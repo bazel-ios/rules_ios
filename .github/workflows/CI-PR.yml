@@ -1,0 +1,16 @@
+name: CI-PR
+
+on: pull_request
+
+jobs:
+  integration_tests:
+    name: Bluepill Test
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Select Xcode 11.2
+        run: sudo xcode-select -s /Applications/Xcode_11.2.app
+      - name: Install Bazel
+        run: brew install bazel
+      - name: Build and Test
+        run: bazel test //...
