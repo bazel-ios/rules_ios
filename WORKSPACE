@@ -13,12 +13,14 @@ git_repository(
     name = "build_bazel_rules_swift",
     commit = "e7ce2d13936a1fe234317f228ef7194f27f8520a",
     remote = "https://github.com/bazelbuild/rules_swift.git",
+    shallow_since = "1574447681 -0800",
 )
 
 git_repository(
     name = "build_bazel_apple_support",
     commit = "9605c3da1c5bcdddc20d1704b52415a6f3a5f422",
     remote = "https://github.com/bazelbuild/apple_support.git",
+    shallow_since = "1570831694 -0700",
 )
 
 load(

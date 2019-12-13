@@ -8,32 +8,35 @@ HMAP_VISIBILITY = ["//visibility:public"]
 
 cc_binary(
     name = "hmaptool",
-    srcs = glob(
-        [
-            "*.c",
-            "*.h",
-        ],
-        exclude = [
-            "hmaptest.c",
-            "hmapdump.c",
-        ],
-    ),
+    srcs = [
+        "hmap.c",
+        "hmap.h",
+        "hmapbuild.c",
+        "uthash.h",
+    ],
     copts = HMAP_COPTS,
     visibility = HMAP_VISIBILITY,
 )
 
 cc_binary(
     name = "hmapdump",
-    srcs = glob(
-        [
-            "*.h",
-            "*.c",
-        ],
-        exclude = [
-            "hmaptest.c",
-            "hmapbuild.c",
-        ],
-    ),
+    srcs = [
+        "hmap.c",
+        "hmap.h",
+        "hmapdump.c",
+        "uthash.h",
+    ],
     copts = HMAP_COPTS,
     visibility = HMAP_VISIBILITY,
+)
+
+cc_test(
+    name = "hmaptest",
+    srcs = [
+        "hmap.c",
+        "hmap.h",
+        "hmaptest.c",
+        "uthash.h",
+    ],
+    visibility = ["//visibility:private"],
 )
