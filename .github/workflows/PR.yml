@@ -1,13 +1,10 @@
-name: CI-master
+name: PR
 
-on:
-  push:
-    branches:
-      - master
+on: pull_request
 
 jobs:
   integration_tests:
-    name: Bluepill Test
+    name: Build and Test
     runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v1
