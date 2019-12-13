@@ -1,4 +1,4 @@
-name: CI-master
+name: master
 
 on:
   push:
