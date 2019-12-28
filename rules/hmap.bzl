@@ -129,7 +129,10 @@ headermap = rule(
     output_to_genfiles = True,
     attrs = {
         "namespace": attr.string(mandatory = True),
-        "hdrs": attr.label_list(mandatory = True),
+        "hdrs": attr.label_list(
+            mandatory = True,
+            allow_files = True,
+        ),
         "flatten_headers": attr.bool(mandatory = True),
         "hdr_providers": attr.label_list(mandatory = False),
         "headermap_builder": attr.label(
