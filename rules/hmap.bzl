@@ -59,7 +59,14 @@ def _make_headermap_impl(ctx):
 
     # Extract propagated headermaps
     for hdr_provider in ctx.attr.hdr_providers:
-        hdrs = hdr_provider[apple_common.Objc].header.to_list()
+        hdrs = []
+        if apple_common.Objc in hdr_provider:
+            hdrs.extend(hdr_provider[apple_common.Objc].header.to_list())
+        elif CcInfo in hdr_provider:
+            hdrs.extend(hdr_provider[CcInfo].compilation_context.headers.to_list())
+        else:
+            fail("hdr_provider must contain either 'CcInfo' or 'objc' provider")
+
         for hdr in hdrs:
             if SwiftInfo in hdr_provider and hdr.path.endswith("-Swift.h"):
                 namespace = ctx.attr.namespace
