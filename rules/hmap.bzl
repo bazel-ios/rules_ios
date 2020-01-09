@@ -71,6 +71,7 @@ def _make_headermap_impl(ctx):
             if SwiftInfo in hdr_provider and hdr.path.endswith("-Swift.h"):
                 namespace = ctx.attr.namespace
                 basename = hdr.basename
+
                 # Only propogate the Swift header from this module
                 # The name of the swift header may be -Swift.h or _Swift-Swift.h
                 # dur to bazelizer generated rule naming convention.
@@ -135,20 +136,40 @@ headermap = rule(
     implementation = _make_headermap_impl,
     output_to_genfiles = True,
     attrs = {
-        "namespace": attr.string(mandatory = True),
+        "namespace": attr.string(
+            mandatory = True,
+            doc = "The prefix to be used for header imports when flatten_headers is true",
+        ),
         "hdrs": attr.label_list(
             mandatory = True,
             allow_files = True,
+            doc = "The list of headers included in the headermap",
         ),
-        "flatten_headers": attr.bool(mandatory = True),
-        "hdr_providers": attr.label_list(mandatory = False),
-        "headermap_builder": attr.label(
+        "flatten_headers": attr.bool(
+            mandatory = True,
+            doc = "Whether headers should be importable with the namespace as a prefix",
+        ),
+        "hdr_providers": attr.label_list(
+            mandatory = False,
+            doc = """\
+Targets that provide headers.
+Targets must have either an Objc or CcInfo provider.""",
+            providers = [apple_common.Objc, CcInfo],
+        ),
+        "_headermap_builder": attr.label(
             executable = True,
             cfg = "host",
             default = Label(
-                "//rules:hmaptool",
+                "//rules/hmap:hmaptool",
             ),
         ),
     },
     outputs = {"headermap": "%{name}.hmap"},
+    doc = """\
+Creates a binary headermap file from the given headers,
+suitable for passing to clang.
+
+This can be used to allow headers to be imported at a consistent path,
+regardless of the package structure being used.
+    """,
 )

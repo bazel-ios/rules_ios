@@ -1,42 +1,24 @@
-HMAP_COPTS = [
-    "-DHASH_FUNCTION=HASH_MUR",
-    "-DHASH_USING_NO_STRICT_ALIASING",
-    "-fno-strict-aliasing",
+load("@io_bazel_stardoc//stardoc:stardoc.bzl", "stardoc")
+load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+
+bzl_library(
+    name = "rules-swift",
+    srcs = [
+        "@build_bazel_rules_swift//swift:swift.bzl",
+    ],
+    deps = [
+        "@bazel_skylib//:bzl_library",
+    ],
+)
+
+[
+    stardoc(
+        name = "%s-docs" % name,
+        out = "%s_doc.md" % name,
+        input = "%s.bzl" % name,
+        visibility = ["//:__pkg__"],
+        deps = [":rules-swift"],
+    )
+    for name in [paths.split_extension(p)[0] for p in glob(["*.bzl"])]
 ]
-
-HMAP_VISIBILITY = ["//visibility:public"]
-
-cc_binary(
-    name = "hmaptool",
-    srcs = [
-        "hmap.c",
-        "hmap.h",
-        "hmapbuild.c",
-        "uthash.h",
-    ],
-    copts = HMAP_COPTS,
-    visibility = HMAP_VISIBILITY,
-)
-
-cc_binary(
-    name = "hmapdump",
-    srcs = [
-        "hmap.c",
-        "hmap.h",
-        "hmapdump.c",
-        "uthash.h",
-    ],
-    copts = HMAP_COPTS,
-    visibility = HMAP_VISIBILITY,
-)
-
-cc_test(
-    name = "hmaptest",
-    srcs = [
-        "hmap.c",
-        "hmap.h",
-        "hmaptest.c",
-        "uthash.h",
-    ],
-    visibility = ["//visibility:private"],
-)
