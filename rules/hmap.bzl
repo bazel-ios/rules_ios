@@ -71,6 +71,7 @@ def _make_headermap_impl(ctx):
             if SwiftInfo in hdr_provider and hdr.path.endswith("-Swift.h"):
                 namespace = ctx.attr.namespace
                 basename = hdr.basename
+
                 # Only propogate the Swift header from this module
                 # The name of the swift header may be -Swift.h or _Swift-Swift.h
                 # dur to bazelizer generated rule naming convention.
@@ -142,7 +143,7 @@ headermap = rule(
         "hdrs": attr.label_list(
             mandatory = True,
             allow_files = True,
-            doc = "The list of headers included in the headermap"
+            doc = "The list of headers included in the headermap",
         ),
         "flatten_headers": attr.bool(
             mandatory = True,
@@ -170,5 +171,5 @@ suitable for passing to clang.
 
 This can be used to allow headers to be imported at a consistent path,
 regardless of the package structure being used.
-    """
+    """,
 )
