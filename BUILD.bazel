@@ -1,0 +1,22 @@
+genrule(
+    name = "docs",
+    srcs = [
+        "//rules:hmap-docs",
+    ],
+    outs = [
+        "generate_docs.sh",
+    ],
+    cmd = """
+echo "#!/bin/bash" > $(OUTS)
+echo "set -eux" > $(OUTS)
+echo 'function copy() { 
+    dest="$${BUILD_WORKSPACE_DIRECTORY}/docs/$$(basename $$1)"
+    cp "$$1" "$$dest"
+    chmod +w "$$dest"
+}' >> $(OUTS)
+for s in $(SRCS); do
+    echo "copy '$$s'" >> $(OUTS)
+done
+    """,
+    executable = 1,
+)
