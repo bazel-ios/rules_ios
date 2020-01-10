@@ -112,8 +112,8 @@ generate_resource_bundles(<a href="#generate_resource_bundles-name">name</a>, <a
 ## write_modulemap
 
 <pre>
-write_modulemap(<a href="#write_modulemap-name">name</a>, <a href="#write_modulemap-library_tools">library_tools</a>, <a href="#write_modulemap-destination">destination</a>, <a href="#write_modulemap-umbrella_header">umbrella_header</a>, <a href="#write_modulemap-public_headers">public_headers</a>, <a href="#write_modulemap-private_headers">private_headers</a>,
-                <a href="#write_modulemap-module_name">module_name</a>, <a href="#write_modulemap-framework">framework</a>, <a href="#write_modulemap-kwargs">kwargs</a>)
+write_modulemap(<a href="#write_modulemap-name">name</a>, <a href="#write_modulemap-library_tools">library_tools</a>, <a href="#write_modulemap-umbrella_header">umbrella_header</a>, <a href="#write_modulemap-public_headers">public_headers</a>, <a href="#write_modulemap-private_headers">private_headers</a>, <a href="#write_modulemap-module_name">module_name</a>,
+                <a href="#write_modulemap-framework">framework</a>, <a href="#write_modulemap-kwargs">kwargs</a>)
 </pre>
 
 
@@ -125,7 +125,6 @@ write_modulemap(<a href="#write_modulemap-name">name</a>, <a href="#write_module
 | :-------------: | :-------------: | :-------------: |
 | name |  <p align="center"> - </p>   |  none |
 | library_tools |  <p align="center"> - </p>   |  none |
-| destination |  <p align="center"> - </p>   |  <code>None</code> |
 | umbrella_header |  <p align="center"> - </p>   |  <code>None</code> |
 | public_headers |  <p align="center"> - </p>   |  <code>[]</code> |
 | private_headers |  <p align="center"> - </p>   |  <code>[]</code> |
@@ -139,8 +138,7 @@ write_modulemap(<a href="#write_modulemap-name">name</a>, <a href="#write_module
 ## write_umbrella_header
 
 <pre>
-write_umbrella_header(<a href="#write_umbrella_header-name">name</a>, <a href="#write_umbrella_header-library_tools">library_tools</a>, <a href="#write_umbrella_header-destination">destination</a>, <a href="#write_umbrella_header-public_headers">public_headers</a>, <a href="#write_umbrella_header-private_headers">private_headers</a>,
-                      <a href="#write_umbrella_header-module_name">module_name</a>, <a href="#write_umbrella_header-kwargs">kwargs</a>)
+write_umbrella_header(<a href="#write_umbrella_header-name">name</a>, <a href="#write_umbrella_header-library_tools">library_tools</a>, <a href="#write_umbrella_header-public_headers">public_headers</a>, <a href="#write_umbrella_header-private_headers">private_headers</a>, <a href="#write_umbrella_header-module_name">module_name</a>, <a href="#write_umbrella_header-kwargs">kwargs</a>)
 </pre>
 
 
@@ -152,7 +150,6 @@ write_umbrella_header(<a href="#write_umbrella_header-name">name</a>, <a href="#
 | :-------------: | :-------------: | :-------------: |
 | name |  <p align="center"> - </p>   |  none |
 | library_tools |  <p align="center"> - </p>   |  none |
-| destination |  <p align="center"> - </p>   |  <code>None</code> |
 | public_headers |  <p align="center"> - </p>   |  <code>[]</code> |
 | private_headers |  <p align="center"> - </p>   |  <code>[]</code> |
 | module_name |  <p align="center"> - </p>   |  <code>None</code> |
