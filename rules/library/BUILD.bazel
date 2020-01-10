@@ -1,0 +1,4 @@
+exports_files([
+    "common.pch",
+    "resource_bundle.plist",
+])

@@ -16,3 +16,5 @@ jobs:
         run: bazel test //...
       - name: buildifier
         run: find . -type f \( -name 'WORKSPACE' -o -name '*.bzl' -o -name '*.bazel' \) | xargs buildifier --mode=diff
+      - name: Check docs
+        run: bazel run docs --nocheck_visibility && git diff --exit-code docs

@@ -1,0 +1,27 @@
+load("//rules:app.bzl", "ios_application")
+
+exports_files([
+    "Info.plist",
+])
+
+[
+    ios_application(
+        name = "iOS-%s-AppHost" % version,
+        srcs = ["main.m"],
+        bundle_id = "com.example.ios-app-host-%s" % version,
+        entitlements = "ios.entitlements",
+        families = [
+            "iphone",
+            "ipad",
+        ],
+        launch_storyboard = "LaunchScreen.storyboard",
+        minimum_os_version = version,
+        visibility = ["//visibility:public"],
+    )
+    for version in [
+        "9.3",
+        "10.0",
+        "11.0",
+        "12.0",
+    ]
+]
