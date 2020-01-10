@@ -1,0 +1,73 @@
+package(default_visibility = ["//visibility:private"])
+
+load("@io_bazel_stardoc//stardoc:stardoc.bzl", "stardoc")
+load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+
+_RULES = [
+    "app",
+    "framework",
+    "hmap",
+    "library",
+    "substitute_build_settings",
+    "test",
+]
+
+# needs --nocheck_visibility because otherwise
+# @build_bazel_apple_support and @build_bazel_rules_apple are
+# completely unreachable
+bzl_library(
+    name = "rules-apple",
+    srcs = [
+        "@build_bazel_apple_support//lib:apple_support.bzl",
+        "@build_bazel_rules_apple//apple:ios.bzl",
+        "@build_bazel_rules_swift//swift:swift.bzl",
+    ],
+    tags = ["manual"],
+    visibility = ["//visibility:private"],
+    deps = [
+        "@bazel_skylib//:bzl_library",
+    ],
+)
+
+[
+    stardoc(
+        name = "%s-docs" % name,
+        out = "%s_doc.md" % name,
+        input = "//rules:%s.bzl" % name,
+        tags = ["manual"],
+        visibility = ["//:__pkg__"],
+        deps = [":rules-apple"],
+    )
+    for name in _RULES
+]
+
+filegroup(
+    name = "_all_docs",
+    srcs = ["%s-docs" % name for name in _RULES],
+    tags = ["manual"],
+)
+
+genrule(
+    name = "docs",
+    srcs = [
+        ":_all_docs",
+    ],
+    outs = [
+        "generate_docs.sh",
+    ],
+    cmd = """
+echo "#!/bin/bash" > $(OUTS)
+echo "set -eu" > $(OUTS)
+echo 'function copy() { 
+    dest="$${BUILD_WORKSPACE_DIRECTORY}/docs/$$(basename $$1)"
+    cp "$$1" "$$dest"
+    chmod +w "$$dest"
+}' >> $(OUTS)
+for s in $(SRCS); do
+    echo "copy '$$s'" >> $(OUTS)
+done
+    """,
+    executable = 1,
+    tags = ["manual"],
+)

@@ -4,7 +4,7 @@ HMAP_COPTS = [
     "-fno-strict-aliasing",
 ]
 
-HMAP_VISIBILITY = ["//rules:__subpackages__"]
+HMAP_VISIBILITY = ["//visibility:public"]
 
 cc_binary(
     name = "hmaptool",

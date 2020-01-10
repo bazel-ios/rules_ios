@@ -115,7 +115,7 @@ def _make_headermap_impl(ctx):
         inputs = inputs,
         mnemonic = "HmapCreate",
         arguments = args,
-        executable = ctx.attr.headermap_builder.files.to_list()[0],
+        executable = ctx.executable._headermap_builder,
         outputs = [ctx.outputs.headermap],
     )
     objc_provider = apple_common.new_objc_provider(
@@ -154,7 +154,7 @@ headermap = rule(
             doc = """\
 Targets that provide headers.
 Targets must have either an Objc or CcInfo provider.""",
-            providers = [apple_common.Objc, CcInfo],
+            providers = [[apple_common.Objc], [CcInfo]],
         ),
         "_headermap_builder": attr.label(
             executable = True,

@@ -1,0 +1,5 @@
+py_binary(
+    name = "vfs_overlay",
+    srcs = ["vfs_overlay.py"],
+    visibility = ["//visibility:public"],
+)
