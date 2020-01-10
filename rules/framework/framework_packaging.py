@@ -86,8 +86,8 @@ class Args(argparse.Namespace):
         return self.inputs[0]
 
     def output(self):
-        assert len(self.output) == 1
-        return self.output[0]
+        assert len(self.outputs) == 1
+        return self.outputs[0]
 
 def main():
     """Main function."""
@@ -101,9 +101,9 @@ def main():
         "modulemap":
             lambda args: _copy_modulemap(args.framework_root, args.input()),
         "swiftmodule":
-            lambda args: _cp(args.inputs, args.outputs),
+            lambda args: _cp(args.input(), args.output()),
         "swiftdoc":
-            lambda args: _cp(args.inputs, args.outputs),
+            lambda args: _cp(args.input(), args.output()),
     }
 
     parser = argparse.ArgumentParser(description="Packages files into a framework", fromfile_prefix_chars = '@')
@@ -113,8 +113,6 @@ def main():
     parser.add_argument('--inputs', type = str, nargs='*')
     parser.add_argument('--outputs', type = str, nargs='*')
     args = parser.parse_args(namespace=Args())
-    if args.framework_name == 'RegisterUI':
-        print(args)
     
     action = actions[args.action]
     action(args)
