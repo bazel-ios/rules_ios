@@ -354,6 +354,14 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
         "-D__SWIFTC__",
     ]
 
+    swift_version = kwargs.pop("swift_version", None)
+    if swift_version:
+        if swift_version.endswith(".0"):
+            swift_version = swift_version[:-2]
+        if swift_version.endswith(".0"):
+            swift_version = swift_version[:-2]
+        swift_copts += ["-swift-version", swift_version]
+
     cc_copts += headermap_copts
 
     objc_libname = "%s_objc" % name
