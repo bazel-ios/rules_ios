@@ -1,38 +1,11 @@
 workspace(name = "build_bazel_rules_ios")
 
 load(
-    "@bazel_tools//tools/build_defs/repo:git.bzl",
-    "git_repository",
-)
-load(
-    "@bazel_tools//tools/build_defs/repo:http.bzl",
-    "http_archive",
+    "//rules:repositories.bzl",
+    "rules_ios_dependencies",
 )
 
-# rules_apple, rules_swift and apple_support no longer support releases. If
-# you'd like to pin down these dependencies to a specific commit, please add the
-# following to the top of your WORKSPACE, using the commit you'd like to pin for
-# each of the repositories.
-git_repository(
-    name = "build_bazel_rules_apple",
-    commit = "96212456d3cd7be9760fe28c077673bb85d46500",
-    remote = "https://github.com/bazelbuild/rules_apple.git",
-    shallow_since = "1576719323 -0800",
-)
-
-git_repository(
-    name = "build_bazel_rules_swift",
-    commit = "d7757c5ee9724df9454edefa3b4455a401a2ae22",
-    remote = "https://github.com/bazelbuild/rules_swift.git",
-    shallow_since = "1576775454 -0800",
-)
-
-git_repository(
-    name = "build_bazel_apple_support",
-    commit = "9605c3da1c5bcdddc20d1704b52415a6f3a5f422",
-    remote = "https://github.com/bazelbuild/apple_support.git",
-    shallow_since = "1570831694 -0700",
-)
+rules_ios_dependencies()
 
 load(
     "@build_bazel_rules_apple//apple:repositories.bzl",
@@ -62,20 +35,14 @@ load(
 
 protobuf_deps()
 
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-
-http_archive(
-    name = "bazel_skylib",
-    sha256 = "97e70364e9249702246c0e9444bccdc4b847bed1eb03c5a3ece4f83dfe6abc44",
-    urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.0.2/bazel-skylib-1.0.2.tar.gz",
-        "https://github.com/bazelbuild/bazel-skylib/releases/download/1.0.2/bazel-skylib-1.0.2.tar.gz",
-    ],
-)
-
 load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 
 bazel_skylib_workspace()
+
+load(
+    "@bazel_tools//tools/build_defs/repo:git.bzl",
+    "git_repository",
+)
 
 git_repository(
     name = "io_bazel_stardoc",
