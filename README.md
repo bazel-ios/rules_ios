@@ -2,6 +2,10 @@
 
 ![](https://github.com/ob/rules_ios/workflows/master/badge.svg)
 
+> :warning: **This is alpha software.** We are developing these rules in the open so you should only use them if you know what you are doing and are willing to help develop them.
+
+
+
 These rules provide some macros and rules that make it easier to build iOS
 application with Bazel. The heavy lifting of compiling, and packaging is
 still done by the existing
@@ -25,11 +29,6 @@ releases](https://github.com/bazelbuild/rules_swift/pull/335), the versions are
 hardcoded to commit sha's that are known to work. You can see the particular
 commit sha's in
 [`repositories.bzl`](https://github.com/ob/rules_ios/tree/master/rules/repositories.bzl).
-
-<aside class="warning">
-This is alpha software. We are developing these rules in the open so you should only
-use them if you know what you are doing and are willing to help develop them.
-</aside>
 
 ```python
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
