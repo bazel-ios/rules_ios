@@ -40,7 +40,7 @@ git_repository(
 )
 
 load(
-    "@build_bazel_rules_ios//rules:.bzl",
+    "@build_bazel_rules_ios//rules:app.bzl",
     "ios_application"
 )
 
