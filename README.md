@@ -73,7 +73,7 @@ apple_support_dependencies()
 Minimal example:
 
 ```python
-load("@build_bazel_rules_ios//rules:.bzl", "ios_application")
+load("@build_bazel_rules_ios//rules:app.bzl", "ios_application")
 
 ios_application(
     name = "iOS-App",
