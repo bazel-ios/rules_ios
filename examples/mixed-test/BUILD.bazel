@@ -1,0 +1,15 @@
+load("@build_bazel_rules_ios//rules:app.bzl", "ios_application")
+
+ios_application(
+    name = "mixed-test",
+    srcs = glob([
+        "*.swift",
+        "*.m",
+        "*.h",
+    ]),
+    bundle_id = "com.example.mixed-app",
+    families = [
+        "iphone",
+    ],
+    minimum_os_version = "12.0",
+)

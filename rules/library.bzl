@@ -44,6 +44,9 @@ write_file = rule(
     doc = "Writes out a file verbatim",
 )
 
+def _normalize_module_name(name):
+    return name.replace("-", "_")
+
 def _extend_modulemap_impl(ctx):
     args = ctx.actions.args()
     args.add("""
@@ -87,7 +90,7 @@ def write_modulemap(name, library_tools, umbrella_header = None, public_headers 
     basename = "{}.modulemap".format(name)
     destination = paths.join(name + "-modulemap", basename)
     if not module_name:
-        module_name = name
+        fail("module_name not set, this is a bug, please file an issue at https://github.com/ob/rules_ios/issues")
     content = """\
 module {module_name} {{
     umbrella header "{umbrella_header}"
@@ -113,7 +116,7 @@ def write_umbrella_header(name, library_tools, public_headers = [], private_head
     basename = "{name}-umbrella.h".format(name = name)
     destination = paths.join(name + "-modulemap", basename)
     if not module_name:
-        module_name = name
+        fail("module_name not set, this is a bug, please file an issue at https://github.com/ob/rules_ios/issues")
     content = """\
 #ifdef __OBJC__
 #    import <Foundation/Foundation.h>
@@ -229,7 +232,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
         else:
             fail("Unable to compile %s in apple_framework %s" % (f, name))
 
-    module_name = kwargs.pop("module_name", name)
+    module_name = _normalize_module_name(kwargs.pop("module_name", name))
     module_map = kwargs.pop("module_map", None)
     cc_copts = kwargs.pop("cc_copts", [])
     swift_copts = kwargs.pop("swift_copts", [])
@@ -397,6 +400,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
             "-fmodule-map-file=" + "$(execpath " + module_map + ")",
             "-import-underlying-module",
         ]
+        print("module name = {}".format(module_name))
         swift_library(
             name = swift_libname,
             module_name = module_name,
@@ -412,7 +416,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
             name = module_map + ".extended." + name,
             destination = "%s.extended.modulemap" % name,
             source = module_map,
-            swift_header = "%s-Swift.h" % swift_libname,
+            swift_header = "%s-Swift.h" % _normalize_module_name(module_name),
             module_name = module_name,
         )
         module_map = "%s.extended.modulemap" % name
