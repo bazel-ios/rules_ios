@@ -201,6 +201,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
     public_headers = kwargs.pop("public_headers", [])
     private_headers = kwargs.pop("private_headers", [])
     objc_hdrs = [f for f in public_headers if f.endswith((".h", ".hh"))]
+    objc_non_exported_hdrs = []
     objc_private_hdrs = [f for f in private_headers if f.endswith((".h", ".hh"))]
     if public_headers:
         public_headers = sets.make(public_headers)
@@ -216,6 +217,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
             if (private_headers and sets.contains(private_headers, f)) or \
                (public_headers and sets.contains(public_headers, f)):
                 pass
+            elif public_headers and private_headers:
+                objc_non_exported_hdrs.append(f)
             elif public_headers:
                 objc_private_hdrs.append(f)
             else:
@@ -306,11 +309,11 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
     private_angled_hdrs_filegroup = name + "_private_angled_hdrs"
     native.filegroup(
         name = private_hdrs_filegroup,
-        srcs = objc_private_hdrs + objc_hdrs,
+        srcs = objc_non_exported_hdrs + objc_private_hdrs + objc_hdrs,
     )
     native.filegroup(
         name = private_angled_hdrs_filegroup,
-        srcs = objc_private_hdrs,
+        srcs = objc_non_exported_hdrs + objc_private_hdrs,
     )
 
     headermap(
@@ -429,7 +432,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
 
     native.objc_library(
         name = objc_libname,
-        srcs = objc_sources + objc_private_hdrs,
+        srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,
         non_arc_srcs = objc_non_arc_sources,
         hdrs = objc_hdrs,
         copts = objc_copts,
