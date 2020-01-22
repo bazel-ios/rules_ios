@@ -158,13 +158,15 @@ static int add_mappings_from_file(mapping **hashmap, char *file) {
     // read the input file to build the initial hashmap
     ssize_t nread;
     char *line = NULL;
+    unsigned int lineno = 0;
     size_t len;
     while ((nread = getline(&line, &len, f)) != -1) {
+        ++lineno;
         chomp(line);
         if (strlen(line) == 0) continue;  // skip empty lines
         char *pipe = strchr(line, '|');
         if (!pipe) {
-            fprintf(stderr, "Error parsing k|v pair in line: '%s'\n", line);
+            fprintf(stderr, "%s:%u: Error parsing k|v pair in line: '%s'\n", file, lineno, line);
             exit(1);
         }
         *pipe = '\0';
