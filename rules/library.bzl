@@ -152,7 +152,6 @@ FOUNDATION_EXPORT const unsigned char {module_name}VersionString[];
 def generate_resource_bundles(name, library_tools, module_name, resource_bundles, **kwargs):
     bundle_target_names = []
     for bundle_name in resource_bundles:
-        resources = resource_bundles[bundle_name]
         target_name = "%s-%s" % (name, bundle_name)
         substitute_build_settings(
             name = name + ".info.plist",
@@ -162,10 +161,16 @@ def generate_resource_bundles(name, library_tools, module_name, resource_bundles
                 "PRODUCT_NAME": bundle_name,
             },
         )
+        resources_name = target_name + "_resources"
+        native.filegroup(
+            name = resources_name,
+            # remove filtering once https://github.com/bazelbuild/rules_apple/pull/694 is merged
+            srcs = [f for f in resource_bundles[bundle_name] if not f.endswith((".xcdatamodeld", ".xcmappingmodel"))],
+        )
         apple_resource_bundle(
             name = target_name,
             bundle_name = bundle_name,
-            resources = resources,
+            resources = [resources_name],
             infoplists = [name + ".info.plist"],
         )
         bundle_target_names.append(target_name)
