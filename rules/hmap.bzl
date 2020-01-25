@@ -4,7 +4,7 @@ def _basename_pipe_path(f):
     return "%s|%s" % (f.basename, f.path)
 
 def _file_path_if_swift_h(f):
-    if (not f.is_source) and (f.basename == f.owner.name + '-Swift.h'):
+    if (not f.is_source) and (f.basename == f.owner.name + "-Swift.h"):
         return f.path
 
 def _file_path_if_public_hmap(f):
