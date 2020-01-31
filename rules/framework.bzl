@@ -5,8 +5,7 @@ load("//rules:library.bzl", "PrivateHeaders", "apple_library")
 load("//rules/vfs_overlay:vfs_overlay.bzl", "VFSOverlay")
 
 def apple_framework(name, apple_library = apple_library, **kwargs):
-    """
-    Builds and packages an Apple framework.
+    """Builds and packages an Apple framework.
 
     Args:
         name: The name of the framework.
@@ -14,27 +13,30 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
         kwargs: Arguments passed to the apple_library and apple_framework_packaging rules as appropriate.
     """
     library = apple_library(name = name, **kwargs)
-    args = {
-        "name": name,
-        "deps": library.lib_names,
-        "visibility": kwargs.get("visibility", None),
-        "tags": kwargs.get("tags", None),
-    }
-    if kwargs.get("srcs", None) or kwargs.get("non_arc_srcs", None):
-        apple_framework_packaging(
-            framework_name = library.module_name,
-            transitive_deps = library.transitive_deps,
-            **args
-        )
-    else:
-        native.objc_library(**args)
+    apple_framework_packaging(
+        name = name,
+        framework_name = library.module_name,
+        transitive_deps = library.transitive_deps,
+        deps = library.lib_names,
+        visibility = kwargs.get("visibility", None),
+        tags = kwargs.get("tags", None),
+    )
 
-def _framework_packaging(ctx, framework_dir, action, inputs, outputs):
+def _find_framework_dir(outputs):
+    for output in outputs:
+        prefix = output.path.split(".framework/")[0]
+        return prefix + ".framework"
+
+def _framework_packaging(ctx, action, inputs, outputs):
     if not inputs:
         return []
     if inputs == [None]:
         return []
+    if action in ctx.attr.skip_packaging:
+        return []
+    outputs = [ctx.actions.declare_file(f) for f in outputs]
     framework_name = ctx.attr.framework_name
+    framework_dir = _find_framework_dir(outputs)
     args = ctx.actions.args().use_param_file("@%s").set_param_file_format("multiline")
     args.add("--framework_name", framework_name)
     args.add("--framework_root", framework_dir)
@@ -50,6 +52,17 @@ def _framework_packaging(ctx, framework_dir, action, inputs, outputs):
     )
     return outputs
 
+def _add_to_dict_if_present(dict, key, value):
+    if value:
+        dict[key] = value
+
+def _concat(*args):
+    arr = []
+    for x in args:
+        if x:
+            arr += x
+    return arr
+
 def _apple_framework_packaging_impl(ctx):
     framework_name = ctx.attr.framework_name
 
@@ -58,10 +71,6 @@ def _apple_framework_packaging_impl(ctx):
 
     # binaries
     binary_in = []
-    binary_out = ctx.actions.declare_file(
-        paths.join(framework_dir, framework_name),
-    )
-    framework_root = binary_out.dirname
 
     # headers
     header_in = []
@@ -74,9 +83,6 @@ def _apple_framework_packaging_impl(ctx):
 
     # modulemap
     modulemap_in = None
-    modulemap_out = ctx.actions.declare_file(
-        paths.join(framework_dir, "Modules", "module.modulemap"),
-    )
 
     # headermaps
     header_maps = []
@@ -92,7 +98,8 @@ def _apple_framework_packaging_impl(ctx):
 
     # collect files
     for dep in ctx.attr.deps:
-        for file in dep.files.to_list():
+        files = dep.files.to_list()
+        for file in files:
             if file.is_source:
                 continue
 
@@ -103,63 +110,69 @@ def _apple_framework_packaging_impl(ctx):
             # collect swift specific files
             if file.path.endswith(".swiftmodule"):
                 swiftmodule_in = file
-                swiftmodule_out = ctx.actions.declare_file(
-                    paths.join(
-                        framework_dir,
-                        "Modules",
-                        framework_name + ".swiftmodule",
-                        arch + ".swiftmodule",
-                    ),
-                )
+                swiftmodule_out = [paths.join(
+                    framework_dir,
+                    "Modules",
+                    framework_name + ".swiftmodule",
+                    arch + ".swiftmodule",
+                )]
             if file.path.endswith(".swiftdoc"):
                 swiftdoc_in = file
-                swiftdoc_out = ctx.actions.declare_file(
-                    paths.join(
-                        framework_dir,
-                        "Modules",
-                        framework_name + ".swiftmodule",
-                        arch + ".swiftdoc",
-                    ),
-                )
+                swiftdoc_out = [paths.join(
+                    framework_dir,
+                    "Modules",
+                    framework_name + ".swiftmodule",
+                    arch + ".swiftdoc",
+                )]
 
         if PrivateHeaders in dep:
             for hdr in dep[PrivateHeaders].headers.to_list():
                 private_header_in.append(hdr)
-                destination = ctx.actions.declare_file(
-                    paths.join(framework_dir, "PrivateHeaders", hdr.basename),
-                )
+                destination = paths.join(framework_dir, "PrivateHeaders", hdr.basename)
                 private_header_out.append(destination)
-                file_map.append((hdr, destination))
 
         if apple_common.Objc in dep:
             # collect headers
+            has_header = False
             for hdr in dep[apple_common.Objc].direct_headers:
                 if hdr.path.endswith((".h", ".hh")):
+                    has_header = True
                     header_in.append(hdr)
-                    destination = ctx.actions.declare_file(
-                        paths.join(framework_dir, "Headers", hdr.basename),
-                    )
+                    destination = paths.join(framework_dir, "Headers", hdr.basename)
                     header_out.append(destination)
-                    file_map.append((hdr, destination))
 
             # collect modulemaps
             for modulemap in dep[apple_common.Objc].direct_module_maps:
+                if not has_header:
+                    # only thing is the generated module map -- we don't want it
+                    continue
+
                 modulemap_in = modulemap
 
-    # if not binary_in:
-    #     fail("%s cannot package a framework, it contains no binaries (deps %s)" % (ctx.attr.name, ctx.attr.deps))
+    binary_out = None
+    modulemap_out = None
+    if binary_in:
+        binary_out = [
+            paths.join(framework_dir, framework_name),
+        ]
+    if modulemap_in:
+        modulemap_out = [
+            paths.join(framework_dir, "Modules", "module.modulemap"),
+        ]
 
     # Package each part of the framework separately,
     # so inputs that do not depend on compilation
     # are available before those that do,
     # improving parallelism
-    framework_files = []
-    framework_files += _framework_packaging(ctx, framework_root, "binary", binary_in, [binary_out])
-    framework_files += _framework_packaging(ctx, framework_root, "modulemap", [modulemap_in], [modulemap_out])
-    framework_files += _framework_packaging(ctx, framework_root, "header", header_in, header_out)
-    framework_files += _framework_packaging(ctx, framework_root, "private_header", private_header_in, private_header_out)
-    framework_files += _framework_packaging(ctx, framework_root, "swiftmodule", [swiftmodule_in], [swiftmodule_out])
-    framework_files += _framework_packaging(ctx, framework_root, "swiftdoc", [swiftdoc_in], [swiftdoc_out])
+    binary_out = _framework_packaging(ctx, "binary", binary_in, binary_out)
+    header_out = _framework_packaging(ctx, "header", header_in, header_out)
+    private_header_out = _framework_packaging(ctx, "private_header", private_header_in, private_header_out)
+    modulemap_out = _framework_packaging(ctx, "modulemap", [modulemap_in], modulemap_out)
+    swiftmodule_out = _framework_packaging(ctx, "swiftmodule", [swiftmodule_in], swiftmodule_out)
+    swiftdoc_out = _framework_packaging(ctx, "swiftdoc", [swiftdoc_in], swiftdoc_out)
+    framework_files = _concat(binary_out, modulemap_out, header_out, private_header_out, swiftmodule_out, swiftdoc_out)
+
+    framework_root = _find_framework_dir(framework_files)
 
     # headermap
     mappings_file = ctx.actions.declare_file(framework_name + "_framework.hmap.txt")
@@ -184,20 +197,21 @@ def _apple_framework_packaging_impl(ctx):
     )
 
     objc_provider_fields = {
-        "static_framework_file": depset(
-            direct = [binary_out],
-        ),
-        "header": depset(
-            direct = header_out + private_header_out + [modulemap_out, hmap_file],
-        ),
-        "module_map": depset(
-            direct = [modulemap_out],
-        ),
-        "framework_search_paths": depset(
-            direct = [framework_root],
-        ),
         "providers": [dep[apple_common.Objc] for dep in ctx.attr.transitive_deps],
     }
+    if framework_root:
+        objc_provider_fields["framework_search_paths"] = depset(
+            direct = [framework_root],
+        )
+    _add_to_dict_if_present(objc_provider_fields, "header", depset(
+        direct = header_out + private_header_out + modulemap_out + [hmap_file],
+    ))
+    _add_to_dict_if_present(objc_provider_fields, "module_map", depset(
+        direct = modulemap_out,
+    ))
+    _add_to_dict_if_present(objc_provider_fields, "static_framework_file", depset(
+        direct = binary_out,
+    ))
     for key in [
         "sdk_dylib",
         "sdk_framework",
@@ -213,8 +227,7 @@ def _apple_framework_packaging_impl(ctx):
             direct = [],
             transitive = [getattr(dep[apple_common.Objc], key) for dep in ctx.attr.deps],
         )
-        if set:
-            objc_provider_fields[key] = set
+        _add_to_dict_if_present(objc_provider_fields, key, set)
 
     objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
     default_info_provider = DefaultInfo(files = depset(framework_files))
@@ -246,6 +259,20 @@ apple_framework_packaging = rule(
             doc =
                 """Deps of the deps
 """,
+        ),
+        "skip_packaging": attr.string_list(
+            mandatory = False,
+            default = [],
+            allow_empty = True,
+            doc = """Parts of the framework packaging process to be skipped.
+Valid values are:
+- "binary"
+- "modulemap"
+- "header"
+- "private_header"
+- "swiftmodule"
+- "swiftdoc"
+            """,
         ),
         "_framework_packaging": attr.label(
             cfg = "host",
