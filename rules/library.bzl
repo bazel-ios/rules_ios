@@ -5,6 +5,7 @@ load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 load("//rules:hmap.bzl", "headermap")
 load("//rules:substitute_build_settings.bzl", "substitute_build_settings")
+load("//rules/library:resources.bzl", "wrap_resources_in_filegroup")
 load("//rules/vfs_overlay:vfs_overlay.bzl", "vfs_overlay")
 
 PrivateHeaders = provider(
@@ -161,16 +162,12 @@ def generate_resource_bundles(name, library_tools, module_name, resource_bundles
                 "PRODUCT_NAME": bundle_name,
             },
         )
-        resources_name = target_name + "_resources"
-        native.filegroup(
-            name = resources_name,
-            # remove filtering once https://github.com/bazelbuild/rules_apple/pull/694 is merged
-            srcs = [f for f in resource_bundles[bundle_name] if not f.endswith((".xcdatamodeld", ".xcmappingmodel"))],
-        )
         apple_resource_bundle(
             name = target_name,
             bundle_name = bundle_name,
-            resources = [resources_name],
+            resources = [
+                wrap_resources_in_filegroup(name = target_name + "_resources", srcs = resource_bundles[bundle_name]),
+            ],
             infoplists = [name + ".info.plist"],
         )
         bundle_target_names.append(target_name)
@@ -448,7 +445,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
         weak_sdk_frameworks = weak_sdk_frameworks,
         sdk_includes = sdk_includes,
         pch = pch,
-        data = data,
+        data = [wrap_resources_in_filegroup(name = objc_libname + "_data", srcs = data)],
         **kwargs
     )
     lib_names += [objc_libname]
