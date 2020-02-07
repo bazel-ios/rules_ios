@@ -166,7 +166,7 @@ def generate_resource_bundles(name, library_tools, module_name, resource_bundles
             name = target_name,
             bundle_name = bundle_name,
             resources = [
-                wrap_resources_in_filegroup(name = target_name + "_resources", srcs = resource_bundles[bundle_name]),
+                library_tools['wrap_resources_in_filegroup'](name = target_name + "_resources", srcs = resource_bundles[bundle_name]),
             ],
             infoplists = [name + ".info.plist"],
         )
@@ -177,6 +177,7 @@ _DefaultLibraryTools = {
     "modulemap_generator": write_modulemap,
     "umbrella_header_generator": write_umbrella_header,
     "resource_bundle_generator": generate_resource_bundles,
+    "wrap_resources_in_filegroup": wrap_resources_in_filegroup,
 }
 
 def _uppercase_string(s):
@@ -445,7 +446,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
         weak_sdk_frameworks = weak_sdk_frameworks,
         sdk_includes = sdk_includes,
         pch = pch,
-        data = [wrap_resources_in_filegroup(name = objc_libname + "_data", srcs = data)],
+        data = [library_tools['wrap_resources_in_filegroup'](name = objc_libname + "_data", srcs = data)],
         **kwargs
     )
     lib_names += [objc_libname]
