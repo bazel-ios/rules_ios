@@ -433,6 +433,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
         )
         lib_names += [cpp_libname]
 
+    objc_library_data = library_tools["wrap_resources_in_filegroup"](name = objc_libname + "_data", srcs = data)
     native.objc_library(
         name = objc_libname,
         srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,
@@ -446,8 +447,15 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
         weak_sdk_frameworks = weak_sdk_frameworks,
         sdk_includes = sdk_includes,
         pch = pch,
-        data = [library_tools["wrap_resources_in_filegroup"](name = objc_libname + "_data", srcs = data)],
+        data = [objc_library_data],
         **kwargs
+    )
+    launch_screen_storyboard_name = name + "_launch_screen_storyboard"
+    native.filegroup(
+        name = launch_screen_storyboard_name,
+        srcs = [objc_library_data],
+        output_group = "launch_screen_storyboard",
+        tags = _MANUAL,
     )
     lib_names += [objc_libname]
 
@@ -461,4 +469,5 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
         transitive_deps = deps,
         deps = lib_names + deps,
         module_name = module_name,
+        launch_screen_storyboard_name = launch_screen_storyboard_name,
     )
