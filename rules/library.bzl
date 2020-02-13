@@ -15,6 +15,8 @@ PrivateHeaders = provider(
     },
 )
 
+_MANUAL = ["manual"]
+
 def _private_headers_impl(ctx):
     return [
         PrivateHeaders(
@@ -107,6 +109,7 @@ module {module_name} {{
         name = basename + "~",
         destination = destination,
         content = content,
+        tags = _MANUAL,
     )
     return destination
 
@@ -147,6 +150,7 @@ FOUNDATION_EXPORT const unsigned char {module_name}VersionString[];
         name = basename + "~",
         destination = destination,
         content = content,
+        tags = _MANUAL,
     )
     return destination
 
@@ -161,6 +165,7 @@ def generate_resource_bundles(name, library_tools, module_name, resource_bundles
                 "PRODUCT_BUNDLE_IDENTIFIER": "com.cocoapods.%s" % bundle_name,
                 "PRODUCT_NAME": bundle_name,
             },
+            tags = _MANUAL,
         )
         apple_resource_bundle(
             name = target_name,
@@ -169,6 +174,7 @@ def generate_resource_bundles(name, library_tools, module_name, resource_bundles
                 library_tools["wrap_resources_in_filegroup"](name = target_name + "_resources", srcs = resource_bundles[bundle_name]),
             ],
             infoplists = [name + ".info.plist"],
+            tags = _MANUAL,
         )
         bundle_target_names.append(target_name)
     return bundle_target_names
@@ -250,6 +256,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     pch = kwargs.pop("pch", "@build_bazel_rules_ios//rules/library:common.pch")
     deps = kwargs.pop("deps", [])
     data = kwargs.pop("data", [])
+    tags = kwargs.pop("tags", [])
+    tags_manual = tags if "manual" in tags else tags + _MANUAL
     internal_deps = []
     lib_names = []
 
@@ -258,6 +266,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         apple_static_framework_import(
             name = import_name,
             framework_imports = native.glob(["%s/**/*" % vendored_static_framework]),
+            tags = _MANUAL,
         )
         deps += [import_name]
     for vendored_dynamic_framework in kwargs.pop("vendored_dynamic_frameworks", []):
@@ -266,6 +275,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             name = import_name,
             framework_imports = native.glob(["%s/**/*" % vendored_dynamic_framework]),
             deps = [],
+            tags = _MANUAL,
         )
         deps += [import_name]
     for vendored_static_library in kwargs.pop("vendored_static_libraries", []):
@@ -273,6 +283,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         native.objc_import(
             name = import_name,
             archives = [vendored_static_library],
+            tags = _MANUAL,
         )
         deps += [import_name]
     for vendored_dynamic_library in kwargs.pop("vendored_dynamic_libraries", []):
@@ -293,6 +304,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     native.filegroup(
         name = public_hdrs_filegroup,
         srcs = objc_hdrs,
+        tags = _MANUAL,
     )
 
     # Public hmaps are for vendored static libs to export their header only.
@@ -304,6 +316,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         hdrs = [public_hdrs_filegroup],
         hdr_providers = deps,
         flatten_headers = True,
+        tags = _MANUAL,
     )
     internal_deps.append(public_hmap_name)
 
@@ -314,10 +327,12 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     native.filegroup(
         name = private_hdrs_filegroup,
         srcs = objc_non_exported_hdrs + objc_private_hdrs + objc_hdrs,
+        tags = _MANUAL,
     )
     native.filegroup(
         name = private_angled_hdrs_filegroup,
         srcs = objc_non_exported_hdrs + objc_private_hdrs,
+        tags = _MANUAL,
     )
 
     headermap(
@@ -325,6 +340,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         namespace = namespace,
         hdrs = [private_hdrs_filegroup],
         flatten_headers = False,
+        tags = _MANUAL,
     )
     internal_deps.append(private_hmap_name)
     headermap(
@@ -332,6 +348,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         namespace = namespace,
         hdrs = [private_angled_hdrs_filegroup],
         flatten_headers = True,
+        tags = _MANUAL,
     )
     internal_deps.append(private_angled_hmap_name)
     ## END HMAP
@@ -418,6 +435,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             deps = deps + internal_deps + lib_names,
             swiftc_inputs = swiftc_inputs,
             features = ["swift.no_generated_module_map"],
+            tags = tags_manual,
             **kwargs
         )
         lib_names += [swift_libname]
@@ -428,6 +446,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                 source = module_map,
                 swift_header = generated_header_name,
                 module_name = module_name,
+                tags = _MANUAL,
             )
             module_map = "%s.extended.modulemap" % name
 
@@ -438,6 +457,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             hdrs = objc_hdrs,
             copts = cc_copts,
             deps = deps,
+            tags = tags_manual,
         )
         lib_names += [cpp_libname]
 
@@ -456,6 +476,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         sdk_includes = sdk_includes,
         pch = pch,
         data = [objc_library_data],
+        tags = tags_manual,
         **kwargs
     )
     launch_screen_storyboard_name = name + "_launch_screen_storyboard"
@@ -470,7 +491,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     if export_private_headers:
         private_headers_name = "%s_private_headers" % name
         lib_names += [private_headers_name]
-        _private_headers(name = private_headers_name, headers = objc_private_hdrs)
+        _private_headers(name = private_headers_name, headers = objc_private_hdrs, tags = _MANUAL)
 
     return struct(
         lib_names = lib_names,
