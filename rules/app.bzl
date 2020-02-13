@@ -22,13 +22,11 @@ def ios_application(name, apple_library = apple_library, **kwargs):
         kwargs: Arguments passed to the apple_library and ios_application rules as appropriate.
     """
     infoplists = kwargs.pop("infoplists", [])
-    application_kwargs = {arg: kwargs.pop(arg, None) for arg in _IOS_APPLICATION_KWARGS}
-    library = apple_library(name = name, **kwargs)
 
     if not infoplists:
         infoplists += ["@build_bazel_rules_ios//rules/test_host_app:Info.plist"]
 
-    kwargs["families"] = kwargs.pop("families", ["iphone", "ipad"])
+    application_kwargs["families"] = application_kwargs.pop("families", ["iphone", "ipad"])
 
     rules_apple_ios_application(
         name = name,
