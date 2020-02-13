@@ -15,7 +15,7 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
     library = apple_library(name = name, **kwargs)
     apple_framework_packaging(
         name = name,
-        framework_name = library.module_name,
+        framework_name = library.namespace,
         transitive_deps = library.transitive_deps,
         deps = library.lib_names,
         visibility = kwargs.get("visibility", None),

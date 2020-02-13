@@ -183,7 +183,7 @@ _DefaultLibraryTools = {
 def _uppercase_string(s):
     return s.upper()
 
-def apple_library(name, library_tools = {}, export_private_headers = True, **kwargs):
+def apple_library(name, library_tools = {}, export_private_headers = True, namespace_is_module_name = True, **kwargs):
     """Create libraries for native source code on Apple platforms.
 
     Automatically handles mixed-source libraries and comes with
@@ -236,6 +236,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
             fail("Unable to compile %s in apple_framework %s" % (f, name))
 
     module_name = kwargs.pop("module_name", name)
+    namespace = module_name if namespace_is_module_name else name
     module_map = kwargs.pop("module_map", None)
     cc_copts = kwargs.pop("cc_copts", [])
     swift_copts = kwargs.pop("swift_copts", [])
@@ -299,7 +300,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
     # rules.
     headermap(
         name = public_hmap_name,
-        namespace = module_name,
+        namespace = namespace,
         hdrs = [public_hdrs_filegroup],
         hdr_providers = deps,
         flatten_headers = True,
@@ -321,14 +322,14 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
 
     headermap(
         name = private_hmap_name,
-        namespace = module_name,
+        namespace = namespace,
         hdrs = [private_hdrs_filegroup],
         flatten_headers = False,
     )
     internal_deps.append(private_hmap_name)
     headermap(
         name = private_angled_hmap_name,
-        namespace = module_name,
+        namespace = namespace,
         hdrs = [private_angled_hdrs_filegroup],
         flatten_headers = True,
     )
@@ -375,7 +376,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
     cpp_libname = "%s_cpp" % name
 
     # TODO: remove framework if set
-    if not module_map and (objc_hdrs or objc_private_hdrs or swift_sources):
+    if namespace_is_module_name and not module_map and (objc_hdrs or objc_private_hdrs or swift_sources):
         umbrella_header = library_tools["umbrella_header_generator"](
             name = name,
             library_tools = library_tools,
@@ -420,14 +421,15 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
             **kwargs
         )
         lib_names += [swift_libname]
-        extend_modulemap(
-            name = module_map + ".extended." + name,
-            destination = "%s.extended.modulemap" % name,
-            source = module_map,
-            swift_header = "%s-Swift.h" % swift_libname,
-            module_name = module_name,
-        )
-        module_map = "%s.extended.modulemap" % name
+        if module_map:
+            extend_modulemap(
+                name = module_map + ".extended." + name,
+                destination = "%s.extended.modulemap" % name,
+                source = module_map,
+                swift_header = generated_header_name,
+                module_name = module_name,
+            )
+            module_map = "%s.extended.modulemap" % name
 
     if cpp_sources and False:
         native.cc_library(
@@ -476,4 +478,5 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
         deps = lib_names + deps,
         module_name = module_name,
         launch_screen_storyboard_name = launch_screen_storyboard_name,
+        namespace = namespace,
     )
