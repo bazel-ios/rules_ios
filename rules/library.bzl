@@ -398,18 +398,24 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
         )
 
     if swift_sources:
-        swift_copts += [
-            "-Xcc",
-            "-fmodule-map-file=" + "$(execpath " + module_map + ")",
-            "-import-underlying-module",
-        ]
+        if module_map:
+            swift_copts += [
+                "-Xcc",
+                "-fmodule-map-file=" + "$(execpath " + module_map + ")",
+                "-import-underlying-module",
+            ]
+        swiftc_inputs = other_inputs + objc_hdrs
+        if module_map:
+            swiftc_inputs.append(module_map)
+        generated_header_name = module_name + "-Swift.h"
         swift_library(
             name = swift_libname,
             module_name = module_name,
+            generated_header_name = generated_header_name,
             srcs = swift_sources,
             copts = swift_copts,
             deps = deps + internal_deps + lib_names,
-            swiftc_inputs = other_inputs + objc_hdrs + [module_map],
+            swiftc_inputs = swiftc_inputs,
             features = ["swift.no_generated_module_map"],
             **kwargs
         )
