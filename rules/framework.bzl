@@ -141,12 +141,18 @@ def _apple_framework_packaging_impl(ctx):
                     destination = paths.join(framework_dir, "Headers", hdr.basename)
                     header_out.append(destination)
 
+            if not has_header:
+                # only thing is the generated module map -- we don't want it
+                continue
+
+            if SwiftInfo in dep and dep[SwiftInfo].direct_swiftmodules:
+                # apple_common.Objc.direct_module_maps is broken coming from swift_library
+                # (it contains one level of transitive module maps), so ignore SwiftInfo from swift_library,
+                # since it doesn't have a module_map field anyway
+                continue
+
             # collect modulemaps
             for modulemap in dep[apple_common.Objc].direct_module_maps:
-                if not has_header:
-                    # only thing is the generated module map -- we don't want it
-                    continue
-
                 modulemap_in = modulemap
 
     binary_out = None
