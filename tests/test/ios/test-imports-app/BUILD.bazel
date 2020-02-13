@@ -1,0 +1,45 @@
+load("//rules:app.bzl", "ios_application")
+load("//rules:framework.bzl", "apple_framework_packaging")
+load("//rules:test.bzl", "ios_unit_test")
+
+ios_application(
+    name = "TestImports-App",
+    srcs = [
+        "Header.h",
+        "Header2.h",
+        "empty.swift",
+        "main.m",
+    ],
+    bundle_id = "com.example.TestImports-App",
+    minimum_os_version = "12.0",
+    module_name = "TestImports_App",
+    sdk_frameworks = ["UIKit"],
+)
+
+# Implicitly generate a framework without a binary so tests can
+# import code from their test hosts without it being double-linked.
+apple_framework_packaging(
+    name = "TestImports-App_framework_unlinked",
+    framework_name = "TestImports-App",
+    skip_packaging = ["binary"],
+    transitive_deps = [],
+    deps = [
+        ":TestImports-App_objc",
+        ":TestImports-App_swift",
+    ],
+)
+
+ios_unit_test(
+    name = "TestImports-Unit-Tests",
+    srcs = [
+        "test.m",
+        "test.swift",
+    ],
+    minimum_os_version = "12.0",
+    module_name = "TestImports_Unit_Tests",
+    sdk_frameworks = ["XCTest"],
+    test_host = ":TestImports-App",
+    deps = [
+        ":TestImports-App_framework_unlinked",
+    ],
+)
