@@ -13,7 +13,7 @@ jobs:
       - name: Install Bazel
         run: brew install bazelisk buildifier
       - name: Build and Test
-        run: bazelisk test //...
+        run: bazelisk test --local_test_jobs=2 //...
       - uses: actions/upload-artifact@v1
         if: failure()
         with:
