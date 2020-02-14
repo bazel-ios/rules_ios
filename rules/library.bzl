@@ -201,6 +201,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                         default behaviors.
         export_private_headers: Whether private headers should be exported via
                                 a `PrivateHeaders` provider.
+        namespace_is_module_name: Whether the module name should be used as the
+                                  namespace for header imports, instead of the target name.
     """
     library_tools = dict(_DefaultLibraryTools, **library_tools)
     swift_sources = []
