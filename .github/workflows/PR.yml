@@ -11,10 +11,10 @@ jobs:
       - name: Select Xcode 11.2
         run: sudo xcode-select -s /Applications/Xcode_11.2.app
       - name: Install Bazel
-        run: brew install bazel buildifier
+        run: brew install bazelisk buildifier
       - name: Build and Test
-        run: bazel test //...
+        run: bazelisk test //...
       - name: buildifier
         run: find . -type f \( -name 'WORKSPACE' -o -name '*.bzl' -o -name '*.bazel' \) | xargs buildifier --mode=diff
       - name: Check docs
-        run: bazel run docs --nocheck_visibility && git diff --exit-code docs
+        run: bazelisk run docs --nocheck_visibility && git diff --exit-code docs
