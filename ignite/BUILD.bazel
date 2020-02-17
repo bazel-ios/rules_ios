@@ -1,20 +1,117 @@
 load("@build_bazel_rules_ios//rules:app.bzl", "ios_application")
-
-
-load("//rules:library.bzl", "apple_library")
+load("//rules:framework.bzl", "apple_framework")
   
 
-apple_library(
+apple_framework(
     name = "Ignite",
     srcs = glob([
         "Classes/**/*.swift",
         "Classes/**/*.m",
         "Classes/**/*.h",
     ]),
+    visibility = ["//visibility:public"],
+    deps = [":MLNetworking_objc"]
+)
+
+
+############### MLNETWORKING ############################
+
+apple_framework(
+    name = "MLNetworking",
+    srcs = glob([
+        "MLNetworking/**/*.h",
+        "MLNetworking/**/*.m",
+    ]),
+    public_headers = glob([
+        "MLNetworking/**/*.h",
+    ]),
+    visibility = ["//visibility:public"],
+    deps = [":PINRemoteImage_objc", "MLAuthentication_objc"]
+)
+
+############### MLSecurity ############################
+
+apple_framework(
+    name = "MLSecurity",
+    srcs = glob([
+        "MLSecurity/**/*.swift",
+    ]),
+    visibility = ["//visibility:public"]
+)
+
+############### MLCommons ############################
+
+apple_framework(
+    name = "MLCommons",
+    srcs = glob([
+        "MLCommons/**/*.swift",
+        "MLCommons/**/*.m",
+        "MLCommons/**/*.h",
+	    
+    ]),
+    visibility = ["//visibility:public"],
+    deps = [":Bugsnag_objc",":MLReachability_objc"],
+)
+
+############### Bugsnag ############################
+
+apple_framework(
+    name = "Bugsnag",
+    srcs = glob([
+        "Bugsnag/**/*.m",
+        "Bugsnag/**/*.h",
+        
+    ]),
+    visibility = ["//visibility:public"]
+)
+
+############### MLReachability ############################
+
+apple_framework(
+    name = "MLReachability",
+    srcs = glob([
+        "MLReachability/**/*.m",
+        "MLReachability/**/*.h",
+        
+    ]),
+    visibility = ["//visibility:public"]
+)
+
+############## MLAUTHENTICATION ################################
+apple_framework(
+    name = "MLAuthentication",
+    srcs = glob([
+        "MLAuthentication/**/*.m",
+        "MLAuthentication/**/*.h",
+    ]),
+    visibility = ["//visibility:public"],
+    deps = [":MLSecurity_objc", ":MLCommons_objc", ":MLCommons_swift"]
+)
+
+############## PINRemoteImage #################################
+apple_framework(
+    name = "PINRemoteImage",
+    srcs = glob([
+        "PINRemoteImage/**/*.m",
+        "PINRemoteImage/**/*.h",
+    ]),
+    visibility = ["//visibility:public"],
+    deps = [":PinCache_objc"]
+)
+
+############### PINCache ############################
+
+apple_framework(
+    name = "PinCache",
+    srcs = glob([
+        "PINCache/**/*.m",
+        "PINCache/**/*.h",
+    ]),
     visibility = ["//visibility:public"]
 )
 
 
+############### IgniteApplication #################################
 ios_application(
     name = "Mixedtest",
     srcs = glob([
@@ -26,6 +123,7 @@ ios_application(
     families = [
         "iphone",
     ],
+
     deps = [":Ignite_swift", ":Ignite_objc"],
     minimum_os_version = "12.0",
 )

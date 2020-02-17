@@ -5,10 +5,10 @@ import Foundation
 public class Ignite: NSObject {
     
     private static let source = InmemoryFlags()
-//    private static let igniteService = IgniteRestClient(config: networkingConfig(), manager: MLRestClientServiceManager.sharedInstance())
+    private static let igniteService = IgniteRestClient(config: networkingConfig(), manager: MLRestClientServiceManager.sharedInstance())
     private static let httpFlags = HTTPFlags(featureFlags: source)
     
-//    private override init() {}
+    private override init() {}
     
     public static func doInitialization() {
         self.httpFlags.requestFlags()
@@ -30,13 +30,13 @@ public class Ignite: NSObject {
 
 extension Ignite {
     
-//    private static func  networkingConfig() -> MLNetworkingConfiguration  {
-//        let config = MLNetworkingConfiguration()
-//        config.baseURLString = Constants.baseUrl
-//        config.path = Constants.serviceURI
-//        config.httpMethod = .GET
-//        return config
-//    }
+    private static func  networkingConfig() -> MLNetworkingConfiguration  {
+        let config = MLNetworkingConfiguration()
+        config.baseURLString = Constants.baseUrl
+        config.path = Constants.serviceURI
+        config.httpMethod = .GET
+        return config
+    }
 }
 
 public struct Constants {
