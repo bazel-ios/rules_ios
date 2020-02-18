@@ -1,7 +1,7 @@
 load("@build_bazel_rules_ios//rules:app.bzl", "ios_application")
-load("//rules:library.bzl", "apple_library")
+load("//rules:framework.bzl", "apple_framework")
   
-apple_library(
+apple_framework(
     name = "ModuleA",
     srcs = glob([
         "ModuleA/**/*.swift",
@@ -9,35 +9,33 @@ apple_library(
         "ModuleA/**/*.h",
     ]),
     visibility = ["//visibility:public"],
-    deps = [":ModuleC_objc"]
+    deps = [":ModuleC"]
 )
 
-apple_library(
+apple_framework(
     name = "ModuleC",
     srcs = glob([
         "ModuleC/**/*.m",
         "ModuleC/**/*.h",
     ]),
-    visibility = ["//visibility:public"],
-    deps = []
+    visibility = ["//visibility:public"]
 )
 
-apple_library(
+apple_framework(
     name = "ModuleD",
     srcs = glob([
         "ModuleD/**/*.swift",
     ]),
     visibility = ["//visibility:public"],
-    deps = [":ModuleE_swift"]
+    deps = [":ModuleE"]
 )
 
-apple_library(
+apple_framework(
     name = "ModuleE",
     srcs = glob([
         "ModuleE/**/*.swift",
     ]),
-    visibility = ["//visibility:public"],
-    deps = []
+    visibility = ["//visibility:public"]
 )
 
 ############### MixedTest #################################
@@ -51,6 +49,6 @@ ios_application(
         "iphone",
     ],
 
-    deps = [":ModuleA_objc",":ModuleA_swift"],
+    deps = [":ModuleA"],
     minimum_os_version = "12.0",
 )

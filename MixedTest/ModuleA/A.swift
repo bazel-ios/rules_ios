@@ -1,5 +1,4 @@
 import Foundation
-//import ModuleD
 import ModuleC
 
 @objcMembers
@@ -12,10 +11,6 @@ public class A: NSObject {
     func methodA(){
     	let b = B()
     	b.methodB()
-
-		//let d = D()
-    	//d.doValidate()
-
     	let c = C()
     	c.methodC()
     	
