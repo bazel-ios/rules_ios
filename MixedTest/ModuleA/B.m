@@ -4,14 +4,15 @@
 //
 #import <Foundation/Foundation.h>
 #import "B.h"
-#import "MixedTest/ModuleC-umbrella.h"
+#import "MixedTest/ModuleA_swift-Swift.h"
+@import ModuleC;
 
 @implementation B
 
 - (void) methodB
 {
     [[[A alloc] init] doValidate];
-    [[[C alloc] init] doValidate];
+    [[[C alloc] init] methodC];
 }
 
 @end
