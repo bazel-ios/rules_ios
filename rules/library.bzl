@@ -246,7 +246,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         else:
             fail("Unable to compile %s in apple_framework %s" % (f, name))
 
-    module_name = kwargs.pop("module_name", name)
+    module_name = _normalize_module_name(kwargs.pop("module_name", name))
     namespace = module_name if namespace_is_module_name else name
     module_map = kwargs.pop("module_map", None)
     cc_copts = kwargs.pop("cc_copts", [])
