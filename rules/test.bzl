@@ -2,6 +2,17 @@ load("@build_bazel_rules_apple//apple:ios.bzl", rules_apple_ios_unit_test = "ios
 load("@bazel_skylib//lib:types.bzl", "types")
 load("//rules:library.bzl", "apple_library")
 
+_IOS_UNIT_TEST_KWARGS = [
+    "bundle_id",
+    "infoplists",
+    "minimum_os_version",
+    "test_host",
+    "env",
+    "args",
+    "size",
+    "timeout",
+]
+
 def ios_unit_test(name, apple_library = apple_library, **kwargs):
     """
     Builds and packages iOS Unit Tests.
@@ -11,9 +22,9 @@ def ios_unit_test(name, apple_library = apple_library, **kwargs):
         apple_library: The macro used to package sources into a library.
         kwargs: Arguments passed to the apple_library and ios_unit_test rules as appropriate.
     """
-    unit_test_kwargs = {arg: kwargs.pop(arg, None) for arg in ["bundle_id", "infoplists", "minimum_os_version", "test_host", "env", "args", "size", "timeout"]}
+    unit_test_kwargs = {arg: kwargs.pop(arg) for arg in _IOS_UNIT_TEST_KWARGS if arg in kwargs}
     unit_test_kwargs["data"] = kwargs.pop("test_data", [])
-    if unit_test_kwargs["test_host"] == True:
+    if unit_test_kwargs.get("test_host", None) == True:
         unit_test_kwargs["test_host"] = "@build_bazel_rules_ios//rules/test_host_app:iOS-%s-AppHost" % unit_test_kwargs.get("minimum_os_version")
 
     if "runner" in kwargs and "runners" in kwargs:
@@ -28,7 +39,7 @@ def ios_unit_test(name, apple_library = apple_library, **kwargs):
         else:
             unit_test_kwargs["runner"] = runner
 
-    library = apple_library(name = name, **kwargs)
+    library = apple_library(name = name, namespace_is_module_name = False, **kwargs)
 
     rule(
         name = name,
