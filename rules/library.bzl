@@ -5,6 +5,7 @@ load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 load("//rules:hmap.bzl", "headermap")
 load("//rules:substitute_build_settings.bzl", "substitute_build_settings")
+load("//rules/library:resources.bzl", "wrap_resources_in_filegroup")
 load("//rules/vfs_overlay:vfs_overlay.bzl", "vfs_overlay")
 
 PrivateHeaders = provider(
@@ -13,6 +14,8 @@ PrivateHeaders = provider(
         "headers": "Private headers",
     },
 )
+
+_MANUAL = ["manual"]
 
 def _private_headers_impl(ctx):
     return [
@@ -109,6 +112,7 @@ module {module_name} {{
         name = basename + "~",
         destination = destination,
         content = content,
+        tags = _MANUAL,
     )
     return destination
 
@@ -149,6 +153,7 @@ FOUNDATION_EXPORT const unsigned char {module_name}VersionString[];
         name = basename + "~",
         destination = destination,
         content = content,
+        tags = _MANUAL,
     )
     return destination
 
@@ -163,18 +168,16 @@ def generate_resource_bundles(name, library_tools, module_name, resource_bundles
                 "PRODUCT_BUNDLE_IDENTIFIER": "com.cocoapods.%s" % bundle_name,
                 "PRODUCT_NAME": bundle_name,
             },
-        )
-        resources_name = target_name + "_resources"
-        native.filegroup(
-            name = resources_name,
-            # remove filtering once https://github.com/bazelbuild/rules_apple/pull/694 is merged
-            srcs = [f for f in resource_bundles[bundle_name] if not f.endswith((".xcdatamodeld", ".xcmappingmodel"))],
+            tags = _MANUAL,
         )
         apple_resource_bundle(
             name = target_name,
             bundle_name = bundle_name,
-            resources = [resources_name],
+            resources = [
+                library_tools["wrap_resources_in_filegroup"](name = target_name + "_resources", srcs = resource_bundles[bundle_name]),
+            ],
             infoplists = [name + ".info.plist"],
+            tags = _MANUAL,
         )
         bundle_target_names.append(target_name)
     return bundle_target_names
@@ -183,12 +186,13 @@ _DefaultLibraryTools = {
     "modulemap_generator": write_modulemap,
     "umbrella_header_generator": write_umbrella_header,
     "resource_bundle_generator": generate_resource_bundles,
+    "wrap_resources_in_filegroup": wrap_resources_in_filegroup,
 }
 
 def _uppercase_string(s):
     return s.upper()
 
-def apple_library(name, library_tools = {}, export_private_headers = True, **kwargs):
+def apple_library(name, library_tools = {}, export_private_headers = True, namespace_is_module_name = True, **kwargs):
     """Create libraries for native source code on Apple platforms.
 
     Automatically handles mixed-source libraries and comes with
@@ -200,6 +204,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
                         default behaviors.
         export_private_headers: Whether private headers should be exported via
                                 a `PrivateHeaders` provider.
+        namespace_is_module_name: Whether the module name should be used as the
+                                  namespace for header imports, instead of the target name.
     """
     library_tools = dict(_DefaultLibraryTools, **library_tools)
     swift_sources = []
@@ -240,7 +246,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
         else:
             fail("Unable to compile %s in apple_framework %s" % (f, name))
 
-    module_name = _normalize_module_name(kwargs.pop("module_name", name))
+    module_name = kwargs.pop("module_name", name)
+    namespace = module_name if namespace_is_module_name else name
     module_map = kwargs.pop("module_map", None)
     cc_copts = kwargs.pop("cc_copts", [])
     swift_copts = kwargs.pop("swift_copts", [])
@@ -254,6 +261,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
     pch = kwargs.pop("pch", "@build_bazel_rules_ios//rules/library:common.pch")
     deps = kwargs.pop("deps", [])
     data = kwargs.pop("data", [])
+    tags = kwargs.pop("tags", [])
+    tags_manual = tags if "manual" in tags else tags + _MANUAL
     internal_deps = []
     lib_names = []
 
@@ -262,6 +271,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
         apple_static_framework_import(
             name = import_name,
             framework_imports = native.glob(["%s/**/*" % vendored_static_framework]),
+            tags = _MANUAL,
         )
         deps += [import_name]
     for vendored_dynamic_framework in kwargs.pop("vendored_dynamic_frameworks", []):
@@ -270,6 +280,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
             name = import_name,
             framework_imports = native.glob(["%s/**/*" % vendored_dynamic_framework]),
             deps = [],
+            tags = _MANUAL,
         )
         deps += [import_name]
     for vendored_static_library in kwargs.pop("vendored_static_libraries", []):
@@ -277,6 +288,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
         native.objc_import(
             name = import_name,
             archives = [vendored_static_library],
+            tags = _MANUAL,
         )
         deps += [import_name]
     for vendored_dynamic_library in kwargs.pop("vendored_dynamic_libraries", []):
@@ -297,6 +309,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
     native.filegroup(
         name = public_hdrs_filegroup,
         srcs = objc_hdrs,
+        tags = _MANUAL,
     )
 
     # Public hmaps are for vendored static libs to export their header only.
@@ -304,10 +317,11 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
     # rules.
     headermap(
         name = public_hmap_name,
-        namespace = module_name,
+        namespace = namespace,
         hdrs = [public_hdrs_filegroup],
         hdr_providers = deps,
         flatten_headers = True,
+        tags = _MANUAL,
     )
     internal_deps.append(public_hmap_name)
 
@@ -318,24 +332,28 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
     native.filegroup(
         name = private_hdrs_filegroup,
         srcs = objc_non_exported_hdrs + objc_private_hdrs + objc_hdrs,
+        tags = _MANUAL,
     )
     native.filegroup(
         name = private_angled_hdrs_filegroup,
         srcs = objc_non_exported_hdrs + objc_private_hdrs,
+        tags = _MANUAL,
     )
 
     headermap(
         name = private_hmap_name,
-        namespace = module_name,
+        namespace = namespace,
         hdrs = [private_hdrs_filegroup],
         flatten_headers = False,
+        tags = _MANUAL,
     )
     internal_deps.append(private_hmap_name)
     headermap(
         name = private_angled_hmap_name,
-        namespace = module_name,
+        namespace = namespace,
         hdrs = [private_angled_hdrs_filegroup],
         flatten_headers = True,
+        tags = _MANUAL,
     )
     internal_deps.append(private_angled_hmap_name)
     ## END HMAP
@@ -380,7 +398,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
     cpp_libname = "%s_cpp" % name
 
     # TODO: remove framework if set
-    if not module_map and (objc_hdrs or objc_private_hdrs or swift_sources):
+    if namespace_is_module_name and not module_map and (objc_hdrs or objc_private_hdrs or swift_sources):
         umbrella_header = library_tools["umbrella_header_generator"](
             name = name,
             library_tools = library_tools,
@@ -403,31 +421,39 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
         )
 
     if swift_sources:
-        swift_copts += [
-            "-Xcc",
-            "-fmodule-map-file=" + "$(execpath " + module_map + ")",
-            "-import-underlying-module",
-        ]
-        print("module name = {}".format(module_name))
+        if module_map:
+            swift_copts += [
+                "-Xcc",
+                "-fmodule-map-file=" + "$(execpath " + module_map + ")",
+                "-import-underlying-module",
+            ]
+        swiftc_inputs = other_inputs + objc_hdrs
+        if module_map:
+            swiftc_inputs.append(module_map)
+        generated_header_name = module_name + "-Swift.h"
         swift_library(
             name = swift_libname,
             module_name = module_name,
+            generated_header_name = generated_header_name,
             srcs = swift_sources,
             copts = swift_copts,
             deps = deps + internal_deps + lib_names,
-            swiftc_inputs = other_inputs + objc_hdrs + [module_map],
+            swiftc_inputs = swiftc_inputs,
             features = ["swift.no_generated_module_map"],
+            tags = tags_manual,
             **kwargs
         )
         lib_names += [swift_libname]
-        extend_modulemap(
-            name = module_map + ".extended." + name,
-            destination = "%s.extended.modulemap" % name,
-            source = module_map,
-            swift_header = "%s-Swift.h" % _normalize_module_name(module_name),
-            module_name = module_name,
-        )
-        module_map = "%s.extended.modulemap" % name
+        if module_map:
+            extend_modulemap(
+                name = module_map + ".extended." + name,
+                destination = "%s.extended.modulemap" % name,
+                source = module_map,
+                swift_header = generated_header_name,
+                module_name = module_name,
+                tags = _MANUAL,
+            )
+            module_map = "%s.extended.modulemap" % name
 
     if cpp_sources and False:
         native.cc_library(
@@ -436,9 +462,11 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
             hdrs = objc_hdrs,
             copts = cc_copts,
             deps = deps,
+            tags = tags_manual,
         )
         lib_names += [cpp_libname]
 
+    objc_library_data = library_tools["wrap_resources_in_filegroup"](name = objc_libname + "_data", srcs = data)
     native.objc_library(
         name = objc_libname,
         srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,
@@ -452,19 +480,29 @@ def apple_library(name, library_tools = {}, export_private_headers = True, **kwa
         weak_sdk_frameworks = weak_sdk_frameworks,
         sdk_includes = sdk_includes,
         pch = pch,
-        data = data,
+        data = [objc_library_data],
+        tags = tags_manual,
         **kwargs
+    )
+    launch_screen_storyboard_name = name + "_launch_screen_storyboard"
+    native.filegroup(
+        name = launch_screen_storyboard_name,
+        srcs = [objc_library_data],
+        output_group = "launch_screen_storyboard",
+        tags = _MANUAL,
     )
     lib_names += [objc_libname]
 
     if export_private_headers:
         private_headers_name = "%s_private_headers" % name
         lib_names += [private_headers_name]
-        _private_headers(name = private_headers_name, headers = objc_private_hdrs)
+        _private_headers(name = private_headers_name, headers = objc_private_hdrs, tags = _MANUAL)
 
     return struct(
         lib_names = lib_names,
         transitive_deps = deps,
         deps = lib_names + deps,
         module_name = module_name,
+        launch_screen_storyboard_name = launch_screen_storyboard_name,
+        namespace = namespace,
     )

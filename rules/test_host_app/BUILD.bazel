@@ -2,6 +2,7 @@ load("//rules:app.bzl", "ios_application")
 
 exports_files([
     "Info.plist",
+    "LaunchScreen.storyboard",
 ])
 
 [
@@ -23,5 +24,7 @@ exports_files([
         "10.0",
         "11.0",
         "12.0",
+        "13.0",
+        "13.2",
     ]
 ]
