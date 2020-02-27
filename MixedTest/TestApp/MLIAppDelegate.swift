@@ -11,16 +11,10 @@ import UIKit
 class MLIAppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    //var coordinator: MLIExampleAppCoordinator?
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
-        //let navController = UINavigationController()
-        //coordinator = MLIExampleAppCoordinator(navigationController: navController)
-        //coordinator?.start()
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool
         
         window = UIWindow(frame: UIScreen.main.bounds)
-//        window?.rootViewController = navController
         window?.makeKeyAndVisible()
         return true
     }
