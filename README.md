@@ -74,19 +74,58 @@ Minimal example:
 
 ```python
 load("@build_bazel_rules_ios//rules:app.bzl", "ios_application")
+load("//rules:framework.bzl", "apple_framework")
+  
+apple_framework(
+    name = "ModuleA",
+    srcs = glob([
+        "ModuleA/**/*.swift",
+        "ModuleA/**/*.m",
+        "ModuleA/**/*.h",
+    ]),
+    visibility = ["//visibility:public"],
+    deps = [":ModuleC"]
+)
 
+apple_framework(
+    name = "ModuleC",
+    srcs = glob([
+        "ModuleC/**/*.m",
+        "ModuleC/**/*.h",
+    ]),
+    visibility = ["//visibility:public"]
+)
+
+apple_framework(
+    name = "ModuleD",
+    srcs = glob([
+        "ModuleD/**/*.swift",
+    ]),
+    visibility = ["//visibility:public"],
+    deps = [":ModuleE"]
+)
+
+apple_framework(
+    name = "ModuleE",
+    srcs = glob([
+        "ModuleE/**/*.swift",
+    ]),
+    visibility = ["//visibility:public"]
+)
+
+############### MixedTest #################################
 ios_application(
-    name = "iOS-App",
-    srcs = glob(["*.m"]),
-    bundle_id = "com.example.ios-app",
-    entitlements = "ios.entitlements",
+    name = "Mixedtest",
+    srcs = glob([
+        "TestApp/**/*.swift",
+    ]),
+    bundle_id = "com.example.mixed-app",
     families = [
         "iphone",
-        "ipad",
     ],
-    launch_storyboard = "LaunchScreen.storyboard",
+
+    deps = [":ModuleA"],
     minimum_os_version = "12.0",
-    visibility = ["//visibility:public"],
 )
 ```
 
