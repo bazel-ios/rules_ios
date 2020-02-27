@@ -4,7 +4,7 @@
 //
 #import <Foundation/Foundation.h>
 #import "B.h"
-#import "MixedTest/ModuleA_swift-Swift.h"
+#import "Example/ModuleA_swift-Swift.h"
 @import ModuleC;
 
 @implementation B
