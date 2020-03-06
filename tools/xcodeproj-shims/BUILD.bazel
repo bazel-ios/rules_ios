@@ -1,0 +1,26 @@
+STUB_VISIBILTIY = ["//visibility:public"]
+
+sh_binary(
+    name = "clang-stub",
+    srcs = ["clang-stub.sh"],
+    visibility = STUB_VISIBILTIY,
+)
+
+sh_binary(
+    name = "ld-stub",
+    srcs = ["ld-stub.sh"],
+    visibility = STUB_VISIBILTIY,
+)
+
+sh_binary(
+    name = "swiftc-stub",
+    srcs = ["swiftc-stub.sh"],
+    visibility = STUB_VISIBILTIY,
+)
+
+sh_binary(
+    name = "installer",
+    srcs = ["install.sh"],
+    data = glob(["installers/*.sh"]),
+    visibility = STUB_VISIBILTIY,
+)
