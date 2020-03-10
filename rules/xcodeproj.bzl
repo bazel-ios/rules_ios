@@ -65,7 +65,7 @@ def _xcodeproj_aspect_impl(target, ctx):
         srcs = []
         for attr in _dir(ctx.rule.files):
             srcs += getattr(ctx.rule.files, attr, [])
-        srcs = [f for f in srcs if not f.path.startswith("external/")]
+        srcs = [f for f in srcs if not f.path.startswith("external/") and f.is_source]
 
         providers.append(
             _SrcsInfo(
