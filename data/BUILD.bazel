@@ -1,1 +1,6 @@
-package(default_visibility = ["//:__subpackages__"])
+package(default_visibility = ["//rules/library:__pkg__"])
+
+exports_files(
+    ["xcspecs.bzl"],
+    visibility = ["//docs:__pkg__"],
+)

@@ -22,6 +22,19 @@ bzl_library(
         "@build_bazel_apple_support//lib:apple_support.bzl",
         "@build_bazel_rules_apple//apple:ios.bzl",
         "@build_bazel_rules_swift//swift:swift.bzl",
+        "@rules_cc//cc:defs.bzl",
+    ],
+    tags = ["manual"],
+    visibility = ["//visibility:private"],
+    deps = [
+        "@bazel_skylib//:bzl_library",
+    ],
+)
+
+bzl_library(
+    name = "data",
+    srcs = [
+        "//data:xcspecs.bzl",
     ],
     tags = ["manual"],
     visibility = ["//visibility:private"],
@@ -37,7 +50,7 @@ bzl_library(
         input = "//rules:%s.bzl" % name,
         tags = ["manual"],
         visibility = ["//:__pkg__"],
-        deps = [":rules-apple"],
+        deps = [":rules-apple", ":data"],
     )
     for name in _RULES
 ]
