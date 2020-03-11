@@ -1,0 +1,26 @@
+load("@rules_python//python:defs.bzl", "py_binary")
+
+py_binary(
+    name = "xcspec_extractor",
+    srcs = ["xcspec_extractor.py"],
+)
+
+genrule(
+    name = "extract_xcspecs",
+    outs = ["extract_xcspecs.sh"],
+    cmd = """set -eu
+cat <<EOS > $(OUTS)
+set -eu
+readonly output=\\$$($(location @bazel_tools//tools/osx:xcode-locator) 2>/dev/null | grep : | sed -Ee s/.*'"(.+)": "(.+)".*'/'\\1.0|\\2'/g | sort --version-sort -k 1 -t '|' | tail -n 1)
+readonly xcode_version=\\$${output%%.0|*}
+readonly developer_dir=\\$${output#*|}
+$(location :xcspec_extractor) \\$$developer_dir \\$$xcode_version > \\$${BUILD_WORKSPACE_DIRECTORY}/data/xcspecs.bzl
+EOS
+    """,
+    executable = True,
+    tags = ["manual"],
+    tools = [
+        ":xcspec_extractor",
+        "@bazel_tools//tools/osx:xcode-locator",
+    ],
+)

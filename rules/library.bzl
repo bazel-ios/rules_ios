@@ -7,6 +7,7 @@ load("//rules:hmap.bzl", "headermap")
 load("//rules:substitute_build_settings.bzl", "substitute_build_settings")
 load("//rules/library:resources.bzl", "wrap_resources_in_filegroup")
 load("//rules/vfs_overlay:vfs_overlay.bzl", "vfs_overlay")
+load("//rules/library:xcconfig.bzl", "settings_from_xcconfig")
 
 PrivateHeaders = provider(
     doc = "Propagates private headers, so they can be accessed if necessary",
@@ -186,10 +187,19 @@ _DefaultLibraryTools = {
     "wrap_resources_in_filegroup": wrap_resources_in_filegroup,
 }
 
+def _add_copts(copts_struct, objc_copts, cc_copts, swift_copts, linkopts, ibtool_copts, momc_copts, mapc_copts):
+    objc_copts += copts_struct.objc_copts
+    cc_copts += copts_struct.cc_copts
+    swift_copts += copts_struct.swift_copts
+    linkopts += copts_struct.linkopts
+    ibtool_copts += copts_struct.ibtool_copts
+    momc_copts += copts_struct.momc_copts
+    mapc_copts += copts_struct.mapc_copts
+
 def _uppercase_string(s):
     return s.upper()
 
-def apple_library(name, library_tools = {}, export_private_headers = True, namespace_is_module_name = True, **kwargs):
+def apple_library(name, library_tools = {}, export_private_headers = True, namespace_is_module_name = True, xcconfig = {}, **kwargs):
     """Create libraries for native source code on Apple platforms.
 
     Automatically handles mixed-source libraries and comes with
@@ -203,6 +213,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                                 a `PrivateHeaders` provider.
         namespace_is_module_name: Whether the module name should be used as the
                                   namespace for header imports, instead of the target name.
+        xcconfig: A dictionary of Xcode build settings to be applied to this target in the
+                  form of different `copt` attributes.
     """
     library_tools = dict(_DefaultLibraryTools, **library_tools)
     swift_sources = []
@@ -248,7 +260,10 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     module_map = kwargs.pop("module_map", None)
     cc_copts = kwargs.pop("cc_copts", [])
     swift_copts = kwargs.pop("swift_copts", [])
-    linkopts = kwargs.pop("linkopts", None)
+    ibtool_copts = kwargs.pop("ibtool_copts", [])
+    momc_copts = kwargs.pop("momc_copts", [])
+    mapc_copts = kwargs.pop("mapc_copts", [])
+    linkopts = kwargs.pop("linkopts", [])
     objc_copts = kwargs.pop("objc_copts", [])
     other_inputs = kwargs.pop("other_inputs", [])
     sdk_dylibs = kwargs.pop("sdk_dylibs", [])
@@ -262,6 +277,17 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     tags_manual = tags if "manual" in tags else tags + _MANUAL
     internal_deps = []
     lib_names = []
+
+    xcconfig_settings = settings_from_xcconfig(xcconfig)
+    _add_copts(xcconfig_settings, objc_copts, cc_copts, swift_copts, linkopts, ibtool_copts, momc_copts, mapc_copts)
+
+    for (k, v) in {"linkopts": linkopts, "momc_copts": momc_copts, "mapc_copts": mapc_copts, "ibtool_copts": ibtool_copts}.items():
+        if v:
+            fail("Specifying {attr} for {name} is not yet supported. Given: {opts}".format(
+                attr = k,
+                name = name,
+                opts = repr(v),
+            ))
 
     for vendored_static_framework in kwargs.pop("vendored_static_frameworks", []):
         import_name = "%s-%s-import" % (name, paths.basename(vendored_static_framework))
@@ -502,4 +528,5 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         module_name = module_name,
         launch_screen_storyboard_name = launch_screen_storyboard_name,
         namespace = namespace,
+        linkopts = linkopts,
     )
