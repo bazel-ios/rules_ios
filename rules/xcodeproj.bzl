@@ -155,11 +155,12 @@ targets:
           script: |
             set -eux
             cd $BAZEL_WORKSPACE_ROOT
+
             $BAZEL_PATH build $BAZEL_PACKAGE:{bazel_name}
             $BAZEL_INSTALLER
 """.format(
                 name = target.name,
-                sources = ", ".join(['{path: "%s", group: "%s", validate: false}' % (paths.join(src_dot_dots, s.short_path), paths.dirname(s.short_path)) for s in target.srcs.to_list() if s.is_source]),
+                sources = ", ".join(['{path: "%s", group: "%s", validate: false}' % (paths.join(src_dot_dots, s.short_path), paths.dirname(s.short_path)) for s in target.srcs.to_list()]),
                 package = target.package,
                 bazel_name = target.bazel_name,
                 product_type = target.product_type,
@@ -170,17 +171,20 @@ targets:
         for target in targets:
             if target.product_type == "framework":
                 continue
+            action = 'test'
+            if target.product_type == "application":
+                action = 'run'
             yaml += """\
     {name}:
         build:
             parallelizeBuild: false
             buildImplicitDependencies: false
             targets:
-                {name}: [test]
-        test:
+                {name}: [{action}]
+        {action}:
             targets:
                 - {name}
-""".format(name = target.name)
+""".format(name = target.name, action = action)
     ctx.actions.write(xcodegen_yaml, yaml)
 
     ctx.actions.run(
@@ -196,6 +200,7 @@ targets:
     install_script_sh = """set -eu
 readonly project_path="${PWD}/%s"
 readonly dest="${BUILD_WORKSPACE_DIRECTORY}/%s/"
+export TMPDIR="/tmp" # TODO: figure out why TMPDIR is not set
 readonly tmp_dest="${TMPDIR}/%s/"
 
 readonly stubs_dir="${dest}/bazelstubs"
