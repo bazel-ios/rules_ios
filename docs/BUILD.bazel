@@ -50,7 +50,10 @@ bzl_library(
         input = "//rules:%s.bzl" % name,
         tags = ["manual"],
         visibility = ["//:__pkg__"],
-        deps = [":rules-apple", ":data"],
+        deps = [
+            ":data",
+            ":rules-apple",
+        ],
     )
     for name in _RULES
 ]
