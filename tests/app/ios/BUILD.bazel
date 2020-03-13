@@ -1,0 +1,16 @@
+load("//rules:framework.bzl", "apple_framework")
+load("//rules:app.bzl", "ios_application")
+
+apple_framework(
+    name = "FW",
+    srcs = glob(["FW/*"]),
+    private_headers = glob(["FW/*_Private.*"]),
+)
+
+ios_application(
+    name = "App",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    minimum_os_version = "10.0",
+    deps = [":FW"],
+)

@@ -26,14 +26,16 @@ def _find_framework_dir(outputs):
     for output in outputs:
         prefix = output.path.split(".framework/")[0]
         return prefix + ".framework"
+    return None
 
-def _framework_packaging(ctx, action, inputs, outputs):
+def _framework_packaging(ctx, action, inputs, outputs, manifest = None):
     if not inputs:
         return []
     if inputs == [None]:
         return []
     if action in ctx.attr.skip_packaging:
         return []
+    action_inputs = [manifest] + inputs if manifest else inputs
     outputs = [ctx.actions.declare_file(f) for f in outputs]
     framework_name = ctx.attr.framework_name
     framework_dir = _find_framework_dir(outputs)
@@ -46,7 +48,7 @@ def _framework_packaging(ctx, action, inputs, outputs):
     ctx.actions.run(
         executable = ctx.executable._framework_packaging,
         arguments = [args],
-        inputs = inputs,
+        inputs = action_inputs,
         outputs = outputs,
         mnemonic = "PackagingFramework%s" % action.title().replace("_", ""),
     )
@@ -166,19 +168,42 @@ def _apple_framework_packaging_impl(ctx):
             paths.join(framework_dir, "Modules", "module.modulemap"),
         ]
 
+    framework_manifest = ctx.actions.declare_file(framework_dir + ".manifest")
+
     # Package each part of the framework separately,
     # so inputs that do not depend on compilation
     # are available before those that do,
     # improving parallelism
-    binary_out = _framework_packaging(ctx, "binary", binary_in, binary_out)
-    header_out = _framework_packaging(ctx, "header", header_in, header_out)
-    private_header_out = _framework_packaging(ctx, "private_header", private_header_in, private_header_out)
-    modulemap_out = _framework_packaging(ctx, "modulemap", [modulemap_in], modulemap_out)
-    swiftmodule_out = _framework_packaging(ctx, "swiftmodule", [swiftmodule_in], swiftmodule_out)
-    swiftdoc_out = _framework_packaging(ctx, "swiftdoc", [swiftdoc_in], swiftdoc_out)
+    binary_out = _framework_packaging(ctx, "binary", binary_in, binary_out, framework_manifest)
+    header_out = _framework_packaging(ctx, "header", header_in, header_out, framework_manifest)
+    private_header_out = _framework_packaging(ctx, "private_header", private_header_in, private_header_out, framework_manifest)
+    modulemap_out = _framework_packaging(ctx, "modulemap", [modulemap_in], modulemap_out, framework_manifest)
+    swiftmodule_out = _framework_packaging(ctx, "swiftmodule", [swiftmodule_in], swiftmodule_out, framework_manifest)
+    swiftdoc_out = _framework_packaging(ctx, "swiftdoc", [swiftdoc_in], swiftdoc_out, framework_manifest)
     framework_files = _concat(binary_out, modulemap_out, header_out, private_header_out, swiftmodule_out, swiftdoc_out)
-
     framework_root = _find_framework_dir(framework_files)
+
+    ctx.actions.run(
+        executable = ctx.executable._framework_packaging,
+        arguments = [
+            "--action",
+            "clean",
+            "--framework_name",
+            framework_name,
+            "--framework_root",
+            framework_root,
+            "--inputs",
+            ctx.actions.args().use_param_file("%s", use_always = True).set_param_file_format("multiline")
+                .add_all(framework_files),
+            "--outputs",
+            framework_manifest.path,
+        ],
+        outputs = [framework_manifest],
+        mnemonic = "CleaningFramework",
+        execution_requirements = {
+            "local": "True",
+        },
+    )
 
     # headermap
     mappings_file = ctx.actions.declare_file(framework_name + "_framework.hmap.txt")
