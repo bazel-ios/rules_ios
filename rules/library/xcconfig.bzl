@@ -9,6 +9,18 @@ _MAPC = "com.apple.compilers.model.coredatamapping"
 _IBTOOL = "com.apple.xcode.tools.ibtool.compiler"
 _OTHERWISE = "<<otherwise>>"
 
+def _unknown_enum_value(option, value, fatal = False):
+    if option["Type"] != "Enumeration":
+        return
+
+    printer = fail if fatal else print
+
+    printer("{name}: {value} not a valid value, must be one of {options}".format(
+                name = option["Name"],
+                value = repr(value),
+                options = repr(option["Values"]),
+            ))
+
 def _add_copts_from_option(xcspec, option, value, copts, linkopts):
     _type = option["Type"]
     name = option["Name"]
@@ -16,7 +28,8 @@ def _add_copts_from_option(xcspec, option, value, copts, linkopts):
     if _type == "Boolean":
         if value not in ("YES", "NO"):
             coerced = "YES" if value != "0" else "NO"
-            print('{name}: {value} not a valid value, must be "YES" or "NO", inferred as {coerced}'.format(
+            printer = print if types.is_string(value) else fail
+            printer('{name}: {value} not a valid value, must be "YES" or "NO", inferred as {coerced}'.format(
                 name = name,
                 value = value,
                 coerced = coerced,
@@ -24,11 +37,7 @@ def _add_copts_from_option(xcspec, option, value, copts, linkopts):
             value = coerced
     elif _type == "Enumeration":
         if value not in option["Values"]:
-            print("{name}: {value} not a valid value, must be one of {options}".format(
-                name = name,
-                value = repr(value),
-                options = repr(option["Values"]),
-            ))
+            _unknown_enum_value(option, value)
         expected_value_type = types
     elif _type in ("StringList", "PathList") and not types.is_list(value):
         fail("{name}: {value} not a valid value, must be a list".format(
@@ -55,6 +64,8 @@ def _add_copts_from_option(xcspec, option, value, copts, linkopts):
             new_linkopts = args[value]
         elif _OTHERWISE in args:
             new_linkopts = args[_OTHERWISE]
+        else:
+            _unknown_enum_value(option, value, fatal = True)
 
     linkopts += [
         arg.replace("$(value)", v)
@@ -73,6 +84,7 @@ def _add_copts_from_option(xcspec, option, value, copts, linkopts):
         elif not types.is_dict(command_line_args):
             new = command_line_args
         else:
+            _unknown_enum_value(option, value, fatal = True)
             fail("{name}: {value} was not able to resolve as a command line arg for {arg}".format(
                 name = name,
                 value = repr(value),
