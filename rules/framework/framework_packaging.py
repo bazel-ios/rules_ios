@@ -89,6 +89,9 @@ def _clean(framework_root, manifest_file, output_manifest_file):
         output_manifest_file: path to the output manifest file
     """
 
+    if not os.path.exists(framework_root):
+        return
+
     with open(manifest_file) as f:
         manifest_lines = (line.rstrip() for line in f)
 
