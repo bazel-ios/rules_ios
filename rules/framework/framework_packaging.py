@@ -80,6 +80,44 @@ def _copy_modulemap(framework_root, modulemap_path):
     _mkdir(os.path.dirname(dest))
     _cp(modulemap_path, dest)
 
+def _clean(framework_root, manifest_file, output_manifest_file):
+    """Remove stale files from the framework root.
+
+    Args:
+        framework_root: root folder of the framework
+        manifest_file: path to the input manifest file
+        output_manifest_file: path to the output manifest file
+    """
+
+    _cp(manifest_file, output_manifest_file)
+
+    if not os.path.exists(framework_root):
+        return
+
+    with open(manifest_file) as f:
+        manifest_lines = (line.rstrip() for line in f)
+
+        files_to_keep = set()
+        dirs_to_keep = set((framework_root,))
+        for file in manifest_lines:
+            files_to_keep.add(file)
+            
+            dir = os.path.dirname(file)
+            while dir not in dirs_to_keep:
+                dirs_to_keep.add(dir)
+                dir = os.path.dirname(dir)
+
+    for root, dirs, files in os.walk(framework_root):
+        for d in dirs:
+            path = os.path.join(root, d)
+            if path not in dirs_to_keep:
+                os.rmdir(path)
+        for f in files:
+            path = os.path.join(root, f)
+            if path not in files_to_keep:
+                os.remove(path)
+
+
 class Args(argparse.Namespace):
     def input(self):
         assert len(self.inputs) == 1
@@ -104,6 +142,8 @@ def main():
             lambda args: _cp(args.input(), args.output()),
         "swiftdoc":
             lambda args: _cp(args.input(), args.output()),
+        "clean":
+            lambda args: _clean(args.framework_root, args.input(), args.output()),
     }
 
     parser = argparse.ArgumentParser(description="Packages files into a framework", fromfile_prefix_chars = '@')
