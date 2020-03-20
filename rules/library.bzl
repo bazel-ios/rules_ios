@@ -180,11 +180,18 @@ def generate_resource_bundles(name, library_tools, module_name, resource_bundles
         bundle_target_names.append(target_name)
     return bundle_target_names
 
+def _error_on_default_xcconfig(name, library_tools, default_xcconfig_name, **kwargs):
+    fail("{name} specifies a default xcconfig ({default_xcconfig_name}). You must override fetch_default_xcconfig to use this feature.".format(
+        name = name,
+        default_xcconfig_name = default_xcconfig_name,
+    ))
+
 _DefaultLibraryTools = {
     "modulemap_generator": write_modulemap,
     "umbrella_header_generator": write_umbrella_header,
     "resource_bundle_generator": generate_resource_bundles,
     "wrap_resources_in_filegroup": wrap_resources_in_filegroup,
+    "fetch_default_xcconfig": _error_on_default_xcconfig,
 }
 
 def _prepend_copts(copts_struct, objc_copts, cc_copts, swift_copts, linkopts, ibtool_copts, momc_copts, mapc_copts):
@@ -199,7 +206,7 @@ def _prepend_copts(copts_struct, objc_copts, cc_copts, swift_copts, linkopts, ib
 def _uppercase_string(s):
     return s.upper()
 
-def apple_library(name, library_tools = {}, export_private_headers = True, namespace_is_module_name = True, xcconfig = {}, **kwargs):
+def apple_library(name, library_tools = {}, export_private_headers = True, namespace_is_module_name = True, default_xcconfig_name = None, xcconfig = {}, **kwargs):
     """Create libraries for native source code on Apple platforms.
 
     Automatically handles mixed-source libraries and comes with
@@ -213,6 +220,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                                 a `PrivateHeaders` provider.
         namespace_is_module_name: Whether the module name should be used as the
                                   namespace for header imports, instead of the target name.
+        default_xcconfig_name: The name of a default xcconfig to be applied to this target.
         xcconfig: A dictionary of Xcode build settings to be applied to this target in the
                   form of different `copt` attributes.
     """
@@ -278,6 +286,10 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     internal_deps = []
     lib_names = []
 
+    if default_xcconfig_name:
+        for (setting, value) in library_tools["fetch_default_xcconfig"](name, library_tools, default_xcconfig_name, **kwargs).items():
+            if not setting in xcconfig:
+                xcconfig[setting] = value
     xcconfig_settings = settings_from_xcconfig(xcconfig)
     _prepend_copts(xcconfig_settings, objc_copts, cc_copts, swift_copts, linkopts, ibtool_copts, momc_copts, mapc_copts)
 
