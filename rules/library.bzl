@@ -187,14 +187,14 @@ _DefaultLibraryTools = {
     "wrap_resources_in_filegroup": wrap_resources_in_filegroup,
 }
 
-def _add_copts(copts_struct, objc_copts, cc_copts, swift_copts, linkopts, ibtool_copts, momc_copts, mapc_copts):
-    objc_copts += copts_struct.objc_copts
-    cc_copts += copts_struct.cc_copts
-    swift_copts += copts_struct.swift_copts
-    linkopts += copts_struct.linkopts
-    ibtool_copts += copts_struct.ibtool_copts
-    momc_copts += copts_struct.momc_copts
-    mapc_copts += copts_struct.mapc_copts
+def _prepend_copts(copts_struct, objc_copts, cc_copts, swift_copts, linkopts, ibtool_copts, momc_copts, mapc_copts):
+    objc_copts = copts_struct.objc_copts + objc_copts
+    cc_copts = copts_struct.cc_copts + cc_copts
+    swift_copts = copts_struct.swift_copts + swift_copts
+    linkopts = copts_struct.linkopts + linkopts
+    ibtool_copts = copts_struct.ibtool_copts + ibtool_copts
+    momc_copts = copts_struct.momc_copts + momc_copts
+    mapc_copts = copts_struct.mapc_copts + mapc_copts
 
 def _uppercase_string(s):
     return s.upper()
@@ -279,7 +279,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     lib_names = []
 
     xcconfig_settings = settings_from_xcconfig(xcconfig)
-    _add_copts(xcconfig_settings, objc_copts, cc_copts, swift_copts, linkopts, ibtool_copts, momc_copts, mapc_copts)
+    _prepend_copts(xcconfig_settings, objc_copts, cc_copts, swift_copts, linkopts, ibtool_copts, momc_copts, mapc_copts)
 
     for (k, v) in {"linkopts": linkopts, "momc_copts": momc_copts, "mapc_copts": mapc_copts, "ibtool_copts": ibtool_copts}.items():
         if v:
