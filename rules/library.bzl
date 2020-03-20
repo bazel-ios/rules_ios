@@ -1,3 +1,4 @@
+load("@rules_cc//cc:defs.bzl", "cc_library", "objc_import", "objc_library")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@build_bazel_rules_apple//apple:apple.bzl", "apple_dynamic_framework_import", "apple_static_framework_import")
@@ -6,7 +7,6 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 load("//rules:hmap.bzl", "headermap")
 load("//rules:substitute_build_settings.bzl", "substitute_build_settings")
 load("//rules/library:resources.bzl", "wrap_resources_in_filegroup")
-load("//rules/vfs_overlay:vfs_overlay.bzl", "vfs_overlay")
 load("//rules/library:xcconfig.bzl", "settings_from_xcconfig")
 
 PrivateHeaders = provider(
@@ -308,7 +308,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         deps += [import_name]
     for vendored_static_library in kwargs.pop("vendored_static_libraries", []):
         import_name = "%s-%s-library-import" % (name, paths.basename(vendored_static_library))
-        native.objc_import(
+        objc_import(
             name = import_name,
             archives = [vendored_static_library],
             tags = _MANUAL,
@@ -479,7 +479,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             module_map = "%s.extended.modulemap" % name
 
     if cpp_sources and False:
-        native.cc_library(
+        cc_library(
             name = cpp_libname,
             srcs = cpp_sources + objc_private_hdrs,
             hdrs = objc_hdrs,
@@ -490,7 +490,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         lib_names += [cpp_libname]
 
     objc_library_data = library_tools["wrap_resources_in_filegroup"](name = objc_libname + "_data", srcs = data)
-    native.objc_library(
+    objc_library(
         name = objc_libname,
         srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,
         non_arc_srcs = objc_non_arc_sources,
