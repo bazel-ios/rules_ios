@@ -47,8 +47,20 @@ def _add_copts_from_option(xcspec, option, value, copts, linkopts):
             cond = repr(option["Condition"]),
         ))
 
+    new_linkopts = []
+
     if "AdditionalLinkerArgs" in option:
-        linkopts += option["AdditionalLinkerArgs"][value]
+        args = option["AdditionalLinkerArgs"]
+        if value in args:
+            new_linkopts = args[value]
+        elif _OTHERWISE in args:
+            new_linkopts = args[_OTHERWISE]
+
+    linkopts += [
+        arg.replace("$(value)", v)
+        for v in (value if types.is_list(value) else [value])
+        for arg in new_linkopts
+    ]
 
     new = None
 
