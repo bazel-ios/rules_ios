@@ -38,6 +38,7 @@ xcspecs = [
 a = []
 for path in xcspecs:
     a.extend(xcspec_from_file(path))
+a.sort(key=lambda x: x['Identifier'])
 
 ids = (
     "com.apple.compilers.llvm.clang.1_0",
@@ -57,5 +58,10 @@ to_print = {
          for (k, v) in x.items()}
     for x in a if x['Identifier'] in ids
 }
+
+# stop sorting dictionary entried
+# both of these are needed to be compatible with various python versions
+pprint._sorted = lambda x: x
+pprint.sorted = lambda x, key: x
 
 pprint.pprint(to_print, width=150)
