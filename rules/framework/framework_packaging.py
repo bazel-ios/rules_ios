@@ -89,6 +89,8 @@ def _clean(framework_root, manifest_file, output_manifest_file):
         output_manifest_file: path to the output manifest file
     """
 
+    _cp(manifest_file, output_manifest_file)
+
     if not os.path.exists(framework_root):
         return
 
@@ -115,7 +117,6 @@ def _clean(framework_root, manifest_file, output_manifest_file):
             if path not in files_to_keep:
                 os.remove(path)
 
-    _cp(manifest_file, output_manifest_file)
 
 class Args(argparse.Namespace):
     def input(self):
