@@ -6,8 +6,6 @@ SRCS = [
     "empty.swift",
 ]
 
-EXPECTED_FAILURE = ["manual"]
-
 apple_framework(
     name = "empty_xcconfig",
     srcs = SRCS,
@@ -30,23 +28,12 @@ apple_framework(
     },
 )
 
-# apple_framework(
-#     name = "invalid_boolean_key_xcconfig",
-#     srcs = SRCS,
-#     xcconfig = {
-#         "GCC_TREAT_WARNINGS_AS_ERRORS": "FILE_NOT_FOUND"
-#     },
-# )
-
-genquery(
-    name = "boolean_key_xcconfig_libraries",
-    expression = 'filter(//tests/xcconfig:, deps("//tests/xcconfig:boolean_key_xcconfig", 1))',
-    opts = [
-        "--output=xml",
-        "--relative_locations",
-        "--noxml:line_numbers",
-    ],
-    scope = ["//tests/xcconfig:boolean_key_xcconfig"],
+apple_framework(
+    name = "array_key_xcconfig",
+    srcs = SRCS,
+    xcconfig = {
+        "GCC_PREPROCESSOR_DEFINITIONS": ["FOO", "BAR=1"],
+    },
 )
 
 xcconfig_unit_test_suite()

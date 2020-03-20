@@ -167,6 +167,11 @@ def xcconfig_unit_test_suite():
                 xcconfig = {"OTHER_CFLAGS": ["-IFOO"]},
                 error = 'OTHER_CFLAGS: unable to extract value for ["-IFOO"] in com.apple.compilers.llvm.clang.1_0',
             ),
+            assert_xcconfig(
+                name = "option_with_inherited",
+                xcconfig = {"GCC_PREPROCESSOR_DEFINITIONS": ["$(inherited)", "ABC=1"]},
+                expected = {"objc_copts": ["-D$(inherited)", "-DABC=1"]},
+            ),
             # TODO: we should eventually support conditioned vars somehow
             assert_xcconfig(
                 name = "conditioned_option_unsupported",
