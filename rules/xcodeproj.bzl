@@ -171,9 +171,9 @@ targets:
         for target in targets:
             if target.product_type == "framework":
                 continue
-            action = 'test'
+            action = "test"
             if target.product_type == "application":
-                action = 'run'
+                action = "run"
             yaml += """\
     {name}:
         build:

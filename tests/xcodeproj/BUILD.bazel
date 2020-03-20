@@ -2,6 +2,6 @@ load("//rules:xcodeproj.bzl", "xcodeproj")
 
 xcodeproj(
     name = "Single-Application",
-    deps = ["//rules/test_host_app:iOS-12.0-AppHost"],
     bazel_path = "bazelisk",
+    deps = ["//rules/test_host_app:iOS-12.0-AppHost"],
 )
