@@ -281,13 +281,23 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     xcconfig_settings = settings_from_xcconfig(xcconfig)
     _prepend_copts(xcconfig_settings, objc_copts, cc_copts, swift_copts, linkopts, ibtool_copts, momc_copts, mapc_copts)
 
-    for (k, v) in {"linkopts": linkopts, "momc_copts": momc_copts, "mapc_copts": mapc_copts, "ibtool_copts": ibtool_copts}.items():
+    for (k, v) in {"momc_copts": momc_copts, "mapc_copts": mapc_copts, "ibtool_copts": ibtool_copts}.items():
         if v:
             fail("Specifying {attr} for {name} is not yet supported. Given: {opts}".format(
                 attr = k,
                 name = name,
                 opts = repr(v),
             ))
+
+    if linkopts:
+        linkopts_name = "%s_linkopts" % (name)
+
+        # https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library
+        cc_library(
+            name = linkopts_name,
+            linkopts = linkopts,
+        )
+        internal_deps += [linkopts_name]
 
     for vendored_static_framework in kwargs.pop("vendored_static_frameworks", []):
         import_name = "%s-%s-import" % (name, paths.basename(vendored_static_framework))
