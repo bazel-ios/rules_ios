@@ -15,13 +15,16 @@ def _add_copts_from_option(xcspec, option, value, copts, linkopts):
 
     if _type == "Boolean":
         if value not in ("YES", "NO"):
-            fail('{name}: {value} not a valid value, must be "YES" or "NO"'.format(
+            coerced = "YES" if value != "0" else "NO"
+            print('{name}: {value} not a valid value, must be "YES" or "NO", inferred as {coerced}'.format(
                 name = name,
                 value = value,
+                coerced = coerced,
             ))
+            value = coerced
     elif _type == "Enumeration":
         if value not in option["Values"]:
-            fail("{name}: {value} not a valid value, must be one of {options}".format(
+            print("{name}: {value} not a valid value, must be one of {options}".format(
                 name = name,
                 value = repr(value),
                 options = repr(option["Values"]),
@@ -63,6 +66,8 @@ def _add_copts_from_option(xcspec, option, value, copts, linkopts):
                 value = repr(value),
                 arg = repr(command_line_args),
             ))
+        if not types.is_list(new):
+            new = [new]
 
     elif "CommandLineFlag" in option:
         command_line_flag = option["CommandLineFlag"]
@@ -88,7 +93,7 @@ def _add_copts_from_option(xcspec, option, value, copts, linkopts):
 
     copts += [
         arg.replace("$(value)", v)
-        for v in (value if types.is_list(value) else (value,))
+        for v in (value if types.is_list(value) else [value])
         for arg in new
     ]
 
