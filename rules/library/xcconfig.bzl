@@ -127,13 +127,14 @@ def settings_from_xcconfig(xcconfig):
         _IBTOOL: ibtool_copts,
     }
 
-    for setting in xcconfig:
-        value = xcconfig[setting]
-        for id in id_map:
-            copts = id_map[id]
-            option = SETTINGS[id]["Options"].get(setting)
-            if option:
-                _add_copts_from_option(id, option, value, copts, linkopts)
+    for (id, copts) in id_map.items():
+        settings = SETTINGS[id]["Options"]
+        for (setting, option) in settings.items():
+            if not setting in xcconfig:
+                continue
+
+            value = xcconfig[setting]
+            _add_copts_from_option(id, option, value, copts, linkopts)
 
     return struct(
         objc_copts = objc_copts,
