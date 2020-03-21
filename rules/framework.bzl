@@ -183,27 +183,30 @@ def _apple_framework_packaging_impl(ctx):
     framework_files = _concat(binary_out, modulemap_out, header_out, private_header_out, swiftmodule_out, swiftdoc_out)
     framework_root = _find_framework_dir(framework_files)
 
-    ctx.actions.run(
-        executable = ctx.executable._framework_packaging,
-        arguments = [
-            "--action",
-            "clean",
-            "--framework_name",
-            framework_name,
-            "--framework_root",
-            framework_root,
-            "--inputs",
-            ctx.actions.args().use_param_file("%s", use_always = True).set_param_file_format("multiline")
-                .add_all(framework_files),
-            "--outputs",
-            framework_manifest.path,
-        ],
-        outputs = [framework_manifest],
-        mnemonic = "CleaningFramework",
-        execution_requirements = {
-            "local": "True",
-        },
-    )
+    if framework_root:
+        ctx.actions.run(
+            executable = ctx.executable._framework_packaging,
+            arguments = [
+                "--action",
+                "clean",
+                "--framework_name",
+                framework_name,
+                "--framework_root",
+                framework_root,
+                "--inputs",
+                ctx.actions.args().use_param_file("%s", use_always = True).set_param_file_format("multiline")
+                    .add_all(framework_files),
+                "--outputs",
+                framework_manifest.path,
+            ],
+            outputs = [framework_manifest],
+            mnemonic = "CleaningFramework",
+            execution_requirements = {
+                "local": "True",
+            },
+        )
+    else:
+        ctx.actions.write(framework_manifest, "# Empty framework\n")
 
     # headermap
     mappings_file = ctx.actions.declare_file(framework_name + "_framework.hmap.txt")
