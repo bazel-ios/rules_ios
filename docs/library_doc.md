@@ -65,8 +65,8 @@ Propagates private headers, so they can be accessed if necessary
 ## apple_library
 
 <pre>
-apple_library(<a href="#apple_library-name">name</a>, <a href="#apple_library-library_tools">library_tools</a>, <a href="#apple_library-export_private_headers">export_private_headers</a>, <a href="#apple_library-namespace_is_module_name">namespace_is_module_name</a>, <a href="#apple_library-xcconfig">xcconfig</a>,
-              <a href="#apple_library-kwargs">kwargs</a>)
+apple_library(<a href="#apple_library-name">name</a>, <a href="#apple_library-library_tools">library_tools</a>, <a href="#apple_library-export_private_headers">export_private_headers</a>, <a href="#apple_library-namespace_is_module_name">namespace_is_module_name</a>,
+              <a href="#apple_library-default_xcconfig_name">default_xcconfig_name</a>, <a href="#apple_library-xcconfig">xcconfig</a>, <a href="#apple_library-kwargs">kwargs</a>)
 </pre>
 
 Create libraries for native source code on Apple platforms.
@@ -84,6 +84,7 @@ reasonable defaults that mimic Xcode's behavior.
 | library_tools |  An optional dictionary containing overrides for                 default behaviors.   |  <code>{}</code> |
 | export_private_headers |  Whether private headers should be exported via                         a <code>PrivateHeaders</code> provider.   |  <code>True</code> |
 | namespace_is_module_name |  Whether the module name should be used as the                           namespace for header imports, instead of the target name.   |  <code>True</code> |
+| default_xcconfig_name |  The name of a default xcconfig to be applied to this target.   |  <code>None</code> |
 | xcconfig |  A dictionary of Xcode build settings to be applied to this target in the           form of different <code>copt</code> attributes.   |  <code>{}</code> |
 | kwargs |  <p align="center"> - </p>   |  none |
 
