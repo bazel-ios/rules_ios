@@ -32,7 +32,10 @@ apple_framework(
     name = "array_key_xcconfig",
     srcs = SRCS,
     xcconfig = {
-        "GCC_PREPROCESSOR_DEFINITIONS": ["FOO", "BAR=1"],
+        "GCC_PREPROCESSOR_DEFINITIONS": [
+            "FOO",
+            "BAR=1",
+        ],
     },
 )
 

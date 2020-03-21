@@ -16,10 +16,10 @@ def _unknown_enum_value(option, value, fatal = False):
     printer = fail if fatal else print
 
     printer("{name}: {value} not a valid value, must be one of {options}".format(
-                name = option["Name"],
-                value = repr(value),
-                options = repr(option["Values"]),
-            ))
+        name = option["Name"],
+        value = repr(value),
+        options = repr(option["Values"]),
+    ))
 
 def _add_copts_from_option(xcspec, option, value, copts, linkopts):
     _type = option["Type"]
