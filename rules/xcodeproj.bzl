@@ -200,7 +200,7 @@ targets:
     install_script_sh = """set -eu
 readonly project_path="${PWD}/%s"
 readonly dest="${BUILD_WORKSPACE_DIRECTORY}/%s/"
-readonly tmp_dest=`mktemp -d`/%s/
+readonly tmp_dest=$(mktemp -d)/%s/
 
 readonly stubs_dir="${dest}/bazelstubs"
 mkdir -p ${stubs_dir}
