@@ -21,6 +21,6 @@ cp -r "${project_path}" "$tmp_dest"
 chmod -R +w "${tmp_dest}"
 
 # always trim three ../ from path, since that's "bazel-out/darwin-fastbuild/bin"
-sed -i. -E -e 's|([ "])../../../|\1|g' -e "s|__BAZEL_EXEC_ROOT__|${PWD}|g" "${tmp_dest}/project.pbxproj"
+sed -i. -E -e 's|([ "])../../../|\1|g' "${tmp_dest}/project.pbxproj"
 rm "${tmp_dest}/project.pbxproj."
 rsync --recursive --quiet --copy-links "${tmp_dest}" "${dest}"

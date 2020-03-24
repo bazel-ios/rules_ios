@@ -113,7 +113,6 @@ options:
     defaultConfig: Debug
     groupSortPosition: none
 settings:
-    BAZEL_EXEC_ROOT: "__BAZEL_EXEC_ROOT__"
     BAZEL_PATH: "{bazel_path}"
     BAZEL_WORKSPACE_ROOT: "$SRCROOT/{bazel_workspace_root}"
     BAZEL_STUBS_DIR: "$PROJECT_FILE_PATH/bazelstubs"
@@ -128,7 +127,12 @@ settings:
     SWIFT_EXEC: "$BAZEL_STUBS_DIR/swiftc-stub"
     SWIFT_OBJC_INTERFACE_HEADER_NAME: ""
     SWIFT_VERSION: 5
-""".format(name = paths.split_extension(project_name)[0], bazel_workspace_root = script_dot_dots, bazel_path = ctx.attr.bazel_path, installer_path = ctx.executable.installer.short_path)
+""".format(
+        name = paths.split_extension(project_name)[0],
+        bazel_workspace_root = script_dot_dots,
+        bazel_path = ctx.attr.bazel_path,
+        installer_path = ctx.executable.installer.short_path,
+    )
 
     targets = []
     if ctx.attr.include_transitive_targets:
