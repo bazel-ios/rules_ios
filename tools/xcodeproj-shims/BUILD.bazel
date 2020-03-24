@@ -24,3 +24,7 @@ sh_binary(
     data = glob(["installers/*.sh"]),
     visibility = STUB_VISIBILITY,
 )
+
+exports_files([
+  "xcodeproj-installer.sh"
+])

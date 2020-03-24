@@ -197,41 +197,18 @@ targets:
         "%s-install-xcodeproj.sh" % ctx.attr.name,
     )
 
-    install_script_sh = """set -eu
-readonly project_path="${PWD}/%s"
-readonly dest="${BUILD_WORKSPACE_DIRECTORY}/%s/"
-readonly tmp_dest=$(mktemp -d)/%s/
-
-readonly stubs_dir="${dest}/bazelstubs"
-mkdir -p ${stubs_dir}
-
-readonly installer="%s"
-
-mkdir -p $(dirname "${stubs_dir}/${installer}")
-cp "${installer}" "${stubs_dir}/${installer}"
-cp "%s" "${stubs_dir}/clang-stub"
-cp "%s" "${stubs_dir}/ld-stub"
-cp "%s" "${stubs_dir}/swiftc-stub"
-
-rm -fr ${tmp_dest}
-mkdir -p $(dirname $tmp_dest)
-cp -r "${project_path}" "$tmp_dest"
-chmod -R +w "${tmp_dest}"
-
-# always trim three ../ from path, since that's "bazel-out/darwin-fastbuild/bin"
-sed -i. -E -e 's|([ "])../../../|\\1|g' -e "s|__BAZEL_EXEC_ROOT__|${PWD}|g" "${tmp_dest}/project.pbxproj"
-rm "${tmp_dest}/project.pbxproj."
-rsync --recursive --quiet --copy-links "${tmp_dest}" "${dest}"
-""" % (
-        project.short_path,
-        project.short_path,
-        project.path,
-        ctx.executable.installer.short_path,
-        ctx.executable.clang_stub.short_path,
-        ctx.executable.ld_stub.short_path,
-        ctx.executable.swiftc_stub.short_path,
-    )
-    ctx.actions.write(install_script, install_script_sh, is_executable = True)
+    ctx.actions.expand_template(
+        template = ctx.file._xcodeproj_installer_template,
+        output = install_script,
+        substitutions = {
+            '$(project_short_path)': project.short_path,
+            '$(project_full_path)': project.path,
+            '$(installer_short_path)': ctx.executable.installer.short_path,
+            '$(clang_stub_short_path)': ctx.executable.clang_stub.short_path,
+            '$(clang_stub_ld_path)': ctx.executable.ld_stub.short_path,
+            '$(clang_stub_swiftc_path)': ctx.executable.swiftc_stub.short_path,
+        },
+        is_executable = True)
 
     return [
         DefaultInfo(
@@ -252,6 +229,7 @@ xcodeproj = rule(
         "include_transitive_targets": attr.bool(default = False, mandatory = False),
         "project_name": attr.string(mandatory = False),
         "bazel_path": attr.string(mandatory = False, default = "bazel"),
+        "_xcodeproj_installer_template": attr.label(executable = False, default = Label("//tools/xcodeproj-shims:xcodeproj-installer.sh"), allow_single_file = ["sh"]),
         "_xcodegen": attr.label(executable = True, default = Label("@com_github_yonaskolb_xcodegen//:xcodegen"), cfg = "host"),
         "clang_stub": attr.label(executable = True, default = Label("//tools/xcodeproj-shims:clang-stub"), cfg = "host"),
         "ld_stub": attr.label(executable = True, default = Label("//tools/xcodeproj-shims:ld-stub"), cfg = "host"),
