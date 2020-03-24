@@ -26,5 +26,5 @@ sh_binary(
 )
 
 exports_files([
-  "xcodeproj-installer.sh"
+    "xcodeproj-installer.sh",
 ])

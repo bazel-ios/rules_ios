@@ -201,14 +201,15 @@ targets:
         template = ctx.file._xcodeproj_installer_template,
         output = install_script,
         substitutions = {
-            '$(project_short_path)': project.short_path,
-            '$(project_full_path)': project.path,
-            '$(installer_short_path)': ctx.executable.installer.short_path,
-            '$(clang_stub_short_path)': ctx.executable.clang_stub.short_path,
-            '$(clang_stub_ld_path)': ctx.executable.ld_stub.short_path,
-            '$(clang_stub_swiftc_path)': ctx.executable.swiftc_stub.short_path,
+            "$(project_short_path)": project.short_path,
+            "$(project_full_path)": project.path,
+            "$(installer_short_path)": ctx.executable.installer.short_path,
+            "$(clang_stub_short_path)": ctx.executable.clang_stub.short_path,
+            "$(clang_stub_ld_path)": ctx.executable.ld_stub.short_path,
+            "$(clang_stub_swiftc_path)": ctx.executable.swiftc_stub.short_path,
         },
-        is_executable = True)
+        is_executable = True,
+    )
 
     return [
         DefaultInfo(
