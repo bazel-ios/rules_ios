@@ -1,0 +1,22 @@
+name: master
+
+on:
+  push:
+    branches:
+      - master
+    pull_request:
+
+jobs:
+  integration_tests:
+    name: Build and Test
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Select Xcode 11.2
+        run: sudo xcode-select -s /Applications/Xcode_11.2.app
+      - name: Install Bazel
+        run: brew install bazelisk
+      - name: Generate Xcode projects
+        run: bazelisk run tests/xcodeproj/... && git diff --exit-code tests/xcodeproj
+      - name: Run Xcode builds
+        run: ./tests/xcodeproj/build.sh

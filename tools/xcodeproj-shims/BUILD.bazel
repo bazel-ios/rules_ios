@@ -1,0 +1,30 @@
+STUB_VISIBILITY = ["//visibility:public"]
+
+sh_binary(
+    name = "clang-stub",
+    srcs = ["clang-stub.sh"],
+    visibility = STUB_VISIBILITY,
+)
+
+sh_binary(
+    name = "ld-stub",
+    srcs = ["ld-stub.sh"],
+    visibility = STUB_VISIBILITY,
+)
+
+sh_binary(
+    name = "swiftc-stub",
+    srcs = ["swiftc-stub.sh"],
+    visibility = STUB_VISIBILITY,
+)
+
+sh_binary(
+    name = "installer",
+    srcs = ["install.sh"],
+    data = glob(["installers/*.sh"]),
+    visibility = STUB_VISIBILITY,
+)
+
+exports_files([
+    "xcodeproj-installer.sh",
+])

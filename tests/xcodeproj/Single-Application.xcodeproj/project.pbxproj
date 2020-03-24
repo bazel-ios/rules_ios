@@ -1,0 +1,228 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		998B8A25A460C8A84A889BA4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E9B6AD18F0456196D0CC53 /* main.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0D83A3C0792B1D31D6679DE6 /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = common.pch; path = ../../rules/library/common.pch; sourceTree = "<group>"; };
+		6F98C687998F1EE41798F0CF /* iOS-12.0-AppHost.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "iOS-12.0-AppHost.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C54D2364694D54B608C1162B /* ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ios.entitlements; path = ../../rules/test_host_app/ios.entitlements; sourceTree = "<group>"; };
+		D1E9B6AD18F0456196D0CC53 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../../rules/test_host_app/main.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		29BFE313382FB9CA48CE9169 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6F98C687998F1EE41798F0CF /* iOS-12.0-AppHost.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4071CF58886D3113CFCF6987 /* test_host_app */ = {
+			isa = PBXGroup;
+			children = (
+				C54D2364694D54B608C1162B /* ios.entitlements */,
+				D1E9B6AD18F0456196D0CC53 /* main.m */,
+			);
+			name = test_host_app;
+			sourceTree = "<group>";
+		};
+		5B1FEF995595D40B30E452A4 = {
+			isa = PBXGroup;
+			children = (
+				7852A87B8FF1B5CB4946B738 /* rules */,
+				29BFE313382FB9CA48CE9169 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7852A87B8FF1B5CB4946B738 /* rules */ = {
+			isa = PBXGroup;
+			children = (
+				C505B2950E6F63AEAE8E1E0A /* library */,
+				4071CF58886D3113CFCF6987 /* test_host_app */,
+			);
+			name = rules;
+			sourceTree = "<group>";
+		};
+		C505B2950E6F63AEAE8E1E0A /* library */ = {
+			isa = PBXGroup;
+			children = (
+				0D83A3C0792B1D31D6679DE6 /* common.pch */,
+			);
+			name = library;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		63A9A4C7BC341C0243D5F61B /* iOS-12.0-AppHost */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 10784815C177215BF3205B25 /* Build configuration list for PBXNativeTarget "iOS-12.0-AppHost" */;
+			buildPhases = (
+				53E55C60467FECA6BED81D86 /* Build with bazel */,
+				4699E0A90E1687D67F90F6CB /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "iOS-12.0-AppHost";
+			productName = "iOS-12.0-AppHost";
+			productReference = 6F98C687998F1EE41798F0CF /* iOS-12.0-AppHost.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		19E365F4EE3C9FD4B62D1044 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1020;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 6B169F9A3DF3690271A6FE36 /* Build configuration list for PBXProject "Single-Application" */;
+			compatibilityVersion = "Xcode 10.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 5B1FEF995595D40B30E452A4;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				63A9A4C7BC341C0243D5F61B /* iOS-12.0-AppHost */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		53E55C60467FECA6BED81D86 /* Build with bazel */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build with bazel";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -eux\ncd $BAZEL_WORKSPACE_ROOT\n$BAZEL_PATH build $BAZEL_PACKAGE:iOS-12.0-AppHost\n$BAZEL_INSTALLER\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4699E0A90E1687D67F90F6CB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				998B8A25A460C8A84A889BA4 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2A06560ADF2996495FDD38B3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_EXEC_ROOT = /private/var/tmp/_bazel_segiddins/6002e4ab2f9e9caedfabd3741b1372a5/execroot/build_bazel_rules_ios/bazel-out/darwin-fastbuild/bin/tests/xcodeproj/Single-Application-install-xcodeproj.sh.runfiles/build_bazel_rules_ios;
+				BAZEL_INSTALLER = "$BAZEL_STUBS_DIR/tools/xcodeproj-shims/installer";
+				BAZEL_PATH = bazelisk;
+				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
+				BAZEL_WORKSPACE_ROOT = $SRCROOT/../..;
+				CC = "$BAZEL_STUBS_DIR/clang-stub";
+				CLANG_ANALYZER_EXEC = $CC;
+				CODE_SIGNING_ALLOWED = NO;
+				CXX = $CC;
+				DONT_RUN_SWIFT_STDLIB_TOOL = YES;
+				LD = "$BAZEL_STUBS_DIR/ld-stub";
+				LIBTOOL = /usr/bin/true;
+				SDKROOT = iphoneos;
+				SWIFT_EXEC = "$BAZEL_STUBS_DIR/swiftc-stub";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
+				SWIFT_VERSION = 5;
+			};
+			name = Release;
+		};
+		3BB370A0E4F5B531163ED319 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_EXEC_ROOT = /private/var/tmp/_bazel_segiddins/6002e4ab2f9e9caedfabd3741b1372a5/execroot/build_bazel_rules_ios/bazel-out/darwin-fastbuild/bin/tests/xcodeproj/Single-Application-install-xcodeproj.sh.runfiles/build_bazel_rules_ios;
+				BAZEL_INSTALLER = "$BAZEL_STUBS_DIR/tools/xcodeproj-shims/installer";
+				BAZEL_PATH = bazelisk;
+				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
+				BAZEL_WORKSPACE_ROOT = $SRCROOT/../..;
+				CC = "$BAZEL_STUBS_DIR/clang-stub";
+				CLANG_ANALYZER_EXEC = $CC;
+				CODE_SIGNING_ALLOWED = NO;
+				CXX = $CC;
+				DONT_RUN_SWIFT_STDLIB_TOOL = YES;
+				LD = "$BAZEL_STUBS_DIR/ld-stub";
+				LIBTOOL = /usr/bin/true;
+				SDKROOT = iphoneos;
+				SWIFT_EXEC = "$BAZEL_STUBS_DIR/swiftc-stub";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
+				SWIFT_VERSION = 5;
+			};
+			name = Debug;
+		};
+		5CE3210372879BBD23D95EAD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_PACKAGE = rules/test_host_app;
+				MACH_O_TYPE = "$(inherited)";
+				PRODUCT_NAME = "iOS-12.0-AppHost";
+			};
+			name = Debug;
+		};
+		E29A0D971F9765385323ACAF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_PACKAGE = rules/test_host_app;
+				MACH_O_TYPE = "$(inherited)";
+				PRODUCT_NAME = "iOS-12.0-AppHost";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		10784815C177215BF3205B25 /* Build configuration list for PBXNativeTarget "iOS-12.0-AppHost" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5CE3210372879BBD23D95EAD /* Debug */,
+				E29A0D971F9765385323ACAF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "";
+		};
+		6B169F9A3DF3690271A6FE36 /* Build configuration list for PBXProject "Single-Application" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3BB370A0E4F5B531163ED319 /* Debug */,
+				2A06560ADF2996495FDD38B3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 19E365F4EE3C9FD4B62D1044 /* Project object */;
+}

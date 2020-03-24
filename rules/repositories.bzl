@@ -57,3 +57,23 @@ def rules_ios_dependencies():
             "https://github.com/bazelbuild/bazel-skylib/releases/download/1.0.2/bazel-skylib-1.0.2.tar.gz",
         ],
     )
+
+    _maybe(
+        http_archive,
+        name = "com_github_yonaskolb_xcodegen",
+        build_file_content = """\
+load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
+
+native_binary(
+    name = "xcodegen",
+    src = "bin/xcodegen",
+    out = "xcodegen",
+    data = glob(["share/**/*"]),
+    visibility = ["//visibility:public"],
+)
+""",
+        canonical_id = "xcodegen-2.13.0",
+        sha256 = "053ed047424a481231e68be3346651a3a91a2d7e3323c52d65ac3f5324b9c109",
+        strip_prefix = "xcodegen",
+        urls = ["https://github.com/yonaskolb/XcodeGen/releases/download/2.13.0/xcodegen.zip"],
+    )
