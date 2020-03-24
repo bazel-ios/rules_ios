@@ -395,7 +395,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     cpp_libname = "%s_cpp" % name
 
     # TODO: remove framework if set
-    if namespace_is_module_name and not module_map and (objc_hdrs or objc_private_hdrs or swift_sources):
+    if namespace_is_module_name and not module_map and \
+       (objc_hdrs or objc_private_hdrs or swift_sources or objc_sources or cpp_sources):
         umbrella_header = library_tools["umbrella_header_generator"](
             name = name,
             library_tools = library_tools,
