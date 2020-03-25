@@ -14,8 +14,6 @@ jobs:
       - uses: actions/checkout@v1
       - name: Select Xcode 11.2
         run: sudo xcode-select -s /Applications/Xcode_11.2.app
-      - name: Install buildifier
-        run: brew install buildifier
       - name: Build and Test
         run: bazelisk test --local_test_jobs=2 //...
       - uses: actions/upload-artifact@v1
@@ -23,7 +21,34 @@ jobs:
         with:
           name: bazel-testlogs
           path: bazel-testlogs
+  check_docs:
+    name: Check Starlark
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Select Xcode 11.2
+        run: sudo xcode-select -s /Applications/Xcode_11.2.app
+      - name: Install buildifier
+        run: brew install buildifier
       - name: buildifier
         run: find . -type f \( -name 'WORKSPACE' -o -name '*.bzl' -o -name '*.bazel' \) | xargs buildifier --mode=diff
+  buildifier:
+    name: Check Docs
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Select Xcode 11.2
+        run: sudo xcode-select -s /Applications/Xcode_11.2.app
       - name: Check docs
         run: bazelisk run docs --nocheck_visibility && git diff --exit-code docs
+  xcodeproj_tests:
+    name: .xcodeproj Tests
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Select Xcode 11.2
+        run: sudo xcode-select -s /Applications/Xcode_11.2.app
+      - name: Generate Xcode projects
+        run: bazelisk run tests/xcodeproj/... && git diff --exit-code tests/xcodeproj
+      - name: Run Xcode builds
+        run: ./tests/xcodeproj/build.sh

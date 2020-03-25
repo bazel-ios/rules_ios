@@ -123,7 +123,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -eux\ncd $BAZEL_WORKSPACE_ROOT\n$BAZEL_PATH build $BAZEL_PACKAGE:iOS-12.0-AppHost\n$BAZEL_INSTALLER\n";
+			shellScript = "set -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build $BAZEL_PACKAGE:iOS-12.0-AppHost\n$BAZEL_INSTALLER\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -142,7 +142,6 @@
 		2A06560ADF2996495FDD38B3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BAZEL_EXEC_ROOT = /private/var/tmp/_bazel_segiddins/6002e4ab2f9e9caedfabd3741b1372a5/execroot/build_bazel_rules_ios/bazel-out/darwin-fastbuild/bin/tests/xcodeproj/Single-Application-install-xcodeproj.sh.runfiles/build_bazel_rules_ios;
 				BAZEL_INSTALLER = "$BAZEL_STUBS_DIR/tools/xcodeproj-shims/installer";
 				BAZEL_PATH = bazelisk;
 				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
@@ -164,7 +163,6 @@
 		3BB370A0E4F5B531163ED319 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BAZEL_EXEC_ROOT = /private/var/tmp/_bazel_segiddins/6002e4ab2f9e9caedfabd3741b1372a5/execroot/build_bazel_rules_ios/bazel-out/darwin-fastbuild/bin/tests/xcodeproj/Single-Application-install-xcodeproj.sh.runfiles/build_bazel_rules_ios;
 				BAZEL_INSTALLER = "$BAZEL_STUBS_DIR/tools/xcodeproj-shims/installer";
 				BAZEL_PATH = bazelisk;
 				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
