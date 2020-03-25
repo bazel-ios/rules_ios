@@ -1,3 +1,4 @@
+load("@rules_cc//cc:defs.bzl", "cc_library", "objc_import", "objc_library")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@build_bazel_rules_apple//apple:apple.bzl", "apple_dynamic_framework_import", "apple_static_framework_import")
@@ -6,7 +7,7 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 load("//rules:hmap.bzl", "headermap")
 load("//rules:substitute_build_settings.bzl", "substitute_build_settings")
 load("//rules/library:resources.bzl", "wrap_resources_in_filegroup")
-load("//rules/vfs_overlay:vfs_overlay.bzl", "vfs_overlay")
+load("//rules/library:xcconfig.bzl", "settings_from_xcconfig")
 
 PrivateHeaders = provider(
     doc = "Propagates private headers, so they can be accessed if necessary",
@@ -179,17 +180,33 @@ def generate_resource_bundles(name, library_tools, module_name, resource_bundles
         bundle_target_names.append(target_name)
     return bundle_target_names
 
+def _error_on_default_xcconfig(name, library_tools, default_xcconfig_name, **kwargs):
+    fail("{name} specifies a default xcconfig ({default_xcconfig_name}). You must override fetch_default_xcconfig to use this feature.".format(
+        name = name,
+        default_xcconfig_name = default_xcconfig_name,
+    ))
+
 _DefaultLibraryTools = {
     "modulemap_generator": write_modulemap,
     "umbrella_header_generator": write_umbrella_header,
     "resource_bundle_generator": generate_resource_bundles,
     "wrap_resources_in_filegroup": wrap_resources_in_filegroup,
+    "fetch_default_xcconfig": _error_on_default_xcconfig,
 }
+
+def _prepend_copts(copts_struct, objc_copts, cc_copts, swift_copts, linkopts, ibtool_copts, momc_copts, mapc_copts):
+    objc_copts = copts_struct.objc_copts + objc_copts
+    cc_copts = copts_struct.cc_copts + cc_copts
+    swift_copts = copts_struct.swift_copts + swift_copts
+    linkopts = copts_struct.linkopts + linkopts
+    ibtool_copts = copts_struct.ibtool_copts + ibtool_copts
+    momc_copts = copts_struct.momc_copts + momc_copts
+    mapc_copts = copts_struct.mapc_copts + mapc_copts
 
 def _uppercase_string(s):
     return s.upper()
 
-def apple_library(name, library_tools = {}, export_private_headers = True, namespace_is_module_name = True, **kwargs):
+def apple_library(name, library_tools = {}, export_private_headers = True, namespace_is_module_name = True, default_xcconfig_name = None, xcconfig = {}, **kwargs):
     """Create libraries for native source code on Apple platforms.
 
     Automatically handles mixed-source libraries and comes with
@@ -203,6 +220,9 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                                 a `PrivateHeaders` provider.
         namespace_is_module_name: Whether the module name should be used as the
                                   namespace for header imports, instead of the target name.
+        default_xcconfig_name: The name of a default xcconfig to be applied to this target.
+        xcconfig: A dictionary of Xcode build settings to be applied to this target in the
+                  form of different `copt` attributes.
     """
     library_tools = dict(_DefaultLibraryTools, **library_tools)
     swift_sources = []
@@ -248,7 +268,10 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     module_map = kwargs.pop("module_map", None)
     cc_copts = kwargs.pop("cc_copts", [])
     swift_copts = kwargs.pop("swift_copts", [])
-    linkopts = kwargs.pop("linkopts", None)
+    ibtool_copts = kwargs.pop("ibtool_copts", [])
+    momc_copts = kwargs.pop("momc_copts", [])
+    mapc_copts = kwargs.pop("mapc_copts", [])
+    linkopts = kwargs.pop("linkopts", [])
     objc_copts = kwargs.pop("objc_copts", [])
     other_inputs = kwargs.pop("other_inputs", [])
     sdk_dylibs = kwargs.pop("sdk_dylibs", [])
@@ -262,6 +285,31 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     tags_manual = tags if "manual" in tags else tags + _MANUAL
     internal_deps = []
     lib_names = []
+
+    if default_xcconfig_name:
+        for (setting, value) in library_tools["fetch_default_xcconfig"](name, library_tools, default_xcconfig_name, **kwargs).items():
+            if not setting in xcconfig:
+                xcconfig[setting] = value
+    xcconfig_settings = settings_from_xcconfig(xcconfig)
+    _prepend_copts(xcconfig_settings, objc_copts, cc_copts, swift_copts, linkopts, ibtool_copts, momc_copts, mapc_copts)
+
+    for (k, v) in {"momc_copts": momc_copts, "mapc_copts": mapc_copts, "ibtool_copts": ibtool_copts}.items():
+        if v:
+            fail("Specifying {attr} for {name} is not yet supported. Given: {opts}".format(
+                attr = k,
+                name = name,
+                opts = repr(v),
+            ))
+
+    if linkopts:
+        linkopts_name = "%s_linkopts" % (name)
+
+        # https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library
+        cc_library(
+            name = linkopts_name,
+            linkopts = linkopts,
+        )
+        internal_deps += [linkopts_name]
 
     for vendored_static_framework in kwargs.pop("vendored_static_frameworks", []):
         import_name = "%s-%s-import" % (name, paths.basename(vendored_static_framework))
@@ -282,7 +330,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         deps += [import_name]
     for vendored_static_library in kwargs.pop("vendored_static_libraries", []):
         import_name = "%s-%s-library-import" % (name, paths.basename(vendored_static_library))
-        native.objc_import(
+        objc_import(
             name = import_name,
             archives = [vendored_static_library],
             tags = _MANUAL,
@@ -453,7 +501,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             module_map = "%s.extended.modulemap" % name
 
     if cpp_sources and False:
-        native.cc_library(
+        cc_library(
             name = cpp_libname,
             srcs = cpp_sources + objc_private_hdrs,
             hdrs = objc_hdrs,
@@ -464,7 +512,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         lib_names += [cpp_libname]
 
     objc_library_data = library_tools["wrap_resources_in_filegroup"](name = objc_libname + "_data", srcs = data)
-    native.objc_library(
+    objc_library(
         name = objc_libname,
         srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,
         non_arc_srcs = objc_non_arc_sources,
@@ -502,4 +550,5 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         module_name = module_name,
         launch_screen_storyboard_name = launch_screen_storyboard_name,
         namespace = namespace,
+        linkopts = linkopts,
     )

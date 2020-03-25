@@ -1,0 +1,42 @@
+load("//rules:framework.bzl", "apple_framework")
+load(":tests.bzl", "xcconfig_unit_test_suite")
+
+SRCS = [
+    "empty.m",
+    "empty.swift",
+]
+
+apple_framework(
+    name = "empty_xcconfig",
+    srcs = SRCS,
+    xcconfig = {},
+)
+
+apple_framework(
+    name = "unknown_key_xcconfig",
+    srcs = SRCS,
+    xcconfig = {
+        "MY_MADEUP_SETTING": "NEVER",
+    },
+)
+
+apple_framework(
+    name = "boolean_key_xcconfig",
+    srcs = SRCS,
+    xcconfig = {
+        "GCC_TREAT_WARNINGS_AS_ERRORS": "YES",
+    },
+)
+
+apple_framework(
+    name = "array_key_xcconfig",
+    srcs = SRCS,
+    xcconfig = {
+        "GCC_PREPROCESSOR_DEFINITIONS": [
+            "FOO",
+            "BAR=1",
+        ],
+    },
+)
+
+xcconfig_unit_test_suite()
