@@ -1,4 +1,6 @@
 # Extracted from Xcode 11.2.1.11B500
+# To update, in rules_ios run `bazel run data_generators:extract_xcspecs`
+
 SETTINGS = {
     "com.apple.compilers.llvm.clang.1_0": {
         "BuiltinJambaseRuleName": "ProcessC",

@@ -10,7 +10,8 @@ genrule(
     outs = ["extract_xcspecs.sh"],
     cmd = """set -eu
 cat <<EOS > $(OUTS)
-set -eu
+set -euo pipefail
+# xcode-locator prints json with keys as version names and values as paths to the developer dir for that xcode version
 readonly output=\\$$($(location @bazel_tools//tools/osx:xcode-locator) 2>/dev/null | grep : | sed -Ee s/.*'"(.+)": "(.+)".*'/'\\1.0|\\2'/g | sort --version-sort -k 1 -t '|' | tail -n 1)
 readonly xcode_version=\\$${output%%.0|*}
 readonly developer_dir=\\$${output#*|}

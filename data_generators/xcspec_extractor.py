@@ -1,10 +1,24 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
+
+"""
+Extracts xcspec info from a given Xcode developer dir
+and prints out a bzl file that contains a single constant, `SETTINGS`,
+that can be used to access the xcspecs from starlark.
+
+Usage: xcspec_extractor.py /Application/Xcode.app/Contents/Developer 11.2.1
+"""
 
 import plistlib
 import pprint
 import subprocess
 import os
+import re
 import sys
+
+try:
+    from StringIO import BytesIO  # for Python 2
+except ImportError:
+    from io import BytesIO  # for Python 3
 
 
 def xcspec_from_file(path):
@@ -49,8 +63,11 @@ ids = (
     "com.apple.xcode.tools.swift.compiler",
 )
 
-print("# Extracted from Xcode %s" % xcode_version)
-print('SETTINGS = ', end='')
+bzl_contents = """
+# Extracted from Xcode %s
+# To update, in rules_ios run `bazel run data_generators:extract_xcspecs`
+
+SETTINGS = """ % xcode_version
 
 to_print = {
     x['Identifier']:
@@ -64,4 +81,11 @@ to_print = {
 pprint._sorted = lambda x: x
 pprint.sorted = lambda x, key: x
 
-pprint.pprint(to_print, width=150)
+bzl_contents += pprint.pformat(to_print, width=150)
+bzl_contents = re.sub(r"([\"'])(\n\s*['\"])", r"\1 +\2", bzl_contents)
+try:
+    bzl_contents = subprocess.check_output(
+        ['buildifier', '-lint', 'fix', '-type', 'bzl'], input=bzl_contents, text=True)
+except FileNotFoundError:
+    pass  # buildifier not found
+print(bzl_contents, end='')
