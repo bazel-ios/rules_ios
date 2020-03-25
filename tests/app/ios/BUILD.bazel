@@ -11,6 +11,11 @@ apple_framework(
     name = "Empty",
 )
 
+apple_framework(
+    name = "OnlySources",
+    srcs = glob(["OnlySources/*.m"]),
+)
+
 ios_application(
     name = "App",
     srcs = ["App/main.m"],
@@ -19,5 +24,6 @@ ios_application(
     deps = [
         ":Empty",
         ":FW",
+        ":OnlySources",
     ],
 )
