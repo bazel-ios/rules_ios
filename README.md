@@ -1,6 +1,6 @@
 # iOS Rules for [Bazel](https://bazel.build)
 
-![](https://github.com/ob/rules_ios/workflows/master/badge.svg)
+![master](https://github.com/ob/rules_ios/workflows/CI-master/badge.svg)
 
 > :warning: **This is alpha software.** We are developing these rules in the open so you should only use them if you know what you are doing and are willing to help develop them.
 
