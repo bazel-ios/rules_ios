@@ -370,6 +370,27 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     )
     internal_deps.append(public_hmap_name)
 
+    if swift_sources:
+        generated_swift_header_name = module_name + "-Swift.h"
+        generated_swift_headers_filegroup = name + "_swift_hdrs"
+        native.filegroup(
+            name = generated_swift_headers_filegroup,
+            srcs = [generated_swift_header_name],
+            tags = _MANUAL,
+        )
+
+        # Add generated swift header to header maps for double quote imports
+        swift_doublequote_hmap_name = name + "_swift_doublequote_hmap"
+        headermap(
+            name = swift_doublequote_hmap_name,
+            namespace = namespace,
+            hdrs = [generated_swift_headers_filegroup],
+            hdr_providers = deps,
+            flatten_headers = True,
+            tags = _MANUAL,
+        )
+        internal_deps.append(swift_doublequote_hmap_name)
+
     private_hmap_name = name + "_private_hmap"
     private_angled_hmap_name = name + "_private_angled_hmap"
     private_hdrs_filegroup = name + "_private_hdrs"
@@ -407,15 +428,15 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     # vfs_overlay(name = vfs_name, deps = deps)
     # internal_deps.append(vfs_name)
 
-    headermap_copts = [
-        "-I\"$(execpath :%s)\"" % private_hmap_name,
-        "-I\"$(execpath :%s)\"" % public_hmap_name,
-        "-I\"$(execpath :%s)\"" % private_angled_hmap_name,
-        "-I.",
-        # "-ivfsoverlay", "$(execpath :%s)" % vfs_name,
-        "-iquote",
-        "$(execpath :%s)" % private_hmap_name,
-    ]
+    headermap_copts = []
+    headermap_copts.append("-I\"$(execpath :%s)\"" % private_hmap_name)
+    headermap_copts.append("-I\"$(execpath :%s)\"" % public_hmap_name)
+    headermap_copts.append("-I\"$(execpath :%s)\"" % private_angled_hmap_name)
+    if swift_sources:
+        # headermap_copts.append("-iquote\"$(execpath :%s)\"" % swift_doublequote_hmap_name)
+        headermap_copts.append("-I\"$(execpath :%s)\"" % swift_doublequote_hmap_name)
+    headermap_copts.append("-I.")
+    headermap_copts.append("-iquote\"$(execpath :%s)\"" % private_hmap_name)
 
     objc_copts += headermap_copts + [
         "-fmodules",

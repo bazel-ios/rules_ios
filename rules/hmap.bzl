@@ -1,6 +1,6 @@
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo")
 
-def _make_headermap_input_file(namespace, hdrs, flatten_headers):
+def _make_headermap_input_file(namespace, hdrs, flatten_headers, bin_dir_path):
     """Create a string representing the mappings from headers to their
     namespaced include versions. The format is
 
@@ -22,10 +22,13 @@ def _make_headermap_input_file(namespace, hdrs, flatten_headers):
     """
     entries = []
     for hdr in hdrs:
+        path = hdr.path
+        if path.endswith("-Swift.h"):
+            path = bin_dir_path + "/" + path
         namespaced_key = namespace + "/" + hdr.basename
-        entries.append("{}|{}".format(hdr.basename, hdr.path))
+        entries.append("{}|{}".format(hdr.basename, path))
         if flatten_headers:
-            entries.append("{}|{}".format(namespaced_key, hdr.path))
+            entries.append("{}|{}".format(namespaced_key, path))
     return "\n".join(entries) + "\n"
 
 def _make_headermap_impl(ctx):
@@ -45,7 +48,7 @@ def _make_headermap_impl(ctx):
     all_hdrs = []
     for provider in ctx.attr.hdrs:
         all_hdrs += provider.files.to_list()
-    out = _make_headermap_input_file(ctx.attr.namespace, all_hdrs, ctx.attr.flatten_headers)
+    out = _make_headermap_input_file(ctx.attr.namespace, all_hdrs, ctx.attr.flatten_headers, ctx.bin_dir.path)
     ctx.actions.write(
         content = out,
         output = input_f,
