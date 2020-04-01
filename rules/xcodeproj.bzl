@@ -108,11 +108,11 @@ def _xcodeproj_impl(ctx):
     project_name = ctx.attr.project_name if ctx.attr.project_name else ctx.attr.name + ".xcodeproj"
     if "/" in project_name:
         fail("No / allowed in project_name")
-    # project = ctx.actions.declare_directory(project_name)
+
+    project = ctx.actions.declare_directory(project_name)
     nesting = ctx.label.package.count("/") + 1 if ctx.label.package else 0
     src_dot_dots = "/".join([".." for x in range(nesting + 3)])
     script_dot_dots = "/".join([".." for x in range(nesting)])
-
 
     proj_options = {
         'createIntermediateGroups': True,
@@ -180,6 +180,9 @@ $BAZEL_INSTALLER
         runtime_env_vars = getattr(target_info, 'runtime_env_vars', None)
         if runtime_env_vars:
             scheme_action_details['environmentVariables'] = runtime_env_vars
+        runtime_cli_args = getattr(target_info, 'runtime_cli_args', None)
+        if runtime_cli_args:
+            scheme_action_details['commandLineArguments'] = runtime_cli_args
 
         xcodeproj_schemes_by_name[target_info.name] = {
             'build': {
@@ -201,41 +204,41 @@ $BAZEL_INSTALLER
     )
 
     ctx.actions.write(xcodegen_jsonfile, xcodeproj_info.to_json())
-    #
-    # ctx.actions.run(
-    #     executable = ctx.executable._xcodegen,
-    #     arguments = ["--quiet", "--no-env", "--spec", xcodegen_yaml.path, "--project", project.dirname],
-    #     inputs = depset([xcodegen_yaml], transitive = [target.srcs for target in targets]),
-    #     outputs = [project],
-    # )
-    # install_script = ctx.actions.declare_file(
-    #     "%s-install-xcodeproj.sh" % ctx.attr.name,
-    # )
-    #
-    # ctx.actions.expand_template(
-    #     template = ctx.file._xcodeproj_installer_template,
-    #     output = install_script,
-    #     substitutions = {
-    #         "$(project_short_path)": project.short_path,
-    #         "$(project_full_path)": project.path,
-    #         "$(installer_short_path)": ctx.executable.installer.short_path,
-    #         "$(clang_stub_short_path)": ctx.executable.clang_stub.short_path,
-    #         "$(clang_stub_ld_path)": ctx.executable.ld_stub.short_path,
-    #         "$(clang_stub_swiftc_path)": ctx.executable.swiftc_stub.short_path,
-    #     },
-    #     is_executable = True,
-    # )
+
+    ctx.actions.run(
+        executable = ctx.executable._xcodegen,
+        arguments = ["--quiet", "--no-env", "--spec", xcodegen_jsonfile.path, "--project", project.dirname],
+        inputs = depset([xcodegen_jsonfile], transitive = [target.srcs for target in targets]),
+        outputs = [project],
+    )
+    install_script = ctx.actions.declare_file(
+        "%s-install-xcodeproj.sh" % ctx.attr.name,
+    )
+
+    ctx.actions.expand_template(
+        template = ctx.file._xcodeproj_installer_template,
+        output = install_script,
+        substitutions = {
+            "$(project_short_path)": project.short_path,
+            "$(project_full_path)": project.path,
+            "$(installer_short_path)": ctx.executable.installer.short_path,
+            "$(clang_stub_short_path)": ctx.executable.clang_stub.short_path,
+            "$(clang_stub_ld_path)": ctx.executable.ld_stub.short_path,
+            "$(clang_stub_swiftc_path)": ctx.executable.swiftc_stub.short_path,
+        },
+        is_executable = True,
+    )
 
     return [
         DefaultInfo(
-            # executable = install_script,
-            files = depset([xcodegen_jsonfile]),
-            # files = depset([xcodegen_yaml, project]),
-            # runfiles = ctx.runfiles(files = [xcodegen_yaml, project], transitive_files = depset(
-            #     direct =
-            #         ctx.files.installer + ctx.files.clang_stub + ctx.files.ld_stub + ctx.files.swiftc_stub,
-            #     transitive = [ctx.attr.installer[DefaultInfo].default_runfiles.files],
-            # )),
+            executable = install_script,
+            # files = depset([xcodegen_jsonfile]),
+            files = depset([xcodegen_jsonfile, project]),
+            runfiles = ctx.runfiles(files = [xcodegen_jsonfile, project], transitive_files = depset(
+                direct =
+                    ctx.files.installer + ctx.files.clang_stub + ctx.files.ld_stub + ctx.files.swiftc_stub,
+                transitive = [ctx.attr.installer[DefaultInfo].default_runfiles.files],
+            )),
         ),
     ]
 
@@ -253,5 +256,5 @@ xcodeproj = rule(
         "swiftc_stub": attr.label(executable = True, default = Label("//tools/xcodeproj-shims:swiftc-stub"), cfg = "host"),
         "installer": attr.label(executable = True, default = Label("//tools/xcodeproj-shims:installer"), cfg = "host"),
     },
-    # executable = True,
+    executable = True,
 )
