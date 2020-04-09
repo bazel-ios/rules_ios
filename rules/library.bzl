@@ -206,6 +206,28 @@ def _prepend_copts(copts_struct, objc_copts, cc_copts, swift_copts, linkopts, ib
 def _uppercase_string(s):
     return s.upper()
 
+def _canonicalize_swift_version(swift_version):
+    if not swift_version:
+        return
+
+    version_parts = swift_version.split(".", 2)
+
+    if int(version_parts[0]) >= 5:
+        # Swift 5+ doesn't allow the minor version to be supplied, though Xcode is more lenient
+        swift_version = version_parts[0]
+    else:
+        # Drop any trailing ".0" versions
+        version_parts_scrubbed = []
+        only_zeros_seen = True
+        for part in reversed(version_parts):
+            if part == "0" and only_zeros_seen:
+                continue
+            only_zeros_seen = False
+            version_parts_scrubbed.insert(0, part)
+        swift_version = ".".join(version_parts_scrubbed)
+
+    return swift_version
+
 def apple_library(name, library_tools = {}, export_private_headers = True, namespace_is_module_name = True, default_xcconfig_name = None, xcconfig = {}, **kwargs):
     """Create libraries for native source code on Apple platforms.
 
@@ -428,12 +450,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         "-D__SWIFTC__",
     ]
 
-    swift_version = kwargs.pop("swift_version", None)
+    swift_version = _canonicalize_swift_version(kwargs.pop("swift_version", None))
     if swift_version:
-        if swift_version.endswith(".0"):
-            swift_version = swift_version[:-2]
-        if swift_version.endswith(".0"):
-            swift_version = swift_version[:-2]
         swift_copts += ["-swift-version", swift_version]
 
     cc_copts += headermap_copts
