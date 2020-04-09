@@ -1,0 +1,14 @@
+load("//rules:framework.bzl", "apple_framework")
+
+apple_framework(
+    name = "MixedSourceFramework",
+    srcs = glob(
+        [
+            "MixedSourceFramework/**/*.h",
+            "MixedSourceFramework/**/*.m",
+            "MixedSourceFramework/**/*.swift",
+        ],
+        exclude = ["MixedSourceFramework/MixedSourceFramework.h"],
+    ),
+    visibility = ["//visibility:public"],
+)
