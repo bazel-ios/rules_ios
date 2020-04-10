@@ -27,4 +27,5 @@ sh_binary(
 
 exports_files([
     "xcodeproj-installer.sh",
+    "WorkspaceSettings.xcsettings",
 ])

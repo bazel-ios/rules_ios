@@ -49,4 +49,5 @@ rsync --quiet \
 
 "$BAZEL_WORKSPACE_ROOT"/tools/bazel-xcodeproj/installers/lldb-settings.sh >/dev/null 2>&1 &
 
+
 wait

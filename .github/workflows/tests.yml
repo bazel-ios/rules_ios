@@ -52,6 +52,8 @@ jobs:
         run: bazelisk run tests/xcodeproj:Single-Application-Project-AllTargets && git diff --exit-code tests/xcodeproj
       - name: Generate Xcode projects that load direct targets only and compare against existing record
         run: bazelisk run tests/xcodeproj:Single-Application-Project-DirectTargetsOnly && git diff --exit-code tests/xcodeproj
+      - name: Generate Xcode projects that have a test target with a host app and compare against existing record
+        run: bazelisk run tests/xcodeproj:Test-Target-With-Test-Host-Project && git diff --exit-code tests/xcodeproj
       - name: Run Xcode builds
         run: ./tests/xcodeproj/build.sh
       - name: Run Unit tests

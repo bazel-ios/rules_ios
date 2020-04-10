@@ -32,6 +32,8 @@ def _xcodeproj_aspect_impl(target, ctx):
     if AppleBundleInfo in target:
         bundle_info = target[AppleBundleInfo]
         bazel_name = target.label.name
+        test_host_appname = None
+        test_host_target = None
         if ctx.rule.kind == "ios_unit_test":
             env_key_value_pairs = getattr(ctx.rule.attr, "env", {})
 
@@ -40,9 +42,13 @@ def _xcodeproj_aspect_impl(target, ctx):
             test_env_vars = tuple(env_key_value_pairs.items())
             commandlines_args = getattr(ctx.rule.attr, "args", [])
             test_commandline_args = tuple(commandlines_args)
+            test_host_target = getattr(ctx.rule.attr, "test_host", None)
+            if test_host_target and test_host_target.label.package != "rules/test_host_app":
+                test_host_appname = test_host_target.label.name
 
         info = struct(
             name = bundle_info.bundle_name,
+            bundle_id = getattr(ctx.rule.attr, 'bundle_id', None),
             bundle_extension = bundle_info.bundle_extension,
             package = target.label.package,
             bazel_name = bazel_name,
@@ -52,6 +58,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             product_type = bundle_info.product_type[len("com.apple.product-type."):],
             test_env_vars = test_env_vars,
             test_commandline_args = test_commandline_args,
+            test_host_appname = test_host_appname,
         )
         providers.append(
             _SrcsInfo(
@@ -61,11 +68,15 @@ def _xcodeproj_aspect_impl(target, ctx):
                 direct_srcs = [],
             ),
         )
-        target_info = _TargetInfo(direct_target = info, targets = depset([info], transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets")))
+        direct_targets = [info]
+        if test_host_target:
+          direct_targets.extend(test_host_target[_TargetInfo].direct_targets)
+        target_info = _TargetInfo(direct_targets = direct_targets, targets = depset([info], transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets")))
         providers.append(target_info)
     elif ctx.rule.kind == "apple_framework_packaging":
         info = struct(
             name = target.label.name,
+            bundle_id = None,
             package = target.label.package,
             bazel_name = target.label.name,
             srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
@@ -75,7 +86,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             test_env_vars = test_env_vars,
             test_commandline_args = test_commandline_args,
         )
-        target_info = _TargetInfo(direct_target = info, targets = depset([info], transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets")))
+        target_info = _TargetInfo(direct_targets = [info], targets = depset([info], transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets")))
         providers.append(target_info)
     else:
         srcs = []
@@ -97,7 +108,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             ),
         )
 
-        info = None
+        infos = None
         actual = None
         if ctx.rule.kind in ("test_suite"):
             actual = getattr(ctx.rule.attr, "tests")[0]
@@ -105,16 +116,16 @@ def _xcodeproj_aspect_impl(target, ctx):
             actual = getattr(ctx.rule.attr, "actual")
 
         if actual and _TargetInfo in actual:
-            info = actual[_TargetInfo].direct_target
+            infos = actual[_TargetInfo].direct_targets
 
         targets = None
-        if info:
-            targets = depset([info], transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets"))
+        if infos:
+            targets = depset(infos, transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets"))
         else:
             targets = depset(transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets"))
 
         providers.append(
-            _TargetInfo(direct_target = info, targets = targets),
+            _TargetInfo(direct_targets = infos, targets = targets),
         )
 
     return providers
@@ -160,13 +171,17 @@ def _xcodeproj_impl(ctx):
     }
 
     targets = []
+    all_transitive_targets = depset(transitive = _get_attr_values_for_name(ctx.attr.deps, _TargetInfo, "targets")).to_list()
     if ctx.attr.include_transitive_targets:
-        targets = depset(transitive = _get_attr_values_for_name(ctx.attr.deps, _TargetInfo, "targets")).to_list()
+        targets = all_transitive_targets
     else:
-        targets = [t for t in _get_attr_values_for_name(ctx.attr.deps, _TargetInfo, "direct_target") if t]
+        targets = []
+        for t in _get_attr_values_for_name(ctx.attr.deps, _TargetInfo, "direct_targets"):
+          targets.extend(t)
 
     xcodeproj_targets_by_name = {}
     xcodeproj_schemes_by_name = {}
+
     for target_info in targets:
         target_macho_type = "staticlib" if target_info.product_type == "framework" else "$(inherited)"
         compiled_sources = [{
@@ -180,15 +195,26 @@ def _xcodeproj_impl(ctx):
             "optional": True,
             "buildPhase": "none",
         } for s in target_info.asset_srcs.to_list()]
+        target_settings = {
+            "PRODUCT_NAME": target_info.name,
+            "BAZEL_PACKAGE": target_info.package,
+            "MACH_O_TYPE": target_macho_type,
+        }
+        if target_info.product_type == "application":
+            target_settings['INFOPLIST_FILE'] = "$BAZEL_STUBS_DIR/Info-stub.plist"
+            target_settings['PRODUCT_BUNDLE_IDENTIFIER'] = target_info.bundle_id
+        target_dependencies = []
+        test_host_appname = getattr(target_info, 'test_host_appname', None)
+        if test_host_appname:
+          target_dependencies.append({'target': test_host_appname})
+          target_settings['TEST_HOST'] = "$(BUILT_PRODUCTS_DIR)/{test_host_appname}.app/{test_host_appname}".format(test_host_appname = test_host_appname)
+
         xcodeproj_targets_by_name[target_info.name] = {
             "sources": compiled_sources + asset_sources,
             "type": target_info.product_type,
             "platform": "iOS",
-            "settings": {
-                "PRODUCT_NAME": target_info.name,
-                "BAZEL_PACKAGE": target_info.package,
-                "MACH_O_TYPE": target_macho_type,
-            },
+            'settings': target_settings,
+            'dependencies': target_dependencies,
             "preBuildScripts": [{
                 "name": "Build with bazel",
                 "script": """
@@ -202,6 +228,7 @@ $BAZEL_INSTALLER
         }
         if target_info.product_type == "framework":
             continue
+
         scheme_action_name = "test"
         if target_info.product_type == "application":
             scheme_action_name = "run"
@@ -219,7 +246,6 @@ $BAZEL_INSTALLER
                 test_env_vars_dict[k] = v
 
         scheme_action_details["environmentVariables"] = test_env_vars_dict
-
         test_commandline_args_tuple = getattr(target_info, "test_commandline_args", ())
         scheme_action_details["commandLineArguments"] = {}
         for arg in test_commandline_args_tuple:
@@ -265,6 +291,8 @@ $BAZEL_INSTALLER
             "$(clang_stub_short_path)": ctx.executable.clang_stub.short_path,
             "$(clang_stub_ld_path)": ctx.executable.ld_stub.short_path,
             "$(clang_stub_swiftc_path)": ctx.executable.swiftc_stub.short_path,
+            "$(infoplist_stub)": ctx.file._infoplist_stub.short_path,
+            "$(workspacesettings_xcsettings_short_path)": ctx.file._workspace_xcsettings.short_path,
         },
         is_executable = True,
     )
@@ -274,8 +302,7 @@ $BAZEL_INSTALLER
             executable = install_script,
             files = depset([xcodegen_jsonfile, project]),
             runfiles = ctx.runfiles(files = [xcodegen_jsonfile, project], transitive_files = depset(
-                direct =
-                    ctx.files.installer + ctx.files.clang_stub + ctx.files.ld_stub + ctx.files.swiftc_stub,
+                direct = ctx.files.installer + ctx.files.clang_stub + ctx.files.ld_stub + ctx.files.swiftc_stub + ctx.files._infoplist_stub + ctx.files._workspace_xcsettings,
                 transitive = [ctx.attr.installer[DefaultInfo].default_runfiles.files],
             )),
         ),
@@ -290,6 +317,8 @@ xcodeproj = rule(
         "bazel_path": attr.string(mandatory = False, default = "bazel"),
         "scheme_existing_envvar_overrides": attr.string_dict(allow_empty = True, default = {}, mandatory = False),
         "_xcodeproj_installer_template": attr.label(executable = False, default = Label("//tools/xcodeproj-shims:xcodeproj-installer.sh"), allow_single_file = ["sh"]),
+        "_infoplist_stub": attr.label(executable = False, default = Label("//rules/test_host_app:Info.plist"), allow_single_file = ["plist"]),
+        "_workspace_xcsettings": attr.label(executable = False, default = Label("//tools/xcodeproj-shims:WorkspaceSettings.xcsettings"), allow_single_file = ["xcsettings"]),
         "_xcodegen": attr.label(executable = True, default = Label("@com_github_yonaskolb_xcodegen//:xcodegen"), cfg = "host"),
         "clang_stub": attr.label(executable = True, default = Label("//tools/xcodeproj-shims:clang-stub"), cfg = "host"),
         "ld_stub": attr.label(executable = True, default = Label("//tools/xcodeproj-shims:ld-stub"), cfg = "host"),

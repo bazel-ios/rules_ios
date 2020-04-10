@@ -71,3 +71,13 @@ xcodeproj(
         "//tests/xcodeproj:Single-Application-UnitTests",
     ],
 )
+
+xcodeproj(
+    name = "Test-Target-With-Test-Host-Project",
+    testonly = True,
+    bazel_path = "bazelisk",
+    include_transitive_targets = False,
+    deps = [
+        "//tests/test/ios/test-imports-app:TestImports-Unit-Tests",
+    ],
+)

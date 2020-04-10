@@ -1,0 +1,367 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		45E4408B2BA66DA5E83B1C0B /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8874B671013FB5B4C9C79FD3 /* empty.swift */; };
+		4BE8D3B252D03AD39D63C111 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A8E4B392F6EEBF0A35A0F879 /* main.m */; };
+		4C7756BF566070C70C038BAB /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E79C1D1FA47E943C6087AB /* test.swift */; };
+		C201D4ABA25811A92EE34DEE /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = E886E7D4877EDB0D5A01D849 /* test.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1DC2C8510A05B48300816294 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0D82F964E7A8A27136301FFF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1ECB59A3C8C905569C62BCE7;
+			remoteInfo = "TestImports-App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		2238C255CB7ED2E848A7FC51 /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = common.pch; path = ../../rules/library/common.pch; sourceTree = "<group>"; };
+		30E79C1D1FA47E943C6087AB /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = test.swift; path = "../test/ios/test-imports-app/test.swift"; sourceTree = "<group>"; };
+		61CE3CBBAD0BFAFC0953377B /* TestImports-App.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "TestImports-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D1EF392512C1F921EE7760C /* Header2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Header2.h; path = "../test/ios/test-imports-app/Header2.h"; sourceTree = "<group>"; };
+		8874B671013FB5B4C9C79FD3 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = empty.swift; path = "../test/ios/test-imports-app/empty.swift"; sourceTree = "<group>"; };
+		9E7E8177A9991D407C446EF6 /* TestImports-Unit-Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TestImports-Unit-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A8E4B392F6EEBF0A35A0F879 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "../test/ios/test-imports-app/main.m"; sourceTree = "<group>"; };
+		E8479B9493E57B4235186D21 /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Header.h; path = "../test/ios/test-imports-app/Header.h"; sourceTree = "<group>"; };
+		E886E7D4877EDB0D5A01D849 /* test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = test.m; path = "../test/ios/test-imports-app/test.m"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0116E61A70E2F030EEFB0081 /* library */ = {
+			isa = PBXGroup;
+			children = (
+				2238C255CB7ED2E848A7FC51 /* common.pch */,
+			);
+			name = library;
+			sourceTree = "<group>";
+		};
+		41BE2FF5579DA46E599A01EC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				61CE3CBBAD0BFAFC0953377B /* TestImports-App.app */,
+				9E7E8177A9991D407C446EF6 /* TestImports-Unit-Tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7CECA2AB833A306EC3500168 = {
+			isa = PBXGroup;
+			children = (
+				9E8242FA9938A76F7FEA9FF8 /* rules */,
+				A072D583870C5D55D7FDE9AA /* tests */,
+				41BE2FF5579DA46E599A01EC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		99554F1D18BBAF389C9DEA73 /* test-imports-app */ = {
+			isa = PBXGroup;
+			children = (
+				8874B671013FB5B4C9C79FD3 /* empty.swift */,
+				E8479B9493E57B4235186D21 /* Header.h */,
+				6D1EF392512C1F921EE7760C /* Header2.h */,
+				A8E4B392F6EEBF0A35A0F879 /* main.m */,
+				E886E7D4877EDB0D5A01D849 /* test.m */,
+				30E79C1D1FA47E943C6087AB /* test.swift */,
+			);
+			name = "test-imports-app";
+			sourceTree = "<group>";
+		};
+		9E8242FA9938A76F7FEA9FF8 /* rules */ = {
+			isa = PBXGroup;
+			children = (
+				0116E61A70E2F030EEFB0081 /* library */,
+			);
+			name = rules;
+			sourceTree = "<group>";
+		};
+		9FB8C5E16B02DF101A5FA2CB /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				99554F1D18BBAF389C9DEA73 /* test-imports-app */,
+			);
+			name = ios;
+			sourceTree = "<group>";
+		};
+		A072D583870C5D55D7FDE9AA /* tests */ = {
+			isa = PBXGroup;
+			children = (
+				E9F92800184FC77B87481E1F /* test */,
+			);
+			name = tests;
+			sourceTree = "<group>";
+		};
+		E9F92800184FC77B87481E1F /* test */ = {
+			isa = PBXGroup;
+			children = (
+				9FB8C5E16B02DF101A5FA2CB /* ios */,
+			);
+			name = test;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1ECB59A3C8C905569C62BCE7 /* TestImports-App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C5F485B930E4C6EAB1E71482 /* Build configuration list for PBXNativeTarget "TestImports-App" */;
+			buildPhases = (
+				3D60A491CE72F7D799EC0383 /* Build with bazel */,
+				30D6283F065DDEDCF32C8E92 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "TestImports-App";
+			productName = "TestImports-App";
+			productReference = 61CE3CBBAD0BFAFC0953377B /* TestImports-App.app */;
+			productType = "com.apple.product-type.application";
+		};
+		5BB71AB936CCD5BDF68DE298 /* TestImports-Unit-Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F0538BC388B2DD5C72F37AB3 /* Build configuration list for PBXNativeTarget "TestImports-Unit-Tests" */;
+			buildPhases = (
+				19A4B8C69447F2F704F1B796 /* Build with bazel */,
+				13A44690EFFE5A0ED1A9F01A /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FFCD8F4448902A3D0CB74E5D /* PBXTargetDependency */,
+			);
+			name = "TestImports-Unit-Tests";
+			productName = "TestImports-Unit-Tests";
+			productReference = 9E7E8177A9991D407C446EF6 /* TestImports-Unit-Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0D82F964E7A8A27136301FFF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1020;
+				TargetAttributes = {
+					5BB71AB936CCD5BDF68DE298 = {
+						TestTargetID = 1ECB59A3C8C905569C62BCE7;
+					};
+				};
+			};
+			buildConfigurationList = 925C7EC36E5BD69BB75B98CD /* Build configuration list for PBXProject "Test-Target-With-Test-Host-Project" */;
+			compatibilityVersion = "Xcode 10.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 7CECA2AB833A306EC3500168;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1ECB59A3C8C905569C62BCE7 /* TestImports-App */,
+				5BB71AB936CCD5BDF68DE298 /* TestImports-Unit-Tests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		19A4B8C69447F2F704F1B796 /* Build with bazel */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build with bazel";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build $BAZEL_PACKAGE:TestImports-Unit-Tests\n$BAZEL_INSTALLER\n";
+		};
+		3D60A491CE72F7D799EC0383 /* Build with bazel */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build with bazel";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build $BAZEL_PACKAGE:TestImports-App\n$BAZEL_INSTALLER\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		13A44690EFFE5A0ED1A9F01A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C201D4ABA25811A92EE34DEE /* test.m in Sources */,
+				4C7756BF566070C70C038BAB /* test.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		30D6283F065DDEDCF32C8E92 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				45E4408B2BA66DA5E83B1C0B /* empty.swift in Sources */,
+				4BE8D3B252D03AD39D63C111 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FFCD8F4448902A3D0CB74E5D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1ECB59A3C8C905569C62BCE7 /* TestImports-App */;
+			targetProxy = 1DC2C8510A05B48300816294 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		052452BF65BFAB2A7B6D74A2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_PACKAGE = "tests/test/ios/test-imports-app";
+				MACH_O_TYPE = "$(inherited)";
+				PRODUCT_NAME = "TestImports-Unit-Tests";
+				SUPPORTS_MACCATALYST = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestImports-App.app/TestImports-App";
+				TEST_TARGET_NAME = "TestImports-App";
+			};
+			name = Release;
+		};
+		2EF540551384D9E7163E1CF4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_PACKAGE = "tests/test/ios/test-imports-app";
+				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
+				MACH_O_TYPE = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.TestImports-App";
+				PRODUCT_NAME = "TestImports-App";
+			};
+			name = Debug;
+		};
+		340C72FB682660DC9C8AF45B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_PACKAGE = "tests/test/ios/test-imports-app";
+				MACH_O_TYPE = "$(inherited)";
+				PRODUCT_NAME = "TestImports-Unit-Tests";
+				SUPPORTS_MACCATALYST = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestImports-App.app/TestImports-App";
+				TEST_TARGET_NAME = "TestImports-App";
+			};
+			name = Debug;
+		};
+		607F6A979BCB270BD2846986 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_PACKAGE = "tests/test/ios/test-imports-app";
+				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
+				MACH_O_TYPE = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.TestImports-App";
+				PRODUCT_NAME = "TestImports-App";
+			};
+			name = Release;
+		};
+		83C6FAF9D19E66ABD6FC3866 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_INSTALLER = "$BAZEL_STUBS_DIR/tools/xcodeproj-shims/installer";
+				BAZEL_PATH = bazelisk;
+				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
+				BAZEL_WORKSPACE_ROOT = $SRCROOT/../..;
+				CC = "$BAZEL_STUBS_DIR/clang-stub";
+				CLANG_ANALYZER_EXEC = $CC;
+				CODE_SIGNING_ALLOWED = 0;
+				CXX = $CC;
+				DONT_RUN_SWIFT_STDLIB_TOOL = 1;
+				LD = "$BAZEL_STUBS_DIR/ld-stub";
+				LIBTOOL = /usr/bin/true;
+				SDKROOT = iphoneos;
+				SWIFT_EXEC = "$BAZEL_STUBS_DIR/swiftc-stub";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
+				SWIFT_VERSION = 5;
+			};
+			name = Release;
+		};
+		AD55644E2B6185FA4E29AA4F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_INSTALLER = "$BAZEL_STUBS_DIR/tools/xcodeproj-shims/installer";
+				BAZEL_PATH = bazelisk;
+				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
+				BAZEL_WORKSPACE_ROOT = $SRCROOT/../..;
+				CC = "$BAZEL_STUBS_DIR/clang-stub";
+				CLANG_ANALYZER_EXEC = $CC;
+				CODE_SIGNING_ALLOWED = 0;
+				CXX = $CC;
+				DONT_RUN_SWIFT_STDLIB_TOOL = 1;
+				LD = "$BAZEL_STUBS_DIR/ld-stub";
+				LIBTOOL = /usr/bin/true;
+				SDKROOT = iphoneos;
+				SWIFT_EXEC = "$BAZEL_STUBS_DIR/swiftc-stub";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
+				SWIFT_VERSION = 5;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		925C7EC36E5BD69BB75B98CD /* Build configuration list for PBXProject "Test-Target-With-Test-Host-Project" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD55644E2B6185FA4E29AA4F /* Debug */,
+				83C6FAF9D19E66ABD6FC3866 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C5F485B930E4C6EAB1E71482 /* Build configuration list for PBXNativeTarget "TestImports-App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2EF540551384D9E7163E1CF4 /* Debug */,
+				607F6A979BCB270BD2846986 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "";
+		};
+		F0538BC388B2DD5C72F37AB3 /* Build configuration list for PBXNativeTarget "TestImports-Unit-Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				340C72FB682660DC9C8AF45B /* Debug */,
+				052452BF65BFAB2A7B6D74A2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "";
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0D82F964E7A8A27136301FFF /* Project object */;
+}
