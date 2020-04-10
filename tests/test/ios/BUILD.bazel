@@ -28,3 +28,13 @@ ios_unit_test(
     minimum_os_version = "12.0",
     test_host = "//rules/test_host_app:iOS-9.3-AppHost",
 )
+
+ios_unit_test(
+    name = "ResourcesAddedToUnitTestBundle",
+    srcs = [
+        "empty.m",
+        "empty.swift",
+    ],
+    resources = ["resource-file.txt"],
+    minimum_os_version = "11.0",
+)
