@@ -38,3 +38,4 @@ ios_unit_test(
     resources = ["resource-file.txt"],
     minimum_os_version = "11.0",
 )
+
