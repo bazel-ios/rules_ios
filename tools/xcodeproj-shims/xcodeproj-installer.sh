@@ -27,3 +27,4 @@ chmod -R +w "${tmp_dest}"
 sed -i.bak -E -e 's|([ "])../../../|\1|g' "${tmp_dest}/project.pbxproj"
 rm "${tmp_dest}/project.pbxproj.bak"
 rsync --recursive --quiet --copy-links "${tmp_dest}" "${dest}"
+mv dummy-testhostapp-plists $dest
