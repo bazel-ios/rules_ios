@@ -27,10 +27,16 @@ def _xcodeproj_aspect_impl(target, ctx):
     deps.append(getattr(ctx.rule.attr, "entitlements", None))
 
     # TODO: handle apple_resource_bundle targets
+    test_env_vars = {}
+    test_commandline_args = {}
     if AppleBundleInfo in target:
         bundle_info = target[AppleBundleInfo]
         srcs = []
         bazel_name = target.label.name
+        if ctx.rule.kind == "ios_unit_test":
+            test_env_vars = getattr(ctx.rule.attr, 'env', {})
+            test_commandline_args = getattr(ctx.rule.attr, 'args', {})
+
         info = struct(
             name = bundle_info.bundle_name,
             bundle_extension = bundle_info.bundle_extension,
@@ -39,8 +45,8 @@ def _xcodeproj_aspect_impl(target, ctx):
             srcs = depset(srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
             build_files = depset([ctx.build_file_path], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
             product_type = bundle_info.product_type[len("com.apple.product-type."):],
-            runtime_env_vars = getattr(ctx.rule.attr, 'env', {}),
-            runtime_cli_args = getattr(ctx.rule.attr, 'args', []),
+            test_env_vars = test_env_vars,
+            test_commandline_args = test_commandline_args,
         )
         providers.append(
             _SrcsInfo(
@@ -60,6 +66,8 @@ def _xcodeproj_aspect_impl(target, ctx):
             srcs = depset(srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
             build_files = depset([ctx.build_file_path], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
             product_type = "framework",
+            test_env_vars = test_env_vars,
+            test_commandline_args = test_commandline_args,
         )
         target_info = _TargetInfo(target = info, targets = depset([info], transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets")))
         providers.append(target_info)
@@ -156,7 +164,7 @@ def _xcodeproj_impl(ctx):
                 'BAZEL_PACKAGE': target_info.package,
                 'MACH_O_TYPE': target_macho_type,
             },
-            'preBuildScripts': {
+            'preBuildScripts': [{
                 'name': 'Build with bazel',
                 'script': """
 set -eux
@@ -165,7 +173,7 @@ cd $BAZEL_WORKSPACE_ROOT
 $BAZEL_PATH build $BAZEL_PACKAGE:{bazel_name}
 $BAZEL_INSTALLER
 """.format(bazel_name = target_info.bazel_name)
-            }
+            }],
         }
         if target_info.product_type == "framework":
             continue
@@ -174,12 +182,18 @@ $BAZEL_INSTALLER
             scheme_action_name = "run"
         scheme_action_details = {'targets': [target_info.name]}
 
-        runtime_env_vars = getattr(target_info, 'runtime_env_vars', None)
-        if runtime_env_vars:
-            scheme_action_details['environmentVariables'] = runtime_env_vars
-        runtime_cli_args = getattr(target_info, 'runtime_cli_args', None)
-        if runtime_cli_args:
-            scheme_action_details['commandLineArguments'] = runtime_cli_args
+        test_env_vars = {}
+        for k,v in getattr(target_info, 'test_env_vars', {}).items():
+           if ctx.attr.scheme_existing_envvar_overrides.get(k, None):
+               test_env_vars[k] = ctx.attr.scheme_existing_envvar_overrides[k]
+           else:
+               test_env_vars[k] = v
+        scheme_action_details['environmentVariables'] = test_env_vars
+
+        test_commandline_args = getattr(target_info, 'test_commandline_args', {})
+        scheme_action_details['commandLineArguments'] = {}
+        for arg in test_commandline_args:
+            scheme_action_details['commandLineArguments'][arg] = True
 
         xcodeproj_schemes_by_name[target_info.name] = {
             'build': {
@@ -245,6 +259,7 @@ xcodeproj = rule(
         "include_transitive_targets": attr.bool(default = False, mandatory = False),
         "project_name": attr.string(mandatory = False),
         "bazel_path": attr.string(mandatory = False, default = "bazel"),
+        "scheme_existing_envvar_overrides": attr.string_dict(allow_empty=True, default={}, mandatory=False),
         "_xcodeproj_installer_template": attr.label(executable = False, default = Label("//tools/xcodeproj-shims:xcodeproj-installer.sh"), allow_single_file = ["sh"]),
         "_xcodegen": attr.label(executable = True, default = Label("@com_github_yonaskolb_xcodegen//:xcodegen"), cfg = "host"),
         "clang_stub": attr.label(executable = True, default = Label("//tools/xcodeproj-shims:clang-stub"), cfg = "host"),
