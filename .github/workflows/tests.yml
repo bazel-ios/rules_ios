@@ -49,6 +49,6 @@ jobs:
       - name: Select Xcode 11.2
         run: sudo xcode-select -s /Applications/Xcode_11.2.app
       - name: Generate Xcode projects
-        run: bazelisk run tests/xcodeproj/... && git diff --exit-code tests/xcodeproj
+        run: bazelisk run tests/xcodeproj:Single-Application-Project && git diff --exit-code tests/xcodeproj
       - name: Run Xcode builds
         run: ./tests/xcodeproj/build.sh
