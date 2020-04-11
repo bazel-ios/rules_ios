@@ -42,6 +42,7 @@ def ios_unit_test(name, apple_library = apple_library, **kwargs):
 
     library = apple_library(name = name, namespace_is_module_name = False, **kwargs)
 
+    print("creating ios_unit_test with rule %s and name %s" % (rule, name))
     rule(
         name = name,
         deps = library.lib_names,

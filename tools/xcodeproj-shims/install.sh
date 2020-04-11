@@ -10,6 +10,20 @@
 set -eux
 
 
+TESTHOSTAPP_SUFFIX=".app"
+input="bazel-bin/$TESTHOSTAPP_BAZEL_PACKAGE/${TESTHOSTAPP_TARGET_NAME}_archive-root/Payload/$TESTHOSTAPP_TARGET_NAME.app"
+tha_output="$TARGET_BUILD_DIR/$TESTHOSTAPP_FULL_PRODUCT_NAME.app"
+mkdir -p "$(dirname "$tha_output")"
+
+if [[ -d $input ]]; then
+    # Copy bundle contents, into the destination bundle.
+    # This avoids self-nesting, like: Foo.app/Foo.app
+    input+="/"
+fi
+rsync --quiet \
+    --recursive --chmod=u+w --delete \
+    "$input" "$tha_output"
+
 
 case ${PRODUCT_TYPE} in
     com.apple.product-type.framework)
@@ -26,7 +40,11 @@ case ${PRODUCT_TYPE} in
         exit 1
         ;;
 esac
+
+# output="$TARGET_BUILD_DIR/$TESTHOSTAPP_FULL_PRODUCT_NAME/PlugIns/$FULL_PRODUCT_NAME"
+# output="$tha_output/PlugIns/$FULL_PRODUCT_NAME"
 output="$TARGET_BUILD_DIR/$FULL_PRODUCT_NAME"
+
 mkdir -p "$(dirname "$output")"
 
 if [[ -d $input ]]; then
@@ -39,6 +57,7 @@ rsync --quiet \
     --recursive --chmod=u+w --delete \
     "$input" "$output"
 
+ln -s /Users/amberdixon/Development/register/bazel-out $(dirname "$output")
 
 # Part of the build intermediary output will be swiftmodule files
 # which XCode will use for indexing. Let's keep those.

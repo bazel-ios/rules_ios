@@ -562,7 +562,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         lib_names += [private_headers_name]
         _private_headers(name = private_headers_name, headers = objc_private_hdrs, tags = _MANUAL)
 
-    return struct(
+    retval = struct(
         lib_names = lib_names,
         transitive_deps = deps,
         deps = lib_names + deps,
@@ -571,3 +571,4 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         namespace = namespace,
         linkopts = linkopts,
     )
+    return retval
