@@ -34,8 +34,8 @@ def _xcodeproj_aspect_impl(target, ctx):
         srcs = []
         bazel_name = target.label.name
         if ctx.rule.kind == "ios_unit_test":
-            test_env_vars = getattr(ctx.rule.attr, 'env', {})
-            test_commandline_args = getattr(ctx.rule.attr, 'args', {})
+            test_env_vars = getattr(ctx.rule.attr, "env", {})
+            test_commandline_args = getattr(ctx.rule.attr, "args", {})
 
         info = struct(
             name = bundle_info.bundle_name,
@@ -120,25 +120,25 @@ def _xcodeproj_impl(ctx):
     script_dot_dots = "/".join([".." for x in range(nesting)])
 
     proj_options = {
-        'createIntermediateGroups': True,
-        'defaultConfig': "Debug",
-        'groupSortPosition': "none",
+        "createIntermediateGroups": True,
+        "defaultConfig": "Debug",
+        "groupSortPosition": "none",
     }
     proj_settings = {
-        'BAZEL_PATH': ctx.attr.bazel_path,
-        'BAZEL_WORKSPACE_ROOT': "$SRCROOT/%s" % script_dot_dots,
-        'BAZEL_STUBS_DIR': "$PROJECT_FILE_PATH/bazelstubs",
-        'BAZEL_INSTALLER': "$BAZEL_STUBS_DIR/%s" % ctx.executable.installer.short_path,
-        'CC': "$BAZEL_STUBS_DIR/clang-stub",
-        'CXX': "$CC",
-        'CLANG_ANALYZER_EXEC': "$CC",
-        'CODE_SIGNING_ALLOWED': False,
-        'DONT_RUN_SWIFT_STDLIB_TOOL': True,
-        'LD': "$BAZEL_STUBS_DIR/ld-stub",
-        'LIBTOOL': "/usr/bin/true",
-        'SWIFT_EXEC': "$BAZEL_STUBS_DIR/swiftc-stub",
-        'SWIFT_OBJC_INTERFACE_HEADER_NAME': "",
-        'SWIFT_VERSION': 5,
+        "BAZEL_PATH": ctx.attr.bazel_path,
+        "BAZEL_WORKSPACE_ROOT": "$SRCROOT/%s" % script_dot_dots,
+        "BAZEL_STUBS_DIR": "$PROJECT_FILE_PATH/bazelstubs",
+        "BAZEL_INSTALLER": "$BAZEL_STUBS_DIR/%s" % ctx.executable.installer.short_path,
+        "CC": "$BAZEL_STUBS_DIR/clang-stub",
+        "CXX": "$CC",
+        "CLANG_ANALYZER_EXEC": "$CC",
+        "CODE_SIGNING_ALLOWED": False,
+        "DONT_RUN_SWIFT_STDLIB_TOOL": True,
+        "LD": "$BAZEL_STUBS_DIR/ld-stub",
+        "LIBTOOL": "/usr/bin/true",
+        "SWIFT_EXEC": "$BAZEL_STUBS_DIR/swiftc-stub",
+        "SWIFT_OBJC_INTERFACE_HEADER_NAME": "",
+        "SWIFT_VERSION": 5,
     }
 
     targets = []
@@ -152,27 +152,27 @@ def _xcodeproj_impl(ctx):
     for target_info in targets:
         target_macho_type = "staticlib" if target_info.product_type == "framework" else "$(inherited)"
         xcodeproj_targets_by_name[target_info.name] = {
-            'sources': [{
-                            'path': paths.join(src_dot_dots, s.short_path),
-                            'group': paths.dirname(s.short_path),
-                            'validate': False
-                        } for s in target_info.srcs.to_list()],
-            'type': target_info.product_type,
-            'platform': 'iOS',
-            'settings': {
-                'PRODUCT_NAME': target_info.name,
-                'BAZEL_PACKAGE': target_info.package,
-                'MACH_O_TYPE': target_macho_type,
+            "sources": [{
+                "path": paths.join(src_dot_dots, s.short_path),
+                "group": paths.dirname(s.short_path),
+                "validate": False,
+            } for s in target_info.srcs.to_list()],
+            "type": target_info.product_type,
+            "platform": "iOS",
+            "settings": {
+                "PRODUCT_NAME": target_info.name,
+                "BAZEL_PACKAGE": target_info.package,
+                "MACH_O_TYPE": target_macho_type,
             },
-            'preBuildScripts': [{
-                'name': 'Build with bazel',
-                'script': """
+            "preBuildScripts": [{
+                "name": "Build with bazel",
+                "script": """
 set -eux
 cd $BAZEL_WORKSPACE_ROOT
 
 $BAZEL_PATH build $BAZEL_PACKAGE:{bazel_name}
 $BAZEL_INSTALLER
-""".format(bazel_name = target_info.bazel_name)
+""".format(bazel_name = target_info.bazel_name),
             }],
         }
         if target_info.product_type == "framework":
@@ -180,27 +180,27 @@ $BAZEL_INSTALLER
         scheme_action_name = "test"
         if target_info.product_type == "application":
             scheme_action_name = "run"
-        scheme_action_details = {'targets': [target_info.name]}
+        scheme_action_details = {"targets": [target_info.name]}
 
         test_env_vars = {}
-        for k,v in getattr(target_info, 'test_env_vars', {}).items():
-           if ctx.attr.scheme_existing_envvar_overrides.get(k, None):
-               test_env_vars[k] = ctx.attr.scheme_existing_envvar_overrides[k]
-           else:
-               test_env_vars[k] = v
-        scheme_action_details['environmentVariables'] = test_env_vars
+        for k, v in getattr(target_info, "test_env_vars", {}).items():
+            if ctx.attr.scheme_existing_envvar_overrides.get(k, None):
+                test_env_vars[k] = ctx.attr.scheme_existing_envvar_overrides[k]
+            else:
+                test_env_vars[k] = v
+        scheme_action_details["environmentVariables"] = test_env_vars
 
-        test_commandline_args = getattr(target_info, 'test_commandline_args', {})
-        scheme_action_details['commandLineArguments'] = {}
+        test_commandline_args = getattr(target_info, "test_commandline_args", {})
+        scheme_action_details["commandLineArguments"] = {}
         for arg in test_commandline_args:
-            scheme_action_details['commandLineArguments'][arg] = True
+            scheme_action_details["commandLineArguments"][arg] = True
 
         xcodeproj_schemes_by_name[target_info.name] = {
-            'build': {
-                'parallelizeBuild': False,
-                'buildImplicitDependencies': False,
-                'targets': {
-                    target_info.name: [scheme_action_name]
+            "build": {
+                "parallelizeBuild": False,
+                "buildImplicitDependencies": False,
+                "targets": {
+                    target_info.name: [scheme_action_name],
                 },
             },
             scheme_action_name: scheme_action_details,
@@ -259,7 +259,7 @@ xcodeproj = rule(
         "include_transitive_targets": attr.bool(default = False, mandatory = False),
         "project_name": attr.string(mandatory = False),
         "bazel_path": attr.string(mandatory = False, default = "bazel"),
-        "scheme_existing_envvar_overrides": attr.string_dict(allow_empty=True, default={}, mandatory=False),
+        "scheme_existing_envvar_overrides": attr.string_dict(allow_empty = True, default = {}, mandatory = False),
         "_xcodeproj_installer_template": attr.label(executable = False, default = Label("//tools/xcodeproj-shims:xcodeproj-installer.sh"), allow_single_file = ["sh"]),
         "_xcodegen": attr.label(executable = True, default = Label("@com_github_yonaskolb_xcodegen//:xcodegen"), cfg = "host"),
         "clang_stub": attr.label(executable = True, default = Label("//tools/xcodeproj-shims:clang-stub"), cfg = "host"),
