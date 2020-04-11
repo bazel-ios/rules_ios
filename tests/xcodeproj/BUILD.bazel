@@ -4,7 +4,7 @@ load("//rules:xcodeproj.bzl", "xcodeproj")
 ios_unit_test(
     name = "Single-Application-UnitTests",
     srcs = ["test.swift"],
-    args = ["commandline_arg1"],
+    args = ["-h"],
     env = {"test_envvar_key": "test_envvar_value"},
     minimum_os_version = "11.0",
     module_name = "Single_Application_UnitTests",

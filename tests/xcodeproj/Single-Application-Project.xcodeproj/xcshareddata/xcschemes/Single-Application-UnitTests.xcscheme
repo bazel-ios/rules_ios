@@ -51,7 +51,7 @@
       </MacroExpansion>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "commandline_arg1"
+            argument = "-h"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

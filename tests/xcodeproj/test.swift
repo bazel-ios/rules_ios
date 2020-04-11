@@ -6,7 +6,7 @@ class SwiftTests : XCTestCase {
       XCTAssertEqual(envvarvalue, "test_envvar_value")
       let arguments = ProcessInfo.processInfo.arguments
       XCTAssertEqual(6, arguments.count)
-      XCTAssertEqual(arguments[1], "commandline_arg1")
+      XCTAssertEqual(arguments[1], "-h")
   }
 }
 
