@@ -194,14 +194,18 @@ _DefaultLibraryTools = {
     "fetch_default_xcconfig": _error_on_default_xcconfig,
 }
 
+def _prepend(list, other):
+    for item in reversed(other):
+        list.insert(0, item)
+
 def _prepend_copts(copts_struct, objc_copts, cc_copts, swift_copts, linkopts, ibtool_copts, momc_copts, mapc_copts):
-    objc_copts = copts_struct.objc_copts + objc_copts
-    cc_copts = copts_struct.cc_copts + cc_copts
-    swift_copts = copts_struct.swift_copts + swift_copts
-    linkopts = copts_struct.linkopts + linkopts
-    ibtool_copts = copts_struct.ibtool_copts + ibtool_copts
-    momc_copts = copts_struct.momc_copts + momc_copts
-    mapc_copts = copts_struct.mapc_copts + mapc_copts
+    _prepend(objc_copts, copts_struct.objc_copts)
+    _prepend(copts_struct.cc_copts, cc_copts)
+    _prepend(copts_struct.swift_copts, swift_copts)
+    _prepend(copts_struct.linkopts, linkopts)
+    _prepend(copts_struct.ibtool_copts, ibtool_copts)
+    _prepend(copts_struct.momc_copts, momc_copts)
+    _prepend(copts_struct.mapc_copts, mapc_copts)
 
 def _uppercase_string(s):
     return s.upper()
