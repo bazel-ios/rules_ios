@@ -155,7 +155,7 @@ def _xcodeproj_impl(ctx):
             "sources": [{
                 "path": paths.join(src_dot_dots, s.short_path),
                 "group": paths.dirname(s.short_path),
-                "validate": False,
+                "optional": True,
             } for s in target_info.srcs.to_list()],
             "type": target_info.product_type,
             "platform": "iOS",
@@ -219,7 +219,7 @@ $BAZEL_INSTALLER
     ctx.actions.run(
         executable = ctx.executable._xcodegen,
         arguments = ["--quiet", "--no-env", "--spec", xcodegen_jsonfile.path, "--project", project.dirname],
-        inputs = depset([xcodegen_jsonfile], transitive = [target.srcs for target in targets]),
+        inputs = [xcodegen_jsonfile],
         outputs = [project],
     )
     install_script = ctx.actions.declare_file(

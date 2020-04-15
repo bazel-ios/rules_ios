@@ -57,8 +57,13 @@
       </CommandLineArguments>
       <EnvironmentVariables>
          <EnvironmentVariable
-            key = "test_envvar_key"
-            value = "test_envvar_value"
+            key = "test_envvar_key1"
+            value = "test_envvar_value1"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "test_envvar_key2"
+            value = "test_envvar_value2_overridenvalue"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
