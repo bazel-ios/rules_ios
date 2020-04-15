@@ -371,6 +371,28 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     deps += resource_bundles
 
     ## BEGIN HMAP
+
+    if swift_sources:
+        generated_swift_header_name = module_name + "-Swift.h"
+        generated_swift_headers_filegroup = name + "_swift_hdrs"
+        native.filegroup(
+            name = generated_swift_headers_filegroup,
+            srcs = [generated_swift_header_name],
+            tags = _MANUAL,
+        )
+
+        # Add generated swift header to header maps for double quote imports
+        swift_doublequote_hmap_name = name + "_swift_doublequote_hmap"
+        headermap(
+            name = swift_doublequote_hmap_name,
+            namespace = namespace,
+            hdrs = [generated_swift_headers_filegroup],
+            hdr_providers = deps,
+            flatten_headers = True,
+            tags = _MANUAL,
+        )
+        internal_deps.append(swift_doublequote_hmap_name)
+
     public_hmap_name = name + "_public_hmap"
     public_hdrs_filegroup = name + "_public_hdrs"
     native.filegroup(
@@ -423,21 +445,21 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         tags = _MANUAL,
     )
     internal_deps.append(private_angled_hmap_name)
+
     ## END HMAP
 
     # vfs_name = name + '_vfs'
     # vfs_overlay(name = vfs_name, deps = deps)
     # internal_deps.append(vfs_name)
 
-    headermap_copts = [
-        "-I\"$(execpath :%s)\"" % private_hmap_name,
-        "-I\"$(execpath :%s)\"" % public_hmap_name,
-        "-I\"$(execpath :%s)\"" % private_angled_hmap_name,
-        "-I.",
-        # "-ivfsoverlay", "$(execpath :%s)" % vfs_name,
-        "-iquote",
-        "$(execpath :%s)" % private_hmap_name,
-    ]
+    headermap_copts = []
+    headermap_copts.append("-I\"$(execpath :%s)\"" % private_hmap_name)
+    headermap_copts.append("-I\"$(execpath :%s)\"" % public_hmap_name)
+    headermap_copts.append("-I\"$(execpath :%s)\"" % private_angled_hmap_name)
+    if swift_sources:
+        headermap_copts.append("-iquote\"$(execpath :%s)\"" % swift_doublequote_hmap_name)
+    headermap_copts.append("-I.")
+    headermap_copts.append("-iquote\"$(execpath :%s)\"" % private_hmap_name)
 
     objc_copts += headermap_copts + [
         "-fmodules",
@@ -494,11 +516,10 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         swiftc_inputs = other_inputs + objc_hdrs
         if module_map:
             swiftc_inputs.append(module_map)
-        generated_header_name = module_name + "-Swift.h"
         swift_library(
             name = swift_libname,
             module_name = module_name,
-            generated_header_name = generated_header_name,
+            generated_header_name = generated_swift_header_name,
             srcs = swift_sources,
             copts = swift_copts,
             deps = deps + internal_deps + lib_names,
@@ -513,7 +534,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                 name = module_map + ".extended." + name,
                 destination = "%s.extended.modulemap" % name,
                 source = module_map,
-                swift_header = generated_header_name,
+                swift_header = generated_swift_header_name,
                 module_name = module_name,
                 tags = _MANUAL,
             )
