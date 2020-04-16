@@ -5,7 +5,10 @@ ios_unit_test(
     name = "Single-Application-UnitTests",
     srcs = ["test.swift"],
     args = ["-h"],
-    env = {"test_envvar_key1": "test_envvar_value1", "test_envvar_key2": "test_envvar_value2"},
+    env = {
+        "test_envvar_key1": "test_envvar_value1",
+        "test_envvar_key2": "test_envvar_value2",
+    },
     minimum_os_version = "11.0",
     module_name = "Single_Application_UnitTests",
     sdk_frameworks = ["XCTest"],
@@ -15,9 +18,9 @@ xcodeproj(
     name = "Single-Application-Project",
     testonly = True,
     bazel_path = "bazelisk",
+    scheme_existing_envvar_overrides = {"test_envvar_key2": "test_envvar_value2_overridenvalue"},
     deps = [
         "//rules/test_host_app:iOS-12.0-AppHost",
         "//tests/xcodeproj:Single-Application-UnitTests",
     ],
-    scheme_existing_envvar_overrides = {"test_envvar_key2": "test_envvar_value2_overridenvalue"},
 )
