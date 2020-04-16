@@ -9,6 +9,7 @@ exports_files([
     ios_application(
         name = "iOS-%s-AppHost" % version,
         srcs = ["main.m"],
+        resource_bundles = {"iOS-AppHost-Resources": glob(["AssetCatalogFixture.xcassets/**"])},
         bundle_id = "com.example.ios-app-host-%s" % version,
         entitlements = "ios.entitlements",
         families = [

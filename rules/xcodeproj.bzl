@@ -31,7 +31,6 @@ def _xcodeproj_aspect_impl(target, ctx):
     test_commandline_args = ()
     if AppleBundleInfo in target:
         bundle_info = target[AppleBundleInfo]
-        srcs = []
         bazel_name = target.label.name
         if ctx.rule.kind == "ios_unit_test":
             env_key_value_pairs = getattr(ctx.rule.attr, "env", {})
@@ -47,7 +46,8 @@ def _xcodeproj_aspect_impl(target, ctx):
             bundle_extension = bundle_info.bundle_extension,
             package = target.label.package,
             bazel_name = bazel_name,
-            srcs = depset(srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
+            srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
+            asset_srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "asset_srcs")),
             build_files = depset([ctx.build_file_path], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
             product_type = bundle_info.product_type[len("com.apple.product-type."):],
             test_env_vars = test_env_vars,
@@ -56,19 +56,20 @@ def _xcodeproj_aspect_impl(target, ctx):
         providers.append(
             _SrcsInfo(
                 srcs = info.srcs,
+                asset_srcs = info.asset_srcs,
                 build_files = depset([ctx.build_file_path]),
-                direct_srcs = srcs,
+                direct_srcs = [],
             ),
         )
         target_info = _TargetInfo(target = info, targets = depset([info], transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets")))
         providers.append(target_info)
     elif ctx.rule.kind == "apple_framework_packaging":
-        srcs = []
         info = struct(
             name = target.label.name,
             package = target.label.package,
             bazel_name = target.label.name,
-            srcs = depset(srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
+            srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
+            asset_srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "asset_srcs")),
             build_files = depset([ctx.build_file_path], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
             product_type = "framework",
             test_env_vars = test_env_vars,
@@ -78,13 +79,19 @@ def _xcodeproj_aspect_impl(target, ctx):
         providers.append(target_info)
     else:
         srcs = []
+        asset_srcs = []
         for attr in _dir(ctx.rule.files):
-            srcs += getattr(ctx.rule.files, attr, [])
+            if attr == 'srcs':
+                srcs += getattr(ctx.rule.files, attr, [])
+            else:
+                asset_srcs += getattr(ctx.rule.files, attr, [])
         srcs = [f for f in srcs if not f.path.startswith("external/") and f.is_source]
+        asset_srcs = [f for f in asset_srcs if not f.path.startswith("external/") and f.is_source]
 
         providers.append(
             _SrcsInfo(
                 srcs = depset(srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
+                asset_srcs = depset(asset_srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "asset_srcs")),
                 build_files = depset([ctx.build_file_path], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
                 direct_srcs = srcs,
             ),
@@ -156,12 +163,19 @@ def _xcodeproj_impl(ctx):
     xcodeproj_schemes_by_name = {}
     for target_info in targets:
         target_macho_type = "staticlib" if target_info.product_type == "framework" else "$(inherited)"
+        compiled_sources = [{
+                            "path": paths.join(src_dot_dots, s.short_path),
+                            "group": paths.dirname(s.short_path),
+                            "optional": True,
+        } for s in target_info.srcs.to_list()]
+        asset_sources = [{
+                            "path": paths.join(src_dot_dots, s.short_path),
+                            "group": paths.dirname(s.short_path),
+                            "optional": True,
+                            "buildPhase": "none",
+        } for s in target_info.asset_srcs.to_list()]
         xcodeproj_targets_by_name[target_info.name] = {
-            "sources": [{
-                "path": paths.join(src_dot_dots, s.short_path),
-                "group": paths.dirname(s.short_path),
-                "optional": True,
-            } for s in target_info.srcs.to_list()],
+            "sources": compiled_sources + asset_sources,
             "type": target_info.product_type,
             "platform": "iOS",
             "settings": {
