@@ -39,4 +39,12 @@ apple_framework(
     },
 )
 
+apple_framework(
+    name = "wont_build_without_xcconfig",
+    non_arc_srcs = ["weak_property.m"],
+    xcconfig = {
+        "CLANG_ENABLE_OBJC_WEAK": "YES",
+    },
+)
+
 xcconfig_unit_test_suite()
