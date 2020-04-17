@@ -14,6 +14,16 @@ _IOS_APPLICATION_KWARGS = [
 ]
 
 def write_info_plists_if_needed(name, plists):
+    """
+    Writes info plists for an app if needed.
+
+    Given a list of infoplists, will write out any plists that are passed as a
+    dict, and will add a default app Info.plist if no non-dict plists are passed.
+
+    Args:
+        name: The name of the app target these infoplists are for.
+        plists: A list of either labels or dicts.
+    """
     already_written_plists = []
     written_plists = []
     for idx, plist in enumerate(plists):
