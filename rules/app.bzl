@@ -1,3 +1,4 @@
+load("@bazel_skylib//lib:types.bzl", "types")
 load("@build_bazel_rules_apple//apple:ios.bzl", rules_apple_ios_application = "ios_application")
 load("//rules:library.bzl", "apple_library", "write_file")
 
@@ -12,6 +13,26 @@ _IOS_APPLICATION_KWARGS = [
     "launch_storyboard",
 ]
 
+def write_info_plists_if_needed(name, plists):
+    already_written_plists = []
+    written_plists = []
+    for idx, plist in enumerate(plists):
+        if types.is_dict(plist):
+            plist_name = "{name}.infoplist.{idx}".format(name = name, idx = idx)
+            write_file(
+                name = plist_name,
+                destination = plist_name + ".plist",
+                content = struct(**plist).to_json(),
+            )
+            written_plists.append(plist_name)
+        else:
+            already_written_plists.append(plist)
+
+    if not already_written_plists:
+        already_written_plists.append("@build_bazel_rules_ios//rules/test_host_app:Info.plist")
+
+    return already_written_plists + written_plists
+
 def ios_application(name, apple_library = apple_library, **kwargs):
     """
     Builds and packages an iOS application.
@@ -21,12 +42,9 @@ def ios_application(name, apple_library = apple_library, **kwargs):
         apple_library: The macro used to package sources into a library.
         kwargs: Arguments passed to the apple_library and ios_application rules as appropriate.
     """
-    infoplists = kwargs.pop("infoplists", [])
+    infoplists = write_info_plists_if_needed(name = name, plists = kwargs.pop("infoplists", []))
     application_kwargs = {arg: kwargs.pop(arg) for arg in _IOS_APPLICATION_KWARGS if arg in kwargs}
     library = apple_library(name = name, namespace_is_module_name = False, **kwargs)
-
-    if not infoplists:
-        infoplists += ["@build_bazel_rules_ios//rules/test_host_app:Info.plist"]
 
     application_kwargs["launch_storyboard"] = application_kwargs.pop("launch_storyboard", library.launch_screen_storyboard_name)
     application_kwargs["families"] = application_kwargs.pop("families", ["iphone", "ipad"])
