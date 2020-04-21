@@ -27,15 +27,20 @@ def _xcodeproj_aspect_impl(target, ctx):
     deps.append(getattr(ctx.rule.attr, "entitlements", None))
 
     # TODO: handle apple_resource_bundle targets
-    test_env_vars = {}
-    test_commandline_args = {}
+    test_env_vars = ()
+    test_commandline_args = ()
     if AppleBundleInfo in target:
         bundle_info = target[AppleBundleInfo]
         srcs = []
         bazel_name = target.label.name
         if ctx.rule.kind == "ios_unit_test":
-            test_env_vars = getattr(ctx.rule.attr, "env", {})
-            test_commandline_args = getattr(ctx.rule.attr, "args", {})
+            env_key_value_pairs = getattr(ctx.rule.attr, "env", {})
+
+            # This converts {"env_k1": "env_v1", "env_k2": "env_v2"}
+            # to (("env_k1", "env_v1"), ("env_k2", "env_v2"))
+            test_env_vars = tuple(env_key_value_pairs.items())
+            commandlines_args = getattr(ctx.rule.attr, "args", [])
+            test_commandline_args = tuple(commandlines_args)
 
         info = struct(
             name = bundle_info.bundle_name,
@@ -182,19 +187,23 @@ $BAZEL_INSTALLER
             scheme_action_name = "run"
         scheme_action_details = {"targets": [target_info.name]}
 
-        test_env_vars = {}
-        for k, v in getattr(target_info, "test_env_vars", {}).items():
+        test_env_vars_dict = {}
+
+        # target_info.test_env_vars looks like (("env_k1", "env_v1"), ("env_k2", "env_v2"))
+        for kvPair in getattr(target_info, "test_env_vars", ()):
+            k = kvPair[0]
+            v = kvPair[1]
             if ctx.attr.scheme_existing_envvar_overrides.get(k, None):
-                test_env_vars[k] = ctx.attr.scheme_existing_envvar_overrides[k]
+                test_env_vars_dict[k] = ctx.attr.scheme_existing_envvar_overrides[k]
             else:
-                test_env_vars[k] = v
-        scheme_action_details["environmentVariables"] = test_env_vars
+                test_env_vars_dict[k] = v
 
-        test_commandline_args = getattr(target_info, "test_commandline_args", {})
+        scheme_action_details["environmentVariables"] = test_env_vars_dict
+
+        test_commandline_args_tuple = getattr(target_info, "test_commandline_args", ())
         scheme_action_details["commandLineArguments"] = {}
-        for arg in test_commandline_args:
+        for arg in test_commandline_args_tuple:
             scheme_action_details["commandLineArguments"][arg] = True
-
         xcodeproj_schemes_by_name[target_info.name] = {
             "build": {
                 "parallelizeBuild": False,
