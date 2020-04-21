@@ -42,9 +42,15 @@ def _make_headermap_impl(ctx):
 
     # Write a file for *this* headermap, this is a temporary file
     input_f = ctx.actions.declare_file(ctx.label.name + "_input.txt")
-    all_hdrs = []
-    for provider in ctx.attr.hdrs:
-        all_hdrs += provider.files.to_list()
+    all_hdrs = list(ctx.files.hdrs)
+    for provider in ctx.attr.direct_hdr_providers:
+        if apple_common.Objc in provider:
+            all_hdrs += provider[apple_common.Objc].direct_headers
+        elif CcInfo in hdr_provider:
+            all_hdrs += provider[CcInfo].compilation_context.direct_headers
+        else:
+            fail("direct_hdr_provider %s must contain either 'CcInfo' or 'objc' provider" % provider)
+
     out = _make_headermap_input_file(ctx.attr.namespace, all_hdrs, ctx.attr.flatten_headers)
     ctx.actions.write(
         content = out,
@@ -68,22 +74,6 @@ def _make_headermap_impl(ctx):
             fail("hdr_provider must contain either 'CcInfo' or 'objc' provider")
 
         for hdr in hdrs:
-            if SwiftInfo in hdr_provider and hdr.path.endswith("-Swift.h"):
-                namespace = ctx.attr.namespace
-                basename = hdr.basename
-
-                # Only propogate the Swift header from this module
-                # The name of the swift header may be -Swift.h or _Swift-Swift.h
-                # dur to bazelizer generated rule naming convention.
-                # Because rules_swift outputs the C header with name of the rule not
-                # the module.
-                normalized_basename = namespace + "-Swift.h"
-                if basename in [normalized_basename, namespace + "_Swift-Swift.h"]:
-                    inputs.append(hdr)
-                    mappings += [namespace + "/" + normalized_basename + "|" + hdr.path]
-                    if ctx.attr.flatten_headers:
-                        mappings += [normalized_basename + "|" + hdr.path]
-
             # only merge public header maps
             if hdr.path.endswith("public_hmap.hmap"):
                 # Add headermaps
@@ -144,6 +134,10 @@ headermap = rule(
             mandatory = True,
             allow_files = True,
             doc = "The list of headers included in the headermap",
+        ),
+        "direct_hdr_providers": attr.label_list(
+            mandatory = False,
+            doc = "Targets whose direct headers should be added to the list of hdrs",
         ),
         "flatten_headers": attr.bool(
             mandatory = True,

@@ -207,6 +207,11 @@ def _prepend_copts(copts_struct, objc_copts, cc_copts, swift_copts, linkopts, ib
     _prepend(copts_struct.momc_copts, momc_copts)
     _prepend(copts_struct.mapc_copts, mapc_copts)
 
+def _append_headermap_copts(hmap, flag, objc_copts, swift_copts, cc_copts):
+    copt = flag + '"$(execpath :{hmap})"'.format(hmap = hmap)
+    objc_copts.append(copt)
+    swift_copts.extend(("-Xcc", copt))
+
 def _uppercase_string(s):
     return s.upper()
 
@@ -376,27 +381,6 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
 
     ## BEGIN HMAP
 
-    if swift_sources:
-        generated_swift_header_name = module_name + "-Swift.h"
-        generated_swift_headers_filegroup = name + "_swift_hdrs"
-        native.filegroup(
-            name = generated_swift_headers_filegroup,
-            srcs = [generated_swift_header_name],
-            tags = _MANUAL,
-        )
-
-        # Add generated swift header to header maps for double quote imports
-        swift_doublequote_hmap_name = name + "_swift_doublequote_hmap"
-        headermap(
-            name = swift_doublequote_hmap_name,
-            namespace = namespace,
-            hdrs = [generated_swift_headers_filegroup],
-            hdr_providers = deps,
-            flatten_headers = True,
-            tags = _MANUAL,
-        )
-        internal_deps.append(swift_doublequote_hmap_name)
-
     public_hmap_name = name + "_public_hmap"
     public_hdrs_filegroup = name + "_public_hdrs"
     native.filegroup(
@@ -456,22 +440,21 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     # vfs_overlay(name = vfs_name, deps = deps)
     # internal_deps.append(vfs_name)
 
-    headermap_copts = []
-    headermap_copts.append("-I\"$(execpath :%s)\"" % private_hmap_name)
-    headermap_copts.append("-I\"$(execpath :%s)\"" % public_hmap_name)
-    headermap_copts.append("-I\"$(execpath :%s)\"" % private_angled_hmap_name)
-    if swift_sources:
-        headermap_copts.append("-iquote\"$(execpath :%s)\"" % swift_doublequote_hmap_name)
-    headermap_copts.append("-I.")
-    headermap_copts.append("-iquote\"$(execpath :%s)\"" % private_hmap_name)
+    _append_headermap_copts(private_hmap_name, "-I", objc_copts, swift_copts, cc_copts)
+    _append_headermap_copts(public_hmap_name, "-I", objc_copts, swift_copts, cc_copts)
+    _append_headermap_copts(private_angled_hmap_name, "-I", objc_copts, swift_copts, cc_copts)
+    objc_copts.append("-I.")
+    cc_copts.append("-I.")
+    swift_copts.extend(("-Xcc", "-I."))
+    _append_headermap_copts(private_hmap_name, "-iquote", objc_copts, swift_copts, cc_copts)
 
-    objc_copts += headermap_copts + [
+    objc_copts += [
         "-fmodules",
         "-fmodule-name=%s" % module_name,
         "-gmodules",
     ]
 
-    swift_copts += [j for i in ([["-Xcc", copt] for copt in headermap_copts]) for j in i] + [
+    swift_copts += [
         "-Xcc",
         "-D__SWIFTC__",
     ]
@@ -479,8 +462,6 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     swift_version = _canonicalize_swift_version(kwargs.pop("swift_version", None))
     if swift_version:
         swift_copts += ["-swift-version", swift_version]
-
-    cc_copts += headermap_copts
 
     objc_libname = "%s_objc" % name
     swift_libname = "%s_swift" % name
@@ -520,6 +501,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         swiftc_inputs = other_inputs + objc_hdrs
         if module_map:
             swiftc_inputs.append(module_map)
+        generated_swift_header_name = module_name + "-Swift.h"
         swift_library(
             name = swift_libname,
             module_name = module_name,
@@ -533,6 +515,20 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             **kwargs
         )
         lib_names += [swift_libname]
+
+        # Add generated swift header to header maps for double quote imports
+        swift_doublequote_hmap_name = name + "_swift_doublequote_hmap"
+        headermap(
+            name = swift_doublequote_hmap_name,
+            namespace = namespace,
+            hdrs = [],
+            direct_hdr_providers = [swift_libname],
+            flatten_headers = True,
+            tags = _MANUAL,
+        )
+        internal_deps.append(swift_doublequote_hmap_name)
+        _append_headermap_copts(swift_doublequote_hmap_name, "-iquote", objc_copts, swift_copts, cc_copts)
+
         if module_map:
             extend_modulemap(
                 name = module_map + ".extended." + name,
