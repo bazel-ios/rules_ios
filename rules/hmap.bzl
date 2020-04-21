@@ -58,7 +58,6 @@ def _make_headermap_impl(ctx):
     )
 
     # Add a list of headermaps in text or hmap format
-    mappings = []
     merge_hmaps = {}
     inputs = [input_f]
     args = []
@@ -79,14 +78,6 @@ def _make_headermap_impl(ctx):
                 # Add headermaps
                 merge_hmaps[hdr] = True
 
-    if mappings:
-        mappings_file = ctx.actions.declare_file(ctx.label.name + ".add_mappings")
-        inputs.append(mappings_file)
-        ctx.actions.write(
-            content = "\n".join(mappings) + "\n",
-            output = mappings_file,
-        )
-        args += ["--add-mappings", mappings_file.path]
     if merge_hmaps:
         paths = []
         for hdr in merge_hmaps.keys():
