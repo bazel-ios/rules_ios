@@ -20,3 +20,26 @@ ios_application(<a href="#ios_application-name">name</a>, <a href="#ios_applicat
 | kwargs |  Arguments passed to the apple_library and ios_application rules as appropriate.   |  none |
 
 
+<a name="#write_info_plists_if_needed"></a>
+
+## write_info_plists_if_needed
+
+<pre>
+write_info_plists_if_needed(<a href="#write_info_plists_if_needed-name">name</a>, <a href="#write_info_plists_if_needed-plists">plists</a>)
+</pre>
+
+    Writes info plists for an app if needed.
+
+Given a list of infoplists, will write out any plists that are passed as a
+dict, and will add a default app Info.plist if no non-dict plists are passed.
+
+
+**PARAMETERS**
+
+
+| Name  | Description | Default Value |
+| :-------------: | :-------------: | :-------------: |
+| name |  The name of the app target these infoplists are for.   |  none |
+| plists |  A list of either labels or dicts.   |  none |
+
+

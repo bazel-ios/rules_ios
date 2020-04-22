@@ -38,8 +38,8 @@ Writes out a file verbatim
 | Name  | Description | Type | Mandatory | Default |
 | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: |
 | name |  A unique name for this target.   | <a href="https://bazel.build/docs/build-ref.html#name">Name</a> | required |  |
-| content |  -   | String | optional | "" |
-| destination |  -   | <a href="https://bazel.build/docs/build-ref.html#labels">Label</a> | optional | None |
+| content |  -   | String | required |  |
+| destination |  -   | <a href="https://bazel.build/docs/build-ref.html#labels">Label</a> | required |  |
 
 
 <a name="#PrivateHeaders"></a>

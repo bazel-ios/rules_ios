@@ -42,8 +42,8 @@ def _write_file_impl(ctx):
 write_file = rule(
     implementation = _write_file_impl,
     attrs = {
-        "content": attr.string(),
-        "destination": attr.output(),
+        "content": attr.string(mandatory = True),
+        "destination": attr.output(mandatory = True),
     },
     doc = "Writes out a file verbatim",
 )
