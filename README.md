@@ -1,6 +1,6 @@
 # iOS Rules for [Bazel](https://bazel.build)
 
-![master](https://github.com/ob/rules_ios/workflows/CI-master/badge.svg)
+![master](https://github.com/bazel-ios/rules_ios/workflows/CI-master/badge.svg)
 
 > :warning: **This is alpha software.** We are developing these rules in the open so you should only use them if you know what you are doing and are willing to help develop them.
 
@@ -14,11 +14,11 @@ in Bazel, and by the
 [`swift_library` rule](https://github.com/bazelbuild/rules_swift/blob/master/doc/rules.md#swift_library)
 available from [rules_swift](https://github.com/bazelbuild/rules_swift).
 
-These rules require Bazel 2.0.
+Bazel version required by current rules is [here](https://github.com/bazel-ios/rules_ios/blob/master/.bazelversion)
 
 ## Reference documentation
 
-[Click here](https://github.com/ob/rules_ios/tree/master/doc)
+[Click here](https://github.com/bazel-ios/rules_ios/tree/master/docs)
 for the documentation.
 
 ## Quick setup
@@ -28,14 +28,14 @@ and `rules_apple` [no longer create
 releases](https://github.com/bazelbuild/rules_swift/pull/335), the versions are
 hardcoded to commit sha's that are known to work. You can see the particular
 commit sha's in
-[`repositories.bzl`](https://github.com/ob/rules_ios/tree/master/rules/repositories.bzl).
+[`repositories.bzl`](https://github.com/bazel-ios/rules_ios/tree/master/rules/repositories.bzl).
 
 ```python
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 git_repository(
     name = "build_bazel_rules_ios",
-    remote = "https://github.com/ob/rules_ios.git",
+    remote = "https://github.com/bazel-ios/rules_ios.git",
     branch = "master",
 )
 
@@ -90,5 +90,5 @@ ios_application(
 )
 ```
 
-See the [examples](https://github.com/ob/rules_ios/tree/master/examples)
+See the [tests](https://github.com/bazel-ios/rules_ios/tree/master/tests)
 directory for sample applications.
