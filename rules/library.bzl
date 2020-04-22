@@ -396,7 +396,6 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         name = public_hmap_name,
         namespace = namespace,
         hdrs = [public_hdrs_filegroup],
-        hdr_providers = deps,
         flatten_headers = True,
         tags = _MANUAL,
     )

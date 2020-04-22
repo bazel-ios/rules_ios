@@ -62,22 +62,6 @@ def _make_headermap_impl(ctx):
     inputs = [input_f]
     args = []
 
-    # Extract propagated headermaps
-    for hdr_provider in ctx.attr.hdr_providers:
-        hdrs = []
-        if apple_common.Objc in hdr_provider:
-            hdrs.extend(hdr_provider[apple_common.Objc].header.to_list())
-        elif CcInfo in hdr_provider:
-            hdrs.extend(hdr_provider[CcInfo].compilation_context.headers.to_list())
-        else:
-            fail("hdr_provider must contain either 'CcInfo' or 'objc' provider")
-
-        for hdr in hdrs:
-            # only merge public header maps
-            if hdr.path.endswith("public_hmap.hmap"):
-                # Add headermaps
-                merge_hmaps[hdr] = True
-
     if merge_hmaps:
         paths = []
         for hdr in merge_hmaps.keys():
@@ -112,7 +96,6 @@ def _make_headermap_impl(ctx):
 # Derive a headermap from transitive headermaps
 # hdrs: a file group containing headers for this rule
 # namespace: the Apple style namespace these header should be under
-# hdr_providers: rules providing headers. i.e. an `objc_library`
 headermap = rule(
     implementation = _make_headermap_impl,
     output_to_genfiles = True,
@@ -133,13 +116,6 @@ headermap = rule(
         "flatten_headers": attr.bool(
             mandatory = True,
             doc = "Whether headers should be importable with the namespace as a prefix",
-        ),
-        "hdr_providers": attr.label_list(
-            mandatory = False,
-            doc = """\
-Targets that provide headers.
-Targets must have either an Objc or CcInfo provider.""",
-            providers = [[apple_common.Objc], [CcInfo]],
         ),
         "_headermap_builder": attr.label(
             executable = True,
