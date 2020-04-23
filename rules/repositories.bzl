@@ -36,7 +36,7 @@ def rules_ios_dependencies():
         git_repository,
         name = "build_bazel_rules_swift",
         commit = "2ebfc403ffdb428befd38e25e236ae181aa1a49b",
-        shallow_since = "1580525034 -0800",
+        shallow_since = "1586818875 -0700",
         remote = "https://github.com/bazelbuild/rules_swift.git",
     )
 

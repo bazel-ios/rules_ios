@@ -208,8 +208,10 @@ def _prepend_copts(copts_struct, objc_copts, cc_copts, swift_copts, linkopts, ib
     _prepend(copts_struct.mapc_copts, mapc_copts)
 
 def _append_headermap_copts(hmap, flag, objc_copts, swift_copts, cc_copts):
-    copt = flag + '"$(execpath :{hmap})"'.format(hmap = hmap)
+    copt = flag + "$(execpath :{hmap})".format(hmap = hmap)
+
     objc_copts.append(copt)
+    cc_copts.append(copt)
     swift_copts.extend(("-Xcc", copt))
 
 def _uppercase_string(s):
@@ -396,7 +398,6 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         name = public_hmap_name,
         namespace = namespace,
         hdrs = [public_hdrs_filegroup],
-        hdr_providers = deps,
         flatten_headers = True,
         tags = _MANUAL,
     )
