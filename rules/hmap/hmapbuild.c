@@ -1,8 +1,15 @@
+#include <assert.h>
+#include <fcntl.h>
 #include <getopt.h>
+#include <libgen.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <sys/errno.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
 
 #include "hmap.h"
+#include "lines.h"
 #include "uthash.h"
 
 static int verbose = 0;
@@ -13,104 +20,61 @@ typedef struct mapping {
     UT_hash_handle hh;
 } mapping;
 
+static struct {
+    char *name_space;
+    char *output_file;
+} cli_args;
+
 static void usage();
 static void debug(char *format, ...);
+
 static inline void chomp(char *s);
 static void add_entry(mapping **hashmap, char *key, char *value);
-static int add_mappings_from_file(mapping **hashmap, char *file);
-static int add_mappings_from_headermap(mapping **hashmap, char *file);
-static int add_mappings_from_headermap_file(mapping **hashmap, char *file);
+static void add_header(mapping **hashmap, char *name_space, char *header);
+static void parse_args(mapping **hashmap, char **av, int ac);
+static void parse_param_file(mapping **hashmap, char *file);
 
 static struct option longopts[] = {
-    {"merge-hmaps", required_argument, NULL, 'm'},
-    {"add-mappings", required_argument, NULL, 'a'},
+    {"namespace", required_argument, NULL, 'n'},
+    {"output", required_argument, NULL, 'o'},
     {"verbose", no_argument, NULL, 'v'},
     {NULL, 0, NULL, 0},
 };
 
 int main(int ac, char **av) {
-    int c;
-    char *extra_headermaps_file = NULL;
-    char *extra_mappings_file = NULL;
-    char *input_file = NULL;
-    char *output_file = NULL;
-
-    while ((c = getopt_long(ac, av, "m:a:", longopts, NULL)) != -1) {
-        switch (c) {
-            case 'm':
-                extra_headermaps_file = strdup(optarg);
-                break;
-            case 'a':
-                extra_mappings_file = strdup(optarg);
-                break;
-            case 'v':
-                verbose = 1;
-                break;
-            default:
-                usage();
-        }
-    }
-    ac -= optind;
-    av += optind;
-    if (ac < 2) usage();
-    input_file = av[0];
-    output_file = av[1];
-
-    // process it
+    cli_args.name_space = NULL;
+    cli_args.output_file = NULL;
     mapping *entries = NULL;
 
-    debug("Adding inputs");
-    if (add_mappings_from_file(&entries, input_file)) {
-        fprintf(stderr, "Failed to add mappings from %s\n", input_file);
-        exit(1);
-    }
-
-    // add extra mappings:
-    if (extra_mappings_file) {
-        debug("Adding mappings");
-        if (add_mappings_from_file(&entries, extra_mappings_file)) {
-            fprintf(stderr, "Failed to add extra mappings from '%s'\n",
-                    extra_mappings_file);
-            exit(1);
-        }
-    }
-
-    // add extra header maps
-    if (extra_headermaps_file) {
-        debug("Adding header maps");
-        if (add_mappings_from_headermap_file(&entries, extra_headermaps_file)) {
-            fprintf(stderr, "Failed to add headermaps for file '%s'\n",
-                    extra_headermaps_file);
-            exit(1);
-        }
-    }
-
-    debug("Writing final header map");
+    parse_args(&entries, av, ac);
 
     mapping *m;
     unsigned numEntries = 0;
     for (m = entries; m != NULL; m = m->hh.next) {
         numEntries++;
     }
-    debug("%u entries", numEntries);
+    debug("Writing hmap with %u entries", numEntries);
     HeaderMap *hmap = hmap_new(numEntries);
     for (m = entries; m != NULL; m = m->hh.next) {
         if (hmap_addEntry(hmap, m->key, m->value)) {
             fprintf(stderr, "failed to add '%s' to hmap\n", m->key);
         }
     }
-    if (hmap_save(hmap, output_file)) {
-        perror(output_file);
+    if (hmap_save(hmap, cli_args.output_file)) {
+        perror(cli_args.output_file);
     }
     hmap_free(hmap);
-    // don't bother free'ing the hash since we are exiting anyway
     return 0;
 }
 
 static void usage() {
-    fprintf(stderr,
-            "hmaptool: [--merge-hmaps <file>] [--add-mappings <file>] "
-            "<input_file> <output_file>\n");
+    fprintf(stderr, "hmaptool: ");
+    for (struct option *op = longopts; op->name; ++op) {
+        fprintf(stderr, "[--%s", op->name);
+        if (op->has_arg == required_argument) fprintf(stderr, " <arg>");
+        fprintf(stderr, "]");
+    }
+    fprintf(stderr, " [<hdr>...]\n");
     exit(1);
 }
 
@@ -123,6 +87,59 @@ static void debug(char *format, ...) {
     printf("%s\n", buffer);
     free(buffer);
     va_end(args);
+}
+
+static void parse_args(mapping **entries, char **av, int ac) {
+    int c;
+    optind = 0;
+    while ((c = getopt_long(ac, av, "n:o:", longopts, NULL)) != -1) {
+        switch (c) {
+            case 'n':
+                cli_args.name_space = strdup(optarg);
+                break;
+            case 'o':
+                cli_args.output_file = strdup(optarg);
+                break;
+            case 'v':
+                verbose = 1;
+                break;
+            default:
+                // TODO: don't
+                usage();
+        }
+    }
+    ac -= optind;
+    av += optind;
+
+    // all remaining arguments are the actual headers
+    for (; *av; av++) {
+        if (**av == '@') {
+            // param file
+            parse_param_file(entries, *av);
+            continue;
+        }
+        add_header(entries, cli_args.name_space, *av);
+    }
+}
+
+static void add_header(mapping **hashmap, char *name_space, char *header) {
+    char *bn = strdup(basename(header));
+    if (bn == NULL) {
+        fprintf(stderr,
+                "Failed to parse '%s': could not extract basename: %s\n",
+                header, strerror(errno));
+        exit(1);
+    }
+    add_entry(hashmap, bn, strdup(header));
+    if (name_space) {
+        char *key = NULL;
+        asprintf(&key, "%s/%s", name_space, bn);
+        if (!key) {
+            perror("malloc");
+            exit(1);
+        }
+        add_entry(hashmap, key, strdup(header));
+    }
 }
 
 static void add_entry(mapping **hashmap, char *key, char *value) {
@@ -149,64 +166,25 @@ static inline void chomp(char *s) {
     if (s[len - 1] == '\n') s[len - 1] = '\0';
 }
 
-static int add_mappings_from_file(mapping **hashmap, char *file) {
+static void parse_param_file(mapping **hashmap, char *file) {
+    assert(file[0] == '@');
+    file++;  // skip @
+
     FILE *f = fopen(file, "r");
     if (!f) {
         perror(file);
-        return 1;
+        exit(1);
     }
-    // read the input file to build the initial hashmap
     ssize_t nread;
     char *line = NULL;
     size_t len;
+    char **av = NULL;
     while ((nread = getline(&line, &len, f)) != -1) {
         chomp(line);
-        if (strlen(line) == 0) continue;  // skip empty lines
-        char *pipe = strchr(line, '|');
-        if (!pipe) {
-            fprintf(stderr, "Error parsing k|v pair in line: '%s'\n", line);
-            exit(1);
-        }
-        *pipe = '\0';
-        char *key = strdup(line);
-        char *value = strdup(++pipe);
-        add_entry(hashmap, key, value);
+        av = addLine(av, line);
+        line = NULL;
     }
+    av = addLine(av, NULL);
     fclose(f);
-    if (line) free(line);
-    return 0;
-}
-
-static int add_mappings_from_headermap(mapping **hashmap, char *file) {
-    int rc = 0;
-    char *key, *value;
-    debug("Merging in '%s'", file);
-    HeaderMap *hmap = hmap_open(file, "r'");
-    if (!hmap) {
-        return 1;
-    }
-    HMAP_EACH(hmap, key, value) { add_entry(hashmap, key, value); }
-    hmap_close(hmap);
-    debug("'%s' Merged", file);
-    return rc;
-}
-
-static int add_mappings_from_headermap_file(mapping **hashmap, char *file) {
-    int rc = 0;
-    FILE *f = fopen(file, "r");
-    if (!f) {
-        perror(file);
-        return 1;
-    }
-    // read the input file to build the initial hashmap
-    ssize_t nread;
-    char *line = NULL;
-    size_t len;
-    while ((nread = getline(&line, &len, f)) != -1) {
-        chomp(line);
-        rc |= add_mappings_from_headermap(hashmap, line);
-    }
-    fclose(f);
-    if (line) free(line);
-    return rc;
+    parse_args(hashmap, av, nLines(av));
 }

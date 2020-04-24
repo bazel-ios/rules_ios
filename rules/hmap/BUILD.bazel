@@ -1,4 +1,4 @@
-load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_test")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 
 HMAP_COPTS = [
     "-DHASH_FUNCTION=HASH_MUR",
@@ -17,6 +17,21 @@ cc_binary(
         "uthash.h",
     ],
     copts = HMAP_COPTS,
+    visibility = HMAP_VISIBILITY,
+    deps = [
+        ":lines",
+    ],
+)
+
+cc_library(
+    name = "lines",
+    srcs = [
+        "lines.c",
+    ],
+    hdrs = [
+        "lines.h",
+    ],
+    copts = ["-Wno-parentheses"],
     visibility = HMAP_VISIBILITY,
 )
 

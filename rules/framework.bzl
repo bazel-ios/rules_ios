@@ -209,24 +209,19 @@ def _apple_framework_packaging_impl(ctx):
     else:
         ctx.actions.write(framework_manifest, "# Empty framework\n")
 
-    # headermap
-    mappings_file = ctx.actions.declare_file(framework_name + "_framework.hmap.txt")
-    mappings = []
-    for header in header_in + private_header_in:
-        mappings.append(framework_name + "/" + header.basename + "|" + header.path)
-
-    # write mapping for hmap tool
-    ctx.actions.write(
-        content = "\n".join(mappings) + "\n",
-        output = mappings_file,
-    )
+    hmap_file = ctx.actions.declare_file(framework_name + "_framework_public_hmap.hmap")
+    args = ctx.actions.args()
+    args.add("--output", hmap_file.path)
+    args.add("--namespace", framework_name)
+    args.add_all(header_in)
+    args.add_all(private_header_in)
+    args.set_param_file_format("multiline")
+    args.use_param_file("@%s", use_always = True)
 
     # write headermap
-    hmap_file = ctx.actions.declare_file(framework_name + "_framework_public_hmap.hmap")
     ctx.actions.run(
-        inputs = [mappings_file],
         mnemonic = "HmapCreate",
-        arguments = [mappings_file.path, hmap_file.path],
+        arguments = [args],
         executable = ctx.executable._headermap_builder,
         outputs = [hmap_file],
     )
