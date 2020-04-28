@@ -81,7 +81,7 @@ def _xcodeproj_aspect_impl(target, ctx):
         srcs = []
         asset_srcs = []
         for attr in _dir(ctx.rule.files):
-            if attr == 'srcs':
+            if attr == "srcs":
                 srcs += getattr(ctx.rule.files, attr, [])
             else:
                 asset_srcs += getattr(ctx.rule.files, attr, [])
@@ -164,15 +164,15 @@ def _xcodeproj_impl(ctx):
     for target_info in targets:
         target_macho_type = "staticlib" if target_info.product_type == "framework" else "$(inherited)"
         compiled_sources = [{
-                            "path": paths.join(src_dot_dots, s.short_path),
-                            "group": paths.dirname(s.short_path),
-                            "optional": True,
+            "path": paths.join(src_dot_dots, s.short_path),
+            "group": paths.dirname(s.short_path),
+            "optional": True,
         } for s in target_info.srcs.to_list()]
         asset_sources = [{
-                            "path": paths.join(src_dot_dots, s.short_path),
-                            "group": paths.dirname(s.short_path),
-                            "optional": True,
-                            "buildPhase": "none",
+            "path": paths.join(src_dot_dots, s.short_path),
+            "group": paths.dirname(s.short_path),
+            "optional": True,
+            "buildPhase": "none",
         } for s in target_info.asset_srcs.to_list()]
         xcodeproj_targets_by_name[target_info.name] = {
             "sources": compiled_sources + asset_sources,
