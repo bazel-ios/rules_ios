@@ -1,6 +1,7 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:types.bzl", "types")
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_common")
 load("//rules:library.bzl", "PrivateHeaders", "apple_library")
 load("//rules/vfs_overlay:vfs_overlay.bzl", "VFSOverlay")
 
@@ -147,10 +148,13 @@ def _apple_framework_packaging_impl(ctx):
                 # only thing is the generated module map -- we don't want it
                 continue
 
+            # hasSwift = False
             if SwiftInfo in dep and dep[SwiftInfo].direct_swiftmodules:
                 # apple_common.Objc.direct_module_maps is broken coming from swift_library
                 # (it contains one level of transitive module maps), so ignore SwiftInfo from swift_library,
                 # since it doesn't have a module_map field anyway
+                # print("swift deps: {0}".format(dep))
+                # hasSwift = True
                 continue
 
             # collect modulemaps
@@ -159,6 +163,8 @@ def _apple_framework_packaging_impl(ctx):
                 # https://github.com/bazelbuild/rules_swift/commit/8ecb09641ee0ba5efd971ffff8dd6cbee6ea7dd3
                 # until we find a way to stop it (ex: via a new feature similiar to "swift.no_generated_module_map"),
                 # we have to ignore a module map if this module map belongs to the current dep:
+                # if hasSwift:
+                # print("objc deps: {0}".format(modulemap))
                 if modulemap.owner == dep.label:
                     continue
                 modulemap_in = modulemap
@@ -236,9 +242,17 @@ def _apple_framework_packaging_impl(ctx):
         outputs = [hmap_file],
     )
 
+    # for dep in ctx.attr.transitive_deps:
+        # print("!!!: {0}".format(dep))
     objc_provider_fields = {
         "providers": [dep[apple_common.Objc] for dep in ctx.attr.transitive_deps],
     }
+    swift_infos = []
+    for dep in ctx.attr.transitive_deps:
+        # print("potential dep: {0}".format(dep))
+        if SwiftInfo in dep:
+            # print(dep[SwiftInfo])
+            swift_infos.append(dep[SwiftInfo])
     if framework_root:
         objc_provider_fields["framework_search_paths"] = depset(
             direct = [framework_root],
@@ -270,12 +284,14 @@ def _apple_framework_packaging_impl(ctx):
         _add_to_dict_if_present(objc_provider_fields, key, set)
 
     objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
+    swift_provider = swift_common.create_swift_info(swift_infos=swift_infos)
     default_info_provider = DefaultInfo(files = depset(framework_files))
     # vfs_overlay_provider = VFSOverlay(
     #     files = depset(items = file_map, transitive = [dep[VFSOverlay].files for dep in ctx.attr.transitive_deps if VFSOverlay in dep])
     # )
-
-    return [objc_provider, default_info_provider]
+    # print("objc_provder {0}".format(objc_provider_fields))
+    # print("swift_infos {0}".format(swift_infos))
+    return [objc_provider, swift_provider, default_info_provider]
 
 apple_framework_packaging = rule(
     implementation = _apple_framework_packaging_impl,
