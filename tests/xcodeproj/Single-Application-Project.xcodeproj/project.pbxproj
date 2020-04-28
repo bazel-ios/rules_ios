@@ -17,6 +17,8 @@
 		48A8F4B41EF706F8BEEC7ACB /* Single-Application-UnitTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "Single-Application-UnitTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FF81A9585DBB110EBD9CAC0 /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = test.swift; path = test.swift; sourceTree = "<group>"; };
 		8DBB99CE021DEB0B97F196EA /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = common.pch; path = ../../rules/library/common.pch; sourceTree = "<group>"; };
+		AB7BB9505A64B479DA80B398 /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = resource_bundle.plist; path = ../../rules/library/resource_bundle.plist; sourceTree = "<group>"; };
+		C7D23D76EAC581CB42F9ECC8 /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = Contents.json; path = ../../rules/test_host_app/AssetCatalogFixture.xcassets/Contents.json; sourceTree = "<group>"; };
 		E8189BFE61671DD0C36CBACF /* ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ios.entitlements; path = ../../rules/test_host_app/ios.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -41,6 +43,7 @@
 		21BA00DCD3A39A744A656EFC /* test_host_app */ = {
 			isa = PBXGroup;
 			children = (
+				995075BD7E686FB0D1912DF2 /* AssetCatalogFixture.xcassets */,
 				E8189BFE61671DD0C36CBACF /* ios.entitlements */,
 				219EC613C66D223DC34C2B88 /* main.m */,
 			);
@@ -73,10 +76,19 @@
 			);
 			sourceTree = "<group>";
 		};
+		995075BD7E686FB0D1912DF2 /* AssetCatalogFixture.xcassets */ = {
+			isa = PBXGroup;
+			children = (
+				C7D23D76EAC581CB42F9ECC8 /* Contents.json */,
+			);
+			name = AssetCatalogFixture.xcassets;
+			sourceTree = "<group>";
+		};
 		D099E71665C7B6C5389FAEDF /* library */ = {
 			isa = PBXGroup;
 			children = (
 				8DBB99CE021DEB0B97F196EA /* common.pch */,
+				AB7BB9505A64B479DA80B398 /* resource_bundle.plist */,
 			);
 			name = library;
 			sourceTree = "<group>";
