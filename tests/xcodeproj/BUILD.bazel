@@ -16,24 +16,22 @@ ios_unit_test(
 )
 
 default_ios_test_runner(
-   name = "iPhone-X__13.2",
-   device_type = "iPhone X",
-   os_version = "13.2",
-   visibility = ["//visibility:public"],
+    name = "iPhone-X__13.2",
+    device_type = "iPhone X",
+    os_version = "13.2",
+    visibility = ["//visibility:public"],
 )
+
 default_ios_test_runner(
-   name = "iPad-Air-2__12.4",
-   device_type = "iPad Air 2",
-   os_version = "12.4",
-   visibility = ["//visibility:public"],
+    name = "iPad-Air-2__12.4",
+    device_type = "iPad Air 2",
+    os_version = "12.4",
+    visibility = ["//visibility:public"],
 )
 
 ios_unit_test(
     name = "Single-Application-RunnableTestSuite",
-    runners = [
-        "iPhone-X__13.2",
-        "iPad-Air-2__12.4",
-    ],
+    srcs = ["test.swift"],
     args = ["-h"],
     env = {
         "test_envvar_key1": "test_envvar_value1",
@@ -41,29 +39,22 @@ ios_unit_test(
     },
     minimum_os_version = "11.0",
     module_name = "Single_Application_RunnableTestSuite",
+    runners = [
+        "iPhone-X__13.2",
+        "iPad-Air-2__12.4",
+    ],
     sdk_frameworks = ["XCTest"],
-    srcs = ["test.swift"],
-)
-
-ios_unit_test(
-    name = "Single-Application-UnrunnableTestSuite",
-    runners = [],
-    minimum_os_version = "11.0",
-    module_name = "Single_Application_UnrunnableTestSuite",
-    sdk_frameworks = ["XCTest"],
-    srcs = ["test.swift"],
 )
 
 xcodeproj(
     name = "Single-Application-Project",
     testonly = True,
     bazel_path = "bazelisk",
+    include_transitive_targets = True,
     scheme_existing_envvar_overrides = {"test_envvar_key2": "test_envvar_value2_overridenvalue"},
     deps = [
         "//rules/test_host_app:iOS-12.0-AppHost",
-        "//tests/xcodeproj:Single-Application-UnitTests",
-        "//tests/xcodeproj:Single-Application-UnrunnableTestSuite",
         "//tests/xcodeproj:Single-Application-RunnableTestSuite",
+        "//tests/xcodeproj:Single-Application-UnitTests",
     ],
-    include_transitive_targets = True,
 )

@@ -114,9 +114,8 @@ def _xcodeproj_aspect_impl(target, ctx):
             all_dep_targets = depset(transitive = _get_attr_values_for_name(deps, _TargetInfo, "all_dep_targets"))
 
         providers.append(
-            _TargetInfo(target = info, all_dep_targets = all_dep_targets)
+            _TargetInfo(target = info, all_dep_targets = all_dep_targets),
         )
-
 
     return providers
 
