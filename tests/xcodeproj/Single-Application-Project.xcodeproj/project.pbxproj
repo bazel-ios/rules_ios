@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6205CF55CFE575BD04520749 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FF81A9585DBB110EBD9CAC0 /* test.swift */; };
+		6A410ADA88ABB3D7DF9CE397 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FF81A9585DBB110EBD9CAC0 /* test.swift */; };
 		8C6CBF1D63DD7DAAE1B93DDE /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FF81A9585DBB110EBD9CAC0 /* test.swift */; };
 		D49E54C698B02F6802182B95 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 219EC613C66D223DC34C2B88 /* main.m */; };
 /* End PBXBuildFile section */
@@ -15,9 +17,11 @@
 		146E4DA29D3926A9043807DA /* iOS-12.0-AppHost.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "iOS-12.0-AppHost.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		219EC613C66D223DC34C2B88 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../../rules/test_host_app/main.m; sourceTree = "<group>"; };
 		48A8F4B41EF706F8BEEC7ACB /* Single-Application-UnitTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "Single-Application-UnitTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		55E76677CDBB4C4E5670E15C /* Single-Application-UnrunnableTestSuite.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "Single-Application-UnrunnableTestSuite.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FF81A9585DBB110EBD9CAC0 /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = test.swift; path = test.swift; sourceTree = "<group>"; };
 		8DBB99CE021DEB0B97F196EA /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = common.pch; path = ../../rules/library/common.pch; sourceTree = "<group>"; };
 		AB7BB9505A64B479DA80B398 /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = resource_bundle.plist; path = ../../rules/library/resource_bundle.plist; sourceTree = "<group>"; };
+		B78EE0EEB0063E31D2BAB2D9 /* Single-Application-RunnableTestSuite.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "Single-Application-RunnableTestSuite.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7D23D76EAC581CB42F9ECC8 /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = Contents.json; path = ../../rules/test_host_app/AssetCatalogFixture.xcassets/Contents.json; sourceTree = "<group>"; };
 		E8189BFE61671DD0C36CBACF /* ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ios.entitlements; path = ../../rules/test_host_app/ios.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -54,7 +58,9 @@
 			isa = PBXGroup;
 			children = (
 				146E4DA29D3926A9043807DA /* iOS-12.0-AppHost.app */,
+				B78EE0EEB0063E31D2BAB2D9 /* Single-Application-RunnableTestSuite.xctest */,
 				48A8F4B41EF706F8BEEC7ACB /* Single-Application-UnitTests.xctest */,
+				55E76677CDBB4C4E5670E15C /* Single-Application-UnrunnableTestSuite.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -112,6 +118,38 @@
 			productReference = 48A8F4B41EF706F8BEEC7ACB /* Single-Application-UnitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		623609DEE5FDA6CD624941CC /* Single-Application-UnrunnableTestSuite */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7331DCC53AE8E03F1ED52A5A /* Build configuration list for PBXNativeTarget "Single-Application-UnrunnableTestSuite" */;
+			buildPhases = (
+				8EA4E2C574273EF20D39F00B /* Build with bazel */,
+				A4D56677F8D70BF60ECFEB3B /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Single-Application-UnrunnableTestSuite";
+			productName = "Single-Application-UnrunnableTestSuite";
+			productReference = 55E76677CDBB4C4E5670E15C /* Single-Application-UnrunnableTestSuite.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		7EB1D435D6F57CDE2169C46E /* Single-Application-RunnableTestSuite */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 940A8EC577688CB1525E1A8D /* Build configuration list for PBXNativeTarget "Single-Application-RunnableTestSuite" */;
+			buildPhases = (
+				118E83A815478B52FE61E86D /* Build with bazel */,
+				32CDC5F16EB265F06B7843DB /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Single-Application-RunnableTestSuite";
+			productName = "Single-Application-RunnableTestSuite";
+			productReference = B78EE0EEB0063E31D2BAB2D9 /* Single-Application-RunnableTestSuite.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		953F77E7CC3D55B3382441CD /* iOS-12.0-AppHost */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5B3C9FF9DE16EFD6B8C92C21 /* Build configuration list for PBXNativeTarget "iOS-12.0-AppHost" */;
@@ -150,7 +188,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				7EB1D435D6F57CDE2169C46E /* Single-Application-RunnableTestSuite */,
 				53B236C9AFA4EEC9DF417E76 /* Single-Application-UnitTests */,
+				623609DEE5FDA6CD624941CC /* Single-Application-UnrunnableTestSuite */,
 				953F77E7CC3D55B3382441CD /* iOS-12.0-AppHost */,
 			);
 		};
@@ -193,9 +233,53 @@
 			shellPath = /bin/sh;
 			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build $BAZEL_PACKAGE:iOS-12.0-AppHost\n$BAZEL_INSTALLER\n";
 		};
+		118E83A815478B52FE61E86D /* Build with bazel */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build with bazel";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build $BAZEL_PACKAGE:Single-Application-RunnableTestSuite_iPad-Air-2__12.4\n$BAZEL_INSTALLER\n";
+		};
+		8EA4E2C574273EF20D39F00B /* Build with bazel */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build with bazel";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build $BAZEL_PACKAGE:Single-Application-UnrunnableTestSuite\n$BAZEL_INSTALLER\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		32CDC5F16EB265F06B7843DB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6A410ADA88ABB3D7DF9CE397 /* test.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		623E27DB6A1344826F4BD432 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -212,6 +296,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A4D56677F8D70BF60ECFEB3B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6205CF55CFE575BD04520749 /* test.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
@@ -224,6 +316,15 @@
 			};
 			name = Release;
 		};
+		07C1F422B24C1BC56DDFE3D7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_PACKAGE = tests/xcodeproj;
+				MACH_O_TYPE = "$(inherited)";
+				PRODUCT_NAME = "Single-Application-RunnableTestSuite";
+			};
+			name = Release;
+		};
 		29FB8FD25EB8E1F46FEDAA92 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -232,6 +333,24 @@
 				PRODUCT_NAME = "iOS-12.0-AppHost";
 			};
 			name = Release;
+		};
+		8BCBFAE9325C1BE03DB2407A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_PACKAGE = tests/xcodeproj;
+				MACH_O_TYPE = "$(inherited)";
+				PRODUCT_NAME = "Single-Application-RunnableTestSuite";
+			};
+			name = Debug;
+		};
+		93ECDC79B66C6FD807AA10C2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_PACKAGE = tests/xcodeproj;
+				MACH_O_TYPE = "$(inherited)";
+				PRODUCT_NAME = "Single-Application-UnrunnableTestSuite";
+			};
+			name = Debug;
 		};
 		946D7ED96CBB77B01B72965A /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -293,6 +412,15 @@
 			};
 			name = Release;
 		};
+		DDCAEFD03C8F501EB6B23CC6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_PACKAGE = tests/xcodeproj;
+				MACH_O_TYPE = "$(inherited)";
+				PRODUCT_NAME = "Single-Application-UnrunnableTestSuite";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -301,6 +429,24 @@
 			buildConfigurations = (
 				946D7ED96CBB77B01B72965A /* Debug */,
 				29FB8FD25EB8E1F46FEDAA92 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "";
+		};
+		7331DCC53AE8E03F1ED52A5A /* Build configuration list for PBXNativeTarget "Single-Application-UnrunnableTestSuite" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				93ECDC79B66C6FD807AA10C2 /* Debug */,
+				DDCAEFD03C8F501EB6B23CC6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "";
+		};
+		940A8EC577688CB1525E1A8D /* Build configuration list for PBXNativeTarget "Single-Application-RunnableTestSuite" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8BCBFAE9325C1BE03DB2407A /* Debug */,
+				07C1F422B24C1BC56DDFE3D7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "";
