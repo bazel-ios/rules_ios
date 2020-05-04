@@ -25,7 +25,7 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
 
 def _find_framework_dir(outputs):
     for output in outputs:
-        prefix = output.path.split(".framework/")[0]
+        prefix = output.path.rsplit(".framework/", 1)[0]
         return prefix + ".framework"
     return None
 
@@ -237,13 +237,11 @@ def _apple_framework_packaging_impl(ctx):
         outputs = [hmap_file],
     )
 
+    # gather objc provider fields
     objc_provider_fields = {
         "providers": [dep[apple_common.Objc] for dep in ctx.attr.transitive_deps],
     }
-    swift_infos = []
-    for dep in ctx.attr.transitive_deps:
-        if SwiftInfo in dep:
-            swift_infos.append(dep[SwiftInfo])
+
     if framework_root:
         objc_provider_fields["framework_search_paths"] = depset(
             direct = [framework_root],
@@ -274,13 +272,42 @@ def _apple_framework_packaging_impl(ctx):
         )
         _add_to_dict_if_present(objc_provider_fields, key, set)
 
-    objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
-    swift_provider = swift_common.create_swift_info(swift_infos=swift_infos)
-    default_info_provider = DefaultInfo(files = depset(framework_files))
-    # vfs_overlay_provider = VFSOverlay(
-    #     files = depset(items = file_map, transitive = [dep[VFSOverlay].files for dep in ctx.attr.transitive_deps if VFSOverlay in dep])
-    # )
-    return [objc_provider, swift_provider, default_info_provider]
+    # gather swift info fields
+    swift_info_fields = {
+        "swift_infos": [dep[SwiftInfo] for dep in ctx.attr.transitive_deps if SwiftInfo in dep],
+    }
+
+    if swiftmodule_out:
+        # only add a swift module to the SwiftInfo if we've actually got a swiftmodule
+        swiftmodule_name = paths.split_extension(swiftmodule_in.basename)[0]
+
+        # need to include the swiftmodule here, even though it will be found through the framework search path,
+        # since swift_library needs to know that the swiftdoc is an input to the compile action
+        swift_module = swift_common.create_swift_module(
+            swiftdoc = swiftdoc_out[0],
+            swiftmodule = swiftmodule_out[0],
+        )
+
+        if swiftmodule_name != framework_name:
+            # Swift won't find swiftmodule files inside of frameworks whose name doesn't match the
+            # module name. It's annoying (since clang finds them just fine), but we have no choice but to point to the
+            # original swift module/doc, so that swift can find it.
+            swift_module = swift_common.create_swift_module(
+                swiftdoc = swiftdoc_in,
+                swiftmodule = swiftmodule_in,
+            )
+
+        swift_info_fields["modules"] = [
+            # only add the swift module, the objc modulemap is already listed as a header,
+            # and it will be discovered via the framework search path
+            swift_common.create_module(name = swiftmodule_name, swift = swift_module),
+        ]
+
+    return [
+        apple_common.new_objc_provider(**objc_provider_fields),
+        swift_common.create_swift_info(**swift_info_fields),
+        DefaultInfo(files = depset(framework_files)),
+    ]
 
 apple_framework_packaging = rule(
     implementation = _apple_framework_packaging_impl,
