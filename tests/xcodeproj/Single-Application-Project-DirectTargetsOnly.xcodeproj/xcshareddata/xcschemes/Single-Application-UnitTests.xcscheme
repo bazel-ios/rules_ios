@@ -14,10 +14,10 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "53B236C9AFA4EEC9DF417E76"
+               BlueprintIdentifier = "A2BEC8240B7BDFE9E08FF581"
                BuildableName = "Single-Application-UnitTests.xctest"
                BlueprintName = "Single-Application-UnitTests"
-               ReferencedContainer = "container:Single-Application-Project.xcodeproj">
+               ReferencedContainer = "container:Single-Application-Project-DirectTargetsOnly.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,20 +33,20 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "53B236C9AFA4EEC9DF417E76"
+               BlueprintIdentifier = "A2BEC8240B7BDFE9E08FF581"
                BuildableName = "Single-Application-UnitTests.xctest"
                BlueprintName = "Single-Application-UnitTests"
-               ReferencedContainer = "container:Single-Application-Project.xcodeproj">
+               ReferencedContainer = "container:Single-Application-Project-DirectTargetsOnly.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "53B236C9AFA4EEC9DF417E76"
+            BlueprintIdentifier = "A2BEC8240B7BDFE9E08FF581"
             BuildableName = "Single-Application-UnitTests.xctest"
             BlueprintName = "Single-Application-UnitTests"
-            ReferencedContainer = "container:Single-Application-Project.xcodeproj">
+            ReferencedContainer = "container:Single-Application-Project-DirectTargetsOnly.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <CommandLineArguments>
@@ -86,10 +86,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "53B236C9AFA4EEC9DF417E76"
+            BlueprintIdentifier = "A2BEC8240B7BDFE9E08FF581"
             BuildableName = "Single-Application-UnitTests.xctest"
             BlueprintName = "Single-Application-UnitTests"
-            ReferencedContainer = "container:Single-Application-Project.xcodeproj">
+            ReferencedContainer = "container:Single-Application-Project-DirectTargetsOnly.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -105,10 +105,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "53B236C9AFA4EEC9DF417E76"
+            BlueprintIdentifier = "A2BEC8240B7BDFE9E08FF581"
             BuildableName = "Single-Application-UnitTests.xctest"
             BlueprintName = "Single-Application-UnitTests"
-            ReferencedContainer = "container:Single-Application-Project.xcodeproj">
+            ReferencedContainer = "container:Single-Application-Project-DirectTargetsOnly.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

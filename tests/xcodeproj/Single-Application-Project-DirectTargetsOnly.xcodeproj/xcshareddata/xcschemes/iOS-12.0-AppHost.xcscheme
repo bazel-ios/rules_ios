@@ -7,17 +7,17 @@
       buildImplicitDependencies = "NO">
       <BuildActionEntries>
          <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "NO"
+            buildForTesting = "NO"
+            buildForRunning = "YES"
             buildForProfiling = "NO"
             buildForArchiving = "NO"
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "623609DEE5FDA6CD624941CC"
-               BuildableName = "Single-Application-UnrunnableTestSuite.xctest"
-               BlueprintName = "Single-Application-UnrunnableTestSuite"
-               ReferencedContainer = "container:Single-Application-Project.xcodeproj">
+               BlueprintIdentifier = "9A4A0D6CE913410FA2032B4D"
+               BuildableName = "iOS-12.0-AppHost.app"
+               BlueprintName = "iOS-12.0-AppHost"
+               ReferencedContainer = "container:Single-Application-Project-DirectTargetsOnly.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -29,28 +29,16 @@
       onlyGenerateCoverageForSpecifiedTargets = "NO"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "623609DEE5FDA6CD624941CC"
-               BuildableName = "Single-Application-UnrunnableTestSuite.xctest"
-               BlueprintName = "Single-Application-UnrunnableTestSuite"
-               ReferencedContainer = "container:Single-Application-Project.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "623609DEE5FDA6CD624941CC"
-            BuildableName = "Single-Application-UnrunnableTestSuite.xctest"
-            BlueprintName = "Single-Application-UnrunnableTestSuite"
-            ReferencedContainer = "container:Single-Application-Project.xcodeproj">
+            BlueprintIdentifier = "9A4A0D6CE913410FA2032B4D"
+            BuildableName = "iOS-12.0-AppHost.app"
+            BlueprintName = "iOS-12.0-AppHost"
+            ReferencedContainer = "container:Single-Application-Project-DirectTargetsOnly.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <CommandLineArguments>
-      </CommandLineArguments>
       <AdditionalOptions>
       </AdditionalOptions>
       <CodeCoverageTargets>
@@ -70,12 +58,14 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "623609DEE5FDA6CD624941CC"
-            BuildableName = "Single-Application-UnrunnableTestSuite.xctest"
-            BlueprintName = "Single-Application-UnrunnableTestSuite"
-            ReferencedContainer = "container:Single-Application-Project.xcodeproj">
+            BlueprintIdentifier = "9A4A0D6CE913410FA2032B4D"
+            BuildableName = "iOS-12.0-AppHost.app"
+            BlueprintName = "iOS-12.0-AppHost"
+            ReferencedContainer = "container:Single-Application-Project-DirectTargetsOnly.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+      </CommandLineArguments>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -89,10 +79,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "623609DEE5FDA6CD624941CC"
-            BuildableName = "Single-Application-UnrunnableTestSuite.xctest"
-            BlueprintName = "Single-Application-UnrunnableTestSuite"
-            ReferencedContainer = "container:Single-Application-Project.xcodeproj">
+            BlueprintIdentifier = "9A4A0D6CE913410FA2032B4D"
+            BuildableName = "iOS-12.0-AppHost.app"
+            BlueprintName = "iOS-12.0-AppHost"
+            ReferencedContainer = "container:Single-Application-Project-DirectTargetsOnly.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

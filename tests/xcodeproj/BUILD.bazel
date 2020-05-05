@@ -47,7 +47,20 @@ ios_unit_test(
 )
 
 xcodeproj(
-    name = "Single-Application-Project",
+    name = "Single-Application-Project-DirectTargetsOnly",
+    testonly = True,
+    bazel_path = "bazelisk",
+    include_transitive_targets = False,
+    scheme_existing_envvar_overrides = {"test_envvar_key2": "test_envvar_value2_overridenvalue"},
+    deps = [
+        "//rules/test_host_app:iOS-12.0-AppHost",
+        "//tests/xcodeproj:Single-Application-RunnableTestSuite",
+        "//tests/xcodeproj:Single-Application-UnitTests",
+    ],
+)
+
+xcodeproj(
+    name = "Single-Application-Project-AllTargets",
     testonly = True,
     bazel_path = "bazelisk",
     include_transitive_targets = True,

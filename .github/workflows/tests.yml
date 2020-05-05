@@ -48,8 +48,10 @@ jobs:
       - uses: actions/checkout@v1
       - name: Select Xcode 11.2
         run: sudo xcode-select -s /Applications/Xcode_11.2.app
-      - name: Generate Xcode projects and compare against existing record
-        run: bazelisk run tests/xcodeproj:Single-Application-Project && git diff --exit-code tests/xcodeproj
+      - name: Generate Xcode projects that load all transitive targets and compare against existing record
+        run: bazelisk run tests/xcodeproj:Single-Application-Project-AllTargets && git diff --exit-code tests/xcodeproj
+      - name: Generate Xcode projects that load direct targets only and compare against existing record
+        run: bazelisk run tests/xcodeproj:Single-Application-Project-DirectTargetsOnly && git diff --exit-code tests/xcodeproj
       - name: Run Xcode builds
         run: ./tests/xcodeproj/build.sh
       - name: Run Unit tests
