@@ -14,10 +14,10 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "953F77E7CC3D55B3382441CD"
+               BlueprintIdentifier = "9A4A0D6CE913410FA2032B4D"
                BuildableName = "iOS-12.0-AppHost.app"
                BlueprintName = "iOS-12.0-AppHost"
-               ReferencedContainer = "container:Single-Application-Project.xcodeproj">
+               ReferencedContainer = "container:Single-Application-Project-DirectTargetsOnly.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,10 +33,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "953F77E7CC3D55B3382441CD"
+            BlueprintIdentifier = "9A4A0D6CE913410FA2032B4D"
             BuildableName = "iOS-12.0-AppHost.app"
             BlueprintName = "iOS-12.0-AppHost"
-            ReferencedContainer = "container:Single-Application-Project.xcodeproj">
+            ReferencedContainer = "container:Single-Application-Project-DirectTargetsOnly.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -58,10 +58,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "953F77E7CC3D55B3382441CD"
+            BlueprintIdentifier = "9A4A0D6CE913410FA2032B4D"
             BuildableName = "iOS-12.0-AppHost.app"
             BlueprintName = "iOS-12.0-AppHost"
-            ReferencedContainer = "container:Single-Application-Project.xcodeproj">
+            ReferencedContainer = "container:Single-Application-Project-DirectTargetsOnly.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
@@ -79,10 +79,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "953F77E7CC3D55B3382441CD"
+            BlueprintIdentifier = "9A4A0D6CE913410FA2032B4D"
             BuildableName = "iOS-12.0-AppHost.app"
             BlueprintName = "iOS-12.0-AppHost"
-            ReferencedContainer = "container:Single-Application-Project.xcodeproj">
+            ReferencedContainer = "container:Single-Application-Project-DirectTargetsOnly.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

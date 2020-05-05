@@ -61,7 +61,7 @@ def _xcodeproj_aspect_impl(target, ctx):
                 direct_srcs = [],
             ),
         )
-        target_info = _TargetInfo(target = info, targets = depset([info], transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets")))
+        target_info = _TargetInfo(direct_target = info, targets = depset([info], transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets")))
         providers.append(target_info)
     elif ctx.rule.kind == "apple_framework_packaging":
         info = struct(
@@ -75,7 +75,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             test_env_vars = test_env_vars,
             test_commandline_args = test_commandline_args,
         )
-        target_info = _TargetInfo(target = info, targets = depset([info], transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets")))
+        target_info = _TargetInfo(direct_target = info, targets = depset([info], transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets")))
         providers.append(target_info)
     else:
         srcs = []
@@ -105,10 +105,16 @@ def _xcodeproj_aspect_impl(target, ctx):
             actual = getattr(ctx.rule.attr, "actual")
 
         if actual and _TargetInfo in actual:
-            info = actual[_TargetInfo].target
+            info = actual[_TargetInfo].direct_target
+
+        targets = None
+        if info:
+            targets = depset([info], transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets"))
+        else:
+            targets = depset(transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets"))
 
         providers.append(
-            _TargetInfo(target = info, targets = depset(transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets"))),
+            _TargetInfo(direct_target = info, targets = targets),
         )
 
     return providers
@@ -157,7 +163,7 @@ def _xcodeproj_impl(ctx):
     if ctx.attr.include_transitive_targets:
         targets = depset(transitive = _get_attr_values_for_name(ctx.attr.deps, _TargetInfo, "targets")).to_list()
     else:
-        targets = [t for t in _get_attr_values_for_name(ctx.attr.deps, _TargetInfo, "target") if t]
+        targets = [t for t in _get_attr_values_for_name(ctx.attr.deps, _TargetInfo, "direct_target") if t]
 
     xcodeproj_targets_by_name = {}
     xcodeproj_schemes_by_name = {}
