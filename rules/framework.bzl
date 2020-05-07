@@ -155,14 +155,8 @@ def _apple_framework_packaging_impl(ctx):
                 continue
 
             # collect modulemaps
-            for modulemap in dep[apple_common.Objc].direct_module_maps:
-                # rule_swift changed how non swift generates module map in this commit
-                # https://github.com/bazelbuild/rules_swift/commit/8ecb09641ee0ba5efd971ffff8dd6cbee6ea7dd3
-                # until we find a way to stop it (ex: via a new feature similiar to "swift.no_generated_module_map"),
-                # we have to ignore a module map if this module map belongs to the current dep:
-                if modulemap.owner == dep.label:
-                    continue
-                modulemap_in = modulemap
+            modulemap_in = modulemap for modulemap in dep[apple_common.Objc].direct_module_maps
+                
 
     binary_out = None
     modulemap_out = None
