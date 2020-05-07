@@ -155,8 +155,8 @@ def _apple_framework_packaging_impl(ctx):
                 continue
 
             # collect modulemaps
-            modulemap_in = modulemap for modulemap in dep[apple_common.Objc].direct_module_maps
-                
+            for modulemap in dep[apple_common.Objc].direct_module_maps:
+                modulemap_in = modulemap
 
     binary_out = None
     modulemap_out = None
