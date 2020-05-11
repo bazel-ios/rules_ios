@@ -5,6 +5,6 @@ apple_framework(
     srcs = [
         "HeaderA.h",
         "main.m",
-        ],
-    visibility = ["//visibility:public"]
+    ],
+    visibility = ["//visibility:public"],
 )
