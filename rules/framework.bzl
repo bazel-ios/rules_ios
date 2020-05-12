@@ -1,9 +1,7 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:types.bzl", "types")
-load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo")
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_common")
+load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo", "swift_common")
 load("//rules:library.bzl", "PrivateHeaders", "apple_library")
-load("//rules/vfs_overlay:vfs_overlay.bzl", "VFSOverlay")
 
 def apple_framework(name, apple_library = apple_library, **kwargs):
     """Builds and packages an Apple framework.
@@ -297,8 +295,13 @@ def _apple_framework_packaging_impl(ctx):
             swift_common.create_module(name = swiftmodule_name, swift = swift_module),
         ]
 
+    # Eventually we need to remove any reference to objc provider
+    # and use CcInfo instead, see this issue for more details: https://github.com/bazelbuild/bazel/issues/10674
+    objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
+    cc_info_provider = CcInfo(compilation_context = objc_provider.compilation_context)
     return [
-        apple_common.new_objc_provider(**objc_provider_fields),
+        objc_provider,
+        cc_info_provider,
         swift_common.create_swift_info(**swift_info_fields),
         DefaultInfo(files = depset(framework_files)),
     ]
