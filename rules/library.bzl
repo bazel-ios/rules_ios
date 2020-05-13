@@ -517,7 +517,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         )
         lib_names += [swift_libname]
 
-        # Add generated swift header to header maps for double quote imports
+        # Add generated swift header to header maps for angle bracket imports
         swift_doublequote_hmap_name = name + "_swift_doublequote_hmap"
         headermap(
             name = swift_doublequote_hmap_name,
