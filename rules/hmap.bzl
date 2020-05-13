@@ -86,9 +86,10 @@ def _make_headermap_impl(ctx):
     objc_provider = apple_common.new_objc_provider(
         header = depset([ctx.outputs.headermap]),
     )
+    cc_info_provider = CcInfo(compilation_context = objc_provider.compilation_context)
     return struct(
         files = depset([ctx.outputs.headermap]),
-        providers = [objc_provider],
+        providers = [objc_provider, cc_info_provider],
         objc = objc_provider,
         headers = depset([ctx.outputs.headermap]),
     )
