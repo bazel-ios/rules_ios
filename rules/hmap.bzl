@@ -87,12 +87,10 @@ def _make_headermap_impl(ctx):
         header = depset([ctx.outputs.headermap]),
     )
     cc_info_provider = CcInfo(compilation_context = objc_provider.compilation_context)
-    return struct(
-        files = depset([ctx.outputs.headermap]),
-        providers = [objc_provider, cc_info_provider],
-        objc = objc_provider,
-        headers = depset([ctx.outputs.headermap]),
-    )
+    return [
+        objc_provider,
+        cc_info_provider,
+    ]
 
 # Derive a headermap from transitive headermaps
 # hdrs: a file group containing headers for this rule
