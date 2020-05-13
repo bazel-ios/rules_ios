@@ -381,6 +381,31 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     )
     deps += resource_bundles
 
+    # TODO: remove framework if set
+    # Needs to happen before headermaps are made, so the generated umbrella header gets added to those headermaps
+    if namespace_is_module_name and not module_map and \
+       (objc_hdrs or objc_private_hdrs or swift_sources or objc_sources or cpp_sources):
+        umbrella_header = library_tools["umbrella_header_generator"](
+            name = name,
+            library_tools = library_tools,
+            public_headers = objc_hdrs,
+            private_headers = objc_private_hdrs,
+            module_name = module_name,
+            **kwargs
+        )
+        if umbrella_header:
+            objc_hdrs += [umbrella_header]
+        module_map = library_tools["modulemap_generator"](
+            name = name,
+            library_tools = library_tools,
+            umbrella_header = paths.basename(umbrella_header),
+            public_headers = objc_hdrs,
+            private_headers = objc_private_hdrs,
+            module_name = module_name,
+            framework = False if swift_sources else True,
+            **kwargs
+        )
+
     ## BEGIN HMAP
 
     public_hmap_name = name + "_public_hmap"
@@ -444,9 +469,6 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     _append_headermap_copts(private_hmap_name, "-I", objc_copts, swift_copts, cc_copts)
     _append_headermap_copts(public_hmap_name, "-I", objc_copts, swift_copts, cc_copts)
     _append_headermap_copts(private_angled_hmap_name, "-I", objc_copts, swift_copts, cc_copts)
-    objc_copts.append("-I.")
-    cc_copts.append("-I.")
-    swift_copts.extend(("-Xcc", "-I."))
     _append_headermap_copts(private_hmap_name, "-iquote", objc_copts, swift_copts, cc_copts)
 
     objc_copts += [
@@ -468,31 +490,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     swift_libname = "%s_swift" % name
     cpp_libname = "%s_cpp" % name
 
-    # TODO: remove framework if set
-    if namespace_is_module_name and not module_map and \
-       (objc_hdrs or objc_private_hdrs or swift_sources or objc_sources or cpp_sources):
-        umbrella_header = library_tools["umbrella_header_generator"](
-            name = name,
-            library_tools = library_tools,
-            public_headers = objc_hdrs,
-            private_headers = objc_private_hdrs,
-            module_name = module_name,
-            **kwargs
-        )
-        if umbrella_header:
-            objc_hdrs += [umbrella_header]
-        module_map = library_tools["modulemap_generator"](
-            name = name,
-            library_tools = library_tools,
-            umbrella_header = paths.basename(umbrella_header),
-            public_headers = objc_hdrs,
-            private_headers = objc_private_hdrs,
-            module_name = module_name,
-            framework = False if swift_sources else True,
-            **kwargs
-        )
-
     if swift_sources:
+        swift_copts.extend(("-Xcc", "-I."))
         if module_map:
             swift_copts += [
                 "-Xcc",
@@ -503,6 +502,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         if module_map:
             swiftc_inputs.append(module_map)
         generated_swift_header_name = module_name + "-Swift.h"
+
         swift_library(
             name = swift_libname,
             module_name = module_name,
@@ -517,18 +517,31 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         )
         lib_names += [swift_libname]
 
-        # Add generated swift header to header maps for double quote imports
+        # Add generated swift header to header maps for angle bracket imports
         swift_doublequote_hmap_name = name + "_swift_doublequote_hmap"
         headermap(
             name = swift_doublequote_hmap_name,
             namespace = namespace,
             hdrs = [],
             direct_hdr_providers = [swift_libname],
-            flatten_headers = True,
+            flatten_headers = False,
             tags = _MANUAL,
         )
         internal_deps.append(swift_doublequote_hmap_name)
         _append_headermap_copts(swift_doublequote_hmap_name, "-iquote", objc_copts, swift_copts, cc_copts)
+
+        # Add generated swift header to header maps for double quote imports
+        swift_angle_bracket_hmap_name = name + "_swift_angle_bracket_hmap"
+        headermap(
+            name = swift_angle_bracket_hmap_name,
+            namespace = namespace,
+            hdrs = [],
+            direct_hdr_providers = [swift_libname],
+            flatten_headers = True,
+            tags = _MANUAL,
+        )
+        internal_deps.append(swift_angle_bracket_hmap_name)
+        _append_headermap_copts(swift_angle_bracket_hmap_name, "-I", objc_copts, swift_copts, cc_copts)
 
         if module_map:
             extend_modulemap(
@@ -542,6 +555,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             module_map = "%s.extended.modulemap" % name
 
     if cpp_sources and False:
+        cc_copts.append("-I.")
         cc_library(
             name = cpp_libname,
             srcs = cpp_sources + objc_private_hdrs,
@@ -553,6 +567,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         lib_names += [cpp_libname]
 
     objc_library_data = library_tools["wrap_resources_in_filegroup"](name = objc_libname + "_data", srcs = data)
+    objc_copts.append("-I.")
     objc_library(
         name = objc_libname,
         srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,
