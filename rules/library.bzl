@@ -381,6 +381,31 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     )
     deps += resource_bundles
 
+    # TODO: remove framework if set
+    # Needs to happen before headermaps are made, so the generated umbrella header gets added to those headermaps
+    if namespace_is_module_name and not module_map and \
+       (objc_hdrs or objc_private_hdrs or swift_sources or objc_sources or cpp_sources):
+        umbrella_header = library_tools["umbrella_header_generator"](
+            name = name,
+            library_tools = library_tools,
+            public_headers = objc_hdrs,
+            private_headers = objc_private_hdrs,
+            module_name = module_name,
+            **kwargs
+        )
+        if umbrella_header:
+            objc_hdrs += [umbrella_header]
+        module_map = library_tools["modulemap_generator"](
+            name = name,
+            library_tools = library_tools,
+            umbrella_header = paths.basename(umbrella_header),
+            public_headers = objc_hdrs,
+            private_headers = objc_private_hdrs,
+            module_name = module_name,
+            framework = False if swift_sources else True,
+            **kwargs
+        )
+
     ## BEGIN HMAP
 
     public_hmap_name = name + "_public_hmap"
@@ -464,30 +489,6 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     objc_libname = "%s_objc" % name
     swift_libname = "%s_swift" % name
     cpp_libname = "%s_cpp" % name
-
-    # TODO: remove framework if set
-    if namespace_is_module_name and not module_map and \
-       (objc_hdrs or objc_private_hdrs or swift_sources or objc_sources or cpp_sources):
-        umbrella_header = library_tools["umbrella_header_generator"](
-            name = name,
-            library_tools = library_tools,
-            public_headers = objc_hdrs,
-            private_headers = objc_private_hdrs,
-            module_name = module_name,
-            **kwargs
-        )
-        if umbrella_header:
-            objc_hdrs += [umbrella_header]
-        module_map = library_tools["modulemap_generator"](
-            name = name,
-            library_tools = library_tools,
-            umbrella_header = paths.basename(umbrella_header),
-            public_headers = objc_hdrs,
-            private_headers = objc_private_hdrs,
-            module_name = module_name,
-            framework = False if swift_sources else True,
-            **kwargs
-        )
 
     if swift_sources:
         swift_copts.extend(("-Xcc", "-I."))
