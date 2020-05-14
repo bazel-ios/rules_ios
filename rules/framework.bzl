@@ -1,7 +1,8 @@
+"""Framework rules"""
+
 load("@bazel_skylib//lib:paths.bzl", "paths")
-load("@bazel_skylib//lib:types.bzl", "types")
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo", "swift_common")
-load("//rules:library.bzl", "PrivateHeaders", "apple_library")
+load("//rules:library.bzl", "PrivateHeadersInfo", "apple_library")
 
 def apple_framework(name, apple_library = apple_library, **kwargs):
     """Builds and packages an Apple framework.
@@ -9,8 +10,9 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
     Args:
         name: The name of the framework.
         apple_library: The macro used to package sources into a library.
-        kwargs: Arguments passed to the apple_library and apple_framework_packaging rules as appropriate.
+        **kwargs: Arguments passed to the apple_library and apple_framework_packaging rules as appropriate.
     """
+
     library = apple_library(name = name, **kwargs)
     apple_framework_packaging(
         name = name,
@@ -126,8 +128,8 @@ def _apple_framework_packaging_impl(ctx):
                     arch + ".swiftdoc",
                 )]
 
-        if PrivateHeaders in dep:
-            for hdr in dep[PrivateHeaders].headers.to_list():
+        if PrivateHeadersInfo in dep:
+            for hdr in dep[PrivateHeadersInfo].headers.to_list():
                 private_header_in.append(hdr)
                 destination = paths.join(framework_dir, "PrivateHeaders", hdr.basename)
                 private_header_out.append(destination)

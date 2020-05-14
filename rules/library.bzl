@@ -1,3 +1,5 @@
+"""Library rules"""
+
 load("@rules_cc//cc:defs.bzl", "cc_library", "objc_import", "objc_library")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:sets.bzl", "sets")
@@ -9,7 +11,7 @@ load("//rules:substitute_build_settings.bzl", "substitute_build_settings")
 load("//rules/library:resources.bzl", "wrap_resources_in_filegroup")
 load("//rules/library:xcconfig.bzl", "settings_from_xcconfig")
 
-PrivateHeaders = provider(
+PrivateHeadersInfo = provider(
     doc = "Propagates private headers, so they can be accessed if necessary",
     fields = {
         "headers": "Private headers",
@@ -20,7 +22,7 @@ _MANUAL = ["manual"]
 
 def _private_headers_impl(ctx):
     return [
-        PrivateHeaders(
+        PrivateHeadersInfo(
             headers = depset(direct = ctx.files.headers),
         ),
         apple_common.new_objc_provider(),
@@ -87,7 +89,7 @@ extend_modulemap = rule(
     doc = "Extends a modulemap with a Swift submodule",
 )
 
-def write_modulemap(name, library_tools, umbrella_header = None, public_headers = [], private_headers = [], module_name = None, framework = False, **kwargs):
+def _write_modulemap(name, library_tools, umbrella_header = None, public_headers = [], private_headers = [], module_name = None, framework = False, **kwargs):
     basename = "{}.modulemap".format(name)
     destination = paths.join(name + "-modulemap", basename)
     if not module_name:
@@ -114,7 +116,7 @@ module {module_name} {{
     )
     return destination
 
-def write_umbrella_header(name, library_tools, public_headers = [], private_headers = [], module_name = None, **kwargs):
+def _write_umbrella_header(name, library_tools, public_headers = [], private_headers = [], module_name = None, **kwargs):
     basename = "{name}-umbrella.h".format(name = name)
     destination = paths.join(name + "-modulemap", basename)
     if not module_name:
@@ -155,7 +157,7 @@ FOUNDATION_EXPORT const unsigned char {module_name}VersionString[];
     )
     return destination
 
-def generate_resource_bundles(name, library_tools, module_name, resource_bundles, **kwargs):
+def _generate_resource_bundles(name, library_tools, module_name, resource_bundles, **kwargs):
     bundle_target_names = []
     for bundle_name in resource_bundles:
         target_name = "%s-%s" % (name, bundle_name)
@@ -186,10 +188,10 @@ def _error_on_default_xcconfig(name, library_tools, default_xcconfig_name, **kwa
         default_xcconfig_name = default_xcconfig_name,
     ))
 
-_DefaultLibraryTools = {
-    "modulemap_generator": write_modulemap,
-    "umbrella_header_generator": write_umbrella_header,
-    "resource_bundle_generator": generate_resource_bundles,
+_DEFAULT_LIBRARY_TOOLS = {
+    "modulemap_generator": _write_modulemap,
+    "umbrella_header_generator": _write_umbrella_header,
+    "resource_bundle_generator": _generate_resource_bundles,
     "wrap_resources_in_filegroup": wrap_resources_in_filegroup,
     "fetch_default_xcconfig": _error_on_default_xcconfig,
 }
@@ -219,7 +221,7 @@ def _uppercase_string(s):
 
 def _canonicalize_swift_version(swift_version):
     if not swift_version:
-        return
+        return None
 
     version_parts = swift_version.split(".", 2)
 
@@ -250,14 +252,18 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         library_tools:  An optional dictionary containing overrides for
                         default behaviors.
         export_private_headers: Whether private headers should be exported via
-                                a `PrivateHeaders` provider.
+                                a `PrivateHeadersInfo` provider.
         namespace_is_module_name: Whether the module name should be used as the
                                   namespace for header imports, instead of the target name.
         default_xcconfig_name: The name of a default xcconfig to be applied to this target.
         xcconfig: A dictionary of Xcode build settings to be applied to this target in the
                   form of different `copt` attributes.
+        **kwargs: keyword arguments.
+
+    Returns:
+        Struct with a bunch of info
     """
-    library_tools = dict(_DefaultLibraryTools, **library_tools)
+    library_tools = dict(_DEFAULT_LIBRARY_TOOLS, **library_tools)
     swift_sources = []
     objc_sources = []
     objc_non_arc_sources = []
@@ -342,7 +348,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             name = linkopts_name,
             linkopts = linkopts,
         )
-        internal_deps += [linkopts_name]
+        internal_deps.append(linkopts_name)
 
     for vendored_static_framework in kwargs.pop("vendored_static_frameworks", []):
         import_name = "%s-%s-import" % (name, paths.basename(vendored_static_framework))
@@ -351,7 +357,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             framework_imports = native.glob(["%s/**/*" % vendored_static_framework]),
             tags = _MANUAL,
         )
-        deps += [import_name]
+        deps.append(import_name)
     for vendored_dynamic_framework in kwargs.pop("vendored_dynamic_frameworks", []):
         import_name = "%s-%s-import" % (name, paths.basename(vendored_dynamic_framework))
         apple_dynamic_framework_import(
@@ -360,7 +366,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             deps = [],
             tags = _MANUAL,
         )
-        deps += [import_name]
+        deps.append(import_name)
     for vendored_static_library in kwargs.pop("vendored_static_libraries", []):
         import_name = "%s-%s-library-import" % (name, paths.basename(vendored_static_library))
         objc_import(
@@ -368,7 +374,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             archives = [vendored_static_library],
             tags = _MANUAL,
         )
-        deps += [import_name]
+        deps.append(import_name)
     for vendored_dynamic_library in kwargs.pop("vendored_dynamic_libraries", []):
         fail("no import for %s" % vendored_dynamic_library)
 
@@ -394,7 +400,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             **kwargs
         )
         if umbrella_header:
-            objc_hdrs += [umbrella_header]
+            objc_hdrs.append(umbrella_header)
         module_map = library_tools["modulemap_generator"](
             name = name,
             library_tools = library_tools,
@@ -515,7 +521,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             tags = tags_manual,
             **kwargs
         )
-        lib_names += [swift_libname]
+        lib_names.append(swift_libname)
 
         # Add generated swift header to header maps for angle bracket imports
         swift_doublequote_hmap_name = name + "_swift_doublequote_hmap"
@@ -564,7 +570,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             deps = deps,
             tags = tags_manual,
         )
-        lib_names += [cpp_libname]
+        lib_names.append(cpp_libname)
 
     objc_library_data = library_tools["wrap_resources_in_filegroup"](name = objc_libname + "_data", srcs = data)
     objc_copts.append("-I.")
@@ -592,11 +598,11 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         output_group = "launch_screen_storyboard",
         tags = _MANUAL,
     )
-    lib_names += [objc_libname]
+    lib_names.append(objc_libname)
 
     if export_private_headers:
         private_headers_name = "%s_private_headers" % name
-        lib_names += [private_headers_name]
+        lib_names.append(private_headers_name)
         _private_headers(name = private_headers_name, headers = objc_private_hdrs, tags = _MANUAL)
 
     return struct(

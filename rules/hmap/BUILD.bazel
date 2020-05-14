@@ -1,3 +1,5 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_test")
+
 HMAP_COPTS = [
     "-DHASH_FUNCTION=HASH_MUR",
     "-DHASH_USING_NO_STRICT_ALIASING",
