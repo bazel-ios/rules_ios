@@ -1,0 +1,6 @@
+{
+    "files.exclude": {
+        "bazel-*": true
+    },
+    "editor.formatOnSave": true,
+}

@@ -42,12 +42,12 @@ Writes out a file verbatim
 | destination |  -   | <a href="https://bazel.build/docs/build-ref.html#labels">Label</a> | required |  |
 
 
-<a name="#PrivateHeaders"></a>
+<a name="#PrivateHeadersInfo"></a>
 
-## PrivateHeaders
+## PrivateHeadersInfo
 
 <pre>
-PrivateHeaders(<a href="#PrivateHeaders-headers">headers</a>)
+PrivateHeadersInfo(<a href="#PrivateHeadersInfo-headers">headers</a>)
 </pre>
 
 Propagates private headers, so they can be accessed if necessary
@@ -82,81 +82,10 @@ reasonable defaults that mimic Xcode's behavior.
 | :-------------: | :-------------: | :-------------: |
 | name |  The base name for all of the underlying targets.   |  none |
 | library_tools |  An optional dictionary containing overrides for                 default behaviors.   |  <code>{}</code> |
-| export_private_headers |  Whether private headers should be exported via                         a <code>PrivateHeaders</code> provider.   |  <code>True</code> |
+| export_private_headers |  Whether private headers should be exported via                         a <code>PrivateHeadersInfo</code> provider.   |  <code>True</code> |
 | namespace_is_module_name |  Whether the module name should be used as the                           namespace for header imports, instead of the target name.   |  <code>True</code> |
 | default_xcconfig_name |  The name of a default xcconfig to be applied to this target.   |  <code>None</code> |
 | xcconfig |  A dictionary of Xcode build settings to be applied to this target in the           form of different <code>copt</code> attributes.   |  <code>{}</code> |
-| kwargs |  <p align="center"> - </p>   |  none |
-
-
-<a name="#generate_resource_bundles"></a>
-
-## generate_resource_bundles
-
-<pre>
-generate_resource_bundles(<a href="#generate_resource_bundles-name">name</a>, <a href="#generate_resource_bundles-library_tools">library_tools</a>, <a href="#generate_resource_bundles-module_name">module_name</a>, <a href="#generate_resource_bundles-resource_bundles">resource_bundles</a>, <a href="#generate_resource_bundles-kwargs">kwargs</a>)
-</pre>
-
-
-
-**PARAMETERS**
-
-
-| Name  | Description | Default Value |
-| :-------------: | :-------------: | :-------------: |
-| name |  <p align="center"> - </p>   |  none |
-| library_tools |  <p align="center"> - </p>   |  none |
-| module_name |  <p align="center"> - </p>   |  none |
-| resource_bundles |  <p align="center"> - </p>   |  none |
-| kwargs |  <p align="center"> - </p>   |  none |
-
-
-<a name="#write_modulemap"></a>
-
-## write_modulemap
-
-<pre>
-write_modulemap(<a href="#write_modulemap-name">name</a>, <a href="#write_modulemap-library_tools">library_tools</a>, <a href="#write_modulemap-umbrella_header">umbrella_header</a>, <a href="#write_modulemap-public_headers">public_headers</a>, <a href="#write_modulemap-private_headers">private_headers</a>, <a href="#write_modulemap-module_name">module_name</a>,
-                <a href="#write_modulemap-framework">framework</a>, <a href="#write_modulemap-kwargs">kwargs</a>)
-</pre>
-
-
-
-**PARAMETERS**
-
-
-| Name  | Description | Default Value |
-| :-------------: | :-------------: | :-------------: |
-| name |  <p align="center"> - </p>   |  none |
-| library_tools |  <p align="center"> - </p>   |  none |
-| umbrella_header |  <p align="center"> - </p>   |  <code>None</code> |
-| public_headers |  <p align="center"> - </p>   |  <code>[]</code> |
-| private_headers |  <p align="center"> - </p>   |  <code>[]</code> |
-| module_name |  <p align="center"> - </p>   |  <code>None</code> |
-| framework |  <p align="center"> - </p>   |  <code>False</code> |
-| kwargs |  <p align="center"> - </p>   |  none |
-
-
-<a name="#write_umbrella_header"></a>
-
-## write_umbrella_header
-
-<pre>
-write_umbrella_header(<a href="#write_umbrella_header-name">name</a>, <a href="#write_umbrella_header-library_tools">library_tools</a>, <a href="#write_umbrella_header-public_headers">public_headers</a>, <a href="#write_umbrella_header-private_headers">private_headers</a>, <a href="#write_umbrella_header-module_name">module_name</a>, <a href="#write_umbrella_header-kwargs">kwargs</a>)
-</pre>
-
-
-
-**PARAMETERS**
-
-
-| Name  | Description | Default Value |
-| :-------------: | :-------------: | :-------------: |
-| name |  <p align="center"> - </p>   |  none |
-| library_tools |  <p align="center"> - </p>   |  none |
-| public_headers |  <p align="center"> - </p>   |  <code>[]</code> |
-| private_headers |  <p align="center"> - </p>   |  <code>[]</code> |
-| module_name |  <p align="center"> - </p>   |  <code>None</code> |
-| kwargs |  <p align="center"> - </p>   |  none |
+| kwargs |  keyword arguments.   |  none |
 
 

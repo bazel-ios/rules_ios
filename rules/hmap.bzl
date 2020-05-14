@@ -1,7 +1,16 @@
-load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo")
+"""Header Map rules"""
+
+HeaderMapInfo = provider(
+    doc = "Propagates header maps",
+    fields = {
+        "files": "depset with headermaps",
+    },
+)
 
 def _make_headermap_input_file(namespace, hdrs, flatten_headers):
-    """Create a string representing the mappings from headers to their
+    """Create a header map input file.
+
+    This function creates a string representing the mappings from headers to their
     namespaced include versions. The format is
 
     virtual_header_path|real_header_path
@@ -18,8 +27,8 @@ def _make_headermap_input_file(namespace, hdrs, flatten_headers):
     :return: string with all the headers in the above mentioned
     format. This can be saved to a file and read by the hmapbuild tool
     included here to create a header map file.
-
     """
+
     entries = []
     for hdr in hdrs:
         namespaced_key = namespace + "/" + hdr.basename
@@ -29,7 +38,9 @@ def _make_headermap_input_file(namespace, hdrs, flatten_headers):
     return "\n".join(entries) + "\n"
 
 def _make_headermap_impl(ctx):
-    """Implementation of the headermap() rule. It creates a text file with
+    """Implementation of the headermap() rule.
+
+    It creates a text file with
     the mappings and creates an action that calls out to the hmapbuild
     tool included here to create the actual .hmap file.
 
@@ -37,7 +48,6 @@ def _make_headermap_impl(ctx):
            https://docs.bazel.build/versions/master/skylark/lib/ctx.html
 
     :return: provider with the info for this rule
-
     """
 
     # Write a file for *this* headermap, this is a temporary file
@@ -58,24 +68,8 @@ def _make_headermap_impl(ctx):
     )
 
     # Add a list of headermaps in text or hmap format
-    merge_hmaps = {}
     inputs = [input_f]
-    args = []
-
-    if merge_hmaps:
-        paths = []
-        for hdr in merge_hmaps.keys():
-            inputs.append(hdr)
-            paths.append(hdr.path)
-        merge_hmaps_file = ctx.actions.declare_file(ctx.label.name + ".merge_hmaps")
-        inputs.append(merge_hmaps_file)
-        ctx.actions.write(
-            content = "\n".join(paths) + "\n",
-            output = merge_hmaps_file,
-        )
-        args += ["--merge-hmaps", merge_hmaps_file.path]
-
-    args += [input_f.path, ctx.outputs.headermap.path]
+    args = [input_f.path, ctx.outputs.headermap.path]
     ctx.actions.run(
         inputs = inputs,
         mnemonic = "HmapCreate",
@@ -87,12 +81,14 @@ def _make_headermap_impl(ctx):
         header = depset([ctx.outputs.headermap]),
     )
     cc_info_provider = CcInfo(compilation_context = objc_provider.compilation_context)
-    return struct(
-        files = depset([ctx.outputs.headermap]),
-        providers = [objc_provider, cc_info_provider],
-        objc = objc_provider,
-        headers = depset([ctx.outputs.headermap]),
-    )
+
+    return [
+        HeaderMapInfo(
+            files = depset([ctx.outputs.headermap]),
+        ),
+        objc_provider,
+        cc_info_provider,
+    ]
 
 # Derive a headermap from transitive headermaps
 # hdrs: a file group containing headers for this rule

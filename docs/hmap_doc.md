@@ -27,3 +27,21 @@ regardless of the package structure being used.
 | namespace |  The prefix to be used for header imports when flatten_headers is true   | String | required |  |
 
 
+<a name="#HeaderMapInfo"></a>
+
+## HeaderMapInfo
+
+<pre>
+HeaderMapInfo(<a href="#HeaderMapInfo-files">files</a>)
+</pre>
+
+Propagates header maps
+
+**FIELDS**
+
+
+| Name  | Description |
+| :-------------: | :-------------: |
+| files |  depset with headermaps    |
+
+

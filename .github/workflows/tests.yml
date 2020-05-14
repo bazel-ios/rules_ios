@@ -9,7 +9,7 @@ on:
 jobs:
   integration_tests:
     name: Build and Test
-    runs-on: macOS-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
       - name: Select Xcode 11.2
@@ -21,9 +21,9 @@ jobs:
         with:
           name: bazel-testlogs
           path: bazel-testlogs
-  check_docs:
+  buildifier:
     name: Check Starlark
-    runs-on: macOS-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
       - name: Select Xcode 11.2
@@ -31,8 +31,8 @@ jobs:
       - name: Install buildifier
         run: brew install buildifier
       - name: buildifier
-        run: find . -type f \( -name 'WORKSPACE' -o -name '*.bzl' -o -name '*.bazel' \) | xargs buildifier --mode=diff
-  buildifier:
+        run: find . -type f \( -name 'WORKSPACE' -o -name '*.bzl' -o -name '*.bazel' \) | xargs buildifier -lint=fix && git diff --exit-code
+  check_docs:
     name: Check Docs
     runs-on: macOS-latest
     steps:

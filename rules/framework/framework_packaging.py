@@ -101,7 +101,7 @@ def _clean(framework_root, manifest_file, output_manifest_file):
         dirs_to_keep = set((framework_root,))
         for file in manifest_lines:
             files_to_keep.add(file)
-            
+
             dir = os.path.dirname(file)
             while dir not in dirs_to_keep:
                 dirs_to_keep.add(dir)
@@ -130,7 +130,7 @@ class Args(argparse.Namespace):
 def main():
     """Main function."""
     actions = {
-        "header": 
+        "header":
             lambda args: _copy_headers(args.framework_root, args.inputs),
         "private_header":
             lambda args: _copy_private_headers(args.framework_root, args.inputs),
@@ -153,7 +153,7 @@ def main():
     parser.add_argument('--inputs', type = str, nargs='*')
     parser.add_argument('--outputs', type = str, nargs='*')
     args = parser.parse_args(namespace=Args())
-    
+
     action = actions[args.action]
     action(args)
 

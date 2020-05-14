@@ -1,8 +1,7 @@
-package(default_visibility = ["//visibility:private"])
-
 load("@io_bazel_stardoc//stardoc:stardoc.bzl", "stardoc")
-load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+
+package(default_visibility = ["//visibility:private"])
 
 _RULES = [
     "app",
