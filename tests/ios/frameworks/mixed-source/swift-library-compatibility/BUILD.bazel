@@ -1,0 +1,23 @@
+load("//rules:framework.bzl", "apple_framework_packaging")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "SwiftFramework",
+    srcs = ["empty.swift"],
+    deps = [
+        "//tests/ios/frameworks/objc:ObjcFramework",
+    ],
+)
+
+# Below framework is repacking a framework created with swift_library
+# together with a framework created with apple_framework
+apple_framework_packaging(
+    name = "SwiftAndObjc",
+    framework_name = "SwiftAndObjc",
+    transitive_deps = [],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":SwiftFramework",
+        "//tests/ios/frameworks/objc:ObjcFramework",
+    ],
+)

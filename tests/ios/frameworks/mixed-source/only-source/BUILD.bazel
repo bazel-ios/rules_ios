@@ -2,9 +2,16 @@ load("//rules:framework.bzl", "apple_framework")
 load("//rules:test.bzl", "ios_unit_test")
 
 apple_framework(
+    name = "SwiftLibrary",
+    srcs = glob(["SwiftLibrary/**/*.swift"]),
+    module_name = "SwiftLibrary",
+    visibility = ["//visibility:public"],
+)
+
+apple_framework(
     name = "MixedSourceFramework",
     srcs = glob(
-        [
+        include = [
             "MixedSourceFramework/**/*.h",
             "MixedSourceFramework/**/*.m",
             "MixedSourceFramework/**/*.swift",
@@ -14,10 +21,13 @@ apple_framework(
         # exclude = ["MixedSourceFramework/MixedSourceFramework.h"],
     ),
     visibility = ["//visibility:public"],
+    deps = [
+        ":SwiftLibrary",  # This is here in order to test for https://github.com/bazel-ios/rules_ios/issues/55
+    ],
 )
 
-ios_unit_test(
-    name = "MixedSourceTest",
+apple_framework(
+    name = "MixedSourceTestLib",
     srcs = glob(
         [
             "MixedSourceTest/**/*.h",
@@ -25,9 +35,14 @@ ios_unit_test(
             "MixedSourceTest/**/*.swift",
         ],
     ),
-    minimum_os_version = "12.0",
     visibility = ["//visibility:public"],
     deps = [
         ":MixedSourceFramework",
     ],
+)
+
+ios_unit_test(
+    name = "MixedSourceTest",
+    minimum_os_version = "12.0",
+    deps = [":MixedSourceTestLib"],
 )

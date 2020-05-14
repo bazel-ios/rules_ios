@@ -1,0 +1,47 @@
+load("//rules:framework.bzl", "apple_framework")
+load("//rules:apple_patched.bzl", "apple_dynamic_framework_import_patched")
+load("//rules:test.bzl", "ios_unit_test")
+
+apple_dynamic_framework_import_patched(
+    name = "InputMask",
+    framework_imports = ["@carthage//:InputMask"],
+    visibility = ["//visibility:public"],
+)
+
+apple_dynamic_framework_import_patched(
+    name = "SnapKit",
+    framework_imports = ["@cocoapods//:SnapKit"],
+    visibility = ["//visibility:public"],
+)
+
+apple_framework(
+    name = "MixedSourceFramework",
+    srcs = glob(
+        include = [
+            "MixedSourceFramework/**/*.h",
+            "MixedSourceFramework/**/*.m",
+            "MixedSourceFramework/**/*.swift",
+        ],
+        exclude = ["MixedSourceFramework/MixedSourceFramework.h"],
+    ),
+    visibility = ["//visibility:public"],
+    deps = [
+        ":InputMask",
+        ":SnapKit",
+    ],
+)
+
+apple_framework(
+    name = "MixedSourceFrameworkTestLib",
+    srcs = glob(["MixedSourceFrameworkTests/**/*.swift"]),
+    visibility = ["//visibility:public"],
+    deps = [
+        ":MixedSourceFramework",
+    ],
+)
+
+ios_unit_test(
+    name = "MixedSourceFrameworkTests",
+    minimum_os_version = "11.0",
+    deps = [":MixedSourceFrameworkTestLib"],
+)
