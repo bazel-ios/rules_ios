@@ -48,7 +48,7 @@ def _xcodeproj_aspect_impl(target, ctx):
 
         info = struct(
             name = bundle_info.bundle_name,
-            bundle_id = getattr(ctx.rule.attr, 'bundle_id', None),
+            bundle_id = getattr(ctx.rule.attr, "bundle_id", None),
             bundle_extension = bundle_info.bundle_extension,
             package = target.label.package,
             bazel_name = bazel_name,
@@ -70,7 +70,7 @@ def _xcodeproj_aspect_impl(target, ctx):
         )
         direct_targets = [info]
         if test_host_target:
-          direct_targets.extend(test_host_target[_TargetInfo].direct_targets)
+            direct_targets.extend(test_host_target[_TargetInfo].direct_targets)
         target_info = _TargetInfo(direct_targets = direct_targets, targets = depset([info], transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets")))
         providers.append(target_info)
     elif ctx.rule.kind == "apple_framework_packaging":
@@ -177,7 +177,7 @@ def _xcodeproj_impl(ctx):
     else:
         targets = []
         for t in _get_attr_values_for_name(ctx.attr.deps, _TargetInfo, "direct_targets"):
-          targets.extend(t)
+            targets.extend(t)
 
     xcodeproj_targets_by_name = {}
     xcodeproj_schemes_by_name = {}
@@ -201,20 +201,20 @@ def _xcodeproj_impl(ctx):
             "MACH_O_TYPE": target_macho_type,
         }
         if target_info.product_type == "application":
-            target_settings['INFOPLIST_FILE'] = "$BAZEL_STUBS_DIR/Info-stub.plist"
-            target_settings['PRODUCT_BUNDLE_IDENTIFIER'] = target_info.bundle_id
+            target_settings["INFOPLIST_FILE"] = "$BAZEL_STUBS_DIR/Info-stub.plist"
+            target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
         target_dependencies = []
-        test_host_appname = getattr(target_info, 'test_host_appname', None)
+        test_host_appname = getattr(target_info, "test_host_appname", None)
         if test_host_appname:
-          target_dependencies.append({'target': test_host_appname})
-          target_settings['TEST_HOST'] = "$(BUILT_PRODUCTS_DIR)/{test_host_appname}.app/{test_host_appname}".format(test_host_appname = test_host_appname)
+            target_dependencies.append({"target": test_host_appname})
+            target_settings["TEST_HOST"] = "$(BUILT_PRODUCTS_DIR)/{test_host_appname}.app/{test_host_appname}".format(test_host_appname = test_host_appname)
 
         xcodeproj_targets_by_name[target_info.name] = {
             "sources": compiled_sources + asset_sources,
             "type": target_info.product_type,
             "platform": "iOS",
-            'settings': target_settings,
-            'dependencies': target_dependencies,
+            "settings": target_settings,
+            "dependencies": target_dependencies,
             "preBuildScripts": [{
                 "name": "Build with bazel",
                 "script": """

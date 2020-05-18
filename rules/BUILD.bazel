@@ -3,7 +3,6 @@ exports_files(
     visibility = ["//docs:__pkg__"],
 )
 
-
 exports_files([
     "WorkspaceSettings.xcsettings",
 ])
