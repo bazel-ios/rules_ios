@@ -22,7 +22,7 @@ jobs:
           name: bazel-testlogs
           path: bazel-testlogs
   buildifier:
-    name: Check Starlark adn Docs
+    name: Check Starlark and Docs
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
