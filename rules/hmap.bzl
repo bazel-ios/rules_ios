@@ -37,7 +37,7 @@ def _make_headermap_impl(ctx):
             fail("direct_hdr_provider %s must contain either 'CcInfo' or 'objc' provider" % provider)
 
     args.set_param_file_format(format = "multiline")
-    args.use_param_file("@%s", use_always = True)
+    args.use_param_file("@%s")
     ctx.actions.run(
         mnemonic = "HmapCreate",
         arguments = [args],
