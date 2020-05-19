@@ -22,7 +22,7 @@ jobs:
           name: bazel-testlogs
           path: bazel-testlogs
   buildifier:
-    name: Check Starlark
+    name: Check Starlark and Docs
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
@@ -32,18 +32,11 @@ jobs:
         run: brew install buildifier
       - name: buildifier
         run: find . -type f \( -name 'WORKSPACE' -o -name '*.bzl' -o -name '*.bazel' \) | xargs buildifier -lint=fix && git diff --exit-code
-  check_docs:
-    name: Check Docs
-    runs-on: macOS-latest
-    steps:
-      - uses: actions/checkout@v1
-      - name: Select Xcode 11.2
-        run: sudo xcode-select -s /Applications/Xcode_11.2.app
       - name: Check docs
         run: bazelisk run docs --nocheck_visibility && git diff --exit-code docs
   xcodeproj_tests:
     name: .xcodeproj Tests
-    runs-on: macOS-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
       - name: Select Xcode 11.2
