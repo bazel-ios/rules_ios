@@ -104,7 +104,6 @@ static void parse_args(mapping **entries, char **av, int ac) {
                 verbose = 1;
                 break;
             default:
-                // TODO: don't
                 usage();
         }
     }
