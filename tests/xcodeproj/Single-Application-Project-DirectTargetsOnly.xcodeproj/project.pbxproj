@@ -304,7 +304,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_PACKAGE = rules/test_host_app;
+				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
 				MACH_O_TYPE = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ios-app-host-12.0";
 				PRODUCT_NAME = "iOS-12.0-AppHost";
 			};
 			name = Release;
@@ -313,7 +315,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_PACKAGE = rules/test_host_app;
+				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
 				MACH_O_TYPE = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ios-app-host-12.0";
 				PRODUCT_NAME = "iOS-12.0-AppHost";
 			};
 			name = Debug;

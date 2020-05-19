@@ -29,7 +29,7 @@
 		61CE3CBBAD0BFAFC0953377B /* TestImports-App.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "TestImports-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D1EF392512C1F921EE7760C /* Header2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Header2.h; path = "../test/ios/test-imports-app/Header2.h"; sourceTree = "<group>"; };
 		8874B671013FB5B4C9C79FD3 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = empty.swift; path = "../test/ios/test-imports-app/empty.swift"; sourceTree = "<group>"; };
-		9E7E8177A9991D407C446EF6 /* TestImports-Unit-Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TestImports-Unit-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9E7E8177A9991D407C446EF6 /* TestImports-Unit-Tests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "TestImports-Unit-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8E4B392F6EEBF0A35A0F879 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "../test/ios/test-imports-app/main.m"; sourceTree = "<group>"; };
 		E8479B9493E57B4235186D21 /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Header.h; path = "../test/ios/test-imports-app/Header.h"; sourceTree = "<group>"; };
 		E886E7D4877EDB0D5A01D849 /* test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = test.m; path = "../test/ios/test-imports-app/test.m"; sourceTree = "<group>"; };
@@ -249,7 +249,6 @@
 				BAZEL_PACKAGE = "tests/test/ios/test-imports-app";
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "TestImports-Unit-Tests";
-				SUPPORTS_MACCATALYST = NO;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestImports-App.app/TestImports-App";
 				TEST_TARGET_NAME = "TestImports-App";
 			};
@@ -272,7 +271,6 @@
 				BAZEL_PACKAGE = "tests/test/ios/test-imports-app";
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "TestImports-Unit-Tests";
-				SUPPORTS_MACCATALYST = NO;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestImports-App.app/TestImports-App";
 				TEST_TARGET_NAME = "TestImports-App";
 			};
