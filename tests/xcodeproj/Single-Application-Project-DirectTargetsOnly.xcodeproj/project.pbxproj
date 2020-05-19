@@ -267,6 +267,7 @@
 				BAZEL_PACKAGE = tests/xcodeproj;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-RunnableTestSuite";
+				SUPPORTS_MACCATALYST = 0;
 			};
 			name = Release;
 		};
@@ -276,6 +277,7 @@
 				BAZEL_PACKAGE = tests/xcodeproj;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-UnitTests";
+				SUPPORTS_MACCATALYST = 0;
 			};
 			name = Debug;
 		};
@@ -328,6 +330,7 @@
 				BAZEL_PACKAGE = tests/xcodeproj;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-RunnableTestSuite";
+				SUPPORTS_MACCATALYST = 0;
 			};
 			name = Debug;
 		};
@@ -358,6 +361,7 @@
 				BAZEL_PACKAGE = tests/xcodeproj;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-UnitTests";
+				SUPPORTS_MACCATALYST = 0;
 			};
 			name = Release;
 		};

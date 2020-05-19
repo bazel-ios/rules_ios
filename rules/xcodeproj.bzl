@@ -203,9 +203,13 @@ def _xcodeproj_impl(ctx):
             "BAZEL_PACKAGE": target_info.package,
             "MACH_O_TYPE": target_macho_type,
         }
+
         if target_info.product_type == "application":
             target_settings["INFOPLIST_FILE"] = "$BAZEL_STUBS_DIR/Info-stub.plist"
             target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
+        if target_info.product_type == "bundle.unit-test":
+            target_settings["SUPPORTS_MACCATALYST"] = False
+
         target_dependencies = []
         test_host_appname = getattr(target_info, "test_host_appname", None)
         if test_host_appname:

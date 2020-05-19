@@ -249,6 +249,7 @@
 				BAZEL_PACKAGE = "tests/test/ios/test-imports-app";
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "TestImports-Unit-Tests";
+				SUPPORTS_MACCATALYST = 0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestImports-App.app/TestImports-App";
 				TEST_TARGET_NAME = "TestImports-App";
 			};
@@ -271,6 +272,7 @@
 				BAZEL_PACKAGE = "tests/test/ios/test-imports-app";
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "TestImports-Unit-Tests";
+				SUPPORTS_MACCATALYST = 0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestImports-App.app/TestImports-App";
 				TEST_TARGET_NAME = "TestImports-App";
 			};
