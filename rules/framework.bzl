@@ -216,7 +216,7 @@ def _apple_framework_packaging_impl(ctx):
     args.add_all(header_in)
     args.add_all(private_header_in)
     args.set_param_file_format("multiline")
-    args.use_param_file("@%s", use_always = True)
+    args.use_param_file("@%s")
 
     # write headermap
     ctx.actions.run(
