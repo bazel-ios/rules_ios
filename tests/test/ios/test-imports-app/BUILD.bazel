@@ -51,4 +51,5 @@ ios_unit_test(
     deps = [
         ":TestImports-App_framework_unlinked",
     ],
+    visibility = ["//visibility:public"],
 )
