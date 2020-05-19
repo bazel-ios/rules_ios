@@ -43,6 +43,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             commandlines_args = getattr(ctx.rule.attr, "args", [])
             test_commandline_args = tuple(commandlines_args)
             test_host_target = getattr(ctx.rule.attr, "test_host", None)
+
             if test_host_target and test_host_target.label.package != "rules/test_host_app":
                 test_host_appname = test_host_target.label.name
 
