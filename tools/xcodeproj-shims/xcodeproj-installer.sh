@@ -30,4 +30,4 @@ rm "${tmp_dest}/project.pbxproj.bak"
 rsync --recursive --quiet --copy-links "${tmp_dest}" "${dest}"
 
 mkdir -p "$dest/project.xcworkspace/xcshareddata/"
-mv "$(workspacesettings_xcsettings_short_path)" "$dest/project.xcworkspace/xcshareddata/"
+cp "$(workspacesettings_xcsettings_short_path)" "$dest/project.xcworkspace/xcshareddata/"

@@ -8,4 +8,4 @@ xcodebuild -project Single-Application-Project-AllTargets.xcodeproj -quiet -sche
 xcodebuild -project Single-Application-Project-DirectTargetsOnly.xcodeproj -quiet -scheme Single-Application-UnitTests test
 xcodebuild -project Single-Application-Project-DirectTargetsOnly.xcodeproj -quiet -scheme Single-Application-RunnableTestSuite test
 
-xcodebuild -project Test-Target-With-Test-Host-Project -quiet -scheme TestImports-Unit-Tests test
+xcodebuild -project Test-Target-With-Test-Host-Project.xcodeproj -quiet -scheme TestImports-Unit-Tests test

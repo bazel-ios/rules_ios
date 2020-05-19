@@ -44,7 +44,9 @@ def _xcodeproj_aspect_impl(target, ctx):
             test_commandline_args = tuple(commandlines_args)
             test_host_target = getattr(ctx.rule.attr, "test_host", None)
 
-            if test_host_target and test_host_target.label.package != "rules/test_host_app":
+            # The ios_unit_test rule sets the test_host attribute to the rules_ios repo's rules/test_host_app target by default, if test_host = True.
+            # The generated xcodeproject should only reference test host applications that live in the same workspace as the test target.
+            if test_host_target and test_host_target.label.workspace_root == target.label.workspace_root:
                 test_host_appname = test_host_target.label.name
 
         info = struct(
