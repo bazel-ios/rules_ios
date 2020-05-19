@@ -265,6 +265,7 @@ $BAZEL_INSTALLER
             "$(clang_stub_short_path)": ctx.executable.clang_stub.short_path,
             "$(clang_stub_ld_path)": ctx.executable.ld_stub.short_path,
             "$(clang_stub_swiftc_path)": ctx.executable.swiftc_stub.short_path,
+            "$(json_util_path)": ctx.executable.json_util.short_path,
         },
         is_executable = True,
     )
@@ -275,7 +276,7 @@ $BAZEL_INSTALLER
             files = depset([xcodegen_jsonfile, project]),
             runfiles = ctx.runfiles(files = [xcodegen_jsonfile, project], transitive_files = depset(
                 direct =
-                    ctx.files.installer + ctx.files.clang_stub + ctx.files.ld_stub + ctx.files.swiftc_stub,
+                    ctx.files.installer + ctx.files.clang_stub + ctx.files.ld_stub + ctx.files.swiftc_stub + ctx.files.json_util,
                 transitive = [ctx.attr.installer[DefaultInfo].default_runfiles.files],
             )),
         ),
@@ -294,6 +295,7 @@ xcodeproj = rule(
         "clang_stub": attr.label(executable = True, default = Label("//tools/xcodeproj-shims:clang-stub"), cfg = "host"),
         "ld_stub": attr.label(executable = True, default = Label("//tools/xcodeproj-shims:ld-stub"), cfg = "host"),
         "swiftc_stub": attr.label(executable = True, default = Label("//tools/xcodeproj-shims:swiftc-stub"), cfg = "host"),
+        "json_util": attr.label(executable = True, default = Label("//tools/xcodeproj-shims:json-util"), cfg = "host"),
         "installer": attr.label(executable = True, default = Label("//tools/xcodeproj-shims:installer"), cfg = "host"),
     },
     executable = True,

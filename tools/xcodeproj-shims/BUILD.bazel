@@ -19,6 +19,12 @@ sh_binary(
 )
 
 sh_binary(
+    name = "json-util",
+    srcs = ["json-util.sh"],
+    visibility = STUB_VISIBILITY,
+)
+
+sh_binary(
     name = "installer",
     srcs = ["install.sh"],
     data = glob(["installers/*.sh"]),

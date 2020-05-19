@@ -17,6 +17,7 @@ cp "${installer}" "${stubs_dir}/${installer}"
 cp "$(clang_stub_short_path)" "${stubs_dir}/clang-stub"
 cp "$(clang_stub_ld_path)" "${stubs_dir}/ld-stub"
 cp "$(clang_stub_swiftc_path)" "${stubs_dir}/swiftc-stub"
+cp "$(json_util_path)" "${stubs_dir}/json-util"
 
 rm -fr "${tmp_dest}"
 mkdir -p "$(dirname $tmp_dest)"

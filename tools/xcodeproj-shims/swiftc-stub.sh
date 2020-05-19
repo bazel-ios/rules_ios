@@ -7,8 +7,9 @@ if [[ $# -eq 1 && $1 == "-v" ]]; then
     exec swiftc -v
 fi
 
+# Source of json-util: https://github.com/dominictarr/JSON.sh
 write_output_files() {
-    cat $1 | jq 'map(map(.)) | flatten | unique | .[]' -r | xargs touch
+    cat $1 | $(dirname "$0")/json-util -b -n  | sed 's/\[.*\]//' | xargs touch
 }
 
 while :; do
