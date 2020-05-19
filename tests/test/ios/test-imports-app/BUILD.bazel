@@ -48,8 +48,8 @@ ios_unit_test(
     module_name = "TestImports_Unit_Tests",
     sdk_frameworks = ["XCTest"],
     test_host = ":TestImports-App",
+    visibility = ["//visibility:public"],
     deps = [
         ":TestImports-App_framework_unlinked",
     ],
-    visibility = ["//visibility:public"],
 )
