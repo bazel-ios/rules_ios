@@ -32,7 +32,7 @@ def _xcodeproj_aspect_impl(target, ctx):
     test_commandline_args = ()
     bazel_build_target_name = ""
     if target.label.workspace_name != "":
-      bazel_build_target_name = "@%s//" % target.label.workspace_name
+        bazel_build_target_name = "@%s//" % target.label.workspace_name
     bazel_build_target_name += "%s:%s" % (target.label.package, target.label.name)
     bazel_bin_subdir = "%s/%s" % (target.label.workspace_root, target.label.package)
     if AppleBundleInfo in target:
@@ -49,7 +49,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             test_commandline_args = tuple(commandlines_args)
             test_host_target = getattr(ctx.rule.attr, "test_host", None)
             if test_host_target:
-              test_host_appname = test_host_target[_TargetInfo].direct_targets[0].name
+                test_host_appname = test_host_target[_TargetInfo].direct_targets[0].name
 
         info = struct(
             name = bundle_info.bundle_name,
@@ -128,7 +128,6 @@ def _xcodeproj_aspect_impl(target, ctx):
             targets = depset(infos, transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets"))
         else:
             targets = depset(transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets"))
-
 
         providers.append(
             _TargetInfo(direct_targets = infos, targets = targets),
