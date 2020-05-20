@@ -25,13 +25,18 @@ def _xcodeproj_aspect_impl(target, ctx):
     deps += getattr(ctx.rule.attr, "deps", [])
     deps += getattr(ctx.rule.attr, "infoplists", [])
     deps.append(getattr(ctx.rule.attr, "entitlements", None))
+    deps.append(getattr(ctx.rule.attr, "test_host", None))
 
     # TODO: handle apple_resource_bundle targets
     test_env_vars = ()
     test_commandline_args = ()
+    bazel_build_target_name = ""
+    if target.label.workspace_name != "":
+      bazel_build_target_name = "@%s//" % target.label.workspace_name
+    bazel_build_target_name += "%s:%s" % (target.label.package, target.label.name)
+    bazel_bin_subdir = "%s/%s" % (target.label.workspace_root, target.label.package)
     if AppleBundleInfo in target:
         bundle_info = target[AppleBundleInfo]
-        bazel_name = target.label.name
         test_host_appname = None
         test_host_target = None
         if ctx.rule.kind == "ios_unit_test":
@@ -43,18 +48,15 @@ def _xcodeproj_aspect_impl(target, ctx):
             commandlines_args = getattr(ctx.rule.attr, "args", [])
             test_commandline_args = tuple(commandlines_args)
             test_host_target = getattr(ctx.rule.attr, "test_host", None)
-
-            # The ios_unit_test rule sets the test_host attribute to the rules_ios repo's rules/test_host_app target by default, if test_host = True.
-            # The generated xcodeproject should only reference test host applications that live in the same workspace as the test target.
-            if test_host_target and test_host_target.label.workspace_root == target.label.workspace_root:
-                test_host_appname = test_host_target.label.name
+            if test_host_target:
+              test_host_appname = test_host_target[_TargetInfo].direct_targets[0].name
 
         info = struct(
             name = bundle_info.bundle_name,
             bundle_id = getattr(ctx.rule.attr, "bundle_id", None),
             bundle_extension = bundle_info.bundle_extension,
-            package = target.label.package,
-            bazel_name = bazel_name,
+            bazel_build_target_name = bazel_build_target_name,
+            bazel_bin_subdir = bazel_bin_subdir,
             srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
             asset_srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "asset_srcs")),
             build_files = depset([ctx.build_file_path], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
@@ -80,8 +82,8 @@ def _xcodeproj_aspect_impl(target, ctx):
         info = struct(
             name = target.label.name,
             bundle_id = None,
-            package = target.label.package,
-            bazel_name = target.label.name,
+            bazel_build_target_name = bazel_build_target_name,
+            bazel_bin_subdir = bazel_bin_subdir,
             srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
             asset_srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "asset_srcs")),
             build_files = depset([ctx.build_file_path], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
@@ -126,6 +128,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             targets = depset(infos, transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets"))
         else:
             targets = depset(transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets"))
+
 
         providers.append(
             _TargetInfo(direct_targets = infos, targets = targets),
@@ -200,7 +203,7 @@ def _xcodeproj_impl(ctx):
         } for s in target_info.asset_srcs.to_list()]
         target_settings = {
             "PRODUCT_NAME": target_info.name,
-            "BAZEL_PACKAGE": target_info.package,
+            "BAZEL_BIN_SUBDIR": target_info.bazel_bin_subdir,
             "MACH_O_TYPE": target_macho_type,
         }
 
@@ -228,9 +231,9 @@ def _xcodeproj_impl(ctx):
 set -eux
 cd $BAZEL_WORKSPACE_ROOT
 
-$BAZEL_PATH build $BAZEL_PACKAGE:{bazel_name}
+$BAZEL_PATH build {bazel_build_target_name}
 $BAZEL_INSTALLER
-""".format(bazel_name = target_info.bazel_name),
+""".format(bazel_build_target_name = target_info.bazel_build_target_name),
             }],
         }
         if target_info.product_type == "framework":

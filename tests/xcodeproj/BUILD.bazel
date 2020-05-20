@@ -79,5 +79,6 @@ xcodeproj(
     include_transitive_targets = False,
     deps = [
         "//tests/test/ios/test-imports-app:TestImports-Unit-Tests",
+        "//tests/test/ios:DefaultHosted",
     ],
 )
