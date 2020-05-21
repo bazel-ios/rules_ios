@@ -19,8 +19,8 @@ sh_binary(
 )
 
 sh_binary(
-    name = "json-util",
-    srcs = ["json-util.sh"],
+    name = "print-json-leaf-nodes",
+    srcs = ["print-json-leaf-nodes.sh"],
     visibility = STUB_VISIBILITY,
 )
 

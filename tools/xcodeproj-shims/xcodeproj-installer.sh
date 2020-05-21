@@ -17,7 +17,7 @@ cp "${installer}" "${stubs_dir}/${installer}"
 cp "$(clang_stub_short_path)" "${stubs_dir}/clang-stub"
 cp "$(clang_stub_ld_path)" "${stubs_dir}/ld-stub"
 cp "$(clang_stub_swiftc_path)" "${stubs_dir}/swiftc-stub"
-cp "$(json_util_path)" "${stubs_dir}/json-util"
+cp "$(print_json_leaf_nodes_path)" "${stubs_dir}/print-json-leaf-nodes"
 cp "$(infoplist_stub)" "${stubs_dir}/Info-stub.plist"
 
 rm -fr "${tmp_dest}"

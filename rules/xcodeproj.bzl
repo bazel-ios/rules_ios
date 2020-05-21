@@ -307,7 +307,7 @@ $BAZEL_INSTALLER
             "$(clang_stub_short_path)": ctx.executable.clang_stub.short_path,
             "$(clang_stub_ld_path)": ctx.executable.ld_stub.short_path,
             "$(clang_stub_swiftc_path)": ctx.executable.swiftc_stub.short_path,
-            "$(json_util_path)": ctx.executable.json_util.short_path,
+            "$(print_json_leaf_nodes_path)": ctx.executable.print_json_leaf_nodes.short_path,
             "$(infoplist_stub)": ctx.file._infoplist_stub.short_path,
             "$(workspacesettings_xcsettings_short_path)": ctx.file._workspace_xcsettings.short_path,
         },
@@ -324,7 +324,7 @@ $BAZEL_INSTALLER
                          ctx.files.ld_stub +
                          ctx.files.swiftc_stub +
                          ctx.files._infoplist_stub +
-                         ctx.files.json_util +
+                         ctx.files.print_json_leaf_nodes +
                          ctx.files._workspace_xcsettings,
                 transitive = [ctx.attr.installer[DefaultInfo].default_runfiles.files],
             )),
@@ -346,7 +346,7 @@ xcodeproj = rule(
         "clang_stub": attr.label(executable = True, default = Label("//tools/xcodeproj-shims:clang-stub"), cfg = "host"),
         "ld_stub": attr.label(executable = True, default = Label("//tools/xcodeproj-shims:ld-stub"), cfg = "host"),
         "swiftc_stub": attr.label(executable = True, default = Label("//tools/xcodeproj-shims:swiftc-stub"), cfg = "host"),
-        "json_util": attr.label(executable = True, default = Label("//tools/xcodeproj-shims:json-util"), cfg = "host"),
+        "print_json_leaf_nodes": attr.label(executable = True, default = Label("//tools/xcodeproj-shims:print-json-leaf-nodes"), cfg = "host"),
         "installer": attr.label(executable = True, default = Label("//tools/xcodeproj-shims:installer"), cfg = "host"),
     },
     executable = True,
