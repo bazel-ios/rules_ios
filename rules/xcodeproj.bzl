@@ -319,7 +319,13 @@ $BAZEL_INSTALLER
             executable = install_script,
             files = depset([xcodegen_jsonfile, project]),
             runfiles = ctx.runfiles(files = [xcodegen_jsonfile, project], transitive_files = depset(
-                direct = ctx.files.installer + ctx.files.clang_stub + ctx.files.ld_stub + ctx.files.swiftc_stub + ctx.files._infoplist_stub + ctx.files.json_util + ctx.files._workspace_xcsettings,
+                direct = ctx.files.installer +
+                         ctx.files.clang_stub + 
+                         ctx.files.ld_stub + 
+                         ctx.files.swiftc_stub + 
+                         ctx.files._infoplist_stub + 
+                         ctx.files.json_util + 
+                         ctx.files._workspace_xcsettings,
                 transitive = [ctx.attr.installer[DefaultInfo].default_runfiles.files],
             )),
         ),
