@@ -284,7 +284,7 @@
 		537B13DA69FE2CF8CE352102 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BAZEL_INSTALLER = "$BAZEL_STUBS_DIR/tools/xcodeproj_shims/installer";
+				BAZEL_INSTALLER = $BAZEL_STUBS_DIR/tools/xcodeproj_shims/installer;
 				BAZEL_PATH = bazelisk;
 				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
 				BAZEL_WORKSPACE_ROOT = $SRCROOT/../..;
@@ -337,7 +337,7 @@
 		AAAEE6E10977303B66545B5D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BAZEL_INSTALLER = "$BAZEL_STUBS_DIR/tools/xcodeproj_shims/installer";
+				BAZEL_INSTALLER = $BAZEL_STUBS_DIR/tools/xcodeproj_shims/installer;
 				BAZEL_PATH = bazelisk;
 				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
 				BAZEL_WORKSPACE_ROOT = $SRCROOT/../..;
