@@ -8,7 +8,7 @@ if [[ $# -eq 1 && $1 == "-v" ]]; then
 fi
 
 write_output_files() {
-    cat $1 | jq 'map(map(.)) | flatten | unique | .[]' -r | xargs touch
+    cat $1 | python $(dirname "$0")/print_json_leaf_nodes | xargs touch
 }
 
 while :; do
