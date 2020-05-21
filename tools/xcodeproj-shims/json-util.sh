@@ -1,4 +1,5 @@
-#!/bin/python
+#!/usr/bin/env python
+
 import sys, json; 
 j = json.load(sys.stdin)
 queue = [j]
@@ -10,4 +11,4 @@ while len(queue) > 0:
       for key, value in entry.items():
         queue.append(value)
     else:
-      print entry
+      print(entry)
