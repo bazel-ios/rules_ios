@@ -21,8 +21,9 @@ sh_binary(
 )
 
 py_binary(
-    name = "print-json-leaf-nodes",
-    srcs = ["print-json-leaf-nodes.py"],
+    name = "print_json_leaf_nodes",
+    srcs = ["print_json_leaf_nodes.py"],
+    visibility = STUB_VISIBILITY,
 )
 
 sh_binary(
