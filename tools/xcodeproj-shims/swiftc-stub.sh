@@ -7,9 +7,10 @@ if [[ $# -eq 1 && $1 == "-v" ]]; then
     exec swiftc -v
 fi
 
-# Source of json-util: https://github.com/dominictarr/JSON.sh
+exit 1
 write_output_files() {
-    cat $1 | $(dirname "$0")/json-util -b -n  | sed 's/\[.*\]//' | xargs touch
+    cat $1 | python $(dirname "$0")/json-util | xargs touch
+    exit 1
 }
 
 while :; do
