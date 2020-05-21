@@ -30,6 +30,13 @@ def _xcodeproj_aspect_impl(target, ctx):
     # TODO: handle apple_resource_bundle targets
     test_env_vars = ()
     test_commandline_args = ()
+
+    # bazel_build_target_name is the argument to bazel build. Example values:
+    #   Frameworks/FWName:FWName_library
+    #   @some_external_repo//Frameworks/FWName:FWName_library
+    # bazel_bin_subdir is the subdirectory within bazel-bin for artifacts built by this target. Example values:
+    #   Frameworks/FWName
+    #   external/some_external_repo/Frameworks/FWName
     bazel_build_target_name = ""
     if target.label.workspace_name != "":
         bazel_build_target_name = "@%s//" % target.label.workspace_name
