@@ -193,7 +193,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build $BAZEL_PACKAGE:Single-Application-RunnableTestSuite_iPad-Air-2__12.4\n$BAZEL_INSTALLER\n";
+			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build tests/xcodeproj:Single-Application-RunnableTestSuite_iPad-Air-2__12.4\n$BAZEL_INSTALLER\n";
 		};
 		8C9FD347EEDF21022077C21D /* Build with bazel */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -211,7 +211,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build $BAZEL_PACKAGE:iOS-12.0-AppHost\n$BAZEL_INSTALLER\n";
+			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build rules/test_host_app:iOS-12.0-AppHost\n$BAZEL_INSTALLER\n";
 		};
 		CEFFC66550AFA438E8952334 /* Build with bazel */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -229,7 +229,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build $BAZEL_PACKAGE:Single-Application-UnitTests\n$BAZEL_INSTALLER\n";
+			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build tests/xcodeproj:Single-Application-UnitTests\n$BAZEL_INSTALLER\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -264,17 +264,20 @@
 		1ED5544822BB90C0310DECBF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BAZEL_PACKAGE = tests/xcodeproj;
+				BAZEL_BIN_SUBDIR = /tests/xcodeproj;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-UnitTests";
+				SUPPORTS_MACCATALYST = 0;
 			};
 			name = Debug;
 		};
 		417C29AC852892B2A910C8D0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BAZEL_PACKAGE = rules/test_host_app;
+				BAZEL_BIN_SUBDIR = /rules/test_host_app;
+				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
 				MACH_O_TYPE = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ios-app-host-12.0";
 				PRODUCT_NAME = "iOS-12.0-AppHost";
 			};
 			name = Debug;
@@ -282,8 +285,10 @@
 		54F7DEC875A2F5ED466FE588 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BAZEL_PACKAGE = rules/test_host_app;
+				BAZEL_BIN_SUBDIR = /rules/test_host_app;
+				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
 				MACH_O_TYPE = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ios-app-host-12.0";
 				PRODUCT_NAME = "iOS-12.0-AppHost";
 			};
 			name = Release;
@@ -333,27 +338,30 @@
 		9C8E43C684BA9BDEB3E3C791 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BAZEL_PACKAGE = tests/xcodeproj;
+				BAZEL_BIN_SUBDIR = /tests/xcodeproj;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-RunnableTestSuite";
+				SUPPORTS_MACCATALYST = 0;
 			};
 			name = Debug;
 		};
 		D0D546F48AD698CADC2B4CF4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BAZEL_PACKAGE = tests/xcodeproj;
+				BAZEL_BIN_SUBDIR = /tests/xcodeproj;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-RunnableTestSuite";
+				SUPPORTS_MACCATALYST = 0;
 			};
 			name = Release;
 		};
 		D60C6B2C219D235429C548BD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BAZEL_PACKAGE = tests/xcodeproj;
+				BAZEL_BIN_SUBDIR = /tests/xcodeproj;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-UnitTests";
+				SUPPORTS_MACCATALYST = 0;
 			};
 			name = Release;
 		};

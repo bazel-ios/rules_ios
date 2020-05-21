@@ -13,13 +13,13 @@ set -eux
 
 case ${PRODUCT_TYPE} in
     com.apple.product-type.framework)
-        input="bazel-bin/$BAZEL_PACKAGE/${TARGET_NAME}/${FULL_PRODUCT_NAME}"
+        input="bazel-bin/$BAZEL_BIN_SUBDIR/${TARGET_NAME}/${FULL_PRODUCT_NAME}"
         ;;
     com.apple.product-type.bundle.unit-test)
-        input="bazel-bin/$BAZEL_PACKAGE/$TARGET_NAME.__internal__.__test_bundle_archive-root/$TARGET_NAME${WRAPPER_SUFFIX:-}"
+        input="bazel-bin/$BAZEL_BIN_SUBDIR/$TARGET_NAME.__internal__.__test_bundle_archive-root/$TARGET_NAME${WRAPPER_SUFFIX:-}"
         ;;
     com.apple.product-type.application)
-        input="bazel-bin/$BAZEL_PACKAGE/${TARGET_NAME}_archive-root/Payload/$TARGET_NAME${WRAPPER_SUFFIX:-}"
+        input="bazel-bin/$BAZEL_BIN_SUBDIR/${TARGET_NAME}_archive-root/Payload/$TARGET_NAME${WRAPPER_SUFFIX:-}"
         ;;
     *)
         echo "Error: Installing ${TARGET_NAME} of type ${PRODUCT_TYPE} is unsupported" >&2
@@ -48,5 +48,6 @@ rsync --quiet \
 # "$SRCROOT"/bazel/installers/indexstores.sh >/dev/null 2>&1 &
 
 "$BAZEL_WORKSPACE_ROOT"/tools/bazel-xcodeproj/installers/lldb-settings.sh >/dev/null 2>&1 &
+
 
 wait
