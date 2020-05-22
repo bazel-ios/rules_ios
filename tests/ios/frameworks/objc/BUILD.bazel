@@ -1,7 +1,7 @@
 load("//rules:framework.bzl", "apple_framework")
 
 apple_framework(
-    name = "frameworkFoo",
+    name = "ObjcFramework",
     srcs = [
         "HeaderA.h",
         "main.m",

@@ -54,8 +54,8 @@ xcodeproj(
     scheme_existing_envvar_overrides = {"test_envvar_key2": "test_envvar_value2_overridenvalue"},
     deps = [
         "//rules/test_host_app:iOS-12.0-AppHost",
-        "//tests/xcodeproj:Single-Application-RunnableTestSuite",
-        "//tests/xcodeproj:Single-Application-UnitTests",
+        "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite",
+        "//tests/macos/xcodeproj:Single-Application-UnitTests",
     ],
 )
 
@@ -67,8 +67,8 @@ xcodeproj(
     scheme_existing_envvar_overrides = {"test_envvar_key2": "test_envvar_value2_overridenvalue"},
     deps = [
         "//rules/test_host_app:iOS-12.0-AppHost",
-        "//tests/xcodeproj:Single-Application-RunnableTestSuite",
-        "//tests/xcodeproj:Single-Application-UnitTests",
+        "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite",
+        "//tests/macos/xcodeproj:Single-Application-UnitTests",
     ],
 )
 
@@ -78,7 +78,7 @@ xcodeproj(
     bazel_path = "bazelisk",
     include_transitive_targets = False,
     deps = [
-        "//tests/test/ios:DefaultHosted",
-        "//tests/test/ios/test-imports-app:TestImports-Unit-Tests",
+        "//tests/ios/unit-test:DefaultHosted",
+        "//tests/ios/unit-test/test-imports-app:TestImports-Unit-Tests",
     ],
 )

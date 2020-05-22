@@ -7,21 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0834EB3BB2BE0990DEED46BD /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1162A80978C527830EDADEE /* test.swift */; };
 		6868785A8F571C49259B50E0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB1C98DB4C8E24414A69917 /* main.m */; };
-		7107AA0AF5DFAFE1B11E9DC8 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FEC38504C5EFA9EB5ABC22 /* test.swift */; };
-		BA6A37B8A061B06D8B89EF2E /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FEC38504C5EFA9EB5ABC22 /* test.swift */; };
+		E8D5A100DC66B1E35BB71538 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1162A80978C527830EDADEE /* test.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4C5CCDAF660EA165B074B8BD /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = resource_bundle.plist; path = ../../rules/library/resource_bundle.plist; sourceTree = "<group>"; };
+		4C5CCDAF660EA165B074B8BD /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = resource_bundle.plist; path = ../../../rules/library/resource_bundle.plist; sourceTree = "<group>"; };
 		5976518F3C0E5F4753E44514 /* Single-Application-RunnableTestSuite.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "Single-Application-RunnableTestSuite.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		78FAC8B505DC9C839473A482 /* iOS-12.0-AppHost.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "iOS-12.0-AppHost.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7ABD95023B71172929B010EE /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = common.pch; path = ../../rules/library/common.pch; sourceTree = "<group>"; };
-		908EFE5EAE901D6B372D68F7 /* ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ios.entitlements; path = ../../rules/test_host_app/ios.entitlements; sourceTree = "<group>"; };
-		BFC300E7CF04688067094BFF /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = Contents.json; path = ../../rules/test_host_app/AssetCatalogFixture.xcassets/Contents.json; sourceTree = "<group>"; };
-		C4FEC38504C5EFA9EB5ABC22 /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = test.swift; path = test.swift; sourceTree = "<group>"; };
-		EEB1C98DB4C8E24414A69917 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../../rules/test_host_app/main.m; sourceTree = "<group>"; };
+		7ABD95023B71172929B010EE /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = common.pch; path = ../../../rules/library/common.pch; sourceTree = "<group>"; };
+		908EFE5EAE901D6B372D68F7 /* ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ios.entitlements; path = ../../../rules/test_host_app/ios.entitlements; sourceTree = "<group>"; };
+		BFC300E7CF04688067094BFF /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = Contents.json; path = ../../../rules/test_host_app/AssetCatalogFixture.xcassets/Contents.json; sourceTree = "<group>"; };
+		EEB1C98DB4C8E24414A69917 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../../../rules/test_host_app/main.m; sourceTree = "<group>"; };
 		EFADB1CE81C3F97F647C9255 /* Single-Application-UnitTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "Single-Application-UnitTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1162A80978C527830EDADEE /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = test.swift; path = test.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -71,20 +71,20 @@
 			name = AssetCatalogFixture.xcassets;
 			sourceTree = "<group>";
 		};
-		A15FD4ED9DCE6442AE542DB1 /* xcodeproj */ = {
-			isa = PBXGroup;
-			children = (
-				C4FEC38504C5EFA9EB5ABC22 /* test.swift */,
-			);
-			name = xcodeproj;
-			sourceTree = "<group>";
-		};
 		B9EA5090755F274681D48FBB /* tests */ = {
 			isa = PBXGroup;
 			children = (
-				A15FD4ED9DCE6442AE542DB1 /* xcodeproj */,
+				C605DB42F15FE4CE37586AC7 /* macos */,
 			);
 			name = tests;
+			sourceTree = "<group>";
+		};
+		C605DB42F15FE4CE37586AC7 /* macos */ = {
+			isa = PBXGroup;
+			children = (
+				F237C982F1E8CD4A105006B4 /* xcodeproj */,
+			);
+			name = macos;
 			sourceTree = "<group>";
 		};
 		D5DFC35BDCA2F1C8B03233AF /* rules */ = {
@@ -94,6 +94,14 @@
 				180CD058CAE61A960B64C45A /* test_host_app */,
 			);
 			name = rules;
+			sourceTree = "<group>";
+		};
+		F237C982F1E8CD4A105006B4 /* xcodeproj */ = {
+			isa = PBXGroup;
+			children = (
+				F1162A80978C527830EDADEE /* test.swift */,
+			);
+			name = xcodeproj;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -193,7 +201,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build tests/xcodeproj:Single-Application-RunnableTestSuite_iPad-Air-2__12.4\n$BAZEL_INSTALLER\n";
+			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build tests/macos/xcodeproj:Single-Application-RunnableTestSuite_iPad-Air-2__12.4\n$BAZEL_INSTALLER\n";
 		};
 		8C9FD347EEDF21022077C21D /* Build with bazel */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -229,7 +237,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build tests/xcodeproj:Single-Application-UnitTests\n$BAZEL_INSTALLER\n";
+			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build tests/macos/xcodeproj:Single-Application-UnitTests\n$BAZEL_INSTALLER\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -238,7 +246,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BA6A37B8A061B06D8B89EF2E /* test.swift in Sources */,
+				0834EB3BB2BE0990DEED46BD /* test.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,7 +262,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7107AA0AF5DFAFE1B11E9DC8 /* test.swift in Sources */,
+				E8D5A100DC66B1E35BB71538 /* test.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,7 +272,7 @@
 		1ED5544822BB90C0310DECBF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BAZEL_BIN_SUBDIR = /tests/xcodeproj;
+				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-UnitTests";
 				SUPPORTS_MACCATALYST = 0;
@@ -299,7 +307,7 @@
 				BAZEL_INSTALLER = $BAZEL_STUBS_DIR/tools/xcodeproj_shims/installer;
 				BAZEL_PATH = bazelisk;
 				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
-				BAZEL_WORKSPACE_ROOT = $SRCROOT/../..;
+				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../..;
 				CC = "$BAZEL_STUBS_DIR/clang-stub";
 				CLANG_ANALYZER_EXEC = $CC;
 				CODE_SIGNING_ALLOWED = 0;
@@ -320,7 +328,7 @@
 				BAZEL_INSTALLER = $BAZEL_STUBS_DIR/tools/xcodeproj_shims/installer;
 				BAZEL_PATH = bazelisk;
 				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
-				BAZEL_WORKSPACE_ROOT = $SRCROOT/../..;
+				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../..;
 				CC = "$BAZEL_STUBS_DIR/clang-stub";
 				CLANG_ANALYZER_EXEC = $CC;
 				CODE_SIGNING_ALLOWED = 0;
@@ -338,7 +346,7 @@
 		9C8E43C684BA9BDEB3E3C791 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BAZEL_BIN_SUBDIR = /tests/xcodeproj;
+				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-RunnableTestSuite";
 				SUPPORTS_MACCATALYST = 0;
@@ -348,7 +356,7 @@
 		D0D546F48AD698CADC2B4CF4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BAZEL_BIN_SUBDIR = /tests/xcodeproj;
+				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-RunnableTestSuite";
 				SUPPORTS_MACCATALYST = 0;
@@ -358,7 +366,7 @@
 		D60C6B2C219D235429C548BD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BAZEL_BIN_SUBDIR = /tests/xcodeproj;
+				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-UnitTests";
 				SUPPORTS_MACCATALYST = 0;

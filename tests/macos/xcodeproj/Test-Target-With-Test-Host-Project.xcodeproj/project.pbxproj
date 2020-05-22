@@ -8,15 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		27550490979301B3C6C0E22F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FE939800D5E84FA4B194548D /* main.m */; };
-		2F9A10F817DE3E3FE6BC79C3 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD473CE9E3A5EEC0174AF150 /* empty.swift */; };
 		4541759E59ED815D18798894 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FE939800D5E84FA4B194548D /* main.m */; };
-		45E4408B2BA66DA5E83B1C0B /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8874B671013FB5B4C9C79FD3 /* empty.swift */; };
-		4BE8D3B252D03AD39D63C111 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A8E4B392F6EEBF0A35A0F879 /* main.m */; };
-		4C7756BF566070C70C038BAB /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E79C1D1FA47E943C6087AB /* test.swift */; };
-		4E51B96ABB0B002D930C80B0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A8E4B392F6EEBF0A35A0F879 /* main.m */; };
-		86B0CD6DCD51A9A67738FE6D /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8874B671013FB5B4C9C79FD3 /* empty.swift */; };
-		C201D4ABA25811A92EE34DEE /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = E886E7D4877EDB0D5A01D849 /* test.m */; };
-		E95D479FDACED21BA1CB90BF /* empty.m in Sources */ = {isa = PBXBuildFile; fileRef = 7979BB10702E797F46699EE7 /* empty.m */; };
+		48C6C9814CEEF1CACD6D55A0 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035030AE3B7F41C97A1EE910 /* empty.swift */; };
+		50B299F156375674909D044A /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035030AE3B7F41C97A1EE910 /* empty.swift */; };
+		55E46FEA2FF714E40EA51316 /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = 2263A980666D293D7413BE92 /* test.m */; };
+		68F6C55581B050CEA9AB6AFF /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246AA4985E50044D3CD8228A /* test.swift */; };
+		B8F9F9CA8BCC4CFF09734974 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B65EED0A5FCC9038424593 /* empty.swift */; };
+		E2DE5A172CF0A78BF06C0140 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C55810C4D90EF86058DB06A /* main.m */; };
+		E8357250994F43CFA07418DF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C55810C4D90EF86058DB06A /* main.m */; };
+		EB57E581728375686EE2959C /* empty.m in Sources */ = {isa = PBXBuildFile; fileRef = F42CC7E6159DCCC28D045A6C /* empty.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,22 +38,22 @@
 
 /* Begin PBXFileReference section */
 		0052687FF99FFC1CF0644A94 /* iOS-10.0-AppHost.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "iOS-10.0-AppHost.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		0E1A2D407EDFADA150631F26 /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = resource_bundle.plist; path = ../../rules/library/resource_bundle.plist; sourceTree = "<group>"; };
+		035030AE3B7F41C97A1EE910 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = empty.swift; path = "../../ios/unit-test/test-imports-app/empty.swift"; sourceTree = "<group>"; };
+		08D20BAAC5B1A41903E13B27 /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Header.h; path = "../../ios/unit-test/test-imports-app/Header.h"; sourceTree = "<group>"; };
+		0C55810C4D90EF86058DB06A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "../../ios/unit-test/test-imports-app/main.m"; sourceTree = "<group>"; };
+		0E1A2D407EDFADA150631F26 /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = resource_bundle.plist; path = ../../../rules/library/resource_bundle.plist; sourceTree = "<group>"; };
 		1AC28A58E3C7738C108353BE /* DefaultHosted.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = DefaultHosted.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		2238C255CB7ED2E848A7FC51 /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = common.pch; path = ../../rules/library/common.pch; sourceTree = "<group>"; };
-		30E79C1D1FA47E943C6087AB /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = test.swift; path = "../test/ios/test-imports-app/test.swift"; sourceTree = "<group>"; };
+		2238C255CB7ED2E848A7FC51 /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = common.pch; path = ../../../rules/library/common.pch; sourceTree = "<group>"; };
+		2263A980666D293D7413BE92 /* test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = test.m; path = "../../ios/unit-test/test-imports-app/test.m"; sourceTree = "<group>"; };
+		246AA4985E50044D3CD8228A /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = test.swift; path = "../../ios/unit-test/test-imports-app/test.swift"; sourceTree = "<group>"; };
+		31B65EED0A5FCC9038424593 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = empty.swift; path = "../../ios/unit-test/empty.swift"; sourceTree = "<group>"; };
 		61CE3CBBAD0BFAFC0953377B /* TestImports-App.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "TestImports-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6D1EF392512C1F921EE7760C /* Header2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Header2.h; path = "../test/ios/test-imports-app/Header2.h"; sourceTree = "<group>"; };
-		7979BB10702E797F46699EE7 /* empty.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = empty.m; path = ../test/ios/empty.m; sourceTree = "<group>"; };
-		8874B671013FB5B4C9C79FD3 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = empty.swift; path = "../test/ios/test-imports-app/empty.swift"; sourceTree = "<group>"; };
+		6725F1A1E5A5BAFC1EE01F00 /* Header2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Header2.h; path = "../../ios/unit-test/test-imports-app/Header2.h"; sourceTree = "<group>"; };
 		9E7E8177A9991D407C446EF6 /* TestImports-Unit-Tests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "TestImports-Unit-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A8E4B392F6EEBF0A35A0F879 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "../test/ios/test-imports-app/main.m"; sourceTree = "<group>"; };
-		AD473CE9E3A5EEC0174AF150 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = empty.swift; path = ../test/ios/empty.swift; sourceTree = "<group>"; };
-		BCDD3D2387B5DA5045A0D600 /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = Contents.json; path = ../../rules/test_host_app/AssetCatalogFixture.xcassets/Contents.json; sourceTree = "<group>"; };
-		CD38E215541F1766D3CAFBEE /* ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ios.entitlements; path = ../../rules/test_host_app/ios.entitlements; sourceTree = "<group>"; };
-		E8479B9493E57B4235186D21 /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Header.h; path = "../test/ios/test-imports-app/Header.h"; sourceTree = "<group>"; };
-		E886E7D4877EDB0D5A01D849 /* test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = test.m; path = "../test/ios/test-imports-app/test.m"; sourceTree = "<group>"; };
-		FE939800D5E84FA4B194548D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../../rules/test_host_app/main.m; sourceTree = "<group>"; };
+		BCDD3D2387B5DA5045A0D600 /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = Contents.json; path = ../../../rules/test_host_app/AssetCatalogFixture.xcassets/Contents.json; sourceTree = "<group>"; };
+		CD38E215541F1766D3CAFBEE /* ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ios.entitlements; path = ../../../rules/test_host_app/ios.entitlements; sourceTree = "<group>"; };
+		F42CC7E6159DCCC28D045A6C /* empty.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = empty.m; path = "../../ios/unit-test/empty.m"; sourceTree = "<group>"; };
+		FE939800D5E84FA4B194548D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../../../rules/test_host_app/main.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -77,6 +77,19 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		47EF8E9B0D250B2E77846871 /* test-imports-app */ = {
+			isa = PBXGroup;
+			children = (
+				035030AE3B7F41C97A1EE910 /* empty.swift */,
+				08D20BAAC5B1A41903E13B27 /* Header.h */,
+				6725F1A1E5A5BAFC1EE01F00 /* Header2.h */,
+				0C55810C4D90EF86058DB06A /* main.m */,
+				2263A980666D293D7413BE92 /* test.m */,
+				246AA4985E50044D3CD8228A /* test.swift */,
+			);
+			name = "test-imports-app";
+			sourceTree = "<group>";
+		};
 		50E12C023D675E3BA9A6FDFA /* AssetCatalogFixture.xcassets */ = {
 			isa = PBXGroup;
 			children = (
@@ -94,19 +107,6 @@
 			);
 			sourceTree = "<group>";
 		};
-		99554F1D18BBAF389C9DEA73 /* test-imports-app */ = {
-			isa = PBXGroup;
-			children = (
-				8874B671013FB5B4C9C79FD3 /* empty.swift */,
-				E8479B9493E57B4235186D21 /* Header.h */,
-				6D1EF392512C1F921EE7760C /* Header2.h */,
-				A8E4B392F6EEBF0A35A0F879 /* main.m */,
-				E886E7D4877EDB0D5A01D849 /* test.m */,
-				30E79C1D1FA47E943C6087AB /* test.swift */,
-			);
-			name = "test-imports-app";
-			sourceTree = "<group>";
-		};
 		9E8242FA9938A76F7FEA9FF8 /* rules */ = {
 			isa = PBXGroup;
 			children = (
@@ -116,20 +116,10 @@
 			name = rules;
 			sourceTree = "<group>";
 		};
-		9FB8C5E16B02DF101A5FA2CB /* ios */ = {
-			isa = PBXGroup;
-			children = (
-				7979BB10702E797F46699EE7 /* empty.m */,
-				AD473CE9E3A5EEC0174AF150 /* empty.swift */,
-				99554F1D18BBAF389C9DEA73 /* test-imports-app */,
-			);
-			name = ios;
-			sourceTree = "<group>";
-		};
 		A072D583870C5D55D7FDE9AA /* tests */ = {
 			isa = PBXGroup;
 			children = (
-				E9F92800184FC77B87481E1F /* test */,
+				FFF381863D683B5DD79A5D6F /* ios */,
 			);
 			name = tests;
 			sourceTree = "<group>";
@@ -144,12 +134,22 @@
 			name = test_host_app;
 			sourceTree = "<group>";
 		};
-		E9F92800184FC77B87481E1F /* test */ = {
+		D09C5AAC3E8F31379C981C8F /* unit-test */ = {
 			isa = PBXGroup;
 			children = (
-				9FB8C5E16B02DF101A5FA2CB /* ios */,
+				F42CC7E6159DCCC28D045A6C /* empty.m */,
+				31B65EED0A5FCC9038424593 /* empty.swift */,
+				47EF8E9B0D250B2E77846871 /* test-imports-app */,
 			);
-			name = test;
+			name = "unit-test";
+			sourceTree = "<group>";
+		};
+		FFF381863D683B5DD79A5D6F /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				D09C5AAC3E8F31379C981C8F /* unit-test */,
+			);
+			name = ios;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -274,7 +274,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build tests/test/ios/test-imports-app:TestImports-Unit-Tests\n$BAZEL_INSTALLER\n";
+			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build tests/ios/unit-test/test-imports-app:TestImports-Unit-Tests\n$BAZEL_INSTALLER\n";
 		};
 		2756FB505F15157D82C9069E /* Build with bazel */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -310,7 +310,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build tests/test/ios/test-imports-app:TestImports-App\n$BAZEL_INSTALLER\n";
+			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build tests/ios/unit-test/test-imports-app:TestImports-App\n$BAZEL_INSTALLER\n";
 		};
 		6DBC122A6C2C8B5D5805E16D /* Build with bazel */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -328,7 +328,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build tests/test/ios:DefaultHosted\n$BAZEL_INSTALLER\n";
+			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build tests/ios/unit-test:DefaultHosted\n$BAZEL_INSTALLER\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -337,10 +337,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				86B0CD6DCD51A9A67738FE6D /* empty.swift in Sources */,
-				4E51B96ABB0B002D930C80B0 /* main.m in Sources */,
-				C201D4ABA25811A92EE34DEE /* test.m in Sources */,
-				4C7756BF566070C70C038BAB /* test.swift in Sources */,
+				50B299F156375674909D044A /* empty.swift in Sources */,
+				E8357250994F43CFA07418DF /* main.m in Sources */,
+				55E46FEA2FF714E40EA51316 /* test.m in Sources */,
+				68F6C55581B050CEA9AB6AFF /* test.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,8 +348,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E95D479FDACED21BA1CB90BF /* empty.m in Sources */,
-				2F9A10F817DE3E3FE6BC79C3 /* empty.swift in Sources */,
+				EB57E581728375686EE2959C /* empty.m in Sources */,
+				B8F9F9CA8BCC4CFF09734974 /* empty.swift in Sources */,
 				27550490979301B3C6C0E22F /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -358,8 +358,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				45E4408B2BA66DA5E83B1C0B /* empty.swift in Sources */,
-				4BE8D3B252D03AD39D63C111 /* main.m in Sources */,
+				48C6C9814CEEF1CACD6D55A0 /* empty.swift in Sources */,
+				E2DE5A172CF0A78BF06C0140 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,7 +390,7 @@
 		052452BF65BFAB2A7B6D74A2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BAZEL_BIN_SUBDIR = "/tests/test/ios/test-imports-app";
+				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "TestImports-Unit-Tests";
 				SUPPORTS_MACCATALYST = 0;
@@ -402,7 +402,7 @@
 		2EF540551384D9E7163E1CF4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BAZEL_BIN_SUBDIR = "/tests/test/ios/test-imports-app";
+				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.TestImports-App";
@@ -413,7 +413,7 @@
 		340C72FB682660DC9C8AF45B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BAZEL_BIN_SUBDIR = "/tests/test/ios/test-imports-app";
+				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "TestImports-Unit-Tests";
 				SUPPORTS_MACCATALYST = 0;
@@ -425,7 +425,7 @@
 		35319915CD86528CFD9DACD6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BAZEL_BIN_SUBDIR = /tests/test/ios;
+				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = DefaultHosted;
 				SUPPORTS_MACCATALYST = 0;
@@ -437,7 +437,7 @@
 		607F6A979BCB270BD2846986 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BAZEL_BIN_SUBDIR = "/tests/test/ios/test-imports-app";
+				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.TestImports-App";
@@ -451,7 +451,7 @@
 				BAZEL_INSTALLER = $BAZEL_STUBS_DIR/tools/xcodeproj_shims/installer;
 				BAZEL_PATH = bazelisk;
 				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
-				BAZEL_WORKSPACE_ROOT = $SRCROOT/../..;
+				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../..;
 				CC = "$BAZEL_STUBS_DIR/clang-stub";
 				CLANG_ANALYZER_EXEC = $CC;
 				CODE_SIGNING_ALLOWED = 0;
@@ -494,7 +494,7 @@
 				BAZEL_INSTALLER = $BAZEL_STUBS_DIR/tools/xcodeproj_shims/installer;
 				BAZEL_PATH = bazelisk;
 				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
-				BAZEL_WORKSPACE_ROOT = $SRCROOT/../..;
+				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../..;
 				CC = "$BAZEL_STUBS_DIR/clang-stub";
 				CLANG_ANALYZER_EXEC = $CC;
 				CODE_SIGNING_ALLOWED = 0;
@@ -512,7 +512,7 @@
 		E23B39181F1860849E079269 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BAZEL_BIN_SUBDIR = /tests/test/ios;
+				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = DefaultHosted;
 				SUPPORTS_MACCATALYST = 0;
