@@ -10,6 +10,8 @@ _RULES = [
     "library",
     "substitute_build_settings",
     "test",
+    "framework_builder",
+    "apple_patched",
 ]
 
 # needs --nocheck_visibility because otherwise

@@ -1,0 +1,84 @@
+load("//rules:test.bzl", "ios_unit_test")
+load("//rules:xcodeproj.bzl", "xcodeproj")
+load("@build_bazel_rules_apple//apple/testing/default_runner:ios_test_runner.bzl", default_ios_test_runner = "ios_test_runner")
+
+ios_unit_test(
+    name = "Single-Application-UnitTests",
+    srcs = ["test.swift"],
+    args = ["-h"],
+    env = {
+        "test_envvar_key1": "test_envvar_value1",
+        "test_envvar_key2": "test_envvar_value2",
+    },
+    minimum_os_version = "11.0",
+    module_name = "Single_Application_UnitTests",
+    sdk_frameworks = ["XCTest"],
+)
+
+default_ios_test_runner(
+    name = "iPhone-X__13.2",
+    device_type = "iPhone X",
+    os_version = "13.2",
+    visibility = ["//visibility:public"],
+)
+
+default_ios_test_runner(
+    name = "iPad-Air-2__12.4",
+    device_type = "iPad Air 2",
+    os_version = "12.4",
+    visibility = ["//visibility:public"],
+)
+
+ios_unit_test(
+    name = "Single-Application-RunnableTestSuite",
+    srcs = ["test.swift"],
+    args = ["-h"],
+    env = {
+        "test_envvar_key1": "test_envvar_value1",
+        "test_envvar_key2": "test_envvar_value2",
+    },
+    minimum_os_version = "11.0",
+    module_name = "Single_Application_RunnableTestSuite",
+    runners = [
+        "iPhone-X__13.2",
+        "iPad-Air-2__12.4",
+    ],
+    sdk_frameworks = ["XCTest"],
+)
+
+xcodeproj(
+    name = "Single-Application-Project-DirectTargetsOnly",
+    testonly = True,
+    bazel_path = "bazelisk",
+    include_transitive_targets = False,
+    scheme_existing_envvar_overrides = {"test_envvar_key2": "test_envvar_value2_overridenvalue"},
+    deps = [
+        "//rules/test_host_app:iOS-12.0-AppHost",
+        "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite",
+        "//tests/macos/xcodeproj:Single-Application-UnitTests",
+    ],
+)
+
+xcodeproj(
+    name = "Single-Application-Project-AllTargets",
+    testonly = True,
+    bazel_path = "bazelisk",
+    include_transitive_targets = True,
+    scheme_existing_envvar_overrides = {"test_envvar_key2": "test_envvar_value2_overridenvalue"},
+    deps = [
+        "//rules/test_host_app:iOS-12.0-AppHost",
+        "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite",
+        "//tests/macos/xcodeproj:Single-Application-UnitTests",
+    ],
+)
+
+xcodeproj(
+    name = "Test-Target-With-Test-Host-Project",
+    testonly = True,
+    bazel_path = "bazelisk",
+    include_transitive_targets = False,
+    deps = [
+        "//tests/ios/unit-test:DefaultHosted",
+        "//tests/ios/unit-test/test-imports-app:TestImports-Unit-Tests",
+    ],
+)

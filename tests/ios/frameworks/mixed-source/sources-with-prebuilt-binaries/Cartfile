@@ -1,0 +1,2 @@
+# carthage bootstrap --no-use-binaries --platform iOS --cache-builds
+github "RedMadRobot/input-mask-ios" == 4.2.0
