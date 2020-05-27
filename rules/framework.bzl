@@ -209,23 +209,6 @@ def _apple_framework_packaging_impl(ctx):
     else:
         ctx.actions.write(framework_manifest, "# Empty framework\n")
 
-    hmap_file = ctx.actions.declare_file(framework_name + "_framework_public_hmap.hmap")
-    args = ctx.actions.args()
-    args.add("--output", hmap_file.path)
-    args.add("--namespace", framework_name)
-    args.add_all(header_in)
-    args.add_all(private_header_in)
-    args.set_param_file_format("multiline")
-    args.use_param_file("@%s")
-
-    # write headermap
-    ctx.actions.run(
-        mnemonic = "HmapCreate",
-        arguments = [args],
-        executable = ctx.executable._headermap_builder,
-        outputs = [hmap_file],
-    )
-
     # gather objc provider fields
     objc_provider_fields = {
         "providers": [dep[apple_common.Objc] for dep in ctx.attr.transitive_deps],
@@ -236,7 +219,7 @@ def _apple_framework_packaging_impl(ctx):
             direct = [framework_root],
         )
     _add_to_dict_if_present(objc_provider_fields, "header", depset(
-        direct = header_out + private_header_out + modulemap_out + [hmap_file],
+        direct = header_out + private_header_out + modulemap_out,
     ))
     _add_to_dict_if_present(objc_provider_fields, "module_map", depset(
         direct = modulemap_out,

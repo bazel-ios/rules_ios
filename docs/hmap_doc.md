@@ -44,3 +44,25 @@ Propagates header maps
 | files |  depset with headermaps    |
 
 
+<a name="#hmap.make_hmap"></a>
+
+## hmap.make_hmap
+
+<pre>
+hmap.make_hmap(<a href="#hmap.make_hmap-actions">actions</a>, <a href="#hmap.make_hmap-headermap_builder">headermap_builder</a>, <a href="#hmap.make_hmap-output">output</a>, <a href="#hmap.make_hmap-namespace">namespace</a>, <a href="#hmap.make_hmap-hdrs_lists">hdrs_lists</a>)
+</pre>
+
+Makes an hmap file.
+
+**PARAMETERS**
+
+
+| Name  | Description | Default Value |
+| :-------------: | :-------------: | :-------------: |
+| actions |  a ctx.actions struct   |  none |
+| headermap_builder |  an executable pointing to @bazel_build_rules_ios//rules/hmap:hmaptool   |  none |
+| output |  the output file that will contain the built hmap   |  none |
+| namespace |  the prefix to be used for header imports   |  none |
+| hdrs_lists |  an array of enumerables containing headers to be added to the hmap   |  none |
+
+
