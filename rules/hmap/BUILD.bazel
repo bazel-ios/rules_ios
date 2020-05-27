@@ -8,21 +8,6 @@ HMAP_COPTS = [
 
 HMAP_VISIBILITY = ["//visibility:public"]
 
-cc_binary(
-    name = "hmaptool",
-    srcs = [
-        "hmap.c",
-        "hmap.h",
-        "hmapbuild.c",
-        "uthash.h",
-    ],
-    copts = HMAP_COPTS,
-    visibility = HMAP_VISIBILITY,
-    deps = [
-        ":lines",
-    ],
-)
-
 cc_library(
     name = "lines",
     srcs = [
@@ -32,28 +17,49 @@ cc_library(
         "lines.h",
     ],
     copts = ["-Wno-parentheses"],
-    visibility = HMAP_VISIBILITY,
 )
 
-cc_binary(
-    name = "hmapdump",
+cc_library(
+    name = "hmap",
     srcs = [
         "hmap.c",
-        "hmap.h",
-        "hmapdump.c",
         "uthash.h",
+    ],
+    hdrs = [
+        "hmap.h",
     ],
     copts = HMAP_COPTS,
     visibility = HMAP_VISIBILITY,
 )
 
+cc_binary(
+    name = "hmaptool",
+    srcs = [
+        "hmapbuild.c",
+    ],
+    copts = HMAP_COPTS,
+    visibility = HMAP_VISIBILITY,
+    deps = [
+        ":hmap",
+        ":lines",
+    ],
+)
+
+cc_binary(
+    name = "hmapdump",
+    srcs = [
+        "hmapdump.c",
+    ],
+    copts = HMAP_COPTS,
+    visibility = HMAP_VISIBILITY,
+    deps = ["hmap"],
+)
+
 cc_test(
     name = "hmaptest",
     srcs = [
-        "hmap.c",
-        "hmap.h",
         "hmaptest.c",
-        "uthash.h",
     ],
     visibility = ["//visibility:private"],
+    deps = ["hmap"],
 )
