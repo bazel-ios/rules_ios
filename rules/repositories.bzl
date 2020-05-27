@@ -7,6 +7,7 @@ load(
 load(
     "@bazel_tools//tools/build_defs/repo:http.bzl",
     "http_archive",
+    "http_file",
 )
 
 def _maybe(repo_rule, name, **kwargs):
@@ -76,4 +77,13 @@ native_binary(
         sha256 = "053ed047424a481231e68be3346651a3a91a2d7e3323c52d65ac3f5324b9c109",
         strip_prefix = "xcodegen",
         urls = ["https://github.com/yonaskolb/XcodeGen/releases/download/2.13.0/xcodegen.zip"],
+
+    # Pinned because 0.2.12 is broken on macOS 10.14
+    # https://github.com/google/xctestrunner/issues/18
+    _maybe(
+        http_file,
+        name = "xctestrunner",
+        executable = 1,
+        sha256 = "9e46d5782a9dc7d40bc93c99377c091886c180b8c4ffb9f79a19a58e234cdb09",
+        urls = ["https://github.com/google/xctestrunner/releases/download/0.2.10/ios_test_runner.par"],
     )
