@@ -7,6 +7,36 @@ HeaderMapInfo = provider(
     },
 )
 
+def _make_hmap(actions, headermap_builder, output, namespace, hdrs_lists):
+    """Makes an hmap file.
+
+    Args:
+        actions: a ctx.actions struct
+        headermap_builder: an executable pointing to @bazel_build_rules_ios//rules/hmap:hmaptool
+        output: the output file that will contain the built hmap
+        namespace: the prefix to be used for header imports
+        hdrs_lists: an array of enumerables containing headers to be added to the hmap
+    """
+
+    args = actions.args()
+    if namespace:
+        args.add("--namespace", namespace)
+
+    args.add("--output", output)
+
+    for hdrs in hdrs_lists:
+        args.add_all(hdrs)
+
+    args.set_param_file_format(format = "multiline")
+    args.use_param_file("@%s")
+
+    actions.run(
+        mnemonic = "HmapCreate",
+        arguments = [args],
+        executable = headermap_builder,
+        outputs = [output],
+    )
+
 def _make_headermap_impl(ctx):
     """Implementation of the headermap() rule.
 
@@ -19,30 +49,22 @@ def _make_headermap_impl(ctx):
 
     :return: provider with the info for this rule
     """
+    hdrs_lists = [ctx.files.hdrs]
 
-    # Add a list of headermaps in text or hmap format
-    args = ctx.actions.args()
-    if ctx.attr.namespace:
-        args.add("--namespace", ctx.attr.namespace)
-
-    args.add("--output", ctx.outputs.headermap.path)
-
-    args.add_all(ctx.files.hdrs)
     for provider in ctx.attr.direct_hdr_providers:
         if apple_common.Objc in provider:
-            args.add_all(provider[apple_common.Objc].direct_headers)
+            hdrs_lists.append(provider[apple_common.Objc].direct_headers)
         elif CcInfo in provider:
-            args.add_all(provider[CcInfo].compilation_context.direct_headers)
+            hdrs_lists.append(provider[CcInfo].compilation_context.direct_headers)
         else:
             fail("direct_hdr_provider %s must contain either 'CcInfo' or 'objc' provider" % provider)
 
-    args.set_param_file_format(format = "multiline")
-    args.use_param_file("@%s")
-    ctx.actions.run(
-        mnemonic = "HmapCreate",
-        arguments = [args],
-        executable = ctx.executable._headermap_builder,
-        outputs = [ctx.outputs.headermap],
+    hmap.make_hmap(
+        actions = ctx.actions,
+        headermap_builder = ctx.executable._headermap_builder,
+        output = ctx.outputs.headermap,
+        namespace = ctx.attr.namespace,
+        hdrs_lists = hdrs_lists,
     )
 
     objc_provider = apple_common.new_objc_provider(
@@ -94,4 +116,8 @@ suitable for passing to clang.
 This can be used to allow headers to be imported at a consistent path,
 regardless of the package structure being used.
     """,
+)
+
+hmap = struct(
+    make_hmap = _make_hmap,
 )
