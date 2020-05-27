@@ -1,6 +1,6 @@
-load("//rules:framework.bzl", "apple_framework")
-load("//rules:apple_patched.bzl", "apple_dynamic_framework_import_patched")
-load("//rules:test.bzl", "ios_unit_test")
+load("@build_bazel_rules_ios//rules:framework.bzl", "apple_framework")
+load("@build_bazel_rules_ios//rules:apple_patched.bzl", "apple_dynamic_framework_import_patched")
+load("@build_bazel_rules_ios//rules:test.bzl", "ios_unit_test")
 
 apple_dynamic_framework_import_patched(
     name = "InputMask",
