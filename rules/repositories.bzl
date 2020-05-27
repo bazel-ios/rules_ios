@@ -28,16 +28,16 @@ def rules_ios_dependencies():
     _maybe(
         git_repository,
         name = "build_bazel_rules_apple",
-        commit = "193d258479e891bf286bf884d52ac779c83be206",
-        shallow_since = "1589211273 -0700",
+        commit = "74eca5857a136b9f1e2020886be76b791eb08231",
+        shallow_since = "1590530217 -0700",
         remote = "https://github.com/bazelbuild/rules_apple.git",
     )
 
     _maybe(
         git_repository,
         name = "build_bazel_rules_swift",
-        commit = "35ef1d6ebd7adb8d20c096bb4355cf41c9a0b5cf",
-        shallow_since = "1588778892 -0700",
+        commit = "6408d85da799ec2af053c4e2883dce3ce6d30f08",
+        shallow_since = "1589833120 -0700",
         remote = "https://github.com/bazelbuild/rules_swift.git",
     )
 
