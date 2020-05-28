@@ -55,14 +55,14 @@ load("@io_bazel_stardoc//:setup.bzl", "stardoc_repositories")
 
 stardoc_repositories()
 
-load("//rules:framework_builder.bzl", "build_carthage_frameworks", "build_cocoapods_frameworks")
+load("@build_bazel_rules_ios//repository_rules:framework_builder.bzl", "build_carthage_frameworks", "build_cocoapods_frameworks")
 
 build_carthage_frameworks(
     name = "carthage",
-    directory = "tests/ios/frameworks/mixed-source/sources-with-prebuilt-binaries",
+    directory = "tests/ios/frameworks/sources-with-prebuilt-binaries",
 )
 
 build_cocoapods_frameworks(
     name = "cocoapods",
-    directory = "tests/ios/frameworks/mixed-source/sources-with-prebuilt-binaries",
+    directory = "tests/ios/frameworks/sources-with-prebuilt-binaries",
 )

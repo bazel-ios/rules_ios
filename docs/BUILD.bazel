@@ -10,8 +10,11 @@ _RULES = [
     "library",
     "substitute_build_settings",
     "test",
-    "framework_builder",
     "apple_patched",
+]
+
+_REPOSITORY_RULES = [
+    "framework_builder",
 ]
 
 # needs --nocheck_visibility because otherwise
@@ -57,6 +60,21 @@ bzl_library(
         ],
     )
     for name in _RULES
+]
+
+[
+    stardoc(
+        name = "%s-docs" % name,
+        out = "%s_doc.md" % name,
+        input = "//repository_rules:%s.bzl" % name,
+        tags = ["manual"],
+        visibility = ["//:__pkg__"],
+        deps = [
+            ":data",
+            ":rules-apple",
+        ],
+    )
+    for name in _REPOSITORY_RULES
 ]
 
 filegroup(
