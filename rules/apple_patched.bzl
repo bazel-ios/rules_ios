@@ -1,10 +1,14 @@
 """This file contains drop-in replacements for rules in the rules_apple repository"""
 
-load("@build_bazel_rules_apple//apple:apple.bzl", "apple_dynamic_framework_import", "apple_static_framework_import")
+load(
+    "@build_bazel_rules_apple//apple:apple.bzl",
+    apple_dynamic_framework_import_original = "apple_dynamic_framework_import",
+    apple_static_framework_import_original = "apple_static_framework_import",
+)
 load("@build_bazel_rules_apple//apple/internal:apple_framework_import.bzl", "AppleFrameworkImportInfo")
 load("@build_bazel_rules_swift//swift/internal:providers.bzl", "SwiftUsageInfo")
 
-def apple_dynamic_framework_import_patched(name, **kwargs):
+def apple_dynamic_framework_import(name, **kwargs):
     """Patches an apple_dynamic_framework_import target based on the problems reported in https://github.com/bazel-ios/rules_ios/issues/55
 
     Args: same as the ones of apple_dynamic_framework_import
@@ -14,7 +18,7 @@ def apple_dynamic_framework_import_patched(name, **kwargs):
     tags = kwargs.pop("tags", [])
 
     legacy_target_label = "_" + name
-    apple_dynamic_framework_import(
+    apple_dynamic_framework_import_original(
         name = legacy_target_label,
         tags = tags + ["manual"],
         **kwargs
@@ -28,7 +32,7 @@ def apple_dynamic_framework_import_patched(name, **kwargs):
         tags = tags,
     )
 
-def apple_static_framework_import_patched(name, **kwargs):
+def apple_static_framework_import(name, **kwargs):
     """Patches an apple_static_framework_import target based on the problems reported in https://github.com/bazel-ios/rules_ios/issues/55
 
     Args: same as the ones of apple_static_framework_import
@@ -38,7 +42,7 @@ def apple_static_framework_import_patched(name, **kwargs):
     tags = kwargs.get("tags", [])
 
     legacy_target_label = "_" + name
-    apple_static_framework_import(
+    apple_static_framework_import_original(
         name = legacy_target_label,
         tags = tags + ["manual"],
         **kwargs

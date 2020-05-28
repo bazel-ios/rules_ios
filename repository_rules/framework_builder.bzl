@@ -62,25 +62,33 @@ def _get_absolute_paths(ctx, file_labels):
 
 def build_carthage_frameworks(
         name,
+        carthage_version,
+        git_repository_url = "https://github.com/Carthage/Carthage.git",
         directory = "",
         files = ["Cartfile"],
-        cmd = "carthage bootstrap --no-use-binaries --platform iOS",
+        install_cmd = "git clone --branch %s --depth 1 %s carthage_repo",
+        run_cmd = "swift run --package-path carthage_repo carthage bootstrap --no-use-binaries --platform iOS",
         quiet = quiet_default):
     """Builds the frameworks for the libraries specified in a Cartfile
 
     Args:
         name: the rule name
+        carthage_version: the carthage version to use
+        git_repository_url: the carthage repository
         directory: the path to the directory containing the carthage setup
         files: the files required for carthage to succeed
-        cmd: the command to run carthage
+        install_cmd: the command to install carthage
+        run_cmd: the command to run carthage
         quiet: if true, it will show the output of running carthage in the command line
     """
+
     _prebuilt_frameworks_importer(
         implementation = _carthage_impl,
         name = name,
         directory = directory,
         files = files,
-        cmd = cmd,
+        install_cmd = install_cmd % (carthage_version, git_repository_url),
+        run_cmd = run_cmd,
         quiet = quiet,
     )
 
@@ -89,7 +97,8 @@ def _carthage_impl(ctx):
 
     absolut_files = _get_absolute_paths(ctx, ctx.attr.file_labels)
     _copy_files(ctx, absolut_files, wd)
-    _execute(ctx, ctx.attr.cmd)
+    _execute(ctx, ctx.attr.install_cmd)
+    _execute(ctx, ctx.attr.run_cmd)
 
     buildfile_content = []
 
@@ -117,7 +126,8 @@ def build_cocoapods_frameworks(
         name,
         directory = "",
         files = ["Podfile", "Gemfile"],
-        cmd = "bundle install; bundle exec pod install",
+        install_cmd = "bundle install",
+        run_cmd = "bundle exec pod install",
         quiet = quiet_default):
     """Builds the frameworks for the pods specified in a Podfile that are using the [cocoapods-binary plugin](https://github.com/leavez/cocoapods-binary)
 
@@ -125,7 +135,8 @@ def build_cocoapods_frameworks(
         name: the rule name
         directory: the path to the directory containing the cocoapods setup
         files: the files required for cocoapods to succeed
-        cmd: the command to run cocoapods
+        install_cmd: the command to install cocoapods
+        run_cmd: the command to run cocoapods
         quiet: if true, it will show the output of running cocoapods in the command line
     """
     _prebuilt_frameworks_importer(
@@ -133,7 +144,8 @@ def build_cocoapods_frameworks(
         name = name,
         directory = directory,
         files = files,
-        cmd = cmd,
+        install_cmd = install_cmd,
+        run_cmd = run_cmd,
         quiet = quiet,
     )
 
@@ -145,7 +157,8 @@ def _cocoapods_impl(ctx):
 
     absolut_files = _get_absolute_paths(ctx, ctx.attr.file_labels)
     _copy_files(ctx, absolut_files, wd)
-    _execute(ctx, ctx.attr.cmd)
+    _execute(ctx, ctx.attr.install_cmd)
+    _execute(ctx, ctx.attr.run_cmd)
 
     buildfile_content = []
     prebuild_subpath = "Pods/_Prebuild/GeneratedFrameworks"
@@ -167,7 +180,8 @@ def _prebuilt_frameworks_importer(
         name,
         directory,
         files,
-        cmd,
+        install_cmd,
+        run_cmd,
         quiet):
     prebuilt_frameworks_importer = repository_rule(
         implementation = implementation,
@@ -176,7 +190,11 @@ def _prebuilt_frameworks_importer(
                 mandatory = True,
                 doc = "The files from the main WORKSPACE required by the tool that will build the frameworks (cocoapods/carthage)",
             ),
-            "cmd": attr.string(
+            "install_cmd": attr.string(
+                mandatory = True,
+                doc = "The command for installing the tool that will build the frameworks (cocoapods/carthage)",
+            ),
+            "run_cmd": attr.string(
                 mandatory = True,
                 doc = "The command for running the tool that will build the frameworks (cocoapods/carthage)",
             ),
@@ -190,7 +208,8 @@ def _prebuilt_frameworks_importer(
 
     prebuilt_frameworks_importer(
         name = name,
-        cmd = cmd,
+        install_cmd = install_cmd,
+        run_cmd = run_cmd,
         file_labels = ["//" + directory + ":" + file for file in files],
         quiet = quiet,
     )
