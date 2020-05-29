@@ -1,6 +1,6 @@
 """This file contains rules to build framework binaries from your podfile or cartfile"""
 
-quiet_default = True  # The default verbose level when running this rules
+verbose_default = False  # The default verbose level when running this rules
 
 def _create_buildfile_content(root, frameworks_subpath):
     """Creates the content of the generated build file
@@ -39,7 +39,7 @@ def _copy_files(ctx, files, destination):
 def _execute(ctx, cmd):
     """Execute the specified command"""
 
-    result = ctx.execute(["sh", "-c", cmd], quiet = ctx.attr.quiet)
+    result = ctx.execute(["sh", "-c", cmd], quiet = not ctx.attr.verbose)
     if result.return_code != 0:
         fail(
             """
@@ -62,26 +62,35 @@ def _get_absolute_paths(ctx, file_labels):
 
 def build_carthage_frameworks(
         name,
+        carthage_version,
+        git_repository_url = "https://github.com/Carthage/Carthage.git",
         directory = "",
         files = ["Cartfile"],
-        cmd = "carthage bootstrap --no-use-binaries --platform iOS",
-        quiet = quiet_default):
-    """Builds the frameworks for the libraries specified in a Cartfile
+        cmd = """
+        git clone --branch %s --depth 1 %s carthage_repo
+        swift run --package-path carthage_repo carthage bootstrap --no-use-binaries --platform iOS
+        """,
+        verbose = verbose_default):
+    """
+    Builds the frameworks for the libraries specified in a Cartfile
 
     Args:
         name: the rule name
+        carthage_version: the carthage version to use
+        git_repository_url: the carthage repository to use
         directory: the path to the directory containing the carthage setup
-        files: the files required for carthage to succeed
-        cmd: the command to run carthage
-        quiet: if true, it will show the output of running carthage in the command line
+        files: the files required for carthage to run
+        cmd: the command to run and install carthage
+        verbose: if true, it will show the output of running carthage in the command line
     """
+
     _prebuilt_frameworks_importer(
         implementation = _carthage_impl,
         name = name,
         directory = directory,
         files = files,
-        cmd = cmd,
-        quiet = quiet,
+        cmd = cmd % (carthage_version, git_repository_url),
+        verbose = verbose,
     )
 
 def _carthage_impl(ctx):
@@ -117,16 +126,20 @@ def build_cocoapods_frameworks(
         name,
         directory = "",
         files = ["Podfile", "Gemfile"],
-        cmd = "bundle install; bundle exec pod install",
-        quiet = quiet_default):
-    """Builds the frameworks for the pods specified in a Podfile that are using the [cocoapods-binary plugin](https://github.com/leavez/cocoapods-binary)
+        cmd = """
+        bundle install
+        bundle exec pod install
+        """,
+        verbose = verbose_default):
+    """
+    Builds the frameworks for the pods specified in a Podfile that are using the [cocoapods-binary plugin](https://github.com/leavez/cocoapods-binary)
 
     Args:
         name: the rule name
         directory: the path to the directory containing the cocoapods setup
-        files: the files required for cocoapods to succeed
-        cmd: the command to run cocoapods
-        quiet: if true, it will show the output of running cocoapods in the command line
+        files: the files required for cocoapods to run
+        cmd: the command to install and run cocoapods
+        verbose: if true, it will show the output of running cocoapods in the command line
     """
     _prebuilt_frameworks_importer(
         implementation = _cocoapods_impl,
@@ -134,7 +147,7 @@ def build_cocoapods_frameworks(
         directory = directory,
         files = files,
         cmd = cmd,
-        quiet = quiet,
+        verbose = verbose,
     )
 
 def _cocoapods_impl(ctx):
@@ -168,7 +181,7 @@ def _prebuilt_frameworks_importer(
         directory,
         files,
         cmd,
-        quiet):
+        verbose):
     prebuilt_frameworks_importer = repository_rule(
         implementation = implementation,
         attrs = {
@@ -180,9 +193,9 @@ def _prebuilt_frameworks_importer(
                 mandatory = True,
                 doc = "The command for running the tool that will build the frameworks (cocoapods/carthage)",
             ),
-            "quiet": attr.bool(
+            "verbose": attr.bool(
                 mandatory = True,
-                doc = "Make the build quiet",
+                doc = "Make the build verbose",
             ),
         },
         doc = "A repository rule that generates prebuilt binaries using an cocoapods or carthage",
@@ -190,7 +203,7 @@ def _prebuilt_frameworks_importer(
 
     prebuilt_frameworks_importer(
         name = name,
-        cmd = cmd,
         file_labels = ["//" + directory + ":" + file for file in files],
-        quiet = quiet,
+        cmd = cmd,
+        verbose = verbose,
     )

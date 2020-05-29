@@ -1,14 +1,14 @@
 load("@build_bazel_rules_ios//rules:framework.bzl", "apple_framework")
-load("@build_bazel_rules_ios//rules:apple_patched.bzl", "apple_dynamic_framework_import_patched")
+load("@build_bazel_rules_ios//rules:apple_patched.bzl", "apple_dynamic_framework_import")
 load("@build_bazel_rules_ios//rules:test.bzl", "ios_unit_test")
 
-apple_dynamic_framework_import_patched(
+apple_dynamic_framework_import(
     name = "InputMask",
     framework_imports = ["@carthage//:InputMask"],
     visibility = ["//visibility:public"],
 )
 
-apple_dynamic_framework_import_patched(
+apple_dynamic_framework_import(
     name = "SnapKit",
     framework_imports = ["@cocoapods//:SnapKit"],
     visibility = ["//visibility:public"],

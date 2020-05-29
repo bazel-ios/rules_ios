@@ -79,7 +79,7 @@ bzl_library(
 
 filegroup(
     name = "_all_docs",
-    srcs = ["%s-docs" % name for name in _RULES],
+    srcs = ["%s-docs" % name for name in (_RULES + _REPOSITORY_RULES)],
     tags = ["manual"],
 )
 
