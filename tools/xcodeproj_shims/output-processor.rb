@@ -12,10 +12,10 @@ class BazelOutputLine
 
   # Try to create a processed line based on a match rule, or a pass-through
   def self.from(line)
-    if (message_line = MessageLine.create_from(line))
+    if (message_line = CompilerMessageLine.create_from(line))
       message_line
-    elsif (snapshot_line = SnapshotLine.create_from(line))
-      snapshot_line
+    elsif (starlark_line = StarlarkLine.create_from(line))
+      starlark_line
     else
       BazelOutputLine.new(line)
     end
@@ -37,21 +37,21 @@ class RegexMatchLine < BazelOutputLine
 end
 
 # Documentation
-class SnapshotLine < RegexMatchLine
+class StarlarkLine < RegexMatchLine
   def initialize(line)
-    @regex = /^DEBUG: .+ Snapshot test (.+) (\(.+\)) does not specify it uses an app host$/
+    @regex = /^DEBUG: (.+.bzl)(:\d+:\d+:) (.+)$/
 
     super(line)
 
     return unless (@match_data = line.match(@regex))
 
-    test_name, test_path = @match_data.captures
-    @text = "warning: Snapshot test #{test_name} #{test_path} does not specify it uses an app host"
+    starlark_file, file_line, message = @match_data.captures
+    @text = "warning: #{message}"
   end
 end
 
 # Documentation
-class MessageLine < RegexMatchLine
+class CompilerMessageLine < RegexMatchLine
   def initialize(line)
     @regex = /^(.+:) (error:|warning:|note:) (.+)/
 
