@@ -2,7 +2,6 @@
 
 BAZEL_WORKSPACE = ENV['BAZEL_WORKSPACE_ROOT'].freeze
 
-# Documentation
 class BazelOutputLine
   attr_reader :text
 
@@ -22,7 +21,6 @@ class BazelOutputLine
   end
 end
 
-# Documentation
 class RegexMatchLine < BazelOutputLine
   attr_reader :regex, :match_data
 
@@ -36,21 +34,20 @@ class RegexMatchLine < BazelOutputLine
   end
 end
 
-# Documentation
 class StarlarkLine < RegexMatchLine
   def initialize(line)
-    @regex = /^DEBUG: (.+.bzl)(:\d+:\d+:) (.+)$/
+
+    @regex = /^DEBUG: (.+(.bzl|.bazel))(:\d+:\d+): (.+)$/
 
     super(line)
 
     return unless (@match_data = line.match(@regex))
 
-    starlark_file, file_line, message = @match_data.captures
-    @text = "warning: #{message}"
+    starlark_file, file_ext, file_line, message = @match_data.captures
+    @text = "warning: #{message} (from #{starlark_file}#{file_line})"
   end
 end
 
-# Documentation
 class CompilerMessageLine < RegexMatchLine
   def initialize(line)
     @regex = /^(.+:) (error:|warning:|note:) (.+)/

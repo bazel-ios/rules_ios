@@ -201,7 +201,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build tests/macos/xcodeproj:Single-Application-RunnableTestSuite_iPad-Air-2__12.4\n$BAZEL_INSTALLER\n";
+			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_BUILD_EXEC tests/macos/xcodeproj:Single-Application-RunnableTestSuite_iPad-Air-2__12.4\n$BAZEL_INSTALLER\n";
 		};
 		B6158A7B27A31249CCAFEC9E /* Build with bazel */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -219,7 +219,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build rules/test_host_app:iOS-12.0-AppHost\n$BAZEL_INSTALLER\n";
+			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_BUILD_EXEC rules/test_host_app:iOS-12.0-AppHost\n$BAZEL_INSTALLER\n";
 		};
 		D318F6F09E06731B996B9EF2 /* Build with bazel */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -237,7 +237,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nset -eux\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_PATH build tests/macos/xcodeproj:Single-Application-UnitTests\n$BAZEL_INSTALLER\n";
+			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_BUILD_EXEC tests/macos/xcodeproj:Single-Application-UnitTests\n$BAZEL_INSTALLER\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -292,7 +292,9 @@
 		537B13DA69FE2CF8CE352102 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
 				BAZEL_INSTALLER = $BAZEL_STUBS_DIR/tools/xcodeproj_shims/installer;
+				BAZEL_OUTPUT_PROCESSOR = "$BAZEL_STUBS_DIR/output-processor.rb";
 				BAZEL_PATH = bazelisk;
 				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
 				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../..;
@@ -345,7 +347,9 @@
 		AAAEE6E10977303B66545B5D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
 				BAZEL_INSTALLER = $BAZEL_STUBS_DIR/tools/xcodeproj_shims/installer;
+				BAZEL_OUTPUT_PROCESSOR = "$BAZEL_STUBS_DIR/output-processor.rb";
 				BAZEL_PATH = bazelisk;
 				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
 				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../..;
