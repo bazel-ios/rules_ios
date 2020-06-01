@@ -7,6 +7,7 @@ load(
 load(
     "@bazel_tools//tools/build_defs/repo:http.bzl",
     "http_archive",
+    "http_file",
 )
 
 def _maybe(repo_rule, name, **kwargs):
@@ -27,16 +28,16 @@ def rules_ios_dependencies():
     _maybe(
         git_repository,
         name = "build_bazel_rules_apple",
-        commit = "193d258479e891bf286bf884d52ac779c83be206",
-        shallow_since = "1589211273 -0700",
+        commit = "74eca5857a136b9f1e2020886be76b791eb08231",
+        shallow_since = "1590530217 -0700",
         remote = "https://github.com/bazelbuild/rules_apple.git",
     )
 
     _maybe(
         git_repository,
         name = "build_bazel_rules_swift",
-        commit = "35ef1d6ebd7adb8d20c096bb4355cf41c9a0b5cf",
-        shallow_since = "1588778892 -0700",
+        commit = "6408d85da799ec2af053c4e2883dce3ce6d30f08",
+        shallow_since = "1589833120 -0700",
         remote = "https://github.com/bazelbuild/rules_swift.git",
     )
 
@@ -72,8 +73,18 @@ native_binary(
     visibility = ["//visibility:public"],
 )
 """,
-        canonical_id = "xcodegen-2.13.0",
-        sha256 = "053ed047424a481231e68be3346651a3a91a2d7e3323c52d65ac3f5324b9c109",
+        canonical_id = "xcodegen-2.15.2",
+        sha256 = "0a53aef09e1b93c5307fc1c411c52a034305ccfd87255c01de7f9ff5141e0d86",
         strip_prefix = "xcodegen",
-        urls = ["https://github.com/yonaskolb/XcodeGen/releases/download/2.13.0/xcodegen.zip"],
+        urls = ["https://github.com/yonaskolb/XcodeGen/releases/download/2.15.1/xcodegen.zip"],
+    )
+
+    # Pinned because 0.2.12 is broken on macOS 10.14
+    # https://github.com/google/xctestrunner/issues/18
+    _maybe(
+        http_file,
+        name = "xctestrunner",
+        executable = 1,
+        sha256 = "9e46d5782a9dc7d40bc93c99377c091886c180b8c4ffb9f79a19a58e234cdb09",
+        urls = ["https://github.com/google/xctestrunner/releases/download/0.2.10/ios_test_runner.par"],
     )

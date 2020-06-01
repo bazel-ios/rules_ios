@@ -170,7 +170,6 @@
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				Base,
 				en,
 			);
 			mainGroup = 0E2CEDC8EC87B38723449716;
@@ -383,7 +382,7 @@
 				D0D546F48AD698CADC2B4CF4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "";
+			defaultConfigurationName = Debug;
 		};
 		A9D000AC6FBD93BBC4171360 /* Build configuration list for PBXNativeTarget "Single-Application-UnitTests" */ = {
 			isa = XCConfigurationList;
@@ -392,7 +391,7 @@
 				D60C6B2C219D235429C548BD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "";
+			defaultConfigurationName = Debug;
 		};
 		B786FFAF7F5DCB5B8AB130C3 /* Build configuration list for PBXNativeTarget "iOS-12.0-AppHost" */ = {
 			isa = XCConfigurationList;
@@ -401,7 +400,7 @@
 				54F7DEC875A2F5ED466FE588 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "";
+			defaultConfigurationName = Debug;
 		};
 		BA2E38F7EDD931D888D74615 /* Build configuration list for PBXProject "Single-Application-Project-AllTargets" */ = {
 			isa = XCConfigurationList;

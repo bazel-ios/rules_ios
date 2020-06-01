@@ -229,12 +229,6 @@
 			attributes = {
 				LastUpgradeCheck = 1020;
 				TargetAttributes = {
-					20A37CC084B553DAC3470E18 = {
-						TestTargetID = 7B42EBEE80E70A0FA637B11B;
-					};
-					5BB71AB936CCD5BDF68DE298 = {
-						TestTargetID = 1ECB59A3C8C905569C62BCE7;
-					};
 				};
 			};
 			buildConfigurationList = 925C7EC36E5BD69BB75B98CD /* Build configuration list for PBXProject "Test-Target-With-Test-Host-Project" */;
@@ -242,7 +236,6 @@
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				Base,
 				en,
 			);
 			mainGroup = 7CECA2AB833A306EC3500168;
@@ -395,7 +388,6 @@
 				PRODUCT_NAME = "TestImports-Unit-Tests";
 				SUPPORTS_MACCATALYST = 0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestImports-App.app/TestImports-App";
-				TEST_TARGET_NAME = "TestImports-App";
 			};
 			name = Release;
 		};
@@ -418,7 +410,6 @@
 				PRODUCT_NAME = "TestImports-Unit-Tests";
 				SUPPORTS_MACCATALYST = 0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestImports-App.app/TestImports-App";
-				TEST_TARGET_NAME = "TestImports-App";
 			};
 			name = Debug;
 		};
@@ -430,7 +421,6 @@
 				PRODUCT_NAME = DefaultHosted;
 				SUPPORTS_MACCATALYST = 0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS-10.0-AppHost.app/iOS-10.0-AppHost";
-				TEST_TARGET_NAME = "iOS-10.0-AppHost";
 			};
 			name = Debug;
 		};
@@ -517,7 +507,6 @@
 				PRODUCT_NAME = DefaultHosted;
 				SUPPORTS_MACCATALYST = 0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS-10.0-AppHost.app/iOS-10.0-AppHost";
-				TEST_TARGET_NAME = "iOS-10.0-AppHost";
 			};
 			name = Release;
 		};
@@ -540,7 +529,7 @@
 				E23B39181F1860849E079269 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "";
+			defaultConfigurationName = Debug;
 		};
 		C5F485B930E4C6EAB1E71482 /* Build configuration list for PBXNativeTarget "TestImports-App" */ = {
 			isa = XCConfigurationList;
@@ -549,7 +538,7 @@
 				607F6A979BCB270BD2846986 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "";
+			defaultConfigurationName = Debug;
 		};
 		D271C4107BA3CC290E3ADC7A /* Build configuration list for PBXNativeTarget "iOS-10.0-AppHost" */ = {
 			isa = XCConfigurationList;
@@ -558,7 +547,7 @@
 				84F4EFF162A20A916170779B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "";
+			defaultConfigurationName = Debug;
 		};
 		F0538BC388B2DD5C72F37AB3 /* Build configuration list for PBXNativeTarget "TestImports-Unit-Tests" */ = {
 			isa = XCConfigurationList;
@@ -567,7 +556,7 @@
 				052452BF65BFAB2A7B6D74A2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "";
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
