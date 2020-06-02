@@ -166,6 +166,8 @@ def _xcodeproj_impl(ctx):
         "groupSortPosition": "none",
     }
     proj_settings = {
+        "BAZEL_BUILD_EXEC": "$BAZEL_STUBS_DIR/build-wrapper",
+        "BAZEL_OUTPUT_PROCESSOR": "$BAZEL_STUBS_DIR/output-processor.rb",
         "BAZEL_PATH": ctx.attr.bazel_path,
         "BAZEL_WORKSPACE_ROOT": "$SRCROOT/%s" % script_dot_dots,
         "BAZEL_STUBS_DIR": "$PROJECT_FILE_PATH/bazelstubs",
@@ -234,10 +236,10 @@ def _xcodeproj_impl(ctx):
             "preBuildScripts": [{
                 "name": "Build with bazel",
                 "script": """
-set -eux
+set -euxo pipefail
 cd $BAZEL_WORKSPACE_ROOT
 
-$BAZEL_PATH build {bazel_build_target_name}
+$BAZEL_BUILD_EXEC {bazel_build_target_name}
 $BAZEL_INSTALLER
 """.format(bazel_build_target_name = target_info.bazel_build_target_name),
             }],
@@ -308,7 +310,9 @@ $BAZEL_INSTALLER
             "$(clang_stub_ld_path)": ctx.executable.ld_stub.short_path,
             "$(clang_stub_swiftc_path)": ctx.executable.swiftc_stub.short_path,
             "$(print_json_leaf_nodes_path)": ctx.executable.print_json_leaf_nodes.short_path,
+            "$(build_wrapper_path)": ctx.executable.build_wrapper.short_path,
             "$(infoplist_stub)": ctx.file._infoplist_stub.short_path,
+            "$(output_processor_path)": ctx.file.output_processor.short_path,
             "$(workspacesettings_xcsettings_short_path)": ctx.file._workspace_xcsettings.short_path,
         },
         is_executable = True,
@@ -319,13 +323,15 @@ $BAZEL_INSTALLER
             executable = install_script,
             files = depset([xcodegen_jsonfile, project]),
             runfiles = ctx.runfiles(files = [xcodegen_jsonfile, project], transitive_files = depset(
-                direct = ctx.files.installer +
+                direct = ctx.files.build_wrapper +
+                         ctx.files.installer +
                          ctx.files.clang_stub +
                          ctx.files.ld_stub +
                          ctx.files.swiftc_stub +
                          ctx.files._infoplist_stub +
                          ctx.files.print_json_leaf_nodes +
-                         ctx.files._workspace_xcsettings,
+                         ctx.files._workspace_xcsettings +
+                         ctx.files.output_processor,
                 transitive = [ctx.attr.installer[DefaultInfo].default_runfiles.files],
             )),
         ),
@@ -342,12 +348,14 @@ xcodeproj = rule(
         "_xcodeproj_installer_template": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:xcodeproj-installer.sh"), allow_single_file = ["sh"]),
         "_infoplist_stub": attr.label(executable = False, default = Label("//rules/test_host_app:Info.plist"), allow_single_file = ["plist"]),
         "_workspace_xcsettings": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:WorkspaceSettings.xcsettings"), allow_single_file = ["xcsettings"]),
+        "output_processor": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:output-processor.rb"), cfg = "host", allow_single_file = True),
         "_xcodegen": attr.label(executable = True, default = Label("@com_github_yonaskolb_xcodegen//:xcodegen"), cfg = "host"),
         "clang_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:clang-stub"), cfg = "host"),
         "ld_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:ld-stub"), cfg = "host"),
         "swiftc_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:swiftc-stub"), cfg = "host"),
         "print_json_leaf_nodes": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:print_json_leaf_nodes"), cfg = "host"),
         "installer": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:installer"), cfg = "host"),
+        "build_wrapper": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:build-wrapper"), cfg = "host"),
     },
     executable = True,
 )

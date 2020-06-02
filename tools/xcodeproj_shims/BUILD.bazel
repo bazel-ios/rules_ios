@@ -33,7 +33,16 @@ sh_binary(
     visibility = STUB_VISIBILITY,
 )
 
+sh_binary(
+    name = "build-wrapper",
+    srcs = [
+        "build-wrapper.sh",
+    ],
+    visibility = STUB_VISIBILITY,
+)
+
 exports_files([
     "xcodeproj-installer.sh",
     "WorkspaceSettings.xcsettings",
+    "output-processor.rb",
 ])
