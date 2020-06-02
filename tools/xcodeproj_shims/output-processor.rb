@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-
+STDOUT.sync = true
 BAZEL_WORKSPACE = ENV['BAZEL_WORKSPACE_ROOT'].freeze
 
 class BazelOutputLine
@@ -36,15 +36,22 @@ end
 
 class StarlarkLine < RegexMatchLine
   def initialize(line)
-
-    @regex = /^DEBUG: (.+(.bzl|.bazel))(:\d+:\d+): (.+)$/
+    @regex = /^(DEBUG|ERROR): (.+(.bzl|.bazel))(:\d+:\d+): (.+)$/
 
     super(line)
 
     return unless (@match_data = line.match(@regex))
 
-    starlark_file, file_ext, file_line, message = @match_data.captures
-    @text = "warning: #{message} (from #{starlark_file}#{file_line})"
+    message_type, starlark_file, file_ext, file_line, message = @match_data.captures
+
+    message_type = case message_type
+                   when 'DEBUG'
+                     'warning'
+                   when 'ERROR'
+                     'error'
+                   end
+
+    @text = "#{starlark_file}#{file_line}: #{message_type}: #{message}"
   end
 end
 
@@ -57,10 +64,10 @@ class CompilerMessageLine < RegexMatchLine
     return unless (@match_data = line.match(@regex))
 
     file_path, error_level, message = match_data.captures
-    full_file_path = "#{BAZEL_WORKSPACE}/#{file_path}"
+    expanded_file_path = File.expand_path(file_path, BAZEL_WORKSPACE)
 
-    full_output_line = "#{full_file_path} #{error_level} #{message}"
-    @text = full_output_line
+    full_output = "#{expanded_file_path} #{error_level} #{message}"
+    @text = full_output
   end
 end
 
