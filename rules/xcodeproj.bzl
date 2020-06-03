@@ -10,6 +10,17 @@ def _get_attr_values_for_name(deps, provider, field):
 
 _TargetInfo = provider()
 _SrcsInfo = provider()
+_PLATFORM_MAPPING = {
+    "ios": "iOS",
+    "macos": "macOS",
+}
+
+_ARCH_MAPPING = {
+    "ios": "arm64 arm64e",
+    "macos": "i386 x86_64",
+}
+
+_PRODUCT_SPECIFIER_LENGTH = len("com.apple.product-type.")
 
 def _dir(o):
     return [
@@ -66,7 +77,9 @@ def _xcodeproj_aspect_impl(target, ctx):
             srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
             asset_srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "asset_srcs")),
             build_files = depset([ctx.build_file_path], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
-            product_type = bundle_info.product_type[len("com.apple.product-type."):],
+            product_type = bundle_info.product_type[_PRODUCT_SPECIFIER_LENGTH:],
+            platform_type = bundle_info.platform_type,
+            minimum_os_version = bundle_info.minimum_os_version,
             test_env_vars = test_env_vars,
             test_commandline_args = test_commandline_args,
             test_host_appname = test_host_appname,
@@ -82,7 +95,7 @@ def _xcodeproj_aspect_impl(target, ctx):
         direct_targets = [info]
         if test_host_target:
             direct_targets.extend(test_host_target[_TargetInfo].direct_targets)
-        target_info = _TargetInfo(direct_targets = direct_targets, targets = depset([info], transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets")))
+        target_info = _TargetInfo(direct_targets = direct_targets, targets = depset([info] if info else [], transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets")))
         providers.append(target_info)
     elif ctx.rule.kind == "apple_framework_packaging":
         info = struct(
@@ -94,6 +107,8 @@ def _xcodeproj_aspect_impl(target, ctx):
             asset_srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "asset_srcs")),
             build_files = depset([ctx.build_file_path], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
             product_type = "framework",
+            platform_type = "ios",
+            minimum_os_version = None,
             test_env_vars = test_env_vars,
             test_commandline_args = test_commandline_args,
         )
@@ -226,10 +241,13 @@ def _xcodeproj_impl(ctx):
             target_dependencies.append({"target": test_host_appname})
             target_settings["TEST_HOST"] = "$(BUILT_PRODUCTS_DIR)/{test_host_appname}.app/{test_host_appname}".format(test_host_appname = test_host_appname)
 
+        target_settings["VALID_ARCHS"] = _ARCH_MAPPING[target_info.platform_type]
+
         xcodeproj_targets_by_name[target_info.name] = {
             "sources": compiled_sources + asset_sources,
             "type": target_info.product_type,
-            "platform": "iOS",
+            "platform": _PLATFORM_MAPPING[target_info.platform_type],
+            "deploymentTarget": target_info.minimum_os_version,
             "settings": target_settings,
             "dependencies": target_dependencies,
             "preBuildScripts": [{
