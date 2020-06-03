@@ -12,6 +12,7 @@ _IOS_APPLICATION_KWARGS = [
     "visibility",
     "launch_storyboard",
     "app_icons",
+    "resources",
 ]
 
 def write_info_plists_if_needed(name, plists):
