@@ -25,7 +25,6 @@ def _xcodeproj_aspect_impl(target, ctx):
     deps += getattr(ctx.rule.attr, "deps", [])
     deps += getattr(ctx.rule.attr, "infoplists", [])
     deps.append(getattr(ctx.rule.attr, "entitlements", None))
-    deps.append(getattr(ctx.rule.attr, "test_host", None))
 
     # TODO: handle apple_resource_bundle targets
     test_env_vars = ()
