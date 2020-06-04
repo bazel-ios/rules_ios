@@ -378,10 +378,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "TestImports-Unit-Tests";
 				SUPPORTS_MACCATALYST = 0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestImports-App.app/TestImports-App";
+				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Release;
 		};
@@ -390,9 +392,11 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.TestImports-App";
 				PRODUCT_NAME = "TestImports-App";
+				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Debug;
 		};
@@ -400,10 +404,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "TestImports-Unit-Tests";
 				SUPPORTS_MACCATALYST = 0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestImports-App.app/TestImports-App";
+				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Debug;
 		};
@@ -411,10 +417,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = DefaultHosted;
 				SUPPORTS_MACCATALYST = 0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS-10.0-AppHost.app/iOS-10.0-AppHost";
+				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Debug;
 		};
@@ -423,9 +431,11 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.TestImports-App";
 				PRODUCT_NAME = "TestImports-App";
+				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Release;
 		};
@@ -457,9 +467,11 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ios-app-host-10.0";
 				PRODUCT_NAME = "iOS-10.0-AppHost";
+				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Release;
 		};
@@ -468,9 +480,11 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ios-app-host-10.0";
 				PRODUCT_NAME = "iOS-10.0-AppHost";
+				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Debug;
 		};
@@ -501,10 +515,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = DefaultHosted;
 				SUPPORTS_MACCATALYST = 0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS-10.0-AppHost.app/iOS-10.0-AppHost";
+				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Release;
 		};
