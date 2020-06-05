@@ -27,11 +27,10 @@ py_binary(
 )
 
 filegroup(
-  name = "installer_runfiles",
-  srcs = glob(["installers/*"]),
-  visibility = STUB_VISIBILITY,
+    name = "installer_runfiles",
+    srcs = glob(["installers/*"]),
+    visibility = STUB_VISIBILITY,
 )
-
 
 sh_binary(
     name = "installer",

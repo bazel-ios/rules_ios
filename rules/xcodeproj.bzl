@@ -323,7 +323,7 @@ $BAZEL_INSTALLER
         substitutions = {
             "$(project_short_path)": project.short_path,
             "$(project_full_path)": project.path,
-            "$(installer_runfile_short_paths)": ' '.join(installer_runfile_paths),
+            "$(installer_runfile_short_paths)": " ".join(installer_runfile_paths),
             "$(installer_short_path)": ctx.executable.installer.short_path,
             "$(clang_stub_short_path)": ctx.executable.clang_stub.short_path,
             "$(index_import_short_path)": ctx.executable.index_import.short_path,
