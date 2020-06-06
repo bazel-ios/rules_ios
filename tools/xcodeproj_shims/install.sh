@@ -13,7 +13,7 @@ set -eux
 diagnostics_dir="$TARGET_BUILD_DIR/../../../bazel-xcode-diagnostics/"
 mkdir -p $diagnostics_dir
 
-for f in "$diagnostics_dir"/*.log
+for f in $diagnostics_dir/*.log
 do
   date >> $f
 done
