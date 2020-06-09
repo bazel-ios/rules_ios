@@ -34,21 +34,28 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
     attr_dict["platform_type"] = str(current_apple_platform.platform.platform_type)
     attr_dict["minimum_os_version"] = str(current_apple_platform.target_os_version)
-
-    # TODO: only do this dance if platform is not macos
     attr_dict["_product_type"] = _FAKE_BUNDLE_PRODUCT_TYPE_BY_PLATFORM_TYPE.get(attr_dict["platform_type"], ctx.attr._product_type)
-    ios_app_ctx_dict = {}
+
+    file_dict = {}
+    for k in dir(ctx.file):
+        if k in ("to_json", "to_proto"):
+            continue
+        file_dict[k] = getattr(ctx.file, k)
+
+    file_dict["_environment_plist"] = [f for f in ctx.files._environment_plists if f.path.endswith("_{}.plist".format(attr_dict["platform_type"]))][0]
+
+    fake_ctx_dict = {}
     for k in dir(ctx):
         if k in ("aspect_ids", "build_setting_value", "rule", "to_json", "to_proto"):
             continue
-        ios_app_ctx_dict[k] = getattr(ctx, k)
-    ios_app_ctx_dict["attr"] = struct(**attr_dict)
-    ios_app_ctx = struct(**ios_app_ctx_dict)
+        fake_ctx_dict[k] = getattr(ctx, k)
+    fake_ctx_dict["attr"] = struct(**attr_dict)
+    fake_ctx_dict["file"] = struct(**file_dict)
+    fake_ctx = struct(**fake_ctx_dict)
 
     partial_output = partial.call(partials.resources_partial(
         top_level_attrs = ["resources"],
-        # plist_attrs = ["infoplist"]
-    ), ios_app_ctx)
+    ), fake_ctx)
 
     # Process the plist ourselves. This is required because
     # include_executable_name defaults to True, which results in iTC rejecting
@@ -58,7 +65,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     )
     bundle_id = ctx.attr.bundle_id or "com.cocoapods." + bundle_name
     resource_actions.merge_root_infoplists(
-        ios_app_ctx,
+        fake_ctx,
         ctx.files.infoplists,
         output_plist,
         None,
@@ -172,15 +179,30 @@ precompiled_apple_resource_bundle = rule(
                 Label("@build_bazel_rules_ios//rules/library:resource_bundle.plist"),
             ],
         ),
-        bundle_name = attr.string(mandatory = False),
-        bundle_id = attr.string(mandatory = False),
+        bundle_name = attr.string(
+            mandatory = False,
+            doc = "The name of the resource bundle. Defaults to the target name.",
+        ),
+        bundle_id = attr.string(
+            mandatory = False,
+            doc = "The bundle identifier of the resource bundle.",
+        ),
         resources = attr.label_list(
             allow_empty = True,
             allow_files = True,
+            doc = "The list of resources to be included in the resource bundle.",
         ),
-        bundle_extension = attr.string(mandatory = False, default = "bundle"),
+        bundle_extension = attr.string(
+            mandatory = False,
+            default = "bundle",
+            doc = "The extension of the resource bundle.",
+        ),
         platforms = attr.string_dict(
-            mandatory = True,
+            mandatory = False,
+            default = {},
+            doc = """A dictionary of platform names to minimum deployment targets.
+If not given, the resource bundle will be built for the platform it inherits from the target that uses
+the bundle as a dependency.""",
         ),
         _product_type = attr.string(default = apple_product_type.bundle),
         # This badly named property is required even though this isn't an ipa
@@ -189,19 +211,25 @@ precompiled_apple_resource_bundle = rule(
             executable = True,
             cfg = "exec",
         ),
-        _environment_plist = attr.label(
-            allow_single_file = True,
-            # TODO: handle other platforms
-            default = Label("@build_bazel_rules_apple//apple/internal:environment_plist_ios"),
-        ),
-        _whitelist_function_transition = attr.label(
-            default = Label("@bazel_tools//tools/whitelists/function_transition_whitelist"),
+        _environment_plists = attr.label_list(
+            allow_files = True,
+            default = [
+                Label("@build_bazel_rules_apple//apple/internal:environment_plist_ios"),
+                Label("@build_bazel_rules_apple//apple/internal:environment_plist_macos"),
+                Label("@build_bazel_rules_apple//apple/internal:environment_plist_tvos"),
+                Label("@build_bazel_rules_apple//apple/internal:environment_plist_watchos"),
+            ],
         ),
         _xcode_config = attr.label(
             default = configuration_field(
                 name = "xcode_config_label",
                 fragment = "apple",
             ),
+            doc = "The xcode config that is used to determine the deployment target for the current platform.",
+        ),
+        _whitelist_function_transition = attr.label(
+            default = "@build_bazel_rules_apple//tools/whitelists/function_transition_whitelist",
+            doc = "Needed to allow this rule to have an incoming edge configuration transition.",
         ),
     ),
 )

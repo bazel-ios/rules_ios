@@ -1,23 +1,5 @@
 load(":versions.bzl", "make_applications", "make_frameworks", "make_frameworks_with_dependencies")
 
-# [
-#     apple_framework(
-#         name = "framework_{platform}_{version}".format(platform = platform, version = version),
-#         srcs = ["platform.m"],
-#         objc_copts = [
-#             "-DTEST_PLATFORM={platform}".format(platform = platform),
-#             "-DTEST_PLATFORM_{platform}=1".format(platform = platform),
-#             "-DTEST_VERSION={version}".format(version = int(float(version) * ),
-#             "-DTEST_VERSION_{version}=1".format(version = version),
-#         ]
-#     )
-#     for platform, versions in {
-#         "ios": ["10", "11", "12"],
-#         "macosx": ["10.11", "10.12"],
-#     }.items()
-#     for version in versions
-# ]
-
 make_frameworks(
     srcs = ["platform.m"],
     resources_to_bundle = glob(["Resources/**/*"]),

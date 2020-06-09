@@ -78,9 +78,10 @@ def _concat(*args):
 
 def _apple_framework_packaging_impl(ctx):
     framework_name = ctx.attr.framework_name
+    bundle_extension = ctx.attr.bundle_extension
 
     # declare framework directory
-    framework_dir = "%s/%s.framework" % (ctx.attr.name, framework_name)
+    framework_dir = "%s/%s.%s" % (ctx.attr.name, framework_name, bundle_extension)
 
     # binaries
     binary_in = []
@@ -305,7 +306,7 @@ def _apple_framework_packaging_impl(ctx):
             binary = binary_out,
             bundle_id = bundle_id,
             bundle_name = framework_name,
-            bundle_extension = ctx.attr.bundle_extension,
+            bundle_extension = bundle_extension,
             entitlements = None,
             infoplist = infoplist,
             minimum_os_version = str(current_apple_platform.target_os_version),
@@ -367,11 +368,21 @@ Valid values are:
                 "//rules/hmap:hmaptool",
             ),
         ),
-        "bundle_id": attr.string(mandatory = False),
-        "bundle_extension": attr.string(mandatory = False, default = "framework"),
+        "bundle_id": attr.string(
+            mandatory = False,
+            doc = "The bundle identifier of the framework. Currently unused.",
+        ),
+        "bundle_extension": attr.string(
+            mandatory = False,
+            default = "framework",
+            doc = "The extension of the bundle, defaults to \"framework\".",
+        ),
         "platforms": attr.string_dict(
             mandatory = False,
             default = {},
+            doc = """A dictionary of platform names to minimum deployment targets.
+If not given, the framework will be built for the platform it inherits from the target that uses
+the framework as a dependency.""",
         ),
         "_product_type": attr.string(default = apple_product_type.static_framework),
         # TODO: allow customizing binary type between dynamic/static
@@ -383,9 +394,11 @@ Valid values are:
                 name = "xcode_config_label",
                 fragment = "apple",
             ),
+            doc = "The xcode config that is used to determine the deployment target for the current platform.",
         ),
         "_whitelist_function_transition": attr.label(
             default = "@build_bazel_rules_apple//tools/whitelists/function_transition_whitelist",
+            doc = "Needed to allow this rule to have an incoming edge configuration transition.",
         ),
     },
     doc = "Packages compiled code into an Apple .framework package",
