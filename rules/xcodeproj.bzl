@@ -85,14 +85,15 @@ def _xcodeproj_aspect_impl(target, ctx):
             test_commandline_args = test_commandline_args,
             test_host_appname = test_host_appname,
         )
-        providers.append(
-            _SrcsInfo(
-                srcs = info.srcs,
-                asset_srcs = info.asset_srcs,
-                build_files = depset([ctx.build_file_path]),
-                direct_srcs = [],
-            ),
-        )
+        if ctx.rule.kind != "apple_framework_packaging":
+            providers.append(
+                _SrcsInfo(
+                    srcs = info.srcs,
+                    asset_srcs = info.asset_srcs,
+                    build_files = depset([ctx.build_file_path]),
+                    direct_srcs = [],
+                ),
+            )
         direct_targets = [info]
         if test_host_target:
             direct_targets.extend(test_host_target[_TargetInfo].direct_targets)
