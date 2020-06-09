@@ -30,6 +30,9 @@ ios_application(
 apple_framework_packaging(
     name = "TestImports-App_framework_unlinked",
     framework_name = "TestImports-App",
+    platforms = {
+        "ios": "12.0",
+    },
     skip_packaging = ["binary"],
     transitive_deps = [],
     deps = [
