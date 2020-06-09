@@ -41,7 +41,7 @@ def ios_unit_test(name, apple_library = apple_library, **kwargs):
         else:
             unit_test_kwargs["runner"] = runner
 
-    library = apple_library(name = name, namespace_is_module_name = False, **kwargs)
+    library = apple_library(name = name, namespace_is_module_name = False, platforms = {"ios": unit_test_kwargs.get('minimum_os_version')}, **kwargs)
 
     rule(
         name = name,

@@ -311,10 +311,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     deps = [d for d in kwargs.pop("deps", [])]
     data = kwargs.pop("data", [])
     tags = kwargs.pop("tags", [])
-    platforms = kwargs.pop("platforms", {
-        "ios": "10.0",  # TODO: remove default
-    })
     tags_manual = tags if "manual" in tags else tags + _MANUAL
+    platforms = kwargs.pop("platforms", None)
     internal_deps = []
     lib_names = []
 
