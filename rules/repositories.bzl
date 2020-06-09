@@ -61,6 +61,24 @@ def rules_ios_dependencies():
 
     _maybe(
         http_archive,
+        name = "com_github_lyft_index_import",
+        build_file_content = """\
+load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
+
+native_binary(
+    name = "index_import",
+    src = "index-import",
+    out = "index-import",
+    visibility = ["//visibility:public"],
+)
+""",
+        canonical_id = "index-import-5.1.1.3",
+        sha256 = "0946012f1557a72fcbc65bd3f2e9b2a99d5b1e57e6db43a5ad0c969bddd9e072",
+        urls = ["https://github.com/lyft/index-import/releases/download/5.1.1.3/index-import.zip"],
+    )
+
+    _maybe(
+        http_archive,
         name = "com_github_yonaskolb_xcodegen",
         build_file_content = """\
 load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
