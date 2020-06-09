@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -euo pipefail
-echo "running index import"
 
 # Import Bazel built indexstores into Xcode. See https://github.com/lyft/index-import
 #

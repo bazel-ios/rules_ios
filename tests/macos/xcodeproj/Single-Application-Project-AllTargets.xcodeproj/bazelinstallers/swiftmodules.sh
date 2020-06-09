@@ -4,7 +4,7 @@ set -euo pipefail
 
 # Copy Bazel build `.swiftmodule` files to `DerivedData`. This is used by Xcode
 # and its indexing.
-find bazel-out/*/bin/ \
+find "$BAZEL_WORKSPACE_ROOT/bazel-out"/*/bin/ \
     -name "*.swiftmodule" \
      -not -path "*/_swift_module_cache/*" \
      -print0 \

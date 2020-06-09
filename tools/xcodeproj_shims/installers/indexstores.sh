@@ -5,7 +5,7 @@ set -euo pipefail
 # See `_indexstore.sh` for full details.
 
 # Make sure add these to bazel build target copts for objective-c
-find bazel-out/*/bin/ \
+find "$BAZEL_WORKSPACE_ROOT/bazel-out"/*/bin/ \
      -type d \
      -name "*.indexstore" \
      -print0 \

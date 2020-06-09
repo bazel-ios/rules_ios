@@ -13,10 +13,9 @@ set -eux
 diagnostics_dir="$TARGET_BUILD_DIR/../../../bazel-xcode-diagnostics/"
 mkdir -p $diagnostics_dir
 
-for f in $diagnostics_dir/*.log
-do
-  date >> $f
-done
+# Delete all logfiles that are older than 7 days
+find $diagnostics_dir -type f -atime +7d -delete
+date_suffix="$(date +%Y%m%d.%H%M%S%L)"
 
 case ${PRODUCT_TYPE} in
     com.apple.product-type.framework)
@@ -46,13 +45,13 @@ fi
 
 rsync \
     --recursive --chmod=u+w --delete \
-    "$input" "$output" >> $diagnostics_dir/rsync-stdout.log 2>> $diagnostics_dir/rsync-stderr.log
+    "$input" "$output" > $diagnostics_dir/rsync-stdout-$date_suffix.log 2> $diagnostics_dir/rsync-stderr-$date_suffix.log
 
 
 # Part of the build intermediary output will be swiftmodule files
 # which XCode will use for indexing. Let's keep those.
-$BAZEL_INSTALLERS_DIR/swiftmodules.sh >> $diagnostics_dir/swiftmodules-stdout.log 2>> $diagnostics_dir/swiftmodules-stderr.log &
-$BAZEL_INSTALLERS_DIR/indexstores.sh >> $diagnostics_dir/indexstores-stdout.log 2>> $diagnostics_dir/indexstores-stderr.log &
-$BAZEL_INSTALLERS_DIR/lldb-settings.sh  >> $diagnostics_dir/lldb-stdout.log 2>> $diagnostics_dir/lldb-stderr.log &
+$BAZEL_INSTALLERS_DIR/swiftmodules.sh > $diagnostics_dir/swiftmodules-stdout-$date_suffix.log 2> $diagnostics_dir/swiftmodules-stderr-$date_suffix.log &
+$BAZEL_INSTALLERS_DIR/indexstores.sh > $diagnostics_dir/indexstores-stdout-$date_suffix.log 2> $diagnostics_dir/indexstores-stderr-$date_suffix.log &
+$BAZEL_INSTALLERS_DIR/lldb-settings.sh  > $diagnostics_dir/lldb-stdout-$date_suffix.log 2> $diagnostics_dir/lldb-stderr-$date_suffix.log &
 
 
