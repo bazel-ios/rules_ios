@@ -170,7 +170,8 @@ def _xcodeproj_impl(ctx):
         "BAZEL_PATH": ctx.attr.bazel_path,
         "BAZEL_WORKSPACE_ROOT": "$SRCROOT/%s" % script_dot_dots,
         "BAZEL_STUBS_DIR": "$PROJECT_FILE_PATH/bazelstubs",
-        "BAZEL_INSTALLER": "$BAZEL_STUBS_DIR/%s" % ctx.executable.installer.short_path,
+        "BAZEL_INSTALLERS_DIR": "$PROJECT_FILE_PATH/bazelinstallers",
+        "BAZEL_INSTALLER": "$BAZEL_INSTALLERS_DIR/%s" % ctx.executable.installer.basename,
         "CC": "$BAZEL_STUBS_DIR/clang-stub",
         "CXX": "$CC",
         "CLANG_ANALYZER_EXEC": "$CC",
@@ -212,6 +213,7 @@ def _xcodeproj_impl(ctx):
             "PRODUCT_NAME": target_info.name,
             "BAZEL_BIN_SUBDIR": target_info.bazel_bin_subdir,
             "MACH_O_TYPE": target_macho_type,
+            "CLANG_ENABLE_MODULES": "YES",
         }
 
         if target_info.product_type == "application":
@@ -219,7 +221,6 @@ def _xcodeproj_impl(ctx):
             target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
         if target_info.product_type == "bundle.unit-test":
             target_settings["SUPPORTS_MACCATALYST"] = False
-
         target_dependencies = []
         test_host_appname = getattr(target_info, "test_host_appname", None)
         if test_host_appname:
@@ -300,15 +301,17 @@ $BAZEL_INSTALLER
     install_script = ctx.actions.declare_file(
         "%s-install-xcodeproj.sh" % ctx.attr.name,
     )
-
+    installer_runfile_paths = [i.short_path for i in ctx.attr.installer[DefaultInfo].default_runfiles.files.to_list()]
     ctx.actions.expand_template(
         template = ctx.file._xcodeproj_installer_template,
         output = install_script,
         substitutions = {
             "$(project_short_path)": project.short_path,
             "$(project_full_path)": project.path,
+            "$(installer_runfile_short_paths)": " ".join(installer_runfile_paths),
             "$(installer_short_path)": ctx.executable.installer.short_path,
             "$(clang_stub_short_path)": ctx.executable.clang_stub.short_path,
+            "$(index_import_short_path)": ctx.executable.index_import.short_path,
             "$(clang_stub_ld_path)": ctx.executable.ld_stub.short_path,
             "$(clang_stub_swiftc_path)": ctx.executable.swiftc_stub.short_path,
             "$(print_json_leaf_nodes_path)": ctx.executable.print_json_leaf_nodes.short_path,
@@ -328,6 +331,7 @@ $BAZEL_INSTALLER
                 direct = ctx.files.build_wrapper +
                          ctx.files.installer +
                          ctx.files.clang_stub +
+                         ctx.files.index_import +
                          ctx.files.ld_stub +
                          ctx.files.swiftc_stub +
                          ctx.files._infoplist_stub +
@@ -352,6 +356,7 @@ xcodeproj = rule(
         "_workspace_xcsettings": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:WorkspaceSettings.xcsettings"), allow_single_file = ["xcsettings"]),
         "output_processor": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:output-processor.rb"), cfg = "host", allow_single_file = True),
         "_xcodegen": attr.label(executable = True, default = Label("@com_github_yonaskolb_xcodegen//:xcodegen"), cfg = "host"),
+        "index_import": attr.label(executable = True, default = Label("@com_github_lyft_index_import//:index_import"), cfg = "host"),
         "clang_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:clang-stub"), cfg = "host"),
         "ld_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:ld-stub"), cfg = "host"),
         "swiftc_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:swiftc-stub"), cfg = "host"),
