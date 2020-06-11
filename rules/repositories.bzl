@@ -29,7 +29,8 @@ def rules_ios_dependencies():
         git_repository,
         name = "build_bazel_rules_apple",
         commit = "74eca5857a136b9f1e2020886be76b791eb08231",
-        shallow_since = "1590530217 -0700",
+        # TODO: Investigate why enabling this causes an analysis failure
+        # shallow_since = "1590530217 -0700",
         remote = "https://github.com/bazelbuild/rules_apple.git",
     )
 
