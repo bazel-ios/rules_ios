@@ -6,7 +6,14 @@ readonly project_path="${PWD}/$(project_short_path)"
 readonly dest="${BUILD_WORKSPACE_DIRECTORY}/$(project_short_path)/"
 readonly tmp_dest=$(mktemp -d)/$(project_full_path)/
 
-readonly stubs_dir="${dest}/bazelstubs"
+readonly installer="$(installer_short_path)"
+
+rm -fr "${tmp_dest}"
+mkdir -p "$(dirname $tmp_dest)"
+cp -r "${project_path}" "$tmp_dest"
+chmod -R +w "${tmp_dest}"
+
+readonly stubs_dir="${tmp_dest}/bazelstubs"
 mkdir -p "${stubs_dir}"
 
 readonly installers_dir="${dest}/bazelinstallers"
@@ -27,9 +34,6 @@ cp "$(infoplist_stub)" "${stubs_dir}/Info-stub.plist"
 cp "$(build_wrapper_path)" "${stubs_dir}/build-wrapper"
 cp "$(output_processor_path)" "${stubs_dir}/output-processor.rb"
 
-rm -fr "${tmp_dest}"
-mkdir -p "$(dirname $tmp_dest)"
-cp -r "${project_path}" "$tmp_dest"
 chmod -R +w "${tmp_dest}"
 
 # always trim three ../ from path, since that's "bazel-out/darwin-fastbuild/bin"
@@ -42,4 +46,3 @@ rsync --recursive --quiet --copy-links "${tmp_dest}" "${dest}"
 # Therefore, we force xcode to use the legacy build system by adding the contents of WorkspaceSettings.xcsettings to the generated project.
 mkdir -p "$dest/project.xcworkspace/xcshareddata/"
 cp "$(workspacesettings_xcsettings_short_path)" "$dest/project.xcworkspace/xcshareddata/"
-

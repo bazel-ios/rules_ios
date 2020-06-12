@@ -4,10 +4,9 @@ load("@rules_cc//cc:defs.bzl", "cc_library", "objc_import", "objc_library")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@build_bazel_rules_apple//apple:apple.bzl", "apple_dynamic_framework_import", "apple_static_framework_import")
-load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("//rules:precompiled_apple_resource_bundle.bzl", "precompiled_apple_resource_bundle")
 load("//rules:hmap.bzl", "headermap")
-load("//rules:substitute_build_settings.bzl", "substitute_build_settings")
 load("//rules/library:resources.bzl", "wrap_resources_in_filegroup")
 load("//rules/library:xcconfig.bzl", "settings_from_xcconfig")
 
@@ -157,26 +156,17 @@ FOUNDATION_EXPORT const unsigned char {module_name}VersionString[];
     )
     return destination
 
-def _generate_resource_bundles(name, library_tools, module_name, resource_bundles, **kwargs):
+def _generate_resource_bundles(name, library_tools, module_name, resource_bundles, platforms, **kwargs):
     bundle_target_names = []
     for bundle_name in resource_bundles:
         target_name = "%s-%s" % (name, bundle_name)
-        substitute_build_settings(
-            name = name + ".info.plist",
-            source = "@build_bazel_rules_ios//rules/library:resource_bundle.plist",
-            variables = {
-                "PRODUCT_BUNDLE_IDENTIFIER": "com.cocoapods.%s" % bundle_name,
-                "PRODUCT_NAME": bundle_name,
-            },
-            tags = _MANUAL,
-        )
-        apple_resource_bundle(
+        precompiled_apple_resource_bundle(
             name = target_name,
             bundle_name = bundle_name,
             resources = [
                 library_tools["wrap_resources_in_filegroup"](name = target_name + "_resources", srcs = resource_bundles[bundle_name]),
             ],
-            infoplists = [name + ".info.plist"],
+            platforms = platforms,
             tags = _MANUAL,
         )
         bundle_target_names.append(target_name)
@@ -318,10 +308,11 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     weak_sdk_frameworks = kwargs.pop("weak_sdk_frameworks", [])
     sdk_includes = kwargs.pop("sdk_includes", [])
     pch = kwargs.pop("pch", "@build_bazel_rules_ios//rules/library:common.pch")
-    deps = kwargs.pop("deps", [])
+    deps = [d for d in kwargs.pop("deps", [])]
     data = kwargs.pop("data", [])
     tags = kwargs.pop("tags", [])
     tags_manual = tags if "manual" in tags else tags + _MANUAL
+    platforms = kwargs.pop("platforms", None)
     internal_deps = []
     lib_names = []
 
@@ -383,6 +374,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         library_tools = library_tools,
         resource_bundles = kwargs.pop("resource_bundles", {}),
         module_name = module_name,
+        platforms = platforms,
         **kwargs
     )
     deps += resource_bundles
@@ -609,4 +601,5 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         launch_screen_storyboard_name = launch_screen_storyboard_name,
         namespace = namespace,
         linkopts = linkopts,
+        platforms = platforms,
     )

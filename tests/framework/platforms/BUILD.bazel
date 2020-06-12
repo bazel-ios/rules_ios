@@ -1,0 +1,15 @@
+load(":versions.bzl", "make_applications", "make_frameworks", "make_frameworks_with_dependencies")
+
+make_frameworks(
+    srcs = ["platform.m"],
+    resources_to_bundle = glob(["Resources/**/*"]),
+)
+
+make_frameworks_with_dependencies(
+    srcs = ["platform.m"],
+    resources_to_bundle = glob(["Resources/**/*"]),
+)
+
+make_applications(
+    srcs = ["main.m"],
+)
