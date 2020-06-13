@@ -44,12 +44,8 @@ jobs:
       - uses: actions/checkout@v1
       - name: Select Xcode 11.2
         run: sudo xcode-select -s /Applications/Xcode_11.2.app
-      - name: Generate Xcode projects that load all transitive targets and compare against existing record
-        run: bazelisk run tests/macos/xcodeproj:Single-Application-Project-AllTargets && git diff --exit-code tests/macos/xcodeproj
-      - name: Generate Xcode projects that load direct targets only and compare against existing record
-        run: bazelisk run tests/macos/xcodeproj:Single-Application-Project-DirectTargetsOnly && git diff --exit-code tests/macos/xcodeproj
-      - name: Generate Xcode projects that have a test target with a host app and compare against existing record
-        run: bazelisk run tests/macos/xcodeproj:Test-Target-With-Test-Host-Project && git diff --exit-code tests/macos/xcodeproj
+      - name: Generate Xcode projects and compare against existing record
+        run: (bazelisk query 'kind(xcodeproj, tests/macos/xcodeproj/...)' | xargs -n 1 bazelisk run) && git diff --exit-code tests/macos/xcodeproj
       - name: Run Xcode builds
         run: ./tests/macos/xcodeproj/build.sh
       - name: Run Unit tests

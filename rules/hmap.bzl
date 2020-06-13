@@ -45,7 +45,7 @@ def _make_headermap_impl(ctx):
     tool included here to create the actual .hmap file.
 
     :param ctx: context for this rule. See
-           https://docs.bazel.build/versions/master/skylark/lib/ctx.html
+           https://docs.bazel.build/versions/master/starlark/lib/ctx.html
 
     :return: provider with the info for this rule
     """

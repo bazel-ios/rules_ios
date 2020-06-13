@@ -1,8 +1,18 @@
 """Framework rules"""
 
+load("@build_bazel_rules_apple//apple/internal:apple_product_type.bzl", "apple_product_type")
+load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo", "swift_common")
 load("//rules:library.bzl", "PrivateHeadersInfo", "apple_library")
+load("//rules:transition_support.bzl", "transition_support")
+
+_APPLE_FRAMEWORK_PACKAGING_KWARGS = [
+    "visibility",
+    "tags",
+    "bundle_id",
+    "skip_packaging",
+]
 
 def apple_framework(name, apple_library = apple_library, **kwargs):
     """Builds and packages an Apple framework.
@@ -12,15 +22,15 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
         apple_library: The macro used to package sources into a library.
         **kwargs: Arguments passed to the apple_library and apple_framework_packaging rules as appropriate.
     """
-
+    framework_packaging_kwargs = {arg: kwargs.pop(arg) for arg in _APPLE_FRAMEWORK_PACKAGING_KWARGS if arg in kwargs}
     library = apple_library(name = name, **kwargs)
     apple_framework_packaging(
         name = name,
         framework_name = library.namespace,
         transitive_deps = library.transitive_deps,
         deps = library.lib_names,
-        visibility = kwargs.get("visibility", None),
-        tags = kwargs.get("tags", None),
+        platforms = library.platforms,
+        **framework_packaging_kwargs
     )
 
 def _find_framework_dir(outputs):
@@ -68,9 +78,10 @@ def _concat(*args):
 
 def _apple_framework_packaging_impl(ctx):
     framework_name = ctx.attr.framework_name
+    bundle_extension = ctx.attr.bundle_extension
 
     # declare framework directory
-    framework_dir = "%s/%s.framework" % (ctx.attr.name, framework_name)
+    framework_dir = "%s/%s.%s" % (ctx.attr.name, framework_name, bundle_extension)
 
     # binaries
     binary_in = []
@@ -98,6 +109,11 @@ def _apple_framework_packaging_impl(ctx):
     swiftmodule_out = None
     swiftdoc_in = None
     swiftdoc_out = None
+
+    # AppleBundleInfo fields
+    bundle_id = ctx.attr.bundle_id
+    infoplist = None
+    current_apple_platform = transition_support.current_apple_platform(ctx.fragments.apple, ctx.attr._xcode_config)
 
     # collect files
     for dep in ctx.attr.deps:
@@ -284,10 +300,25 @@ def _apple_framework_packaging_impl(ctx):
         cc_info_provider,
         swift_common.create_swift_info(**swift_info_fields),
         DefaultInfo(files = depset(framework_files)),
+        AppleBundleInfo(
+            archive = None,
+            archive_root = None,
+            binary = binary_out,
+            bundle_id = bundle_id,
+            bundle_name = framework_name,
+            bundle_extension = bundle_extension,
+            entitlements = None,
+            infoplist = infoplist,
+            minimum_os_version = str(current_apple_platform.target_os_version),
+            platform_type = str(current_apple_platform.platform.platform_type),
+            product_type = ctx.attr._product_type,
+            uses_swift = swiftmodule_out != None,
+        ),
     ]
 
 apple_framework_packaging = rule(
     implementation = _apple_framework_packaging_impl,
+    cfg = transition_support.apple_rule_transition,
     fragments = ["apple"],
     output_to_genfiles = True,
     attrs = {
@@ -336,6 +367,38 @@ Valid values are:
             default = Label(
                 "//rules/hmap:hmaptool",
             ),
+        ),
+        "bundle_id": attr.string(
+            mandatory = False,
+            doc = "The bundle identifier of the framework. Currently unused.",
+        ),
+        "bundle_extension": attr.string(
+            mandatory = False,
+            default = "framework",
+            doc = "The extension of the bundle, defaults to \"framework\".",
+        ),
+        "platforms": attr.string_dict(
+            mandatory = False,
+            default = {},
+            doc = """A dictionary of platform names to minimum deployment targets.
+If not given, the framework will be built for the platform it inherits from the target that uses
+the framework as a dependency.""",
+        ),
+        "_product_type": attr.string(default = apple_product_type.static_framework),
+        # TODO: allow customizing binary type between dynamic/static
+        #         "binary_type": attr.string(
+        #             default = "dylib",
+        #         ),
+        "_xcode_config": attr.label(
+            default = configuration_field(
+                name = "xcode_config_label",
+                fragment = "apple",
+            ),
+            doc = "The xcode config that is used to determine the deployment target for the current platform.",
+        ),
+        "_whitelist_function_transition": attr.label(
+            default = "@build_bazel_rules_apple//tools/whitelists/function_transition_whitelist",
+            doc = "Needed to allow this rule to have an incoming edge configuration transition.",
         ),
     },
     doc = "Packages compiled code into an Apple .framework package",

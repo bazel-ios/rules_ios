@@ -55,7 +55,7 @@ def ios_application(name, apple_library = apple_library, **kwargs):
     """
     infoplists = write_info_plists_if_needed(name = name, plists = kwargs.pop("infoplists", []))
     application_kwargs = {arg: kwargs.pop(arg) for arg in _IOS_APPLICATION_KWARGS if arg in kwargs}
-    library = apple_library(name = name, namespace_is_module_name = False, **kwargs)
+    library = apple_library(name = name, namespace_is_module_name = False, platforms = {"ios": application_kwargs.get("minimum_os_version")}, **kwargs)
 
     application_kwargs["launch_storyboard"] = application_kwargs.pop("launch_storyboard", library.launch_screen_storyboard_name)
     application_kwargs["families"] = application_kwargs.pop("families", ["iphone", "ipad"])
