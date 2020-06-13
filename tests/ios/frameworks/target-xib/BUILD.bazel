@@ -11,12 +11,12 @@ apple_framework(
 apple_framework(
     name = "TargetXIBTestsLib",
     srcs = glob(["TargetXIBTests/**/*.swift"]),
-    deps = [":TargetXIB"],
     visibility = ["//visibility:public"],
+    deps = [":TargetXIB"],
 )
 
 ios_unit_test(
     name = "TargetXIBTests",
-    deps = [":TargetXIBTestsLib"],
     minimum_os_version = "11.0",
+    deps = [":TargetXIBTestsLib"],
 )
