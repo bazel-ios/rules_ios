@@ -13,6 +13,7 @@ _IOS_UNIT_TEST_KWARGS = [
     "timeout",
     "visibility",
     "resources",
+    "tags",
 ]
 
 def ios_unit_test(name, apple_library = apple_library, **kwargs):
