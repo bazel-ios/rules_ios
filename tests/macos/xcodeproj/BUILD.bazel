@@ -82,3 +82,23 @@ xcodeproj(
         "//tests/ios/unit-test/test-imports-app:TestImports-Unit-Tests",
     ],
 )
+
+genrule(
+    name = "Test-Project-Regeneration",
+    testonly = True,
+    outs = ["Test-Project-Regeneration.sh"],
+    cmd = """
+cat <<'EOS' > $@
+#!/bin/sh
+set -euxo pipefail
+rm -fr {package_name}/{target_name}.xcodeproj
+bazel run {package_name}:{target_name}
+bazel run {package_name}:{target_name}
+EOS
+    """.format(
+        package_name = package_name(),
+        target_name = "Single-Application-Project-DirectTargetsOnly",
+    ),
+    executable = True,
+    tools = [":Single-Application-Project-DirectTargetsOnly"],
+)
