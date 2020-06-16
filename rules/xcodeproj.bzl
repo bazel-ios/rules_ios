@@ -176,6 +176,7 @@ def _xcodeproj_impl(ctx):
         "createIntermediateGroups": True,
         "defaultConfig": "Debug",
         "groupSortPosition": "none",
+        "settingPresets": "none",
     }
     proj_settings = {
         "BAZEL_BUILD_EXEC": "$BAZEL_STUBS_DIR/build-wrapper",
