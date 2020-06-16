@@ -336,6 +336,7 @@ $BAZEL_INSTALLER
             "$(infoplist_stub)": ctx.file._infoplist_stub.short_path,
             "$(output_processor_path)": ctx.file.output_processor.short_path,
             "$(workspacesettings_xcsettings_short_path)": ctx.file._workspace_xcsettings.short_path,
+            "$(ideworkspacechecks_plist_short_path)": ctx.file._workspace_checks.short_path,
         },
         is_executable = True,
     )
@@ -354,6 +355,7 @@ $BAZEL_INSTALLER
                          ctx.files._infoplist_stub +
                          ctx.files.print_json_leaf_nodes +
                          ctx.files._workspace_xcsettings +
+                         ctx.files._workspace_checks +
                          ctx.files.output_processor,
                 transitive = [ctx.attr.installer[DefaultInfo].default_runfiles.files],
             )),
@@ -371,6 +373,7 @@ xcodeproj = rule(
         "_xcodeproj_installer_template": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:xcodeproj-installer.sh"), allow_single_file = ["sh"]),
         "_infoplist_stub": attr.label(executable = False, default = Label("//rules/test_host_app:Info.plist"), allow_single_file = ["plist"]),
         "_workspace_xcsettings": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:WorkspaceSettings.xcsettings"), allow_single_file = ["xcsettings"]),
+        "_workspace_checks": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:IDEWorkspaceChecks.plist"), allow_single_file = ["plist"]),
         "output_processor": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:output-processor.rb"), cfg = "host", allow_single_file = True),
         "_xcodegen": attr.label(executable = True, default = Label("@com_github_yonaskolb_xcodegen//:xcodegen"), cfg = "host"),
         "index_import": attr.label(executable = True, default = Label("@com_github_lyft_index_import//:index_import"), cfg = "host"),

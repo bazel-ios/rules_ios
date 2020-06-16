@@ -39,6 +39,7 @@ cp "$(output_processor_path)" "${stubs_dir}/output-processor.rb"
 # Therefore, we force xcode to use the legacy build system by adding the contents of WorkspaceSettings.xcsettings to the generated project.
 mkdir -p "$tmp_dest/project.xcworkspace/xcshareddata/"
 cp "$(workspacesettings_xcsettings_short_path)" "$tmp_dest/project.xcworkspace/xcshareddata/"
+cp "$(ideworkspacechecks_plist_short_path)" "$tmp_dest/project.xcworkspace/xcshareddata/"
 
 chmod -R +w "${tmp_dest}"
 
