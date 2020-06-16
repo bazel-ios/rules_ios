@@ -30,6 +30,12 @@ def _dir(o):
         if x not in ("to_json", "to_proto")
     ]
 
+def _is_current_project_file(f):
+    return f.is_source and _is_current_project_path(f.path)
+
+def _is_current_project_path(path):
+    return not path.startswith("external/")
+
 def _xcodeproj_aspect_impl(target, ctx):
     providers = []
 
@@ -107,8 +113,8 @@ def _xcodeproj_aspect_impl(target, ctx):
                 srcs += getattr(ctx.rule.files, attr, [])
             else:
                 asset_srcs += getattr(ctx.rule.files, attr, [])
-        srcs = [f for f in srcs if not f.path.startswith("external/") and f.is_source]
-        asset_srcs = [f for f in asset_srcs if not f.path.startswith("external/") and f.is_source]
+        srcs = [f for f in srcs if _is_current_project_file(f)]
+        asset_srcs = [f for f in asset_srcs if _is_current_project_file(f)]
 
         providers.append(
             _SrcsInfo(
@@ -282,12 +288,23 @@ $BAZEL_INSTALLER
             scheme_action_name: scheme_action_details,
         }
 
+    project_file_groups = [
+        {"path": paths.join(src_dot_dots, f.short_path), "optional": True}
+        for f in ctx.files.additional_files
+        if _is_current_project_file(f)
+    ]
+
     xcodeproj_info = struct(
         name = paths.split_extension(project_name)[0],
         options = proj_options,
         settings = proj_settings,
         targets = xcodeproj_targets_by_name,
         schemes = xcodeproj_schemes_by_name,
+        fileGroups = [
+            src_dot_dots + f.short_path
+            for f in ctx.files.additional_files
+            if _is_current_project_file(f)
+        ]
     )
 
     ctx.actions.write(xcodegen_jsonfile, xcodeproj_info.to_json())
@@ -363,6 +380,7 @@ xcodeproj = rule(
         "print_json_leaf_nodes": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:print_json_leaf_nodes"), cfg = "host"),
         "installer": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:installer"), cfg = "host"),
         "build_wrapper": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:build-wrapper"), cfg = "host"),
+        "additional_files": attr.label_list(allow_files = True, allow_empty = True, default = [], mandatory = False),
     },
     executable = True,
 )
