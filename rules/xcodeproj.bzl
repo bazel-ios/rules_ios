@@ -36,6 +36,13 @@ def _is_current_project_file(f):
 def _is_current_project_path(path):
     return not path.startswith("external/")
 
+def _srcs_info_build_files(ctx):
+    path = ctx.build_file_path
+    if not _is_current_project_path(path):
+        return []
+
+    return [path]
+
 def _xcodeproj_aspect_impl(target, ctx):
     providers = []
 
@@ -83,7 +90,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             bazel_bin_subdir = bazel_bin_subdir,
             srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
             asset_srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "asset_srcs")),
-            build_files = depset([ctx.build_file_path], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
+            build_files = depset(_srcs_info_build_files(ctx), transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
             product_type = bundle_info.product_type[_PRODUCT_SPECIFIER_LENGTH:],
             platform_type = bundle_info.platform_type,
             minimum_os_version = bundle_info.minimum_os_version,
@@ -96,7 +103,7 @@ def _xcodeproj_aspect_impl(target, ctx):
                 _SrcsInfo(
                     srcs = info.srcs,
                     asset_srcs = info.asset_srcs,
-                    build_files = depset([ctx.build_file_path]),
+                    build_files = depset(_srcs_info_build_files(ctx)),
                     direct_srcs = [],
                 ),
             )
@@ -120,7 +127,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             _SrcsInfo(
                 srcs = depset(srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
                 asset_srcs = depset(asset_srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "asset_srcs")),
-                build_files = depset([ctx.build_file_path], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
+                build_files = depset(_srcs_info_build_files(ctx), transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
                 direct_srcs = srcs,
             ),
         )
@@ -215,6 +222,13 @@ def _xcodeproj_impl(ctx):
             "optional": True,
             "buildPhase": "none",
         } for s in target_info.asset_srcs.to_list()]
+        asset_sources += [{
+            "path": paths.join(src_dot_dots, p),
+            "group": paths.dirname(p),
+            "optional": True,
+            "buildPhase": "none",
+            # TODO: add source language type once https://github.com/yonaskolb/XcodeGen/issues/850 is resolved
+        } for p in target_info.build_files.to_list()]
         target_settings = {
             "PRODUCT_NAME": target_info.name,
             "BAZEL_BIN_SUBDIR": target_info.bazel_bin_subdir,
@@ -300,15 +314,10 @@ $BAZEL_INSTALLER
         settings = proj_settings,
         targets = xcodeproj_targets_by_name,
         schemes = xcodeproj_schemes_by_name,
-        fileGroups = [
-            src_dot_dots + f.short_path
-            for f in ctx.files.additional_files
-            if _is_current_project_file(f)
-        ]
+        fileGroups = project_file_groups,
     )
 
     ctx.actions.write(xcodegen_jsonfile, xcodeproj_info.to_json())
-
     ctx.actions.run(
         executable = ctx.executable._xcodegen,
         arguments = ["--quiet", "--no-env", "--spec", xcodegen_jsonfile.path, "--project", project.dirname],
