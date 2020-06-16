@@ -1,10 +1,6 @@
 """Definitions for handling Bazel repositories used by the Apple rules."""
 
 load(
-    "@bazel_tools//tools/build_defs/repo:git.bzl",
-    "git_repository",
-)
-load(
     "@bazel_tools//tools/build_defs/repo:http.bzl",
     "http_archive",
     "http_file",
@@ -22,32 +18,58 @@ def _maybe(repo_rule, name, **kwargs):
     if not native.existing_rule(name):
         repo_rule(name = name, **kwargs)
 
+def github_repo(name, project, repo, ref, sha256 = None):
+    """Downloads a repository from GitHub as a tarball.
+
+    Args:
+        name: The name of the repository.
+        project: The project (user or organization) on GitHub that hosts the repository.
+        repo: The name of the repository on GitHub.
+        ref: The reference to be downloaded. Can be any named ref, e.g. a commit, branch, or tag.
+        sha256: The sha256 of the downloaded tarball.
+    """
+
+    github_url = "https://github.com/{project}/{repo}/archive/{ref}.zip".format(
+        project = project,
+        repo = repo,
+        ref = ref,
+    )
+    http_archive(
+        name = name,
+        strip_prefix = "%s-%s" % (repo, ref.replace("/", "-")),
+        url = github_url,
+        sha256 = sha256,
+        canonical_id = github_url,
+    )
+
 def rules_ios_dependencies():
     """Fetches repositories that are dependencies of the `rules_apple` workspace.
     """
     _maybe(
-        git_repository,
+        github_repo,
         name = "build_bazel_rules_apple",
-        commit = "74eca5857a136b9f1e2020886be76b791eb08231",
-        # TODO: Investigate why enabling this causes an analysis failure
-        # shallow_since = "1590530217 -0700",
-        remote = "https://github.com/bazelbuild/rules_apple.git",
+        ref = "eadfa72e26dd8b459038dc83fc440759daff65c6",
+        project = "bazelbuild",
+        repo = "rules_apple",
+        sha256 = "be2e2e26d85dff61d4f9ae11e74be656a231389629474b39db887baa407a6f7d",
     )
 
     _maybe(
-        git_repository,
+        github_repo,
         name = "build_bazel_rules_swift",
-        commit = "6408d85da799ec2af053c4e2883dce3ce6d30f08",
-        shallow_since = "1589833120 -0700",
-        remote = "https://github.com/bazelbuild/rules_swift.git",
+        ref = "15d2b18ac7a71796984c4064fc0b570260969ac3",
+        project = "bazelbuild",
+        repo = "rules_swift",
+        sha256 = "566bfce66201c9264bfc4bc5a84260c8039858158432eda012ec9907feceff41",
     )
 
     _maybe(
-        git_repository,
+        github_repo,
         name = "build_bazel_apple_support",
-        commit = "501b4afb27745c4813a88ffa28acd901408014e4",
-        shallow_since = "1577729628 -0800",
-        remote = "https://github.com/bazelbuild/apple_support.git",
+        ref = "501b4afb27745c4813a88ffa28acd901408014e4",
+        project = "bazelbuild",
+        repo = "apple_support",
+        sha256 = "8aa07a6388e121763c0164624feac9b20841afa2dd87bac0ba0c3ed1d56feb70",
     )
 
     _maybe(
@@ -92,7 +114,7 @@ native_binary(
     visibility = ["//visibility:public"],
 )
 """,
-        canonical_id = "xcodegen-2.15.2",
+        canonical_id = "xcodegen-2.15.1",
         sha256 = "0a53aef09e1b93c5307fc1c411c52a034305ccfd87255c01de7f9ff5141e0d86",
         strip_prefix = "xcodegen",
         urls = ["https://github.com/yonaskolb/XcodeGen/releases/download/2.15.1/xcodegen.zip"],
