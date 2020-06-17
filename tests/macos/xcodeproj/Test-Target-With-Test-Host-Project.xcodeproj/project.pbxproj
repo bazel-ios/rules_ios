@@ -270,7 +270,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\nexport bazel_build_event_text_filename=$(mktemp -d)/build_event.txt\n$BAZEL_BUILD_EXEC tests/ios/unit-test/test-imports-app:TestImports-Unit-Tests\n$BAZEL_INSTALLER\n";
+			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\nexport BAZEL_BUILD_EVENT_TEXT_FILENAME=$(mktemp -d)/build_event.txt\n$BAZEL_BUILD_EXEC tests/ios/unit-test/test-imports-app:TestImports-Unit-Tests\n$BAZEL_INSTALLER\n";
 		};
 		2756FB505F15157D82C9069E /* Build with bazel */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -288,7 +288,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\nexport bazel_build_event_text_filename=$(mktemp -d)/build_event.txt\n$BAZEL_BUILD_EXEC rules/test_host_app:iOS-10.0-AppHost\n$BAZEL_INSTALLER\n";
+			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\nexport BAZEL_BUILD_EVENT_TEXT_FILENAME=$(mktemp -d)/build_event.txt\n$BAZEL_BUILD_EXEC rules/test_host_app:iOS-10.0-AppHost\n$BAZEL_INSTALLER\n";
 		};
 		3D60A491CE72F7D799EC0383 /* Build with bazel */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -306,7 +306,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\nexport bazel_build_event_text_filename=$(mktemp -d)/build_event.txt\n$BAZEL_BUILD_EXEC tests/ios/unit-test/test-imports-app:TestImports-App\n$BAZEL_INSTALLER\n";
+			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\nexport BAZEL_BUILD_EVENT_TEXT_FILENAME=$(mktemp -d)/build_event.txt\n$BAZEL_BUILD_EXEC tests/ios/unit-test/test-imports-app:TestImports-App\n$BAZEL_INSTALLER\n";
 		};
 		6DBC122A6C2C8B5D5805E16D /* Build with bazel */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -324,7 +324,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\nexport bazel_build_event_text_filename=$(mktemp -d)/build_event.txt\n$BAZEL_BUILD_EXEC tests/ios/unit-test:DefaultHosted\n$BAZEL_INSTALLER\n";
+			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\nexport BAZEL_BUILD_EVENT_TEXT_FILENAME=$(mktemp -d)/build_event.txt\n$BAZEL_BUILD_EXEC tests/ios/unit-test:DefaultHosted\n$BAZEL_INSTALLER\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
