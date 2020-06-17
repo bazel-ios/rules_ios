@@ -4,11 +4,23 @@ set -euo pipefail
 
 # See `_indexstore.sh` for full details.
 
-# Make sure add these to bazel build target copts for objective-c
-find "$BAZEL_WORKSPACE_ROOT/bazel-out"/*/bin/ \
-     -type d \
-     -name "*.indexstore" \
-     -print0 \
-    | xargs -0 "$BAZEL_INSTALLERS_DIR/_indexstore.sh"
+echo "Start remapping index files at `date`"
 
-echo "Finish remapping index files"
+FOUND_INDEXSTORES=`pcregrep -o1 'command_line: "(.*\.indexstore)' $bazel_build_event_text_filename || true`
+declare -a EXISTING_INDEXSTORES=()
+for i in $FOUND_INDEXSTORES
+do
+if [ -d $i ]
+then
+EXISTING_INDEXSTORES+=($i)
+fi
+done
+
+if [ ${#EXISTING_INDEXSTORES[@]} -ne 0 ]
+then
+  "$BAZEL_INSTALLERS_DIR/_indexstore.sh" $EXISTING_INDEXSTORES
+else
+  echo "No indexstores found"
+fi
+
+echo "Finish remapping index files at `date`"
