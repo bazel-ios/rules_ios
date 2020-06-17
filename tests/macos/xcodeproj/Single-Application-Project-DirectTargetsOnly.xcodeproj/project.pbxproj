@@ -16,11 +16,13 @@
 		0BD63CC255956E60D898C7B7 /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = test.swift; path = test.swift; sourceTree = "<group>"; };
 		2B41830721183AA100B23D64 /* ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ios.entitlements; path = ../../../rules/test_host_app/ios.entitlements; sourceTree = "<group>"; };
 		2DA260AA799ED8A57078C331 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../../../rules/test_host_app/main.m; sourceTree = "<group>"; };
+		4936F4D0B63B32AD09E63C43 /* BUILD.bazel */ = {isa = PBXFileReference; name = BUILD.bazel; path = BUILD.bazel; sourceTree = "<group>"; };
 		58D47D35D8B8E34549EE944E /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = Contents.json; path = ../../../rules/test_host_app/AssetCatalogFixture.xcassets/Contents.json; sourceTree = "<group>"; };
 		712BB7D3F966AAE042C40E4E /* iOS-12.0-AppHost.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "iOS-12.0-AppHost.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9735D50F44B3B4D188BA18BF /* Single-Application-RunnableTestSuite.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "Single-Application-RunnableTestSuite.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF248CD4BA2D7D91429E9BCB /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = common.pch; path = ../../../rules/library/common.pch; sourceTree = "<group>"; };
 		E94B0DB5FD5082DE73F52008 /* Single-Application-UnitTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "Single-Application-UnitTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EAEB79BE70BFB649A6FBC92C /* BUILD.bazel */ = {isa = PBXFileReference; name = BUILD.bazel; path = ../../../rules/test_host_app/BUILD.bazel; sourceTree = "<group>"; };
 		F689E871A09EA979611C589A /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = resource_bundle.plist; path = ../../../rules/library/resource_bundle.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -56,6 +58,7 @@
 			isa = PBXGroup;
 			children = (
 				D46477D0666FC1C236EDC486 /* AssetCatalogFixture.xcassets */,
+				EAEB79BE70BFB649A6FBC92C /* BUILD.bazel */,
 				2B41830721183AA100B23D64 /* ios.entitlements */,
 				2DA260AA799ED8A57078C331 /* main.m */,
 			);
@@ -99,6 +102,7 @@
 		F4FF0CBD8A1F7A37DB68252E /* xcodeproj */ = {
 			isa = PBXGroup;
 			children = (
+				4936F4D0B63B32AD09E63C43 /* BUILD.bazel */,
 				0BD63CC255956E60D898C7B7 /* test.swift */,
 			);
 			name = xcodeproj;

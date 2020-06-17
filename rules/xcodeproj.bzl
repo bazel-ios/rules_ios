@@ -30,6 +30,19 @@ def _dir(o):
         if x not in ("to_json", "to_proto")
     ]
 
+def _is_current_project_file(f):
+    return f.is_source and _is_current_project_path(f.path)
+
+def _is_current_project_path(path):
+    return not path.startswith("external/")
+
+def _srcs_info_build_files(ctx):
+    path = ctx.build_file_path
+    if not _is_current_project_path(path):
+        return []
+
+    return [path]
+
 def _xcodeproj_aspect_impl(target, ctx):
     providers = []
 
@@ -77,7 +90,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             bazel_bin_subdir = bazel_bin_subdir,
             srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
             asset_srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "asset_srcs")),
-            build_files = depset([ctx.build_file_path], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
+            build_files = depset(_srcs_info_build_files(ctx), transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
             product_type = bundle_info.product_type[_PRODUCT_SPECIFIER_LENGTH:],
             platform_type = bundle_info.platform_type,
             minimum_os_version = bundle_info.minimum_os_version,
@@ -90,7 +103,7 @@ def _xcodeproj_aspect_impl(target, ctx):
                 _SrcsInfo(
                     srcs = info.srcs,
                     asset_srcs = info.asset_srcs,
-                    build_files = depset([ctx.build_file_path]),
+                    build_files = depset(_srcs_info_build_files(ctx)),
                     direct_srcs = [],
                 ),
             )
@@ -107,14 +120,14 @@ def _xcodeproj_aspect_impl(target, ctx):
                 srcs += getattr(ctx.rule.files, attr, [])
             else:
                 asset_srcs += getattr(ctx.rule.files, attr, [])
-        srcs = [f for f in srcs if not f.path.startswith("external/") and f.is_source]
-        asset_srcs = [f for f in asset_srcs if not f.path.startswith("external/") and f.is_source]
+        srcs = [f for f in srcs if _is_current_project_file(f)]
+        asset_srcs = [f for f in asset_srcs if _is_current_project_file(f)]
 
         providers.append(
             _SrcsInfo(
                 srcs = depset(srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
                 asset_srcs = depset(asset_srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "asset_srcs")),
-                build_files = depset([ctx.build_file_path], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
+                build_files = depset(_srcs_info_build_files(ctx), transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
                 direct_srcs = srcs,
             ),
         )
@@ -163,6 +176,7 @@ def _xcodeproj_impl(ctx):
         "createIntermediateGroups": True,
         "defaultConfig": "Debug",
         "groupSortPosition": "none",
+        "settingPresets": "none",
     }
     proj_settings = {
         "BAZEL_BUILD_EXEC": "$BAZEL_STUBS_DIR/build-wrapper",
@@ -209,6 +223,13 @@ def _xcodeproj_impl(ctx):
             "optional": True,
             "buildPhase": "none",
         } for s in target_info.asset_srcs.to_list()]
+        asset_sources += [{
+            "path": paths.join(src_dot_dots, p),
+            "group": paths.dirname(p),
+            "optional": True,
+            "buildPhase": "none",
+            # TODO: add source language type once https://github.com/yonaskolb/XcodeGen/issues/850 is resolved
+        } for p in target_info.build_files.to_list()]
         target_settings = {
             "PRODUCT_NAME": target_info.name,
             "BAZEL_BIN_SUBDIR": target_info.bazel_bin_subdir,
@@ -282,16 +303,22 @@ $BAZEL_INSTALLER
             scheme_action_name: scheme_action_details,
         }
 
+    project_file_groups = [
+        {"path": paths.join(src_dot_dots, f.short_path), "optional": True}
+        for f in ctx.files.additional_files
+        if _is_current_project_file(f)
+    ]
+
     xcodeproj_info = struct(
         name = paths.split_extension(project_name)[0],
         options = proj_options,
         settings = proj_settings,
         targets = xcodeproj_targets_by_name,
         schemes = xcodeproj_schemes_by_name,
+        fileGroups = project_file_groups,
     )
 
     ctx.actions.write(xcodegen_jsonfile, xcodeproj_info.to_json())
-
     ctx.actions.run(
         executable = ctx.executable._xcodegen,
         arguments = ["--quiet", "--no-env", "--spec", xcodegen_jsonfile.path, "--project", project.dirname],
@@ -319,6 +346,7 @@ $BAZEL_INSTALLER
             "$(infoplist_stub)": ctx.file._infoplist_stub.short_path,
             "$(output_processor_path)": ctx.file.output_processor.short_path,
             "$(workspacesettings_xcsettings_short_path)": ctx.file._workspace_xcsettings.short_path,
+            "$(ideworkspacechecks_plist_short_path)": ctx.file._workspace_checks.short_path,
         },
         is_executable = True,
     )
@@ -337,6 +365,7 @@ $BAZEL_INSTALLER
                          ctx.files._infoplist_stub +
                          ctx.files.print_json_leaf_nodes +
                          ctx.files._workspace_xcsettings +
+                         ctx.files._workspace_checks +
                          ctx.files.output_processor,
                 transitive = [ctx.attr.installer[DefaultInfo].default_runfiles.files],
             )),
@@ -354,6 +383,7 @@ xcodeproj = rule(
         "_xcodeproj_installer_template": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:xcodeproj-installer.sh"), allow_single_file = ["sh"]),
         "_infoplist_stub": attr.label(executable = False, default = Label("//rules/test_host_app:Info.plist"), allow_single_file = ["plist"]),
         "_workspace_xcsettings": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:WorkspaceSettings.xcsettings"), allow_single_file = ["xcsettings"]),
+        "_workspace_checks": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:IDEWorkspaceChecks.plist"), allow_single_file = ["plist"]),
         "output_processor": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:output-processor.rb"), cfg = "host", allow_single_file = True),
         "_xcodegen": attr.label(executable = True, default = Label("@com_github_yonaskolb_xcodegen//:xcodegen"), cfg = "host"),
         "index_import": attr.label(executable = True, default = Label("@com_github_lyft_index_import//:index_import"), cfg = "host"),
@@ -363,6 +393,7 @@ xcodeproj = rule(
         "print_json_leaf_nodes": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:print_json_leaf_nodes"), cfg = "host"),
         "installer": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:installer"), cfg = "host"),
         "build_wrapper": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:build-wrapper"), cfg = "host"),
+        "additional_files": attr.label_list(allow_files = True, allow_empty = True, default = [], mandatory = False),
     },
     executable = True,
 )

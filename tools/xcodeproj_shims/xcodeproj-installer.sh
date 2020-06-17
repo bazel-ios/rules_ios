@@ -16,7 +16,7 @@ chmod -R +w "${tmp_dest}"
 readonly stubs_dir="${tmp_dest}/bazelstubs"
 mkdir -p "${stubs_dir}"
 
-readonly installers_dir="${dest}/bazelinstallers"
+readonly installers_dir="${tmp_dest}/bazelinstallers"
 mkdir -p "${installers_dir}"
 
 for INSTALLER_PATH in $(installer_runfile_short_paths)
@@ -34,15 +34,16 @@ cp "$(infoplist_stub)" "${stubs_dir}/Info-stub.plist"
 cp "$(build_wrapper_path)" "${stubs_dir}/build-wrapper"
 cp "$(output_processor_path)" "${stubs_dir}/output-processor.rb"
 
+# The new build system leaves a subdirectory called XCBuildData in the DerivedData directory which causes incremental build and test attempts to fail at launch time.
+# The error message says "Cannot attach to pid." This error seems to happen in the Xcode IDE, not when the project is tested from the xcodebuild command.
+# Therefore, we force xcode to use the legacy build system by adding the contents of WorkspaceSettings.xcsettings to the generated project.
+mkdir -p "$tmp_dest/project.xcworkspace/xcshareddata/"
+cp "$(workspacesettings_xcsettings_short_path)" "$tmp_dest/project.xcworkspace/xcshareddata/"
+cp "$(ideworkspacechecks_plist_short_path)" "$tmp_dest/project.xcworkspace/xcshareddata/"
+
 chmod -R +w "${tmp_dest}"
 
 # always trim three ../ from path, since that's "bazel-out/darwin-fastbuild/bin"
 sed -i.bak -E -e 's|([ "])../../../|\1|g' "${tmp_dest}/project.pbxproj"
 rm "${tmp_dest}/project.pbxproj.bak"
 rsync --recursive --quiet --copy-links "${tmp_dest}" "${dest}"
-
-# The new build system leaves a subdirectory called XCBuildData in the DerivedData directory which causes incremental build and test attempts to fail at launch time.
-# The error message says "Cannot attach to pid." This error seems to happen in the Xcode IDE, not when the project is tested from the xcodebuild command.
-# Therefore, we force xcode to use the legacy build system by adding the contents of WorkspaceSettings.xcsettings to the generated project.
-mkdir -p "$dest/project.xcworkspace/xcshareddata/"
-cp "$(workspacesettings_xcsettings_short_path)" "$dest/project.xcworkspace/xcshareddata/"
