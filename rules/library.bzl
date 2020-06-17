@@ -484,6 +484,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     swift_libname = "%s_swift" % name
     cpp_libname = "%s_cpp" % name
 
+    module_data = library_tools["wrap_resources_in_filegroup"](name = module_name + "_data", srcs = data)
+
     if swift_sources:
         swift_copts.extend(("-Xcc", "-I."))
         if module_map:
@@ -506,6 +508,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             deps = deps + internal_deps + lib_names,
             swiftc_inputs = swiftc_inputs,
             features = ["swift.no_generated_module_map"],
+            data = [module_data],
             tags = tags_manual,
             **kwargs
         )
@@ -558,7 +561,6 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         )
         lib_names.append(cpp_libname)
 
-    objc_library_data = library_tools["wrap_resources_in_filegroup"](name = objc_libname + "_data", srcs = data)
     objc_copts.append("-I.")
 
     objc_copts.extend(("-index-store-path", "$(GENDIR)/rules_ios_apple_library_objc.indexstore"))
@@ -575,14 +577,14 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         weak_sdk_frameworks = weak_sdk_frameworks,
         sdk_includes = sdk_includes,
         pch = pch,
-        data = [objc_library_data],
+        data = [] if swift_sources else [module_data],
         tags = tags_manual,
         **kwargs
     )
     launch_screen_storyboard_name = name + "_launch_screen_storyboard"
     native.filegroup(
         name = launch_screen_storyboard_name,
-        srcs = [objc_library_data],
+        srcs = [module_data],
         output_group = "launch_screen_storyboard",
         tags = _MANUAL,
     )
