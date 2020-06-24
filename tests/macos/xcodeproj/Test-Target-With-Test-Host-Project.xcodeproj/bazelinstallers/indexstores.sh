@@ -7,6 +7,7 @@ set -euo pipefail
 echo "Start remapping index files at `date`"
 
 FOUND_INDEXSTORES=`pcregrep -o1 'command_line: "(.*\.indexstore)' $BAZEL_BUILD_EVENT_TEXT_FILENAME || true`
+
 declare -a EXISTING_INDEXSTORES=()
 for i in $FOUND_INDEXSTORES
 do
@@ -15,6 +16,8 @@ do
     EXISTING_INDEXSTORES+=($i)
   fi
 done
+
+echo "Found ${#EXISTING_INDEXSTORES[@]} existing indexstores"
 
 if [ ${#EXISTING_INDEXSTORES[@]} -ne 0 ]
 then
