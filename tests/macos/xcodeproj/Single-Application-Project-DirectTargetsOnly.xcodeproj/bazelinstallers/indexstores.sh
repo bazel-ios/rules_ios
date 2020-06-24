@@ -27,3 +27,5 @@ else
 fi
 
 echo "Finish remapping index files at `date`"
+
+ls -ltR $BUILD_DIR/../../Index/DataStore/ > $BAZEL_DIAGNOSTICS_DIR/indexstores-contents-$DATE_SUFFIX.log
