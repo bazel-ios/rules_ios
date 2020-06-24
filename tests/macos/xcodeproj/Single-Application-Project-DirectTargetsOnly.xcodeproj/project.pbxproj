@@ -204,7 +204,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_BUILD_EXEC tests/macos/xcodeproj:Single-Application-RunnableTestSuite_iPad-Air-2__12.4\n$BAZEL_INSTALLER\n";
+			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\nexport BAZEL_BUILD_EVENT_TEXT_FILENAME=$(mktemp -d)/build_event.txt\n$BAZEL_BUILD_EXEC tests/macos/xcodeproj:Single-Application-RunnableTestSuite_iPad-Air-2__12.4\n$BAZEL_INSTALLER\n";
 		};
 		B6158A7B27A31249CCAFEC9E /* Build with bazel */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -222,7 +222,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_BUILD_EXEC rules/test_host_app:iOS-12.0-AppHost\n$BAZEL_INSTALLER\n";
+			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\nexport BAZEL_BUILD_EVENT_TEXT_FILENAME=$(mktemp -d)/build_event.txt\n$BAZEL_BUILD_EXEC rules/test_host_app:iOS-12.0-AppHost\n$BAZEL_INSTALLER\n";
 		};
 		D318F6F09E06731B996B9EF2 /* Build with bazel */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -240,7 +240,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\n$BAZEL_BUILD_EXEC tests/macos/xcodeproj:Single-Application-UnitTests\n$BAZEL_INSTALLER\n";
+			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\nexport BAZEL_BUILD_EVENT_TEXT_FILENAME=$(mktemp -d)/build_event.txt\n$BAZEL_BUILD_EXEC tests/macos/xcodeproj:Single-Application-UnitTests\n$BAZEL_INSTALLER\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

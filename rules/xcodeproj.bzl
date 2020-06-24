@@ -263,6 +263,7 @@ def _xcodeproj_impl(ctx):
 set -euxo pipefail
 cd $BAZEL_WORKSPACE_ROOT
 
+export BAZEL_BUILD_EVENT_TEXT_FILENAME=$(mktemp -d)/build_event.txt
 $BAZEL_BUILD_EXEC {bazel_build_target_name}
 $BAZEL_INSTALLER
 """.format(bazel_build_target_name = target_info.bazel_build_target_name),
