@@ -1,5 +1,9 @@
 load("@bazel_skylib//lib:sets.bzl", "sets")
-load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftToolchainInfo", "swift_common")
+load("@bazel_skylib//lib:dicts.bzl", "dicts")
+load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo", "SwiftToolchainInfo", "swift_common")
+load("//rules:transition_support.bzl", "transition_support")
+load("@build_bazel_rules_apple//apple/internal:apple_product_type.bzl", "apple_product_type")
+load("@build_bazel_rules_apple//apple/internal:rule_support.bzl", "rule_support")
 load("//rules:hmap.bzl", "hmap")
 load(
     "@bazel_tools//tools/build_defs/cc:action_names.bzl",
@@ -9,16 +13,148 @@ load(
 
 _VFS_ROOT = "/__com_github_bazel_ios_rules_ios/framework"
 
+def _tool_attrs():
+    return {
+        "_cc_toolchain": attr.label(
+            default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
+            doc = """\
+The C++ toolchain from which linking flags and other tools needed by the Swift & Objective-C
+toolchains (such as `clang`) will be retrieved.
+""",
+            providers = [[cc_common.CcToolchainInfo]],
+        ),
+        "_swift_toolchain": attr.label(
+            default = Label("@build_bazel_rules_swift_local_config//:toolchain"),
+            providers = [[SwiftToolchainInfo]],
+            doc = """\
+""",
+        ),
+        "_headermap_builder": attr.label(
+            executable = True,
+            cfg = "host",
+            default = Label(
+                "//rules/hmap:hmaptool",
+            ),
+            doc = """\
+""",
+        ),
+    }
+
+_DEFAULT_HDRS_EXTENSIONS = ["h", "hh", "hpp"]
+_DEFAULT_SRCS_EXTENSIONS = _DEFAULT_HDRS_EXTENSIONS + ["m", "mm", "c", "cpp", "swift"]
+_DEFAULT_DEPS_PROVIDERS = [
+    [SwiftInfo],
+    [CcInfo],
+    [apple_common.Objc],  # TODO: to be removed, once it's unsupported in bazel upstream
+]
+
+def _library_attrs(srcs_files = _DEFAULT_SRCS_EXTENSIONS, headers_files = _DEFAULT_HDRS_EXTENSIONS, deps_providers = _DEFAULT_DEPS_PROVIDERS, platform_transition = True):
+    if platform_transition:
+        transition_attrs = {
+            "platforms": attr.string_dict(
+                mandatory = False,
+                default = {},
+                doc = """A dictionary of platform names to minimum deployment targets.
+If not given, the framework will be built for the platform it inherits from the target that uses
+the framework as a dependency.""",
+            ),
+            "_xcode_config": attr.label(
+                default = configuration_field(
+                    name = "xcode_config_label",
+                    fragment = "apple",
+                ),
+                doc = "The xcode config that is used to determine the deployment target for the current platform.",
+            ),
+            "_whitelist_function_transition": attr.label(
+                default = "@build_bazel_rules_apple//tools/whitelists/function_transition_whitelist",
+                doc = "Needed to allow this rule to have an incoming edge configuration transition.",
+            ),
+            "fail_on_apple_rule_transition_platform_mismatches": attr.bool(default = False),
+        }
+    else:
+        transition_attrs = {}
+
+    library_attrs = {
+        "srcs": attr.label_list(allow_files = srcs_files),
+        "private_headers": attr.label_list(allow_files = headers_files),
+        "module_name": attr.string(mandatory = False),
+        "deps": attr.label_list(
+            providers = deps_providers,
+        ),
+    }
+    return dicts.add(transition_attrs, library_attrs)
+
+def _bundling_attrs(apple_product_type, bundle_id_mandatory = False, bundle_extension_default = None):
+    return {
+        "bundle_id": attr.string(
+            mandatory = bundle_id_mandatory,
+            doc = "The bundle identifier of the bundle. Currently unused.",
+        ),
+        "bundle_extension": attr.string(
+            default = bundle_extension_default,
+            doc = "The extension of the bundle.",
+        ),
+        "_product_type": attr.string(default = apple_product_type),
+    }
+
+def _fragments():
+    return ["apple", "cpp", "objc"]
+
+# _OVERRIDDEN_DESCRIPTORS = {
+#     None: struct(),
+# }
+
+# def _rules_apple_rule_descriptor(platform_type, product_type):
+#     if (platform_type, product_type) in _OVERRIDDEN_DESCRIPTORS:
+#         return _OVERRIDDEN_DESCRIPTORS[(platform_type, product_type)]
+#     return rule_support.rule_descriptor_no_ctx(
+#         platform_type, product_type
+#     )
+
+def _apple_library_rule(implementation, is_library = True, bundle_platform = None, platform_transition = True, custom_attrs = {}):
+    attr_list = [
+        _tool_attrs(),
+    ]
+
+    if is_library:
+        attr_list.append(_library_attrs(platform_transition = platform_transition))
+    if bundle_platform:
+        attr_list.append(_bundling_attrs(platform = bundle_platform))
+
+    attr_list.append(custom_attrs)
+
+    transition = transition_support.apple_rule_transition if platform_transition else None
+
+    return rule(
+        implementation = implementation,
+        cfg = transition,
+        fragments = _fragments(),
+        attrs = dicts.add(*attr_list),
+    )
+
 def _uppercase_path_string(s):
     return s.path.upper()
 
-def _apple_library_2_impl(ctx):
-    srcs = ctx.files.srcs
-    name = ctx.label
-    module_name = ctx.attr.module_name or name.name
+def _write_modulemap(ctx, library_tools):
+    if ctx.file.modulemap:
+        return ctx.file.modulemap
 
-    private_headers = None
-    public_headers = None
+    modulemap = library_tools.derived_files.modulemap()
+    ctx.actions.declare_file(modulemap)
+    return modulemap
+
+def _extend_modulemap(ctx, library_tools, modulemap):
+    if not modulemap:
+        return None
+
+    extended_modulemap = library_tools.derived_files.extended_modulemap()
+    ctx.actions.run()
+    return extended_modulemap
+
+def _partition_srcs(name, srcs, private_headers = None, public_headers = None):
+    private_headers = sets.make(private_headers) if private_headers else None
+    public_headers = sets.make(public_headers) if public_headers else None
+
     objc_sources = []
     swift_sources = []
     cpp_sources = []
@@ -45,7 +181,22 @@ def _apple_library_2_impl(ctx):
         elif extension in ("cc", "cpp"):
             cpp_sources.append(f)
         else:
-            fail("Unable to compile %s in %s (ext %s)" % (f, name, extension))
+            fail("Unable to compile %s in %s" % (f, name))
+
+    return struct(
+        objc_sources = objc_sources,
+        swift_sources = swift_sources,
+        cpp_sources = cpp_sources,
+        objc_non_exported_hdrs = objc_non_exported_hdrs,
+        objc_private_hdrs = objc_private_hdrs,
+        objc_hdrs = objc_hdrs,
+    )
+
+def _apple_library_2_impl(ctx):
+    name = ctx.label
+    module_name = ctx.attr.module_name or name.name
+
+    srcs = _partition_srcs(srcs = ctx.files.srcs, name = name)
 
     output_template = "_objs/{name}/{type}/{filename}"
 
@@ -66,7 +217,7 @@ def _apple_library_2_impl(ctx):
     umbrella_header = ctx.actions.declare_file(output_template.format(name = ctx.label.name, type = "umbrella_header", filename = module_name + "-umbrella.h"))
     vfsoverlay_file = ctx.actions.declare_file(output_template.format(name = ctx.label.name, type = "vfsoverlay", filename = module_name + ".vfxoverlay.yaml"))
 
-    ctx.actions.write(umbrella_header, "\n".join(["#import \"%s\"" % h.basename for h in objc_hdrs]))
+    ctx.actions.write(umbrella_header, "\n".join(["#import \"%s\"" % h.basename for h in srcs.objc_hdrs]))
     ctx.actions.write(modulemap, """framework module %s {
   umbrella header \"%s\"
 
@@ -75,7 +226,7 @@ def _apple_library_2_impl(ctx):
 }
 """ % (module_name, umbrella_header.basename))
 
-    objc_hdrs.append(umbrella_header)
+    srcs.objc_hdrs.append(umbrella_header)
 
     dep_cc_info = cc_common.merge_cc_infos(cc_infos = [dep[CcInfo] for dep in ctx.attr.deps if CcInfo in dep])
 
@@ -85,7 +236,7 @@ def _apple_library_2_impl(ctx):
             "name": header.basename,
             "external-contents": header.path,
         }
-        for header in objc_hdrs
+        for header in srcs.objc_hdrs
     ]
 
     # These explicit settings ensure that the VFS actually improves search
@@ -124,10 +275,10 @@ def _apple_library_2_impl(ctx):
         actions = ctx.actions,
         feature_configuration = swift_features,
         module_name = module_name,
-        srcs = swift_sources,
+        srcs = srcs.swift_sources,
         swift_toolchain = swift_toolchain,
         target_name = ctx.label.name,
-        additional_inputs = [vfsoverlay_file, modulemap, umbrella_header] + objc_hdrs,
+        additional_inputs = [vfsoverlay_file, modulemap, umbrella_header] + srcs.objc_hdrs,
         bin_dir = None,
         copts = [
             "-Xfrontend",
@@ -142,7 +293,7 @@ def _apple_library_2_impl(ctx):
         generated_header_name = "{}-Swift.h".format(module_name),
         genfiles_dir = None,
     )
-    objc_hdrs.append(swift_compilation.generated_header)
+    srcs.objc_hdrs.append(swift_compilation.generated_header)
     object_files.extend(swift_compilation.object_files)
 
     hmap.make_hmap(
@@ -150,7 +301,7 @@ def _apple_library_2_impl(ctx):
         headermap_builder = ctx.executable._headermap_builder,
         output = private_hmap,
         namespace = module_name,
-        hdrs_lists = (objc_hdrs,),
+        hdrs_lists = (srcs.objc_hdrs, srcs.objc_private_hdrs, srcs.objc_non_exported_hdrs),
     )
 
     hmap.make_hmap(
@@ -158,10 +309,10 @@ def _apple_library_2_impl(ctx):
         headermap_builder = ctx.executable._headermap_builder,
         output = public_hmap,
         namespace = module_name,
-        hdrs_lists = (objc_hdrs,),
+        hdrs_lists = (srcs.objc_hdrs,),
     )
 
-    for file in objc_sources:
+    for file in srcs.objc_sources:
         output = ctx.actions.declare_file(output_template.format(name = name, type = "objc_arc", filename = file.basename + ".o"))
         compile_variables = cc_common.create_compile_variables(
             cc_toolchain = cc_toolchain,
@@ -198,14 +349,14 @@ def _apple_library_2_impl(ctx):
         ctx.actions.run(
             executable = tool,
             arguments = [args],
-            inputs = depset([file, private_hmap, public_hmap, vfsoverlay_file] + objc_hdrs, transitive = [cc_toolchain.all_files, dep_cc_info.compilation_context.headers]),
+            inputs = depset([file, private_hmap, public_hmap, vfsoverlay_file] + srcs.objc_hdrs, transitive = [cc_toolchain.all_files, dep_cc_info.compilation_context.headers]),
             outputs = [output],
             env = env,
         )
 
     archive = ctx.actions.declare_file("{name}/{bundle_name}.{bundle_extension}/{bundle_name}".format(
         name = ctx.label.name,
-        bundle_name = ctx.label.name,
+        bundle_name = module_name,
         bundle_extension = "framework",
     ))
     archiver_variables = cc_common.create_link_variables(
@@ -238,8 +389,8 @@ def _apple_library_2_impl(ctx):
         execution_requirements = execution_requirements,
     )
 
-    copied_framework_files = []
-    for (dir, files) in {"Headers": objc_hdrs, "PrivateHeaders": objc_private_hdrs, "Modules": [modulemap, swift_compilation.swiftmodule]}.items():
+    copied_framework_files = {}
+    for (dir, files) in {"Headers": srcs.objc_hdrs, "PrivateHeaders": srcs.objc_private_hdrs, "Modules": [modulemap, swift_compilation.swiftmodule]}.items():
         for file in files:
             output = ctx.actions.declare_file("{name}/{bundle_name}.{bundle_extension}/{dir}/{file}".format(
                 name = ctx.label.name,
@@ -248,7 +399,7 @@ def _apple_library_2_impl(ctx):
                 file = file.basename,
                 dir = dir,
             ))
-            copied_framework_files.append(output)
+            copied_framework_files[file] = output
             ctx.actions.symlink(
                 output = output,
                 target_file = file,
@@ -256,35 +407,8 @@ def _apple_library_2_impl(ctx):
 
     return [
         DefaultInfo(
-            files = depset([archive] + copied_framework_files),
+            files = depset([archive]),
         ),
     ]
 
-apple_library_2 = rule(
-    implementation = _apple_library_2_impl,
-    fragments = ["apple", "cpp", "objc"],
-    attrs = {
-        "srcs": attr.label_list(allow_files = True),
-        "module_name": attr.string(mandatory = False),
-        "deps": attr.label_list(
-        ),
-        "_cc_toolchain": attr.label(
-            default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
-            doc = """\
-The C++ toolchain from which linking flags and other tools needed by the Swift
-toolchain (such as `clang`) will be retrieved.
-""",
-        ),
-        "_swift_toolchain": attr.label(
-            default = Label("@build_bazel_rules_swift_local_config//:toolchain"),
-            providers = [[SwiftToolchainInfo]],
-        ),
-        "_headermap_builder": attr.label(
-            executable = True,
-            cfg = "host",
-            default = Label(
-                "//rules/hmap:hmaptool",
-            ),
-        ),
-    },
-)
+apple_library_2 = _apple_library_rule(implementation = _apple_library_2_impl)
