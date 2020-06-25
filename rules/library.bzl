@@ -563,7 +563,10 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
 
     objc_copts.append("-I.")
 
-    objc_copts.extend(("-index-store-path", "$(GENDIR)/rules_ios_apple_library_objc.indexstore"))
+    objc_copts.extend(("-index-store-path", "$(GENDIR)/{package}/rules_ios_objc_library_{libname}.indexstore".format(
+        package = native.package_name(),
+        libname = objc_libname,
+    )))
     objc_library(
         name = objc_libname,
         srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,

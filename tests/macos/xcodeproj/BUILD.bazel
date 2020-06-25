@@ -92,8 +92,8 @@ cat <<'EOS' > $@
 #!/bin/sh
 set -euxo pipefail
 rm -fr {package_name}/{target_name}.xcodeproj
-bazel run {package_name}:{target_name}
-bazel run {package_name}:{target_name}
+bazelisk run {package_name}:{target_name}
+bazelisk run {package_name}:{target_name}
 EOS
     """.format(
         package_name = package_name(),
