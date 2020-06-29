@@ -268,7 +268,7 @@ mkdir -p $BAZEL_DIAGNOSTICS_DIR
 export DATE_SUFFIX="$(date +%Y%m%d.%H%M%S%L)"
 export BAZEL_BUILD_EVENT_TEXT_FILENAME="$BAZEL_DIAGNOSTICS_DIR/build-event-$DATE_SUFFIX.txt"
 export BAZEL_BUILD_EXECUTION_LOG_FILENAME="$BAZEL_DIAGNOSTICS_DIR/build-execution-log-$DATE_SUFFIX.log"
-$BAZEL_BUILD_EXEC {bazel_build_target_name}
+env -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC {bazel_build_target_name}
 $BAZEL_INSTALLER
 """.format(bazel_build_target_name = target_info.bazel_build_target_name),
             }],
