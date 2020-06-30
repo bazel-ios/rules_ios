@@ -15,5 +15,5 @@ set -euo pipefail
 #
 #     command source ~/.lldbinit-source-map
 cat <<-END > ~/.lldbinit-source-map
-settings set target.source-map ./ "$SRCROOT/"
+settings set target.source-map ./ "$BAZEL_WORKSPACE_ROOT/"
 END
