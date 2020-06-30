@@ -42,11 +42,11 @@ rsync \
     --recursive --chmod=u+w --delete \
     "$input" "$output" > $BAZEL_DIAGNOSTICS_DIR/rsync-stdout-$DATE_SUFFIX.log 2> $BAZEL_DIAGNOSTICS_DIR/rsync-stderr-$DATE_SUFFIX.log
 
+$BAZEL_INSTALLERS_DIR/lldb-settings.sh  > $BAZEL_DIAGNOSTICS_DIR/lldb-stdout-$DATE_SUFFIX.log 2> $BAZEL_DIAGNOSTICS_DIR/lldb-stderr-$DATE_SUFFIX.log
 
 # Part of the build intermediary output will be swiftmodule files
 # which XCode will use for indexing. Let's keep those.
 $BAZEL_INSTALLERS_DIR/swiftmodules.sh > $BAZEL_DIAGNOSTICS_DIR/swiftmodules-stdout-$DATE_SUFFIX.log 2> $BAZEL_DIAGNOSTICS_DIR/swiftmodules-stderr-$DATE_SUFFIX.log &
 $BAZEL_INSTALLERS_DIR/indexstores.sh > $BAZEL_DIAGNOSTICS_DIR/indexstores-stdout-$DATE_SUFFIX.log 2> $BAZEL_DIAGNOSTICS_DIR/indexstores-stderr-$DATE_SUFFIX.log &
-$BAZEL_INSTALLERS_DIR/lldb-settings.sh  > $BAZEL_DIAGNOSTICS_DIR/lldb-stdout-$DATE_SUFFIX.log 2> $BAZEL_DIAGNOSTICS_DIR/lldb-stderr-$DATE_SUFFIX.log &
 
 
