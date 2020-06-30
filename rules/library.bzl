@@ -468,12 +468,13 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     objc_copts += [
         "-fmodules",
         "-fmodule-name=%s" % module_name,
-        "-gmodules",
     ]
 
     swift_copts += [
         "-Xcc",
         "-D__SWIFTC__",
+        "-Xfrontend",
+        "-no-clang-module-breadcrumbs",
     ]
 
     swift_version = _canonicalize_swift_version(kwargs.pop("swift_version", None))
