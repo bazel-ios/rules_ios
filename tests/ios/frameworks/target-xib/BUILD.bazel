@@ -5,12 +5,14 @@ apple_framework(
     name = "TargetXIB",
     srcs = glob(["TargetXIB/**/*.swift"]),
     data = glob(["TargetXIB/**/*.xib"]),
+    platforms = {"ios": "11.0"},
     visibility = ["//visibility:public"],
 )
 
 apple_framework(
     name = "TargetXIBTestsLib",
     srcs = glob(["TargetXIBTests/**/*.swift"]),
+    platforms = {"ios": "11.0"},
     visibility = ["//visibility:public"],
     deps = [":TargetXIB"],
 )
