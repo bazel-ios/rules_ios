@@ -1,5 +1,6 @@
 load("//data:xcspecs.bzl", "SETTINGS")
 load("@bazel_skylib//lib:types.bzl", "types")
+load("@bazel_skylib//lib:shell.bzl", "shell")
 
 _CLANG = "com.apple.compilers.llvm.clang.1_0"
 _SWIFT = "com.apple.xcode.tools.swift.compiler"
@@ -21,7 +22,10 @@ def _unknown_enum_value(option, value, fatal = False):
         options = repr(option["Values"]),
     ))
 
-def _add_copts_from_option(xcspec, option, value, copts, linkopts):
+def _id(value):
+    return value
+
+def _add_copts_from_option(xcspec, option, value, value_escaper, copts, linkopts):
     _type = option["Type"]
     name = option["Name"]
 
@@ -116,7 +120,7 @@ def _add_copts_from_option(xcspec, option, value, copts, linkopts):
         ))
 
     copts += [
-        arg.replace("$(value)", v)
+        arg.replace("$(value)", value_escaper(v))
         for v in (value if types.is_list(value) else [value])
         for arg in new
     ]
@@ -130,23 +134,23 @@ def settings_from_xcconfig(xcconfig):
     ibtool_copts = []
     linkopts = []
 
-    id_map = {
-        _CLANG: objc_copts,
-        _SWIFT: swift_copts,
-        _LD: linkopts,
-        _MOMC: momc_copts,
-        _MAPC: mapc_copts,
-        _IBTOOL: ibtool_copts,
-    }
+    identifiers = [
+        (_CLANG, objc_copts, shell.quote),
+        (_SWIFT, swift_copts, _id),
+        (_LD, linkopts, shell.quote),
+        (_MOMC, momc_copts, _id),
+        (_MAPC, mapc_copts, _id),
+        (_IBTOOL, ibtool_copts, _id),
+    ]
 
-    for (id, copts) in id_map.items():
+    for (id, copts, value_escaper) in identifiers:
         settings = SETTINGS[id]["Options"]
         for (setting, option) in settings.items():
             if not setting in xcconfig:
                 continue
 
             value = xcconfig[setting]
-            _add_copts_from_option(id, option, value, copts, linkopts)
+            _add_copts_from_option(id, option, value, value_escaper, copts, linkopts)
 
     return struct(
         objc_copts = objc_copts,
