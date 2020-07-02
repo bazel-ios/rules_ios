@@ -76,6 +76,16 @@ def _concat(*args):
             arr += x
     return arr
 
+def _package_framework(actions, modulemap, swiftmodule, swiftdoc, public_headers, private_headers, platforms, binaries):
+    return struct(
+        swiftmodule = None,
+        swiftdoc = None,
+        public_headers = None,
+        private_headers = None,
+        binary = None,
+        modulemap = None,
+    )
+
 def _apple_framework_packaging_impl(ctx):
     framework_name = ctx.attr.framework_name
     bundle_extension = ctx.attr.bundle_extension
@@ -402,4 +412,8 @@ the framework as a dependency.""",
         ),
     },
     doc = "Packages compiled code into an Apple .framework package",
+)
+
+framework = struct(
+    package_framework = _package_framework,
 )

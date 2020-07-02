@@ -81,6 +81,19 @@ the framework as a dependency.""",
         "deps": attr.label_list(
             providers = deps_providers,
         ),
+        "private_deps": attr.label_list(
+                doc = """\
+A list of targets that are implementation-only dependencies of the target being
+built. Libraries/linker flags from these dependencies will be propagated to
+dependent for linking, but artifacts/flags required for compilation (such as
+.swiftmodule files, C headers, and search paths) will not be propagated.
+""",
+providers = [
+            [CcInfo],
+            [SwiftInfo],
+            [apple_common.Objc],
+        ],
+            ),
     }
     return dicts.add(transition_attrs, library_attrs)
 
@@ -99,17 +112,6 @@ def _bundling_attrs(apple_product_type, bundle_id_mandatory = False, bundle_exte
 
 def _fragments():
     return ["apple", "cpp", "objc"]
-
-# _OVERRIDDEN_DESCRIPTORS = {
-#     None: struct(),
-# }
-
-# def _rules_apple_rule_descriptor(platform_type, product_type):
-#     if (platform_type, product_type) in _OVERRIDDEN_DESCRIPTORS:
-#         return _OVERRIDDEN_DESCRIPTORS[(platform_type, product_type)]
-#     return rule_support.rule_descriptor_no_ctx(
-#         platform_type, product_type
-#     )
 
 def _apple_library_rule(implementation, is_library = True, bundle_platform = None, platform_transition = True, custom_attrs = {}):
     attr_list = [
@@ -270,7 +272,7 @@ def _apple_library_2_impl(ctx):
     )
 
     swift_toolchain = ctx.attr._swift_toolchain[SwiftToolchainInfo]
-    swift_features = swift_common.configure_features(ctx = ctx, swift_toolchain = swift_toolchain, requested_features = [], unsupported_features = [])
+    swift_features = swift_common.configure_features(ctx = ctx, swift_toolchain = swift_toolchain, requested_features = ctx.features, unsupported_features = ctx.disabled_features)
     swift_compilation = swift_common.compile(
         actions = ctx.actions,
         feature_configuration = swift_features,
@@ -412,3 +414,10 @@ def _apple_library_2_impl(ctx):
     ]
 
 apple_library_2 = _apple_library_rule(implementation = _apple_library_2_impl)
+
+tools = struct(
+    modulemap = None,
+    hmap = None,
+    vfsoverlay = None,
+    partition_srcs = None,
+)
