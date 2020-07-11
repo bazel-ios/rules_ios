@@ -9,14 +9,9 @@ load("//rules:precompiled_apple_resource_bundle.bzl", "precompiled_apple_resourc
 load("//rules:hmap.bzl", "headermap")
 load("//rules/library:resources.bzl", "wrap_resources_in_filegroup")
 load("//rules/library:xcconfig.bzl", "settings_from_xcconfig")
-load("//rules:apple_library_2.bzl", "apple_library_2")
+load("//rules:apple_library_2.bzl", "apple_library_2", _PrivateHeadersInfo = "PrivateHeadersInfo")
 
-PrivateHeadersInfo = provider(
-    doc = "Propagates private headers, so they can be accessed if necessary",
-    fields = {
-        "headers": "Private headers",
-    },
-)
+PrivateHeadersInfo = _PrivateHeadersInfo
 
 _MANUAL = ["manual"]
 
@@ -255,45 +250,47 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         Struct with a bunch of info
     """
     library_tools = dict(_DEFAULT_LIBRARY_TOOLS, **library_tools)
-    swift_sources = []
-    objc_sources = []
-    objc_non_arc_sources = []
-    cpp_sources = []
+
+    # swift_sources = []
+    # objc_sources = []
+    # objc_non_arc_sources = []
+    # cpp_sources = []
     public_headers = kwargs.pop("public_headers", [])
     private_headers = kwargs.pop("private_headers", [])
-    objc_hdrs = [f for f in public_headers if f.endswith((".h", ".hh"))]
-    objc_non_exported_hdrs = []
-    objc_private_hdrs = [f for f in private_headers if f.endswith((".h", ".hh"))]
-    if public_headers:
-        public_headers = sets.make(public_headers)
-    if private_headers:
-        private_headers = sets.make(private_headers)
-    for f in sorted(kwargs.pop("non_arc_srcs", []), key = _uppercase_string):
-        if f.endswith((".m", ".mm")):
-            objc_non_arc_sources.append(f)
-        else:
-            kwargs["srcs"] = kwargs.pop("srcs", []) + [f]
-    srcs = []
-    for f in sorted(kwargs.pop("srcs", []), key = _uppercase_string):
-        srcs.append(f)
-        if f.endswith((".h", ".hh")):
-            if (private_headers and sets.contains(private_headers, f)) or \
-               (public_headers and sets.contains(public_headers, f)):
-                pass
-            elif public_headers and private_headers:
-                objc_non_exported_hdrs.append(f)
-            elif public_headers:
-                objc_private_hdrs.append(f)
-            else:
-                objc_hdrs.append(f)
-        elif f.endswith((".m", ".mm", ".c")):
-            objc_sources.append(f)
-        elif f.endswith((".swift")):
-            swift_sources.append(f)
-        elif f.endswith((".cc", ".cpp")):
-            cpp_sources.append(f)
-        else:
-            fail("Unable to compile %s in apple_framework %s" % (f, name))
+    srcs = kwargs.pop("srcs", [])
+    # objc_hdrs = [f for f in public_headers if f.endswith((".h", ".hh"))]
+    # objc_non_exported_hdrs = []
+    # objc_private_hdrs = [f for f in private_headers if f.endswith((".h", ".hh"))]
+    # if public_headers:
+    #     public_headers = sets.make(public_headers)
+    # if private_headers:
+    #     private_headers = sets.make(private_headers)
+    # for f in sorted(kwargs.pop("non_arc_srcs", []), key = _uppercase_string):
+    #     if f.endswith((".m", ".mm")):
+    #         objc_non_arc_sources.append(f)
+    #     else:
+    #         kwargs["srcs"] = kwargs.pop("srcs", []) + [f]
+    # srcs = []
+    # for f in sorted(kwargs.pop("srcs", []), key = _uppercase_string):
+    #     srcs.append(f)
+    #     if f.endswith((".h", ".hh")):
+    #         if (private_headers and sets.contains(private_headers, f)) or \
+    #            (public_headers and sets.contains(public_headers, f)):
+    #             pass
+    #         elif public_headers and private_headers:
+    #             objc_non_exported_hdrs.append(f)
+    #         elif public_headers:
+    #             objc_private_hdrs.append(f)
+    #         else:
+    #             objc_hdrs.append(f)
+    #     elif f.endswith((".m", ".mm", ".c")):
+    #         objc_sources.append(f)
+    #     elif f.endswith((".swift")):
+    #         swift_sources.append(f)
+    #     elif f.endswith((".cc", ".cpp")):
+    #         cpp_sources.append(f)
+    #     else:
+    #         fail("Unable to compile %s in apple_framework %s" % (f, name))
 
     module_name = kwargs.pop("module_name", name)
     namespace = module_name if namespace_is_module_name else name
@@ -316,6 +313,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     tags = kwargs.pop("tags", [])
     tags_manual = tags if "manual" in tags else tags + _MANUAL
     platforms = kwargs.pop("platforms", None)
+    defines = kwargs.pop("defines", None)
     internal_deps = []
     lib_names = []
 
@@ -382,236 +380,255 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     )
     deps += resource_bundles
 
-    apple_library_2(name = name + "_library", srcs = srcs, deps = deps, module_name = module_name, objc_copts = objc_copts, linkopts = linkopts, sdk_frameworks = sdk_frameworks, platforms = platforms, namespace = namespace, pch = pch, data = [library_tools["wrap_resources_in_filegroup"](name = module_name + "_data", srcs = data)])
-    return struct(namespace = namespace, transitive_deps = deps, lib_names = [name + "_library"], platforms = platforms, launch_screen_storyboard_name = None, deps = [name + "_library"])
-
-    # TODO: remove framework if set
-    # Needs to happen before headermaps are made, so the generated umbrella header gets added to those headermaps
-    if namespace_is_module_name and not module_map and \
-       (objc_hdrs or objc_private_hdrs or swift_sources or objc_sources or cpp_sources):
-        umbrella_header = library_tools["umbrella_header_generator"](
-            name = name,
-            library_tools = library_tools,
-            public_headers = objc_hdrs,
-            private_headers = objc_private_hdrs,
-            module_name = module_name,
-            **kwargs
-        )
-        if umbrella_header:
-            objc_hdrs.append(umbrella_header)
-        module_map = library_tools["modulemap_generator"](
-            name = name,
-            library_tools = library_tools,
-            umbrella_header = paths.basename(umbrella_header),
-            public_headers = objc_hdrs,
-            private_headers = objc_private_hdrs,
-            module_name = module_name,
-            framework = False if swift_sources else True,
-            **kwargs
-        )
-
-    ## BEGIN HMAP
-
-    public_hmap_name = name + "_public_hmap"
-    public_hdrs_filegroup = name + "_public_hdrs"
-    native.filegroup(
-        name = public_hdrs_filegroup,
-        srcs = objc_hdrs,
-        tags = _MANUAL,
-    )
-
-    # Public hmaps are for vendored static libs to export their header only.
-    # Other dependencies' headermaps will be generated by li_ios_framework
-    # rules.
-    headermap(
-        name = public_hmap_name,
-        namespace = namespace,
-        hdrs = [public_hdrs_filegroup],
-        tags = _MANUAL,
-    )
-    internal_deps.append(public_hmap_name)
-
-    private_hmap_name = name + "_private_hmap"
-    private_angled_hmap_name = name + "_private_angled_hmap"
-    private_hdrs_filegroup = name + "_private_hdrs"
-    private_angled_hdrs_filegroup = name + "_private_angled_hdrs"
-    native.filegroup(
-        name = private_hdrs_filegroup,
-        srcs = objc_non_exported_hdrs + objc_private_hdrs + objc_hdrs,
-        tags = _MANUAL,
-    )
-    native.filegroup(
-        name = private_angled_hdrs_filegroup,
-        srcs = objc_non_exported_hdrs + objc_private_hdrs,
-        tags = _MANUAL,
-    )
-
-    headermap(
-        name = private_hmap_name,
-        hdrs = [private_hdrs_filegroup],
-        tags = _MANUAL,
-    )
-    internal_deps.append(private_hmap_name)
-    headermap(
-        name = private_angled_hmap_name,
-        namespace = namespace,
-        hdrs = [private_angled_hdrs_filegroup],
-        tags = _MANUAL,
-    )
-    internal_deps.append(private_angled_hmap_name)
-
-    ## END HMAP
-
-    # vfs_name = name + '_vfs'
-    # vfs_overlay(name = vfs_name, deps = deps)
-    # internal_deps.append(vfs_name)
-
-    _append_headermap_copts(private_hmap_name, "-I", objc_copts, swift_copts, cc_copts)
-    _append_headermap_copts(public_hmap_name, "-I", objc_copts, swift_copts, cc_copts)
-    _append_headermap_copts(private_angled_hmap_name, "-I", objc_copts, swift_copts, cc_copts)
-    _append_headermap_copts(private_hmap_name, "-iquote", objc_copts, swift_copts, cc_copts)
-
-    objc_copts += [
-        "-fmodules",
-        "-fmodule-name=%s" % module_name,
-    ]
-
-    swift_copts += [
-        "-Xcc",
-        "-D__SWIFTC__",
-        "-Xfrontend",
-        "-no-clang-module-breadcrumbs",
-    ]
-
-    swift_version = _canonicalize_swift_version(kwargs.pop("swift_version", None))
-    if swift_version:
-        swift_copts += ["-swift-version", swift_version]
-
-    objc_libname = "%s_objc" % name
-    swift_libname = "%s_swift" % name
-    cpp_libname = "%s_cpp" % name
-
-    module_data = library_tools["wrap_resources_in_filegroup"](name = module_name + "_data", srcs = data)
-
-    if swift_sources:
-        swift_copts.extend(("-Xcc", "-I."))
-        if module_map:
-            swift_copts += [
-                "-Xcc",
-                "-fmodule-map-file=" + "$(execpath " + module_map + ")",
-                "-import-underlying-module",
-            ]
-        swiftc_inputs = other_inputs + objc_hdrs
-        if module_map:
-            swiftc_inputs.append(module_map)
-        generated_swift_header_name = module_name + "-Swift.h"
-
-        swift_library(
-            name = swift_libname,
-            module_name = module_name,
-            generated_header_name = generated_swift_header_name,
-            srcs = swift_sources,
-            copts = swift_copts,
-            deps = deps + internal_deps + lib_names,
-            swiftc_inputs = swiftc_inputs,
-            features = ["swift.no_generated_module_map"],
-            data = [module_data],
-            tags = tags_manual,
-            **kwargs
-        )
-        lib_names.append(swift_libname)
-
-        # Add generated swift header to header maps for angle bracket imports
-        swift_doublequote_hmap_name = name + "_swift_doublequote_hmap"
-        headermap(
-            name = swift_doublequote_hmap_name,
-            namespace = namespace,
-            hdrs = [],
-            direct_hdr_providers = [swift_libname],
-            tags = _MANUAL,
-        )
-        internal_deps.append(swift_doublequote_hmap_name)
-        _append_headermap_copts(swift_doublequote_hmap_name, "-iquote", objc_copts, swift_copts, cc_copts)
-
-        # Add generated swift header to header maps for double quote imports
-        swift_angle_bracket_hmap_name = name + "_swift_angle_bracket_hmap"
-        headermap(
-            name = swift_angle_bracket_hmap_name,
-            namespace = namespace,
-            hdrs = [],
-            direct_hdr_providers = [swift_libname],
-            tags = _MANUAL,
-        )
-        internal_deps.append(swift_angle_bracket_hmap_name)
-        _append_headermap_copts(swift_angle_bracket_hmap_name, "-I", objc_copts, swift_copts, cc_copts)
-
-        if module_map:
-            extend_modulemap(
-                name = module_map + ".extended." + name,
-                destination = "%s.extended.modulemap" % name,
-                source = module_map,
-                swift_header = generated_swift_header_name,
-                module_name = module_name,
-                tags = _MANUAL,
-            )
-            module_map = "%s.extended.modulemap" % name
-
-    if cpp_sources and False:
-        cc_copts.append("-I.")
-        cc_library(
-            name = cpp_libname,
-            srcs = cpp_sources + objc_private_hdrs,
-            hdrs = objc_hdrs,
-            copts = cc_copts,
-            deps = deps,
-            tags = tags_manual,
-        )
-        lib_names.append(cpp_libname)
-
-    objc_copts.append("-I.")
-
-    objc_copts.extend(("-index-store-path", "$(GENDIR)/{package}/rules_ios_objc_library_{libname}.indexstore".format(
-        package = native.package_name(),
-        libname = objc_libname,
-    )))
-    objc_library(
-        name = objc_libname,
-        srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,
-        non_arc_srcs = objc_non_arc_sources,
-        hdrs = objc_hdrs,
-        copts = objc_copts,
-        deps = deps + internal_deps + lib_names,
-        module_map = module_map,
-        sdk_dylibs = sdk_dylibs,
-        sdk_frameworks = sdk_frameworks,
-        weak_sdk_frameworks = weak_sdk_frameworks,
-        sdk_includes = sdk_includes,
-        pch = pch,
-        data = [] if swift_sources else [module_data],
-        tags = tags_manual,
-        **kwargs
-    )
-    launch_screen_storyboard_name = name + "_launch_screen_storyboard"
-    native.filegroup(
-        name = launch_screen_storyboard_name,
-        srcs = [module_data],
-        output_group = "launch_screen_storyboard",
-        tags = _MANUAL,
-    )
-    lib_names.append(objc_libname)
-
-    if export_private_headers:
-        private_headers_name = "%s_private_headers" % name
-        lib_names.append(private_headers_name)
-        _private_headers(name = private_headers_name, headers = objc_private_hdrs, tags = _MANUAL)
-
-    return struct(
-        lib_names = lib_names,
-        transitive_deps = deps,
-        deps = lib_names + deps,
-        module_name = module_name,
-        launch_screen_storyboard_name = launch_screen_storyboard_name,
-        namespace = namespace,
+    private_library_name = "{}.__internal__.library".format(name)
+    apple_library_2(
+        name = private_library_name,
+        srcs = srcs,
+        defines = defines,
         linkopts = linkopts,
+        module_name = module_name,
+        modulemap = module_map,
+        namespace = namespace,
+        objc_copts = objc_copts,
+        swift_copts = swift_copts,
+        pch = pch,
         platforms = platforms,
+        private_headers = private_headers,
+        public_headers = public_headers,
+        sdk_frameworks = sdk_frameworks,
+        data = data,
+        deps = deps,
+        tags = _MANUAL,
     )
+    return struct(namespace = namespace, transitive_deps = deps, lib_names = [private_library_name], platforms = platforms, launch_screen_storyboard_name = None, deps = deps + [private_library_name], linkopts = linkopts)
+
+    # # TODO: remove framework if set
+    # # Needs to happen before headermaps are made, so the generated umbrella header gets added to those headermaps
+    # if namespace_is_module_name and not module_map and \
+    #    (objc_hdrs or objc_private_hdrs or swift_sources or objc_sources or cpp_sources):
+    #     umbrella_header = library_tools["umbrella_header_generator"](
+    #         name = name,
+    #         library_tools = library_tools,
+    #         public_headers = objc_hdrs,
+    #         private_headers = objc_private_hdrs,
+    #         module_name = module_name,
+    #         **kwargs
+    #     )
+    #     if umbrella_header:
+    #         objc_hdrs.append(umbrella_header)
+    #     module_map = library_tools["modulemap_generator"](
+    #         name = name,
+    #         library_tools = library_tools,
+    #         umbrella_header = paths.basename(umbrella_header),
+    #         public_headers = objc_hdrs,
+    #         private_headers = objc_private_hdrs,
+    #         module_name = module_name,
+    #         framework = False if swift_sources else True,
+    #         **kwargs
+    #     )
+
+    # ## BEGIN HMAP
+
+    # public_hmap_name = name + "_public_hmap"
+    # public_hdrs_filegroup = name + "_public_hdrs"
+    # native.filegroup(
+    #     name = public_hdrs_filegroup,
+    #     srcs = objc_hdrs,
+    #     tags = _MANUAL,
+    # )
+
+    # # Public hmaps are for vendored static libs to export their header only.
+    # # Other dependencies' headermaps will be generated by li_ios_framework
+    # # rules.
+    # headermap(
+    #     name = public_hmap_name,
+    #     namespace = namespace,
+    #     hdrs = [public_hdrs_filegroup],
+    #     tags = _MANUAL,
+    # )
+    # internal_deps.append(public_hmap_name)
+
+    # private_hmap_name = name + "_private_hmap"
+    # private_angled_hmap_name = name + "_private_angled_hmap"
+    # private_hdrs_filegroup = name + "_private_hdrs"
+    # private_angled_hdrs_filegroup = name + "_private_angled_hdrs"
+    # native.filegroup(
+    #     name = private_hdrs_filegroup,
+    #     srcs = objc_non_exported_hdrs + objc_private_hdrs + objc_hdrs,
+    #     tags = _MANUAL,
+    # )
+    # native.filegroup(
+    #     name = private_angled_hdrs_filegroup,
+    #     srcs = objc_non_exported_hdrs + objc_private_hdrs,
+    #     tags = _MANUAL,
+    # )
+
+    # headermap(
+    #     name = private_hmap_name,
+    #     hdrs = [private_hdrs_filegroup],
+    #     tags = _MANUAL,
+    # )
+    # internal_deps.append(private_hmap_name)
+    # headermap(
+    #     name = private_angled_hmap_name,
+    #     namespace = namespace,
+    #     hdrs = [private_angled_hdrs_filegroup],
+    #     tags = _MANUAL,
+    # )
+    # internal_deps.append(private_angled_hmap_name)
+
+    # ## END HMAP
+
+    # # vfs_name = name + '_vfs'
+    # # vfs_overlay(name = vfs_name, deps = deps)
+    # # internal_deps.append(vfs_name)
+
+    # _append_headermap_copts(private_hmap_name, "-I", objc_copts, swift_copts, cc_copts)
+    # _append_headermap_copts(public_hmap_name, "-I", objc_copts, swift_copts, cc_copts)
+    # _append_headermap_copts(private_angled_hmap_name, "-I", objc_copts, swift_copts, cc_copts)
+    # _append_headermap_copts(private_hmap_name, "-iquote", objc_copts, swift_copts, cc_copts)
+
+    # objc_copts += [
+    #     "-fmodules",
+    #     "-fmodule-name=%s" % module_name,
+    # ]
+
+    # swift_copts += [
+    #     "-Xcc",
+    #     "-D__SWIFTC__",
+    #     "-Xfrontend",
+    #     "-no-clang-module-breadcrumbs",
+    # ]
+
+    # swift_version = _canonicalize_swift_version(kwargs.pop("swift_version", None))
+    # if swift_version:
+    #     swift_copts += ["-swift-version", swift_version]
+
+    # objc_libname = "%s_objc" % name
+    # swift_libname = "%s_swift" % name
+    # cpp_libname = "%s_cpp" % name
+
+    # module_data = library_tools["wrap_resources_in_filegroup"](name = module_name + "_data", srcs = data)
+
+    # if swift_sources:
+    #     swift_copts.extend(("-Xcc", "-I."))
+    #     if module_map:
+    #         swift_copts += [
+    #             "-Xcc",
+    #             "-fmodule-map-file=" + "$(execpath " + module_map + ")",
+    #             "-import-underlying-module",
+    #         ]
+    #     swiftc_inputs = other_inputs + objc_hdrs
+    #     if module_map:
+    #         swiftc_inputs.append(module_map)
+    #     generated_swift_header_name = module_name + "-Swift.h"
+
+    #     swift_library(
+    #         name = swift_libname,
+    #         module_name = module_name,
+    #         generated_header_name = generated_swift_header_name,
+    #         srcs = swift_sources,
+    #         copts = swift_copts,
+    #         deps = deps + internal_deps + lib_names,
+    #         swiftc_inputs = swiftc_inputs,
+    #         features = ["swift.no_generated_module_map"],
+    #         data = [module_data],
+    #         tags = tags_manual,
+    #         **kwargs
+    #     )
+    #     lib_names.append(swift_libname)
+
+    #     # Add generated swift header to header maps for angle bracket imports
+    #     swift_doublequote_hmap_name = name + "_swift_doublequote_hmap"
+    #     headermap(
+    #         name = swift_doublequote_hmap_name,
+    #         namespace = namespace,
+    #         hdrs = [],
+    #         direct_hdr_providers = [swift_libname],
+    #         tags = _MANUAL,
+    #     )
+    #     internal_deps.append(swift_doublequote_hmap_name)
+    #     _append_headermap_copts(swift_doublequote_hmap_name, "-iquote", objc_copts, swift_copts, cc_copts)
+
+    #     # Add generated swift header to header maps for double quote imports
+    #     swift_angle_bracket_hmap_name = name + "_swift_angle_bracket_hmap"
+    #     headermap(
+    #         name = swift_angle_bracket_hmap_name,
+    #         namespace = namespace,
+    #         hdrs = [],
+    #         direct_hdr_providers = [swift_libname],
+    #         tags = _MANUAL,
+    #     )
+    #     internal_deps.append(swift_angle_bracket_hmap_name)
+    #     _append_headermap_copts(swift_angle_bracket_hmap_name, "-I", objc_copts, swift_copts, cc_copts)
+
+    #     if module_map:
+    #         extend_modulemap(
+    #             name = module_map + ".extended." + name,
+    #             destination = "%s.extended.modulemap" % name,
+    #             source = module_map,
+    #             swift_header = generated_swift_header_name,
+    #             module_name = module_name,
+    #             tags = _MANUAL,
+    #         )
+    #         module_map = "%s.extended.modulemap" % name
+
+    # if cpp_sources and False:
+    #     cc_copts.append("-I.")
+    #     cc_library(
+    #         name = cpp_libname,
+    #         srcs = cpp_sources + objc_private_hdrs,
+    #         hdrs = objc_hdrs,
+    #         copts = cc_copts,
+    #         deps = deps,
+    #         tags = tags_manual,
+    #     )
+    #     lib_names.append(cpp_libname)
+
+    # objc_copts.append("-I.")
+
+    # objc_copts.extend(("-index-store-path", "$(GENDIR)/{package}/rules_ios_objc_library_{libname}.indexstore".format(
+    #     package = native.package_name(),
+    #     libname = objc_libname,
+    # )))
+    # objc_library(
+    #     name = objc_libname,
+    #     srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,
+    #     non_arc_srcs = objc_non_arc_sources,
+    #     hdrs = objc_hdrs,
+    #     copts = objc_copts,
+    #     deps = deps + internal_deps + lib_names,
+    #     module_map = module_map,
+    #     sdk_dylibs = sdk_dylibs,
+    #     sdk_frameworks = sdk_frameworks,
+    #     weak_sdk_frameworks = weak_sdk_frameworks,
+    #     sdk_includes = sdk_includes,
+    #     pch = pch,
+    #     data = [] if swift_sources else [module_data],
+    #     tags = tags_manual,
+    #     **kwargs
+    # )
+    # launch_screen_storyboard_name = name + "_launch_screen_storyboard"
+    # native.filegroup(
+    #     name = launch_screen_storyboard_name,
+    #     srcs = [module_data],
+    #     output_group = "launch_screen_storyboard",
+    #     tags = _MANUAL,
+    # )
+    # lib_names.append(objc_libname)
+
+    # if export_private_headers:
+    #     private_headers_name = "%s_private_headers" % name
+    #     lib_names.append(private_headers_name)
+    #     _private_headers(name = private_headers_name, headers = objc_private_hdrs, tags = _MANUAL)
+
+    # return struct(
+    #     lib_names = lib_names,
+    #     transitive_deps = deps,
+    #     deps = lib_names + deps,
+    #     module_name = module_name,
+    #     launch_screen_storyboard_name = launch_screen_storyboard_name,
+    #     namespace = namespace,
+    #     linkopts = linkopts,
+    #     platforms = platforms,
+    # )

@@ -14,6 +14,7 @@ load(
     "resources",
 )
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleResourceInfo")
+load("@build_bazel_rules_apple//apple/internal/aspects:resource_aspect.bzl", "apple_resource_aspect")
 load("//rules:hmap.bzl", "hmap")
 load(
     "@bazel_tools//tools/build_defs/cc:action_names.bzl",
@@ -25,6 +26,13 @@ load(
 )
 
 _VFS_ROOT = "/__com_github_bazel_ios_rules_ios/framework"
+
+PrivateHeadersInfo = provider(
+    doc = "Propagates private headers, so they can be accessed if necessary",
+    fields = {
+        "headers": "Private headers",
+    },
+)
 
 def _tool_attrs():
     return {
@@ -90,15 +98,20 @@ the framework as a dependency.""",
     library_attrs = {
         "srcs": attr.label_list(allow_files = srcs_files),
         "private_headers": attr.label_list(allow_files = headers_files),
+        "public_headers": attr.label_list(allow_files = headers_files),
         "module_name": attr.string(mandatory = False),
         "linkopts": attr.string_list(mandatory = False),
         "objc_copts": attr.string_list(mandatory = False),
+        "swift_copts": attr.string_list(mandatory = False),
+        "defines": attr.string_list(mandatory = False),
         "sdk_frameworks": attr.string_list(mandatory = False),
         "namespace": attr.string(mandatory = False),
+        "modulemap": attr.label(allow_single_file = ["modulemap"], mandatory = False),
         "pch": attr.label(allow_single_file = ["pch"], mandatory = False, default = Label("@build_bazel_rules_ios//rules/library:common.pch")),
         "data": attr.label_list(allow_files = True, mandatory = False),
         "deps": attr.label_list(
             providers = deps_providers,
+            aspects = [apple_resource_aspect],
         ),
         "private_deps": attr.label_list(
             doc = """\
@@ -112,6 +125,7 @@ dependent for linking, but artifacts/flags required for compilation (such as
                 [SwiftInfo],
                 [apple_common.Objc],
             ],
+            aspects = [apple_resource_aspect],
         ),
     }
     return dicts.add(transition_attrs, library_attrs)
@@ -187,9 +201,10 @@ def _partition_srcs(name, srcs, private_headers = None, public_headers = None):
     for f in sorted(srcs, key = _uppercase_path_string):
         extension = f.extension
         if extension in ("h", "hh"):
-            if (private_headers and sets.contains(private_headers, f)) or \
-               (public_headers and sets.contains(public_headers, f)):
-                pass
+            if public_headers and sets.contains(public_headers, f):
+                objc_hdrs.append(f)
+            elif private_headers and sets.contains(private_headers, f):
+                objc_private_hdrs.append(f)
             elif public_headers and private_headers:
                 objc_non_exported_hdrs.append(f)
             elif public_headers:
@@ -219,76 +234,88 @@ def _partition_srcs(name, srcs, private_headers = None, public_headers = None):
 
 def _cc_compile(srcs, prebuild, output_template, dep_cc_info, copts, actions, cc_toolchain, cc_feature_configuration):
     object_files = []
-    for file in srcs.objc_sources:
-        output = actions.declare_file(output_template.format(type = "objc_arc", filename = file.basename + ".o"))
-        compile_variables = cc_common.create_compile_variables(
-            cc_toolchain = cc_toolchain,
-            feature_configuration = cc_feature_configuration,
-            source_file = file.path,
-            output_file = output.path,
-            user_compile_flags = copts.objc,
-        )
-        env = cc_common.get_environment_variables(
-            action_name = OBJC_COMPILE_ACTION_NAME,
-            feature_configuration = cc_feature_configuration,
-            variables = compile_variables,
-        )
+    mappings = [
+        struct(files = srcs.objc_sources, type = "objc_arc", copts = ["-fobjc-arc"] + copts.objc, action_name = OBJC_COMPILE_ACTION_NAME, mnemonic = "ObjcCompile"),
+    ]
 
-        command_line = cc_common.get_memory_inefficient_command_line(
-            action_name = OBJC_COMPILE_ACTION_NAME,
-            feature_configuration = cc_feature_configuration,
-            variables = compile_variables,
-        )
+    shared_args = actions.args()
+    shared_args.add(prebuild.private_hmap, format = "-iquote%s")
+    shared_args.add(prebuild.private_hmap, format = "-I%s")
+    shared_args.add(prebuild.public_hmap, format = "-I%s")
+    shared_args.add("-I.")
+    shared_args.add(prebuild.private_hmap, format = "-iquote%s")
+    shared_args.add(_VFS_ROOT, format = "-F%s")
+    shared_args.add_all(dep_cc_info.compilation_context.framework_includes, format_each = "-F%s")
+    shared_args.add("-fmodules")
+    shared_args.add_all(dep_cc_info.compilation_context.defines, format_each = "-D%s")
 
-        inputs = [file, prebuild.private_hmap, prebuild.public_hmap] + srcs.objc_hdrs + srcs.objc_non_exported_hdrs + srcs.objc_private_hdrs
+    shared_direct_inputs = [prebuild.private_hmap, prebuild.public_hmap] + srcs.objc_hdrs + srcs.objc_non_exported_hdrs + srcs.objc_private_hdrs
+    if prebuild.module_name:
+        shared_args.add(prebuild.module_name, format = "-fmodule-name=%s")
+    if prebuild.vfsoverlay_file:
+        shared_args.add(prebuild.vfsoverlay_file, format = "-ivfsoverlay%s")
+        shared_direct_inputs.append(prebuild.vfsoverlay_file)
+    if prebuild.modulemap:
+        shared_args.add(prebuild.modulemap, format = "-fmodule-map-file=%s")
+        shared_direct_inputs.append(prebuild.modulemap)
+    if prebuild.pch:
+        shared_args.add("-include", prebuild.pch)
+        shared_direct_inputs.append(prebuild.pch)
+    shared_inputs = depset(shared_direct_inputs, transitive = [cc_toolchain.all_files, dep_cc_info.compilation_context.headers])
 
-        args = actions.args()
-        args.add("-fobjc-arc")
-        args.add(prebuild.private_hmap, format = "-iquote%s")
-        args.add(prebuild.public_hmap, format = "-I%s")
-        args.add("-I.")
-        args.add(prebuild.private_hmap, format = "-iquote%s")
-        args.add(_VFS_ROOT, format = "-F%s")
-        args.add_all(dep_cc_info.compilation_context.framework_includes, before_each = "-F")
+    for mapping in mappings:
+        for file in mapping.files:
+            output = actions.declare_file(output_template.format(type = mapping.type, filename = file.basename + ".o"))
+            compile_variables = cc_common.create_compile_variables(
+                cc_toolchain = cc_toolchain,
+                feature_configuration = cc_feature_configuration,
+                source_file = file.path,
+                output_file = output.path,
+                user_compile_flags = mapping.copts,
+            )
 
-        outputs = [output]
+            env = cc_common.get_environment_variables(
+                action_name = mapping.action_name,
+                feature_configuration = cc_feature_configuration,
+                variables = compile_variables,
+            )
 
-        if SWIFT_FEATURE_INDEX_WHILE_BUILDING and False:
-            indexstore = actions.declare_directory(output_template.format(type = "index_store", filename = file.basename + ".indexstore"))
-            args.add("-index-store-path", indexstore.path)
-            outputs.append(indexstore)
+            command_line = cc_common.get_memory_inefficient_command_line(
+                action_name = mapping.action_name,
+                feature_configuration = cc_feature_configuration,
+                variables = compile_variables,
+            )
 
-        if prebuild.vfsoverlay_file:
-            args.add(prebuild.vfsoverlay_file, format = "-ivfsoverlay%s")
-            inputs.append(prebuild.vfsoverlay_file)
-        if prebuild.modulemap:
-            args.add(prebuild.modulemap, format = "-fmodule-map-file=%s")
-            inputs.append(prebuild.modulemap)
-        if prebuild.pch:
-            args.add("-include", prebuild.pch)
-            inputs.append(prebuild.pch)
-        args.add("-fmodules")
-        args.add_all(command_line)
+            outputs = [output]
 
-        tool = cc_common.get_tool_for_action(feature_configuration = cc_feature_configuration, action_name = OBJC_COMPILE_ACTION_NAME)
+            args = actions.args()
 
-        object_files.append(output)
-        actions.run(
-            executable = tool,
-            arguments = [args],
-            inputs = depset(inputs, transitive = [cc_toolchain.all_files, dep_cc_info.compilation_context.headers]),
-            outputs = outputs,
-            env = env,
-            mnemonic = "ObjcCompile",
-        )
+            if SWIFT_FEATURE_INDEX_WHILE_BUILDING and False:
+                indexstore = actions.declare_directory(output_template.format(type = "index_store", filename = file.basename + ".indexstore"))
+                args.add("-index-store-path", indexstore.path)
+                outputs.append(indexstore)
+
+            tool = cc_common.get_tool_for_action(feature_configuration = cc_feature_configuration, action_name = OBJC_COMPILE_ACTION_NAME)
+
+            object_files.append(output)
+            actions.run(
+                executable = tool,
+                arguments = [shared_args, args.add_all(command_line)],
+                inputs = depset([file], transitive = [shared_inputs]),
+                outputs = outputs,
+                env = env,
+                mnemonic = "ObjcCompile",
+                progress_message = "Compiling %s" % file.short_path,
+            )
     return object_files
 
-def _link(object_files, archive, actions, cc_toolchain, cc_feature_configuration):
+def _link(object_files, archive, linkopts, actions, cc_toolchain, cc_feature_configuration):
     archiver_variables = cc_common.create_link_variables(
         cc_toolchain = cc_toolchain,
         feature_configuration = cc_feature_configuration,
         is_using_linker = False,
         output_file = archive.path,
+        user_link_flags = linkopts,
     )
     command_line = cc_common.get_memory_inefficient_command_line(
         action_name = CPP_LINK_STATIC_LIBRARY_ACTION_NAME,
@@ -312,17 +339,17 @@ def _link(object_files, archive, actions, cc_toolchain, cc_feature_configuration
         outputs = [archive],
         env = env,
         execution_requirements = execution_requirements,
+        mnemonic = "AppleLibraryArchive",
+        progress_message = "Linking {}".format(archive.short_path),
     )
 
 def _library_data(label, swift_module_name, files, deps):
     providers = []
 
     bucketize_args = {}
-    collect_args = {}
 
     if swift_module_name:
         bucketize_args["swift_module"] = swift_module_name
-    collect_args["res_attrs"] = ["data"]
     owner = str(label)
 
     # Collect all resource files related to this target.
@@ -350,7 +377,7 @@ def _apple_library_2_impl(ctx):
     bundle_extension = getattr(ctx.attr, "bundle_extension", "framework")
     providers = []
 
-    srcs = _partition_srcs(srcs = ctx.files.srcs, name = name)
+    srcs = _partition_srcs(srcs = ctx.files.srcs, name = name, private_headers = ctx.files.private_headers, public_headers = ctx.files.public_headers)
 
     output_template = "_objs/%s/{type}/{filename}" % (name.name)
 
@@ -367,10 +394,10 @@ def _apple_library_2_impl(ctx):
 
     private_hmap = ctx.actions.declare_file(output_template.format(type = "hmap", filename = "private.hmap"))
     public_hmap = ctx.actions.declare_file(output_template.format(type = "hmap", filename = "public.hmap"))
-    modulemap = None
+    modulemap = ctx.file.modulemap
     vfsoverlay_file = None
     umbrella_header = None
-    if namespace_is_module_name:
+    if namespace_is_module_name and not modulemap:
         modulemap = ctx.actions.declare_file(output_template.format(type = "modulemap", filename = module_name + ".modulemap"))
         umbrella_header = ctx.actions.declare_file(output_template.format(type = "umbrella_header", filename = module_name + "-umbrella.h"))
         vfsoverlay_file = ctx.actions.declare_file(output_template.format(type = "vfsoverlay", filename = module_name + ".vfsoverlay.yaml"))
@@ -480,6 +507,8 @@ framework module %s {
                 "-Xcc",
                 "-iquote{}".format(private_hmap.path),
                 "-Xcc",
+                "-I{}".format(private_hmap.path),
+                "-Xcc",
                 "-I{}".format(public_hmap.path),
                 "-Xcc",
                 "-I.",
@@ -487,8 +516,8 @@ framework module %s {
                 "-D__SWIFTC__",
                 "-Xfrontend",
                 "-no-clang-module-breadcrumbs",
-            ],
-            defines = [],
+            ] + ctx.attr.swift_copts,
+            defines = ctx.attr.defines,
             deps = ctx.attr.deps + ctx.attr.private_deps,
             generated_header_name = "{}-Swift.h".format(module_name),
             genfiles_dir = None,
@@ -503,7 +532,7 @@ framework module %s {
             inputs = [modulemap],
             outputs = [extended_modulemap],
             mnemonic = "ExtendModulemap",
-            progress_message = "Extending %s" % modulemap.basename,
+            progress_message = "Extending %s" % modulemap.short_path,
             command = "echo \"$1\" | cat <(perl -0 -pe 's/\\A(framework )?/framework /m' $2) - > $3",
             arguments = [ctx.actions.args()
                 .add("""
@@ -535,8 +564,10 @@ module {module_name}.Swift {{
         hdrs_lists = (srcs.objc_hdrs,),
     )
 
-    dep_cc_info = cc_common.merge_cc_infos(cc_infos = [dep[CcInfo] for dep in ctx.attr.deps + ctx.attr.private_deps if CcInfo in dep])
-    object_files += _cc_compile(srcs = srcs, prebuild = struct(private_hmap = private_hmap, public_hmap = public_hmap, vfsoverlay_file = vfsoverlay_file, modulemap = modulemap, pch = ctx.file.pch), output_template = output_template, dep_cc_info = dep_cc_info, copts = struct(objc = ctx.attr.objc_copts), actions = ctx.actions, cc_toolchain = cc_toolchain, cc_feature_configuration = cc_feature_configuration)
+    dep_cc_info = cc_common.merge_cc_infos(cc_infos = [
+        CcInfo(compilation_context = cc_common.create_compilation_context(defines = depset(ctx.attr.defines)), linking_context = None),
+    ] + [dep[CcInfo] for dep in ctx.attr.deps + ctx.attr.private_deps if CcInfo in dep])
+    object_files += _cc_compile(srcs = srcs, prebuild = struct(private_hmap = private_hmap, public_hmap = public_hmap, vfsoverlay_file = vfsoverlay_file, modulemap = modulemap, module_name = module_name, pch = ctx.file.pch), output_template = output_template, dep_cc_info = dep_cc_info, copts = struct(objc = ctx.attr.objc_copts), actions = ctx.actions, cc_toolchain = cc_toolchain, cc_feature_configuration = cc_feature_configuration)
 
     archive = []
     if object_files:
@@ -545,7 +576,7 @@ module {module_name}.Swift {{
             bundle_name = module_name,
             bundle_extension = bundle_extension,
         ))]
-        _link(object_files = object_files, archive = archive[0], actions = ctx.actions, cc_toolchain = cc_toolchain, cc_feature_configuration = cc_feature_configuration)
+        _link(object_files = object_files, archive = archive[0], linkopts = ctx.attr.linkopts, actions = ctx.actions, cc_toolchain = cc_toolchain, cc_feature_configuration = cc_feature_configuration)
 
     copied_framework_paths = {}
     for (dir, files) in {"Headers": srcs.objc_hdrs, "PrivateHeaders": srcs.objc_private_hdrs}.items():
@@ -627,26 +658,30 @@ module {module_name}.Swift {{
         framework_search_paths = depset([_VFS_ROOT + "{name}/{bundle_name}.{bundle_extension}".format(name = ctx.label.name, bundle_name = module_name, bundle_extension = bundle_extension)]),
         header = depset([copied_framework_files[f] for f in srcs.objc_hdrs]),
         module_map = depset([copied_framework_files[modulemap]] if modulemap else []),
-        umbrella_header = depset([copied_framework_files[umbrella_header]] if modulemap else []),
+        umbrella_header = depset([copied_framework_files[umbrella_header]] if umbrella_header else []),
         uses_swift = swift_compilation != None,
         link_inputs = depset(link_inputs),
         linkopt = depset(linkopts),
         static_framework_file = depset(archive),
         sdk_framework = depset(ctx.attr.sdk_frameworks),
+        define = depset(ctx.attr.defines),
     )
     cc_info_provider = CcInfo(compilation_context = objc_provider.compilation_context)
     return providers + [
         DefaultInfo(
             files = depset(archive + copied_framework_files.values()),
-            runfiles = ctx.runfiles(
-                collect_data = True,
-                collect_default = True,
-                files = ctx.files.data,
-            ),
+            # runfiles = ctx.runfiles(
+            #     collect_data = True,
+            #     collect_default = True,
+            #     files = ctx.files.data,
+            # ),
         ),
         objc_provider,
         cc_info_provider,
         swift_common.create_swift_info(**swift_info_fields),
+        PrivateHeadersInfo(
+            headers = depset(direct = srcs.objc_private_hdrs),
+        ),
     ] + _library_data(label = name, swift_module_name = module_name if swift_toolchain else None, files = ctx.files.data, deps = ctx.attr.deps + ctx.attr.private_deps + ctx.attr.data)
 
 apple_library_2 = _apple_library_rule(implementation = _apple_library_2_impl)

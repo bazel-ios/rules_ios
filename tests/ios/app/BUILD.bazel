@@ -46,6 +46,7 @@ ios_application(
         },
     }],
     minimum_os_version = "10.0",
+    objc_copts = ["-Werror"],
     deps = [
         ":Empty",
         ":FW",
