@@ -39,8 +39,7 @@ apple_framework_packaging(
     skip_packaging = ["binary"],
     transitive_deps = [],
     deps = [
-        ":TestImports-App_objc",
-        ":TestImports-App_swift",
+        ":TestImports-App_library",
     ],
 )
 

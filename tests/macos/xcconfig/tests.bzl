@@ -135,7 +135,7 @@ def xcconfig_unit_test_suite():
             assert_xcconfig(
                 name = "otherwise_supported",
                 xcconfig = {"ALTERNATE_LINKER": "foo"},
-                expected = {"linkopts": ["-fuse-ld='foo'"]},
+                expected = {"linkopts": ["-fuse-ld=foo"]},
             ),
             assert_xcconfig(
                 name = "empty_string_match",
@@ -145,12 +145,12 @@ def xcconfig_unit_test_suite():
             assert_xcconfig(
                 name = "command_line_flag",
                 xcconfig = {"SYSTEM_FRAMEWORK_SEARCH_PATHS": ["foo", "/bar"]},
-                expected = {"linkopts": ["-iframework", "'foo'", "-iframework", "'/bar'"]},
+                expected = {"linkopts": ["-iframework", "foo", "-iframework", "/bar"]},
             ),
             assert_xcconfig(
                 name = "command_line_prefix",
                 xcconfig = {"CLANG_MACRO_BACKTRACE_LIMIT": "12"},
-                expected = {"objc_copts": ["-fmacro-backtrace-limit='12'"]},
+                expected = {"objc_copts": ["-fmacro-backtrace-limit=12"]},
             ),
             assert_xcconfig(
                 name = "command_line_flag_default_bool",
@@ -170,12 +170,12 @@ def xcconfig_unit_test_suite():
             assert_xcconfig(
                 name = "option_with_inherited",
                 xcconfig = {"GCC_PREPROCESSOR_DEFINITIONS": ["$(inherited)", "ABC=1"]},
-                expected = {"objc_copts": ["-D'$(inherited)'", "-D'ABC=1'"]},
+                expected = {"objc_copts": ["-D$(inherited)", "-DABC=1"]},
             ),
             assert_xcconfig(
                 name = "option_with_shell_metacharacters",
                 xcconfig = {"GCC_PREPROCESSOR_DEFINITIONS": ["DISPLAY_VERSION=1.0.0-beta.1", "SDK_NAME=WHY WOULD YOU ADD SPACES"]},
-                expected = {"objc_copts": ["-D'DISPLAY_VERSION=1.0.0-beta.1'", "-D'SDK_NAME=WHY WOULD YOU ADD SPACES'"]},
+                expected = {"objc_copts": ["-DDISPLAY_VERSION=1.0.0-beta.1", "-DSDK_NAME=WHY WOULD YOU ADD SPACES"]},
             ),
             # TODO: we should eventually support conditioned vars somehow
             assert_xcconfig(

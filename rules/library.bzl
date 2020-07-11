@@ -9,6 +9,7 @@ load("//rules:precompiled_apple_resource_bundle.bzl", "precompiled_apple_resourc
 load("//rules:hmap.bzl", "headermap")
 load("//rules/library:resources.bzl", "wrap_resources_in_filegroup")
 load("//rules/library:xcconfig.bzl", "settings_from_xcconfig")
+load("//rules:apple_library_2.bzl", "apple_library_2")
 
 PrivateHeadersInfo = provider(
     doc = "Propagates private headers, so they can be accessed if necessary",
@@ -272,7 +273,9 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             objc_non_arc_sources.append(f)
         else:
             kwargs["srcs"] = kwargs.pop("srcs", []) + [f]
+    srcs = []
     for f in sorted(kwargs.pop("srcs", []), key = _uppercase_string):
+        srcs.append(f)
         if f.endswith((".h", ".hh")):
             if (private_headers and sets.contains(private_headers, f)) or \
                (public_headers and sets.contains(public_headers, f)):
@@ -331,15 +334,15 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                 opts = repr(v),
             ))
 
-    if linkopts:
-        linkopts_name = "%s_linkopts" % (name)
+    # if linkopts:
+    #     linkopts_name = "%s_linkopts" % (name)
 
-        # https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library
-        cc_library(
-            name = linkopts_name,
-            linkopts = linkopts,
-        )
-        internal_deps.append(linkopts_name)
+    #     # https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library
+    #     cc_library(
+    #         name = linkopts_name,
+    #         linkopts = linkopts,
+    #     )
+    #     internal_deps.append(linkopts_name)
 
     for vendored_static_framework in kwargs.pop("vendored_static_frameworks", []):
         import_name = "%s-%s-import" % (name, paths.basename(vendored_static_framework))
@@ -378,6 +381,9 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         **kwargs
     )
     deps += resource_bundles
+
+    apple_library_2(name = name + "_library", srcs = srcs, deps = deps, module_name = module_name, objc_copts = objc_copts, linkopts = linkopts, sdk_frameworks = sdk_frameworks, platforms = platforms, namespace = namespace, pch = pch, data = [library_tools["wrap_resources_in_filegroup"](name = module_name + "_data", srcs = data)])
+    return struct(namespace = namespace, transitive_deps = deps, lib_names = [name + "_library"], platforms = platforms, launch_screen_storyboard_name = None, deps = [name + "_library"])
 
     # TODO: remove framework if set
     # Needs to happen before headermaps are made, so the generated umbrella header gets added to those headermaps

@@ -1,6 +1,5 @@
 load("//data:xcspecs.bzl", "SETTINGS")
 load("@bazel_skylib//lib:types.bzl", "types")
-load("@bazel_skylib//lib:shell.bzl", "shell")
 
 _CLANG = "com.apple.compilers.llvm.clang.1_0"
 _SWIFT = "com.apple.xcode.tools.swift.compiler"
@@ -135,9 +134,9 @@ def settings_from_xcconfig(xcconfig):
     linkopts = []
 
     identifiers = [
-        (_CLANG, objc_copts, shell.quote),
+        (_CLANG, objc_copts, _id),
         (_SWIFT, swift_copts, _id),
-        (_LD, linkopts, shell.quote),
+        (_LD, linkopts, _id),
         (_MOMC, momc_copts, _id),
         (_MAPC, mapc_copts, _id),
         (_IBTOOL, ibtool_copts, _id),

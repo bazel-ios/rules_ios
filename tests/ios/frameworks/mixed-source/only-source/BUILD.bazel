@@ -13,27 +13,11 @@ apple_framework(
     srcs = glob(
         include = [
             "MixedSourceFramework/**/*.h",
+            "MixedSourceFramework/**/*.hh",
             "MixedSourceFramework/**/*.m",
-            "MixedSourceFramework/**/*.swift",
-        ],
-        # Cannot be excluded since the swift compiler is hard-coded to refer to a header with the same name as
-        # the module when generating the -Swift.h header
-        # exclude = ["MixedSourceFramework/MixedSourceFramework.h"],
-    ),
-    visibility = ["//visibility:public"],
-    deps = [
-        ":SwiftLibrary",  # This is here in order to test for https://github.com/bazel-ios/rules_ios/issues/55
-    ],
-)
-
-load("//rules:apple_library_2.bzl", "apple_library_2")
-apple_library_2(
-    name = "MixedSourceLib",
-    module_name = "MixedSourceFramework",
-    srcs = glob(
-        include = [
-            "MixedSourceFramework/**/*.h",
-            "MixedSourceFramework/**/*.m",
+            "MixedSourceFramework/**/*.mm",
+            "MixedSourceFramework/**/*.c",
+            "MixedSourceFramework/**/*.cpp",
             "MixedSourceFramework/**/*.swift",
         ],
         # Cannot be excluded since the swift compiler is hard-coded to refer to a header with the same name as
