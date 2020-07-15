@@ -66,6 +66,7 @@ def _xcodeproj_aspect_impl(target, ctx):
         bazel_build_target_name = "@%s//" % target.label.workspace_name
     bazel_build_target_name += "%s:%s" % (target.label.package, target.label.name)
     bazel_bin_subdir = "%s/%s" % (target.label.workspace_root, target.label.package)
+
     if AppleBundleInfo in target:
         bundle_info = target[AppleBundleInfo]
         test_host_appname = None
@@ -90,6 +91,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             bazel_bin_subdir = bazel_bin_subdir,
             srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
             asset_srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "asset_srcs")),
+            other_cflags = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "other_cflags")),
             build_files = depset(_srcs_info_build_files(ctx), transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
             product_type = bundle_info.product_type[_PRODUCT_SPECIFIER_LENGTH:],
             platform_type = bundle_info.platform_type,
@@ -103,6 +105,7 @@ def _xcodeproj_aspect_impl(target, ctx):
                 _SrcsInfo(
                     srcs = info.srcs,
                     asset_srcs = info.asset_srcs,
+                    other_cflags = info.other_cflags,
                     build_files = depset(_srcs_info_build_files(ctx)),
                     direct_srcs = [],
                 ),
@@ -115,6 +118,7 @@ def _xcodeproj_aspect_impl(target, ctx):
     else:
         srcs = []
         asset_srcs = []
+        other_cflags = []
         for attr in _dir(ctx.rule.files):
             if attr == "srcs":
                 srcs += getattr(ctx.rule.files, attr, [])
@@ -122,11 +126,20 @@ def _xcodeproj_aspect_impl(target, ctx):
                 asset_srcs += getattr(ctx.rule.files, attr, [])
         srcs = [f for f in srcs if _is_current_project_file(f)]
         asset_srcs = [f for f in asset_srcs if _is_current_project_file(f)]
+        if CcInfo in target:
+          for fi in target[CcInfo].compilation_context.framework_includes.to_list():
+            if fi[0] != '/':
+              fi = "$BAZEL_WORKSPACE_ROOT/%s" % fi
+            other_cflags.append("-F%s" % fi)
+          other_cflags.extend(["-D%s" % di for di in target[CcInfo].compilation_context.defines.to_list()])
+          other_cflags.append("-fobjc-arc") # TODO: only apply to arc sources
+          print("got other cflags %s" % other_cflags)
 
         providers.append(
             _SrcsInfo(
                 srcs = depset(srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
                 asset_srcs = depset(asset_srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "asset_srcs")),
+                other_cflags = depset(other_cflags, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "other_cflags")),
                 build_files = depset(_srcs_info_build_files(ctx), transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
                 direct_srcs = srcs,
             ),
@@ -236,7 +249,7 @@ def _xcodeproj_impl(ctx):
             "MACH_O_TYPE": target_macho_type,
             "CLANG_ENABLE_MODULES": "YES",
         }
-
+        target_settings["OTHER_CFLAGS"] = " ".join(target_info.other_cflags.to_list())
         if target_info.product_type == "application":
             target_settings["INFOPLIST_FILE"] = "$BAZEL_STUBS_DIR/Info-stub.plist"
             target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
