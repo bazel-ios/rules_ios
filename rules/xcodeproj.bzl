@@ -133,26 +133,18 @@ def _xcodeproj_aspect_impl(target, ctx):
         srcs = [f for f in srcs if _is_current_project_file(f)]
         non_arc_srcs = [f for f in non_arc_srcs if _is_current_project_file(f)]
         asset_srcs = [f for f in asset_srcs if _is_current_project_file(f)]
-        # if CcInfo in target:
-        #   for fi in target[CcInfo].framework_includes.framework_includes.to_list():
-        #     if fi[0] != '/':
-        #       fi = "$BAZEL_WORKSPACE_ROOT/%s" % fi
-        #     framework_includes.append("-F%s" % fi)
-        #   framework_includes.extend(["-D%s" % di for di in target[CcInfo].framework_includes.defines.to_list()])
-        #   framework_includes.append("-fobjc-arc") # TODO: only apply to arc sources
-        #   print("got other cflags %s" % framework_includes)
-        framework_includes = []
-        cc_defines = []
+        framework_includes = _get_attr_values_for_name(deps, _SrcsInfo, "framework_includes")
+        cc_defines = _get_attr_values_for_name(deps, _SrcsInfo, "cc_defines")
         if CcInfo in target:
-          framework_includes = target[CcInfo].compilation_context.framework_includes.to_list()
-          cc_defines = target[CcInfo].compilation_context.defines.to_list()
+          framework_includes.append(target[CcInfo].compilation_context.framework_includes)
+          cc_defines.append(target[CcInfo].compilation_context.defines)
         providers.append(
             _SrcsInfo(
                 srcs = depset(srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
-                non_arc_srcs = depset(asset_srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "non_arc_srcs")),
+                non_arc_srcs = depset(non_arc_srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "non_arc_srcs")),
                 asset_srcs = depset(asset_srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "asset_srcs")),
-                framework_includes = depset(framework_includes, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "framework_includes")),
-                cc_defines = depset(cc_defines, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "cc_defines")),
+                framework_includes = depset([], transitive = framework_includes),
+                cc_defines = depset([], transitive = cc_defines),
                 build_files = depset(_srcs_info_build_files(ctx), transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
                 direct_srcs = srcs,
             ),
@@ -269,9 +261,13 @@ def _xcodeproj_impl(ctx):
             "CLANG_ENABLE_MODULES": "YES",
             "CLANG_ENABLE_OBJC_ARC": "YES",
         }
-        # TODO
-        target_settings["FRAMEWORK_SEARCH_PATHS"] = " ".join(target_info.framework_includes.to_list())
-        target_settings["GCC_PREPROCESSOR_DEFINITIONS"] = " ".join(target_info.cc_defines.to_list())
+        framework_search_paths = []
+        for fi in target_info.framework_includes.to_list():
+          if fi[0] != '/':
+            fi = "$BAZEL_WORKSPACE_ROOT/%s" % fi
+          framework_search_paths.append("\"%s\"" % fi)
+        target_settings["FRAMEWORK_SEARCH_PATHS"] = " ".join(framework_search_paths)
+        target_settings["GCC_PREPROCESSOR_DEFINITIONS"] = " ".join(["\"%s\"" % d for d in target_info.cc_defines.to_list()])
         if target_info.product_type == "application":
             target_settings["INFOPLIST_FILE"] = "$BAZEL_STUBS_DIR/Info-stub.plist"
             target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
