@@ -273,7 +273,7 @@ $BAZEL_INSTALLER
 """.format(bazel_build_target_name = target_info.bazel_build_target_name),
             }],
         }
-        if target_info.product_type == "framework":
+        if target_info.product_type == "framework" or target_info.product_type == "framework.static":
             continue
 
         scheme_action_name = "test"
