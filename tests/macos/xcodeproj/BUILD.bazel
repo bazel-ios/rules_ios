@@ -5,16 +5,19 @@ load("@build_bazel_rules_apple//apple/testing/default_runner:ios_test_runner.bzl
 ios_unit_test(
     name = "Single-Application-UnitTests",
     srcs = ["test.swift"],
-    non_arc_srcs = ["NonArcObject.h", "NonArcObject.m"],
     args = ["-h"],
+    defines = ["REQUIRED_DEFINED_FLAG"],
     env = {
         "test_envvar_key1": "test_envvar_value1",
         "test_envvar_key2": "test_envvar_value2",
     },
     minimum_os_version = "11.0",
     module_name = "Single_Application_UnitTests",
+    non_arc_srcs = [
+        "NonArcObject.h",
+        "NonArcObject.m",
+    ],
     sdk_frameworks = ["XCTest"],
-    defines = ["REQUIRED_DEFINED_FLAG"],
 )
 
 default_ios_test_runner(

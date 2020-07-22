@@ -136,8 +136,8 @@ def _xcodeproj_aspect_impl(target, ctx):
         framework_includes = _get_attr_values_for_name(deps, _SrcsInfo, "framework_includes")
         cc_defines = _get_attr_values_for_name(deps, _SrcsInfo, "cc_defines")
         if CcInfo in target:
-          framework_includes.append(target[CcInfo].compilation_context.framework_includes)
-          cc_defines.append(target[CcInfo].compilation_context.defines)
+            framework_includes.append(target[CcInfo].compilation_context.framework_includes)
+            cc_defines.append(target[CcInfo].compilation_context.defines)
         providers.append(
             _SrcsInfo(
                 srcs = depset(srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
@@ -263,9 +263,9 @@ def _xcodeproj_impl(ctx):
         }
         framework_search_paths = []
         for fi in target_info.framework_includes.to_list():
-          if fi[0] != '/':
-            fi = "$BAZEL_WORKSPACE_ROOT/%s" % fi
-          framework_search_paths.append("\"%s\"" % fi)
+            if fi[0] != "/":
+                fi = "$BAZEL_WORKSPACE_ROOT/%s" % fi
+            framework_search_paths.append("\"%s\"" % fi)
         target_settings["FRAMEWORK_SEARCH_PATHS"] = " ".join(framework_search_paths)
         target_settings["GCC_PREPROCESSOR_DEFINITIONS"] = " ".join(["\"%s\"" % d for d in target_info.cc_defines.to_list()])
         if target_info.product_type == "application":
