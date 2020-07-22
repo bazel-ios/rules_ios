@@ -1,5 +1,4 @@
 import XCTest
-import TestHostModule
 
 class SwiftTests : XCTestCase {
   func testPasses() {
