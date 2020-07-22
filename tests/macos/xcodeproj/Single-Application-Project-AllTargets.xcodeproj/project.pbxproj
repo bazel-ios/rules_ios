@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0834EB3BB2BE0990DEED46BD /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1162A80978C527830EDADEE /* test.swift */; };
 		6868785A8F571C49259B50E0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB1C98DB4C8E24414A69917 /* main.m */; };
+		8A8AC7C1D053F87A0D991815 /* NonArcObject.m in Sources */ = {isa = PBXBuildFile; fileRef = E881738E1AAC1FCA61D467D8 /* NonArcObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		E8D5A100DC66B1E35BB71538 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1162A80978C527830EDADEE /* test.swift */; };
 /* End PBXBuildFile section */
 
@@ -19,8 +20,10 @@
 		7ABD95023B71172929B010EE /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = common.pch; path = ../../../rules/library/common.pch; sourceTree = "<group>"; };
 		908EFE5EAE901D6B372D68F7 /* ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ios.entitlements; path = ../../../rules/test_host_app/ios.entitlements; sourceTree = "<group>"; };
 		A05E016687115D20E64A5C60 /* BUILD.bazel */ = {isa = PBXFileReference; name = BUILD.bazel; path = BUILD.bazel; sourceTree = "<group>"; };
+		B63432B3F93F02853868034C /* NonArcObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NonArcObject.h; path = NonArcObject.h; sourceTree = "<group>"; };
 		BA5C2481E04D8592323A7AD9 /* BUILD.bazel */ = {isa = PBXFileReference; name = BUILD.bazel; path = ../../../rules/test_host_app/BUILD.bazel; sourceTree = "<group>"; };
 		BFC300E7CF04688067094BFF /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = Contents.json; path = ../../../rules/test_host_app/AssetCatalogFixture.xcassets/Contents.json; sourceTree = "<group>"; };
+		E881738E1AAC1FCA61D467D8 /* NonArcObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NonArcObject.m; path = NonArcObject.m; sourceTree = "<group>"; };
 		EEB1C98DB4C8E24414A69917 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../../../rules/test_host_app/main.m; sourceTree = "<group>"; };
 		EFADB1CE81C3F97F647C9255 /* Single-Application-UnitTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "Single-Application-UnitTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1162A80978C527830EDADEE /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = test.swift; path = test.swift; sourceTree = "<group>"; };
@@ -103,6 +106,8 @@
 			isa = PBXGroup;
 			children = (
 				A05E016687115D20E64A5C60 /* BUILD.bazel */,
+				B63432B3F93F02853868034C /* NonArcObject.h */,
+				E881738E1AAC1FCA61D467D8 /* NonArcObject.m */,
 				F1162A80978C527830EDADEE /* test.swift */,
 			);
 			name = xcodeproj;
@@ -265,6 +270,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A8AC7C1D053F87A0D991815 /* NonArcObject.m in Sources */,
 				E8D5A100DC66B1E35BB71538 /* test.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -277,6 +283,9 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "\"REQUIRED_DEFINED_FLAG\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-UnitTests";
@@ -290,6 +299,9 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
@@ -304,6 +316,9 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
@@ -366,6 +381,9 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-RunnableTestSuite";
@@ -379,6 +397,9 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-RunnableTestSuite";
@@ -392,6 +413,9 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "\"REQUIRED_DEFINED_FLAG\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-UnitTests";

@@ -239,7 +239,7 @@ def _xcodeproj_impl(ctx):
             "path": paths.join(src_dot_dots, s.short_path),
             "group": paths.dirname(s.short_path),
             "optional": True,
-            "compilerFlags": "-fobjc-no-arc", # TODO: why is this not working
+            "compilerFlags": "-fno-objc-arc",
         } for s in target_info.non_arc_srcs.to_list()]
         asset_sources = [{
             "path": paths.join(src_dot_dots, s.short_path),
