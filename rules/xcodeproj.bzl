@@ -66,6 +66,7 @@ def _xcodeproj_aspect_impl(target, ctx):
         bazel_build_target_name = "@%s//" % target.label.workspace_name
     bazel_build_target_name += "%s:%s" % (target.label.package, target.label.name)
     bazel_bin_subdir = "%s/%s" % (target.label.workspace_root, target.label.package)
+
     if AppleBundleInfo in target:
         bundle_info = target[AppleBundleInfo]
         test_host_appname = None
@@ -89,7 +90,10 @@ def _xcodeproj_aspect_impl(target, ctx):
             bazel_build_target_name = bazel_build_target_name,
             bazel_bin_subdir = bazel_bin_subdir,
             srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
+            non_arc_srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "non_arc_srcs")),
             asset_srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "asset_srcs")),
+            framework_includes = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "framework_includes")),
+            cc_defines = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "cc_defines")),
             build_files = depset(_srcs_info_build_files(ctx), transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
             product_type = bundle_info.product_type[_PRODUCT_SPECIFIER_LENGTH:],
             platform_type = bundle_info.platform_type,
@@ -102,7 +106,10 @@ def _xcodeproj_aspect_impl(target, ctx):
             providers.append(
                 _SrcsInfo(
                     srcs = info.srcs,
+                    non_arc_srcs = info.non_arc_srcs,
                     asset_srcs = info.asset_srcs,
+                    framework_includes = info.framework_includes,
+                    cc_defines = info.cc_defines,
                     build_files = depset(_srcs_info_build_files(ctx)),
                     direct_srcs = [],
                 ),
@@ -114,19 +121,30 @@ def _xcodeproj_aspect_impl(target, ctx):
         providers.append(target_info)
     else:
         srcs = []
+        non_arc_srcs = []
         asset_srcs = []
         for attr in _dir(ctx.rule.files):
             if attr == "srcs":
                 srcs += getattr(ctx.rule.files, attr, [])
+            elif attr == "non_arc_srcs":
+                non_arc_srcs += getattr(ctx.rule.files, attr, [])
             else:
                 asset_srcs += getattr(ctx.rule.files, attr, [])
         srcs = [f for f in srcs if _is_current_project_file(f)]
+        non_arc_srcs = [f for f in non_arc_srcs if _is_current_project_file(f)]
         asset_srcs = [f for f in asset_srcs if _is_current_project_file(f)]
-
+        framework_includes = _get_attr_values_for_name(deps, _SrcsInfo, "framework_includes")
+        cc_defines = _get_attr_values_for_name(deps, _SrcsInfo, "cc_defines")
+        if CcInfo in target:
+            framework_includes.append(target[CcInfo].compilation_context.framework_includes)
+            cc_defines.append(target[CcInfo].compilation_context.defines)
         providers.append(
             _SrcsInfo(
                 srcs = depset(srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
+                non_arc_srcs = depset(non_arc_srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "non_arc_srcs")),
                 asset_srcs = depset(asset_srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "asset_srcs")),
+                framework_includes = depset([], transitive = framework_includes),
+                cc_defines = depset([], transitive = cc_defines),
                 build_files = depset(_srcs_info_build_files(ctx), transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
                 direct_srcs = srcs,
             ),
@@ -217,6 +235,12 @@ def _xcodeproj_impl(ctx):
             "group": paths.dirname(s.short_path),
             "optional": True,
         } for s in target_info.srcs.to_list()]
+        compiled_non_arc_sources = [{
+            "path": paths.join(src_dot_dots, s.short_path),
+            "group": paths.dirname(s.short_path),
+            "optional": True,
+            "compilerFlags": "-fno-objc-arc",
+        } for s in target_info.non_arc_srcs.to_list()]
         asset_sources = [{
             "path": paths.join(src_dot_dots, s.short_path),
             "group": paths.dirname(s.short_path),
@@ -235,8 +259,15 @@ def _xcodeproj_impl(ctx):
             "BAZEL_BIN_SUBDIR": target_info.bazel_bin_subdir,
             "MACH_O_TYPE": target_macho_type,
             "CLANG_ENABLE_MODULES": "YES",
+            "CLANG_ENABLE_OBJC_ARC": "YES",
         }
-
+        framework_search_paths = []
+        for fi in target_info.framework_includes.to_list():
+            if fi[0] != "/":
+                fi = "$BAZEL_WORKSPACE_ROOT/%s" % fi
+            framework_search_paths.append("\"%s\"" % fi)
+        target_settings["FRAMEWORK_SEARCH_PATHS"] = " ".join(framework_search_paths)
+        target_settings["GCC_PREPROCESSOR_DEFINITIONS"] = " ".join(["\"%s\"" % d for d in target_info.cc_defines.to_list()])
         if target_info.product_type == "application":
             target_settings["INFOPLIST_FILE"] = "$BAZEL_STUBS_DIR/Info-stub.plist"
             target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
@@ -251,7 +282,7 @@ def _xcodeproj_impl(ctx):
         target_settings["VALID_ARCHS"] = _ARCH_MAPPING[target_info.platform_type]
 
         xcodeproj_targets_by_name[target_info.name] = {
-            "sources": compiled_sources + asset_sources,
+            "sources": compiled_sources + compiled_non_arc_sources + asset_sources,
             "type": target_info.product_type,
             "platform": _PLATFORM_MAPPING[target_info.platform_type],
             "deploymentTarget": target_info.minimum_os_version,

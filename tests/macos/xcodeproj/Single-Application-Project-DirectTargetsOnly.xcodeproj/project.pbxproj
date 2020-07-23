@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		53E65376450A485B39CE93FE /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD63CC255956E60D898C7B7 /* test.swift */; };
+		706F35140D56EA1BB820A681 /* NonArcObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B1396A59924BC26C630854 /* NonArcObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		83D9B2BE42CE395FCC9356FB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DA260AA799ED8A57078C331 /* main.m */; };
 		B868F40E021F743023B7764F /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD63CC255956E60D898C7B7 /* test.swift */; };
 /* End PBXBuildFile section */
@@ -19,11 +20,13 @@
 		4936F4D0B63B32AD09E63C43 /* BUILD.bazel */ = {isa = PBXFileReference; name = BUILD.bazel; path = BUILD.bazel; sourceTree = "<group>"; };
 		58D47D35D8B8E34549EE944E /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = Contents.json; path = ../../../rules/test_host_app/AssetCatalogFixture.xcassets/Contents.json; sourceTree = "<group>"; };
 		712BB7D3F966AAE042C40E4E /* iOS-12.0-AppHost.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "iOS-12.0-AppHost.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		77B1396A59924BC26C630854 /* NonArcObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NonArcObject.m; path = NonArcObject.m; sourceTree = "<group>"; };
 		9735D50F44B3B4D188BA18BF /* Single-Application-RunnableTestSuite.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "Single-Application-RunnableTestSuite.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF248CD4BA2D7D91429E9BCB /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = common.pch; path = ../../../rules/library/common.pch; sourceTree = "<group>"; };
 		E94B0DB5FD5082DE73F52008 /* Single-Application-UnitTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "Single-Application-UnitTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAEB79BE70BFB649A6FBC92C /* BUILD.bazel */ = {isa = PBXFileReference; name = BUILD.bazel; path = ../../../rules/test_host_app/BUILD.bazel; sourceTree = "<group>"; };
 		F689E871A09EA979611C589A /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = resource_bundle.plist; path = ../../../rules/library/resource_bundle.plist; sourceTree = "<group>"; };
+		FE2DCE7EA91C1CAF4050351A /* NonArcObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NonArcObject.h; path = NonArcObject.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -103,6 +106,8 @@
 			isa = PBXGroup;
 			children = (
 				4936F4D0B63B32AD09E63C43 /* BUILD.bazel */,
+				FE2DCE7EA91C1CAF4050351A /* NonArcObject.h */,
+				77B1396A59924BC26C630854 /* NonArcObject.m */,
 				0BD63CC255956E60D898C7B7 /* test.swift */,
 			);
 			name = xcodeproj;
@@ -249,6 +254,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				706F35140D56EA1BB820A681 /* NonArcObject.m in Sources */,
 				53E65376450A485B39CE93FE /* test.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -277,6 +283,9 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "\"REQUIRED_DEFINED_FLAG\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-RunnableTestSuite";
@@ -290,6 +299,9 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "\"REQUIRED_DEFINED_FLAG\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-UnitTests";
@@ -327,6 +339,9 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
@@ -341,6 +356,9 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
@@ -355,6 +373,9 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "\"REQUIRED_DEFINED_FLAG\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-RunnableTestSuite";
@@ -392,6 +413,9 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "\"REQUIRED_DEFINED_FLAG\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-UnitTests";
