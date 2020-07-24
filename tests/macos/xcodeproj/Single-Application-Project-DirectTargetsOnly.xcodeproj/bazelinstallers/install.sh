@@ -12,6 +12,19 @@ case "${PRODUCT_TYPE}" in
     com.apple.product-type.framework)
         input_options=("bazel-bin/$BAZEL_BIN_SUBDIR/${TARGET_NAME}/${FULL_PRODUCT_NAME}")
         ;;
+    com.apple.product-type.framework.static)
+	    # For static library, as the output is not under bazel-bin, we have to get it based on build event
+        # Example of such entry inside build event:
+        # important_output {
+        #   name: ".../SomeFramework.framework/SomeFramework"
+        #   uri: "file:///private/var/tmp/.../.../SomeFramework.framework/SomeFramework"
+        #   path_prefix:... 
+        #   ...
+        #  } 
+        # We only care about the entry ending with TARGET_NAME" so that we can get the path to its directory
+        QUERY=`grep -A 2 important_output "$BAZEL_BUILD_EVENT_TEXT_FILENAME" | grep -w uri | grep ${TARGET_NAME}\" | sed "s/uri: \"file:\/\///"`
+        input_options=($(dirname "${QUERY}"))
+        ;;
     com.apple.product-type.bundle.unit-test)
         input_options=("bazel-bin/$BAZEL_BIN_SUBDIR/${FULL_PRODUCT_NAME}" "bazel-bin/$BAZEL_BIN_SUBDIR/$TARGET_NAME.__internal__.__test_bundle_archive-root/$TARGET_NAME${WRAPPER_SUFFIX:-}")
         ;;
