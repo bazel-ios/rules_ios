@@ -1,0 +1,269 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D100BF9D72B5F6940F83816B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6902D1207F875225638DE30A /* main.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		4BB7A0F977B290B8648FFDB0 /* ObjcFramework.framework */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; path = ObjcFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6902D1207F875225638DE30A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../../ios/frameworks/objc/main.m; sourceTree = "<group>"; };
+		A889D4F5A404037DAAE41E2C /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = common.pch; path = ../../../rules/library/common.pch; sourceTree = "<group>"; };
+		C7460A0CB5B34CD2836CB044 /* HeaderA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HeaderA.h; path = ../../ios/frameworks/objc/HeaderA.h; sourceTree = "<group>"; };
+		F9528189952DC1024F47A893 /* BUILD.bazel */ = {isa = PBXFileReference; name = BUILD.bazel; path = ../../ios/frameworks/objc/BUILD.bazel; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		2E65D165D8CB3DA10A3241BB /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				F9780F090C099456FA802F03 /* frameworks */,
+			);
+			name = ios;
+			sourceTree = "<group>";
+		};
+		6666B4FAC3B5C464339017A9 /* objc */ = {
+			isa = PBXGroup;
+			children = (
+				F9528189952DC1024F47A893 /* BUILD.bazel */,
+				C7460A0CB5B34CD2836CB044 /* HeaderA.h */,
+				6902D1207F875225638DE30A /* main.m */,
+			);
+			name = objc;
+			sourceTree = "<group>";
+		};
+		A3598111BA39DE57BE267C48 /* tests */ = {
+			isa = PBXGroup;
+			children = (
+				2E65D165D8CB3DA10A3241BB /* ios */,
+			);
+			name = tests;
+			sourceTree = "<group>";
+		};
+		D86E9FCCC4BB853B2A451672 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4BB7A0F977B290B8648FFDB0 /* ObjcFramework.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E8099B19B67C1115D200E916 = {
+			isa = PBXGroup;
+			children = (
+				F1E6E5D1773FF98D954EB32A /* rules */,
+				A3598111BA39DE57BE267C48 /* tests */,
+				D86E9FCCC4BB853B2A451672 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F1E6E5D1773FF98D954EB32A /* rules */ = {
+			isa = PBXGroup;
+			children = (
+				F5677F534CD0BBE67D08B11C /* library */,
+			);
+			name = rules;
+			sourceTree = "<group>";
+		};
+		F5677F534CD0BBE67D08B11C /* library */ = {
+			isa = PBXGroup;
+			children = (
+				A889D4F5A404037DAAE41E2C /* common.pch */,
+			);
+			name = library;
+			sourceTree = "<group>";
+		};
+		F9780F090C099456FA802F03 /* frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6666B4FAC3B5C464339017A9 /* objc */,
+			);
+			name = frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8869F51F3D726AA5FE196B17 /* ObjcFramework */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B33E17AF83994B91DC686C38 /* Build configuration list for PBXNativeTarget "ObjcFramework" */;
+			buildPhases = (
+				CE57FCF23CE6E76528187F3E /* Build with bazel */,
+				196DE48F4B98C20C3C11CA7D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ObjcFramework;
+			productName = ObjcFramework;
+			productReference = 4BB7A0F977B290B8648FFDB0 /* ObjcFramework.framework */;
+			productType = "com.apple.product-type.framework.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1203D0689A9C5AF03A1C225D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1020;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = EAA83B860F36FAFBD0A4D153 /* Build configuration list for PBXProject "Single-Static-Framework-Project" */;
+			compatibilityVersion = "Xcode 10.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = E8099B19B67C1115D200E916;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8869F51F3D726AA5FE196B17 /* ObjcFramework */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		CE57FCF23CE6E76528187F3E /* Build with bazel */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build with bazel";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\nexport BAZEL_DIAGNOSTICS_DIR=\"$BUILD_DIR/../../bazel-xcode-diagnostics/\"\nmkdir -p $BAZEL_DIAGNOSTICS_DIR\nexport DATE_SUFFIX=\"$(date +%Y%m%d.%H%M%S%L)\"\nexport BAZEL_BUILD_EVENT_TEXT_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-event-$DATE_SUFFIX.txt\"\nexport BAZEL_BUILD_EXECUTION_LOG_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-execution-log-$DATE_SUFFIX.log\"\nenv -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC tests/ios/frameworks/objc:ObjcFramework\n$BAZEL_INSTALLER\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		196DE48F4B98C20C3C11CA7D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D100BF9D72B5F6940F83816B /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4A592014F4EE0EF133043433 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACH_O_TYPE = "$(inherited)";
+				PRODUCT_NAME = ObjcFramework;
+				VALID_ARCHS = "arm64 arm64e";
+			};
+			name = Release;
+		};
+		52EE4EE37BBA0006C75B7793 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
+				BAZEL_INSTALLER = $BAZEL_INSTALLERS_DIR/installer;
+				BAZEL_INSTALLERS_DIR = $PROJECT_FILE_PATH/bazelinstallers;
+				BAZEL_OUTPUT_PROCESSOR = "$BAZEL_STUBS_DIR/output-processor.rb";
+				BAZEL_PATH = bazelisk;
+				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
+				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../..;
+				CC = "$BAZEL_STUBS_DIR/clang-stub";
+				CLANG_ANALYZER_EXEC = $CC;
+				CODE_SIGNING_ALLOWED = 0;
+				CXX = $CC;
+				DONT_RUN_SWIFT_STDLIB_TOOL = 1;
+				LD = "$BAZEL_STUBS_DIR/ld-stub";
+				LIBTOOL = /usr/bin/true;
+				SDKROOT = iphoneos;
+				SWIFT_EXEC = "$BAZEL_STUBS_DIR/swiftc-stub";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
+				SWIFT_VERSION = 5;
+			};
+			name = Debug;
+		};
+		A248E1E9CD0AD51889E5D7DE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACH_O_TYPE = "$(inherited)";
+				PRODUCT_NAME = ObjcFramework;
+				VALID_ARCHS = "arm64 arm64e";
+			};
+			name = Debug;
+		};
+		A6B50790B7933226FB9F8B30 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
+				BAZEL_INSTALLER = $BAZEL_INSTALLERS_DIR/installer;
+				BAZEL_INSTALLERS_DIR = $PROJECT_FILE_PATH/bazelinstallers;
+				BAZEL_OUTPUT_PROCESSOR = "$BAZEL_STUBS_DIR/output-processor.rb";
+				BAZEL_PATH = bazelisk;
+				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
+				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../..;
+				CC = "$BAZEL_STUBS_DIR/clang-stub";
+				CLANG_ANALYZER_EXEC = $CC;
+				CODE_SIGNING_ALLOWED = 0;
+				CXX = $CC;
+				DONT_RUN_SWIFT_STDLIB_TOOL = 1;
+				LD = "$BAZEL_STUBS_DIR/ld-stub";
+				LIBTOOL = /usr/bin/true;
+				SDKROOT = iphoneos;
+				SWIFT_EXEC = "$BAZEL_STUBS_DIR/swiftc-stub";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
+				SWIFT_VERSION = 5;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B33E17AF83994B91DC686C38 /* Build configuration list for PBXNativeTarget "ObjcFramework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A248E1E9CD0AD51889E5D7DE /* Debug */,
+				4A592014F4EE0EF133043433 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		EAA83B860F36FAFBD0A4D153 /* Build configuration list for PBXProject "Single-Static-Framework-Project" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				52EE4EE37BBA0006C75B7793 /* Debug */,
+				A6B50790B7933226FB9F8B30 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1203D0689A9C5AF03A1C225D /* Project object */;
+}

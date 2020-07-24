@@ -6,5 +6,6 @@ apple_framework(
         "HeaderA.h",
         "main.m",
     ],
+    platforms = {"ios": "10.0"},
     visibility = ["//visibility:public"],
 )
