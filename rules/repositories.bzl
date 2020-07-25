@@ -114,10 +114,10 @@ native_binary(
     visibility = ["//visibility:public"],
 )
 """,
-        canonical_id = "xcodegen-2.15.1",
-        sha256 = "0a53aef09e1b93c5307fc1c411c52a034305ccfd87255c01de7f9ff5141e0d86",
+        canonical_id = "xcodegen-2.16.0",
+        sha256 = "6c2e212e2dd8000e5cb35aadc772d58d411924d8484f9946f6653aa50e613d31",
         strip_prefix = "xcodegen",
-        urls = ["https://github.com/yonaskolb/XcodeGen/releases/download/2.15.1/xcodegen.zip"],
+        urls = ["https://github.com/yonaskolb/XcodeGen/releases/download/2.16.0/xcodegen.zip"],
     )
 
     # Pinned because 0.2.12 is broken on macOS 10.14
