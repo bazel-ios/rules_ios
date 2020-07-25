@@ -29,6 +29,16 @@
       onlyGenerateCoverageForSpecifiedTargets = "NO"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "69C247D461E2D715D19CB6DA"
+               BuildableName = "Single-Application-RunnableTestSuite.xctest"
+               BlueprintName = "Single-Application-RunnableTestSuite"
+               ReferencedContainer = "container:Single-Application-Project-AllTargets.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
@@ -39,6 +49,8 @@
             ReferencedContainer = "container:Single-Application-Project-AllTargets.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -50,8 +62,7 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "69C247D461E2D715D19CB6DA"
@@ -59,7 +70,7 @@
             BlueprintName = "Single-Application-RunnableTestSuite"
             ReferencedContainer = "container:Single-Application-Project-AllTargets.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
       <CommandLineArguments>
          <CommandLineArgument
             argument = "-h"
