@@ -307,7 +307,6 @@ $BAZEL_INSTALLER
         }
 
         # Defines what are available actions under each scheme
-        scheme_action_names = ["run", "test", "profile"]
         scheme_action_details = {"targets": [target_info.name]}
 
         env_vars_dict = {}
@@ -324,17 +323,22 @@ $BAZEL_INSTALLER
         scheme_action_details["commandLineArguments"] = {}
         for arg in commandline_args_tuple:
             scheme_action_details["commandLineArguments"][arg] = True
+        # See https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md#scheme 
+        # on structure of xcodeproj_schemes_by_name[target_info.name]
         xcodeproj_schemes_by_name[target_info.name] = {
             "build": {
                 "parallelizeBuild": False,
                 "buildImplicitDependencies": False,
                 "targets": {
-                    target_info.name: scheme_action_names,
+                    target_info.name: ["run", "test", "profile"],
                 },
             },
             # By putting under run action, test action will just use them automatically
-            "run": scheme_action_details,
+            "run": scheme_action_details
         }
+        # They will show as `TestableReference` under the scheme
+        if target_info.product_type == "bundle.unit-test":
+            xcodeproj_schemes_by_name[target_info.name]["test"] = {"targets": [target_info.name]}
 
     project_file_groups = [
         {"path": paths.join(src_dot_dots, f.short_path), "optional": True}
