@@ -69,3 +69,5 @@ jobs:
           git diff --exit-code tests/ios/xcodeproj
       - name: Run Xcode builds
         run: ./tests/ios/xcodeproj/build.sh
+      - name: Run Unit tests
+        run: ./tests/ios/xcodeproj/tests.sh

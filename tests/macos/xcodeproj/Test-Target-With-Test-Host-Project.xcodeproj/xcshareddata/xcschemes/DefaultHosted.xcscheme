@@ -26,16 +26,8 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      onlyGenerateCoverageForSpecifiedTargets = "NO"
       shouldUseLaunchSchemeArgsEnv = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "20A37CC084B553DAC3470E18"
-            BuildableName = "DefaultHosted.xctest"
-            BlueprintName = "DefaultHosted"
-            ReferencedContainer = "container:Test-Target-With-Test-Host-Project.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -48,6 +40,17 @@
             </BuildableReference>
          </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "20A37CC084B553DAC3470E18"
+            BuildableName = "DefaultHosted.xctest"
+            BlueprintName = "DefaultHosted"
+            ReferencedContainer = "container:Test-Target-With-Test-Host-Project.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -68,6 +71,8 @@
             ReferencedContainer = "container:Test-Target-With-Test-Host-Project.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

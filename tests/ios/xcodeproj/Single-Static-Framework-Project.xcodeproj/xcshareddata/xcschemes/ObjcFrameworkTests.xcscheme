@@ -14,10 +14,10 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9A4A0D6CE913410FA2032B4D"
-               BuildableName = "iOS-12.0-AppHost.app"
-               BlueprintName = "iOS-12.0-AppHost"
-               ReferencedContainer = "container:Single-Application-Project-DirectTargetsOnly.xcodeproj">
+               BlueprintIdentifier = "BABD3C372AC007CE85F8D2A5"
+               BuildableName = "ObjcFrameworkTests.xctest"
+               BlueprintName = "ObjcFrameworkTests"
+               ReferencedContainer = "container:Single-Static-Framework-Project.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -29,16 +29,28 @@
       onlyGenerateCoverageForSpecifiedTargets = "NO"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BABD3C372AC007CE85F8D2A5"
+               BuildableName = "ObjcFrameworkTests.xctest"
+               BlueprintName = "ObjcFrameworkTests"
+               ReferencedContainer = "container:Single-Static-Framework-Project.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9A4A0D6CE913410FA2032B4D"
-            BuildableName = "iOS-12.0-AppHost.app"
-            BlueprintName = "iOS-12.0-AppHost"
-            ReferencedContainer = "container:Single-Application-Project-DirectTargetsOnly.xcodeproj">
+            BlueprintIdentifier = "BABD3C372AC007CE85F8D2A5"
+            BuildableName = "ObjcFrameworkTests.xctest"
+            BlueprintName = "ObjcFrameworkTests"
+            ReferencedContainer = "container:Single-Static-Framework-Project.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -50,16 +62,15 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9A4A0D6CE913410FA2032B4D"
-            BuildableName = "iOS-12.0-AppHost.app"
-            BlueprintName = "iOS-12.0-AppHost"
-            ReferencedContainer = "container:Single-Application-Project-DirectTargetsOnly.xcodeproj">
+            BlueprintIdentifier = "BABD3C372AC007CE85F8D2A5"
+            BuildableName = "ObjcFrameworkTests.xctest"
+            BlueprintName = "ObjcFrameworkTests"
+            ReferencedContainer = "container:Single-Static-Framework-Project.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
       <CommandLineArguments>
       </CommandLineArguments>
    </LaunchAction>
@@ -73,10 +84,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9A4A0D6CE913410FA2032B4D"
-            BuildableName = "iOS-12.0-AppHost.app"
-            BlueprintName = "iOS-12.0-AppHost"
-            ReferencedContainer = "container:Single-Application-Project-DirectTargetsOnly.xcodeproj">
+            BlueprintIdentifier = "BABD3C372AC007CE85F8D2A5"
+            BuildableName = "ObjcFrameworkTests.xctest"
+            BlueprintName = "ObjcFrameworkTests"
+            ReferencedContainer = "container:Single-Static-Framework-Project.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
