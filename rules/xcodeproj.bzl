@@ -209,6 +209,7 @@ def _xcodeproj_impl(ctx):
         "CXX": "$CC",
         "CLANG_ANALYZER_EXEC": "$CC",
         "CODE_SIGNING_ALLOWED": False,
+        "DEBUG_INFORMATION_FORMAT": "dwarf",
         "DONT_RUN_SWIFT_STDLIB_TOOL": True,
         "LD": "$BAZEL_STUBS_DIR/ld-stub",
         "LIBTOOL": "/usr/bin/true",

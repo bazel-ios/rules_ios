@@ -324,6 +324,7 @@
 				CLANG_ANALYZER_EXEC = $CC;
 				CODE_SIGNING_ALLOWED = 0;
 				CXX = $CC;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DONT_RUN_SWIFT_STDLIB_TOOL = 1;
 				LD = "$BAZEL_STUBS_DIR/ld-stub";
 				LIBTOOL = /usr/bin/true;
@@ -398,6 +399,7 @@
 				CLANG_ANALYZER_EXEC = $CC;
 				CODE_SIGNING_ALLOWED = 0;
 				CXX = $CC;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DONT_RUN_SWIFT_STDLIB_TOOL = 1;
 				LD = "$BAZEL_STUBS_DIR/ld-stub";
 				LIBTOOL = /usr/bin/true;
