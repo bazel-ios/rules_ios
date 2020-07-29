@@ -1,4 +1,5 @@
 bazel-*
 .idea
 tests/macos/xcodeproj/**/xcuserdata
+tests/ios/xcodeproj/**/xcuserdata
 **/*.xcodeproj/bazelinstallers/index-import

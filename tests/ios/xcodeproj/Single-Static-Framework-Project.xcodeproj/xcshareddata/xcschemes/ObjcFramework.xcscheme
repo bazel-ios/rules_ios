@@ -14,10 +14,10 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9A4A0D6CE913410FA2032B4D"
-               BuildableName = "iOS-12.0-AppHost.app"
-               BlueprintName = "iOS-12.0-AppHost"
-               ReferencedContainer = "container:Single-Application-Project-DirectTargetsOnly.xcodeproj">
+               BlueprintIdentifier = "8869F51F3D726AA5FE196B17"
+               BuildableName = "ObjcFramework.framework"
+               BlueprintName = "ObjcFramework"
+               ReferencedContainer = "container:Single-Static-Framework-Project.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,10 +33,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9A4A0D6CE913410FA2032B4D"
-            BuildableName = "iOS-12.0-AppHost.app"
-            BlueprintName = "iOS-12.0-AppHost"
-            ReferencedContainer = "container:Single-Application-Project-DirectTargetsOnly.xcodeproj">
+            BlueprintIdentifier = "8869F51F3D726AA5FE196B17"
+            BuildableName = "ObjcFramework.framework"
+            BlueprintName = "ObjcFramework"
+            ReferencedContainer = "container:Single-Static-Framework-Project.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -50,16 +50,15 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9A4A0D6CE913410FA2032B4D"
-            BuildableName = "iOS-12.0-AppHost.app"
-            BlueprintName = "iOS-12.0-AppHost"
-            ReferencedContainer = "container:Single-Application-Project-DirectTargetsOnly.xcodeproj">
+            BlueprintIdentifier = "8869F51F3D726AA5FE196B17"
+            BuildableName = "ObjcFramework.framework"
+            BlueprintName = "ObjcFramework"
+            ReferencedContainer = "container:Single-Static-Framework-Project.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
       <CommandLineArguments>
       </CommandLineArguments>
    </LaunchAction>
@@ -73,10 +72,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9A4A0D6CE913410FA2032B4D"
-            BuildableName = "iOS-12.0-AppHost.app"
-            BlueprintName = "iOS-12.0-AppHost"
-            ReferencedContainer = "container:Single-Application-Project-DirectTargetsOnly.xcodeproj">
+            BlueprintIdentifier = "8869F51F3D726AA5FE196B17"
+            BuildableName = "ObjcFramework.framework"
+            BlueprintName = "ObjcFramework"
+            ReferencedContainer = "container:Single-Static-Framework-Project.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

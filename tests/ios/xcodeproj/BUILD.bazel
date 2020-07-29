@@ -1,0 +1,32 @@
+load("//rules:xcodeproj.bzl", "xcodeproj")
+
+xcodeproj(
+    name = "Single-Static-Framework-Project",
+    testonly = True,
+    bazel_path = "bazelisk",
+    include_transitive_targets = True,
+    deps = [
+        "//tests/ios/frameworks/objc:ObjcFramework",
+        "//tests/ios/frameworks/objc:ObjcFrameworkTests",
+    ],
+)
+
+genrule(
+    name = "Test-Project-Regeneration",
+    testonly = True,
+    outs = ["Test-Project-Regeneration.sh"],
+    cmd = """
+cat <<'EOS' > $@
+#!/bin/sh
+set -euxo pipefail
+rm -fr {package_name}/{target_name}.xcodeproj
+bazelisk run {package_name}:{target_name}
+bazelisk run {package_name}:{target_name}
+EOS
+    """.format(
+        package_name = package_name(),
+        target_name = "Single-Static-Framework-Project",
+    ),
+    executable = True,
+    tools = [":Single-Static-Framework-Project"],
+)
