@@ -410,6 +410,7 @@
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.TestImports-App";
 				PRODUCT_NAME = "TestImports-App";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Debug;
@@ -426,6 +427,7 @@
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "TestImports-Unit-Tests";
 				SUPPORTS_MACCATALYST = 0;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestImports-App.app/TestImports-App";
 				VALID_ARCHS = "arm64 arm64e";
 			};
@@ -443,6 +445,7 @@
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = DefaultHosted;
 				SUPPORTS_MACCATALYST = 0;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS-10.0-AppHost.app/iOS-10.0-AppHost";
 				VALID_ARCHS = "arm64 arm64e";
 			};
@@ -461,6 +464,7 @@
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.TestImports-App";
 				PRODUCT_NAME = "TestImports-App";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Release;
@@ -502,6 +506,7 @@
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ios-app-host-10.0";
 				PRODUCT_NAME = "iOS-10.0-AppHost";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Release;
@@ -519,6 +524,7 @@
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ios-app-host-10.0";
 				PRODUCT_NAME = "iOS-10.0-AppHost";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Debug;
@@ -559,6 +565,7 @@
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = DefaultHosted;
 				SUPPORTS_MACCATALYST = 0;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS-10.0-AppHost.app/iOS-10.0-AppHost";
 				VALID_ARCHS = "arm64 arm64e";
 			};
