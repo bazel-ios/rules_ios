@@ -1,4 +1,5 @@
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo")
+load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 
 def _get_attr_values_for_name(deps, provider, field):
@@ -95,6 +96,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             asset_srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "asset_srcs")),
             framework_includes = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "framework_includes")),
             cc_defines = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "cc_defines")),
+            swift_defines = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "swift_defines")),
             build_files = depset(_srcs_info_build_files(ctx), transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
             product_type = bundle_info.product_type[_PRODUCT_SPECIFIER_LENGTH:],
             platform_type = bundle_info.platform_type,
@@ -111,6 +113,7 @@ def _xcodeproj_aspect_impl(target, ctx):
                     asset_srcs = info.asset_srcs,
                     framework_includes = info.framework_includes,
                     cc_defines = info.cc_defines,
+                    swift_defines = info.swift_defines,
                     build_files = depset(_srcs_info_build_files(ctx)),
                     direct_srcs = [],
                 ),
@@ -136,9 +139,14 @@ def _xcodeproj_aspect_impl(target, ctx):
         asset_srcs = [f for f in asset_srcs if _is_current_project_file(f)]
         framework_includes = _get_attr_values_for_name(deps, _SrcsInfo, "framework_includes")
         cc_defines = _get_attr_values_for_name(deps, _SrcsInfo, "cc_defines")
+        swift_defines = _get_attr_values_for_name(deps, _SrcsInfo, "swift_defines")
         if CcInfo in target:
             framework_includes.append(target[CcInfo].compilation_context.framework_includes)
             cc_defines.append(target[CcInfo].compilation_context.defines)
+
+        if SwiftInfo in target:
+            swift_defines.append(depset(target[SwiftInfo].direct_defines))
+            swift_defines.append(target[SwiftInfo].transitive_defines)
         providers.append(
             _SrcsInfo(
                 srcs = depset(srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
@@ -147,6 +155,7 @@ def _xcodeproj_aspect_impl(target, ctx):
                 framework_includes = depset([], transitive = framework_includes),
                 cc_defines = depset([], transitive = cc_defines),
                 build_files = depset(_srcs_info_build_files(ctx), transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
+                swift_defines = depset([], transitive = swift_defines),
                 direct_srcs = srcs,
             ),
         )
@@ -269,6 +278,11 @@ def _xcodeproj_impl(ctx):
             framework_search_paths.append("\"%s\"" % fi)
         target_settings["FRAMEWORK_SEARCH_PATHS"] = " ".join(framework_search_paths)
         target_settings["GCC_PREPROCESSOR_DEFINITIONS"] = " ".join(["\"%s\"" % d for d in target_info.cc_defines.to_list()])
+
+        target_settings["SWIFT_ACTIVE_COMPILATION_CONDITIONS"] = " ".join(
+            ["\"%s\"" % d for d in target_info.swift_defines.to_list()],
+        )
+
         if target_info.product_type == "application":
             target_settings["INFOPLIST_FILE"] = "$BAZEL_STUBS_DIR/Info-stub.plist"
             target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
