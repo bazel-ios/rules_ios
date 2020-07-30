@@ -372,6 +372,7 @@
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = ObjcFrameworkTests;
 				SUPPORTS_MACCATALYST = 0;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Debug;
