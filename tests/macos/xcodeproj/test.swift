@@ -6,12 +6,15 @@ class SwiftTests : XCTestCase {
   }
   func testPreprocessorDefinesFlag() {
       #if REQUIRED_DEFINED_FLAG
+        XCTAssertTrue(true)
       #else
-          XCTAssertTrue(false)
+        NoteThisShouldShowNoErrorInsideXCodeOrBuildError
       #endif // REQUIRED_DEFINED_FLAG
     
       #if FLAG_WITH_VALUE_ZERO
-          XCTAssertTrue(false)
+        NoteThisShouldShowNoErrorInsideXCodeOrBuildError
+        XCTAssertTrue(false)
+      #else
       #endif //FLAG_WITH_VALUE_ZERO
 
   }
