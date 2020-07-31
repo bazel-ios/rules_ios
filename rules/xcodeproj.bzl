@@ -279,13 +279,13 @@ def _xcodeproj_impl(ctx):
         target_settings["FRAMEWORK_SEARCH_PATHS"] = " ".join(framework_search_paths)
         target_settings["GCC_PREPROCESSOR_DEFINITIONS"] = " ".join(["\"%s\"" % d for d in target_info.cc_defines.to_list()])
 
-        target_settings["SWIFT_ACTIVE_COMPILATION_CONDITIONS"] = " ".join(
-            ["\"%s\"" % d for d in target_info.swift_defines.to_list()],
-        )
-
         if target_info.product_type == "application":
             target_settings["INFOPLIST_FILE"] = "$BAZEL_STUBS_DIR/Info-stub.plist"
             target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
+        else:
+            target_settings["SWIFT_ACTIVE_COMPILATION_CONDITIONS"] = " ".join(
+                ["\"%s\"" % d for d in target_info.swift_defines.to_list()],
+            )
         if target_info.product_type == "bundle.unit-test":
             target_settings["SUPPORTS_MACCATALYST"] = False
         target_dependencies = []
