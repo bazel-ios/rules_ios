@@ -283,9 +283,17 @@ def _xcodeproj_impl(ctx):
             target_settings["INFOPLIST_FILE"] = "$BAZEL_STUBS_DIR/Info-stub.plist"
             target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
         else:
-            target_settings["SWIFT_ACTIVE_COMPILATION_CONDITIONS"] = " ".join(
-                ["\"%s\"" % d for d in target_info.swift_defines.to_list()],
-            )
+            defines_without_equal_sign = []
+            for d in target_info.swift_defines.to_list():
+                splits = d.split("=")
+                append_this_define = True
+
+                # So that definition with value zero won't be populated
+                if len(splits) > 1 and splits[1] == "0":
+                    append_this_define = False
+                if append_this_define:
+                    defines_without_equal_sign.append(splits[0])
+            target_settings["SWIFT_ACTIVE_COMPILATION_CONDITIONS"] = " ".join(["\"%s\"" % d for d in defines_without_equal_sign])
         if target_info.product_type == "bundle.unit-test":
             target_settings["SUPPORTS_MACCATALYST"] = False
         target_dependencies = []
