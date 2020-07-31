@@ -6,7 +6,10 @@ ios_unit_test(
     name = "Single-Application-UnitTests",
     srcs = ["test.swift"],
     args = ["-h"],
-    defines = ["REQUIRED_DEFINED_FLAG"],
+    defines = [
+        "REQUIRED_DEFINED_FLAG=1",
+        "FLAG_WITH_VALUE_ZERO=0",
+    ],
     env = {
         "test_envvar_key1": "test_envvar_value1",
         "test_envvar_key2": "test_envvar_value2",
@@ -38,7 +41,10 @@ ios_unit_test(
     name = "Single-Application-RunnableTestSuite",
     srcs = ["test.swift"],
     args = ["-h"],
-    defines = ["REQUIRED_DEFINED_FLAG"],
+    defines = [
+        "REQUIRED_DEFINED_FLAG=1",
+        "FLAG_WITH_VALUE_ZERO=0",
+    ],
     env = {
         "test_envvar_key1": "test_envvar_value1",
         "test_envvar_key2": "test_envvar_value2",

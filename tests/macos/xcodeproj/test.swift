@@ -9,6 +9,11 @@ class SwiftTests : XCTestCase {
       #else
           XCTAssertTrue(false)
       #endif // REQUIRED_DEFINED_FLAG
+    
+      #if FLAG_WITH_VALUE_ZERO
+          XCTAssertTrue(false)
+      #endif //FLAG_WITH_VALUE_ZERO
+
   }
   func testTestEnvArgsMatches() {
     XCTAssertEqual(ProcessInfo.processInfo.environment["test_envvar_key1"], "test_envvar_value1")
