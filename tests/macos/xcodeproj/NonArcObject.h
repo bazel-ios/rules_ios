@@ -1,2 +1,2 @@
-@interface NonArcObject : NSObject
+@interface NonArcObject
 @end
