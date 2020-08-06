@@ -275,7 +275,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = ObjcFramework;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
 				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Release;
@@ -298,6 +298,7 @@
 				LD = "$BAZEL_STUBS_DIR/ld-stub";
 				LIBTOOL = /usr/bin/true;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_EXEC = "$BAZEL_STUBS_DIR/swiftc-stub";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_VERSION = 5;
@@ -315,7 +316,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = ObjcFrameworkTestLib;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
 				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Debug;
@@ -331,7 +332,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = ObjcFramework;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
 				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Debug;
@@ -372,7 +373,7 @@
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = ObjcFrameworkTests;
 				SUPPORTS_MACCATALYST = 0;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
 				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Debug;
@@ -389,7 +390,7 @@
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = ObjcFrameworkTests;
 				SUPPORTS_MACCATALYST = 0;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
 				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Release;
@@ -405,7 +406,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = ObjcFrameworkTestLib;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
 				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Release;

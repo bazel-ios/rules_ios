@@ -187,6 +187,27 @@ _xcodeproj_aspect = aspect(
     attr_aspects = ["deps", "actual", "tests", "infoplists", "entitlements", "resources", "test_host"],
 )
 
+# Borrowed from rules_swift/compiling.bzl
+def _exclude_swift_incompatible_define(define):
+    """A `map_each` helper that excludes a define if it is not Swift-compatible.
+
+    This function rejects any defines that are not of the form `FOO=1` or `FOO`.
+    Note that in C-family languages, the option `-DFOO` is equivalent to
+    `-DFOO=1` so we must preserve both.
+
+    Args:
+        define: A string of the form `FOO` or `FOO=BAR` that represents an
+        Objective-C define.
+
+    Returns:
+        The token portion of the define it is Swift-compatible, or `None`
+        otherwise.
+    """
+    token, equal, value = define.partition("=")
+    if (not equal and not value) or (equal == "=" and value == "1"):
+        return token
+    return None
+
 def _xcodeproj_impl(ctx):
     xcodegen_jsonfile = ctx.actions.declare_file(
         "%s-xcodegen.json" % ctx.attr.name,
@@ -226,13 +247,12 @@ def _xcodeproj_impl(ctx):
         "SWIFT_VERSION": 5,
     }
     proj_settings_debug = {
-        "GCC_PREPROCESSOR_DEFINITIONS": "DEBUG",
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "DEBUG",
     }
     proj_settings = {
         "base": proj_settings_base,
         "configs": {
-            "Debug": proj_settings_debug
+            "Debug": proj_settings_debug,
         },
     }
 
@@ -295,15 +315,14 @@ def _xcodeproj_impl(ctx):
         else:
             defines_without_equal_sign = ["$(inherited)"]
             for d in target_info.swift_defines.to_list():
-                splits = d.split("=")
-                append_this_define = True
+                defines_without_equal_sign.append(d)
+                d = _exclude_swift_incompatible_define(d)
+                if d != None:
+                    defines_without_equal_sign.append(d)
 
-                # So that definition with value zero won't be populated
-                if len(splits) > 1 and splits[1] == "0":
-                    append_this_define = False
-                if append_this_define:
-                    defines_without_equal_sign.append(splits[0])
-            target_settings["SWIFT_ACTIVE_COMPILATION_CONDITIONS"] = " ".join(["\"%s\"" % d for d in defines_without_equal_sign])
+            target_settings["SWIFT_ACTIVE_COMPILATION_CONDITIONS"] = " ".join(
+                ["\"%s\"" % d for d in defines_without_equal_sign],
+            )
         if target_info.product_type == "bundle.unit-test":
             target_settings["SUPPORTS_MACCATALYST"] = False
         target_dependencies = []

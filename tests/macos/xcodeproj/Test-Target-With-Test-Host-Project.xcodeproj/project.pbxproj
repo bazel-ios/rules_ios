@@ -392,7 +392,7 @@
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "TestImports-Unit-Tests";
 				SUPPORTS_MACCATALYST = 0;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestImports-App.app/TestImports-App";
 				VALID_ARCHS = "arm64 arm64e";
 			};
@@ -427,7 +427,7 @@
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "TestImports-Unit-Tests";
 				SUPPORTS_MACCATALYST = 0;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestImports-App.app/TestImports-App";
 				VALID_ARCHS = "arm64 arm64e";
 			};
@@ -445,7 +445,7 @@
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = DefaultHosted;
 				SUPPORTS_MACCATALYST = 0;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS-10.0-AppHost.app/iOS-10.0-AppHost";
 				VALID_ARCHS = "arm64 arm64e";
 			};
@@ -544,6 +544,7 @@
 				LD = "$BAZEL_STUBS_DIR/ld-stub";
 				LIBTOOL = /usr/bin/true;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_EXEC = "$BAZEL_STUBS_DIR/swiftc-stub";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_VERSION = 5;
@@ -562,7 +563,7 @@
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = DefaultHosted;
 				SUPPORTS_MACCATALYST = 0;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS-10.0-AppHost.app/iOS-10.0-AppHost";
 				VALID_ARCHS = "arm64 arm64e";
 			};
