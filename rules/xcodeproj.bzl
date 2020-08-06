@@ -52,6 +52,21 @@ def _xcodeproj_aspect_impl(target, ctx):
     deps += getattr(ctx.rule.attr, "infoplists", [])
     deps.append(getattr(ctx.rule.attr, "entitlements", None))
 
+    hmap_paths = []
+    for copt in getattr(ctx.rule.attr, "copts", []):
+        if copt.startswith("-I"):
+            path = copt[2:]
+
+            # path can be just `.` or `$(execpath :label)`
+            if path.startswith("$(execpath :"):
+                path = ctx.expand_location(path)
+            hmap_paths.append(path)
+
+    # use this to get hmap directly instead of via copts
+    # if ctx.rule.kind == 'hmap':
+    #     # see how library.bzl comes up with the hmap path
+    #     return _SrcInfo(hmap_paths = ctx.expand_location("$execpath hmap"))
+
     # TODO: handle apple_resource_bundle targets
     env_vars = ()
     commandline_args = ()
@@ -103,6 +118,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             minimum_os_version = bundle_info.minimum_os_version,
             test_host_appname = test_host_appname,
             env_vars = env_vars,
+            hmap_paths = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "hmap_paths")),
             commandline_args = commandline_args,
         )
         if ctx.rule.kind != "apple_framework_packaging":
@@ -116,6 +132,7 @@ def _xcodeproj_aspect_impl(target, ctx):
                     swift_defines = info.swift_defines,
                     build_files = depset(_srcs_info_build_files(ctx)),
                     direct_srcs = [],
+                    hmap_paths = depset(hmap_paths),
                 ),
             )
         direct_targets = [info]
@@ -157,6 +174,7 @@ def _xcodeproj_aspect_impl(target, ctx):
                 build_files = depset(_srcs_info_build_files(ctx), transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
                 swift_defines = depset([], transitive = swift_defines),
                 direct_srcs = srcs,
+                hmap_paths = depset(hmap_paths),
             ),
         )
 
@@ -303,6 +321,18 @@ def _xcodeproj_impl(ctx):
             "CLANG_ENABLE_MODULES": "YES",
             "CLANG_ENABLE_OBJC_ARC": "YES",
         }
+
+        # Just like framework, we need to have absoluate path to the hmap files
+        # so that Objc files can correctly import headers
+        header_search_paths = []
+        for hmap in target_info.hmap_paths.to_list():
+            if len(hmap) == 0:
+                continue
+            if hmap != "." and hmap[0] != "/":
+                hmap = "$BAZEL_WORKSPACE_ROOT/%s" % hmap
+            header_search_paths.append("\"%s\"" % hmap)
+        target_settings["HEADER_SEARCH_PATHS"] = " ".join(header_search_paths)
+
         framework_search_paths = []
         for fi in target_info.framework_includes.to_list():
             if fi[0] != "/":
