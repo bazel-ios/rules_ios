@@ -206,7 +206,7 @@ def _xcodeproj_impl(ctx):
         "groupSortPosition": "none",
         "settingPresets": "none",
     }
-    proj_settings = {
+    proj_settings_base = {
         "BAZEL_BUILD_EXEC": "$BAZEL_STUBS_DIR/build-wrapper",
         "BAZEL_OUTPUT_PROCESSOR": "$BAZEL_STUBS_DIR/output-processor.rb",
         "BAZEL_PATH": ctx.attr.bazel_path,
@@ -224,6 +224,16 @@ def _xcodeproj_impl(ctx):
         "SWIFT_EXEC": "$BAZEL_STUBS_DIR/swiftc-stub",
         "SWIFT_OBJC_INTERFACE_HEADER_NAME": "",
         "SWIFT_VERSION": 5,
+    }
+    proj_settings_debug = {
+        "GCC_PREPROCESSOR_DEFINITIONS": "DEBUG",
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "DEBUG",
+    }
+    proj_settings = {
+        "base": proj_settings_base,
+        "configs": {
+            "Debug": proj_settings_debug
+        },
     }
 
     targets = []
@@ -283,7 +293,7 @@ def _xcodeproj_impl(ctx):
             target_settings["INFOPLIST_FILE"] = "$BAZEL_STUBS_DIR/Info-stub.plist"
             target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
         else:
-            defines_without_equal_sign = []
+            defines_without_equal_sign = ["$(inherited)"]
             for d in target_info.swift_defines.to_list():
                 splits = d.split("=")
                 append_this_define = True
