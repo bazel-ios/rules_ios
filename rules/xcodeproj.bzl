@@ -1,4 +1,5 @@
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo")
+load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 
 def _get_attr_values_for_name(deps, provider, field):
@@ -95,6 +96,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             asset_srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "asset_srcs")),
             framework_includes = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "framework_includes")),
             cc_defines = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "cc_defines")),
+            swift_defines = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "swift_defines")),
             build_files = depset(_srcs_info_build_files(ctx), transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
             product_type = bundle_info.product_type[_PRODUCT_SPECIFIER_LENGTH:],
             platform_type = bundle_info.platform_type,
@@ -111,6 +113,7 @@ def _xcodeproj_aspect_impl(target, ctx):
                     asset_srcs = info.asset_srcs,
                     framework_includes = info.framework_includes,
                     cc_defines = info.cc_defines,
+                    swift_defines = info.swift_defines,
                     build_files = depset(_srcs_info_build_files(ctx)),
                     direct_srcs = [],
                 ),
@@ -136,9 +139,14 @@ def _xcodeproj_aspect_impl(target, ctx):
         asset_srcs = [f for f in asset_srcs if _is_current_project_file(f)]
         framework_includes = _get_attr_values_for_name(deps, _SrcsInfo, "framework_includes")
         cc_defines = _get_attr_values_for_name(deps, _SrcsInfo, "cc_defines")
+        swift_defines = _get_attr_values_for_name(deps, _SrcsInfo, "swift_defines")
         if CcInfo in target:
             framework_includes.append(target[CcInfo].compilation_context.framework_includes)
             cc_defines.append(target[CcInfo].compilation_context.defines)
+
+        if SwiftInfo in target:
+            swift_defines.append(depset(target[SwiftInfo].direct_defines))
+            swift_defines.append(target[SwiftInfo].transitive_defines)
         providers.append(
             _SrcsInfo(
                 srcs = depset(srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
@@ -147,6 +155,7 @@ def _xcodeproj_aspect_impl(target, ctx):
                 framework_includes = depset([], transitive = framework_includes),
                 cc_defines = depset([], transitive = cc_defines),
                 build_files = depset(_srcs_info_build_files(ctx), transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
+                swift_defines = depset([], transitive = swift_defines),
                 direct_srcs = srcs,
             ),
         )
@@ -178,6 +187,27 @@ _xcodeproj_aspect = aspect(
     attr_aspects = ["deps", "actual", "tests", "infoplists", "entitlements", "resources", "test_host"],
 )
 
+# Borrowed from rules_swift/compiling.bzl
+def _exclude_swift_incompatible_define(define):
+    """A `map_each` helper that excludes a define if it is not Swift-compatible.
+
+    This function rejects any defines that are not of the form `FOO=1` or `FOO`.
+    Note that in C-family languages, the option `-DFOO` is equivalent to
+    `-DFOO=1` so we must preserve both.
+
+    Args:
+        define: A string of the form `FOO` or `FOO=BAR` that represents an
+        Objective-C define.
+
+    Returns:
+        The token portion of the define it is Swift-compatible, or `None`
+        otherwise.
+    """
+    token, equal, value = define.partition("=")
+    if (not equal and not value) or (equal == "=" and value == "1"):
+        return token
+    return None
+
 def _xcodeproj_impl(ctx):
     xcodegen_jsonfile = ctx.actions.declare_file(
         "%s-xcodegen.json" % ctx.attr.name,
@@ -197,7 +227,7 @@ def _xcodeproj_impl(ctx):
         "groupSortPosition": "none",
         "settingPresets": "none",
     }
-    proj_settings = {
+    proj_settings_base = {
         "BAZEL_BUILD_EXEC": "$BAZEL_STUBS_DIR/build-wrapper",
         "BAZEL_OUTPUT_PROCESSOR": "$BAZEL_STUBS_DIR/output-processor.rb",
         "BAZEL_PATH": ctx.attr.bazel_path,
@@ -216,6 +246,16 @@ def _xcodeproj_impl(ctx):
         "SWIFT_EXEC": "$BAZEL_STUBS_DIR/swiftc-stub",
         "SWIFT_OBJC_INTERFACE_HEADER_NAME": "",
         "SWIFT_VERSION": 5,
+    }
+    proj_settings_debug = {
+        "GCC_PREPROCESSOR_DEFINITIONS": "DEBUG",
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "DEBUG",
+    }
+    proj_settings = {
+        "base": proj_settings_base,
+        "configs": {
+            "Debug": proj_settings_debug,
+        },
     }
 
     targets = []
@@ -269,10 +309,24 @@ def _xcodeproj_impl(ctx):
                 fi = "$BAZEL_WORKSPACE_ROOT/%s" % fi
             framework_search_paths.append("\"%s\"" % fi)
         target_settings["FRAMEWORK_SEARCH_PATHS"] = " ".join(framework_search_paths)
-        target_settings["GCC_PREPROCESSOR_DEFINITIONS"] = " ".join(["\"%s\"" % d for d in target_info.cc_defines.to_list()])
+
+        macros = ["\"%s\"" % d for d in target_info.cc_defines.to_list()]
+        macros.append("$(inherited)")
+        target_settings["GCC_PREPROCESSOR_DEFINITIONS"] = " ".join(macros)
+
+        defines_without_equal_sign = ["$(inherited)"]
+        for d in target_info.swift_defines.to_list():
+            d = _exclude_swift_incompatible_define(d)
+            if d != None:
+                defines_without_equal_sign.append(d)
+        target_settings["SWIFT_ACTIVE_COMPILATION_CONDITIONS"] = " ".join(
+            ["\"%s\"" % d for d in defines_without_equal_sign],
+        )
+
         if target_info.product_type == "application":
             target_settings["INFOPLIST_FILE"] = "$BAZEL_STUBS_DIR/Info-stub.plist"
             target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
+
         if target_info.product_type == "bundle.unit-test":
             target_settings["SUPPORTS_MACCATALYST"] = False
         target_dependencies = []
