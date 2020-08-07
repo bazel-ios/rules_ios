@@ -290,7 +290,7 @@
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-UnitTests";
 				SUPPORTS_MACCATALYST = 0;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\" \"REQUIRED_DEFINED_FLAG=1\" \"REQUIRED_DEFINED_FLAG\" \"FLAG_WITH_VALUE_ZERO=0\"";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\" \"REQUIRED_DEFINED_FLAG\"";
 				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Debug;
@@ -391,7 +391,7 @@
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-RunnableTestSuite";
 				SUPPORTS_MACCATALYST = 0;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\" \"REQUIRED_DEFINED_FLAG=1\" \"REQUIRED_DEFINED_FLAG\" \"FLAG_WITH_VALUE_ZERO=0\"";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\" \"REQUIRED_DEFINED_FLAG\"";
 				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Debug;
@@ -408,7 +408,7 @@
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-RunnableTestSuite";
 				SUPPORTS_MACCATALYST = 0;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\" \"REQUIRED_DEFINED_FLAG=1\" \"REQUIRED_DEFINED_FLAG\" \"FLAG_WITH_VALUE_ZERO=0\"";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\" \"REQUIRED_DEFINED_FLAG\"";
 				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Release;
@@ -425,7 +425,7 @@
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "Single-Application-UnitTests";
 				SUPPORTS_MACCATALYST = 0;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\" \"REQUIRED_DEFINED_FLAG=1\" \"REQUIRED_DEFINED_FLAG\" \"FLAG_WITH_VALUE_ZERO=0\"";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\" \"REQUIRED_DEFINED_FLAG\"";
 				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Release;

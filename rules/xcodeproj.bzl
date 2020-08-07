@@ -318,7 +318,6 @@ def _xcodeproj_impl(ctx):
         else:
             defines_without_equal_sign = ["$(inherited)"]
             for d in target_info.swift_defines.to_list():
-                defines_without_equal_sign.append(d)
                 d = _exclude_swift_incompatible_define(d)
                 if d != None:
                     defines_without_equal_sign.append(d)
