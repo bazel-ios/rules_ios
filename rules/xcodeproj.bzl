@@ -44,6 +44,18 @@ def _srcs_info_build_files(ctx):
 
     return [path]
 
+def _xcodeproj_aspect_collect_hmap_paths(deps, target, ctx):
+    hmap_paths = []
+    kind = ctx.rule.kind
+    if kind == "objc_library" or kind == "swift_library":
+        for dep in deps:
+            if type(dep) == "Target":
+                label_name = getattr(dep, "label").name
+                if label_name.endswith("hmap") and not label_name.endswith("private_hmap"):
+                    path = ctx.expand_location("$(execpath :%s)" % label_name)
+                    hmap_paths.append(path)
+    return hmap_paths
+
 def _xcodeproj_aspect_impl(target, ctx):
     providers = []
 
@@ -52,20 +64,7 @@ def _xcodeproj_aspect_impl(target, ctx):
     deps += getattr(ctx.rule.attr, "infoplists", [])
     deps.append(getattr(ctx.rule.attr, "entitlements", None))
 
-    hmap_paths = []
-    for copt in getattr(ctx.rule.attr, "copts", []):
-        if copt.startswith("-I"):
-            path = copt[2:]
-
-            # path can be just `.` or `$(execpath :label)`
-            if path.startswith("$(execpath :"):
-                path = ctx.expand_location(path)
-            hmap_paths.append(path)
-
-    # use this to get hmap directly instead of via copts
-    # if ctx.rule.kind == 'hmap':
-    #     # see how library.bzl comes up with the hmap path
-    #     return _SrcInfo(hmap_paths = ctx.expand_location("$execpath hmap"))
+    hmap_paths = _xcodeproj_aspect_collect_hmap_paths(deps, target, ctx)
 
     # TODO: handle apple_resource_bundle targets
     env_vars = ()
@@ -331,6 +330,7 @@ def _xcodeproj_impl(ctx):
             if hmap != "." and hmap[0] != "/":
                 hmap = "$BAZEL_WORKSPACE_ROOT/%s" % hmap
             header_search_paths.append("\"%s\"" % hmap)
+        header_search_paths.append("\"$BAZEL_WORKSPACE_ROOT\"")
         target_settings["HEADER_SEARCH_PATHS"] = " ".join(header_search_paths)
 
         framework_search_paths = []
