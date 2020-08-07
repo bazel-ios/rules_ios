@@ -308,23 +308,24 @@ def _xcodeproj_impl(ctx):
                 fi = "$BAZEL_WORKSPACE_ROOT/%s" % fi
             framework_search_paths.append("\"%s\"" % fi)
         target_settings["FRAMEWORK_SEARCH_PATHS"] = " ".join(framework_search_paths)
+
         macros = ["\"%s\"" % d for d in target_info.cc_defines.to_list()]
         macros.append("$(inherited)")
         target_settings["GCC_PREPROCESSOR_DEFINITIONS"] = " ".join(macros)
 
+        defines_without_equal_sign = ["$(inherited)"]
+        for d in target_info.swift_defines.to_list():
+            d = _exclude_swift_incompatible_define(d)
+            if d != None:
+                defines_without_equal_sign.append(d)
+        target_settings["SWIFT_ACTIVE_COMPILATION_CONDITIONS"] = " ".join(
+            ["\"%s\"" % d for d in defines_without_equal_sign],
+        )
+
         if target_info.product_type == "application":
             target_settings["INFOPLIST_FILE"] = "$BAZEL_STUBS_DIR/Info-stub.plist"
             target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
-        else:
-            defines_without_equal_sign = ["$(inherited)"]
-            for d in target_info.swift_defines.to_list():
-                d = _exclude_swift_incompatible_define(d)
-                if d != None:
-                    defines_without_equal_sign.append(d)
 
-            target_settings["SWIFT_ACTIVE_COMPILATION_CONDITIONS"] = " ".join(
-                ["\"%s\"" % d for d in defines_without_equal_sign],
-            )
         if target_info.product_type == "bundle.unit-test":
             target_settings["SUPPORTS_MACCATALYST"] = False
         target_dependencies = []

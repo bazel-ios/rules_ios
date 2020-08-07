@@ -349,6 +349,7 @@
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ios-app-host-12.0";
 				PRODUCT_NAME = "iOS-12.0-AppHost";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
 				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Release;
@@ -366,6 +367,7 @@
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ios-app-host-12.0";
 				PRODUCT_NAME = "iOS-12.0-AppHost";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
 				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Debug;
