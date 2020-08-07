@@ -271,7 +271,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = ObjcFramework;
@@ -295,6 +295,7 @@
 				CODE_SIGNING_ALLOWED = 0;
 				CXX = $CC;
 				DONT_RUN_SWIFT_STDLIB_TOOL = 1;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				LD = "$BAZEL_STUBS_DIR/ld-stub";
 				LIBTOOL = /usr/bin/true;
 				SDKROOT = iphoneos;
@@ -312,7 +313,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-fastbuild-ST-cecbe3cb5ea2880cd67bf87ed1de59490130c0d897af2739d7b0f3dd10b40f24/bin/tests/ios/frameworks/objc/ObjcFramework\"";
-				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = ObjcFrameworkTestLib;
@@ -328,7 +329,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = ObjcFramework;
@@ -368,7 +369,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-fastbuild-ST-cecbe3cb5ea2880cd67bf87ed1de59490130c0d897af2739d7b0f3dd10b40f24/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-fastbuild-ST-b6e49002cb7dafa9fcd24b0dd76f1c63efbe73d59588c29fc9a7b41408f04f90/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\"";
-				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = ObjcFrameworkTests;
@@ -385,7 +386,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-fastbuild-ST-cecbe3cb5ea2880cd67bf87ed1de59490130c0d897af2739d7b0f3dd10b40f24/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-fastbuild-ST-b6e49002cb7dafa9fcd24b0dd76f1c63efbe73d59588c29fc9a7b41408f04f90/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\"";
-				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = ObjcFrameworkTests;
@@ -402,7 +403,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-fastbuild-ST-cecbe3cb5ea2880cd67bf87ed1de59490130c0d897af2739d7b0f3dd10b40f24/bin/tests/ios/frameworks/objc/ObjcFramework\"";
-				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = ObjcFrameworkTestLib;

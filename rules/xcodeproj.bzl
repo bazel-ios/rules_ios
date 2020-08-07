@@ -247,6 +247,7 @@ def _xcodeproj_impl(ctx):
         "SWIFT_VERSION": 5,
     }
     proj_settings_debug = {
+        "GCC_PREPROCESSOR_DEFINITIONS": "DEBUG",
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "DEBUG",
     }
     proj_settings = {
@@ -307,7 +308,9 @@ def _xcodeproj_impl(ctx):
                 fi = "$BAZEL_WORKSPACE_ROOT/%s" % fi
             framework_search_paths.append("\"%s\"" % fi)
         target_settings["FRAMEWORK_SEARCH_PATHS"] = " ".join(framework_search_paths)
-        target_settings["GCC_PREPROCESSOR_DEFINITIONS"] = " ".join(["\"%s\"" % d for d in target_info.cc_defines.to_list()])
+        macros = ["\"%s\"" % d for d in target_info.cc_defines.to_list()]
+        macros.append("$(inherited)")
+        target_settings["GCC_PREPROCESSOR_DEFINITIONS"] = " ".join(macros)
 
         if target_info.product_type == "application":
             target_settings["INFOPLIST_FILE"] = "$BAZEL_STUBS_DIR/Info-stub.plist"
