@@ -1,6 +1,7 @@
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo")
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo")
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("//rules:hmap.bzl", "HeaderMapInfo")
 
 def _get_attr_values_for_name(deps, provider, field):
     return [
@@ -47,13 +48,15 @@ def _srcs_info_build_files(ctx):
 def _xcodeproj_aspect_collect_hmap_paths(deps, target, ctx):
     hmap_paths = []
     kind = ctx.rule.kind
-    if kind == "objc_library" or kind == "swift_library":
+    is_library = kind == "objc_library" or kind == "swift_library"
+    if is_library:
         for dep in deps:
-            if type(dep) == "Target":
-                label_name = getattr(dep, "label").name
-                if label_name.endswith("hmap") and not label_name.endswith("private_hmap"):
-                    path = ctx.expand_location("$(execpath :%s)" % label_name)
-                    hmap_paths.append(path)
+            if type(dep) == "Target" and HeaderMapInfo in dep:
+                files = getattr(dep[HeaderMapInfo], "files").to_list()
+                for file in files:
+                    # Relative to workspace root
+                    relative_path = getattr(file, "path")
+                    hmap_paths.append(relative_path)
     return hmap_paths
 
 def _xcodeproj_aspect_impl(target, ctx):
