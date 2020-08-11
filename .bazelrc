@@ -1,9 +1,19 @@
 # We can't create a bzl_library for rules-swift because of its visibility,
 # so circumvent by not using the sandbox
 build --strategy=Stardoc=standalone
+
+# Debugging does not work in sandbox mode. Uncomment these lines to turn off sandboxing.
+# build --genrule_strategy=standalone
+# build --spawn_strategy=standalone
+
 build --verbose_failures # Print the full command line for commands that failed
 build --test_output=errors # Prints log file output to the console on failure
 
-# By default do not build the tests for sources-with-prebuilt-binaries, 
+# By default do not build the tests for sources-with-prebuilt-binaries,
 # because it takes quite some time. They will only run on CI
 build --deleted_packages tests/ios/frameworks/sources-with-prebuilt-binaries
+
+# Enable these features to test local and CI builds
+# when swiftmodule caching is enabled.
+build --features=swift.cacheable_swiftmodules
+build --features=swift.use_global_module_cache

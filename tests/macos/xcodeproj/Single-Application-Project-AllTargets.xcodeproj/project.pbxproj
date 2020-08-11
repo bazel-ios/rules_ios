@@ -284,7 +284,7 @@
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "\"REQUIRED_DEFINED_FLAG=1\" \"FLAG_WITH_VALUE_ZERO=0\" $(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACH_O_TYPE = "$(inherited)";
@@ -301,7 +301,7 @@
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -319,7 +319,7 @@
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -335,6 +335,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
+				BAZEL_DEBUG_SYMBOLS_FLAG = "--compilation_mode=dbg";
 				BAZEL_INSTALLER = $BAZEL_INSTALLERS_DIR/installer;
 				BAZEL_INSTALLERS_DIR = $PROJECT_FILE_PATH/bazelinstallers;
 				BAZEL_OUTPUT_PROCESSOR = "$BAZEL_STUBS_DIR/output-processor.rb";
@@ -389,7 +390,7 @@
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "\"REQUIRED_DEFINED_FLAG=1\" \"FLAG_WITH_VALUE_ZERO=0\" $(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACH_O_TYPE = "$(inherited)";
@@ -406,7 +407,7 @@
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "\"REQUIRED_DEFINED_FLAG=1\" \"FLAG_WITH_VALUE_ZERO=0\" $(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACH_O_TYPE = "$(inherited)";
@@ -423,7 +424,7 @@
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "\"REQUIRED_DEFINED_FLAG=1\" \"FLAG_WITH_VALUE_ZERO=0\" $(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACH_O_TYPE = "$(inherited)";
