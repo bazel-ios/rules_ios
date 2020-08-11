@@ -15,5 +15,5 @@ build --deleted_packages tests/ios/frameworks/sources-with-prebuilt-binaries
 
 # Enable these features to test local and CI builds
 # when swiftmodule caching is enabled.
-build --features=swift.cacheable_swiftmodules
-build --features=swift.use_global_module_cache
+# build --features=swift.cacheable_swiftmodules
+# build --features=swift.use_global_module_cache
