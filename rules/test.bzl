@@ -46,13 +46,13 @@ def ios_unit_test(name, apple_library = apple_library, **kwargs):
 
     local_debug_options_for_swift = []
     if library.has_swift_sources and unit_test_kwargs.get("test_host", None) == None:
-      local_debug_options_for_swift += ["@build_bazel_rules_ios//rules:_LocalDebugOptions"]
+        local_debug_options_for_swift.append("@build_bazel_rules_ios//rules:_LocalDebugOptions")
 
     rule(
         name = name,
         deps = library.lib_names + select({
-           "@build_bazel_rules_ios//rules:local_debug_options": local_debug_options_for_swift,
-           "//conditions:default": [],
+            "@build_bazel_rules_ios//rules:local_debug_options": local_debug_options_for_swift,
+            "//conditions:default": [],
         }),
         **unit_test_kwargs
     )

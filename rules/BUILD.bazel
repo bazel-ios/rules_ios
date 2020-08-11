@@ -1,7 +1,5 @@
-
 load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
-
 
 exports_files(
     glob(["*.bzl"]),
@@ -21,20 +19,25 @@ swift_library(
     name = "_LocalDebugOptions",
     srcs = [":empty"],
     copts = [
-            "-Xfrontend",
-            "-serialize-debugging-options",
+        "-Xfrontend",
+        "-serialize-debugging-options",
     ],
     module_name = "_LocalDebugOptions",
-    tags = ["no-remote"],
+    tags = [
+        "manual",
+        "no-remote",
+    ],
     visibility = ["//visibility:public"],
 )
 
-
-bool_flag(name = "local_debug_options_enabled", build_setting_default = False)
+bool_flag(
+    name = "local_debug_options_enabled",
+    build_setting_default = False,
+)
 
 config_setting(
     name = "local_debug_options",
     flag_values = {
         ":local_debug_options_enabled": "True",
-    }
+    },
 )
