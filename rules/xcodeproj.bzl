@@ -1,6 +1,7 @@
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo")
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo")
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("//rules:hmap.bzl", "HeaderMapInfo")
 
 def _get_attr_values_for_name(deps, provider, field):
     return [
@@ -44,13 +45,38 @@ def _srcs_info_build_files(ctx):
 
     return [path]
 
+def _xcodeproj_aspect_collect_hmap_paths(deps, target, ctx):
+    """Helper method collecting hmap paths from HeaderMapInfo
+
+    Args:
+        deps: array of deps collected from target
+        target: same as what is passed into aspect impl
+        ctx: same as what is passed into aspect impl
+
+    Returns:
+        Array of hmap paths (relative to bazel root)
+    """
+    hmap_paths = []
+    for dep in deps:
+        if HeaderMapInfo in dep:
+            files = getattr(dep[HeaderMapInfo], "files").to_list()
+            for file in files:
+                # Relative to workspace root
+                relative_path = getattr(file, "path")
+                hmap_paths.append(relative_path)
+    return hmap_paths
+
 def _xcodeproj_aspect_impl(target, ctx):
     providers = []
 
     deps = []
     deps += getattr(ctx.rule.attr, "deps", [])
     deps += getattr(ctx.rule.attr, "infoplists", [])
-    deps.append(getattr(ctx.rule.attr, "entitlements", None))
+    entitlements = getattr(ctx.rule.attr, "entitlements", None)
+    if entitlements:
+        deps.append(entitlements)
+
+    hmap_paths = _xcodeproj_aspect_collect_hmap_paths(deps, target, ctx)
 
     # TODO: handle apple_resource_bundle targets
     env_vars = ()
@@ -103,6 +129,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             minimum_os_version = bundle_info.minimum_os_version,
             test_host_appname = test_host_appname,
             env_vars = env_vars,
+            hmap_paths = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "hmap_paths")),
             commandline_args = commandline_args,
         )
         if ctx.rule.kind != "apple_framework_packaging":
@@ -116,6 +143,7 @@ def _xcodeproj_aspect_impl(target, ctx):
                     swift_defines = info.swift_defines,
                     build_files = depset(_srcs_info_build_files(ctx)),
                     direct_srcs = [],
+                    hmap_paths = depset(hmap_paths),
                 ),
             )
         direct_targets = [info]
@@ -157,6 +185,7 @@ def _xcodeproj_aspect_impl(target, ctx):
                 build_files = depset(_srcs_info_build_files(ctx), transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
                 swift_defines = depset([], transitive = swift_defines),
                 direct_srcs = srcs,
+                hmap_paths = depset(hmap_paths),
             ),
         )
 
@@ -207,6 +236,27 @@ def _exclude_swift_incompatible_define(define):
     if (not equal and not value) or (equal == "=" and value == "1"):
         return token
     return None
+
+def _joined_header_search_paths(hmap_paths):
+    """Helper method transforming valid hmap paths into full absolute paths and concat together
+
+    Args:
+        hmap_paths: array of string and each is a path to hmap we have collected
+
+    Returns:
+        One string joined by absolute hmap paths, each path is quoted and separated by a space
+    """
+    header_search_paths = []
+    for hmap in hmap_paths:
+        if len(hmap) == 0:
+            continue
+        if hmap != "." and hmap[0] != "/":
+            hmap = "$BAZEL_WORKSPACE_ROOT/%s" % hmap
+            header_search_paths.append("\"%s\"" % hmap)
+
+    # We always need to include a search path at workspace root
+    header_search_paths.append("\"$BAZEL_WORKSPACE_ROOT\"")
+    return " ".join(header_search_paths)
 
 def _xcodeproj_impl(ctx):
     xcodegen_jsonfile = ctx.actions.declare_file(
@@ -304,6 +354,12 @@ def _xcodeproj_impl(ctx):
             "CLANG_ENABLE_MODULES": "YES",
             "CLANG_ENABLE_OBJC_ARC": "YES",
         }
+
+        # Just like framework, we need to have absolute path to the hmap files
+        # so that Objc files can correctly import headers
+        target_settings["HEADER_SEARCH_PATHS"] = _joined_header_search_paths(
+            target_info.hmap_paths.to_list(),
+        )
 
         # Ensure Xcode will resolve references to the XCTest framework.
         framework_search_paths = ["$(PLATFORM_DIR)/Developer/Library/Frameworks"]

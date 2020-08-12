@@ -388,6 +388,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-fastbuild-ST-f22bcf18950e92551e6bc2e43803228c8d15233d48c88265af0229927f68339f/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "TestImports-Unit-Tests";
@@ -406,6 +407,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-fastbuild-ST-f22bcf18950e92551e6bc2e43803228c8d15233d48c88265af0229927f68339f/bin/tests/ios/unit-test/test-imports-app/SomeFramework\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
@@ -424,6 +426,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-fastbuild-ST-f22bcf18950e92551e6bc2e43803228c8d15233d48c88265af0229927f68339f/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = "TestImports-Unit-Tests";
@@ -442,6 +445,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = DefaultHosted;
@@ -460,6 +464,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-fastbuild-ST-f22bcf18950e92551e6bc2e43803228c8d15233d48c88265af0229927f68339f/bin/tests/ios/unit-test/test-imports-app/SomeFramework\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
@@ -503,6 +508,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACH_O_TYPE = "$(inherited)";
@@ -521,6 +527,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACH_O_TYPE = "$(inherited)";
@@ -567,6 +574,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACH_O_TYPE = "$(inherited)";
 				PRODUCT_NAME = DefaultHosted;
