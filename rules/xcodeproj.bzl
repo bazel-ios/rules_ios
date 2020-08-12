@@ -300,6 +300,7 @@ def _xcodeproj_impl(ctx):
     proj_settings_debug = {
         "GCC_PREPROCESSOR_DEFINITIONS": "DEBUG",
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "DEBUG",
+        "BAZEL_DEBUG_SYMBOLS_FLAG": "--compilation_mode=dbg",
     }
     proj_settings = {
         "base": proj_settings_base,
@@ -360,7 +361,8 @@ def _xcodeproj_impl(ctx):
             target_info.hmap_paths.to_list(),
         )
 
-        framework_search_paths = []
+        # Ensure Xcode will resolve references to the XCTest framework.
+        framework_search_paths = ["$(PLATFORM_DIR)/Developer/Library/Frameworks"]
         for fi in target_info.framework_includes.to_list():
             if fi[0] != "/":
                 fi = "$BAZEL_WORKSPACE_ROOT/%s" % fi

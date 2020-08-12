@@ -61,9 +61,19 @@ def ios_application(name, apple_library = apple_library, **kwargs):
     application_kwargs["launch_storyboard"] = application_kwargs.pop("launch_storyboard", library.launch_screen_storyboard_name)
     application_kwargs["families"] = application_kwargs.pop("families", ["iphone", "ipad"])
 
+    local_debug_options_for_swift = []
+
+    # A dummy target that enables serialize-debugging-options but only in local development.
+    # As of Xcode 11.5, LocalDebugOptions is not needed for debugging apps.
+    if library.has_swift_sources:
+        local_debug_options_for_swift.append("@build_bazel_rules_ios//rules:_LocalDebugOptions")
+
     rules_apple_ios_application(
         name = name,
-        deps = library.deps,
+        deps = library.deps + select({
+            "@build_bazel_rules_ios//rules:local_debug_options": local_debug_options_for_swift,
+            "//conditions:default": [],
+        }),
         infoplists = infoplists,
         **application_kwargs
     )

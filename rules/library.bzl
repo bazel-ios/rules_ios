@@ -608,4 +608,5 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         namespace = namespace,
         linkopts = linkopts,
         platforms = platforms,
+        has_swift_sources = (swift_sources and len(swift_sources) > 0),
     )
