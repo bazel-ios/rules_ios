@@ -48,7 +48,7 @@ def _srcs_info_build_files(ctx):
 def _xcodeproj_aspect_collect_hmap_paths(deps, target, ctx):
     hmap_paths = []
     for dep in deps:
-        if type(dep) == "Target" and HeaderMapInfo in dep:
+        if dep != None and HeaderMapInfo in dep:
             files = getattr(dep[HeaderMapInfo], "files").to_list()
             for file in files:
                 # Relative to workspace root
