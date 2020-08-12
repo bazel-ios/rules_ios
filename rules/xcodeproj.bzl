@@ -47,16 +47,13 @@ def _srcs_info_build_files(ctx):
 
 def _xcodeproj_aspect_collect_hmap_paths(deps, target, ctx):
     hmap_paths = []
-    kind = ctx.rule.kind
-    is_library = kind == "objc_library" or kind == "swift_library"
-    if is_library:
-        for dep in deps:
-            if type(dep) == "Target" and HeaderMapInfo in dep:
-                files = getattr(dep[HeaderMapInfo], "files").to_list()
-                for file in files:
-                    # Relative to workspace root
-                    relative_path = getattr(file, "path")
-                    hmap_paths.append(relative_path)
+    for dep in deps:
+        if type(dep) == "Target" and HeaderMapInfo in dep:
+            files = getattr(dep[HeaderMapInfo], "files").to_list()
+            for file in files:
+                # Relative to workspace root
+                relative_path = getattr(file, "path")
+                hmap_paths.append(relative_path)
     return hmap_paths
 
 def _xcodeproj_aspect_impl(target, ctx):
@@ -228,6 +225,27 @@ def _exclude_swift_incompatible_define(define):
         return token
     return None
 
+def _joined_header_search_paths(hmap_paths):
+    """Helper method transforming valid hmap paths into full absolute paths and concat together
+
+    Args:
+        hmap_paths: array of string and each is a path to hmap we have collected
+
+    Returns:
+        One string joined by absolute hmap paths, each path is quoted and separated by a space
+    """
+    header_search_paths = []
+    for hmap in hmap_paths:
+        if len(hmap) == 0:
+            continue
+        if hmap != "." and hmap[0] != "/":
+            hmap = "$BAZEL_WORKSPACE_ROOT/%s" % hmap
+            header_search_paths.append("\"%s\"" % hmap)
+
+    # We always need to include a search path at workspace root
+    header_search_paths.append("\"$BAZEL_WORKSPACE_ROOT\"")
+    return " ".join(header_search_paths)
+
 def _xcodeproj_impl(ctx):
     xcodegen_jsonfile = ctx.actions.declare_file(
         "%s-xcodegen.json" % ctx.attr.name,
@@ -324,17 +342,11 @@ def _xcodeproj_impl(ctx):
             "CLANG_ENABLE_OBJC_ARC": "YES",
         }
 
-        # Just like framework, we need to have absoluate path to the hmap files
+        # Just like framework, we need to have absolute path to the hmap files
         # so that Objc files can correctly import headers
-        header_search_paths = []
-        for hmap in target_info.hmap_paths.to_list():
-            if len(hmap) == 0:
-                continue
-            if hmap != "." and hmap[0] != "/":
-                hmap = "$BAZEL_WORKSPACE_ROOT/%s" % hmap
-            header_search_paths.append("\"%s\"" % hmap)
-        header_search_paths.append("\"$BAZEL_WORKSPACE_ROOT\"")
-        target_settings["HEADER_SEARCH_PATHS"] = " ".join(header_search_paths)
+        target_settings["HEADER_SEARCH_PATHS"] = _joined_header_search_paths(
+            target_info.hmap_paths.to_list(),
+        )
 
         framework_search_paths = []
         for fi in target_info.framework_includes.to_list():
