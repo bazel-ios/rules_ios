@@ -46,9 +46,19 @@ def _srcs_info_build_files(ctx):
     return [path]
 
 def _xcodeproj_aspect_collect_hmap_paths(deps, target, ctx):
+    """Helper method collecting hmap paths from HeaderMapInfo
+
+    Args:
+        deps: array of deps collected from target
+        target: same as what is passed into aspect impl
+        ctx: same as what is passed into aspect impl
+
+    Returns:
+        Array of hmap paths (relative to bazel root)
+    """
     hmap_paths = []
     for dep in deps:
-        if dep != None and HeaderMapInfo in dep:
+        if HeaderMapInfo in dep:
             files = getattr(dep[HeaderMapInfo], "files").to_list()
             for file in files:
                 # Relative to workspace root
@@ -62,7 +72,9 @@ def _xcodeproj_aspect_impl(target, ctx):
     deps = []
     deps += getattr(ctx.rule.attr, "deps", [])
     deps += getattr(ctx.rule.attr, "infoplists", [])
-    deps.append(getattr(ctx.rule.attr, "entitlements", None))
+    entitlements = getattr(ctx.rule.attr, "entitlements", None)
+    if entitlements:
+        deps.append(entitlements)
 
     hmap_paths = _xcodeproj_aspect_collect_hmap_paths(deps, target, ctx)
 
