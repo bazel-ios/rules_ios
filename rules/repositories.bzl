@@ -47,10 +47,10 @@ def rules_ios_dependencies():
     _maybe(
         github_repo,
         name = "build_bazel_rules_apple",
-        ref = "eadfa72e26dd8b459038dc83fc440759daff65c6",
+        ref = "12ac0738c56f8a15c714a7e09ec87a1bbdbcada9",
         project = "bazelbuild",
         repo = "rules_apple",
-        #sha256 = "3100977922a83c71742ab38cd433e8878e3692d8106a8107126c59e3ca6e50f3",
+        sha256 = "60db0889ce9593ed2e6de513beb59770b9dbc122f6dcb68d5d49379e85c4b374",
     )
 
     _maybe(
