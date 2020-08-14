@@ -17,3 +17,6 @@ build --deleted_packages tests/ios/frameworks/sources-with-prebuilt-binaries
 # when swiftmodule caching is enabled.
 # build --features=swift.cacheable_swiftmodules
 # build --features=swift.use_global_module_cache
+
+# Match this with the flag used in build-wrapper.sh
+build --compilation_mode=dbg
