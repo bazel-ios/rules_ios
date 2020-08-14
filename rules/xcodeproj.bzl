@@ -2,6 +2,7 @@ load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo")
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//rules:hmap.bzl", "HeaderMapInfo")
+load("//rules:transition_support.bzl", "transition_support")
 
 def _get_attr_values_for_name(deps, provider, field):
     return [
@@ -526,6 +527,7 @@ $BAZEL_INSTALLER
 
 xcodeproj = rule(
     implementation = _xcodeproj_impl,
+    cfg = transition_support.xcodeproj_rule_transition,
     attrs = {
         "deps": attr.label_list(mandatory = True, allow_empty = False, providers = [], aspects = [_xcodeproj_aspect]),
         "include_transitive_targets": attr.bool(default = False, mandatory = False),
@@ -546,6 +548,10 @@ xcodeproj = rule(
         "installer": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:installer"), cfg = "host"),
         "build_wrapper": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:build-wrapper"), cfg = "host"),
         "additional_files": attr.label_list(allow_files = True, allow_empty = True, default = [], mandatory = False),
+        "_whitelist_function_transition": attr.label(
+            default = "@build_bazel_rules_apple//tools/whitelists/function_transition_whitelist",
+            doc = "Needed to allow this rule to have an incoming edge configuration transition.",
+        ),
     },
     executable = True,
 )
