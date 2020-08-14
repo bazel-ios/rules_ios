@@ -20,3 +20,4 @@ build --deleted_packages tests/ios/frameworks/sources-with-prebuilt-binaries
 
 # Match this with the flag used in build-wrapper.sh
 build --compilation_mode=dbg
+
