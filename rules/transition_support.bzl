@@ -118,7 +118,23 @@ _apple_rule_transition = transition(
     ],
 )
 
+def _xcodeproj_rule_transition_impl(settings, attr):
+    _ignore = (settings, attr)
+    return [
+        {"@build_bazel_rules_ios//rules:local_debug_options_enabled": True},
+    ]
+
+
+_xcodeproj_rule_transition = transition(
+    implementation=_xcodeproj_rule_transition_impl,
+    inputs=[],
+    outputs=[
+        "@build_bazel_rules_ios//rules:local_debug_options_enabled"
+    ]
+)
+
 transition_support = struct(
-    apple_rule_transition = _apple_rule_transition,
-    current_apple_platform = _current_apple_platform,
+    apple_rule_transition=_apple_rule_transition,
+    current_apple_platform=_current_apple_platform,
+    xcodeproj_rule_transition=_xcodeproj_rule_transition,
 )
