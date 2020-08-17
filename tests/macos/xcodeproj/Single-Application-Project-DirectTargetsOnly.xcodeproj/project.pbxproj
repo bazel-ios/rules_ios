@@ -400,7 +400,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
-				BAZEL_DEBUG_SYMBOLS_FLAG = "--compilation_mode=dbg";
 				BAZEL_INSTALLER = $BAZEL_INSTALLERS_DIR/installer;
 				BAZEL_INSTALLERS_DIR = $PROJECT_FILE_PATH/bazelinstallers;
 				BAZEL_OUTPUT_PROCESSOR = "$BAZEL_STUBS_DIR/output-processor.rb";

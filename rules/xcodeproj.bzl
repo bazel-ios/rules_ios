@@ -302,7 +302,6 @@ def _xcodeproj_impl(ctx):
     proj_settings_debug = {
         "GCC_PREPROCESSOR_DEFINITIONS": "DEBUG",
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "DEBUG",
-        "BAZEL_DEBUG_SYMBOLS_FLAG": "--compilation_mode=dbg",
     }
     proj_settings = {
         "base": proj_settings_base,

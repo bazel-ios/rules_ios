@@ -6,5 +6,5 @@ $BAZEL_PATH build \
 --build_event_text_file=$BAZEL_BUILD_EVENT_TEXT_FILENAME \
 --build_event_publish_all_actions $1 \
 $BAZEL_RULES_IOS_OPTIONS \
-$BAZEL_DEBUG_SYMBOLS_FLAG 2>&1 \
+2>&1 \
 | $BAZEL_OUTPUT_PROCESSOR
