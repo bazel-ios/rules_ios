@@ -3,7 +3,6 @@
 load(
     "@bazel_tools//tools/build_defs/repo:http.bzl",
     "http_archive",
-    "http_file",
 )
 
 def _maybe(repo_rule, name, **kwargs):
@@ -48,10 +47,10 @@ def rules_ios_dependencies():
     _maybe(
         github_repo,
         name = "build_bazel_rules_apple",
-        ref = "eadfa72e26dd8b459038dc83fc440759daff65c6",
+        ref = "12ac0738c56f8a15c714a7e09ec87a1bbdbcada9",
         project = "bazelbuild",
         repo = "rules_apple",
-        sha256 = "be2e2e26d85dff61d4f9ae11e74be656a231389629474b39db887baa407a6f7d",
+        sha256 = "60db0889ce9593ed2e6de513beb59770b9dbc122f6dcb68d5d49379e85c4b374",
     )
 
     _maybe(
@@ -118,14 +117,4 @@ native_binary(
         sha256 = "6c2e212e2dd8000e5cb35aadc772d58d411924d8484f9946f6653aa50e613d31",
         strip_prefix = "xcodegen",
         urls = ["https://github.com/yonaskolb/XcodeGen/releases/download/2.16.0/xcodegen.zip"],
-    )
-
-    # Pinned because 0.2.12 is broken on macOS 10.14
-    # https://github.com/google/xctestrunner/issues/18
-    _maybe(
-        http_file,
-        name = "xctestrunner",
-        executable = 1,
-        sha256 = "9e46d5782a9dc7d40bc93c99377c091886c180b8c4ffb9f79a19a58e234cdb09",
-        urls = ["https://github.com/google/xctestrunner/releases/download/0.2.10/ios_test_runner.par"],
     )
