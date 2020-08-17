@@ -527,7 +527,7 @@ $BAZEL_INSTALLER
 
 xcodeproj = rule(
     implementation = _xcodeproj_impl,
-    cfg = transition_support.xcodeproj_rule_transition,
+    cfg = transition_support.force_swift_local_debug_options_transition,
     attrs = {
         "deps": attr.label_list(mandatory = True, allow_empty = False, providers = [], aspects = [_xcodeproj_aspect]),
         "include_transitive_targets": attr.bool(default = False, mandatory = False),
