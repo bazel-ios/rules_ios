@@ -2,6 +2,7 @@ load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo")
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//rules:hmap.bzl", "HeaderMapInfo")
+load("//rules:transition_support.bzl", "transition_support")
 
 def _get_attr_values_for_name(deps, provider, field):
     return [
@@ -281,6 +282,7 @@ def _xcodeproj_impl(ctx):
         "BAZEL_BUILD_EXEC": "$BAZEL_STUBS_DIR/build-wrapper",
         "BAZEL_OUTPUT_PROCESSOR": "$BAZEL_STUBS_DIR/output-processor.rb",
         "BAZEL_PATH": ctx.attr.bazel_path,
+        "BAZEL_RULES_IOS_OPTIONS": "--@build_bazel_rules_ios//rules:local_debug_options_enabled",
         "BAZEL_WORKSPACE_ROOT": "$SRCROOT/%s" % script_dot_dots,
         "BAZEL_STUBS_DIR": "$PROJECT_FILE_PATH/bazelstubs",
         "BAZEL_INSTALLERS_DIR": "$PROJECT_FILE_PATH/bazelinstallers",
@@ -300,7 +302,6 @@ def _xcodeproj_impl(ctx):
     proj_settings_debug = {
         "GCC_PREPROCESSOR_DEFINITIONS": "DEBUG",
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "DEBUG",
-        "BAZEL_DEBUG_SYMBOLS_FLAG": "--compilation_mode=dbg",
     }
     proj_settings = {
         "base": proj_settings_base,
@@ -526,6 +527,7 @@ $BAZEL_INSTALLER
 
 xcodeproj = rule(
     implementation = _xcodeproj_impl,
+    cfg = transition_support.force_swift_local_debug_options_transition,
     attrs = {
         "deps": attr.label_list(mandatory = True, allow_empty = False, providers = [], aspects = [_xcodeproj_aspect]),
         "include_transitive_targets": attr.bool(default = False, mandatory = False),
@@ -546,6 +548,10 @@ xcodeproj = rule(
         "installer": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:installer"), cfg = "host"),
         "build_wrapper": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:build-wrapper"), cfg = "host"),
         "additional_files": attr.label_list(allow_files = True, allow_empty = True, default = [], mandatory = False),
+        "_whitelist_function_transition": attr.label(
+            default = "@build_bazel_rules_apple//tools/whitelists/function_transition_whitelist",
+            doc = "Needed to allow this rule to have an incoming edge configuration transition.",
+        ),
     },
     executable = True,
 )
