@@ -289,7 +289,7 @@
 				BAZEL_INSTALLERS_DIR = $PROJECT_FILE_PATH/bazelinstallers;
 				BAZEL_OUTPUT_PROCESSOR = "$BAZEL_STUBS_DIR/output-processor.rb";
 				BAZEL_PATH = bazelisk;
-				BAZEL_RULES_IOS_OPTIONS = "--@build_bazel_rules_ios//rules:local_debug_options_enabled";
+				BAZEL_RULES_IOS_OPTIONS = "--@build_bazel_rules_ios//rules:local_debug_options_enabled --features=-swift.cacheable_swiftmodules --features=-swift.use_global_module_cache";
 				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
 				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../..;
 				CC = "$BAZEL_STUBS_DIR/clang-stub";
@@ -351,7 +351,7 @@
 				BAZEL_INSTALLERS_DIR = $PROJECT_FILE_PATH/bazelinstallers;
 				BAZEL_OUTPUT_PROCESSOR = "$BAZEL_STUBS_DIR/output-processor.rb";
 				BAZEL_PATH = bazelisk;
-				BAZEL_RULES_IOS_OPTIONS = "--@build_bazel_rules_ios//rules:local_debug_options_enabled";
+				BAZEL_RULES_IOS_OPTIONS = "--@build_bazel_rules_ios//rules:local_debug_options_enabled --features=-swift.cacheable_swiftmodules --features=-swift.use_global_module_cache";
 				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
 				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../..;
 				CC = "$BAZEL_STUBS_DIR/clang-stub";
