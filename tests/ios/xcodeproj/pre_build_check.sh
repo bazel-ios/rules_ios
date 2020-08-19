@@ -2,14 +2,22 @@ set -eux
 
 cd $(dirname $0)
 
-export HEADER_SERACH_PATHS=`grep "HEADER_SEARCH_PATHS" *.xcodeproj/project.pbxproj | grep -o  "bazel-out\S*\.hmap"`
-
+export HSP=`grep "HEADER_SEARCH_PATHS" *.xcodeproj/project.pbxproj | grep -o  "bazel-out\S*\.hmap"`
 echo "Ensure hmap files do not exist (remove if they do)"
-for path in ${HEADER_SERACH_PATHS}; do
+for path in ${HSP}; do
     FULL_PATH="../../../$path"
     if [ -f $FULL_PATH ]; then
         rm $FULL_PATH;
-        echo "Removed file at $FULL_PATH"; 
+        echo "Removed file at $FULL_PATH";
     fi
 done
 
+export FSP=`grep "FRAMEWORK_SEARCH_PATHS" *.xcodeproj/project.pbxproj | grep -o "bazel-out[^ \\]*"`
+echo "Ensure framework search paths do not exist"
+for path in ${FSP}; do
+    FULL_PATH="../../../$path"
+    if [ -f $FULL_PATH ]; then
+        rm -rf $FULL_PATH;
+        echo "Removed file at $FULL_PATH";
+    fi
+done
