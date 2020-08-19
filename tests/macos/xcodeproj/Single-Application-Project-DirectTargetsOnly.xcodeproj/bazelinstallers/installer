@@ -23,6 +23,10 @@ case "${PRODUCT_TYPE}" in
         #  } 
         # We only care about the entry ending with TARGET_NAME" so that we can get the path to its directory
         QUERY=`grep -A 2 important_output "$BAZEL_BUILD_EVENT_TEXT_FILENAME" | grep -w uri | grep ${TARGET_NAME}\" | sed "s/uri: \"file:\/\///"`
+        if [[ -z $QUERY ]]; then
+            echo "Error: failed to locate resource for static framework of ${TARGET_NAME}" >&2
+            exit 1
+        fi
         input_options=($(dirname "${QUERY}"))
         ;;
     com.apple.product-type.bundle.unit-test)
