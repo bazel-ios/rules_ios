@@ -282,7 +282,7 @@ def _xcodeproj_impl(ctx):
         "BAZEL_BUILD_EXEC": "$BAZEL_STUBS_DIR/build-wrapper",
         "BAZEL_OUTPUT_PROCESSOR": "$BAZEL_STUBS_DIR/output-processor.rb",
         "BAZEL_PATH": ctx.attr.bazel_path,
-        "BAZEL_RULES_IOS_OPTIONS": "--@build_bazel_rules_ios//rules:local_debug_options_enabled",
+        "BAZEL_RULES_IOS_OPTIONS": "--@build_bazel_rules_ios//rules:local_debug_options_enabled --features=-swift.cacheable_swiftmodules --features=-swift.use_global_module_cache",
         "BAZEL_WORKSPACE_ROOT": "$SRCROOT/%s" % script_dot_dots,
         "BAZEL_STUBS_DIR": "$PROJECT_FILE_PATH/bazelstubs",
         "BAZEL_INSTALLERS_DIR": "$PROJECT_FILE_PATH/bazelinstallers",
