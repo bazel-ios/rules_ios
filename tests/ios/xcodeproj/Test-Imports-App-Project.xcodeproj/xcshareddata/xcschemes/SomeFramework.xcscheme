@@ -14,10 +14,10 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1ECB59A3C8C905569C62BCE7"
-               BuildableName = "TestImports-App.app"
-               BlueprintName = "TestImports-App"
-               ReferencedContainer = "container:Test-Target-With-Test-Host-Project.xcodeproj">
+               BlueprintIdentifier = "23DA0DD8AF1DB9CAF252282C"
+               BuildableName = "SomeFramework.framework"
+               BlueprintName = "SomeFramework"
+               ReferencedContainer = "container:Test-Imports-App-Project.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -26,18 +26,19 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      onlyGenerateCoverageForSpecifiedTargets = "NO"
       shouldUseLaunchSchemeArgsEnv = "YES">
+      <Testables>
+      </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1ECB59A3C8C905569C62BCE7"
-            BuildableName = "TestImports-App.app"
-            BlueprintName = "TestImports-App"
-            ReferencedContainer = "container:Test-Target-With-Test-Host-Project.xcodeproj">
+            BlueprintIdentifier = "23DA0DD8AF1DB9CAF252282C"
+            BuildableName = "SomeFramework.framework"
+            BlueprintName = "SomeFramework"
+            ReferencedContainer = "container:Test-Imports-App-Project.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <Testables>
-      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -49,16 +50,17 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1ECB59A3C8C905569C62BCE7"
-            BuildableName = "TestImports-App.app"
-            BlueprintName = "TestImports-App"
-            ReferencedContainer = "container:Test-Target-With-Test-Host-Project.xcodeproj">
+            BlueprintIdentifier = "23DA0DD8AF1DB9CAF252282C"
+            BuildableName = "SomeFramework.framework"
+            BlueprintName = "SomeFramework"
+            ReferencedContainer = "container:Test-Imports-App-Project.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -70,10 +72,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1ECB59A3C8C905569C62BCE7"
-            BuildableName = "TestImports-App.app"
-            BlueprintName = "TestImports-App"
-            ReferencedContainer = "container:Test-Target-With-Test-Host-Project.xcodeproj">
+            BlueprintIdentifier = "23DA0DD8AF1DB9CAF252282C"
+            BuildableName = "SomeFramework.framework"
+            BlueprintName = "SomeFramework"
+            ReferencedContainer = "container:Test-Imports-App-Project.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
