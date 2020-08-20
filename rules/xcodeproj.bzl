@@ -73,6 +73,8 @@ def _xcodeproj_aspect_impl(target, ctx):
     deps = []
     deps += getattr(ctx.rule.attr, "deps", [])
     deps += getattr(ctx.rule.attr, "infoplists", [])
+    tags = getattr(ctx.rule.attr, "tags", [])
+
     entitlements = getattr(ctx.rule.attr, "entitlements", None)
     if entitlements:
         deps.append(entitlements)
@@ -132,6 +134,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             env_vars = env_vars,
             hmap_paths = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "hmap_paths")),
             commandline_args = commandline_args,
+            tags = tags,
         )
         if ctx.rule.kind != "apple_framework_packaging":
             providers.append(
@@ -323,6 +326,8 @@ def _xcodeproj_impl(ctx):
     xcodeproj_schemes_by_name = {}
 
     for target_info in targets:
+        if "xcodeproj-ignore-as-target" in target_info.tags:
+            continue
         target_macho_type = "staticlib" if target_info.product_type == "framework" else "$(inherited)"
         compiled_sources = [{
             "path": paths.join(src_dot_dots, s.short_path),
