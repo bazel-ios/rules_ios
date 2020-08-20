@@ -47,7 +47,7 @@ mkdir -p "$(dirname "$output")"
 for input in "${input_options[@]}"; do
     if [[ -z $input ]] || [ $input = "." ] || [ $input = "/" ]; then
         # rsync can be a dangerous operation when it tries to copy entire root dir into the $output
-        echo "Error: illegal input for installing ${TARGET_NAME} of type ${PRODUCT_TYPE}" >&2
+        echo "Error: illegal input \"${input}\" for installing ${TARGET_NAME} of type ${PRODUCT_TYPE}" >&2
         exit 1
     fi
     if [[ -d $input ]]; then
