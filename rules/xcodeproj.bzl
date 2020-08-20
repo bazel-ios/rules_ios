@@ -326,8 +326,19 @@ def _xcodeproj_impl(ctx):
     xcodeproj_schemes_by_name = {}
 
     for target_info in targets:
+        target_name = target_info.name
+
         if "xcodeproj-ignore-as-target" in target_info.tags:
             continue
+
+        if target_name in xcodeproj_targets_by_name:
+            existing_type = xcodeproj_targets_by_name[target_name]["type"]
+            if target_info.product_type != existing_type:
+                fail("""
+Target "{}" is defined with type "{}", but a same-name target of type "{}" wants to override.
+Please double check your rule declaration or add `xcodeproj-ignore-as-target` as a tag to choose ignore which target.
+""".format(target_name, existing_type, target_info.product_type))
+
         target_macho_type = "staticlib" if target_info.product_type == "framework" else "$(inherited)"
         compiled_sources = [{
             "path": paths.join(src_dot_dots, s.short_path),
@@ -354,7 +365,7 @@ def _xcodeproj_impl(ctx):
             # TODO: add source language type once https://github.com/yonaskolb/XcodeGen/issues/850 is resolved
         } for p in target_info.build_files.to_list()]
         target_settings = {
-            "PRODUCT_NAME": target_info.name,
+            "PRODUCT_NAME": target_name,
             "BAZEL_BIN_SUBDIR": target_info.bazel_bin_subdir,
             "MACH_O_TYPE": target_macho_type,
             "CLANG_ENABLE_MODULES": "YES",
@@ -402,7 +413,7 @@ def _xcodeproj_impl(ctx):
 
         target_settings["VALID_ARCHS"] = _ARCH_MAPPING[target_info.platform_type]
 
-        xcodeproj_targets_by_name[target_info.name] = {
+        xcodeproj_targets_by_name[target_name] = {
             "sources": compiled_sources + compiled_non_arc_sources + asset_sources,
             "type": target_info.product_type,
             "platform": _PLATFORM_MAPPING[target_info.platform_type],
@@ -426,7 +437,7 @@ $BAZEL_INSTALLER
             }],
         }
 
-        scheme_action_details = {"targets": [target_info.name]}
+        scheme_action_details = {"targets": [target_name]}
 
         env_vars_dict = {}
 
@@ -445,12 +456,12 @@ $BAZEL_INSTALLER
 
         # See https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md#scheme
         # on structure of xcodeproj_schemes_by_name[target_info.name]
-        xcodeproj_schemes_by_name[target_info.name] = {
+        xcodeproj_schemes_by_name[target_name] = {
             "build": {
                 "parallelizeBuild": False,
                 "buildImplicitDependencies": False,
                 "targets": {
-                    target_info.name: ["run", "test", "profile"],
+                    target_name: ["run", "test", "profile"],
                 },
             },
             # By putting under run action, test action will just use them automatically
@@ -459,7 +470,7 @@ $BAZEL_INSTALLER
 
         # They will show as `TestableReference` under the scheme
         if target_info.product_type == "bundle.unit-test":
-            xcodeproj_schemes_by_name[target_info.name]["test"] = {"targets": [target_info.name]}
+            xcodeproj_schemes_by_name[target_name]["test"] = {"targets": [target_name]}
 
     project_file_groups = [
         {"path": paths.join(src_dot_dots, f.short_path), "optional": True}
