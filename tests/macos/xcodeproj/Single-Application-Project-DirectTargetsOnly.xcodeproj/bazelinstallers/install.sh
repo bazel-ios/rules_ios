@@ -23,6 +23,10 @@ case "${PRODUCT_TYPE}" in
         #  } 
         # We only care about the entry ending with TARGET_NAME" so that we can get the path to its directory
         QUERY=`grep -A 2 important_output "$BAZEL_BUILD_EVENT_TEXT_FILENAME" | grep -w uri | grep ${TARGET_NAME}\" | sed "s/uri: \"file:\/\///"`
+        if [[ -z $QUERY ]]; then 
+            echo "Unable to locate resource for framework of ${TARGET_NAME}"
+            exit 1
+        fi
         input_options=($(dirname "${QUERY}"))
         ;;
     com.apple.product-type.bundle.unit-test)
@@ -41,6 +45,11 @@ output="$TARGET_BUILD_DIR/$FULL_PRODUCT_NAME"
 mkdir -p "$(dirname "$output")"
 
 for input in "${input_options[@]}"; do
+    if [[ -z $input ]] || [ $input = "." ] || [ $input = "/" ]; then
+        # rsync can be a dangerous operation when it tries to copy entire root dir into the $output
+        echo "Error: illegal input \"${input}\" for installing ${TARGET_NAME} of type ${PRODUCT_TYPE}" >&2
+        exit 1
+    fi
     if [[ -d $input ]]; then
         # Copy bundle contents, into the destination bundle.
         # This avoids self-nesting, like: Foo.app/Foo.app
