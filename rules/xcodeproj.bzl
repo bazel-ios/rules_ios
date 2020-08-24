@@ -26,6 +26,8 @@ _ARCH_MAPPING = {
 
 _PRODUCT_SPECIFIER_LENGTH = len("com.apple.product-type.")
 
+_IGNORE_AS_TARGET_TAG = "xcodeproj-ignore-as-target"
+
 def _dir(o):
     return [
         x
@@ -134,7 +136,6 @@ def _xcodeproj_aspect_impl(target, ctx):
             env_vars = env_vars,
             hmap_paths = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "hmap_paths")),
             commandline_args = commandline_args,
-            tags = tags,
         )
         if ctx.rule.kind != "apple_framework_packaging":
             providers.append(
@@ -150,10 +151,16 @@ def _xcodeproj_aspect_impl(target, ctx):
                     hmap_paths = depset(hmap_paths),
                 ),
             )
-        direct_targets = [info]
+
+        direct_targets = []
+        transitive_targets = []
+        if not _IGNORE_AS_TARGET_TAG in tags:
+            direct_targets.append(info)
+            transitive_targets.append(info)
+
         if test_host_target:
             direct_targets.extend(test_host_target[_TargetInfo].direct_targets)
-        target_info = _TargetInfo(direct_targets = direct_targets, targets = depset([info], transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets")))
+        target_info = _TargetInfo(direct_targets = direct_targets, targets = depset(transitive_targets, transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets")))
         providers.append(target_info)
     else:
         srcs = []
@@ -328,16 +335,14 @@ def _xcodeproj_impl(ctx):
     for target_info in targets:
         target_name = target_info.name
 
-        if "xcodeproj-ignore-as-target" in target_info.tags:
-            continue
-
         if target_name in xcodeproj_targets_by_name:
             existing_type = xcodeproj_targets_by_name[target_name]["type"]
             if target_info.product_type != existing_type:
-                fail("""
+                fail("""\
+Failed to generate xcodeproj for "{}" due to conflicting targets:
 Target "{}" is defined with type "{}", but a same-name target of type "{}" wants to override.
-Please double check your rule declaration or add `xcodeproj-ignore-as-target` as a tag to choose ignore which target.
-""".format(target_name, existing_type, target_info.product_type))
+Double check your rule declaration for naming or add `xcodeproj-ignore-as-target` as a tag to choose which target to ignore.
+""".format(ctx.label, target_name, existing_type, target_info.product_type))
 
         target_macho_type = "staticlib" if target_info.product_type == "framework" else "$(inherited)"
         compiled_sources = [{
@@ -543,6 +548,11 @@ $BAZEL_INSTALLER
 
 xcodeproj = rule(
     implementation = _xcodeproj_impl,
+    doc = """\
+Generates a XCode project file (.xcodeproj) with a reasonable set of defaults
+Tags for configuration:
+    xcodeproj-ignore-as-target: Add this to a rule declaration so that this rule will not generates a scheme for this target
+""",
     cfg = transition_support.force_swift_local_debug_options_transition,
     attrs = {
         "deps": attr.label_list(mandatory = True, allow_empty = False, providers = [], aspects = [_xcodeproj_aspect]),
