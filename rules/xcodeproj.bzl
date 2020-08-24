@@ -340,9 +340,10 @@ def _xcodeproj_impl(ctx):
             if target_info.product_type != existing_type:
                 fail("""\
 Failed to generate xcodeproj for "{}" due to conflicting targets:
-Target "{}" is defined with type "{}", but a same-name target of type "{}" wants to override.
+Target "{}" is already defined with type "{}". 
+A same-name target with label "{}" of type "{}" wants to override.
 Double check your rule declaration for naming or add `xcodeproj-ignore-as-target` as a tag to choose which target to ignore.
-""".format(ctx.label, target_name, existing_type, target_info.product_type))
+""".format(ctx.label, target_name, existing_type, target_info.bazel_build_target_name, target_info.product_type))
 
         target_macho_type = "staticlib" if target_info.product_type == "framework" else "$(inherited)"
         compiled_sources = [{
@@ -549,7 +550,7 @@ $BAZEL_INSTALLER
 xcodeproj = rule(
     implementation = _xcodeproj_impl,
     doc = """\
-Generates a XCode project file (.xcodeproj) with a reasonable set of defaults
+Generates a Xcode project file (.xcodeproj) with a reasonable set of defaults
 Tags for configuration:
     xcodeproj-ignore-as-target: Add this to a rule declaration so that this rule will not generates a scheme for this target
 """,
