@@ -297,6 +297,7 @@ def _xcodeproj_impl(ctx):
         "BAZEL_STUBS_DIR": "$PROJECT_FILE_PATH/bazelstubs",
         "BAZEL_INSTALLERS_DIR": "$PROJECT_FILE_PATH/bazelinstallers",
         "BAZEL_INSTALLER": "$BAZEL_INSTALLERS_DIR/%s" % ctx.executable.installer.basename,
+        "BAZEL_EXECUTION_LOG_ENABLED": False,
         "CC": "$BAZEL_STUBS_DIR/clang-stub",
         "CXX": "$CC",
         "CLANG_ANALYZER_EXEC": "$CC",
