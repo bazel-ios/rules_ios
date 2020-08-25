@@ -11,6 +11,18 @@ xcodeproj(
     ],
 )
 
+xcodeproj(
+    name = "Test-Imports-App-Project",
+    testonly = True,
+    bazel_path = "bazelisk",
+    include_transitive_targets = False,
+    deps = [
+        "//tests/ios/unit-test/test-imports-app:TestImports-App",
+        "//tests/ios/unit-test/test-imports-app:TestImports-App_framework_unlinked",
+        "//tests/ios/unit-test/test-imports-app:TestImports-Unit-Tests",
+    ],
+)
+
 genrule(
     name = "Test-Project-Regeneration",
     testonly = True,

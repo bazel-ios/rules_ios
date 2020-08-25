@@ -1,4 +1,4 @@
-set -eux
+set -eu
 
 cd $(dirname $0)
 

@@ -26,6 +26,8 @@ _ARCH_MAPPING = {
 
 _PRODUCT_SPECIFIER_LENGTH = len("com.apple.product-type.")
 
+_IGNORE_AS_TARGET_TAG = "xcodeproj-ignore-as-target"
+
 def _dir(o):
     return [
         x
@@ -73,6 +75,8 @@ def _xcodeproj_aspect_impl(target, ctx):
     deps = []
     deps += getattr(ctx.rule.attr, "deps", [])
     deps += getattr(ctx.rule.attr, "infoplists", [])
+    tags = getattr(ctx.rule.attr, "tags", [])
+
     entitlements = getattr(ctx.rule.attr, "entitlements", None)
     if entitlements:
         deps.append(entitlements)
@@ -147,10 +151,16 @@ def _xcodeproj_aspect_impl(target, ctx):
                     hmap_paths = depset(hmap_paths),
                 ),
             )
-        direct_targets = [info]
+
+        direct_targets = []
+        transitive_targets = []
+        if not _IGNORE_AS_TARGET_TAG in tags:
+            direct_targets.append(info)
+            transitive_targets.append(info)
+
         if test_host_target:
             direct_targets.extend(test_host_target[_TargetInfo].direct_targets)
-        target_info = _TargetInfo(direct_targets = direct_targets, targets = depset([info], transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets")))
+        target_info = _TargetInfo(direct_targets = direct_targets, targets = depset(transitive_targets, transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets")))
         providers.append(target_info)
     else:
         srcs = []
@@ -323,6 +333,18 @@ def _xcodeproj_impl(ctx):
     xcodeproj_schemes_by_name = {}
 
     for target_info in targets:
+        target_name = target_info.name
+
+        if target_name in xcodeproj_targets_by_name:
+            existing_type = xcodeproj_targets_by_name[target_name]["type"]
+            if target_info.product_type != existing_type:
+                fail("""\
+Failed to generate xcodeproj for "{}" due to conflicting targets:
+Target "{}" is already defined with type "{}". 
+A same-name target with label "{}" of type "{}" wants to override.
+Double check your rule declaration for naming or add `xcodeproj-ignore-as-target` as a tag to choose which target to ignore.
+""".format(ctx.label, target_name, existing_type, target_info.bazel_build_target_name, target_info.product_type))
+
         target_macho_type = "staticlib" if target_info.product_type == "framework" else "$(inherited)"
         compiled_sources = [{
             "path": paths.join(src_dot_dots, s.short_path),
@@ -349,7 +371,7 @@ def _xcodeproj_impl(ctx):
             # TODO: add source language type once https://github.com/yonaskolb/XcodeGen/issues/850 is resolved
         } for p in target_info.build_files.to_list()]
         target_settings = {
-            "PRODUCT_NAME": target_info.name,
+            "PRODUCT_NAME": target_name,
             "BAZEL_BIN_SUBDIR": target_info.bazel_bin_subdir,
             "MACH_O_TYPE": target_macho_type,
             "CLANG_ENABLE_MODULES": "YES",
@@ -397,7 +419,7 @@ def _xcodeproj_impl(ctx):
 
         target_settings["VALID_ARCHS"] = _ARCH_MAPPING[target_info.platform_type]
 
-        xcodeproj_targets_by_name[target_info.name] = {
+        xcodeproj_targets_by_name[target_name] = {
             "sources": compiled_sources + compiled_non_arc_sources + asset_sources,
             "type": target_info.product_type,
             "platform": _PLATFORM_MAPPING[target_info.platform_type],
@@ -421,7 +443,7 @@ $BAZEL_INSTALLER
             }],
         }
 
-        scheme_action_details = {"targets": [target_info.name]}
+        scheme_action_details = {"targets": [target_name]}
 
         env_vars_dict = {}
 
@@ -440,12 +462,12 @@ $BAZEL_INSTALLER
 
         # See https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md#scheme
         # on structure of xcodeproj_schemes_by_name[target_info.name]
-        xcodeproj_schemes_by_name[target_info.name] = {
+        xcodeproj_schemes_by_name[target_name] = {
             "build": {
                 "parallelizeBuild": False,
                 "buildImplicitDependencies": False,
                 "targets": {
-                    target_info.name: ["run", "test", "profile"],
+                    target_name: ["run", "test", "profile"],
                 },
             },
             # By putting under run action, test action will just use them automatically
@@ -454,7 +476,7 @@ $BAZEL_INSTALLER
 
         # They will show as `TestableReference` under the scheme
         if target_info.product_type == "bundle.unit-test":
-            xcodeproj_schemes_by_name[target_info.name]["test"] = {"targets": [target_info.name]}
+            xcodeproj_schemes_by_name[target_name]["test"] = {"targets": [target_name]}
 
     project_file_groups = [
         {"path": paths.join(src_dot_dots, f.short_path), "optional": True}
@@ -527,6 +549,11 @@ $BAZEL_INSTALLER
 
 xcodeproj = rule(
     implementation = _xcodeproj_impl,
+    doc = """\
+Generates a Xcode project file (.xcodeproj) with a reasonable set of defaults
+Tags for configuration:
+    xcodeproj-ignore-as-target: Add this to a rule declaration so that this rule will not generates a scheme for this target
+""",
     cfg = transition_support.force_swift_local_debug_options_transition,
     attrs = {
         "deps": attr.label_list(mandatory = True, allow_empty = False, providers = [], aspects = [_xcodeproj_aspect]),
