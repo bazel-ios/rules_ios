@@ -22,6 +22,10 @@ ios_application(
     bundle_id = "com.example.TestImports-App",
     minimum_os_version = "12.0",
     module_name = "TestImports_App",
+    resource_bundles = {"ResourceBundle": glob(
+        ["Resources/**/*"],
+        exclude_directories = 0,
+    )},
     sdk_frameworks = ["UIKit"],
     visibility = ["//visibility:public"],
     deps = [

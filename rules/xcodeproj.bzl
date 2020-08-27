@@ -269,6 +269,66 @@ def _joined_header_search_paths(hmap_paths):
     header_search_paths.append("\"$BAZEL_WORKSPACE_ROOT\"")
     return " ".join(header_search_paths)
 
+def _gather_asset_sources(target_info, path_prefix):
+    """Helper method gather asset sources (non-code resources) based on its type or special names
+
+    Args:
+        target_info: containing asset_srcs and build_files that we compose the list from
+        path_prefix: any prefix needed to correctly resolve a relative path in xcode proj
+    Returns:
+        array of dictionry, each dict represents a Target Resource described in XcodeGen:
+        https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md#target-source
+    """
+    asset_sources = []
+
+    # Each key will be a short_path to a directory ending either .xcdatamodeld or .xcdatamodel
+    datamodel_groups = {}
+    for s in target_info.asset_srcs.to_list():
+        short_path = s.short_path
+        group = paths.dirname(short_path)
+
+        # Reference for logics below:
+        # https://github.com/bazelbuild/rules_apple/blob/master/apple/internal/partials/support/resources_support.bzl#L162
+        if ".xcdatamodeld/" in short_path:
+            # Any file under xcdatamodeld is ignored but this directory will be added
+            # However since what's under it can be either a file
+            # or a directory, we only look for `*.xcdatamodel` directory
+            # for example, only if we encounter foo.xcdatamodeld/bar.xcdatamodel/content
+            # that we add an entry `foo.xcdatamodeld` to `datamodel_groups`
+            # but we won't add an entry if we encounter foo.xcdatamodeld/.xccurrentversion
+            if ".xcdatamodel/" in short_path:
+                datamodel_groups[paths.dirname(group)] = True
+        elif ".xcdatamodel/" in short_path:
+            # These are standalone xcdatamodel (not grouped by .xcdatamodeld)
+            # and again any file under is ignored but this directory will be added
+            datamodel_groups[group] = True
+        else:
+            payload = {
+                "path": paths.join(path_prefix, short_path),
+                "group": group,
+                "optional": True,
+                "buildPhase": "none",
+            }
+            asset_sources.append(payload)
+    for datamodel_short_path in datamodel_groups.keys():
+        payload = {
+            "path": paths.join(path_prefix, datamodel_short_path),
+            "group": paths.dirname(datamodel_short_path),
+            "optional": True,
+            "buildPhase": "none",
+        }
+        asset_sources.append(payload)
+
+    # Append BUILD.bazel files to project
+    asset_sources += [{
+        "path": paths.join(path_prefix, p),
+        "group": paths.dirname(p),
+        "optional": True,
+        "buildPhase": "none",
+        # TODO: add source language type once https://github.com/yonaskolb/XcodeGen/issues/850 is resolved
+    } for p in target_info.build_files.to_list()]
+    return asset_sources
+
 def _xcodeproj_impl(ctx):
     xcodegen_jsonfile = ctx.actions.declare_file(
         "%s-xcodegen.json" % ctx.attr.name,
@@ -358,19 +418,9 @@ Double check your rule declaration for naming or add `xcodeproj-ignore-as-target
             "optional": True,
             "compilerFlags": "-fno-objc-arc",
         } for s in target_info.non_arc_srcs.to_list()]
-        asset_sources = [{
-            "path": paths.join(src_dot_dots, s.short_path),
-            "group": paths.dirname(s.short_path),
-            "optional": True,
-            "buildPhase": "none",
-        } for s in target_info.asset_srcs.to_list()]
-        asset_sources += [{
-            "path": paths.join(src_dot_dots, p),
-            "group": paths.dirname(p),
-            "optional": True,
-            "buildPhase": "none",
-            # TODO: add source language type once https://github.com/yonaskolb/XcodeGen/issues/850 is resolved
-        } for p in target_info.build_files.to_list()]
+
+        asset_sources = _gather_asset_sources(target_info, src_dot_dots)
+
         target_settings = {
             "PRODUCT_NAME": target_name,
             "BAZEL_BIN_SUBDIR": target_info.bazel_bin_subdir,
