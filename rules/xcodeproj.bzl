@@ -281,27 +281,58 @@ def _gather_asset_sources(target_info, path_prefix):
     """
     asset_sources = []
 
-    # Each key will be a short_path to a directory ending either .xcdatamodeld or .xcdatamodel
     datamodel_groups = {}
+
+    # .xcassets or .xcstickers
+    catalog_groups = {}
     for s in target_info.asset_srcs.to_list():
         short_path = s.short_path
         group = paths.dirname(short_path)
+        short_path_components = short_path.split("/")
+        is_xcassets = False
+        is_xcstickers = False
+        is_xcdatamodeld = False
+        is_xcdatamodel = False
+        is_xcmappingmodel = False
+
+        path_so_far = ""
+        for component in short_path_components:
+            path_so_far += component
+            if component.endswith(".xcassets"):
+                is_xcassets = True
+                break
+            elif component.endswith(".xcstickers"):
+                is_xcstickers = True
+                break
+            elif component.endswith(".xcdatamodeld"):
+                is_xcdatamodeld = True
+                break
+            elif component.endswith(".xcdatamodel"):
+                is_xcdatamodel = True
+                break
+            elif component.endswith(".xcmappingmodel"):
+                is_xcmappingmodel = True
+                break
+            else:
+                path_so_far += "/"
 
         # Reference for logics below:
         # https://github.com/bazelbuild/rules_apple/blob/master/apple/internal/partials/support/resources_support.bzl#L162
-        if ".xcdatamodeld/" in short_path:
-            # Any file under xcdatamodeld is ignored but this directory will be added
-            # However since what's under it can be either a file
-            # or a directory, we only look for `*.xcdatamodel` directory
-            # for example, only if we encounter foo.xcdatamodeld/bar.xcdatamodel/content
-            # that we add an entry `foo.xcdatamodeld` to `datamodel_groups`
-            # but we won't add an entry if we encounter foo.xcdatamodeld/.xccurrentversion
-            if ".xcdatamodel/" in short_path:
-                datamodel_groups[paths.dirname(group)] = True
-        elif ".xcdatamodel/" in short_path:
-            # These are standalone xcdatamodel (not grouped by .xcdatamodeld)
-            # and again any file under is ignored but this directory will be added
-            datamodel_groups[group] = True
+        if is_xcassets or is_xcstickers:
+            basename = paths.basename(path_so_far)
+            if basename not in catalog_groups:
+                catalog_groups[basename] = path_so_far
+        elif is_xcdatamodeld or is_xcdatamodel or is_xcmappingmodel:
+            # Any file under .xcdatamodeld or .xcdatamodel is ignored but itself will be added.
+            # However there two possibilities for .xcdatamodel to exist:
+            # 1. foo/bar.xcdatamodel (standalone)
+            # 2. foo/foo2.xcdatamodeld/bar(v2).xcdatamodel (versioned datadmodel)
+            # Iteration of path components above stops at xcdatamodeld first
+            # so the second case is taken care of
+            datamodel_name = paths.basename(path_so_far)
+            if datamodel_name not in datamodel_groups:
+                datamodel_groups[datamodel_name] = path_so_far
+
         else:
             payload = {
                 "path": paths.join(path_prefix, short_path),
@@ -310,10 +341,22 @@ def _gather_asset_sources(target_info, path_prefix):
                 "buildPhase": "none",
             }
             asset_sources.append(payload)
-    for datamodel_short_path in datamodel_groups.keys():
+
+    for datamodel_key in datamodel_groups.keys():
+        datamodel_path = datamodel_groups[datamodel_key]
         payload = {
-            "path": paths.join(path_prefix, datamodel_short_path),
-            "group": paths.dirname(datamodel_short_path),
+            "path": paths.join(path_prefix, datamodel_path),
+            "group": paths.dirname(datamodel_path),
+            "optional": True,
+            "buildPhase": "none",
+        }
+        asset_sources.append(payload)
+
+    for asset_key in catalog_groups.keys():
+        asset_path = catalog_groups[asset_key]
+        payload = {
+            "path": paths.join(path_prefix, asset_path),
+            "group": paths.dirname(asset_path),
             "optional": True,
             "buildPhase": "none",
         }

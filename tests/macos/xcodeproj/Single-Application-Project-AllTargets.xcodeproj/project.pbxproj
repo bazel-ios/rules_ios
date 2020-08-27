@@ -14,6 +14,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		291405E8869304FF16CEA948 /* AssetCatalogFixture.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = AssetCatalogFixture.xcassets; path = ../../../rules/test_host_app/AssetCatalogFixture.xcassets; sourceTree = "<group>"; };
 		4C5CCDAF660EA165B074B8BD /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = resource_bundle.plist; path = ../../../rules/library/resource_bundle.plist; sourceTree = "<group>"; };
 		5976518F3C0E5F4753E44514 /* Single-Application-RunnableTestSuite.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "Single-Application-RunnableTestSuite.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		78FAC8B505DC9C839473A482 /* iOS-12.0-AppHost.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "iOS-12.0-AppHost.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -22,7 +23,6 @@
 		A05E016687115D20E64A5C60 /* BUILD.bazel */ = {isa = PBXFileReference; name = BUILD.bazel; path = BUILD.bazel; sourceTree = "<group>"; };
 		B63432B3F93F02853868034C /* NonArcObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NonArcObject.h; path = NonArcObject.h; sourceTree = "<group>"; };
 		BA5C2481E04D8592323A7AD9 /* BUILD.bazel */ = {isa = PBXFileReference; name = BUILD.bazel; path = ../../../rules/test_host_app/BUILD.bazel; sourceTree = "<group>"; };
-		BFC300E7CF04688067094BFF /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = Contents.json; path = ../../../rules/test_host_app/AssetCatalogFixture.xcassets/Contents.json; sourceTree = "<group>"; };
 		E881738E1AAC1FCA61D467D8 /* NonArcObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NonArcObject.m; path = NonArcObject.m; sourceTree = "<group>"; };
 		EEB1C98DB4C8E24414A69917 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../../../rules/test_host_app/main.m; sourceTree = "<group>"; };
 		EFADB1CE81C3F97F647C9255 /* Single-Application-UnitTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "Single-Application-UnitTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -42,7 +42,7 @@
 		180CD058CAE61A960B64C45A /* test_host_app */ = {
 			isa = PBXGroup;
 			children = (
-				7CCE59C7822E18EBC1CD9D6D /* AssetCatalogFixture.xcassets */,
+				291405E8869304FF16CEA948 /* AssetCatalogFixture.xcassets */,
 				BA5C2481E04D8592323A7AD9 /* BUILD.bazel */,
 				908EFE5EAE901D6B372D68F7 /* ios.entitlements */,
 				EEB1C98DB4C8E24414A69917 /* main.m */,
@@ -67,14 +67,6 @@
 				4C5CCDAF660EA165B074B8BD /* resource_bundle.plist */,
 			);
 			name = library;
-			sourceTree = "<group>";
-		};
-		7CCE59C7822E18EBC1CD9D6D /* AssetCatalogFixture.xcassets */ = {
-			isa = PBXGroup;
-			children = (
-				BFC300E7CF04688067094BFF /* Contents.json */,
-			);
-			name = AssetCatalogFixture.xcassets;
 			sourceTree = "<group>";
 		};
 		B9EA5090755F274681D48FBB /* tests */ = {
