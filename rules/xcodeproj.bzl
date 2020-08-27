@@ -280,11 +280,9 @@ def _gather_asset_sources(target_info, path_prefix):
         https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md#target-source
     """
     asset_sources = []
-
     datamodel_groups = {}
-
-    # .xcassets or .xcstickers
     catalog_groups = {}
+
     for s in target_info.asset_srcs.to_list():
         short_path = s.short_path
         group = paths.dirname(short_path)
