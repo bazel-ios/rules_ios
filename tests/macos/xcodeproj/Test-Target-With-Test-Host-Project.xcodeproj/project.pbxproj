@@ -43,12 +43,14 @@
 		2238C255CB7ED2E848A7FC51 /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = common.pch; path = ../../../rules/library/common.pch; sourceTree = "<group>"; };
 		2263A980666D293D7413BE92 /* test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = test.m; path = "../../ios/unit-test/test-imports-app/test.m"; sourceTree = "<group>"; };
 		246AA4985E50044D3CD8228A /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = test.swift; path = "../../ios/unit-test/test-imports-app/test.swift"; sourceTree = "<group>"; };
+		29A682D26AECECF5058D991B /* TestModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; name = TestModel.xcdatamodel; path = "../../ios/unit-test/test-imports-app/Resources/TestModel.xcdatamodel"; sourceTree = "<group>"; };
 		300321A84FA667D38500A4EE /* BUILD.bazel */ = {isa = PBXFileReference; name = BUILD.bazel; path = ../../../rules/test_host_app/BUILD.bazel; sourceTree = "<group>"; };
 		31B65EED0A5FCC9038424593 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = empty.swift; path = "../../ios/unit-test/empty.swift"; sourceTree = "<group>"; };
 		36C5066BFCF7F5E1A169E184 /* BUILD.bazel */ = {isa = PBXFileReference; name = BUILD.bazel; path = "../../ios/unit-test/BUILD.bazel"; sourceTree = "<group>"; };
 		61CE3CBBAD0BFAFC0953377B /* TestImports-App.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "TestImports-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6725F1A1E5A5BAFC1EE01F00 /* Header2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Header2.h; path = "../../ios/unit-test/test-imports-app/Header2.h"; sourceTree = "<group>"; };
 		9E7E8177A9991D407C446EF6 /* TestImports-Unit-Tests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "TestImports-Unit-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B07BC976C01F7FFC817868EC /* TestModel2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; name = TestModel2.xcdatamodel; path = "../../ios/unit-test/test-imports-app/Resources/TestModel2.xcdatamodel"; sourceTree = "<group>"; };
 		BC8493575E7FDD7052346981 /* BUILD.bazel */ = {isa = PBXFileReference; name = BUILD.bazel; path = "../../ios/unit-test/test-imports-app/BUILD.bazel"; sourceTree = "<group>"; };
 		BCDD3D2387B5DA5045A0D600 /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = Contents.json; path = ../../../rules/test_host_app/AssetCatalogFixture.xcassets/Contents.json; sourceTree = "<group>"; };
 		CD38E215541F1766D3CAFBEE /* ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ios.entitlements; path = ../../../rules/test_host_app/ios.entitlements; sourceTree = "<group>"; };
@@ -64,6 +66,15 @@
 				0E1A2D407EDFADA150631F26 /* resource_bundle.plist */,
 			);
 			name = library;
+			sourceTree = "<group>";
+		};
+		04C2FDC1FEE0E4D66A74C119 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				29A682D26AECECF5058D991B /* TestModel.xcdatamodel */,
+				B07BC976C01F7FFC817868EC /* TestModel2.xcdatamodel */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		41BE2FF5579DA46E599A01EC /* Products */ = {
@@ -85,6 +96,7 @@
 				08D20BAAC5B1A41903E13B27 /* Header.h */,
 				6725F1A1E5A5BAFC1EE01F00 /* Header2.h */,
 				0C55810C4D90EF86058DB06A /* main.m */,
+				04C2FDC1FEE0E4D66A74C119 /* Resources */,
 				2263A980666D293D7413BE92 /* test.m */,
 				246AA4985E50044D3CD8228A /* test.swift */,
 			);
