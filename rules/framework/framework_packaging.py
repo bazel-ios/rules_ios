@@ -60,13 +60,18 @@ def _merge_binaries(framework_root, framework_name, binary_in):
         binary_in: a list of binary paths
     """
     output_path = os.path.join(framework_root, framework_name)
-    commands = ["libtool",
-                "-static",
-                "-D",
-                "-no_warning_for_no_symbols",
-                "-o", output_path
-                ] + binary_in
-    subprocess.check_call(commands)
+    if len(binary_in) == 1:
+        # avoid unnecessary invocation,
+        # ensure the same object is used so the CAS is not unecessarily bloated
+        _cp(binary_in[0], output_path)
+    else:
+        commands = ["libtool",
+                    "-static",
+                    "-D",
+                    "-no_warning_for_no_symbols",
+                    "-o", output_path
+                    ] + binary_in
+        subprocess.check_call(commands)
 
 
 def _copy_modulemap(framework_root, modulemap_path):
