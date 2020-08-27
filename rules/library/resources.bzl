@@ -56,7 +56,7 @@ or `resources` in an `apple_resource_bundle`.
 
 def wrap_resources_in_filegroup(name, srcs, extensions_to_filter = [], **kwargs):
     extensions_to_filter = list(extensions_to_filter)
-    for x in ("xcdatamodeld", "xcmappingmodel", "xcassets"):
+    for x in ("xcdatamodeld", "xcdatamodel", "xcmappingmodel", "xcassets"):
         if x not in extensions_to_filter:
             extensions_to_filter.append(x)
     resources_filegroup(
