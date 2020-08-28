@@ -4,10 +4,10 @@ load("@build_bazel_rules_ios//rules:test.bzl", "ios_unit_test")
 apple_framework(
     name = "TargetXIB",
     srcs = glob(["TargetXIB/**/*.swift"]),
+    platforms = {"ios": "11.0"},
     resource_bundles = {
         "TargetXIB": glob(["TargetXIB/**/*.xib"]),
     },
-    platforms = {"ios": "11.0"},
     visibility = ["//visibility:public"],
 )
 
