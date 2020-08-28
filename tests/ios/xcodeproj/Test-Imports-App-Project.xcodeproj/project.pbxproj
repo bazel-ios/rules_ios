@@ -36,6 +36,7 @@
 		C73857A1D91F761A1128A896 /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Header.h; path = "../unit-test/test-imports-app/Header.h"; sourceTree = "<group>"; };
 		C81CD0924D905E721C028356 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "../unit-test/test-imports-app/Resources/Images.xcassets"; sourceTree = "<group>"; };
 		DF561348FD5E569AB21F7F3D /* TestModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; name = TestModel.xcdatamodel; path = "../unit-test/test-imports-app/Resources/TestModel.xcdatamodel"; sourceTree = "<group>"; };
+		E275784281C69199FBA76C03 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "../unit-test/test-imports-app/Resources/Resources2/Images.xcassets"; sourceTree = "<group>"; };
 		E6411D3FC8114DF5DE33DABC /* Header2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Header2.h; path = "../unit-test/test-imports-app/Header2.h"; sourceTree = "<group>"; };
 		EC730E57A94AE56443A8D68E /* TestImports-App.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "TestImports-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFFCD75973B790B8428EF9E7 /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = test.swift; path = "../unit-test/test-imports-app/test.swift"; sourceTree = "<group>"; };
@@ -85,6 +86,14 @@
 			name = library;
 			sourceTree = "<group>";
 		};
+		76E3C04E2FCE697285501653 /* Resources2 */ = {
+			isa = PBXGroup;
+			children = (
+				E275784281C69199FBA76C03 /* Images.xcassets */,
+			);
+			name = Resources2;
+			sourceTree = "<group>";
+		};
 		8910DAC3B74F70E3EAF715F8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -121,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				C81CD0924D905E721C028356 /* Images.xcassets */,
+				76E3C04E2FCE697285501653 /* Resources2 */,
 				DF561348FD5E569AB21F7F3D /* TestModel.xcdatamodel */,
 				4B218D3B14EACFE8F6D1A7D9 /* TestModel2.xcdatamodel */,
 				4AC4C1B394B3894431813BFA /* TestModelMapping.xcmappingmodel */,

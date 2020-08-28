@@ -52,6 +52,7 @@
 		6725F1A1E5A5BAFC1EE01F00 /* Header2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Header2.h; path = "../../ios/unit-test/test-imports-app/Header2.h"; sourceTree = "<group>"; };
 		94D89E404CDBA8D5D8F2A11C /* TestStickers.xcstickers */ = {isa = PBXFileReference; lastKnownFileType = folder.stickers; name = TestStickers.xcstickers; path = "../../ios/unit-test/test-imports-app/Resources/TestStickers.xcstickers"; sourceTree = "<group>"; };
 		9E7E8177A9991D407C446EF6 /* TestImports-Unit-Tests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "TestImports-Unit-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB4C6651E31A8BAA65B71170 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "../../ios/unit-test/test-imports-app/Resources/Resources2/Images.xcassets"; sourceTree = "<group>"; };
 		B07BC976C01F7FFC817868EC /* TestModel2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; name = TestModel2.xcdatamodel; path = "../../ios/unit-test/test-imports-app/Resources/TestModel2.xcdatamodel"; sourceTree = "<group>"; };
 		B68CDE19D4CB716811CCC0D1 /* TestModelMapping.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; name = TestModelMapping.xcmappingmodel; path = "../../ios/unit-test/test-imports-app/Resources/TestModelMapping.xcmappingmodel"; sourceTree = "<group>"; };
 		BC8493575E7FDD7052346981 /* BUILD.bazel */ = {isa = PBXFileReference; name = BUILD.bazel; path = "../../ios/unit-test/test-imports-app/BUILD.bazel"; sourceTree = "<group>"; };
@@ -75,6 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				10ED0FBA33677AAD264EF3D3 /* Images.xcassets */,
+				E4C6BADCBA75DF4644F9AAB6 /* Resources2 */,
 				29A682D26AECECF5058D991B /* TestModel.xcdatamodel */,
 				B07BC976C01F7FFC817868EC /* TestModel2.xcdatamodel */,
 				B68CDE19D4CB716811CCC0D1 /* TestModelMapping.xcmappingmodel */,
@@ -155,6 +157,14 @@
 				47EF8E9B0D250B2E77846871 /* test-imports-app */,
 			);
 			name = "unit-test";
+			sourceTree = "<group>";
+		};
+		E4C6BADCBA75DF4644F9AAB6 /* Resources2 */ = {
+			isa = PBXGroup;
+			children = (
+				AB4C6651E31A8BAA65B71170 /* Images.xcassets */,
+			);
+			name = Resources2;
 			sourceTree = "<group>";
 		};
 		FFF381863D683B5DD79A5D6F /* ios */ = {
