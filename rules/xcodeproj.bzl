@@ -269,6 +269,43 @@ def _joined_header_search_paths(hmap_paths):
     header_search_paths.append("\"$BAZEL_WORKSPACE_ROOT\"")
     return " ".join(header_search_paths)
 
+_XCASSETS = "xcassets"
+_XCDATAMODELD = "xcdatamodeld"
+_XCDATAMODEL = "xcdatamodel"
+_XCMAPPINGMODEL = "xcmappingmodel"
+_XCSTICKERS = "xcstickers"
+
+def _classify_asset(path):
+    """Helper method to identify known extesion via the passed in path
+
+    Args:
+        path: single file/directory path (relative or absolute)
+
+    Returns:
+        A tuple where first argument is the first known extension found, or None.
+        Second argument is the path that we constructed so far that leads to this known extension.
+        For example: foo/bar/a.xcassets/someicon.imageset gives back
+        ("xcassets", "foo/bar/a.xcassets")
+    """
+
+    # Order is important here, since we stop as soon as a match is found
+    # This is especially important for xcdatamodeld vesus xcdatamodel,
+    # since a xcdatamodeld can have many xcdatamodel as children
+    known_xc_extensions = [_XCDATAMODELD, _XCDATAMODEL, _XCMAPPINGMODEL, _XCASSETS, _XCSTICKERS]
+    path_components = path.split("/")
+    path_so_far = ""
+    for component in path_components:
+        path_so_far += component
+        for extension in known_xc_extensions:
+            if component.endswith("." + extension):
+                return (extension, path_so_far)
+
+        # Match no exntesion, keep appending the component
+        path_so_far += "/"
+
+    # No match, return None and complete path
+    return (None, path_so_far)
+
 def _gather_asset_sources(target_info, path_prefix):
     """Helper method gather asset sources (non-code resources) based on its type or special names
 
@@ -280,29 +317,17 @@ def _gather_asset_sources(target_info, path_prefix):
         https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md#target-source
     """
     asset_sources = []
-
-    # Each key will be a short_path to a directory ending either .xcdatamodeld or .xcdatamodel
     datamodel_groups = {}
+    catalog_groups = {}
+
     for s in target_info.asset_srcs.to_list():
         short_path = s.short_path
         group = paths.dirname(short_path)
+        (extension, path_so_far) = _classify_asset(short_path)
 
         # Reference for logics below:
         # https://github.com/bazelbuild/rules_apple/blob/master/apple/internal/partials/support/resources_support.bzl#L162
-        if ".xcdatamodeld/" in short_path:
-            # Any file under xcdatamodeld is ignored but this directory will be added
-            # However since what's under it can be either a file
-            # or a directory, we only look for `*.xcdatamodel` directory
-            # for example, only if we encounter foo.xcdatamodeld/bar.xcdatamodel/content
-            # that we add an entry `foo.xcdatamodeld` to `datamodel_groups`
-            # but we won't add an entry if we encounter foo.xcdatamodeld/.xccurrentversion
-            if ".xcdatamodel/" in short_path:
-                datamodel_groups[paths.dirname(group)] = True
-        elif ".xcdatamodel/" in short_path:
-            # These are standalone xcdatamodel (not grouped by .xcdatamodeld)
-            # and again any file under is ignored but this directory will be added
-            datamodel_groups[group] = True
-        else:
+        if extension == None:
             payload = {
                 "path": paths.join(path_prefix, short_path),
                 "group": group,
@@ -310,10 +335,36 @@ def _gather_asset_sources(target_info, path_prefix):
                 "buildPhase": "none",
             }
             asset_sources.append(payload)
-    for datamodel_short_path in datamodel_groups.keys():
+        elif extension in [_XCASSETS, _XCSTICKERS]:
+            basename = paths.basename(path_so_far)
+            if basename not in catalog_groups:
+                catalog_groups[path_so_far] = basename
+        elif extension in [_XCDATAMODELD, _XCDATAMODEL, _XCMAPPINGMODEL]:
+            # Any file under .xcdatamodeld or .xcdatamodel is ignored but itself will be added.
+            # However there two possibilities for .xcdatamodel to exist:
+            # 1. foo/bar.xcdatamodel (standalone)
+            # 2. foo/foo2.xcdatamodeld/bar(v2).xcdatamodel (versioned datadmodel)
+            # Iteration of path components above stops at xcdatamodeld first
+            # so the second case is taken care of
+            datamodel_name = paths.basename(path_so_far)
+            if datamodel_name not in datamodel_groups:
+                datamodel_groups[path_so_far] = datamodel_name
+        else:
+            fail("Known extension {} returned from _classify_asset method is not handled".format(extension))
+
+    for datamodel_key in datamodel_groups.keys():
         payload = {
-            "path": paths.join(path_prefix, datamodel_short_path),
-            "group": paths.dirname(datamodel_short_path),
+            "path": paths.join(path_prefix, datamodel_key),
+            "group": paths.dirname(datamodel_key),
+            "optional": True,
+            "buildPhase": "none",
+        }
+        asset_sources.append(payload)
+
+    for asset_key in catalog_groups.keys():
+        payload = {
+            "path": paths.join(path_prefix, asset_key),
+            "group": paths.dirname(asset_key),
             "optional": True,
             "buildPhase": "none",
         }
