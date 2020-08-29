@@ -1,0 +1,29 @@
+load("@build_bazel_rules_ios//rules:framework.bzl", "apple_framework")
+load("@build_bazel_rules_ios//rules:test.bzl", "ios_unit_test")
+
+# This example tests that a core data model that sets `Model = "Current Product Module"`
+# works well when using a resource bundle
+
+apple_framework(
+    name = "CoreDataExample",
+    srcs = glob(["CoreDataExample/**/*.swift"]),
+    platforms = {"ios": "11.0"},
+    resource_bundles = {
+        "CoreDataExample": glob(["CoreDataExample/**/*.xcdatamodeld"]),
+    },
+    visibility = ["//visibility:public"],
+)
+
+apple_framework(
+    name = "CoreDataExampleTestsLib",
+    srcs = glob(["TargetXIBTests/**/*.swift"]),
+    platforms = {"ios": "11.0"},
+    visibility = ["//visibility:public"],
+    deps = [":CoreDataExample"],
+)
+
+ios_unit_test(
+    name = "CoreDataExampleTests",
+    minimum_os_version = "11.0",
+    deps = [":CoreDataExampleTestsLib"],
+)
