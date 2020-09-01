@@ -52,11 +52,15 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     fake_ctx_dict["attr"] = struct(**attr_dict)
     fake_ctx_dict["file"] = struct(**file_dict)
 
-    # The label of this fake_ctx is used as the swift module associated with storyboards, nibs and xibs.
-    # See: https://github.com/bazelbuild/rules_apple/blob/master/apple/internal/partials/support/resources_support.bzl#L446
+    # The label of this fake_ctx is used as the swift module associated with storyboards, nibs, xibs
+    # and CoreData models.
+    # * For storyboards, nibs and xibs: https://github.com/bazelbuild/rules_apple/blob/master/apple/internal/partials/support/resources_support.bzl#L446
+    # * For CoreData models: https://github.com/bazelbuild/rules_apple/blob/master/apple/internal/partials/support/resources_support.bzl#L57
     #
-    # Such swift module is required when the storyboard, nib or xib contains the value <customModuleProvider="target">.
-    # Otherwise, the swift module is not important and could be any arbitrary string.
+    # Such swift module is required in the following cases:
+    # 1- When the storyboard, nib or xib contains the value <customModuleProvider="target">.
+    # 2- When the CoreData model sets "Current Product Module" for its Module property.
+    # If none of above scenarios, the swift module is not important and could be any arbitrary string.
     # For the full context see https://github.com/bazel-ios/rules_ios/issues/113
     #
     # Usage:

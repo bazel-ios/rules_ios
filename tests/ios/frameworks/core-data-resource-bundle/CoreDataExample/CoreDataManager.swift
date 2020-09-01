@@ -20,8 +20,14 @@ public final class CoreDataManager {
     }()
 
     private lazy var managedObjectModel: NSManagedObjectModel = {
-        guard let modelURL = Bundle(for: Self.self).url(forResource: self.modelName, withExtension: "momd") else {
-            fatalError("Unable to Find Data Model")
+        guard let bundle = Bundle(for: Self.self)
+            .url(forResource: "CoreDataExample", withExtension: "bundle")
+            .flatMap(Bundle.init(url:)) else {
+            fatalError("Unable to Find bundle")
+        }
+
+        guard let modelURL = bundle.url(forResource: self.modelName, withExtension: "momd") else {
+            fatalError("Unable to Find Data Model in bundle at path \(bundle.bundleURL)")
         }
 
         guard let managedObjectModel = NSManagedObjectModel(contentsOf: modelURL) else {
@@ -32,10 +38,16 @@ public final class CoreDataManager {
     }()
 
     private lazy var persistentStoreCoordinatorUrl: URL = {
-        let fileManager = FileManager.default
         let storeName = "\(self.modelName).sqlite"
 
-        let documentsDirectoryURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        guard let documentsDirectoryURL = try? FileManager.default.url(
+            for: .documentDirectory,
+            in: .userDomainMask,
+            appropriateFor: nil,
+            create: true
+            ) else {
+            fatalError("Document directory is not ready")
+        }
 
         let persistentStoreURL = documentsDirectoryURL.appendingPathComponent(storeName)
         return persistentStoreURL
@@ -44,14 +56,15 @@ public final class CoreDataManager {
     private lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
         let persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
 
-
         do {
-            try persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType,
-                                                              configurationName: nil,
-                                                              at: persistentStoreCoordinatorUrl,
-                                                              options: nil)
+            try persistentStoreCoordinator.addPersistentStore(
+                ofType: NSSQLiteStoreType,
+                configurationName: nil,
+                at: persistentStoreCoordinatorUrl,
+                options: nil
+            )
         } catch {
-            fatalError("Unable to Load Persistent Store")
+            fatalError("Unable to Load Persistent Store. Error: \(error)")
         }
 
         return persistentStoreCoordinator
