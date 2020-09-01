@@ -51,6 +51,19 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         fake_ctx_dict[k] = getattr(ctx, k)
     fake_ctx_dict["attr"] = struct(**attr_dict)
     fake_ctx_dict["file"] = struct(**file_dict)
+
+    # The label of this fake_ctx is used as the swift module associated with storyboards, nibs and xibs.
+    # See: https://github.com/bazelbuild/rules_apple/blob/master/apple/internal/partials/support/resources_support.bzl#L446
+    #
+    # Such swift module is required when the storyboard, nib or xib contains the value <customModuleProvider="target">.
+    # Otherwise, the swift module is not important and could be any arbitrary string.
+    # For the full context see https://github.com/bazel-ios/rules_ios/issues/113
+    #
+    # Usage:
+    # The most common scenario happens when the bundle name is the same as the corresponding swift module.
+    # If that is not the case, it is possible to customize the swift module by explicitly
+    # passing a swift_module attr
+    fake_ctx_dict["label"] = Label("//fake_package:" + (ctx.attr.swift_module or bundle_name))
     fake_ctx = struct(**fake_ctx_dict)
 
     partial_output = partial.call(partials.resources_partial(
@@ -186,6 +199,10 @@ precompiled_apple_resource_bundle = rule(
         bundle_id = attr.string(
             mandatory = False,
             doc = "The bundle identifier of the resource bundle.",
+        ),
+        swift_module = attr.string(
+            mandatory = False,
+            doc = "The swift module to use when compiling storyboards, nibs and xibs that contain a customModuleProvider",
         ),
         resources = attr.label_list(
             allow_empty = True,
