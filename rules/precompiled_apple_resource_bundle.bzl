@@ -248,8 +248,8 @@ the bundle as a dependency.""",
             ),
             doc = "The xcode config that is used to determine the deployment target for the current platform.",
         ),
-        _whitelist_function_transition = attr.label(
-            default = "@build_bazel_rules_apple//tools/whitelists/function_transition_whitelist",
+        _allowlist_function_transition = attr.label(
+            default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
             doc = "Needed to allow this rule to have an incoming edge configuration transition.",
         ),
     ),

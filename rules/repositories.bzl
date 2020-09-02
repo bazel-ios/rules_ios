@@ -47,38 +47,38 @@ def rules_ios_dependencies():
     _maybe(
         github_repo,
         name = "build_bazel_rules_apple",
-        ref = "12ac0738c56f8a15c714a7e09ec87a1bbdbcada9",
+        ref = "1b784889f241c5b1bb7d6dc8ee8bde9fbd33245a",
         project = "bazelbuild",
         repo = "rules_apple",
-        sha256 = "60db0889ce9593ed2e6de513beb59770b9dbc122f6dcb68d5d49379e85c4b374",
+        sha256 = "3660e5076cbdcab5d14530c1bd1de7c94d1d20259c52f2fc107293e32a32847f",
     )
 
     _maybe(
         github_repo,
         name = "build_bazel_rules_swift",
-        ref = "15d2b18ac7a71796984c4064fc0b570260969ac3",
+        ref = "beb3a30faf3982b870924cfcedf01dc596400599",
         project = "bazelbuild",
         repo = "rules_swift",
-        sha256 = "566bfce66201c9264bfc4bc5a84260c8039858158432eda012ec9907feceff41",
+        sha256 = "0035214dbb2075b5a8f7b2b82351f45a2b0405354d29e22723b0ecc7f9c1ac18",
     )
 
     _maybe(
         github_repo,
         name = "build_bazel_apple_support",
-        ref = "501b4afb27745c4813a88ffa28acd901408014e4",
+        ref = "b8755bd2884d6bf651827c30e00bd0ea318e41a2",
         project = "bazelbuild",
         repo = "apple_support",
-        sha256 = "8aa07a6388e121763c0164624feac9b20841afa2dd87bac0ba0c3ed1d56feb70",
+        sha256 = "07d6a7552a85ef0299ccea18951a527e57ea928159c20f3b9d0b138561313adb",
     )
 
     _maybe(
         http_archive,
         name = "bazel_skylib",
-        sha256 = "97e70364e9249702246c0e9444bccdc4b847bed1eb03c5a3ece4f83dfe6abc44",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.0.2/bazel-skylib-1.0.2.tar.gz",
-            "https://github.com/bazelbuild/bazel-skylib/releases/download/1.0.2/bazel-skylib-1.0.2.tar.gz",
+            "https://github.com/bazelbuild/bazel-skylib/releases/download/1.0.3/bazel-skylib-1.0.3.tar.gz",
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.0.3/bazel-skylib-1.0.3.tar.gz",
         ],
+        sha256 = "1c531376ac7e5a180e0237938a2536de0c54d93f5c278634818e0efc952dd56c",
     )
 
     _maybe(
@@ -93,10 +93,24 @@ native_binary(
     out = "index-import",
     visibility = ["//visibility:public"],
 )
+
+native_binary(
+    name = "validate_index",
+    src = "validate-index",
+    out = "validate-index",
+    visibility = ["//visibility:public"],
+)
+
+native_binary(
+    name = "absolute_unit",
+    src = "absolute-unit",
+    out = "absolute-unit",
+    visibility = ["//visibility:public"],
+)
 """,
-        canonical_id = "index-import-5.1.1.3",
-        sha256 = "0946012f1557a72fcbc65bd3f2e9b2a99d5b1e57e6db43a5ad0c969bddd9e072",
-        urls = ["https://github.com/lyft/index-import/releases/download/5.1.1.3/index-import.zip"],
+        canonical_id = "index-import-5.2.1.4",
+        urls = ["https://github.com/lyft/index-import/releases/download/5.2.1.4/index-import.zip"],
+        sha256 = "62f42816baf3b690682b5d6fe543a3c5a4a6ea7499ce1f4e8326c7bd2175989a",
     )
 
     _maybe(
