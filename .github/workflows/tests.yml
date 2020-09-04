@@ -36,7 +36,7 @@ jobs:
       - name: buildifier
         run: find . -type f \( -name 'WORKSPACE' -o -name '*.bzl' -o -name '*.bazel' \) | xargs buildifier -lint=fix && git diff --exit-code
       - name: Check docs
-        run: bazelisk run docs --nocheck_visibility && git diff --exit-code docs
+        run: bazelisk run docs && git diff --exit-code docs
   xcodeproj_tests_macos:
     name: .xcodeproj Tests for Mac OS platform
     runs-on: macos-latest

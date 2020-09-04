@@ -1,6 +1,6 @@
 <!-- Generated with Stardoc: http://skydoc.bazel.build -->
 
-<a name="#extend_modulemap"></a>
+<a id="#extend_modulemap"></a>
 
 ## extend_modulemap
 
@@ -14,15 +14,15 @@ Extends a modulemap with a Swift submodule
 
 
 | Name  | Description | Type | Mandatory | Default |
-| :-------------: | :-------------: | :-------------: | :-------------: | :-------------: |
-| name |  A unique name for this target.   | <a href="https://bazel.build/docs/build-ref.html#name">Name</a> | required |  |
-| destination |  -   | <a href="https://bazel.build/docs/build-ref.html#labels">Label</a> | optional | None |
-| module_name |  -   | String | required |  |
-| source |  -   | <a href="https://bazel.build/docs/build-ref.html#labels">Label</a> | optional | None |
-| swift_header |  -   | String | optional | "" |
+| :------------- | :------------- | :------------- | :------------- | :------------- |
+| <a id="extend_modulemap-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/docs/build-ref.html#name">Name</a> | required |  |
+| <a id="extend_modulemap-destination"></a>destination |  -   | <a href="https://bazel.build/docs/build-ref.html#labels">Label</a> | optional |  |
+| <a id="extend_modulemap-module_name"></a>module_name |  -   | String | required |  |
+| <a id="extend_modulemap-source"></a>source |  -   | <a href="https://bazel.build/docs/build-ref.html#labels">Label</a> | optional | None |
+| <a id="extend_modulemap-swift_header"></a>swift_header |  -   | String | optional | "" |
 
 
-<a name="#write_file"></a>
+<a id="#write_file"></a>
 
 ## write_file
 
@@ -36,13 +36,13 @@ Writes out a file verbatim
 
 
 | Name  | Description | Type | Mandatory | Default |
-| :-------------: | :-------------: | :-------------: | :-------------: | :-------------: |
-| name |  A unique name for this target.   | <a href="https://bazel.build/docs/build-ref.html#name">Name</a> | required |  |
-| content |  -   | String | required |  |
-| destination |  -   | <a href="https://bazel.build/docs/build-ref.html#labels">Label</a> | required |  |
+| :------------- | :------------- | :------------- | :------------- | :------------- |
+| <a id="write_file-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/docs/build-ref.html#name">Name</a> | required |  |
+| <a id="write_file-content"></a>content |  -   | String | required |  |
+| <a id="write_file-destination"></a>destination |  -   | <a href="https://bazel.build/docs/build-ref.html#labels">Label</a> | required |  |
 
 
-<a name="#PrivateHeadersInfo"></a>
+<a id="#PrivateHeadersInfo"></a>
 
 ## PrivateHeadersInfo
 
@@ -56,11 +56,11 @@ Propagates private headers, so they can be accessed if necessary
 
 
 | Name  | Description |
-| :-------------: | :-------------: |
-| headers |  Private headers    |
+| :------------- | :------------- |
+| <a id="PrivateHeadersInfo-headers"></a>headers |  Private headers    |
 
 
-<a name="#apple_library"></a>
+<a id="#apple_library"></a>
 
 ## apple_library
 
@@ -79,13 +79,13 @@ reasonable defaults that mimic Xcode's behavior.
 
 
 | Name  | Description | Default Value |
-| :-------------: | :-------------: | :-------------: |
-| name |  The base name for all of the underlying targets.   |  none |
-| library_tools |  An optional dictionary containing overrides for                 default behaviors.   |  <code>{}</code> |
-| export_private_headers |  Whether private headers should be exported via                         a <code>PrivateHeadersInfo</code> provider.   |  <code>True</code> |
-| namespace_is_module_name |  Whether the module name should be used as the                           namespace for header imports, instead of the target name.   |  <code>True</code> |
-| default_xcconfig_name |  The name of a default xcconfig to be applied to this target.   |  <code>None</code> |
-| xcconfig |  A dictionary of Xcode build settings to be applied to this target in the           form of different <code>copt</code> attributes.   |  <code>{}</code> |
-| kwargs |  keyword arguments.   |  none |
+| :------------- | :------------- | :------------- |
+| <a id="apple_library-name"></a>name |  The base name for all of the underlying targets.   |  none |
+| <a id="apple_library-library_tools"></a>library_tools |  An optional dictionary containing overrides for                 default behaviors.   |  <code>{}</code> |
+| <a id="apple_library-export_private_headers"></a>export_private_headers |  Whether private headers should be exported via                         a <code>PrivateHeadersInfo</code> provider.   |  <code>True</code> |
+| <a id="apple_library-namespace_is_module_name"></a>namespace_is_module_name |  Whether the module name should be used as the                           namespace for header imports, instead of the target name.   |  <code>True</code> |
+| <a id="apple_library-default_xcconfig_name"></a>default_xcconfig_name |  The name of a default xcconfig to be applied to this target.   |  <code>None</code> |
+| <a id="apple_library-xcconfig"></a>xcconfig |  A dictionary of Xcode build settings to be applied to this target in the           form of different <code>copt</code> attributes.   |  <code>{}</code> |
+| <a id="apple_library-kwargs"></a>kwargs |  keyword arguments.   |  none |
 
 

@@ -1,6 +1,6 @@
 <!-- Generated with Stardoc: http://skydoc.bazel.build -->
 
-<a name="#headermap"></a>
+<a id="#headermap"></a>
 
 ## headermap
 
@@ -19,14 +19,14 @@ regardless of the package structure being used.
 
 
 | Name  | Description | Type | Mandatory | Default |
-| :-------------: | :-------------: | :-------------: | :-------------: | :-------------: |
-| name |  A unique name for this target.   | <a href="https://bazel.build/docs/build-ref.html#name">Name</a> | required |  |
-| direct_hdr_providers |  Targets whose direct headers should be added to the list of hdrs   | <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a> | optional | [] |
-| hdrs |  The list of headers included in the headermap   | <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a> | required |  |
-| namespace |  The prefix to be used for header imports   | String | optional | "" |
+| :------------- | :------------- | :------------- | :------------- | :------------- |
+| <a id="headermap-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/docs/build-ref.html#name">Name</a> | required |  |
+| <a id="headermap-direct_hdr_providers"></a>direct_hdr_providers |  Targets whose direct headers should be added to the list of hdrs   | <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a> | optional | [] |
+| <a id="headermap-hdrs"></a>hdrs |  The list of headers included in the headermap   | <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a> | required |  |
+| <a id="headermap-namespace"></a>namespace |  The prefix to be used for header imports   | String | optional | "" |
 
 
-<a name="#HeaderMapInfo"></a>
+<a id="#HeaderMapInfo"></a>
 
 ## HeaderMapInfo
 
@@ -40,11 +40,11 @@ Propagates header maps
 
 
 | Name  | Description |
-| :-------------: | :-------------: |
-| files |  depset with headermaps    |
+| :------------- | :------------- |
+| <a id="HeaderMapInfo-files"></a>files |  depset with headermaps    |
 
 
-<a name="#hmap.make_hmap"></a>
+<a id="#hmap.make_hmap"></a>
 
 ## hmap.make_hmap
 
@@ -58,11 +58,11 @@ Makes an hmap file.
 
 
 | Name  | Description | Default Value |
-| :-------------: | :-------------: | :-------------: |
-| actions |  a ctx.actions struct   |  none |
-| headermap_builder |  an executable pointing to @bazel_build_rules_ios//rules/hmap:hmaptool   |  none |
-| output |  the output file that will contain the built hmap   |  none |
-| namespace |  the prefix to be used for header imports   |  none |
-| hdrs_lists |  an array of enumerables containing headers to be added to the hmap   |  none |
+| :------------- | :------------- | :------------- |
+| <a id="hmap.make_hmap-actions"></a>actions |  a ctx.actions struct   |  none |
+| <a id="hmap.make_hmap-headermap_builder"></a>headermap_builder |  an executable pointing to @bazel_build_rules_ios//rules/hmap:hmaptool   |  none |
+| <a id="hmap.make_hmap-output"></a>output |  the output file that will contain the built hmap   |  none |
+| <a id="hmap.make_hmap-namespace"></a>namespace |  the prefix to be used for header imports   |  none |
+| <a id="hmap.make_hmap-hdrs_lists"></a>hdrs_lists |  an array of enumerables containing headers to be added to the hmap   |  none |
 
 
