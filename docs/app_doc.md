@@ -17,7 +17,7 @@ ios_application(<a href="#ios_application-name">name</a>, <a href="#ios_applicat
 | :------------- | :------------- | :------------- |
 | <a id="ios_application-name"></a>name |  The name of the iOS application.   |  none |
 | <a id="ios_application-apple_library"></a>apple_library |  The macro used to package sources into a library.   |  <code><function apple_library></code> |
-| <a id="ios_application-kwargs"></a>kwargs |  <p align="center"> - </p>   |  none |
+| <a id="ios_application-kwargs"></a>kwargs |  Arguments passed to the apple_library and ios_application rules as appropriate.   |  none |
 
 
 <a id="#write_info_plists_if_needed"></a>
