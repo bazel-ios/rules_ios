@@ -159,7 +159,11 @@ def _xcodeproj_aspect_impl(target, ctx):
             transitive_targets.append(info)
 
         if test_host_target:
-            direct_targets.extend(test_host_target[_TargetInfo].direct_targets)
+            # Add the test_host_target to the targets to be added to the xcode project
+            test_host_direct_targets = test_host_target[_TargetInfo].direct_targets
+            direct_targets.extend(test_host_direct_targets)
+            transitive_targets.extend(test_host_direct_targets)
+
         target_info = _TargetInfo(direct_targets = direct_targets, targets = depset(transitive_targets, transitive = _get_attr_values_for_name(deps, _TargetInfo, "targets")))
         providers.append(target_info)
     else:
@@ -384,7 +388,7 @@ def _xcodeproj_impl(ctx):
     xcodegen_jsonfile = ctx.actions.declare_file(
         "%s-xcodegen.json" % ctx.attr.name,
     )
-    project_name = ctx.attr.project_name if ctx.attr.project_name else ctx.attr.name + ".xcodeproj"
+    project_name = (ctx.attr.project_name or ctx.attr.name) + ".xcodeproj"
     if "/" in project_name:
         fail("No / allowed in project_name")
 
