@@ -20,3 +20,10 @@ settings append target.source-map ./ "$BAZEL_WORKSPACE_ROOT/"
 settings set target.sdk-path $SDKROOT
 settings set target.swift-framework-search-paths $FRAMEWORK_SEARCH_PATHS
 END
+
+if [ -v BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS ]
+then
+cat <<-END > ~/.lldbinit-source-map
+settings set -- target.swift-extra-clang-flags $BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS
+END
+fi

@@ -6,9 +6,6 @@ build --incompatible_objc_compile_info_migration
 # so circumvent by not using the sandbox
 build --strategy=Stardoc=standalone
 
-# Debugging does not work in sandbox mode. Uncomment these lines to turn off sandboxing.
-# build --genrule_strategy=standalone
-# build --spawn_strategy=standalone
 
 build --verbose_failures # Print the full command line for commands that failed
 build --test_output=errors # Prints log file output to the console on failure
@@ -19,5 +16,10 @@ build --deleted_packages tests/ios/frameworks/sources-with-prebuilt-binaries
 
 # Enable these features to test local and CI builds
 # when swiftmodule caching is enabled.
-# build --features=swift.cacheable_swiftmodules
-# build --features=swift.use_global_module_cache
+build --features=swift.cacheable_swiftmodules
+build --features=swift.use_global_module_cache
+build --compilation_mode=dbg
+
+# Debugging does not work in sandbox mode
+build --genrule_strategy=standalone
+build --spawn_strategy=standalone

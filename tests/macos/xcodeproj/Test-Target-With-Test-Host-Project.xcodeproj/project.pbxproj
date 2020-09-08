@@ -404,9 +404,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-fastbuild-ST-e11e4ada49a5/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e11e4ada49a5/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -423,9 +424,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-fastbuild-ST-e11e4ada49a5/bin/tests/ios/unit-test/test-imports-app/SomeFramework\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e11e4ada49a5/bin/tests/ios/unit-test/test-imports-app/SomeFramework\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
@@ -442,9 +444,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-fastbuild-ST-e11e4ada49a5/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e11e4ada49a5/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -461,6 +464,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -480,9 +484,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-fastbuild-ST-e11e4ada49a5/bin/tests/ios/unit-test/test-imports-app/SomeFramework\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e11e4ada49a5/bin/tests/ios/unit-test/test-imports-app/SomeFramework\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
@@ -504,7 +509,7 @@
 				BAZEL_INSTALLERS_DIR = $PROJECT_FILE_PATH/bazelinstallers;
 				BAZEL_OUTPUT_PROCESSOR = "$BAZEL_STUBS_DIR/output-processor.rb";
 				BAZEL_PATH = bazelisk;
-				BAZEL_RULES_IOS_OPTIONS = "--@build_bazel_rules_ios//rules:local_debug_options_enabled --features=-swift.cacheable_swiftmodules --features=-swift.use_global_module_cache";
+				BAZEL_RULES_IOS_OPTIONS = "--@build_bazel_rules_ios//rules:local_debug_options_enabled";
 				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
 				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../..;
 				CC = "$BAZEL_STUBS_DIR/clang-stub";
@@ -526,6 +531,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -545,6 +551,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -569,7 +576,7 @@
 				BAZEL_INSTALLERS_DIR = $PROJECT_FILE_PATH/bazelinstallers;
 				BAZEL_OUTPUT_PROCESSOR = "$BAZEL_STUBS_DIR/output-processor.rb";
 				BAZEL_PATH = bazelisk;
-				BAZEL_RULES_IOS_OPTIONS = "--@build_bazel_rules_ios//rules:local_debug_options_enabled --features=-swift.cacheable_swiftmodules --features=-swift.use_global_module_cache";
+				BAZEL_RULES_IOS_OPTIONS = "--@build_bazel_rules_ios//rules:local_debug_options_enabled";
 				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
 				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../..;
 				CC = "$BAZEL_STUBS_DIR/clang-stub";
@@ -593,6 +600,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";

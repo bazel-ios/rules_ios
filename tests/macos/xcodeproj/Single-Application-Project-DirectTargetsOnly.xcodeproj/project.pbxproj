@@ -274,6 +274,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-DREQUIRED_DEFINED_FLAG=1 -DFLAG_WITH_VALUE_ZERO=0";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -292,6 +293,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-DREQUIRED_DEFINED_FLAG=1 -DFLAG_WITH_VALUE_ZERO=0";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -315,7 +317,7 @@
 				BAZEL_INSTALLERS_DIR = $PROJECT_FILE_PATH/bazelinstallers;
 				BAZEL_OUTPUT_PROCESSOR = "$BAZEL_STUBS_DIR/output-processor.rb";
 				BAZEL_PATH = bazelisk;
-				BAZEL_RULES_IOS_OPTIONS = "--@build_bazel_rules_ios//rules:local_debug_options_enabled --features=-swift.cacheable_swiftmodules --features=-swift.use_global_module_cache";
+				BAZEL_RULES_IOS_OPTIONS = "--@build_bazel_rules_ios//rules:local_debug_options_enabled";
 				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
 				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../..;
 				CC = "$BAZEL_STUBS_DIR/clang-stub";
@@ -337,6 +339,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -356,6 +359,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -375,6 +379,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-DREQUIRED_DEFINED_FLAG=1 -DFLAG_WITH_VALUE_ZERO=0";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -398,7 +403,7 @@
 				BAZEL_INSTALLERS_DIR = $PROJECT_FILE_PATH/bazelinstallers;
 				BAZEL_OUTPUT_PROCESSOR = "$BAZEL_STUBS_DIR/output-processor.rb";
 				BAZEL_PATH = bazelisk;
-				BAZEL_RULES_IOS_OPTIONS = "--@build_bazel_rules_ios//rules:local_debug_options_enabled --features=-swift.cacheable_swiftmodules --features=-swift.use_global_module_cache";
+				BAZEL_RULES_IOS_OPTIONS = "--@build_bazel_rules_ios//rules:local_debug_options_enabled";
 				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
 				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../..;
 				CC = "$BAZEL_STUBS_DIR/clang-stub";
@@ -422,6 +427,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-DREQUIRED_DEFINED_FLAG=1 -DFLAG_WITH_VALUE_ZERO=0";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";

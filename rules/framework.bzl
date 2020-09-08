@@ -250,9 +250,13 @@ def _apple_framework_packaging_impl(ctx):
         "imported_library",
         "force_load_library",
         "multi_arch_linked_archives",
+        "multi_arch_linked_binaries",
+        "multi_arch_dynamic_libraries",
         "source",
         "define",
         "include",
+        "link_inputs",
+        "linkopt",
     ]:
         set = depset(
             direct = [],
