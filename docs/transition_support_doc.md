@@ -1,6 +1,6 @@
 <!-- Generated with Stardoc: http://skydoc.bazel.build -->
 
-<a name="#transition_support.current_apple_platform"></a>
+<a id="#transition_support.current_apple_platform"></a>
 
 ## transition_support.current_apple_platform
 
@@ -14,8 +14,8 @@ Returns a struct containing the platform and target os version
 
 
 | Name  | Description | Default Value |
-| :-------------: | :-------------: | :-------------: |
-| apple_fragment |  <p align="center"> - </p>   |  none |
-| xcode_config |  <p align="center"> - </p>   |  none |
+| :------------- | :------------- | :------------- |
+| <a id="transition_support.current_apple_platform-apple_fragment"></a>apple_fragment |  <p align="center"> - </p>   |  none |
+| <a id="transition_support.current_apple_platform-xcode_config"></a>xcode_config |  <p align="center"> - </p>   |  none |
 
 

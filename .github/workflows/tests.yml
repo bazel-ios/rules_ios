@@ -12,8 +12,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Select Xcode 11.2
-        run: sudo xcode-select -s /Applications/Xcode_11.2.app
+      - name: Select Xcode 11.6
+        run: sudo xcode-select -s /Applications/Xcode_11.6.app
       - name: Build and Test
         run: |
           bazelisk test --local_test_jobs=1 -- //... -//tests/ios/...
@@ -29,21 +29,21 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Select Xcode 11.2
-        run: sudo xcode-select -s /Applications/Xcode_11.2.app
+      - name: Select Xcode 11.6
+        run: sudo xcode-select -s /Applications/Xcode_11.6.app
       - name: Install buildifier
         run: brew install buildifier
       - name: buildifier
         run: find . -type f \( -name 'WORKSPACE' -o -name '*.bzl' -o -name '*.bazel' \) | xargs buildifier -lint=fix && git diff --exit-code
       - name: Check docs
-        run: bazelisk run docs --nocheck_visibility && git diff --exit-code docs
+        run: bazelisk run docs && git diff --exit-code docs
   xcodeproj_tests_macos:
     name: .xcodeproj Tests for Mac OS platform
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Select Xcode 11.2
-        run: sudo xcode-select -s /Applications/Xcode_11.2.app
+      - name: Select Xcode 11.6
+        run: sudo xcode-select -s /Applications/Xcode_11.6.app
       - name: Generate Xcode projects and compare against existing record
         run: |
           set -euo pipefail
@@ -60,8 +60,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Select Xcode 11.2
-        run: sudo xcode-select -s /Applications/Xcode_11.2.app
+      - name: Select Xcode 11.6
+        run: sudo xcode-select -s /Applications/Xcode_11.6.app
       - name: Generate Xcode projects and compare against existing record
         run: |
           set -euo pipefail

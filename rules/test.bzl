@@ -23,7 +23,7 @@ def ios_unit_test(name, apple_library = apple_library, **kwargs):
     Args:
         name: The name of the unit test.
         apple_library: The macro used to package sources into a library.
-        kwargs: Arguments passed to the apple_library and ios_unit_test rules as appropriate.
+        **kwargs: Arguments passed to the apple_library and ios_unit_test rules as appropriate.
     """
     unit_test_kwargs = {arg: kwargs.pop(arg) for arg in _IOS_UNIT_TEST_KWARGS if arg in kwargs}
     unit_test_kwargs["data"] = kwargs.pop("test_data", [])

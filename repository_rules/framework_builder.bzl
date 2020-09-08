@@ -43,12 +43,12 @@ def _execute(ctx, cmd):
     if result.return_code != 0:
         fail(
             """
-====== Command '%s' failed ======
+====== Command '%s' failed (%s) ======
 ====== stdout ======
 %s
 ====== stderr ======
 %s
-        """ % (cmd, result.stdout, result.stderr),
+        """ % (cmd, result.return_code, result.stdout, result.stderr),
         )
 
 def _get_absolute_paths(ctx, file_labels):

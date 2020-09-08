@@ -677,8 +677,8 @@ Tags for configuration:
         "installer": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:installer"), cfg = "host"),
         "build_wrapper": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:build-wrapper"), cfg = "host"),
         "additional_files": attr.label_list(allow_files = True, allow_empty = True, default = [], mandatory = False),
-        "_whitelist_function_transition": attr.label(
-            default = "@build_bazel_rules_apple//tools/whitelists/function_transition_whitelist",
+        "_allowlist_function_transition": attr.label(
+            default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
             doc = "Needed to allow this rule to have an incoming edge configuration transition.",
         ),
     },

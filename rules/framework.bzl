@@ -297,7 +297,7 @@ def _apple_framework_packaging_impl(ctx):
     cc_info_provider = CcInfo(compilation_context = objc_provider.compilation_context)
     return [
         objc_provider,
-        cc_info_provider,
+        cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider], cc_infos = [dep[CcInfo] for dep in ctx.attr.transitive_deps if CcInfo in dep]),
         swift_common.create_swift_info(**swift_info_fields),
         DefaultInfo(files = depset(framework_files)),
         AppleBundleInfo(
@@ -396,8 +396,8 @@ the framework as a dependency.""",
             ),
             doc = "The xcode config that is used to determine the deployment target for the current platform.",
         ),
-        "_whitelist_function_transition": attr.label(
-            default = "@build_bazel_rules_apple//tools/whitelists/function_transition_whitelist",
+        "_allowlist_function_transition": attr.label(
+            default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
             doc = "Needed to allow this rule to have an incoming edge configuration transition.",
         ),
     },

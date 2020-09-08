@@ -7,9 +7,9 @@ exports_files([
 
 [
     ios_application(
-        name = "iOS-%s-AppHost" % version,
+        name = "iOS-{}-AppHost".format(version),
         srcs = ["main.m"],
-        bundle_id = "com.example.ios-app-host-%s" % version,
+        bundle_id = "com.example.ios-app-host-{}".format(version),
         entitlements = "ios.entitlements",
         families = [
             "iphone",
@@ -17,7 +17,7 @@ exports_files([
         ],
         launch_storyboard = "LaunchScreen.storyboard",
         minimum_os_version = version,
-        resource_bundles = {"iOS-AppHost-Resources": glob(["AssetCatalogFixture.xcassets/**"])},
+        resource_bundles = {"iOS-{}-AppHost-Resources".format(version): glob(["AssetCatalogFixture.xcassets/**"])},
         visibility = ["//visibility:public"],
     )
     for version in [
@@ -27,5 +27,6 @@ exports_files([
         "12.0",
         "13.0",
         "13.2",
+        "13.6",
     ]
 ]

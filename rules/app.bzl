@@ -52,7 +52,7 @@ def ios_application(name, apple_library = apple_library, **kwargs):
     Args:
         name: The name of the iOS application.
         apple_library: The macro used to package sources into a library.
-        kwargs: Arguments passed to the apple_library and ios_application rules as appropriate.
+        **kwargs: Arguments passed to the apple_library and ios_application rules as appropriate.
     """
     infoplists = write_info_plists_if_needed(name = name, plists = kwargs.pop("infoplists", []))
     application_kwargs = {arg: kwargs.pop(arg) for arg in _IOS_APPLICATION_KWARGS if arg in kwargs}

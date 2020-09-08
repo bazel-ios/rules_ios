@@ -54,9 +54,11 @@ def _make_headermap_impl(ctx):
     for provider in ctx.attr.direct_hdr_providers:
         if apple_common.Objc in provider:
             hdrs_lists.append(provider[apple_common.Objc].direct_headers)
-        elif CcInfo in provider:
+        if CcInfo in provider:
             hdrs_lists.append(provider[CcInfo].compilation_context.direct_headers)
-        else:
+
+        if len(hdrs_lists) == 1:
+            # means neither apple_common.Objc nor CcInfo in hdr provider target
             fail("direct_hdr_provider %s must contain either 'CcInfo' or 'objc' provider" % provider)
 
     hmap.make_hmap(
