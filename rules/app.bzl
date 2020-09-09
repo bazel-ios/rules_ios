@@ -11,6 +11,7 @@ _IOS_APPLICATION_KWARGS = [
     "entitlements",
     "visibility",
     "launch_storyboard",
+    "resources",
     "app_icons",
     "tags",
 ]
