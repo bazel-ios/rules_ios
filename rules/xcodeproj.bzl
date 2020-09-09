@@ -514,7 +514,6 @@ Double check your rule declaration for naming or add `xcodeproj-ignore-as-target
             ["-D%s" % d for d in target_info.cc_defines.to_list()],
         )
 
-
         if target_info.product_type == "application":
             target_settings["INFOPLIST_FILE"] = "$BAZEL_STUBS_DIR/Info-stub.plist"
             target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
