@@ -2,6 +2,10 @@ set -eu
 
 cd $(dirname $0)
 
+# The linked binary should include ASTs for the transitive dependency as well
+export NUM_LINKED_ASTS=`dsymutil -s ../../../bazel-bin/tests/ios/unit-test/test-imports-app/TestImports-App_archive-root/Payload/TestImports-App.app/TestImports-App  | grep -c N_AST`
+[[ $NUM_LINKED_ASTS == 2 ]]
+
 export HSP=`grep "HEADER_SEARCH_PATHS" *.xcodeproj/project.pbxproj | grep -o  "bazel-out\S*\.hmap"`
 echo "Make sure hmap files exist after build"
 for path in ${HSP}; do

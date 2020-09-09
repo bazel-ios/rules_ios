@@ -12,6 +12,3 @@ for i in `find *.xcodeproj -maxdepth 0 -type d`; do
     xcodebuild -project $i -alltargets -destination "id=$SIM_DEVICE_ID" -quiet
 done
 
-# The linked binary should include ASTs for the transitive dependency as well
-export NUM_LINKED_ASTS=`dsymutil -s bazel-bin/tests/ios/unit-test/test-imports-app/TestImports-App_archive-root/Payload/TestImports-App.app/TestImports-App  | grep -c N_AST`
-[[ $NUM_LINKED_ASTS == 2 ]]
