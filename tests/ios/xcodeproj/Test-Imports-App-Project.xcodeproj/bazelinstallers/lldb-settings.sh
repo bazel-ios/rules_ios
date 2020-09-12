@@ -20,21 +20,17 @@ settings set target.sdk-path $SDKROOT
 settings set target.swift-framework-search-paths $FRAMEWORK_SEARCH_PATHS
 END
 
-set +u
-if [[ -n $BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS ]]
+if [[ -n ${BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS:-} ]]
 then
-set -u
-cat <<-END >> ~/.lldbinit-source-map
+  cat <<-END >> ~/.lldbinit-source-map
 settings set -- target.swift-extra-clang-flags $BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS
 END
 fi
-set -u
 
 BAZEL_EXTERNAL_DIRNAME="$BAZEL_WORKSPACE_ROOT/bazel-$(basename "$BAZEL_WORKSPACE_ROOT")/external"
-if [ -d $BAZEL_EXTERNAL_DIRNAME ]
+if [ -d "$BAZEL_EXTERNAL_DIRNAME" ]
 then
-cat <<-END >> ~/.lldbinit-source-map
-settings append target.source-map ./external/ $BAZEL_EXTERNAL_DIRNAME
+  cat <<-END >> ~/.lldbinit-source-map
+settings append target.source-map ./external/ "$BAZEL_EXTERNAL_DIRNAME"
 END
 fi
-
