@@ -17,7 +17,6 @@ build --test_output=errors # Prints log file output to the console on failure
 # because it takes quite some time. They will only run on CI
 build --deleted_packages tests/ios/frameworks/sources-with-prebuilt-binaries
 
-# Enable these features to test local and CI builds
-# when swiftmodule caching is enabled.
-# build --features=swift.cacheable_swiftmodules
-# build --features=swift.use_global_module_cache
+# Enable dbg compilation mode in this repo, so we can test xcodeproj-built
+# binaries contain debug symbol tables.
+build --compilation_mode=dbg

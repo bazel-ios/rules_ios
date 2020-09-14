@@ -11,3 +11,4 @@ export SIM_DEVICE_ID=`xcodebuild $SAMPLE_PROJECT_AND_SCHEME -showdestinations | 
 for i in `find *.xcodeproj -maxdepth 0 -type d`; do
     xcodebuild -project $i -alltargets -destination "id=$SIM_DEVICE_ID" -quiet
 done
+

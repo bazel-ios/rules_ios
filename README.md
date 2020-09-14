@@ -92,3 +92,6 @@ ios_application(
 
 See the [tests](https://github.com/bazel-ios/rules_ios/tree/master/tests)
 directory for sample applications.
+
+## Special note about debugging
+Debugging does not work in sandbox mode, due to issue #108. The workaround for now is to disable sandboxing in the .bazelrc file.

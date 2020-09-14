@@ -407,7 +407,7 @@ def _xcodeproj_impl(ctx):
         "BAZEL_BUILD_EXEC": "$BAZEL_STUBS_DIR/build-wrapper",
         "BAZEL_OUTPUT_PROCESSOR": "$BAZEL_STUBS_DIR/output-processor.rb",
         "BAZEL_PATH": ctx.attr.bazel_path,
-        "BAZEL_RULES_IOS_OPTIONS": "--@build_bazel_rules_ios//rules:local_debug_options_enabled --features=-swift.cacheable_swiftmodules --features=-swift.use_global_module_cache",
+        "BAZEL_RULES_IOS_OPTIONS": "--@build_bazel_rules_ios//rules:local_debug_options_enabled",
         "BAZEL_WORKSPACE_ROOT": "$SRCROOT/%s" % script_dot_dots,
         "BAZEL_STUBS_DIR": "$PROJECT_FILE_PATH/bazelstubs",
         "BAZEL_INSTALLERS_DIR": "$PROJECT_FILE_PATH/bazelinstallers",
@@ -456,7 +456,7 @@ def _xcodeproj_impl(ctx):
             if target_info.product_type != existing_type:
                 fail("""\
 Failed to generate xcodeproj for "{}" due to conflicting targets:
-Target "{}" is already defined with type "{}". 
+Target "{}" is already defined with type "{}".
 A same-name target with label "{}" of type "{}" wants to override.
 Double check your rule declaration for naming or add `xcodeproj-ignore-as-target` as a tag to choose which target to ignore.
 """.format(ctx.label, target_name, existing_type, target_info.bazel_build_target_name, target_info.product_type))
@@ -509,6 +509,9 @@ Double check your rule declaration for naming or add `xcodeproj-ignore-as-target
                 defines_without_equal_sign.append(d)
         target_settings["SWIFT_ACTIVE_COMPILATION_CONDITIONS"] = " ".join(
             ["\"%s\"" % d for d in defines_without_equal_sign],
+        )
+        target_settings["BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS"] = " ".join(
+            ["-D%s" % d for d in target_info.cc_defines.to_list()],
         )
 
         if target_info.product_type == "application":

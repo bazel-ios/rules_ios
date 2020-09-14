@@ -15,8 +15,22 @@ set -euo pipefail
 #
 #     command source ~/.lldbinit-source-map
 cat <<-END > ~/.lldbinit-source-map
-settings set target.source-map ./external/ "$BAZEL_WORKSPACE_ROOT/bazel-$(basename "$BAZEL_WORKSPACE_ROOT")/external"
-settings append target.source-map ./ "$BAZEL_WORKSPACE_ROOT/"
+settings set target.source-map ./ "$BAZEL_WORKSPACE_ROOT/"
 settings set target.sdk-path $SDKROOT
 settings set target.swift-framework-search-paths $FRAMEWORK_SEARCH_PATHS
 END
+
+if [[ -n ${BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS:-} ]]
+then
+  cat <<-END >> ~/.lldbinit-source-map
+settings set -- target.swift-extra-clang-flags $BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS
+END
+fi
+
+BAZEL_EXTERNAL_DIRNAME="$BAZEL_WORKSPACE_ROOT/bazel-$(basename "$BAZEL_WORKSPACE_ROOT")/external"
+if [ -d "$BAZEL_EXTERNAL_DIRNAME" ]
+then
+  cat <<-END >> ~/.lldbinit-source-map
+settings append target.source-map ./external/ "$BAZEL_EXTERNAL_DIRNAME"
+END
+fi
