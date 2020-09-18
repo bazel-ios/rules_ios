@@ -419,13 +419,14 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots):
     xcodeproj_schemes_by_name = {}
     for target_info in targets:
         target_name = target_info.name
+        product_type = target_info.product_type
 
         if target_name in xcodeproj_targets_by_name:
             existing_type = xcodeproj_targets_by_name[target_name]["type"]
-            if target_info.product_type != existing_type:
+            if product_type != existing_type:
                 fail(_CONFLICTING_TARGET_MSG.format(ctx.label, target_name, existing_type, target_info.bazel_build_target_name, target_info.product_type))
 
-        target_macho_type = "staticlib" if target_info.product_type == "framework" else "$(inherited)"
+        target_macho_type = "staticlib" if product_type == "framework" else "$(inherited)"
         compiled_sources = [{
             "path": paths.join(src_dot_dots, s.short_path),
             "group": paths.dirname(s.short_path),
@@ -478,11 +479,11 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots):
             ["-D%s" % d for d in target_info.cc_defines.to_list()],
         )
 
-        if target_info.product_type == "application":
+        if product_type == "application":
             target_settings["INFOPLIST_FILE"] = "$BAZEL_STUBS_DIR/Info-stub.plist"
             target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
 
-        if target_info.product_type == "bundle.unit-test":
+        if product_type == "bundle.unit-test":
             target_settings["SUPPORTS_MACCATALYST"] = False
         target_dependencies = []
         test_host_appname = getattr(target_info, "test_host_appname", None)
@@ -494,7 +495,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots):
 
         xcodeproj_targets_by_name[target_name] = {
             "sources": compiled_sources + compiled_non_arc_sources + asset_sources,
-            "type": target_info.product_type,
+            "type": product_type,
             "platform": _PLATFORM_MAPPING[target_info.platform_type],
             "deploymentTarget": target_info.minimum_os_version,
             "settings": target_settings,
@@ -505,10 +506,14 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots):
             }],
         }
 
+        # Skip a scheme generation if allowlist is not empty
+        # and current product type not in the list
+        allow_scheme_list = ctx.attr.generate_schemes_for_product_types
+        if len(allow_scheme_list) > 0 and product_type not in allow_scheme_list:
+            continue
+
         scheme_action_details = {"targets": [target_name]}
-
         env_vars_dict = {}
-
         for (k, v) in getattr(target_info, "env_vars", ()):
             # Specific scheme can override the ones defined under env_vars here:
             if ctx.attr.scheme_existing_envvar_overrides.get(k, None):
@@ -687,6 +692,7 @@ Tags for configuration:
         "project_name": attr.string(mandatory = False),
         "bazel_path": attr.string(mandatory = False, default = "bazel"),
         "scheme_existing_envvar_overrides": attr.string_dict(allow_empty = True, default = {}, mandatory = False),
+        "generate_schemes_for_product_types": attr.string_list(mandatory = False, allow_empty = True, default = [], doc = "Generate schemes only for the specified product types if this list is not empty"),
         "_xcodeproj_installer_template": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:xcodeproj-installer.sh"), allow_single_file = ["sh"]),
         "_infoplist_stub": attr.label(executable = False, default = Label("//rules/test_host_app:Info.plist"), allow_single_file = ["plist"]),
         "_workspace_xcsettings": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:WorkspaceSettings.xcsettings"), allow_single_file = ["xcsettings"]),
