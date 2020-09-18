@@ -384,82 +384,46 @@ def _gather_asset_sources(target_info, path_prefix):
     } for p in target_info.build_files.to_list()]
     return asset_sources
 
-def _xcodeproj_impl(ctx):
-    xcodegen_jsonfile = ctx.actions.declare_file(
-        "%s-xcodegen.json" % ctx.attr.name,
-    )
-    project_name = (ctx.attr.project_name or ctx.attr.name) + ".xcodeproj"
-    if "/" in project_name:
-        fail("No / allowed in project_name")
+_CONFLICTING_TARGET_MSG = """\
+Failed to generate xcodeproj for "{}" due to conflicting targets:
+Target "{}" is already defined with type "{}".
+A same-name target with label "{}" of type "{}" wants to override.
+Double check your rule declaration for naming or add `xcodeproj-ignore-as-target` as a tag to choose which target to ignore.
+"""
+_BUILD_WITH_BAZEL_SCRIPT = """
+set -euxo pipefail
+cd $BAZEL_WORKSPACE_ROOT
 
-    project = ctx.actions.declare_directory(project_name)
-    nesting = ctx.label.package.count("/") + 1 if ctx.label.package else 0
-    src_dot_dots = "/".join([".." for x in range(nesting + 3)])
-    script_dot_dots = "/".join([".." for x in range(nesting)])
+export BAZEL_DIAGNOSTICS_DIR="$BUILD_DIR/../../bazel-xcode-diagnostics/"
+mkdir -p $BAZEL_DIAGNOSTICS_DIR
+export DATE_SUFFIX="$(date +%Y%m%d.%H%M%S%L)"
+export BAZEL_BUILD_EVENT_TEXT_FILENAME="$BAZEL_DIAGNOSTICS_DIR/build-event-$DATE_SUFFIX.txt"
+export BAZEL_BUILD_EXECUTION_LOG_FILENAME="$BAZEL_DIAGNOSTICS_DIR/build-execution-log-$DATE_SUFFIX.log"
+env -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC {bazel_build_target_name}
+$BAZEL_INSTALLER
+"""
 
-    proj_options = {
-        "createIntermediateGroups": True,
-        "defaultConfig": "Debug",
-        "groupSortPosition": "none",
-        "settingPresets": "none",
-    }
-    proj_settings_base = {
-        "BAZEL_BUILD_EXEC": "$BAZEL_STUBS_DIR/build-wrapper",
-        "BAZEL_OUTPUT_PROCESSOR": "$BAZEL_STUBS_DIR/output-processor.rb",
-        "BAZEL_PATH": ctx.attr.bazel_path,
-        "BAZEL_RULES_IOS_OPTIONS": "--@build_bazel_rules_ios//rules:local_debug_options_enabled",
-        "BAZEL_WORKSPACE_ROOT": "$SRCROOT/%s" % script_dot_dots,
-        "BAZEL_STUBS_DIR": "$PROJECT_FILE_PATH/bazelstubs",
-        "BAZEL_INSTALLERS_DIR": "$PROJECT_FILE_PATH/bazelinstallers",
-        "BAZEL_INSTALLER": "$BAZEL_INSTALLERS_DIR/%s" % ctx.executable.installer.basename,
-        "BAZEL_EXECUTION_LOG_ENABLED": False,
-        "CC": "$BAZEL_STUBS_DIR/clang-stub",
-        "CXX": "$CC",
-        "CLANG_ANALYZER_EXEC": "$CC",
-        "CODE_SIGNING_ALLOWED": False,
-        "DEBUG_INFORMATION_FORMAT": "dwarf",
-        "DONT_RUN_SWIFT_STDLIB_TOOL": True,
-        "LD": "$BAZEL_STUBS_DIR/ld-stub",
-        "LIBTOOL": "/usr/bin/true",
-        "SWIFT_EXEC": "$BAZEL_STUBS_DIR/swiftc-stub",
-        "SWIFT_OBJC_INTERFACE_HEADER_NAME": "",
-        "SWIFT_VERSION": 5,
-    }
-    proj_settings_debug = {
-        "GCC_PREPROCESSOR_DEFINITIONS": "DEBUG",
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "DEBUG",
-    }
-    proj_settings = {
-        "base": proj_settings_base,
-        "configs": {
-            "Debug": proj_settings_debug,
-        },
-    }
+def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots):
+    """Helper method to generate dicts for targets and schemes inside Xcode context
 
-    targets = []
-    all_transitive_targets = depset(transitive = _get_attr_values_for_name(ctx.attr.deps, _TargetInfo, "targets")).to_list()
-    if ctx.attr.include_transitive_targets:
-        targets = all_transitive_targets
-    else:
-        targets = []
-        for t in _get_attr_values_for_name(ctx.attr.deps, _TargetInfo, "direct_targets"):
-            targets.extend(t)
+    Args:
+        ctx: context provided to rule impl
+        targets: each dict contains info of a bazel target (not xcode target)
+        src_dot_dots: caller needs to figure out how many `../` needed to correctly points to an actual file
 
+    Returns:
+        A tuple where first argument a dict representing xcode targets.
+        Second argument represents xcode schemes
+    """
     xcodeproj_targets_by_name = {}
     xcodeproj_schemes_by_name = {}
-
     for target_info in targets:
         target_name = target_info.name
 
         if target_name in xcodeproj_targets_by_name:
             existing_type = xcodeproj_targets_by_name[target_name]["type"]
             if target_info.product_type != existing_type:
-                fail("""\
-Failed to generate xcodeproj for "{}" due to conflicting targets:
-Target "{}" is already defined with type "{}".
-A same-name target with label "{}" of type "{}" wants to override.
-Double check your rule declaration for naming or add `xcodeproj-ignore-as-target` as a tag to choose which target to ignore.
-""".format(ctx.label, target_name, existing_type, target_info.bazel_build_target_name, target_info.product_type))
+                fail(_CONFLICTING_TARGET_MSG.format(ctx.label, target_name, existing_type, target_info.bazel_build_target_name, target_info.product_type))
 
         target_macho_type = "staticlib" if target_info.product_type == "framework" else "$(inherited)"
         compiled_sources = [{
@@ -537,18 +501,7 @@ Double check your rule declaration for naming or add `xcodeproj-ignore-as-target
             "dependencies": target_dependencies,
             "preBuildScripts": [{
                 "name": "Build with bazel",
-                "script": """
-set -euxo pipefail
-cd $BAZEL_WORKSPACE_ROOT
-
-export BAZEL_DIAGNOSTICS_DIR="$BUILD_DIR/../../bazel-xcode-diagnostics/"
-mkdir -p $BAZEL_DIAGNOSTICS_DIR
-export DATE_SUFFIX="$(date +%Y%m%d.%H%M%S%L)"
-export BAZEL_BUILD_EVENT_TEXT_FILENAME="$BAZEL_DIAGNOSTICS_DIR/build-event-$DATE_SUFFIX.txt"
-export BAZEL_BUILD_EXECUTION_LOG_FILENAME="$BAZEL_DIAGNOSTICS_DIR/build-execution-log-$DATE_SUFFIX.log"
-env -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC {bazel_build_target_name}
-$BAZEL_INSTALLER
-""".format(bazel_build_target_name = target_info.bazel_build_target_name),
+                "script": _BUILD_WITH_BAZEL_SCRIPT.format(bazel_build_target_name = target_info.bazel_build_target_name),
             }],
         }
 
@@ -586,6 +539,70 @@ $BAZEL_INSTALLER
         # They will show as `TestableReference` under the scheme
         if target_info.product_type == "bundle.unit-test":
             xcodeproj_schemes_by_name[target_name]["test"] = {"targets": [target_name]}
+    return (xcodeproj_targets_by_name, xcodeproj_schemes_by_name)
+
+def _xcodeproj_impl(ctx):
+    xcodegen_jsonfile = ctx.actions.declare_file(
+        "%s-xcodegen.json" % ctx.attr.name,
+    )
+    project_name = (ctx.attr.project_name or ctx.attr.name) + ".xcodeproj"
+    if "/" in project_name:
+        fail("No / allowed in project_name")
+
+    project = ctx.actions.declare_directory(project_name)
+    nesting = ctx.label.package.count("/") + 1 if ctx.label.package else 0
+    src_dot_dots = "/".join([".." for x in range(nesting + 3)])
+    script_dot_dots = "/".join([".." for x in range(nesting)])
+
+    proj_options = {
+        "createIntermediateGroups": True,
+        "defaultConfig": "Debug",
+        "groupSortPosition": "none",
+        "settingPresets": "none",
+    }
+    proj_settings_base = {
+        "BAZEL_BUILD_EXEC": "$BAZEL_STUBS_DIR/build-wrapper",
+        "BAZEL_OUTPUT_PROCESSOR": "$BAZEL_STUBS_DIR/output-processor.rb",
+        "BAZEL_PATH": ctx.attr.bazel_path,
+        "BAZEL_RULES_IOS_OPTIONS": "--@build_bazel_rules_ios//rules:local_debug_options_enabled",
+        "BAZEL_WORKSPACE_ROOT": "$SRCROOT/%s" % script_dot_dots,
+        "BAZEL_STUBS_DIR": "$PROJECT_FILE_PATH/bazelstubs",
+        "BAZEL_INSTALLERS_DIR": "$PROJECT_FILE_PATH/bazelinstallers",
+        "BAZEL_INSTALLER": "$BAZEL_INSTALLERS_DIR/%s" % ctx.executable.installer.basename,
+        "BAZEL_EXECUTION_LOG_ENABLED": False,
+        "CC": "$BAZEL_STUBS_DIR/clang-stub",
+        "CXX": "$CC",
+        "CLANG_ANALYZER_EXEC": "$CC",
+        "CODE_SIGNING_ALLOWED": False,
+        "DEBUG_INFORMATION_FORMAT": "dwarf",
+        "DONT_RUN_SWIFT_STDLIB_TOOL": True,
+        "LD": "$BAZEL_STUBS_DIR/ld-stub",
+        "LIBTOOL": "/usr/bin/true",
+        "SWIFT_EXEC": "$BAZEL_STUBS_DIR/swiftc-stub",
+        "SWIFT_OBJC_INTERFACE_HEADER_NAME": "",
+        "SWIFT_VERSION": 5,
+    }
+    proj_settings_debug = {
+        "GCC_PREPROCESSOR_DEFINITIONS": "DEBUG",
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "DEBUG",
+    }
+    proj_settings = {
+        "base": proj_settings_base,
+        "configs": {
+            "Debug": proj_settings_debug,
+        },
+    }
+
+    targets = []
+    all_transitive_targets = depset(transitive = _get_attr_values_for_name(ctx.attr.deps, _TargetInfo, "targets")).to_list()
+    if ctx.attr.include_transitive_targets:
+        targets = all_transitive_targets
+    else:
+        targets = []
+        for t in _get_attr_values_for_name(ctx.attr.deps, _TargetInfo, "direct_targets"):
+            targets.extend(t)
+
+    (xcodeproj_targets_by_name, xcodeproj_schemes_by_name) = _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots)
 
     project_file_groups = [
         {"path": paths.join(src_dot_dots, f.short_path), "optional": True}
