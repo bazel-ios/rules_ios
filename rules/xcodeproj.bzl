@@ -692,7 +692,12 @@ Tags for configuration:
         "project_name": attr.string(mandatory = False),
         "bazel_path": attr.string(mandatory = False, default = "bazel"),
         "scheme_existing_envvar_overrides": attr.string_dict(allow_empty = True, default = {}, mandatory = False),
-        "generate_schemes_for_product_types": attr.string_list(mandatory = False, allow_empty = True, default = [], doc = "Generate schemes only for the specified product types if this list is not empty"),
+        "generate_schemes_for_product_types": attr.string_list(mandatory = False, allow_empty = True, default = [], doc = """\
+Generate schemes only for the specified product types if this list is not empty.
+Product types must be valid apple product types, e.g. application, bundle.unit-test, framework.
+For a full list, see under keys of `PRODUCT_TYPE_UTI` under
+https://www.rubydoc.info/github/CocoaPods/Xcodeproj/Xcodeproj/Constants
+"""),
         "_xcodeproj_installer_template": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:xcodeproj-installer.sh"), allow_single_file = ["sh"]),
         "_infoplist_stub": attr.label(executable = False, default = Label("//rules/test_host_app:Info.plist"), allow_single_file = ["plist"]),
         "_workspace_xcsettings": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:WorkspaceSettings.xcsettings"), allow_single_file = ["xcsettings"]),
