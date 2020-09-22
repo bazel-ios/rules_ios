@@ -4,6 +4,10 @@ xcodeproj(
     name = "Single-Static-Framework-Project",
     testonly = True,
     bazel_path = "bazelisk",
+    generate_schemes_for_product_types = [
+        "framework.static",
+        "bundle.unit-test",
+    ],
     include_transitive_targets = True,
     deps = [
         "//tests/ios/frameworks/objc:ObjcFramework",
@@ -15,6 +19,7 @@ xcodeproj(
     name = "Test-Imports-App-Project",
     testonly = True,
     bazel_path = "bazelisk",
+    generate_schemes_for_product_types = ["application"],
     include_transitive_targets = False,
     deps = [
         "//tests/ios/unit-test/test-imports-app:TestImports-App",
@@ -28,6 +33,11 @@ xcodeproj(
     name = "Test-With-Host-App",
     testonly = True,
     bazel_path = "bazelisk",
+    generate_schemes_for_product_types = [
+        "application",
+        "bundle.unit-test",
+        "test_suite",
+    ],
     include_transitive_targets = True,
     project_name = "TestWithHostApp",  # Test that setting a custom project name works as expected
     deps = [
@@ -36,9 +46,9 @@ xcodeproj(
 )
 
 genrule(
-    name = "Test-Project-Regeneration",
+    name = "Test-Project-Regeneration-For-Single-Static-Framework",
     testonly = True,
-    outs = ["Test-Project-Regeneration.sh"],
+    outs = ["Test-Project-Regeneration-For-Single-Static-Framework.sh"],
     cmd = """
 cat <<'EOS' > $@
 #!/bin/sh
@@ -53,4 +63,24 @@ EOS
     ),
     executable = True,
     tools = [":Single-Static-Framework-Project"],
+)
+
+genrule(
+    name = "Test-Project-Regeneration-For-Test-Imports-App-Project",
+    testonly = True,
+    outs = ["Test-Project-Regeneration-For-Test-Imports-App-Project.sh"],
+    cmd = """
+cat <<'EOS' > $@
+#!/bin/sh
+set -euxo pipefail
+rm -fr {package_name}/{target_name}.xcodeproj
+bazelisk run {package_name}:{target_name}
+bazelisk run {package_name}:{target_name}
+EOS
+    """.format(
+        package_name = package_name(),
+        target_name = "Test-Imports-App-Project",
+    ),
+    executable = True,
+    tools = [":Test-Imports-App-Project"],
 )

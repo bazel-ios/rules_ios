@@ -384,6 +384,168 @@ def _gather_asset_sources(target_info, path_prefix):
     } for p in target_info.build_files.to_list()]
     return asset_sources
 
+_CONFLICTING_TARGET_MSG = """\
+Failed to generate xcodeproj for "{}" due to conflicting targets:
+Target "{}" is already defined with type "{}".
+A same-name target with label "{}" of type "{}" wants to override.
+Double check your rule declaration for naming or add `xcodeproj-ignore-as-target` as a tag to choose which target to ignore.
+"""
+_BUILD_WITH_BAZEL_SCRIPT = """
+set -euxo pipefail
+cd $BAZEL_WORKSPACE_ROOT
+
+export BAZEL_DIAGNOSTICS_DIR="$BUILD_DIR/../../bazel-xcode-diagnostics/"
+mkdir -p $BAZEL_DIAGNOSTICS_DIR
+export DATE_SUFFIX="$(date +%Y%m%d.%H%M%S%L)"
+export BAZEL_BUILD_EVENT_TEXT_FILENAME="$BAZEL_DIAGNOSTICS_DIR/build-event-$DATE_SUFFIX.txt"
+export BAZEL_BUILD_EXECUTION_LOG_FILENAME="$BAZEL_DIAGNOSTICS_DIR/build-execution-log-$DATE_SUFFIX.log"
+env -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC {bazel_build_target_name}
+$BAZEL_INSTALLER
+"""
+
+def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots):
+    """Helper method to generate dicts for targets and schemes inside Xcode context
+
+    Args:
+        ctx: context provided to rule impl
+        targets: each dict contains info of a bazel target (not xcode target)
+        src_dot_dots: caller needs to figure out how many `../` needed to correctly points to an actual file
+
+    Returns:
+        A tuple where first argument a dict representing xcode targets.
+        Second argument represents xcode schemes
+    """
+    xcodeproj_targets_by_name = {}
+    xcodeproj_schemes_by_name = {}
+    for target_info in targets:
+        target_name = target_info.name
+        product_type = target_info.product_type
+
+        if target_name in xcodeproj_targets_by_name:
+            existing_type = xcodeproj_targets_by_name[target_name]["type"]
+            if product_type != existing_type:
+                fail(_CONFLICTING_TARGET_MSG.format(ctx.label, target_name, existing_type, target_info.bazel_build_target_name, target_info.product_type))
+
+        target_macho_type = "staticlib" if product_type == "framework" else "$(inherited)"
+        compiled_sources = [{
+            "path": paths.join(src_dot_dots, s.short_path),
+            "group": paths.dirname(s.short_path),
+            "optional": True,
+        } for s in target_info.srcs.to_list()]
+        compiled_non_arc_sources = [{
+            "path": paths.join(src_dot_dots, s.short_path),
+            "group": paths.dirname(s.short_path),
+            "optional": True,
+            "compilerFlags": "-fno-objc-arc",
+        } for s in target_info.non_arc_srcs.to_list()]
+
+        asset_sources = _gather_asset_sources(target_info, src_dot_dots)
+
+        target_settings = {
+            "PRODUCT_NAME": target_name,
+            "BAZEL_BIN_SUBDIR": target_info.bazel_bin_subdir,
+            "MACH_O_TYPE": target_macho_type,
+            "CLANG_ENABLE_MODULES": "YES",
+            "CLANG_ENABLE_OBJC_ARC": "YES",
+        }
+
+        # Just like framework, we need to have absolute path to the hmap files
+        # so that Objc files can correctly import headers
+        target_settings["HEADER_SEARCH_PATHS"] = _joined_header_search_paths(
+            target_info.hmap_paths.to_list(),
+        )
+
+        # Ensure Xcode will resolve references to the XCTest framework.
+        framework_search_paths = ["$(PLATFORM_DIR)/Developer/Library/Frameworks"]
+        for fi in target_info.framework_includes.to_list():
+            if fi[0] != "/":
+                fi = "$BAZEL_WORKSPACE_ROOT/%s" % fi
+            framework_search_paths.append("\"%s\"" % fi)
+        target_settings["FRAMEWORK_SEARCH_PATHS"] = " ".join(framework_search_paths)
+
+        macros = ["\"%s\"" % d for d in target_info.cc_defines.to_list()]
+        macros.append("$(inherited)")
+        target_settings["GCC_PREPROCESSOR_DEFINITIONS"] = " ".join(macros)
+
+        defines_without_equal_sign = ["$(inherited)"]
+        for d in target_info.swift_defines.to_list():
+            d = _exclude_swift_incompatible_define(d)
+            if d != None:
+                defines_without_equal_sign.append(d)
+        target_settings["SWIFT_ACTIVE_COMPILATION_CONDITIONS"] = " ".join(
+            ["\"%s\"" % d for d in defines_without_equal_sign],
+        )
+        target_settings["BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS"] = " ".join(
+            ["-D%s" % d for d in target_info.cc_defines.to_list()],
+        )
+
+        if product_type == "application":
+            target_settings["INFOPLIST_FILE"] = "$BAZEL_STUBS_DIR/Info-stub.plist"
+            target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
+
+        if product_type == "bundle.unit-test":
+            target_settings["SUPPORTS_MACCATALYST"] = False
+        target_dependencies = []
+        test_host_appname = getattr(target_info, "test_host_appname", None)
+        if test_host_appname:
+            target_dependencies.append({"target": test_host_appname})
+            target_settings["TEST_HOST"] = "$(BUILT_PRODUCTS_DIR)/{test_host_appname}.app/{test_host_appname}".format(test_host_appname = test_host_appname)
+
+        target_settings["VALID_ARCHS"] = _ARCH_MAPPING[target_info.platform_type]
+
+        xcodeproj_targets_by_name[target_name] = {
+            "sources": compiled_sources + compiled_non_arc_sources + asset_sources,
+            "type": product_type,
+            "platform": _PLATFORM_MAPPING[target_info.platform_type],
+            "deploymentTarget": target_info.minimum_os_version,
+            "settings": target_settings,
+            "dependencies": target_dependencies,
+            "preBuildScripts": [{
+                "name": "Build with bazel",
+                "script": _BUILD_WITH_BAZEL_SCRIPT.format(bazel_build_target_name = target_info.bazel_build_target_name),
+            }],
+        }
+
+        # Skip a scheme generation if allowlist is not empty
+        # and current product type not in the list
+        allow_scheme_list = ctx.attr.generate_schemes_for_product_types
+        if len(allow_scheme_list) > 0 and product_type not in allow_scheme_list:
+            continue
+
+        scheme_action_details = {"targets": [target_name]}
+        env_vars_dict = {}
+        for (k, v) in getattr(target_info, "env_vars", ()):
+            # Specific scheme can override the ones defined under env_vars here:
+            if ctx.attr.scheme_existing_envvar_overrides.get(k, None):
+                env_vars_dict[k] = ctx.attr.scheme_existing_envvar_overrides[k]
+            else:
+                env_vars_dict[k] = v
+        scheme_action_details["environmentVariables"] = env_vars_dict
+
+        commandline_args_tuple = getattr(target_info, "commandline_args", ())
+        scheme_action_details["commandLineArguments"] = {}
+        for arg in commandline_args_tuple:
+            scheme_action_details["commandLineArguments"][arg] = True
+
+        # See https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md#scheme
+        # on structure of xcodeproj_schemes_by_name[target_info.name]
+        xcodeproj_schemes_by_name[target_name] = {
+            "build": {
+                "parallelizeBuild": False,
+                "buildImplicitDependencies": False,
+                "targets": {
+                    target_name: ["run", "test", "profile"],
+                },
+            },
+            # By putting under run action, test action will just use them automatically
+            "run": scheme_action_details,
+        }
+
+        # They will show as `TestableReference` under the scheme
+        if target_info.product_type == "bundle.unit-test":
+            xcodeproj_schemes_by_name[target_name]["test"] = {"targets": [target_name]}
+    return (xcodeproj_targets_by_name, xcodeproj_schemes_by_name)
+
 def _xcodeproj_impl(ctx):
     xcodegen_jsonfile = ctx.actions.declare_file(
         "%s-xcodegen.json" % ctx.attr.name,
@@ -445,147 +607,7 @@ def _xcodeproj_impl(ctx):
         for t in _get_attr_values_for_name(ctx.attr.deps, _TargetInfo, "direct_targets"):
             targets.extend(t)
 
-    xcodeproj_targets_by_name = {}
-    xcodeproj_schemes_by_name = {}
-
-    for target_info in targets:
-        target_name = target_info.name
-
-        if target_name in xcodeproj_targets_by_name:
-            existing_type = xcodeproj_targets_by_name[target_name]["type"]
-            if target_info.product_type != existing_type:
-                fail("""\
-Failed to generate xcodeproj for "{}" due to conflicting targets:
-Target "{}" is already defined with type "{}".
-A same-name target with label "{}" of type "{}" wants to override.
-Double check your rule declaration for naming or add `xcodeproj-ignore-as-target` as a tag to choose which target to ignore.
-""".format(ctx.label, target_name, existing_type, target_info.bazel_build_target_name, target_info.product_type))
-
-        target_macho_type = "staticlib" if target_info.product_type == "framework" else "$(inherited)"
-        compiled_sources = [{
-            "path": paths.join(src_dot_dots, s.short_path),
-            "group": paths.dirname(s.short_path),
-            "optional": True,
-        } for s in target_info.srcs.to_list()]
-        compiled_non_arc_sources = [{
-            "path": paths.join(src_dot_dots, s.short_path),
-            "group": paths.dirname(s.short_path),
-            "optional": True,
-            "compilerFlags": "-fno-objc-arc",
-        } for s in target_info.non_arc_srcs.to_list()]
-
-        asset_sources = _gather_asset_sources(target_info, src_dot_dots)
-
-        target_settings = {
-            "PRODUCT_NAME": target_name,
-            "BAZEL_BIN_SUBDIR": target_info.bazel_bin_subdir,
-            "MACH_O_TYPE": target_macho_type,
-            "CLANG_ENABLE_MODULES": "YES",
-            "CLANG_ENABLE_OBJC_ARC": "YES",
-        }
-
-        # Just like framework, we need to have absolute path to the hmap files
-        # so that Objc files can correctly import headers
-        target_settings["HEADER_SEARCH_PATHS"] = _joined_header_search_paths(
-            target_info.hmap_paths.to_list(),
-        )
-
-        # Ensure Xcode will resolve references to the XCTest framework.
-        framework_search_paths = ["$(PLATFORM_DIR)/Developer/Library/Frameworks"]
-        for fi in target_info.framework_includes.to_list():
-            if fi[0] != "/":
-                fi = "$BAZEL_WORKSPACE_ROOT/%s" % fi
-            framework_search_paths.append("\"%s\"" % fi)
-        target_settings["FRAMEWORK_SEARCH_PATHS"] = " ".join(framework_search_paths)
-
-        macros = ["\"%s\"" % d for d in target_info.cc_defines.to_list()]
-        macros.append("$(inherited)")
-        target_settings["GCC_PREPROCESSOR_DEFINITIONS"] = " ".join(macros)
-
-        defines_without_equal_sign = ["$(inherited)"]
-        for d in target_info.swift_defines.to_list():
-            d = _exclude_swift_incompatible_define(d)
-            if d != None:
-                defines_without_equal_sign.append(d)
-        target_settings["SWIFT_ACTIVE_COMPILATION_CONDITIONS"] = " ".join(
-            ["\"%s\"" % d for d in defines_without_equal_sign],
-        )
-        target_settings["BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS"] = " ".join(
-            ["-D%s" % d for d in target_info.cc_defines.to_list()],
-        )
-
-        if target_info.product_type == "application":
-            target_settings["INFOPLIST_FILE"] = "$BAZEL_STUBS_DIR/Info-stub.plist"
-            target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
-
-        if target_info.product_type == "bundle.unit-test":
-            target_settings["SUPPORTS_MACCATALYST"] = False
-        target_dependencies = []
-        test_host_appname = getattr(target_info, "test_host_appname", None)
-        if test_host_appname:
-            target_dependencies.append({"target": test_host_appname})
-            target_settings["TEST_HOST"] = "$(BUILT_PRODUCTS_DIR)/{test_host_appname}.app/{test_host_appname}".format(test_host_appname = test_host_appname)
-
-        target_settings["VALID_ARCHS"] = _ARCH_MAPPING[target_info.platform_type]
-
-        xcodeproj_targets_by_name[target_name] = {
-            "sources": compiled_sources + compiled_non_arc_sources + asset_sources,
-            "type": target_info.product_type,
-            "platform": _PLATFORM_MAPPING[target_info.platform_type],
-            "deploymentTarget": target_info.minimum_os_version,
-            "settings": target_settings,
-            "dependencies": target_dependencies,
-            "preBuildScripts": [{
-                "name": "Build with bazel",
-                "script": """
-set -euxo pipefail
-cd $BAZEL_WORKSPACE_ROOT
-
-export BAZEL_DIAGNOSTICS_DIR="$BUILD_DIR/../../bazel-xcode-diagnostics/"
-mkdir -p $BAZEL_DIAGNOSTICS_DIR
-export DATE_SUFFIX="$(date +%Y%m%d.%H%M%S%L)"
-export BAZEL_BUILD_EVENT_TEXT_FILENAME="$BAZEL_DIAGNOSTICS_DIR/build-event-$DATE_SUFFIX.txt"
-export BAZEL_BUILD_EXECUTION_LOG_FILENAME="$BAZEL_DIAGNOSTICS_DIR/build-execution-log-$DATE_SUFFIX.log"
-env -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC {bazel_build_target_name}
-$BAZEL_INSTALLER
-""".format(bazel_build_target_name = target_info.bazel_build_target_name),
-            }],
-        }
-
-        scheme_action_details = {"targets": [target_name]}
-
-        env_vars_dict = {}
-
-        for (k, v) in getattr(target_info, "env_vars", ()):
-            # Specific scheme can override the ones defined under env_vars here:
-            if ctx.attr.scheme_existing_envvar_overrides.get(k, None):
-                env_vars_dict[k] = ctx.attr.scheme_existing_envvar_overrides[k]
-            else:
-                env_vars_dict[k] = v
-        scheme_action_details["environmentVariables"] = env_vars_dict
-
-        commandline_args_tuple = getattr(target_info, "commandline_args", ())
-        scheme_action_details["commandLineArguments"] = {}
-        for arg in commandline_args_tuple:
-            scheme_action_details["commandLineArguments"][arg] = True
-
-        # See https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md#scheme
-        # on structure of xcodeproj_schemes_by_name[target_info.name]
-        xcodeproj_schemes_by_name[target_name] = {
-            "build": {
-                "parallelizeBuild": False,
-                "buildImplicitDependencies": False,
-                "targets": {
-                    target_name: ["run", "test", "profile"],
-                },
-            },
-            # By putting under run action, test action will just use them automatically
-            "run": scheme_action_details,
-        }
-
-        # They will show as `TestableReference` under the scheme
-        if target_info.product_type == "bundle.unit-test":
-            xcodeproj_schemes_by_name[target_name]["test"] = {"targets": [target_name]}
+    (xcodeproj_targets_by_name, xcodeproj_schemes_by_name) = _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots)
 
     project_file_groups = [
         {"path": paths.join(src_dot_dots, f.short_path), "optional": True}
@@ -670,6 +692,12 @@ Tags for configuration:
         "project_name": attr.string(mandatory = False),
         "bazel_path": attr.string(mandatory = False, default = "bazel"),
         "scheme_existing_envvar_overrides": attr.string_dict(allow_empty = True, default = {}, mandatory = False),
+        "generate_schemes_for_product_types": attr.string_list(mandatory = False, allow_empty = True, default = [], doc = """\
+Generate schemes only for the specified product types if this list is not empty.
+Product types must be valid apple product types, e.g. application, bundle.unit-test, framework.
+For a full list, see under keys of `PRODUCT_TYPE_UTI` under
+https://www.rubydoc.info/github/CocoaPods/Xcodeproj/Xcodeproj/Constants
+"""),
         "_xcodeproj_installer_template": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:xcodeproj-installer.sh"), allow_single_file = ["sh"]),
         "_infoplist_stub": attr.label(executable = False, default = Label("//rules/test_host_app:Info.plist"), allow_single_file = ["plist"]),
         "_workspace_xcsettings": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:WorkspaceSettings.xcsettings"), allow_single_file = ["xcsettings"]),

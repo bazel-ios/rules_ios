@@ -47,6 +47,7 @@ jobs:
       - name: Generate Xcode projects and compare against existing record
         run: |
           set -euo pipefail
+          rm -rf tests/macos/xcodeproj/*.xcodeproj
           bazelisk clean
           bazelisk query 'kind(xcodeproj, tests/macos/xcodeproj/...)' | xargs -n 1 bazelisk run
           bazelisk query 'attr(executable, 1, kind(genrule, tests/macos/xcodeproj/...))' | xargs -n 1 bazelisk run
@@ -65,6 +66,7 @@ jobs:
       - name: Generate Xcode projects and compare against existing record
         run: |
           set -euo pipefail
+          rm -rf tests/ios/xcodeproj/*.xcodeproj
           bazelisk clean
           bazelisk query 'kind(xcodeproj, tests/ios/xcodeproj/...)' | xargs -n 1 bazelisk run
           bazelisk query 'attr(executable, 1, kind(genrule, tests/ios/xcodeproj/...))' | xargs -n 1 bazelisk run
