@@ -6,6 +6,7 @@ apple_framework(
     name = "FW",
     srcs = glob(["FW/*"]),
     private_headers = glob(["FW/*_Private.*"]),
+    platforms = {"ios": "10.0"}
 )
 
 apple_framework(
