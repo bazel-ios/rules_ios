@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		21B461EAB7C0599E6E439C2A /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFFCD75973B790B8428EF9E7 /* test.swift */; };
-		B9A7450627748CC2D7F58245 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EE49718CB8070C38416B64 /* empty.swift */; };
-		D22E20A62C92D4512E0FB68E /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00C28DA12F127AC0AE1387 /* test.m */; };
-		DD54889640478286F3D7EE39 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C080011EC2F624D38C590D3 /* main.m */; };
+		28DC502501A36DE46FB2FDAE /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EF81609D3AA2C86BD531FC9 /* test.m */; };
+		318F5B16837DD5CFA4D00889 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B776E1DCA016E54FFA3DD126 /* main.m */; };
+		C7087EC243FF0E3AB1AB011E /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9CDCA4AFFA244654BAAF8B /* test.swift */; };
+		E99867EE1F1D782F81A4FE00 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED99215913B1CD2AA84B255 /* empty.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -24,74 +24,101 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		034C629FFD4FA9DFBC427161 /* BUILD.bazel */ = {isa = PBXFileReference; name = BUILD.bazel; path = "../unit-test/test-imports-app/BUILD.bazel"; sourceTree = "<group>"; };
-		2C080011EC2F624D38C590D3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "../unit-test/test-imports-app/main.m"; sourceTree = "<group>"; };
-		373EA069001CD4FC3561D226 /* TestStickers.xcstickers */ = {isa = PBXFileReference; lastKnownFileType = folder.stickers; name = TestStickers.xcstickers; path = "../unit-test/test-imports-app/Resources/TestStickers.xcstickers"; sourceTree = "<group>"; };
-		4AC4C1B394B3894431813BFA /* TestModelMapping.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; name = TestModelMapping.xcmappingmodel; path = "../unit-test/test-imports-app/Resources/TestModelMapping.xcmappingmodel"; sourceTree = "<group>"; };
-		4B218D3B14EACFE8F6D1A7D9 /* TestModel2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; name = TestModel2.xcdatamodel; path = "../unit-test/test-imports-app/Resources/TestModel2.xcdatamodel"; sourceTree = "<group>"; };
-		4C00C28DA12F127AC0AE1387 /* test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = test.m; path = "../unit-test/test-imports-app/test.m"; sourceTree = "<group>"; };
-		58E87329BAD4527D85639045 /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = common.pch; path = ../../../rules/library/common.pch; sourceTree = "<group>"; };
-		7658664DBA198AB4F6A9633C /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = resource_bundle.plist; path = ../../../rules/library/resource_bundle.plist; sourceTree = "<group>"; };
-		C5EE49718CB8070C38416B64 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = empty.swift; path = "../unit-test/test-imports-app/empty.swift"; sourceTree = "<group>"; };
-		C73857A1D91F761A1128A896 /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Header.h; path = "../unit-test/test-imports-app/Header.h"; sourceTree = "<group>"; };
-		C81CD0924D905E721C028356 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "../unit-test/test-imports-app/Resources/Images.xcassets"; sourceTree = "<group>"; };
-		DF561348FD5E569AB21F7F3D /* TestModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; name = TestModel.xcdatamodel; path = "../unit-test/test-imports-app/Resources/TestModel.xcdatamodel"; sourceTree = "<group>"; };
-		E275784281C69199FBA76C03 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "../unit-test/test-imports-app/Resources/Resources2/Images.xcassets"; sourceTree = "<group>"; };
-		E6411D3FC8114DF5DE33DABC /* Header2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Header2.h; path = "../unit-test/test-imports-app/Header2.h"; sourceTree = "<group>"; };
+		0A9CDCA4AFFA244654BAAF8B /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
+		0B582D2FC35395890994566A /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = resource_bundle.plist; sourceTree = "<group>"; };
+		13569230489FEDC63798F45E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		2782A0E3F33311285AE36FC8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		2EF81609D3AA2C86BD531FC9 /* test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = test.m; sourceTree = "<group>"; };
+		3D8C6FABE401A5C37EEACCF7 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
+		4EA47E87D37B93163DC37DFE /* Header2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header2.h; sourceTree = "<group>"; };
+		4ED99215913B1CD2AA84B255 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
+		632CFB9DFB491CE5041EE814 /* TestStickers.xcstickers */ = {isa = PBXFileReference; lastKnownFileType = folder.stickers; path = TestStickers.xcstickers; sourceTree = "<group>"; };
+		B3D32E19E3BA9A9FCC8FCBCF /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.pch; sourceTree = "<group>"; };
+		B4CD841B3F2A7DEE174D9413 /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header.h; sourceTree = "<group>"; };
+		B776E1DCA016E54FFA3DD126 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		D3853399B479656CD9D1B02D /* TestModelMapping.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = TestModelMapping.xcmappingmodel; sourceTree = "<group>"; };
 		EC730E57A94AE56443A8D68E /* TestImports-App.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "TestImports-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		EFFCD75973B790B8428EF9E7 /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = test.swift; path = "../unit-test/test-imports-app/test.swift"; sourceTree = "<group>"; };
+		EDE6AD266A3FA658551F1143 /* TestModel2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestModel2.xcdatamodel; sourceTree = "<group>"; };
+		EE15C7CB8FDCDB50A2BC13CF /* TestModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestModel.xcdatamodel; sourceTree = "<group>"; };
 		FFC67BEE5C0F371E96445C00 /* TestImports-Unit-Tests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "TestImports-Unit-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
-		0FE10EE3091635571895E70D /* rules */ = {
+		16425F9DA3B24C7DB08487A0 /* ios */ = {
 			isa = PBXGroup;
 			children = (
-				5C497A439614A741544A6E1D /* library */,
+				3098D956609A70129E4CEF39 /* unit-test */,
 			);
-			name = rules;
+			path = ios;
+			sourceTree = "<group>";
+		};
+		22A8A4218E2455208F73FDF0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				13569230489FEDC63798F45E /* Images.xcassets */,
+				49ACE10FF598298C0C4EA7D9 /* Resources2 */,
+				EE15C7CB8FDCDB50A2BC13CF /* TestModel.xcdatamodel */,
+				EDE6AD266A3FA658551F1143 /* TestModel2.xcdatamodel */,
+				D3853399B479656CD9D1B02D /* TestModelMapping.xcmappingmodel */,
+				632CFB9DFB491CE5041EE814 /* TestStickers.xcstickers */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		26F69A463591D5BF4E58071F = {
 			isa = PBXGroup;
 			children = (
-				0FE10EE3091635571895E70D /* rules */,
-				4EE9EE45D0BA3C4F3C9940DC /* tests */,
+				BA2ACFB90DE930D947464421 /* build_bazel_rules_ios */,
 				8910DAC3B74F70E3EAF715F8 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		3569A79348A02D3B2304900C /* unit-test */ = {
+		3098D956609A70129E4CEF39 /* unit-test */ = {
 			isa = PBXGroup;
 			children = (
-				B85CBF061C0EE7D29E6325E4 /* test-imports-app */,
+				429F6F81AE5D3CA395FC38CC /* test-imports-app */,
 			);
-			name = "unit-test";
+			path = "unit-test";
 			sourceTree = "<group>";
 		};
-		4EE9EE45D0BA3C4F3C9940DC /* tests */ = {
+		429F6F81AE5D3CA395FC38CC /* test-imports-app */ = {
 			isa = PBXGroup;
 			children = (
-				A8CE1638F1E0F10970A23913 /* ios */,
+				3D8C6FABE401A5C37EEACCF7 /* BUILD.bazel */,
+				4ED99215913B1CD2AA84B255 /* empty.swift */,
+				B4CD841B3F2A7DEE174D9413 /* Header.h */,
+				4EA47E87D37B93163DC37DFE /* Header2.h */,
+				B776E1DCA016E54FFA3DD126 /* main.m */,
+				22A8A4218E2455208F73FDF0 /* Resources */,
+				2EF81609D3AA2C86BD531FC9 /* test.m */,
+				0A9CDCA4AFFA244654BAAF8B /* test.swift */,
 			);
-			name = tests;
+			path = "test-imports-app";
 			sourceTree = "<group>";
 		};
-		5C497A439614A741544A6E1D /* library */ = {
+		49ACE10FF598298C0C4EA7D9 /* Resources2 */ = {
 			isa = PBXGroup;
 			children = (
-				58E87329BAD4527D85639045 /* common.pch */,
-				7658664DBA198AB4F6A9633C /* resource_bundle.plist */,
+				2782A0E3F33311285AE36FC8 /* Images.xcassets */,
 			);
-			name = library;
+			path = Resources2;
 			sourceTree = "<group>";
 		};
-		76E3C04E2FCE697285501653 /* Resources2 */ = {
+		52753EA7175AA78967732213 /* rules */ = {
 			isa = PBXGroup;
 			children = (
-				E275784281C69199FBA76C03 /* Images.xcassets */,
+				69BCA59A4DB8984153B811AA /* library */,
 			);
-			name = Resources2;
+			path = rules;
+			sourceTree = "<group>";
+		};
+		69BCA59A4DB8984153B811AA /* library */ = {
+			isa = PBXGroup;
+			children = (
+				B3D32E19E3BA9A9FCC8FCBCF /* common.pch */,
+				0B582D2FC35395890994566A /* resource_bundle.plist */,
+			);
+			path = library;
 			sourceTree = "<group>";
 		};
 		8910DAC3B74F70E3EAF715F8 /* Products */ = {
@@ -103,40 +130,22 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A8CE1638F1E0F10970A23913 /* ios */ = {
+		BA2ACFB90DE930D947464421 /* build_bazel_rules_ios */ = {
 			isa = PBXGroup;
 			children = (
-				3569A79348A02D3B2304900C /* unit-test */,
+				52753EA7175AA78967732213 /* rules */,
+				DD3F59257AC4C8A5C0227F76 /* tests */,
 			);
-			name = ios;
+			name = build_bazel_rules_ios;
+			path = ../../..;
 			sourceTree = "<group>";
 		};
-		B85CBF061C0EE7D29E6325E4 /* test-imports-app */ = {
+		DD3F59257AC4C8A5C0227F76 /* tests */ = {
 			isa = PBXGroup;
 			children = (
-				034C629FFD4FA9DFBC427161 /* BUILD.bazel */,
-				C5EE49718CB8070C38416B64 /* empty.swift */,
-				C73857A1D91F761A1128A896 /* Header.h */,
-				E6411D3FC8114DF5DE33DABC /* Header2.h */,
-				2C080011EC2F624D38C590D3 /* main.m */,
-				EB86E0720942E17186A84231 /* Resources */,
-				4C00C28DA12F127AC0AE1387 /* test.m */,
-				EFFCD75973B790B8428EF9E7 /* test.swift */,
+				16425F9DA3B24C7DB08487A0 /* ios */,
 			);
-			name = "test-imports-app";
-			sourceTree = "<group>";
-		};
-		EB86E0720942E17186A84231 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				C81CD0924D905E721C028356 /* Images.xcassets */,
-				76E3C04E2FCE697285501653 /* Resources2 */,
-				DF561348FD5E569AB21F7F3D /* TestModel.xcdatamodel */,
-				4B218D3B14EACFE8F6D1A7D9 /* TestModel2.xcdatamodel */,
-				4AC4C1B394B3894431813BFA /* TestModelMapping.xcmappingmodel */,
-				373EA069001CD4FC3561D226 /* TestStickers.xcstickers */,
-			);
-			name = Resources;
+			path = tests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -246,8 +255,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D22E20A62C92D4512E0FB68E /* test.m in Sources */,
-				21B461EAB7C0599E6E439C2A /* test.swift in Sources */,
+				28DC502501A36DE46FB2FDAE /* test.m in Sources */,
+				C7087EC243FF0E3AB1AB011E /* test.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,8 +264,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B9A7450627748CC2D7F58245 /* empty.swift in Sources */,
-				DD54889640478286F3D7EE39 /* main.m in Sources */,
+				E99867EE1F1D782F81A4FE00 /* empty.swift in Sources */,
+				318F5B16837DD5CFA4D00889 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

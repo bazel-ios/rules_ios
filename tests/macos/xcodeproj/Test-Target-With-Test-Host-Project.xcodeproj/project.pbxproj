@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4541759E59ED815D18798894 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FE939800D5E84FA4B194548D /* main.m */; };
-		48C6C9814CEEF1CACD6D55A0 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035030AE3B7F41C97A1EE910 /* empty.swift */; };
-		55E46FEA2FF714E40EA51316 /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = 2263A980666D293D7413BE92 /* test.m */; };
-		68F6C55581B050CEA9AB6AFF /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246AA4985E50044D3CD8228A /* test.swift */; };
-		B8F9F9CA8BCC4CFF09734974 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B65EED0A5FCC9038424593 /* empty.swift */; };
-		E2DE5A172CF0A78BF06C0140 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C55810C4D90EF86058DB06A /* main.m */; };
-		EB57E581728375686EE2959C /* empty.m in Sources */ = {isa = PBXBuildFile; fileRef = F42CC7E6159DCCC28D045A6C /* empty.m */; };
+		4D9FC7A3A45FAD1826CE314F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ECF1D7133544DD5E82A3EB0 /* main.m */; };
+		8B8703078ED965C24F7DFC6D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 211B0D62D65A5D8BEFE42153 /* main.m */; };
+		9C997105C8FCCC97A52F3C37 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF21FC7C23005F0603AD4F0 /* test.swift */; };
+		A92FEA9E7CEAA5C1D707216B /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = EC2BF9F658BA7B0FF93BA215 /* test.m */; };
+		C61986BF5CBA4DAEAF33BE91 /* empty.m in Sources */ = {isa = PBXBuildFile; fileRef = 018DA4ABD245EA72FEA9BA46 /* empty.m */; };
+		C6B1D1CBC7730A53A2C04E0D /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5478D8BA2BE2A548270A80 /* empty.swift */; };
+		E676560B3EE63A86606530C8 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AC323968F3E7DC9BAFEC85 /* empty.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,54 +35,59 @@
 
 /* Begin PBXFileReference section */
 		0052687FF99FFC1CF0644A94 /* iOS-10.0-AppHost.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "iOS-10.0-AppHost.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		035030AE3B7F41C97A1EE910 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = empty.swift; path = "../../ios/unit-test/test-imports-app/empty.swift"; sourceTree = "<group>"; };
-		08D20BAAC5B1A41903E13B27 /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Header.h; path = "../../ios/unit-test/test-imports-app/Header.h"; sourceTree = "<group>"; };
-		0C55810C4D90EF86058DB06A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "../../ios/unit-test/test-imports-app/main.m"; sourceTree = "<group>"; };
-		0E1A2D407EDFADA150631F26 /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = resource_bundle.plist; path = ../../../rules/library/resource_bundle.plist; sourceTree = "<group>"; };
-		10ED0FBA33677AAD264EF3D3 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "../../ios/unit-test/test-imports-app/Resources/Images.xcassets"; sourceTree = "<group>"; };
+		018DA4ABD245EA72FEA9BA46 /* empty.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = empty.m; sourceTree = "<group>"; };
+		0A3BB7488A9B93655A5A80A7 /* TestModelMapping.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = TestModelMapping.xcmappingmodel; sourceTree = "<group>"; };
+		0DEBE921687BED0630F2E803 /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.pch; sourceTree = "<group>"; };
 		1AC28A58E3C7738C108353BE /* DefaultHosted.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = DefaultHosted.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		2238C255CB7ED2E848A7FC51 /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = common.pch; path = ../../../rules/library/common.pch; sourceTree = "<group>"; };
-		2263A980666D293D7413BE92 /* test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = test.m; path = "../../ios/unit-test/test-imports-app/test.m"; sourceTree = "<group>"; };
-		246AA4985E50044D3CD8228A /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = test.swift; path = "../../ios/unit-test/test-imports-app/test.swift"; sourceTree = "<group>"; };
-		29A682D26AECECF5058D991B /* TestModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; name = TestModel.xcdatamodel; path = "../../ios/unit-test/test-imports-app/Resources/TestModel.xcdatamodel"; sourceTree = "<group>"; };
-		300321A84FA667D38500A4EE /* BUILD.bazel */ = {isa = PBXFileReference; name = BUILD.bazel; path = ../../../rules/test_host_app/BUILD.bazel; sourceTree = "<group>"; };
-		31B65EED0A5FCC9038424593 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = empty.swift; path = "../../ios/unit-test/empty.swift"; sourceTree = "<group>"; };
-		36C5066BFCF7F5E1A169E184 /* BUILD.bazel */ = {isa = PBXFileReference; name = BUILD.bazel; path = "../../ios/unit-test/BUILD.bazel"; sourceTree = "<group>"; };
+		211B0D62D65A5D8BEFE42153 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3CCFF4E96CDD4C2949F0F71A /* Header2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header2.h; sourceTree = "<group>"; };
+		3ECF1D7133544DD5E82A3EB0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		57D04511C7357979F7EB5058 /* TestModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestModel.xcdatamodel; sourceTree = "<group>"; };
+		5BE4EAFF6C0B54947E66B439 /* ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ios.entitlements; sourceTree = "<group>"; };
+		5EF21FC7C23005F0603AD4F0 /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
 		61CE3CBBAD0BFAFC0953377B /* TestImports-App.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "TestImports-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6725F1A1E5A5BAFC1EE01F00 /* Header2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Header2.h; path = "../../ios/unit-test/test-imports-app/Header2.h"; sourceTree = "<group>"; };
-		94D89E404CDBA8D5D8F2A11C /* TestStickers.xcstickers */ = {isa = PBXFileReference; lastKnownFileType = folder.stickers; name = TestStickers.xcstickers; path = "../../ios/unit-test/test-imports-app/Resources/TestStickers.xcstickers"; sourceTree = "<group>"; };
+		652BABC45FC498B9E08F96B8 /* AssetCatalogFixture.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = AssetCatalogFixture.xcassets; sourceTree = "<group>"; };
+		6B5478D8BA2BE2A548270A80 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
+		6E1E57A5D2E549D270B1B1A7 /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = resource_bundle.plist; sourceTree = "<group>"; };
+		8BBBE8333A9A3A09CEFFD917 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9E7E8177A9991D407C446EF6 /* TestImports-Unit-Tests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "TestImports-Unit-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		AB4C6651E31A8BAA65B71170 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "../../ios/unit-test/test-imports-app/Resources/Resources2/Images.xcassets"; sourceTree = "<group>"; };
-		B07BC976C01F7FFC817868EC /* TestModel2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; name = TestModel2.xcdatamodel; path = "../../ios/unit-test/test-imports-app/Resources/TestModel2.xcdatamodel"; sourceTree = "<group>"; };
-		B68CDE19D4CB716811CCC0D1 /* TestModelMapping.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; name = TestModelMapping.xcmappingmodel; path = "../../ios/unit-test/test-imports-app/Resources/TestModelMapping.xcmappingmodel"; sourceTree = "<group>"; };
-		BC8493575E7FDD7052346981 /* BUILD.bazel */ = {isa = PBXFileReference; name = BUILD.bazel; path = "../../ios/unit-test/test-imports-app/BUILD.bazel"; sourceTree = "<group>"; };
-		CD38E215541F1766D3CAFBEE /* ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ios.entitlements; path = ../../../rules/test_host_app/ios.entitlements; sourceTree = "<group>"; };
-		D91B075B8A3A245F26D08A11 /* AssetCatalogFixture.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = AssetCatalogFixture.xcassets; path = ../../../rules/test_host_app/AssetCatalogFixture.xcassets; sourceTree = "<group>"; };
-		F42CC7E6159DCCC28D045A6C /* empty.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = empty.m; path = "../../ios/unit-test/empty.m"; sourceTree = "<group>"; };
-		FE939800D5E84FA4B194548D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../../../rules/test_host_app/main.m; sourceTree = "<group>"; };
+		A038F6999FF698D9E7E393F6 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
+		A5AC323968F3E7DC9BAFEC85 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
+		AF7BF530BE9F3ED2CB34B356 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
+		BE18C5CC5D69DC93C244A788 /* TestModel2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestModel2.xcdatamodel; sourceTree = "<group>"; };
+		BFBF7DC447A9E302E7E2946B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		C3241F917953C6BD1D2BE62A /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
+		D08289E7727590A63B67489C /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header.h; sourceTree = "<group>"; };
+		D229E599DDBCC713FF997122 /* TestStickers.xcstickers */ = {isa = PBXFileReference; lastKnownFileType = folder.stickers; path = TestStickers.xcstickers; sourceTree = "<group>"; };
+		EC2BF9F658BA7B0FF93BA215 /* test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = test.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
-		0116E61A70E2F030EEFB0081 /* library */ = {
+		06B23FF0DFF8BD111D851949 /* ios */ = {
 			isa = PBXGroup;
 			children = (
-				2238C255CB7ED2E848A7FC51 /* common.pch */,
-				0E1A2D407EDFADA150631F26 /* resource_bundle.plist */,
+				64B768958760ECC68D48BCA8 /* unit-test */,
 			);
-			name = library;
+			path = ios;
 			sourceTree = "<group>";
 		};
-		04C2FDC1FEE0E4D66A74C119 /* Resources */ = {
+		086FBDD761E762B1598CC05E /* test_host_app */ = {
 			isa = PBXGroup;
 			children = (
-				10ED0FBA33677AAD264EF3D3 /* Images.xcassets */,
-				E4C6BADCBA75DF4644F9AAB6 /* Resources2 */,
-				29A682D26AECECF5058D991B /* TestModel.xcdatamodel */,
-				B07BC976C01F7FFC817868EC /* TestModel2.xcdatamodel */,
-				B68CDE19D4CB716811CCC0D1 /* TestModelMapping.xcmappingmodel */,
-				94D89E404CDBA8D5D8F2A11C /* TestStickers.xcstickers */,
+				652BABC45FC498B9E08F96B8 /* AssetCatalogFixture.xcassets */,
+				C3241F917953C6BD1D2BE62A /* BUILD.bazel */,
+				5BE4EAFF6C0B54947E66B439 /* ios.entitlements */,
+				211B0D62D65A5D8BEFE42153 /* main.m */,
 			);
-			name = Resources;
+			path = test_host_app;
+			sourceTree = "<group>";
+		};
+		12AC35FA4ADBC321A4E27AFC /* tests */ = {
+			isa = PBXGroup;
+			children = (
+				06B23FF0DFF8BD111D851949 /* ios */,
+			);
+			path = tests;
 			sourceTree = "<group>";
 		};
 		41BE2FF5579DA46E599A01EC /* Products */ = {
@@ -96,83 +101,87 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		47EF8E9B0D250B2E77846871 /* test-imports-app */ = {
+		53A1C0AA09C71D538BA9031C /* Resources2 */ = {
 			isa = PBXGroup;
 			children = (
-				BC8493575E7FDD7052346981 /* BUILD.bazel */,
-				035030AE3B7F41C97A1EE910 /* empty.swift */,
-				08D20BAAC5B1A41903E13B27 /* Header.h */,
-				6725F1A1E5A5BAFC1EE01F00 /* Header2.h */,
-				0C55810C4D90EF86058DB06A /* main.m */,
-				04C2FDC1FEE0E4D66A74C119 /* Resources */,
-				2263A980666D293D7413BE92 /* test.m */,
-				246AA4985E50044D3CD8228A /* test.swift */,
+				BFBF7DC447A9E302E7E2946B /* Images.xcassets */,
 			);
-			name = "test-imports-app";
+			path = Resources2;
+			sourceTree = "<group>";
+		};
+		64B768958760ECC68D48BCA8 /* unit-test */ = {
+			isa = PBXGroup;
+			children = (
+				A038F6999FF698D9E7E393F6 /* BUILD.bazel */,
+				018DA4ABD245EA72FEA9BA46 /* empty.m */,
+				6B5478D8BA2BE2A548270A80 /* empty.swift */,
+				9D68117D7BA652584708D01D /* test-imports-app */,
+			);
+			path = "unit-test";
 			sourceTree = "<group>";
 		};
 		7CECA2AB833A306EC3500168 = {
 			isa = PBXGroup;
 			children = (
-				9E8242FA9938A76F7FEA9FF8 /* rules */,
-				A072D583870C5D55D7FDE9AA /* tests */,
+				EEFB98134D768549E03E39A5 /* build_bazel_rules_ios */,
 				41BE2FF5579DA46E599A01EC /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		9E8242FA9938A76F7FEA9FF8 /* rules */ = {
+		9D68117D7BA652584708D01D /* test-imports-app */ = {
 			isa = PBXGroup;
 			children = (
-				0116E61A70E2F030EEFB0081 /* library */,
-				AFC31966959E7E95E45AEEBE /* test_host_app */,
+				AF7BF530BE9F3ED2CB34B356 /* BUILD.bazel */,
+				A5AC323968F3E7DC9BAFEC85 /* empty.swift */,
+				D08289E7727590A63B67489C /* Header.h */,
+				3CCFF4E96CDD4C2949F0F71A /* Header2.h */,
+				3ECF1D7133544DD5E82A3EB0 /* main.m */,
+				DC21B9839449D8D9195E4A22 /* Resources */,
+				EC2BF9F658BA7B0FF93BA215 /* test.m */,
+				5EF21FC7C23005F0603AD4F0 /* test.swift */,
 			);
-			name = rules;
+			path = "test-imports-app";
 			sourceTree = "<group>";
 		};
-		A072D583870C5D55D7FDE9AA /* tests */ = {
+		B0B40062B117F993E7D160D6 /* rules */ = {
 			isa = PBXGroup;
 			children = (
-				FFF381863D683B5DD79A5D6F /* ios */,
+				E58B9C8B7E68050BE38EEF27 /* library */,
+				086FBDD761E762B1598CC05E /* test_host_app */,
 			);
-			name = tests;
+			path = rules;
 			sourceTree = "<group>";
 		};
-		AFC31966959E7E95E45AEEBE /* test_host_app */ = {
+		DC21B9839449D8D9195E4A22 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				D91B075B8A3A245F26D08A11 /* AssetCatalogFixture.xcassets */,
-				300321A84FA667D38500A4EE /* BUILD.bazel */,
-				CD38E215541F1766D3CAFBEE /* ios.entitlements */,
-				FE939800D5E84FA4B194548D /* main.m */,
+				8BBBE8333A9A3A09CEFFD917 /* Images.xcassets */,
+				53A1C0AA09C71D538BA9031C /* Resources2 */,
+				57D04511C7357979F7EB5058 /* TestModel.xcdatamodel */,
+				BE18C5CC5D69DC93C244A788 /* TestModel2.xcdatamodel */,
+				0A3BB7488A9B93655A5A80A7 /* TestModelMapping.xcmappingmodel */,
+				D229E599DDBCC713FF997122 /* TestStickers.xcstickers */,
 			);
-			name = test_host_app;
+			path = Resources;
 			sourceTree = "<group>";
 		};
-		D09C5AAC3E8F31379C981C8F /* unit-test */ = {
+		E58B9C8B7E68050BE38EEF27 /* library */ = {
 			isa = PBXGroup;
 			children = (
-				36C5066BFCF7F5E1A169E184 /* BUILD.bazel */,
-				F42CC7E6159DCCC28D045A6C /* empty.m */,
-				31B65EED0A5FCC9038424593 /* empty.swift */,
-				47EF8E9B0D250B2E77846871 /* test-imports-app */,
+				0DEBE921687BED0630F2E803 /* common.pch */,
+				6E1E57A5D2E549D270B1B1A7 /* resource_bundle.plist */,
 			);
-			name = "unit-test";
+			path = library;
 			sourceTree = "<group>";
 		};
-		E4C6BADCBA75DF4644F9AAB6 /* Resources2 */ = {
+		EEFB98134D768549E03E39A5 /* build_bazel_rules_ios */ = {
 			isa = PBXGroup;
 			children = (
-				AB4C6651E31A8BAA65B71170 /* Images.xcassets */,
+				B0B40062B117F993E7D160D6 /* rules */,
+				12AC35FA4ADBC321A4E27AFC /* tests */,
 			);
-			name = Resources2;
-			sourceTree = "<group>";
-		};
-		FFF381863D683B5DD79A5D6F /* ios */ = {
-			isa = PBXGroup;
-			children = (
-				D09C5AAC3E8F31379C981C8F /* unit-test */,
-			);
-			name = ios;
+			name = build_bazel_rules_ios;
+			path = ../../..;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -353,8 +362,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				55E46FEA2FF714E40EA51316 /* test.m in Sources */,
-				68F6C55581B050CEA9AB6AFF /* test.swift in Sources */,
+				A92FEA9E7CEAA5C1D707216B /* test.m in Sources */,
+				9C997105C8FCCC97A52F3C37 /* test.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -362,8 +371,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EB57E581728375686EE2959C /* empty.m in Sources */,
-				B8F9F9CA8BCC4CFF09734974 /* empty.swift in Sources */,
+				C61986BF5CBA4DAEAF33BE91 /* empty.m in Sources */,
+				C6B1D1CBC7730A53A2C04E0D /* empty.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,8 +380,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48C6C9814CEEF1CACD6D55A0 /* empty.swift in Sources */,
-				E2DE5A172CF0A78BF06C0140 /* main.m in Sources */,
+				E676560B3EE63A86606530C8 /* empty.swift in Sources */,
+				4D9FC7A3A45FAD1826CE314F /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -380,7 +389,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4541759E59ED815D18798894 /* main.m in Sources */,
+				8B8703078ED965C24F7DFC6D /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
