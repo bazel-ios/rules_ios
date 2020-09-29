@@ -15,13 +15,16 @@ def _create_buildfile_content(root, frameworks_subpath):
     binaries_path = root
     for element in frameworks_subpath.split("/"):
         binaries_path = binaries_path.get_child(element)
+        nested_framework_binaries_path = binaries_path.get_child("Frameworks")
+        if nested_framework_binaries_path.exists:
+            binaries_path = nested_framework_binaries_path.readdir()[0]
 
     if binaries_path.exists:
         frameworks = [path for path in binaries_path.readdir() if str(path).endswith(".framework")]
         for framework in frameworks:
             new_content = """\
 filegroup(
-    name = "%s", 
+    name = "%s",
     srcs = glob(["%s/%s/**/*"]),
     visibility = ["//visibility:public"],
 )\
