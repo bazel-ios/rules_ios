@@ -326,7 +326,6 @@ def _gather_asset_sources(target_info, path_prefix):
 
     for s in target_info.asset_srcs.to_list():
         short_path = s.short_path
-        group = paths.dirname(short_path)
         (extension, path_so_far) = _classify_asset(short_path)
 
         # Reference for logics below:
@@ -334,7 +333,6 @@ def _gather_asset_sources(target_info, path_prefix):
         if extension == None:
             payload = {
                 "path": paths.join(path_prefix, short_path),
-                "group": group,
                 "optional": True,
                 "buildPhase": "none",
             }
@@ -359,7 +357,6 @@ def _gather_asset_sources(target_info, path_prefix):
     for datamodel_key in datamodel_groups.keys():
         payload = {
             "path": paths.join(path_prefix, datamodel_key),
-            "group": paths.dirname(datamodel_key),
             "optional": True,
             "buildPhase": "none",
         }
@@ -368,7 +365,6 @@ def _gather_asset_sources(target_info, path_prefix):
     for asset_key in catalog_groups.keys():
         payload = {
             "path": paths.join(path_prefix, asset_key),
-            "group": paths.dirname(asset_key),
             "optional": True,
             "buildPhase": "none",
         }
@@ -377,7 +373,6 @@ def _gather_asset_sources(target_info, path_prefix):
     # Append BUILD.bazel files to project
     asset_sources += [{
         "path": paths.join(path_prefix, p),
-        "group": paths.dirname(p),
         "optional": True,
         "buildPhase": "none",
         # TODO: add source language type once https://github.com/yonaskolb/XcodeGen/issues/850 is resolved
@@ -429,12 +424,10 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots):
         target_macho_type = "staticlib" if product_type == "framework" else "$(inherited)"
         compiled_sources = [{
             "path": paths.join(src_dot_dots, s.short_path),
-            "group": paths.dirname(s.short_path),
             "optional": True,
         } for s in target_info.srcs.to_list()]
         compiled_non_arc_sources = [{
             "path": paths.join(src_dot_dots, s.short_path),
-            "group": paths.dirname(s.short_path),
             "optional": True,
             "compilerFlags": "-fno-objc-arc",
         } for s in target_info.non_arc_srcs.to_list()]

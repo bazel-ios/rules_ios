@@ -7,55 +7,79 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		486340F1844ADD3B94BFE9F6 /* FooFrameworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F95CB476EBF28FCFE1BCE04F /* FooFrameworkTests.m */; };
-		D100BF9D72B5F6940F83816B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6902D1207F875225638DE30A /* main.m */; };
+		0BD7FD856ED50175FA3D3BC9 /* FooFrameworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 091655034CF618D208C22AE8 /* FooFrameworkTests.m */; };
+		5C8EED4DAAF3B4B069337569 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7A2F537C999952921627A8 /* main.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		091655034CF618D208C22AE8 /* FooFrameworkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FooFrameworkTests.m; sourceTree = "<group>"; };
+		11B98E6654D00F1E74B2DA47 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		24C22223D1434365B1D0A956 /* ObjcFrameworkTestLib.framework */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; path = ObjcFrameworkTestLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		413EA7F09E2ABDF7CFCB736D /* ObjcFrameworkTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ObjcFrameworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BB7A0F977B290B8648FFDB0 /* ObjcFramework.framework */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; path = ObjcFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6902D1207F875225638DE30A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../frameworks/objc/main.m; sourceTree = "<group>"; };
-		A889D4F5A404037DAAE41E2C /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = common.pch; path = ../../../rules/library/common.pch; sourceTree = "<group>"; };
-		C7460A0CB5B34CD2836CB044 /* HeaderA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HeaderA.h; path = ../frameworks/objc/HeaderA.h; sourceTree = "<group>"; };
-		F9528189952DC1024F47A893 /* BUILD.bazel */ = {isa = PBXFileReference; name = BUILD.bazel; path = ../frameworks/objc/BUILD.bazel; sourceTree = "<group>"; };
-		F95CB476EBF28FCFE1BCE04F /* FooFrameworkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FooFrameworkTests.m; path = ../frameworks/objc/tests/FooFrameworkTests.m; sourceTree = "<group>"; };
+		AD7402651F16555F753997F4 /* HeaderA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HeaderA.h; sourceTree = "<group>"; };
+		BD4894AC90711E6A55CB1657 /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.pch; sourceTree = "<group>"; };
+		CF7A2F537C999952921627A8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
-		2E65D165D8CB3DA10A3241BB /* ios */ = {
+		0A2CB2A75E2EAAB1095F1214 /* objc */ = {
 			isa = PBXGroup;
 			children = (
-				F9780F090C099456FA802F03 /* frameworks */,
+				11B98E6654D00F1E74B2DA47 /* BUILD.bazel */,
+				AD7402651F16555F753997F4 /* HeaderA.h */,
+				CF7A2F537C999952921627A8 /* main.m */,
+				37D2E41255E69DF775A9E8A7 /* tests */,
 			);
-			name = ios;
+			path = objc;
 			sourceTree = "<group>";
 		};
-		6666B4FAC3B5C464339017A9 /* objc */ = {
+		1E3DFBAC8DCF4B75D9A8F878 /* tests */ = {
 			isa = PBXGroup;
 			children = (
-				F9528189952DC1024F47A893 /* BUILD.bazel */,
-				C7460A0CB5B34CD2836CB044 /* HeaderA.h */,
-				6902D1207F875225638DE30A /* main.m */,
-				C46EA7CD087E497DFB189040 /* tests */,
+				7EDC6B4DDC5CF54A9237A106 /* ios */,
 			);
-			name = objc;
+			path = tests;
 			sourceTree = "<group>";
 		};
-		A3598111BA39DE57BE267C48 /* tests */ = {
+		37D2E41255E69DF775A9E8A7 /* tests */ = {
 			isa = PBXGroup;
 			children = (
-				2E65D165D8CB3DA10A3241BB /* ios */,
+				091655034CF618D208C22AE8 /* FooFrameworkTests.m */,
 			);
-			name = tests;
+			path = tests;
 			sourceTree = "<group>";
 		};
-		C46EA7CD087E497DFB189040 /* tests */ = {
+		7EDC6B4DDC5CF54A9237A106 /* ios */ = {
 			isa = PBXGroup;
 			children = (
-				F95CB476EBF28FCFE1BCE04F /* FooFrameworkTests.m */,
+				D0115B467F0DE21A500FA41C /* frameworks */,
 			);
-			name = tests;
+			path = ios;
+			sourceTree = "<group>";
+		};
+		A2A2DE2B0CF19BE872E1DD76 /* library */ = {
+			isa = PBXGroup;
+			children = (
+				BD4894AC90711E6A55CB1657 /* common.pch */,
+			);
+			path = library;
+			sourceTree = "<group>";
+		};
+		D0115B467F0DE21A500FA41C /* frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0A2CB2A75E2EAAB1095F1214 /* objc */,
+			);
+			path = frameworks;
+			sourceTree = "<group>";
+		};
+		D7905EC44A468549D712685E /* rules */ = {
+			isa = PBXGroup;
+			children = (
+				A2A2DE2B0CF19BE872E1DD76 /* library */,
+			);
+			path = rules;
 			sourceTree = "<group>";
 		};
 		D86E9FCCC4BB853B2A451672 /* Products */ = {
@@ -71,34 +95,19 @@
 		E8099B19B67C1115D200E916 = {
 			isa = PBXGroup;
 			children = (
-				F1E6E5D1773FF98D954EB32A /* rules */,
-				A3598111BA39DE57BE267C48 /* tests */,
+				EB104984AF478D5D5F2B07DE /* build_bazel_rules_ios */,
 				D86E9FCCC4BB853B2A451672 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		F1E6E5D1773FF98D954EB32A /* rules */ = {
+		EB104984AF478D5D5F2B07DE /* build_bazel_rules_ios */ = {
 			isa = PBXGroup;
 			children = (
-				F5677F534CD0BBE67D08B11C /* library */,
+				D7905EC44A468549D712685E /* rules */,
+				1E3DFBAC8DCF4B75D9A8F878 /* tests */,
 			);
-			name = rules;
-			sourceTree = "<group>";
-		};
-		F5677F534CD0BBE67D08B11C /* library */ = {
-			isa = PBXGroup;
-			children = (
-				A889D4F5A404037DAAE41E2C /* common.pch */,
-			);
-			name = library;
-			sourceTree = "<group>";
-		};
-		F9780F090C099456FA802F03 /* frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				6666B4FAC3B5C464339017A9 /* objc */,
-			);
-			name = frameworks;
+			name = build_bazel_rules_ios;
+			path = ../../..;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -242,7 +251,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D100BF9D72B5F6940F83816B /* main.m in Sources */,
+				5C8EED4DAAF3B4B069337569 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,7 +266,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				486340F1844ADD3B94BFE9F6 /* FooFrameworkTests.m in Sources */,
+				0BD7FD856ED50175FA3D3BC9 /* FooFrameworkTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

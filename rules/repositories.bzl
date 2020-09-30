@@ -127,8 +127,8 @@ native_binary(
     visibility = ["//visibility:public"],
 )
 """,
-        canonical_id = "xcodegen-2.17.0",
-        sha256 = "6d1e4a8617e7d13910366c25d1e3ab475158e91e3071cb17f44e3ea29c9a1a41",
+        canonical_id = "xcodegen-2.17.0-19-g775e14c",
+        sha256 = "5dbda77da860e615e32f80de8c662757e7ccb7e5012c7fa233b137a4baa36c3d",
         strip_prefix = "xcodegen",
-        urls = ["https://github.com/yonaskolb/XcodeGen/releases/download/2.17.0/xcodegen.zip"],
+        urls = ["https://github.com/segiddins/XcodeGen/releases/download/2.17.0-19-g775e14c/xcodegen.zip"],
     )

@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		45E7F8EFCCCC1A9DF4D72E93 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EA28E49F9120D00949E5FAAB /* main.m */; };
-		8172AD24AC6E26E18F4BB8FE /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5873201DE5FA7E56144FE7 /* empty.swift */; };
-		D6D88A405B801B83965A394E /* empty.m in Sources */ = {isa = PBXBuildFile; fileRef = FFEB9EB1C9B6406A04C9EEDD /* empty.m */; };
+		31AA2C5800D29E42C589B56B /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FB08B7C929A64386CDFE06 /* empty.swift */; };
+		83CAB78009AF4F0196136FB6 /* empty.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F973C72CDD8C3C263F6A615 /* empty.m */; };
+		90364CB6CB510200E694DB55 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B78B78C06FA82FF60423814 /* main.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,46 +23,46 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		087F3B42D7BE6F86AB8C54F0 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		1A670BBD3E8C25AB89221850 /* iOS-9.3-AppHost.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "iOS-9.3-AppHost.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		252D1E153AD8984665E68A74 /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = resource_bundle.plist; path = ../../../rules/library/resource_bundle.plist; sourceTree = "<group>"; };
-		4C2573089396ADCB63FBB6FE /* AssetCatalogFixture.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = AssetCatalogFixture.xcassets; path = ../../../rules/test_host_app/AssetCatalogFixture.xcassets; sourceTree = "<group>"; };
-		4E5873201DE5FA7E56144FE7 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = empty.swift; path = "../unit-test/empty.swift"; sourceTree = "<group>"; };
-		527A05AD0BFB9B9E5471D17D /* BUILD.bazel */ = {isa = PBXFileReference; name = BUILD.bazel; path = "../unit-test/BUILD.bazel"; sourceTree = "<group>"; };
-		7623EBE7D0F49CEC82671A64 /* ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ios.entitlements; path = ../../../rules/test_host_app/ios.entitlements; sourceTree = "<group>"; };
-		79E7AD8A4A8CCCE1B4980CEB /* BUILD.bazel */ = {isa = PBXFileReference; name = BUILD.bazel; path = ../../../rules/test_host_app/BUILD.bazel; sourceTree = "<group>"; };
+		39917DE37B353186CF715BF8 /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = resource_bundle.plist; sourceTree = "<group>"; };
+		3F973C72CDD8C3C263F6A615 /* empty.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = empty.m; sourceTree = "<group>"; };
+		4B78B78C06FA82FF60423814 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		52FB08B7C929A64386CDFE06 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
+		640958F271E540FA689954DB /* AssetCatalogFixture.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = AssetCatalogFixture.xcassets; sourceTree = "<group>"; };
+		6AA79D51459F5745C6597549 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		A7A135B2F45AA4AE95B5C366 /* ExplicitHosted.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ExplicitHosted.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		EA28E49F9120D00949E5FAAB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../../../rules/test_host_app/main.m; sourceTree = "<group>"; };
-		ED29AB1B1F4BCEE96C19748E /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = common.pch; path = ../../../rules/library/common.pch; sourceTree = "<group>"; };
-		FFEB9EB1C9B6406A04C9EEDD /* empty.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = empty.m; path = "../unit-test/empty.m"; sourceTree = "<group>"; };
+		D94E8DA21E16E538B8F80977 /* ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ios.entitlements; sourceTree = "<group>"; };
+		E7221F8588A5E2BBC1C40983 /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.pch; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
-		0B5CF4AEC90E36CC75780DCE /* unit-test */ = {
+		3F0ED6F34AF3A58C237AF38E /* rules */ = {
 			isa = PBXGroup;
 			children = (
-				527A05AD0BFB9B9E5471D17D /* BUILD.bazel */,
-				FFEB9EB1C9B6406A04C9EEDD /* empty.m */,
-				4E5873201DE5FA7E56144FE7 /* empty.swift */,
+				E07FD4C0CC80805A04C80894 /* library */,
+				48EC573E873376EF2328B54F /* test_host_app */,
 			);
-			name = "unit-test";
-			sourceTree = "<group>";
-		};
-		332607BCF31A55A4E232E977 /* library */ = {
-			isa = PBXGroup;
-			children = (
-				ED29AB1B1F4BCEE96C19748E /* common.pch */,
-				252D1E153AD8984665E68A74 /* resource_bundle.plist */,
-			);
-			name = library;
+			path = rules;
 			sourceTree = "<group>";
 		};
 		4458650FCF08ECB7D12D6103 = {
 			isa = PBXGroup;
 			children = (
-				DEF4341AB4D0B0E4410D5310 /* rules */,
-				F00067E7E50682821D2C107F /* tests */,
+				E0A6B3D7DB2877F8279F72D1 /* build_bazel_rules_ios */,
 				80B743DAD4870A59BE6681A5 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		48EC573E873376EF2328B54F /* test_host_app */ = {
+			isa = PBXGroup;
+			children = (
+				640958F271E540FA689954DB /* AssetCatalogFixture.xcassets */,
+				087F3B42D7BE6F86AB8C54F0 /* BUILD.bazel */,
+				D94E8DA21E16E538B8F80977 /* ios.entitlements */,
+				4B78B78C06FA82FF60423814 /* main.m */,
+			);
+			path = test_host_app;
 			sourceTree = "<group>";
 		};
 		80B743DAD4870A59BE6681A5 /* Products */ = {
@@ -74,40 +74,49 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		DEF4341AB4D0B0E4410D5310 /* rules */ = {
+		9A72A8B989632B31533CCF07 /* unit-test */ = {
 			isa = PBXGroup;
 			children = (
-				332607BCF31A55A4E232E977 /* library */,
-				E66A304A2AFBA29E06A2C7F4 /* test_host_app */,
+				6AA79D51459F5745C6597549 /* BUILD.bazel */,
+				3F973C72CDD8C3C263F6A615 /* empty.m */,
+				52FB08B7C929A64386CDFE06 /* empty.swift */,
 			);
-			name = rules;
+			path = "unit-test";
 			sourceTree = "<group>";
 		};
-		E66A304A2AFBA29E06A2C7F4 /* test_host_app */ = {
+		A00021A91B77EC95CF688BAA /* ios */ = {
 			isa = PBXGroup;
 			children = (
-				4C2573089396ADCB63FBB6FE /* AssetCatalogFixture.xcassets */,
-				79E7AD8A4A8CCCE1B4980CEB /* BUILD.bazel */,
-				7623EBE7D0F49CEC82671A64 /* ios.entitlements */,
-				EA28E49F9120D00949E5FAAB /* main.m */,
+				9A72A8B989632B31533CCF07 /* unit-test */,
 			);
-			name = test_host_app;
+			path = ios;
 			sourceTree = "<group>";
 		};
-		F00067E7E50682821D2C107F /* tests */ = {
+		DCBB2E5ECC3355E25E5F9E3F /* tests */ = {
 			isa = PBXGroup;
 			children = (
-				FC860E9659513C5FA2ED11FB /* ios */,
+				A00021A91B77EC95CF688BAA /* ios */,
 			);
-			name = tests;
+			path = tests;
 			sourceTree = "<group>";
 		};
-		FC860E9659513C5FA2ED11FB /* ios */ = {
+		E07FD4C0CC80805A04C80894 /* library */ = {
 			isa = PBXGroup;
 			children = (
-				0B5CF4AEC90E36CC75780DCE /* unit-test */,
+				E7221F8588A5E2BBC1C40983 /* common.pch */,
+				39917DE37B353186CF715BF8 /* resource_bundle.plist */,
 			);
-			name = ios;
+			path = library;
+			sourceTree = "<group>";
+		};
+		E0A6B3D7DB2877F8279F72D1 /* build_bazel_rules_ios */ = {
+			isa = PBXGroup;
+			children = (
+				3F0ED6F34AF3A58C237AF38E /* rules */,
+				DCBB2E5ECC3355E25E5F9E3F /* tests */,
+			);
+			name = build_bazel_rules_ios;
+			path = ../../..;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -217,7 +226,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				45E7F8EFCCCC1A9DF4D72E93 /* main.m in Sources */,
+				90364CB6CB510200E694DB55 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,8 +234,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6D88A405B801B83965A394E /* empty.m in Sources */,
-				8172AD24AC6E26E18F4BB8FE /* empty.swift in Sources */,
+				83CAB78009AF4F0196136FB6 /* empty.m in Sources */,
+				31AA2C5800D29E42C589B56B /* empty.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
