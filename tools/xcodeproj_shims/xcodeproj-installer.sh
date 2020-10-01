@@ -43,7 +43,10 @@ cp "$(ideworkspacechecks_plist_short_path)" "$tmp_dest/project.xcworkspace/xcsha
 
 chmod -R +w "${tmp_dest}"
 
+# if installing into the root of the workspace, remove the path entry entirely
+sed -i.bak -E -e 's|^([[:space:]]*path = )../../..;$|\1.;|g' "${tmp_dest}/project.pbxproj"
 # always trim three ../ from path, since that's "bazel-out/darwin-fastbuild/bin"
 sed -i.bak -E -e 's|([ "])../../../|\1|g' "${tmp_dest}/project.pbxproj"
 rm "${tmp_dest}/project.pbxproj.bak"
+
 rsync --recursive --quiet --copy-links "${tmp_dest}" "${dest}"
