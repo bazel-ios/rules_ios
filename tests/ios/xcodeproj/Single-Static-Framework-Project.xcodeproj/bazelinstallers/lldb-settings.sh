@@ -11,10 +11,15 @@ set -euo pipefail
 # the paths in the debug info. This lldb setting ensures that _project relative_
 # paths are remapped to _project absolute_ paths.
 #
+# The platform settings one points the current working directory (cwd) to workspace root.
+# This is needed for features relying on lldb remote debugging, such as `oso_prefix_is_pwd`.
+#
 # NOTE: In order to use this, add this line to `~/.lldbinit`:
 #
 #     command source ~/.lldbinit-source-map
 cat <<-END > ~/.lldbinit-source-map
+platform settings -w "$BAZEL_WORKSPACE_ROOT/"
+
 settings set target.source-map ./ "$BAZEL_WORKSPACE_ROOT/"
 settings set target.sdk-path $SDKROOT
 settings set target.swift-framework-search-paths $FRAMEWORK_SEARCH_PATHS
