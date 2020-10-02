@@ -1,4 +1,4 @@
 @import Foundation;
 
-@interface FW: NSObject
+@interface FW2: NSObject
 @end
