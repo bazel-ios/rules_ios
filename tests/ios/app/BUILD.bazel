@@ -6,6 +6,14 @@ apple_framework(
     name = "FW",
     srcs = glob(["FW/*"]),
     private_headers = glob(["FW/*_Private.*"]),
+    visibility = ["//visibility:public"],
+)
+
+apple_framework(
+    name = "FW2",
+    srcs = glob(["FW2/*"]),
+    deps = [":FW"],
+    visibility = ["//visibility:public"],
 )
 
 apple_framework(
@@ -25,8 +33,10 @@ ios_application(
     deps = [
         ":Empty",
         ":FW",
+        ":FW2",
         ":OnlySources",
     ],
+    visibility = ["//visibility:public"],
 )
 
 ios_application(

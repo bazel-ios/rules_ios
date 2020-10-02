@@ -115,6 +115,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             if test_host_target:
                 test_host_appname = test_host_target[_TargetInfo].direct_targets[0].name
 
+        framework_includes = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "framework_includes"))
         info = struct(
             name = bundle_info.bundle_name,
             bundle_id = bundle_info.bundle_id,
@@ -124,7 +125,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
             non_arc_srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "non_arc_srcs")),
             asset_srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "asset_srcs")),
-            framework_includes = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "framework_includes")),
+            framework_includes = framework_includes,
             cc_defines = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "cc_defines")),
             swift_defines = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "swift_defines")),
             build_files = depset(_srcs_info_build_files(ctx), transitive = _get_attr_values_for_name(deps, _SrcsInfo, "build_files")),
@@ -397,7 +398,7 @@ env -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC {bazel_build_target_na
 $BAZEL_INSTALLER
 """
 
-def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots):
+def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_transitive_targets):
     """Helper method to generate dicts for targets and schemes inside Xcode context
 
     Args:
@@ -441,18 +442,20 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots):
             "CLANG_ENABLE_OBJC_ARC": "YES",
         }
 
-        # Just like framework, we need to have absolute path to the hmap files
-        # so that Objc files can correctly import headers
-        target_settings["HEADER_SEARCH_PATHS"] = _joined_header_search_paths(
-            target_info.hmap_paths.to_list(),
-        )
+        all_hmaps = []
+        for at in all_transitive_targets:
+          if at.name == target_name:
+            all_hmaps.extend(at.hmap_paths.to_list())
+        target_settings["HEADER_SEARCH_PATHS"] = _joined_header_search_paths(all_hmaps)
 
         # Ensure Xcode will resolve references to the XCTest framework.
         framework_search_paths = ["$(PLATFORM_DIR)/Developer/Library/Frameworks"]
-        for fi in target_info.framework_includes.to_list():
-            if fi[0] != "/":
-                fi = "$BAZEL_WORKSPACE_ROOT/%s" % fi
-            framework_search_paths.append("\"%s\"" % fi)
+        for at in all_transitive_targets:
+          if at.name == target_name:
+            for fi in at.framework_includes.to_list():
+                if fi[0] != "/":
+                    fi = "$BAZEL_WORKSPACE_ROOT/%s" % fi
+                framework_search_paths.append("\"%s\"" % fi)
         target_settings["FRAMEWORK_SEARCH_PATHS"] = " ".join(framework_search_paths)
 
         macros = ["\"%s\"" % d for d in target_info.cc_defines.to_list()]
@@ -539,6 +542,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots):
     return (xcodeproj_targets_by_name, xcodeproj_schemes_by_name)
 
 def _xcodeproj_impl(ctx):
+
     xcodegen_jsonfile = ctx.actions.declare_file(
         "%s-xcodegen.json" % ctx.attr.name,
     )
@@ -599,7 +603,7 @@ def _xcodeproj_impl(ctx):
         for t in _get_attr_values_for_name(ctx.attr.deps, _TargetInfo, "direct_targets"):
             targets.extend(t)
 
-    (xcodeproj_targets_by_name, xcodeproj_schemes_by_name) = _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots)
+    (xcodeproj_targets_by_name, xcodeproj_schemes_by_name) = _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_transitive_targets)
 
     project_file_groups = [
         {"path": paths.join(src_dot_dots, f.short_path), "optional": True}
