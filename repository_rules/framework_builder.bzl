@@ -15,9 +15,6 @@ def _create_buildfile_content(root, frameworks_subpath):
     binaries_path = root
     for element in frameworks_subpath.split("/"):
         binaries_path = binaries_path.get_child(element)
-        nested_framework_binaries_path = binaries_path.get_child("Frameworks")
-        if nested_framework_binaries_path.exists:
-            binaries_path = nested_framework_binaries_path.readdir()[0]
 
     if binaries_path.exists:
         frameworks = [path for path in binaries_path.readdir() if str(path).endswith(".framework")]
@@ -167,7 +164,16 @@ def _cocoapods_impl(ctx):
     prebuild_subpath = "Pods/_Prebuild/GeneratedFrameworks"
     for path in ctx.path(prebuild_subpath).readdir():
         filegroups = _create_buildfile_content(wd, prebuild_subpath + "/" + path.basename)
-        buildfile_content = buildfile_content + filegroups
+        nested_path = prebuild_subpath + "/" + path.basename + "/Frameworks"
+        nested_filegroups = _create_buildfile_content(wd, nested_path)
+        nested_framework_path = ctx.path(nested_path)
+        if nested_framework_path.exists:
+            for nested_subpath in nested_framework_path.readdir():
+                filegroups = filegroups + _create_buildfile_content(
+                    wd,
+                    prebuild_subpath + "/" + path.basename + "/Frameworks/" + nested_subpath.basename,
+                )
+        buildfile_content = buildfile_content + filegroups + nested_filegroups
 
     ctx.file(
         "BUILD.bazel",
