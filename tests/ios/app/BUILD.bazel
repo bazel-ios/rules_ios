@@ -12,8 +12,8 @@ apple_framework(
 apple_framework(
     name = "FW2",
     srcs = glob(["FW2/*"]),
-    deps = [":FW"],
     visibility = ["//visibility:public"],
+    deps = [":FW"],
 )
 
 apple_framework(
@@ -30,13 +30,13 @@ ios_application(
     srcs = ["App/main.m"],
     bundle_id = "com.example.app",
     minimum_os_version = "10.0",
+    visibility = ["//visibility:public"],
     deps = [
         ":Empty",
         ":FW",
         ":FW2",
         ":OnlySources",
     ],
-    visibility = ["//visibility:public"],
 )
 
 ios_application(

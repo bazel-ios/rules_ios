@@ -34,9 +34,9 @@ xcodeproj(
     generate_schemes_for_product_types = ["application"],
     include_transitive_targets = False,
     deps = [
+        "//tests/ios/app:App",
         "//tests/ios/app:FW",
         "//tests/ios/app:FW2",
-        "//tests/ios/app:App",
     ],
 )
 
@@ -46,12 +46,11 @@ xcodeproj(
     generate_schemes_for_product_types = ["application"],
     include_transitive_targets = True,
     deps = [
+        "//tests/ios/app:App",
         "//tests/ios/app:FW",
         "//tests/ios/app:FW2",
-        "//tests/ios/app:App",
     ],
 )
-
 
 # Test that the test_host is included when using "include_transitive_targets = True"
 xcodeproj(

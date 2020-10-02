@@ -252,7 +252,22 @@ def _exclude_swift_incompatible_define(define):
         return token
     return None
 
-def _joined_header_search_paths(hmap_paths):
+def _fw_search_paths_for_target(target_name, all_transitive_targets):
+    # Ensure Xcode will resolve references to the XCTest framework.
+    framework_search_paths = ["$(PLATFORM_DIR)/Developer/Library/Frameworks"]
+
+    # all_transitive_targets includes all the targets built with their different configurations.
+    # Some configurations are only applied when the target is reached transitively
+    # (e.g. via an app or test that applies and propagates new build settings).
+    for at in all_transitive_targets:
+        if at.name == target_name:
+            for fi in at.framework_includes.to_list():
+                if fi[0] != "/":
+                    fi = "$BAZEL_WORKSPACE_ROOT/%s" % fi
+                framework_search_paths.append("\"%s\"" % fi)
+    return " ".join(framework_search_paths)
+
+def _header_search_paths_for_target(target_name, all_transitive_targets):
     """Helper method transforming valid hmap paths into full absolute paths and concat together
 
     Args:
@@ -262,7 +277,15 @@ def _joined_header_search_paths(hmap_paths):
         One string joined by absolute hmap paths, each path is quoted and separated by a space
     """
     header_search_paths = []
-    for hmap in hmap_paths:
+    all_hmaps = []
+
+    # all_transitive_targets includes all the targets built with their different configurations.
+    # Some configurations are only applied when the target is reached transitively
+    # (e.g. via an app or test that applies and propagates new build settings).
+    for at in all_transitive_targets:
+        if at.name == target_name:
+            all_hmaps.extend(at.hmap_paths.to_list())
+    for hmap in all_hmaps:
         if len(hmap) == 0:
             continue
         if hmap != "." and hmap[0] != "/":
@@ -442,21 +465,9 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
             "CLANG_ENABLE_OBJC_ARC": "YES",
         }
 
-        all_hmaps = []
-        for at in all_transitive_targets:
-          if at.name == target_name:
-            all_hmaps.extend(at.hmap_paths.to_list())
-        target_settings["HEADER_SEARCH_PATHS"] = _joined_header_search_paths(all_hmaps)
+        target_settings["HEADER_SEARCH_PATHS"] = _header_search_paths_for_target(target_name, all_transitive_targets)
 
-        # Ensure Xcode will resolve references to the XCTest framework.
-        framework_search_paths = ["$(PLATFORM_DIR)/Developer/Library/Frameworks"]
-        for at in all_transitive_targets:
-          if at.name == target_name:
-            for fi in at.framework_includes.to_list():
-                if fi[0] != "/":
-                    fi = "$BAZEL_WORKSPACE_ROOT/%s" % fi
-                framework_search_paths.append("\"%s\"" % fi)
-        target_settings["FRAMEWORK_SEARCH_PATHS"] = " ".join(framework_search_paths)
+        target_settings["FRAMEWORK_SEARCH_PATHS"] = _fw_search_paths_for_target(target_name, all_transitive_targets)
 
         macros = ["\"%s\"" % d for d in target_info.cc_defines.to_list()]
         macros.append("$(inherited)")
@@ -542,7 +553,6 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
     return (xcodeproj_targets_by_name, xcodeproj_schemes_by_name)
 
 def _xcodeproj_impl(ctx):
-
     xcodegen_jsonfile = ctx.actions.declare_file(
         "%s-xcodegen.json" % ctx.attr.name,
     )
