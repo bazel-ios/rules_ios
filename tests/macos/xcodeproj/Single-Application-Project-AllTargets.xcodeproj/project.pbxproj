@@ -364,6 +364,7 @@
 				SWIFT_EXEC = "$BAZEL_STUBS_DIR/swiftc-stub";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_VERSION = 5;
+				USE_HEADERMAP = 0;
 			};
 			name = Debug;
 		};
@@ -391,6 +392,7 @@
 				SWIFT_EXEC = "$BAZEL_STUBS_DIR/swiftc-stub";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_VERSION = 5;
+				USE_HEADERMAP = 0;
 			};
 			name = Release;
 		};

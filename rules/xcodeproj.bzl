@@ -571,7 +571,10 @@ def _xcodeproj_impl(ctx):
         "groupSortPosition": "none",
         "settingPresets": "none",
     }
-    proj_settings_base = {
+    proj_settings_base = {}
+
+    # User defined macro for Bazel only
+    proj_settings_base.update({
         "BAZEL_BUILD_EXEC": "$BAZEL_STUBS_DIR/build-wrapper",
         "BAZEL_OUTPUT_PROCESSOR": "$BAZEL_STUBS_DIR/output-processor.rb",
         "BAZEL_PATH": ctx.attr.bazel_path,
@@ -581,18 +584,33 @@ def _xcodeproj_impl(ctx):
         "BAZEL_INSTALLERS_DIR": "$PROJECT_FILE_PATH/bazelinstallers",
         "BAZEL_INSTALLER": "$BAZEL_INSTALLERS_DIR/%s" % ctx.executable.installer.basename,
         "BAZEL_EXECUTION_LOG_ENABLED": False,
+    })
+
+    # Stubbding main executable used by xcode so no actual building happening on Xcode side
+    proj_settings_base.update({
         "CC": "$BAZEL_STUBS_DIR/clang-stub",
         "CXX": "$CC",
         "CLANG_ANALYZER_EXEC": "$CC",
-        "CODE_SIGNING_ALLOWED": False,
-        "DEBUG_INFORMATION_FORMAT": "dwarf",
-        "DONT_RUN_SWIFT_STDLIB_TOOL": True,
         "LD": "$BAZEL_STUBS_DIR/ld-stub",
         "LIBTOOL": "/usr/bin/true",
         "SWIFT_EXEC": "$BAZEL_STUBS_DIR/swiftc-stub",
+    })
+
+    # Change of settings to help params used for compiling individual files to match closer to Bazel
+    proj_settings_base.update({
+        "USE_HEADERMAP": False,
+    })
+
+    # Other misc. settings changes
+    proj_settings_base.update({
+        "CODE_SIGNING_ALLOWED": False,
+        "DEBUG_INFORMATION_FORMAT": "dwarf",
+        "DONT_RUN_SWIFT_STDLIB_TOOL": True,
         "SWIFT_OBJC_INTERFACE_HEADER_NAME": "",
         "SWIFT_VERSION": 5,
-    }
+    })
+
+    # For debugging config only:
     proj_settings_debug = {
         "GCC_PREPROCESSOR_DEFINITIONS": "DEBUG",
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "DEBUG",
