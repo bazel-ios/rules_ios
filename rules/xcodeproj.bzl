@@ -252,7 +252,7 @@ def _exclude_swift_incompatible_define(define):
         return token
     return None
 
-def _fw_search_paths_for_target(target_name, all_transitive_targets):
+def _framework_search_paths_for_target(target_name, all_transitive_targets):
     # Ensure Xcode will resolve references to the XCTest framework.
     framework_search_paths = ["$(PLATFORM_DIR)/Developer/Library/Frameworks"]
 
@@ -467,7 +467,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
 
         target_settings["HEADER_SEARCH_PATHS"] = _header_search_paths_for_target(target_name, all_transitive_targets)
 
-        target_settings["FRAMEWORK_SEARCH_PATHS"] = _fw_search_paths_for_target(target_name, all_transitive_targets)
+        target_settings["FRAMEWORK_SEARCH_PATHS"] = _framework_search_paths_for_target(target_name, all_transitive_targets)
 
         macros = ["\"%s\"" % d for d in target_info.cc_defines.to_list()]
         macros.append("$(inherited)")
