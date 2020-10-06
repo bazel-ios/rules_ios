@@ -165,7 +165,12 @@ def xcconfig_unit_test_suite():
             assert_xcconfig(
                 name = "option_with_unknown_command_line",
                 xcconfig = {"OTHER_CFLAGS": ["-IFOO"]},
-                error = 'OTHER_CFLAGS: unable to extract value for ["-IFOO"] in com.apple.compilers.llvm.clang.1_0',
+                expected = {},
+            ),
+            assert_xcconfig(
+                name = "only_used_as_condition",
+                xcconfig = {"APPLICATION_EXTENSION_API_ONLY": "YES"},
+                expected = {"linkopts": ["-fapplication-extension", "-fapplication-extension"], "objc_copts": ["-fapplication-extension"], "swift_copts": ["-application-extension"]},
             ),
             assert_xcconfig(
                 name = "option_with_inherited",
@@ -177,11 +182,10 @@ def xcconfig_unit_test_suite():
                 xcconfig = {"GCC_PREPROCESSOR_DEFINITIONS": ["DISPLAY_VERSION=1.0.0-beta.1", "SDK_NAME=WHY WOULD YOU ADD SPACES"]},
                 expected = {"objc_copts": ["-D'DISPLAY_VERSION=1.0.0-beta.1'", "-D'SDK_NAME=WHY WOULD YOU ADD SPACES'"]},
             ),
-            # TODO: we should eventually support conditioned vars somehow
             assert_xcconfig(
-                name = "conditioned_option_unsupported",
+                name = "conditioned_option",
                 xcconfig = {"CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTEGER": "YES"},
-                error = 'CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTEGER: option specifies a condition ("$(CLANG_UNDEFINED_BEHAVIOR_SANITIZER) == YES"), which is currently unsupported',
+                expected = {},
             ),
         ],
     )

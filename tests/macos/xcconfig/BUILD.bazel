@@ -48,4 +48,15 @@ apple_framework(
     },
 )
 
+apple_framework(
+    name = "used_as_condition_xcconfig",
+    srcs = [
+        "objc_imports_swift_internal.m",
+        "swift_internal.swift",
+    ],
+    xcconfig = {
+        "APPLICATION_EXTENSION_API_ONLY": "YES",
+    },
+)
+
 xcconfig_unit_test_suite()
