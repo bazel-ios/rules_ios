@@ -1,4 +1,5 @@
-# foo
+# Extracted from Xcode 11.6
+# To update, in rules_ios run `bazel run data_generators:extract_xcspecs`
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_ARCHS__Condition(xcconfigs, id_configs):
     # $(USE_LLVM_TARGET_TRIPLES_FOR_CLANG) == YES

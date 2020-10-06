@@ -57,6 +57,9 @@ def _add_copts_from_option(xcspec, name, option, value, value_escaper, xcconfigs
         used_user_config = used_user_config or condition_used_user_config
 
     if not used_user_config:
+        # the point of this is to not pollute copts with all of xcode's defaults.
+        # only take into account settings that the user's explicit config have influenced
+        # (e.g. their config was used in the conditional or default value, if not the value for the setting itself)
         return
 
     if _type == "Boolean":
