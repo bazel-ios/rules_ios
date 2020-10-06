@@ -49,7 +49,7 @@ jobs:
           set -euo pipefail
           rm -rf tests/macos/xcodeproj/*.xcodeproj
           bazelisk clean
-          bazelisk query 'kind(xcodeproj, tests/macos/xcodeproj/...)' | xargs -n 1 bazelisk run
+          bazelisk query 'kind(xcodeproj, tests/macos/xcodeproj/...)' | xargs -n 1 bazelisk run --//rules:local_debug_options_enabled
           bazelisk query 'attr(executable, 1, kind(genrule, tests/macos/xcodeproj/...))' | xargs -n 1 bazelisk run
           git diff --exit-code tests/macos/xcodeproj
       - name: Run Xcode builds
@@ -68,7 +68,7 @@ jobs:
           set -euo pipefail
           rm -rf tests/ios/xcodeproj/*.xcodeproj
           bazelisk clean
-          bazelisk query 'kind(xcodeproj, tests/ios/xcodeproj/...)' | xargs -n 1 bazelisk run
+          bazelisk query 'kind(xcodeproj, tests/ios/xcodeproj/...)' | xargs -n 1 bazelisk run --//rules:local_debug_options_enabled
           bazelisk query 'attr(executable, 1, kind(genrule, tests/ios/xcodeproj/...))' | xargs -n 1 bazelisk run
           git diff --exit-code tests/ios/xcodeproj
       - name: Run pre build checks
