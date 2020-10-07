@@ -8,9 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		045D4161C1AD7DBC32E8B780 /* NonArcObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EB0D04543A3924BA34C4E72B /* NonArcObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		2530CD9920C75C7CC2BE6EC7 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8309CFF8A1900D3AB1BF293D /* test.swift */; };
-		92A134A20F5F9E93BCB6F756 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 705989AC65B3703138E736BB /* main.m */; };
-		EC6016D70E0EEF1F8C1B0F2D /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8309CFF8A1900D3AB1BF293D /* test.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -255,7 +252,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2530CD9920C75C7CC2BE6EC7 /* test.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,7 +259,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92A134A20F5F9E93BCB6F756 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,7 +267,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				045D4161C1AD7DBC32E8B780 /* NonArcObject.m in Sources */,
-				EC6016D70E0EEF1F8C1B0F2D /* test.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
