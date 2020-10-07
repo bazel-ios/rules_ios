@@ -6,12 +6,6 @@
 	objectVersion = 51;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		31AA2C5800D29E42C589B56B /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FB08B7C929A64386CDFE06 /* empty.swift */; };
-		83CAB78009AF4F0196136FB6 /* empty.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F973C72CDD8C3C263F6A615 /* empty.m */; };
-		90364CB6CB510200E694DB55 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B78B78C06FA82FF60423814 /* main.m */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXContainerItemProxy section */
 		F38C65FC54D7CD052E02657E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -226,7 +220,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				90364CB6CB510200E694DB55 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,8 +227,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83CAB78009AF4F0196136FB6 /* empty.m in Sources */,
-				31AA2C5800D29E42C589B56B /* empty.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

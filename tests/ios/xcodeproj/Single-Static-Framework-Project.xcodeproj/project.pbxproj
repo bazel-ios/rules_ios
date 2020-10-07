@@ -6,11 +6,6 @@
 	objectVersion = 51;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		0BD7FD856ED50175FA3D3BC9 /* FooFrameworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 091655034CF618D208C22AE8 /* FooFrameworkTests.m */; };
-		5C8EED4DAAF3B4B069337569 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7A2F537C999952921627A8 /* main.m */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
 		091655034CF618D208C22AE8 /* FooFrameworkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FooFrameworkTests.m; sourceTree = "<group>"; };
 		11B98E6654D00F1E74B2DA47 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
@@ -251,7 +246,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5C8EED4DAAF3B4B069337569 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,7 +260,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0BD7FD856ED50175FA3D3BC9 /* FooFrameworkTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

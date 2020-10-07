@@ -6,16 +6,6 @@
 	objectVersion = 51;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		4D9FC7A3A45FAD1826CE314F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ECF1D7133544DD5E82A3EB0 /* main.m */; };
-		8B8703078ED965C24F7DFC6D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 211B0D62D65A5D8BEFE42153 /* main.m */; };
-		9C997105C8FCCC97A52F3C37 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF21FC7C23005F0603AD4F0 /* test.swift */; };
-		A92FEA9E7CEAA5C1D707216B /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = EC2BF9F658BA7B0FF93BA215 /* test.m */; };
-		C61986BF5CBA4DAEAF33BE91 /* empty.m in Sources */ = {isa = PBXBuildFile; fileRef = 018DA4ABD245EA72FEA9BA46 /* empty.m */; };
-		C6B1D1CBC7730A53A2C04E0D /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5478D8BA2BE2A548270A80 /* empty.swift */; };
-		E676560B3EE63A86606530C8 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AC323968F3E7DC9BAFEC85 /* empty.swift */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXContainerItemProxy section */
 		1DC2C8510A05B48300816294 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -362,8 +352,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A92FEA9E7CEAA5C1D707216B /* test.m in Sources */,
-				9C997105C8FCCC97A52F3C37 /* test.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,8 +359,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C61986BF5CBA4DAEAF33BE91 /* empty.m in Sources */,
-				C6B1D1CBC7730A53A2C04E0D /* empty.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -380,8 +366,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E676560B3EE63A86606530C8 /* empty.swift in Sources */,
-				4D9FC7A3A45FAD1826CE314F /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -389,7 +373,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B8703078ED965C24F7DFC6D /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
