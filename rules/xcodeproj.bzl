@@ -425,6 +425,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots):
         compiled_sources = [{
             "path": paths.join(src_dot_dots, s.short_path),
             "optional": True,
+            "buildPhase": "none",
         } for s in target_info.srcs.to_list()]
         compiled_non_arc_sources = [{
             "path": paths.join(src_dot_dots, s.short_path),
