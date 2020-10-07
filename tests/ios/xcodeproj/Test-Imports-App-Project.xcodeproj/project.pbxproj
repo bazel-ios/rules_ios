@@ -33,7 +33,6 @@
 		4EA47E87D37B93163DC37DFE /* Header2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header2.h; sourceTree = "<group>"; };
 		4ED99215913B1CD2AA84B255 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
 		632CFB9DFB491CE5041EE814 /* TestStickers.xcstickers */ = {isa = PBXFileReference; lastKnownFileType = folder.stickers; path = TestStickers.xcstickers; sourceTree = "<group>"; };
-		70E27FA8E54946025994BBF5 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		B3D32E19E3BA9A9FCC8FCBCF /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.pch; sourceTree = "<group>"; };
 		B4CD841B3F2A7DEE174D9413 /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header.h; sourceTree = "<group>"; };
 		B776E1DCA016E54FFA3DD126 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -108,7 +107,6 @@
 		52753EA7175AA78967732213 /* rules */ = {
 			isa = PBXGroup;
 			children = (
-				70E27FA8E54946025994BBF5 /* BUILD.bazel */,
 				69BCA59A4DB8984153B811AA /* library */,
 			);
 			path = rules;
@@ -345,7 +343,7 @@
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-87b21033b2ac/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e11e4ada49a5/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -365,7 +363,7 @@
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-87b21033b2ac/bin/tests/ios/unit-test/test-imports-app/SomeFramework\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e11e4ada49a5/bin/tests/ios/unit-test/test-imports-app/SomeFramework\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
@@ -385,7 +383,7 @@
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-87b21033b2ac/bin/tests/ios/unit-test/test-imports-app/SomeFramework\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e11e4ada49a5/bin/tests/ios/unit-test/test-imports-app/SomeFramework\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
@@ -405,7 +403,7 @@
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-87b21033b2ac/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e11e4ada49a5/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
