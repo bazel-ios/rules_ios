@@ -2,7 +2,6 @@ load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo")
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//rules:hmap.bzl", "HeaderMapInfo")
-load("//rules:transition_support.bzl", "transition_support")
 
 def _get_attr_values_for_name(deps, provider, field):
     return [
@@ -674,11 +673,10 @@ def _xcodeproj_impl(ctx):
 xcodeproj = rule(
     implementation = _xcodeproj_impl,
     doc = """\
-Generates a Xcode project file (.xcodeproj) with a reasonable set of defaults
+Generates a Xcode project file (.xcodeproj) with a reasonable set of defaults. Specify the --@build_bazel_rules_ios//rules:local_debug_options_enabled when generating the project to ensure debugging of swiftmodules works.
 Tags for configuration:
     xcodeproj-ignore-as-target: Add this to a rule declaration so that this rule will not generates a scheme for this target
 """,
-    cfg = transition_support.force_swift_local_debug_options_transition,
     attrs = {
         "deps": attr.label_list(mandatory = True, allow_empty = False, providers = [], aspects = [_xcodeproj_aspect]),
         "include_transitive_targets": attr.bool(default = False, mandatory = False),
@@ -705,10 +703,6 @@ https://www.rubydoc.info/github/CocoaPods/Xcodeproj/Xcodeproj/Constants
         "installer": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:installer"), cfg = "host"),
         "build_wrapper": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:build-wrapper"), cfg = "host"),
         "additional_files": attr.label_list(allow_files = True, allow_empty = True, default = [], mandatory = False),
-        "_allowlist_function_transition": attr.label(
-            default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
-            doc = "Needed to allow this rule to have an incoming edge configuration transition.",
-        ),
     },
     executable = True,
 )

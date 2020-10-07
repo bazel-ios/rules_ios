@@ -118,22 +118,7 @@ _apple_rule_transition = transition(
     ],
 )
 
-def _force_swift_local_debug_options_transition_impl(settings, attr):
-    _ignore = (settings, attr)
-    return [
-        {"@build_bazel_rules_ios//rules:local_debug_options_enabled": True},
-    ]
-
-_force_swift_local_debug_options_transition = transition(
-    implementation = _force_swift_local_debug_options_transition_impl,
-    inputs = [],
-    outputs = [
-        "@build_bazel_rules_ios//rules:local_debug_options_enabled",
-    ],
-)
-
 transition_support = struct(
     apple_rule_transition = _apple_rule_transition,
     current_apple_platform = _current_apple_platform,
-    force_swift_local_debug_options_transition = _force_swift_local_debug_options_transition,
 )
