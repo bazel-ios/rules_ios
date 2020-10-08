@@ -74,17 +74,13 @@ def _make_headermap_impl(ctx):
     )
     cc_info_provider = CcInfo(compilation_context = objc_provider.compilation_context)
 
-    contains_headers = False
-    for h in hdrs_lists:
-        if len(h) > 0:
-            contains_headers = True
-
     providers = [
         objc_provider,
         cc_info_provider,
     ]
 
-    if contains_headers:
+    hdrs_lists = [l for l in hdrs_lists if l]
+    if len(hdrs_lists) > 0:
         providers.append(HeaderMapInfo(
             files = depset([ctx.outputs.headermap]),
         ))
