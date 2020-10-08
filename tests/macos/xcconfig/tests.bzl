@@ -187,5 +187,10 @@ def xcconfig_unit_test_suite():
                 xcconfig = {"CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTEGER": "YES"},
                 expected = {},
             ),
+            assert_xcconfig(
+                name = "product_module_name",
+                xcconfig = {"PRODUCT_MODULE_NAME": "BIG_BAD_MODULE"},
+                expected = {},
+            ),
         ],
     )

@@ -66,8 +66,11 @@ ids = (
 )
 
 header = """
-# Extracted from Xcode {xcode_version}
-# To update, in rules_ios run `bazel run data_generators:extract_xcspecs`
+############################################################################
+#                   THIS IS GENERATED CODE                                 #
+# Extracted from Xcode {xcode_version}                                     #
+# To update, in rules_ios run `bazel run data_generators:extract_xcspecs`  #
+############################################################################
 """.format(xcode_version=xcode_version)
 
 xcpec_evals_bzl_contents = """
@@ -159,7 +162,7 @@ def add_eval(id, name, key, string, eval_methods):
     method_name = '__'.join(
         (id.replace('.', '_'), name.replace('.', '_'), key))
     if method_name in eval_methods:
-        raise "Dup"
+        raise "Duplicate method {}".format(method_name)
 
     eval_methods[method_name] = """
 def _{method_name}(xcconfigs, id_configs):

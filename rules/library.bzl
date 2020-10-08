@@ -296,7 +296,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     namespace = module_name if namespace_is_module_name else name
     module_map = kwargs.pop("module_map", None)
     cc_copts = kwargs.pop("cc_copts", [])
-    swift_copts = list(kwargs.pop("swift_copts", []))
+    swift_copts = kwargs.pop("swift_copts", [])
     ibtool_copts = kwargs.pop("ibtool_copts", [])
     momc_copts = kwargs.pop("momc_copts", [])
     mapc_copts = kwargs.pop("mapc_copts", [])
