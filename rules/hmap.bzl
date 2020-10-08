@@ -76,8 +76,8 @@ def _make_headermap_impl(ctx):
 
     contains_headers = False
     for h in hdrs_lists:
-      if len(h) > 0:
-        contains_headers = True
+        if len(h) > 0:
+            contains_headers = True
 
     providers = [
         objc_provider,
@@ -85,9 +85,9 @@ def _make_headermap_impl(ctx):
     ]
 
     if contains_headers:
-      providers.append(HeaderMapInfo(
-          files = depset([ctx.outputs.headermap]),
-      ))
+        providers.append(HeaderMapInfo(
+            files = depset([ctx.outputs.headermap]),
+        ))
 
     return providers
 
