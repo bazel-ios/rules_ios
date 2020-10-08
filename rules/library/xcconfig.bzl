@@ -175,6 +175,7 @@ def settings_from_xcconfig(xcconfig):
         "CLANG_MODULES_PRUNE_AFTER",  # we don't want to prune the ephemeral module cache
         "CLANG_MODULES_PRUNE_INTERVAL",  # we don't want to prune the ephemeral module cache
         "IBC_MODULE",  # derived by rules_apple
+        "LD_LTO_OBJECT_FILE",  # handled by objc_library
         "MAPC_MODULE",  # derived by rules_apple
         "MOMC_MODULE",  # derived by rules_apple
         "SWIFT_MODULE_NAME",  # has its own attr for swift_library
