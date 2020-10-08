@@ -28,6 +28,30 @@ xcodeproj(
     ],
 )
 
+xcodeproj(
+    name = "Test-MultipleConfigs-Project",
+    bazel_path = "bazelisk",
+    generate_schemes_for_product_types = ["application"],
+    include_transitive_targets = False,
+    deps = [
+        "//tests/ios/app:App",
+        "//tests/ios/app:FW",
+        "//tests/ios/app:FW2",
+    ],
+)
+
+xcodeproj(
+    name = "Test-MultipleConfigs-Project-WithTransitiveFlag",
+    bazel_path = "bazelisk",
+    generate_schemes_for_product_types = ["application"],
+    include_transitive_targets = True,
+    deps = [
+        "//tests/ios/app:App",
+        "//tests/ios/app:FW",
+        "//tests/ios/app:FW2",
+    ],
+)
+
 # Test that the test_host is included when using "include_transitive_targets = True"
 xcodeproj(
     name = "Test-With-Host-App",

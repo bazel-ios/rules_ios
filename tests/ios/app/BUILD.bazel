@@ -5,7 +5,17 @@ load("//rules:test.bzl", "ios_unit_test")
 apple_framework(
     name = "FW",
     srcs = glob(["FW/*"]),
+    platforms = {"ios": "10.0"},
     private_headers = glob(["FW/*_Private.*"]),
+    visibility = ["//visibility:public"],
+)
+
+apple_framework(
+    name = "FW2",
+    srcs = glob(["FW2/*"]),
+    platforms = {"ios": "10.0"},
+    visibility = ["//visibility:public"],
+    deps = [":FW"],
 )
 
 apple_framework(
@@ -22,9 +32,24 @@ ios_application(
     srcs = ["App/main.m"],
     bundle_id = "com.example.app",
     minimum_os_version = "10.0",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":FW",
+        ":FW2",
+        ":OnlySources",
+    ],
+)
+
+ios_application(
+    name = "AppWithEmptyDep",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    minimum_os_version = "10.0",
+    visibility = ["//visibility:public"],
     deps = [
         ":Empty",
         ":FW",
+        ":FW2",
         ":OnlySources",
     ],
 )

@@ -74,13 +74,18 @@ def _make_headermap_impl(ctx):
     )
     cc_info_provider = CcInfo(compilation_context = objc_provider.compilation_context)
 
-    return [
-        HeaderMapInfo(
-            files = depset([ctx.outputs.headermap]),
-        ),
+    providers = [
         objc_provider,
         cc_info_provider,
     ]
+
+    hdrs_lists = [l for l in hdrs_lists if l]
+    if len(hdrs_lists) > 0:
+        providers.append(HeaderMapInfo(
+            files = depset([ctx.outputs.headermap]),
+        ))
+
+    return providers
 
 # Derive a headermap from transitive headermaps
 # hdrs: a file group containing headers for this rule
