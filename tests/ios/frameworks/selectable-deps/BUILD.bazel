@@ -1,0 +1,37 @@
+load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
+load("//rules:framework.bzl", "apple_framework")
+
+string_flag(
+    name = "build-type",
+    build_setting_default = "debug",
+)
+
+config_setting(
+    name = "release",
+    flag_values = {
+        ":build-type": "release",
+    },
+)
+
+apple_framework(
+    name = "SelectableFramework",
+    srcs = [
+        "SelectableFramework/FooFramework.h",
+        "SelectableFramework/FooFramework.m",
+    ],
+    platforms = {"ios": "10.0"},
+    visibility = ["//visibility:public"],
+)
+
+apple_framework(
+    name = "SelectableDepsFramework",
+    srcs = [
+        "main.m",
+    ],
+    platforms = {"ios": "10.0"},
+    visibility = ["//visibility:public"],
+    deps = select({
+        ":release": [":SelectableFramework"],
+        "//conditions:default": [":SelectableFramework"],
+    }),
+)
