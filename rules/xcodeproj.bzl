@@ -148,7 +148,7 @@ def _xcodeproj_aspect_impl(target, ctx):
                     swift_defines = info.swift_defines,
                     build_files = depset(_srcs_info_build_files(ctx)),
                     direct_srcs = [],
-                    hmap_paths = depset(hmap_paths),
+                    hmap_paths = info.hmap_paths,
                 ),
             )
 
