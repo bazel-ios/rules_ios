@@ -192,5 +192,10 @@ def xcconfig_unit_test_suite():
                 xcconfig = {"PRODUCT_MODULE_NAME": "BIG_BAD_MODULE"},
                 expected = {},
             ),
+            assert_xcconfig(
+                name = "optimization_level_0",
+                xcconfig = {"GCC_OPTIMIZATION_LEVEL": "0"},
+                expected = {},
+            ),
         ],
     )
