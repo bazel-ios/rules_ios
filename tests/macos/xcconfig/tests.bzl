@@ -183,7 +183,7 @@ def xcconfig_unit_test_suite():
                 expected = {"objc_copts": ["-D'DISPLAY_VERSION=1.0.0-beta.1'", "-D'SDK_NAME=WHY WOULD YOU ADD SPACES'"]},
             ),
             assert_xcconfig(
-                name = "conditioned_option", # The condition is on CLANG_UNDEFINED_BEHAVIOR_SANITIZER, which is unspecified
+                name = "conditioned_option",  # The condition is on CLANG_UNDEFINED_BEHAVIOR_SANITIZER, which is unspecified
                 xcconfig = {"CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTEGER": "YES"},
                 expected = {},
             ),
@@ -205,7 +205,12 @@ def xcconfig_unit_test_suite():
             assert_xcconfig(
                 name = "optimization_level_0",
                 xcconfig = {"GCC_OPTIMIZATION_LEVEL": "0"},
-                expected = {"linkopts": ["-Xlinker", "-no_deduplicate"]},
+                expected = {"linkopts": ["-Wl,-no_deduplicate"]},
+            ),
+            assert_xcconfig(
+                name = "xlinker_to_wl",
+                xcconfig = {"REEXPORTED_FRAMEWORK_NAMES": ["a", "z"], "LINKER_DISPLAYS_MANGLED_NAMES": "YES"},
+                expected = {"linkopts": ["-Wl,--no-demangle", "-Wl,-reexport_framework,'a'", "-Wl,-reexport_framework,'z'"]},
             ),
         ],
     )

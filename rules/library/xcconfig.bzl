@@ -27,6 +27,27 @@ def _unknown_enum_value(name, option, value, fatal = False):
 def _id(value):
     return value
 
+def _linkopt_xlinker_substitution(args):
+    ret = []
+    xlinker = None
+
+    for arg in args:
+        if xlinker == True:
+            xlinker = arg
+        elif xlinker:
+            if arg != "-Xlinker":
+                ret.append("-Wl,{},{}".format(xlinker, arg))
+                xlinker = None
+        elif arg == "-Xlinker":
+            xlinker = True
+        else:
+            ret.append(arg)
+
+    if xlinker:
+        ret.append("-Wl,{}".format(xlinker))
+
+    return ret
+
 def _add_copts_from_option(xcspec, name, option, value, value_escaper, xcconfigs, copts, linkopts):
     _type = option["Type"]
     used_user_config = True
@@ -107,7 +128,7 @@ def _add_copts_from_option(xcspec, name, option, value, value_escaper, xcconfigs
     linkopts += [
         arg.replace("$(value)", v)
         for v in (value if types.is_list(value) else [value])
-        for arg in new_linkopts
+        for arg in _linkopt_xlinker_substitution(new_linkopts)
     ]
 
     new = None
@@ -146,6 +167,9 @@ def _add_copts_from_option(xcspec, name, option, value, value_escaper, xcconfigs
 
     if new == None:
         return
+
+    if xcspec == _LD:
+        new = _linkopt_xlinker_substitution(new)
 
     copts += [
         arg.replace("$(value)", value_escaper(v))
