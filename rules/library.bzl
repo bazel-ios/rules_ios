@@ -308,7 +308,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     weak_sdk_frameworks = kwargs.pop("weak_sdk_frameworks", [])
     sdk_includes = kwargs.pop("sdk_includes", [])
     pch = kwargs.pop("pch", "@build_bazel_rules_ios//rules/library:common.pch")
-    deps = [d for d in kwargs.pop("deps", [])]
+    deps = [] + kwargs.pop("deps", [])
     data = kwargs.pop("data", [])
     tags = kwargs.pop("tags", [])
     tags_manual = tags if "manual" in tags else tags + _MANUAL
@@ -341,6 +341,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         )
         internal_deps.append(linkopts_name)
 
+    vendored_deps = []
     for vendored_static_framework in kwargs.pop("vendored_static_frameworks", []):
         import_name = "%s-%s-import" % (name, paths.basename(vendored_static_framework))
         apple_static_framework_import(
@@ -348,7 +349,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             framework_imports = native.glob(["%s/**/*" % vendored_static_framework]),
             tags = _MANUAL,
         )
-        deps.append(import_name)
+        vendored_deps.append(import_name)
     for vendored_dynamic_framework in kwargs.pop("vendored_dynamic_frameworks", []):
         import_name = "%s-%s-import" % (name, paths.basename(vendored_dynamic_framework))
         apple_dynamic_framework_import(
@@ -357,7 +358,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             deps = [],
             tags = _MANUAL,
         )
-        deps.append(import_name)
+        vendored_deps.append(import_name)
     for vendored_static_library in kwargs.pop("vendored_static_libraries", []):
         import_name = "%s-%s-library-import" % (name, paths.basename(vendored_static_library))
         objc_import(
@@ -365,9 +366,10 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             archives = [vendored_static_library],
             tags = _MANUAL,
         )
-        deps.append(import_name)
+        vendored_deps.append(import_name)
     for vendored_dynamic_library in kwargs.pop("vendored_dynamic_libraries", []):
         fail("no import for %s" % vendored_dynamic_library)
+    deps += vendored_deps
 
     resource_bundles = library_tools["resource_bundle_generator"](
         name = name,
