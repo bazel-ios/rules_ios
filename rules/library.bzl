@@ -192,12 +192,12 @@ def _prepend(list, other):
 
 def _prepend_copts(copts_struct, objc_copts, cc_copts, swift_copts, linkopts, ibtool_copts, momc_copts, mapc_copts):
     _prepend(objc_copts, copts_struct.objc_copts)
-    _prepend(copts_struct.cc_copts, cc_copts)
-    _prepend(copts_struct.swift_copts, swift_copts)
-    _prepend(copts_struct.linkopts, linkopts)
-    _prepend(copts_struct.ibtool_copts, ibtool_copts)
-    _prepend(copts_struct.momc_copts, momc_copts)
-    _prepend(copts_struct.mapc_copts, mapc_copts)
+    _prepend(cc_copts, copts_struct.cc_copts)
+    _prepend(swift_copts, copts_struct.swift_copts)
+    _prepend(linkopts, copts_struct.linkopts)
+    _prepend(ibtool_copts, copts_struct.ibtool_copts)
+    _prepend(momc_copts, copts_struct.momc_copts)
+    _prepend(mapc_copts, copts_struct.mapc_copts)
 
 def _append_headermap_copts(hmap, flag, objc_copts, swift_copts, cc_copts):
     copt = flag + "$(execpath :{hmap})".format(hmap = hmap)

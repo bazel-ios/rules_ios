@@ -15,7 +15,7 @@ set -euo pipefail
 readonly output=\\$$($(location @bazel_tools//tools/osx:xcode-locator) 2>/dev/null | grep : | sed -Ee s/.*'"(.+)": "(.+)".*'/'\\1.0|\\2'/g | sort --version-sort -k 1 -t '|' | tail -n 1)
 readonly xcode_version=\\$${output%%.0|*}
 readonly developer_dir=\\$${output#*|}
-$(location :xcspec_extractor) \\$$developer_dir \\$$xcode_version > \\$${BUILD_WORKSPACE_DIRECTORY}/data/xcspecs.bzl
+$(location :xcspec_extractor) \\$$developer_dir \\$$xcode_version \\$${BUILD_WORKSPACE_DIRECTORY}/data/xcspecs.bzl \\$${BUILD_WORKSPACE_DIRECTORY}/data/xcspec_evals.bzl
 EOS
     """,
     executable = True,
