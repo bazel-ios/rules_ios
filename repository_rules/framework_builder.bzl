@@ -56,6 +56,25 @@ def _get_absolute_paths(ctx, file_labels):
 
     return [ctx.path(file_label) for file_label in file_labels]
 
+def _path_is_directory(ctx, path):
+    """Determines if a path is a directory or a file"""
+    result = ctx.execute([
+        "if",
+        "find",
+        path,
+        "-maxdepth",
+        "0",
+        "-empty",
+        "|",
+        "read",
+        "v;",
+        "then",
+        "exit",
+        "1;",
+        "fi",
+    ])
+    return result.return_code != 0
+
 ###############
 # Carthage
 ###############
@@ -163,17 +182,19 @@ def _cocoapods_impl(ctx):
     buildfile_content = []
     prebuild_subpath = "Pods/_Prebuild/GeneratedFrameworks"
     for path in ctx.path(prebuild_subpath).readdir():
-        filegroups = _create_buildfile_content(wd, prebuild_subpath + "/" + path.basename)
-        nested_path = prebuild_subpath + "/" + path.basename + "/Frameworks"
-        nested_filegroups = _create_buildfile_content(wd, nested_path)
-        nested_framework_path = ctx.path(nested_path)
-        if nested_framework_path.exists:
-            for nested_subpath in nested_framework_path.readdir():
-                filegroups = filegroups + _create_buildfile_content(
-                    wd,
-                    prebuild_subpath + "/" + path.basename + "/Frameworks/" + nested_subpath.basename,
-                )
-        buildfile_content = buildfile_content + filegroups + nested_filegroups
+        main_frameworks_path = prebuild_subpath + "/" + path.basename
+        main_frameworks_filegroups = _create_buildfile_content(wd, main_frameworks_path)
+
+        vendored_frameworks_path = main_frameworks_path + "/Frameworks"
+        vendored_frameworks_filegroups = _create_buildfile_content(wd, vendored_frameworks_path)
+
+        if ctx.path(vendored_frameworks_path).exists:
+            for subpath in ctx.path(vendored_frameworks_path).readdir():
+                nested_subpath = vendored_frameworks_path + "/" + subpath.basename
+                if _path_is_directory(ctx, nested_subpath):
+                    buildfile_content = buildfile_content + _create_buildfile_content(wd, nested_subpath)
+
+        buildfile_content = buildfile_content + main_frameworks_filegroups + vendored_frameworks_filegroups
 
     ctx.file(
         "BUILD.bazel",
