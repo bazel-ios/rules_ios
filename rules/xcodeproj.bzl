@@ -542,6 +542,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
                 "targets": {
                     target_name: ["run", "test", "profile"],
                 },
+                "preActions": [{"script": "rm -rf $OBJROOT/XCBuildData", "name": "Delete leftover build system info", "settingsTarget": target_name}],
             },
             # By putting under run action, test action will just use them automatically
             "run": scheme_action_details,

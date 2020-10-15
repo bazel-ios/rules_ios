@@ -46,9 +46,9 @@ cp "$(output_processor_path)" "${stubs_dir}/output-processor.rb"
 # The new build system leaves a subdirectory called XCBuildData in the DerivedData directory which causes incremental build and test attempts to fail at launch time.
 # The error message says "Cannot attach to pid." This error seems to happen in the Xcode IDE, not when the project is tested from the xcodebuild command.
 # Therefore, we force xcode to use the legacy build system by adding the contents of WorkspaceSettings.xcsettings to the generated project.
-mkdir -p "$tmp_dest/project.xcworkspace/xcshareddata/"
-cp "$(workspacesettings_xcsettings_short_path)" "$tmp_dest/project.xcworkspace/xcshareddata/"
-cp "$(ideworkspacechecks_plist_short_path)" "$tmp_dest/project.xcworkspace/xcshareddata/"
+# mkdir -p "$tmp_dest/project.xcworkspace/xcshareddata/"
+# cp "$(workspacesettings_xcsettings_short_path)" "$tmp_dest/project.xcworkspace/xcshareddata/"
+# cp "$(ideworkspacechecks_plist_short_path)" "$tmp_dest/project.xcworkspace/xcshareddata/"
 
 chmod -R +w "${tmp_dest}"
 
