@@ -6,12 +6,20 @@ ios_unit_test(
     name = "Single-Application-UnitTests",
     srcs = ["test.swift"],
     args = ["-h"],
+    defines = [
+        "REQUIRED_DEFINED_FLAG=1",
+        "FLAG_WITH_VALUE_ZERO=0",
+    ],
     env = {
         "test_envvar_key1": "test_envvar_value1",
         "test_envvar_key2": "test_envvar_value2",
     },
     minimum_os_version = "11.0",
     module_name = "Single_Application_UnitTests",
+    non_arc_srcs = [
+        "NonArcObject.h",
+        "NonArcObject.m",
+    ],
     sdk_frameworks = ["XCTest"],
 )
 
@@ -33,6 +41,10 @@ ios_unit_test(
     name = "Single-Application-RunnableTestSuite",
     srcs = ["test.swift"],
     args = ["-h"],
+    defines = [
+        "REQUIRED_DEFINED_FLAG=1",
+        "FLAG_WITH_VALUE_ZERO=0",
+    ],
     env = {
         "test_envvar_key1": "test_envvar_value1",
         "test_envvar_key2": "test_envvar_value2",
@@ -81,4 +93,24 @@ xcodeproj(
         "//tests/ios/unit-test:DefaultHosted",
         "//tests/ios/unit-test/test-imports-app:TestImports-Unit-Tests",
     ],
+)
+
+genrule(
+    name = "Test-Project-Regeneration",
+    testonly = True,
+    outs = ["Test-Project-Regeneration.sh"],
+    cmd = """
+cat <<'EOS' > $@
+#!/bin/sh
+set -euxo pipefail
+rm -fr {package_name}/{target_name}.xcodeproj
+bazelisk run {package_name}:{target_name} --@build_bazel_rules_ios//rules:local_debug_options_enabled
+bazelisk run {package_name}:{target_name} --@build_bazel_rules_ios//rules:local_debug_options_enabled
+EOS
+    """.format(
+        package_name = package_name(),
+        target_name = "Single-Application-Project-DirectTargetsOnly",
+    ),
+    executable = True,
+    tools = [":Single-Application-Project-DirectTargetsOnly"],
 )

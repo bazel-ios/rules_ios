@@ -411,9 +411,8 @@ static char* getStringFromTable(HeaderMap* hmap, unsigned int tblIndex) {
 static inline unsigned addStringToTable(HeaderMap* hmap, char* str) {
     unsigned idx = hmap->stringsTableNextEntry;
     unsigned len = strlen(str);
-    if (idx + len >= hmap->size) {
-        // time to realloc
-        hmap->size *= 2;
+    if (idx + len + 1 >= hmap->size) {
+        while (idx + len + 1 >= hmap->size) { hmap->size *= 2; }
         hmap->data = reallocf(hmap->data, hmap->size);
         assert(hmap->data);
     }

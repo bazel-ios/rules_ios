@@ -135,7 +135,7 @@ def xcconfig_unit_test_suite():
             assert_xcconfig(
                 name = "otherwise_supported",
                 xcconfig = {"ALTERNATE_LINKER": "foo"},
-                expected = {"linkopts": ["-fuse-ld=foo"]},
+                expected = {"linkopts": ["-fuse-ld='foo'"]},
             ),
             assert_xcconfig(
                 name = "empty_string_match",
@@ -145,12 +145,12 @@ def xcconfig_unit_test_suite():
             assert_xcconfig(
                 name = "command_line_flag",
                 xcconfig = {"SYSTEM_FRAMEWORK_SEARCH_PATHS": ["foo", "/bar"]},
-                expected = {"linkopts": ["-iframework", "foo", "-iframework", "/bar"]},
+                expected = {"linkopts": ["-iframework", "'foo'", "-iframework", "'/bar'"]},
             ),
             assert_xcconfig(
                 name = "command_line_prefix",
                 xcconfig = {"CLANG_MACRO_BACKTRACE_LIMIT": "12"},
-                expected = {"objc_copts": ["-fmacro-backtrace-limit=12"]},
+                expected = {"objc_copts": ["-fmacro-backtrace-limit='12'"]},
             ),
             assert_xcconfig(
                 name = "command_line_flag_default_bool",
@@ -165,18 +165,52 @@ def xcconfig_unit_test_suite():
             assert_xcconfig(
                 name = "option_with_unknown_command_line",
                 xcconfig = {"OTHER_CFLAGS": ["-IFOO"]},
-                error = 'OTHER_CFLAGS: unable to extract value for ["-IFOO"] in com.apple.compilers.llvm.clang.1_0',
+                expected = {},
+            ),
+            assert_xcconfig(
+                name = "only_used_as_condition",
+                xcconfig = {"APPLICATION_EXTENSION_API_ONLY": "YES"},
+                expected = {"linkopts": ["-fapplication-extension", "-fapplication-extension"], "objc_copts": ["-fapplication-extension"], "swift_copts": ["-application-extension"]},
             ),
             assert_xcconfig(
                 name = "option_with_inherited",
                 xcconfig = {"GCC_PREPROCESSOR_DEFINITIONS": ["$(inherited)", "ABC=1"]},
-                expected = {"objc_copts": ["-D$(inherited)", "-DABC=1"]},
+                expected = {"objc_copts": ["-D'$(inherited)'", "-D'ABC=1'"]},
             ),
-            # TODO: we should eventually support conditioned vars somehow
             assert_xcconfig(
-                name = "conditioned_option_unsupported",
+                name = "option_with_shell_metacharacters",
+                xcconfig = {"GCC_PREPROCESSOR_DEFINITIONS": ["DISPLAY_VERSION=1.0.0-beta.1", "SDK_NAME=WHY WOULD YOU ADD SPACES"]},
+                expected = {"objc_copts": ["-D'DISPLAY_VERSION=1.0.0-beta.1'", "-D'SDK_NAME=WHY WOULD YOU ADD SPACES'"]},
+            ),
+            assert_xcconfig(
+                name = "conditioned_option",  # The condition is on CLANG_UNDEFINED_BEHAVIOR_SANITIZER, which is unspecified
                 xcconfig = {"CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTEGER": "YES"},
-                error = 'CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTEGER: option specifies a condition ("$(CLANG_UNDEFINED_BEHAVIOR_SANITIZER) == YES"), which is currently unsupported',
+                expected = {},
+            ),
+            assert_xcconfig(
+                name = "conditioned_option_yes",
+                xcconfig = {"CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTEGER": "YES", "CLANG_UNDEFINED_BEHAVIOR_SANITIZER": "YES"},
+                expected = {"linkopts": ["-fsanitize=undefined"], "objc_copts": ["-fsanitize=undefined", "-fno-sanitize=enum,return,float-divide-by-zero,function,vptr", "-fsanitize=integer"]},
+            ),
+            assert_xcconfig(
+                name = "conditioned_option_no",
+                xcconfig = {"CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTEGER": "YES", "CLANG_UNDEFINED_BEHAVIOR_SANITIZER": "NO"},
+                expected = {},
+            ),
+            assert_xcconfig(
+                name = "product_module_name",
+                xcconfig = {"PRODUCT_MODULE_NAME": "BIG_BAD_MODULE"},
+                expected = {},
+            ),
+            assert_xcconfig(
+                name = "optimization_level_0",
+                xcconfig = {"GCC_OPTIMIZATION_LEVEL": "0"},
+                expected = {"linkopts": ["-Wl,-no_deduplicate"]},
+            ),
+            assert_xcconfig(
+                name = "xlinker_to_wl",
+                xcconfig = {"REEXPORTED_FRAMEWORK_NAMES": ["a", "z"], "LINKER_DISPLAYS_MANGLED_NAMES": "YES"},
+                expected = {"linkopts": ["-Wl,--no-demangle", "-Wl,-reexport_framework,'a'", "-Wl,-reexport_framework,'z'"]},
             ),
         ],
     )

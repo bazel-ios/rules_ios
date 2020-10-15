@@ -35,6 +35,7 @@ apple_framework(
         "GCC_PREPROCESSOR_DEFINITIONS": [
             "FOO",
             "BAR=1",
+            "ABCD=HAS SO MANY SPACES",
         ],
     },
 )
@@ -44,6 +45,17 @@ apple_framework(
     non_arc_srcs = ["weak_property.m"],
     xcconfig = {
         "CLANG_ENABLE_OBJC_WEAK": "YES",
+    },
+)
+
+apple_framework(
+    name = "used_as_condition_xcconfig",
+    srcs = [
+        "objc_imports_swift_internal.m",
+        "swift_internal.swift",
+    ],
+    xcconfig = {
+        "APPLICATION_EXTENSION_API_ONLY": "YES",
     },
 )
 

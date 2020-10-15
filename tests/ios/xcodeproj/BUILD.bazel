@@ -1,0 +1,110 @@
+load("//rules:xcodeproj.bzl", "xcodeproj")
+
+xcodeproj(
+    name = "Single-Static-Framework-Project",
+    testonly = True,
+    bazel_path = "bazelisk",
+    generate_schemes_for_product_types = [
+        "framework.static",
+        "bundle.unit-test",
+    ],
+    include_transitive_targets = True,
+    deps = [
+        "//tests/ios/frameworks/objc:ObjcFramework",
+        "//tests/ios/frameworks/objc:ObjcFrameworkTests",
+    ],
+)
+
+xcodeproj(
+    name = "Test-Imports-App-Project",
+    testonly = True,
+    bazel_path = "bazelisk",
+    generate_schemes_for_product_types = ["application"],
+    include_transitive_targets = False,
+    deps = [
+        "//tests/ios/unit-test/test-imports-app:TestImports-App",
+        "//tests/ios/unit-test/test-imports-app:TestImports-App_framework_unlinked",
+        "//tests/ios/unit-test/test-imports-app:TestImports-Unit-Tests",
+    ],
+)
+
+xcodeproj(
+    name = "Test-MultipleConfigs-Project",
+    bazel_path = "bazelisk",
+    generate_schemes_for_product_types = ["application"],
+    include_transitive_targets = False,
+    deps = [
+        "//tests/ios/app:App",
+        "//tests/ios/app:FW",
+        "//tests/ios/app:FW2",
+    ],
+)
+
+xcodeproj(
+    name = "Test-MultipleConfigs-Project-WithTransitiveFlag",
+    bazel_path = "bazelisk",
+    generate_schemes_for_product_types = ["application"],
+    include_transitive_targets = True,
+    deps = [
+        "//tests/ios/app:App",
+        "//tests/ios/app:FW",
+        "//tests/ios/app:FW2",
+    ],
+)
+
+# Test that the test_host is included when using "include_transitive_targets = True"
+xcodeproj(
+    name = "Test-With-Host-App",
+    testonly = True,
+    bazel_path = "bazelisk",
+    generate_schemes_for_product_types = [
+        "application",
+        "bundle.unit-test",
+        "test_suite",
+    ],
+    include_transitive_targets = True,
+    project_name = "TestWithHostApp",  # Test that setting a custom project name works as expected
+    deps = [
+        "//tests/ios/unit-test:ExplicitHosted",
+    ],
+)
+
+genrule(
+    name = "Test-Project-Regeneration-For-Single-Static-Framework",
+    testonly = True,
+    outs = ["Test-Project-Regeneration-For-Single-Static-Framework.sh"],
+    cmd = """
+cat <<'EOS' > $@
+#!/bin/sh
+set -euxo pipefail
+rm -fr {package_name}/{target_name}.xcodeproj
+bazelisk run {package_name}:{target_name} --@build_bazel_rules_ios//rules:local_debug_options_enabled
+bazelisk run {package_name}:{target_name} --@build_bazel_rules_ios//rules:local_debug_options_enabled
+EOS
+    """.format(
+        package_name = package_name(),
+        target_name = "Single-Static-Framework-Project",
+    ),
+    executable = True,
+    tools = [":Single-Static-Framework-Project"],
+)
+
+genrule(
+    name = "Test-Project-Regeneration-For-Test-Imports-App-Project",
+    testonly = True,
+    outs = ["Test-Project-Regeneration-For-Test-Imports-App-Project.sh"],
+    cmd = """
+cat <<'EOS' > $@
+#!/bin/sh
+set -euxo pipefail
+rm -fr {package_name}/{target_name}.xcodeproj
+bazelisk run {package_name}:{target_name} --@build_bazel_rules_ios//rules:local_debug_options_enabled
+bazelisk run {package_name}:{target_name} --@build_bazel_rules_ios//rules:local_debug_options_enabled
+EOS
+    """.format(
+        package_name = package_name(),
+        target_name = "Test-Imports-App-Project",
+    ),
+    executable = True,
+    tools = [":Test-Imports-App-Project"],
+)

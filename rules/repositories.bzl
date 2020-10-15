@@ -1,13 +1,8 @@
 """Definitions for handling Bazel repositories used by the Apple rules."""
 
 load(
-    "@bazel_tools//tools/build_defs/repo:git.bzl",
-    "git_repository",
-)
-load(
     "@bazel_tools//tools/build_defs/repo:http.bzl",
     "http_archive",
-    "http_file",
 )
 
 def _maybe(repo_rule, name, **kwargs):
@@ -22,41 +17,100 @@ def _maybe(repo_rule, name, **kwargs):
     if not native.existing_rule(name):
         repo_rule(name = name, **kwargs)
 
+def github_repo(name, project, repo, ref, sha256 = None):
+    """Downloads a repository from GitHub as a tarball.
+
+    Args:
+        name: The name of the repository.
+        project: The project (user or organization) on GitHub that hosts the repository.
+        repo: The name of the repository on GitHub.
+        ref: The reference to be downloaded. Can be any named ref, e.g. a commit, branch, or tag.
+        sha256: The sha256 of the downloaded tarball.
+    """
+
+    github_url = "https://github.com/{project}/{repo}/archive/{ref}.zip".format(
+        project = project,
+        repo = repo,
+        ref = ref,
+    )
+    http_archive(
+        name = name,
+        strip_prefix = "%s-%s" % (repo, ref.replace("/", "-")),
+        url = github_url,
+        sha256 = sha256,
+        canonical_id = github_url,
+    )
+
 def rules_ios_dependencies():
     """Fetches repositories that are dependencies of the `rules_apple` workspace.
     """
     _maybe(
-        git_repository,
+        github_repo,
         name = "build_bazel_rules_apple",
-        commit = "74eca5857a136b9f1e2020886be76b791eb08231",
-        shallow_since = "1590530217 -0700",
-        remote = "https://github.com/bazelbuild/rules_apple.git",
+        ref = "1b784889f241c5b1bb7d6dc8ee8bde9fbd33245a",
+        project = "bazelbuild",
+        repo = "rules_apple",
+        sha256 = "3660e5076cbdcab5d14530c1bd1de7c94d1d20259c52f2fc107293e32a32847f",
     )
 
     _maybe(
-        git_repository,
+        github_repo,
         name = "build_bazel_rules_swift",
-        commit = "6408d85da799ec2af053c4e2883dce3ce6d30f08",
-        shallow_since = "1589833120 -0700",
-        remote = "https://github.com/bazelbuild/rules_swift.git",
+        ref = "beb3a30faf3982b870924cfcedf01dc596400599",
+        project = "bazelbuild",
+        repo = "rules_swift",
+        sha256 = "0035214dbb2075b5a8f7b2b82351f45a2b0405354d29e22723b0ecc7f9c1ac18",
     )
 
     _maybe(
-        git_repository,
+        github_repo,
         name = "build_bazel_apple_support",
-        commit = "501b4afb27745c4813a88ffa28acd901408014e4",
-        shallow_since = "1577729628 -0800",
-        remote = "https://github.com/bazelbuild/apple_support.git",
+        ref = "b8755bd2884d6bf651827c30e00bd0ea318e41a2",
+        project = "bazelbuild",
+        repo = "apple_support",
+        sha256 = "07d6a7552a85ef0299ccea18951a527e57ea928159c20f3b9d0b138561313adb",
     )
 
     _maybe(
         http_archive,
         name = "bazel_skylib",
-        sha256 = "97e70364e9249702246c0e9444bccdc4b847bed1eb03c5a3ece4f83dfe6abc44",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.0.2/bazel-skylib-1.0.2.tar.gz",
-            "https://github.com/bazelbuild/bazel-skylib/releases/download/1.0.2/bazel-skylib-1.0.2.tar.gz",
+            "https://github.com/bazelbuild/bazel-skylib/releases/download/1.0.3/bazel-skylib-1.0.3.tar.gz",
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.0.3/bazel-skylib-1.0.3.tar.gz",
         ],
+        sha256 = "1c531376ac7e5a180e0237938a2536de0c54d93f5c278634818e0efc952dd56c",
+    )
+
+    _maybe(
+        http_archive,
+        name = "com_github_lyft_index_import",
+        build_file_content = """\
+load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
+
+native_binary(
+    name = "index_import",
+    src = "index-import",
+    out = "index-import",
+    visibility = ["//visibility:public"],
+)
+
+native_binary(
+    name = "validate_index",
+    src = "validate-index",
+    out = "validate-index",
+    visibility = ["//visibility:public"],
+)
+
+native_binary(
+    name = "absolute_unit",
+    src = "absolute-unit",
+    out = "absolute-unit",
+    visibility = ["//visibility:public"],
+)
+""",
+        canonical_id = "index-import-5.2.1.4",
+        urls = ["https://github.com/lyft/index-import/releases/download/5.2.1.4/index-import.zip"],
+        sha256 = "62f42816baf3b690682b5d6fe543a3c5a4a6ea7499ce1f4e8326c7bd2175989a",
     )
 
     _maybe(
@@ -73,18 +127,8 @@ native_binary(
     visibility = ["//visibility:public"],
 )
 """,
-        canonical_id = "xcodegen-2.15.2",
-        sha256 = "0a53aef09e1b93c5307fc1c411c52a034305ccfd87255c01de7f9ff5141e0d86",
+        canonical_id = "xcodegen-2.17.0-19-g775e14c",
+        sha256 = "5dbda77da860e615e32f80de8c662757e7ccb7e5012c7fa233b137a4baa36c3d",
         strip_prefix = "xcodegen",
-        urls = ["https://github.com/yonaskolb/XcodeGen/releases/download/2.15.1/xcodegen.zip"],
-    )
-
-    # Pinned because 0.2.12 is broken on macOS 10.14
-    # https://github.com/google/xctestrunner/issues/18
-    _maybe(
-        http_file,
-        name = "xctestrunner",
-        executable = 1,
-        sha256 = "9e46d5782a9dc7d40bc93c99377c091886c180b8c4ffb9f79a19a58e234cdb09",
-        urls = ["https://github.com/google/xctestrunner/releases/download/0.2.10/ios_test_runner.par"],
+        urls = ["https://github.com/segiddins/XcodeGen/releases/download/2.17.0-19-g775e14c/xcodegen.zip"],
     )

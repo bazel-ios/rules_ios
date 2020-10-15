@@ -45,7 +45,7 @@ def _make_headermap_impl(ctx):
     tool included here to create the actual .hmap file.
 
     :param ctx: context for this rule. See
-           https://docs.bazel.build/versions/master/skylark/lib/ctx.html
+           https://docs.bazel.build/versions/master/starlark/lib/ctx.html
 
     :return: provider with the info for this rule
     """
@@ -54,9 +54,11 @@ def _make_headermap_impl(ctx):
     for provider in ctx.attr.direct_hdr_providers:
         if apple_common.Objc in provider:
             hdrs_lists.append(provider[apple_common.Objc].direct_headers)
-        elif CcInfo in provider:
+        if CcInfo in provider:
             hdrs_lists.append(provider[CcInfo].compilation_context.direct_headers)
-        else:
+
+        if len(hdrs_lists) == 1:
+            # means neither apple_common.Objc nor CcInfo in hdr provider target
             fail("direct_hdr_provider %s must contain either 'CcInfo' or 'objc' provider" % provider)
 
     hmap.make_hmap(
@@ -72,13 +74,18 @@ def _make_headermap_impl(ctx):
     )
     cc_info_provider = CcInfo(compilation_context = objc_provider.compilation_context)
 
-    return [
-        HeaderMapInfo(
-            files = depset([ctx.outputs.headermap]),
-        ),
+    providers = [
         objc_provider,
         cc_info_provider,
     ]
+
+    hdrs_lists = [l for l in hdrs_lists if l]
+    if len(hdrs_lists) > 0:
+        providers.append(HeaderMapInfo(
+            files = depset([ctx.outputs.headermap]),
+        ))
+
+    return providers
 
 # Derive a headermap from transitive headermaps
 # hdrs: a file group containing headers for this rule

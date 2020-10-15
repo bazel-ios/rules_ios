@@ -27,7 +27,6 @@ def apple_dynamic_framework_import(name, **kwargs):
     _apple_framework_import_modulemap(
         name = name,
         legacy_target = legacy_target_label,
-        isDynamic = True,
         visibility = visibility,
         tags = tags,
     )
@@ -51,13 +50,14 @@ def apple_static_framework_import(name, **kwargs):
     _apple_framework_import_modulemap(
         name = name,
         legacy_target = legacy_target_label,
-        isDynamic = False,
         visibility = visibility,
         tags = tags,
     )
 
 def _apple_framework_import_modulemap_impl(ctx):
-    old_objc_provider = ctx.attr.legacy_target[apple_common.Objc]
+    legacy_target = ctx.attr.legacy_target
+    old_objc_provider = legacy_target[apple_common.Objc]
+    old_cc_info = legacy_target[CcInfo]
 
     # Merge providers
     objc_provider_fields = {
@@ -73,17 +73,20 @@ def _apple_framework_import_modulemap_impl(ctx):
         "header": old_objc_provider.module_map,
     }
     new_objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
+    new_cc_info = cc_common.merge_cc_infos(
+        cc_infos = [
+            old_cc_info,
+            CcInfo(compilation_context = cc_common.create_compilation_context(headers = depset(old_objc_provider.module_map))),
+        ],
+    )
 
     # Seems that there is no way to iterate on the existing providers, so what is possible instead
     # is to list here the keys to all of them (you can see the keys for the existing providers of a
     # target by just printing the target)
     # For more information refer to https://groups.google.com/forum/#!topic/bazel-discuss/4KkflTjmUyk
-    other_provider_keys = []
-    if ctx.attr.isDynamic:
-        other_provider_keys = [AppleFrameworkImportInfo, apple_common.AppleDynamicFramework, CcInfo, OutputGroupInfo]
-    else:
-        other_provider_keys = [AppleFrameworkImportInfo, SwiftUsageInfo, CcInfo, OutputGroupInfo]
-    return [ctx.attr.legacy_target[provider_key] for provider_key in other_provider_keys] + [new_objc_provider]
+    other_provider_keys = [AppleFrameworkImportInfo, SwiftUsageInfo, apple_common.AppleDynamicFramework, OutputGroupInfo, DefaultInfo]
+    return [new_objc_provider, new_cc_info] + \
+           [legacy_target[provider_key] for provider_key in other_provider_keys if provider_key in legacy_target]
 
 _apple_framework_import_modulemap = rule(
     implementation = _apple_framework_import_modulemap_impl,
@@ -91,10 +94,6 @@ _apple_framework_import_modulemap = rule(
         "legacy_target": attr.label(
             mandatory = True,
             doc = "The legacy target to patch",
-        ),
-        "isDynamic": attr.bool(
-            mandatory = True,
-            doc = "If the target being patch generates a dynamic or static framework",
         ),
     },
     doc = "Patches the associated legacy_target",

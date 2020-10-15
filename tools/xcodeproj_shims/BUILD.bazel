@@ -26,10 +26,16 @@ py_binary(
     visibility = STUB_VISIBILITY,
 )
 
+filegroup(
+    name = "installer_runfiles",
+    srcs = glob(["installers/*"]),
+    visibility = STUB_VISIBILITY,
+)
+
 sh_binary(
     name = "installer",
     srcs = ["install.sh"],
-    data = glob(["installers/*.sh"]),
+    data = [":installer_runfiles"],
     visibility = STUB_VISIBILITY,
 )
 
@@ -42,7 +48,8 @@ sh_binary(
 )
 
 exports_files([
-    "xcodeproj-installer.sh",
-    "WorkspaceSettings.xcsettings",
+    "IDEWorkspaceChecks.plist",
     "output-processor.rb",
+    "WorkspaceSettings.xcsettings",
+    "xcodeproj-installer.sh",
 ])

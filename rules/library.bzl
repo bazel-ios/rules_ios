@@ -4,10 +4,9 @@ load("@rules_cc//cc:defs.bzl", "cc_library", "objc_import", "objc_library")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@build_bazel_rules_apple//apple:apple.bzl", "apple_dynamic_framework_import", "apple_static_framework_import")
-load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("//rules:precompiled_apple_resource_bundle.bzl", "precompiled_apple_resource_bundle")
 load("//rules:hmap.bzl", "headermap")
-load("//rules:substitute_build_settings.bzl", "substitute_build_settings")
 load("//rules/library:resources.bzl", "wrap_resources_in_filegroup")
 load("//rules/library:xcconfig.bzl", "settings_from_xcconfig")
 
@@ -157,26 +156,17 @@ FOUNDATION_EXPORT const unsigned char {module_name}VersionString[];
     )
     return destination
 
-def _generate_resource_bundles(name, library_tools, module_name, resource_bundles, **kwargs):
+def _generate_resource_bundles(name, library_tools, module_name, resource_bundles, platforms, **kwargs):
     bundle_target_names = []
     for bundle_name in resource_bundles:
         target_name = "%s-%s" % (name, bundle_name)
-        substitute_build_settings(
-            name = name + ".info.plist",
-            source = "@build_bazel_rules_ios//rules/library:resource_bundle.plist",
-            variables = {
-                "PRODUCT_BUNDLE_IDENTIFIER": "com.cocoapods.%s" % bundle_name,
-                "PRODUCT_NAME": bundle_name,
-            },
-            tags = _MANUAL,
-        )
-        apple_resource_bundle(
+        precompiled_apple_resource_bundle(
             name = target_name,
             bundle_name = bundle_name,
             resources = [
                 library_tools["wrap_resources_in_filegroup"](name = target_name + "_resources", srcs = resource_bundles[bundle_name]),
             ],
-            infoplists = [name + ".info.plist"],
+            platforms = platforms,
             tags = _MANUAL,
         )
         bundle_target_names.append(target_name)
@@ -202,12 +192,12 @@ def _prepend(list, other):
 
 def _prepend_copts(copts_struct, objc_copts, cc_copts, swift_copts, linkopts, ibtool_copts, momc_copts, mapc_copts):
     _prepend(objc_copts, copts_struct.objc_copts)
-    _prepend(copts_struct.cc_copts, cc_copts)
-    _prepend(copts_struct.swift_copts, swift_copts)
-    _prepend(copts_struct.linkopts, linkopts)
-    _prepend(copts_struct.ibtool_copts, ibtool_copts)
-    _prepend(copts_struct.momc_copts, momc_copts)
-    _prepend(copts_struct.mapc_copts, mapc_copts)
+    _prepend(cc_copts, copts_struct.cc_copts)
+    _prepend(swift_copts, copts_struct.swift_copts)
+    _prepend(linkopts, copts_struct.linkopts)
+    _prepend(ibtool_copts, copts_struct.ibtool_copts)
+    _prepend(momc_copts, copts_struct.momc_copts)
+    _prepend(mapc_copts, copts_struct.mapc_copts)
 
 def _append_headermap_copts(hmap, flag, objc_copts, swift_copts, cc_copts):
     copt = flag + "$(execpath :{hmap})".format(hmap = hmap)
@@ -318,10 +308,11 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     weak_sdk_frameworks = kwargs.pop("weak_sdk_frameworks", [])
     sdk_includes = kwargs.pop("sdk_includes", [])
     pch = kwargs.pop("pch", "@build_bazel_rules_ios//rules/library:common.pch")
-    deps = kwargs.pop("deps", [])
+    deps = [] + kwargs.pop("deps", [])
     data = kwargs.pop("data", [])
     tags = kwargs.pop("tags", [])
     tags_manual = tags if "manual" in tags else tags + _MANUAL
+    platforms = kwargs.pop("platforms", None)
     internal_deps = []
     lib_names = []
 
@@ -350,6 +341,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         )
         internal_deps.append(linkopts_name)
 
+    vendored_deps = []
     for vendored_static_framework in kwargs.pop("vendored_static_frameworks", []):
         import_name = "%s-%s-import" % (name, paths.basename(vendored_static_framework))
         apple_static_framework_import(
@@ -357,7 +349,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             framework_imports = native.glob(["%s/**/*" % vendored_static_framework]),
             tags = _MANUAL,
         )
-        deps.append(import_name)
+        vendored_deps.append(import_name)
     for vendored_dynamic_framework in kwargs.pop("vendored_dynamic_frameworks", []):
         import_name = "%s-%s-import" % (name, paths.basename(vendored_dynamic_framework))
         apple_dynamic_framework_import(
@@ -366,7 +358,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             deps = [],
             tags = _MANUAL,
         )
-        deps.append(import_name)
+        vendored_deps.append(import_name)
     for vendored_static_library in kwargs.pop("vendored_static_libraries", []):
         import_name = "%s-%s-library-import" % (name, paths.basename(vendored_static_library))
         objc_import(
@@ -374,15 +366,17 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             archives = [vendored_static_library],
             tags = _MANUAL,
         )
-        deps.append(import_name)
+        vendored_deps.append(import_name)
     for vendored_dynamic_library in kwargs.pop("vendored_dynamic_libraries", []):
         fail("no import for %s" % vendored_dynamic_library)
+    deps += vendored_deps
 
     resource_bundles = library_tools["resource_bundle_generator"](
         name = name,
         library_tools = library_tools,
         resource_bundles = kwargs.pop("resource_bundles", {}),
         module_name = module_name,
+        platforms = platforms,
         **kwargs
     )
     deps += resource_bundles
@@ -476,12 +470,13 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     objc_copts += [
         "-fmodules",
         "-fmodule-name=%s" % module_name,
-        "-gmodules",
     ]
 
     swift_copts += [
         "-Xcc",
         "-D__SWIFTC__",
+        "-Xfrontend",
+        "-no-clang-module-breadcrumbs",
     ]
 
     swift_version = _canonicalize_swift_version(kwargs.pop("swift_version", None))
@@ -491,6 +486,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     objc_libname = "%s_objc" % name
     swift_libname = "%s_swift" % name
     cpp_libname = "%s_cpp" % name
+
+    module_data = library_tools["wrap_resources_in_filegroup"](name = module_name + "_data", srcs = data)
 
     if swift_sources:
         swift_copts.extend(("-Xcc", "-I."))
@@ -514,6 +511,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             deps = deps + internal_deps + lib_names,
             swiftc_inputs = swiftc_inputs,
             features = ["swift.no_generated_module_map"],
+            data = [module_data],
             tags = tags_manual,
             **kwargs
         )
@@ -566,8 +564,12 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         )
         lib_names.append(cpp_libname)
 
-    objc_library_data = library_tools["wrap_resources_in_filegroup"](name = objc_libname + "_data", srcs = data)
     objc_copts.append("-I.")
+
+    objc_copts.extend(("-index-store-path", "$(GENDIR)/{package}/rules_ios_objc_library_{libname}.indexstore".format(
+        package = native.package_name(),
+        libname = objc_libname,
+    )))
     objc_library(
         name = objc_libname,
         srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,
@@ -581,14 +583,14 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         weak_sdk_frameworks = weak_sdk_frameworks,
         sdk_includes = sdk_includes,
         pch = pch,
-        data = [objc_library_data],
+        data = [] if swift_sources else [module_data],
         tags = tags_manual,
         **kwargs
     )
     launch_screen_storyboard_name = name + "_launch_screen_storyboard"
     native.filegroup(
         name = launch_screen_storyboard_name,
-        srcs = [objc_library_data],
+        srcs = [module_data],
         output_group = "launch_screen_storyboard",
         tags = _MANUAL,
     )
@@ -607,4 +609,6 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         launch_screen_storyboard_name = launch_screen_storyboard_name,
         namespace = namespace,
         linkopts = linkopts,
+        platforms = platforms,
+        has_swift_sources = (swift_sources and len(swift_sources) > 0),
     )

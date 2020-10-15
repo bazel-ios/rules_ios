@@ -11,8 +11,11 @@ _IOS_APPLICATION_KWARGS = [
     "entitlements",
     "visibility",
     "launch_storyboard",
+    "provisioning_profile",
+    "resources",
     "app_icons",
     "resources",
+    "tags",
 ]
 
 def write_info_plists_if_needed(name, plists):
@@ -52,18 +55,28 @@ def ios_application(name, apple_library = apple_library, **kwargs):
     Args:
         name: The name of the iOS application.
         apple_library: The macro used to package sources into a library.
-        kwargs: Arguments passed to the apple_library and ios_application rules as appropriate.
+        **kwargs: Arguments passed to the apple_library and ios_application rules as appropriate.
     """
     infoplists = write_info_plists_if_needed(name = name, plists = kwargs.pop("infoplists", []))
     application_kwargs = {arg: kwargs.pop(arg) for arg in _IOS_APPLICATION_KWARGS if arg in kwargs}
-    library = apple_library(name = name, namespace_is_module_name = False, **kwargs)
+    library = apple_library(name = name, namespace_is_module_name = False, platforms = {"ios": application_kwargs.get("minimum_os_version")}, **kwargs)
 
     application_kwargs["launch_storyboard"] = application_kwargs.pop("launch_storyboard", library.launch_screen_storyboard_name)
     application_kwargs["families"] = application_kwargs.pop("families", ["iphone", "ipad"])
 
+    local_debug_options_for_swift = []
+
+    # A dummy target that enables serialize-debugging-options but only in local development.
+    # As of Xcode 11.5, LocalDebugOptions is not needed for debugging apps.
+    if library.has_swift_sources:
+        local_debug_options_for_swift.append("@build_bazel_rules_ios//rules:_LocalDebugOptions")
+
     rules_apple_ios_application(
         name = name,
-        deps = library.deps,
+        deps = library.deps + select({
+            "@build_bazel_rules_ios//rules:local_debug_options": local_debug_options_for_swift,
+            "//conditions:default": [],
+        }),
         infoplists = infoplists,
         **application_kwargs
     )

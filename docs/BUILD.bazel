@@ -5,34 +5,27 @@ package(default_visibility = ["//visibility:private"])
 
 _RULES = [
     "app",
+    "apple_patched",
     "framework",
     "hmap",
     "library",
+    "precompiled_apple_resource_bundle",
     "substitute_build_settings",
     "test",
-    "apple_patched",
+    "transition_support",
 ]
 
 _REPOSITORY_RULES = [
     "framework_builder",
 ]
 
-# needs --nocheck_visibility because otherwise
-# @build_bazel_apple_support and @build_bazel_rules_apple are
-# completely unreachable
 bzl_library(
-    name = "rules-apple",
+    name = "rules_cc",
     srcs = [
-        "@build_bazel_apple_support//lib:apple_support.bzl",
-        "@build_bazel_rules_apple//apple:ios.bzl",
-        "@build_bazel_rules_swift//swift:swift.bzl",
-        "@rules_cc//cc:defs.bzl",
+        "@rules_cc//cc:srcs",
     ],
     tags = ["manual"],
     visibility = ["//visibility:private"],
-    deps = [
-        "@bazel_skylib//:bzl_library",
-    ],
 )
 
 bzl_library(
@@ -42,9 +35,6 @@ bzl_library(
     ],
     tags = ["manual"],
     visibility = ["//visibility:private"],
-    deps = [
-        "@bazel_skylib//:bzl_library",
-    ],
 )
 
 [
@@ -56,7 +46,8 @@ bzl_library(
         visibility = ["//:__pkg__"],
         deps = [
             ":data",
-            ":rules-apple",
+            ":rules_cc",
+            "@build_bazel_rules_apple//apple",
         ],
     )
     for name in _RULES
@@ -71,7 +62,7 @@ bzl_library(
         visibility = ["//:__pkg__"],
         deps = [
             ":data",
-            ":rules-apple",
+            "@build_bazel_rules_apple//apple",
         ],
     )
     for name in _REPOSITORY_RULES
