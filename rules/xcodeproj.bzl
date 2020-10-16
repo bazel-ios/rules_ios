@@ -135,6 +135,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             test_host_appname = test_host_appname,
             env_vars = env_vars,
             hmap_paths = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "hmap_paths")),
+            swift_module_paths = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "swift_module_paths")),
             commandline_args = commandline_args,
         )
         if ctx.rule.kind != "apple_framework_packaging":
@@ -149,6 +150,7 @@ def _xcodeproj_aspect_impl(target, ctx):
                     build_files = depset(_srcs_info_build_files(ctx)),
                     direct_srcs = [],
                     hmap_paths = info.hmap_paths,
+                    swift_module_paths = info.swift_module_paths,
                 ),
             )
 
@@ -187,9 +189,13 @@ def _xcodeproj_aspect_impl(target, ctx):
             framework_includes.append(target[CcInfo].compilation_context.framework_includes)
             cc_defines.append(target[CcInfo].compilation_context.defines)
 
+        swift_module_paths = []
         if SwiftInfo in target:
             swift_defines.append(depset(target[SwiftInfo].direct_defines))
             swift_defines.append(target[SwiftInfo].transitive_defines)
+            print("Got SwiftInfo for target with name %s %s" % (target.label.name, target[SwiftInfo].direct_swiftmodules[0].path))
+            swift_module_paths = [m.path for m in target[SwiftInfo].direct_swiftmodules]
+
         providers.append(
             _SrcsInfo(
                 srcs = depset(srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
@@ -201,6 +207,7 @@ def _xcodeproj_aspect_impl(target, ctx):
                 swift_defines = depset([], transitive = swift_defines),
                 direct_srcs = srcs,
                 hmap_paths = depset(hmap_paths),
+                swift_module_paths = depset(swift_module_paths, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "swift_module_paths")),
             ),
         )
 
@@ -457,12 +464,18 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
 
         asset_sources = _gather_asset_sources(target_info, src_dot_dots)
 
+        swiftmodulefiles = []
+        for modulefilename in target_info.swift_module_paths.to_list():
+          swiftmodulefiles.append(modulefilename)
+          swiftmodulefiles.append(modulefilename.replace('.swiftmodule', '.swiftdoc'))
+          swiftmodulefiles.append(modulefilename.replace('.swiftmodule', '.swiftsourceinfo'))
         target_settings = {
             "PRODUCT_NAME": target_name,
             "BAZEL_BIN_SUBDIR": target_info.bazel_bin_subdir,
             "MACH_O_TYPE": target_macho_type,
             "CLANG_ENABLE_MODULES": "YES",
             "CLANG_ENABLE_OBJC_ARC": "YES",
+            "BAZEL_SWIFTMODULEFILES_TO_COPY": " ".join(swiftmodulefiles),
         }
 
         target_settings["HEADER_SEARCH_PATHS"] = _header_search_paths_for_target(target_name, all_transitive_targets)
@@ -593,7 +606,7 @@ def _xcodeproj_impl(ctx):
         "CXX": "$CC",
         "CLANG_ANALYZER_EXEC": "$CC",
         "LD": "$BAZEL_STUBS_DIR/ld-stub",
-        "LIBTOOL": "/usr/bin/true",
+        "LIBTOOL": "$BAZEL_STUBS_DIR/ld-stub",
         "SWIFT_EXEC": "$BAZEL_STUBS_DIR/swiftc-stub",
     })
 
