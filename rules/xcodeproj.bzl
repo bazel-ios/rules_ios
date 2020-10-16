@@ -659,6 +659,20 @@ def _xcodeproj_impl(ctx):
         "%s-install-xcodeproj.sh" % ctx.attr.name,
     )
     installer_runfile_paths = [i.short_path for i in ctx.attr.installer[DefaultInfo].default_runfiles.files.to_list()]
+
+    # In order to be runnable, the print_json_leaf_nodes script needs to live
+    # next to a print_json_leaf_nodes.runfiles directory that contains its runfiles.
+    # The print_json_leaf_nodes_runfiles array will be populated with the subdirectories
+    # and paths that the py_binary expects the runfiles directory to contain.
+    print_json_leaf_nodes_runfiles = []
+    for pi in ctx.attr.print_json_leaf_nodes[DefaultInfo].default_runfiles.files.to_list():
+        if pi.short_path.startswith("../"):
+            runfiles_subdirectory_path = pi.short_path[3:]
+            print_json_leaf_nodes_runfiles.append(runfiles_subdirectory_path)
+        else:
+            runfiles_subdirectory_path = "%s/%s" % (ctx.workspace_name, pi.short_path)
+            print_json_leaf_nodes_runfiles.append(runfiles_subdirectory_path)
+
     ctx.actions.expand_template(
         template = ctx.file._xcodeproj_installer_template,
         output = install_script,
@@ -672,6 +686,7 @@ def _xcodeproj_impl(ctx):
             "$(clang_stub_ld_path)": ctx.executable.ld_stub.short_path,
             "$(clang_stub_swiftc_path)": ctx.executable.swiftc_stub.short_path,
             "$(print_json_leaf_nodes_path)": ctx.executable.print_json_leaf_nodes.short_path,
+            "$(print_json_leaf_nodes_runfiles)": " ".join(print_json_leaf_nodes_runfiles),
             "$(build_wrapper_path)": ctx.executable.build_wrapper.short_path,
             "$(infoplist_stub)": ctx.file._infoplist_stub.short_path,
             "$(output_processor_path)": ctx.file.output_processor.short_path,
@@ -697,7 +712,10 @@ def _xcodeproj_impl(ctx):
                          ctx.files._workspace_xcsettings +
                          ctx.files._workspace_checks +
                          ctx.files.output_processor,
-                transitive = [ctx.attr.installer[DefaultInfo].default_runfiles.files],
+                transitive = [
+                    ctx.attr.installer[DefaultInfo].default_runfiles.files,
+                    ctx.attr.print_json_leaf_nodes[DefaultInfo].default_runfiles.files,
+                ],
             )),
         ),
     ]

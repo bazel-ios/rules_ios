@@ -19,6 +19,15 @@ mkdir -p "${stubs_dir}"
 readonly installers_dir="${tmp_dest}/bazelinstallers"
 mkdir -p "${installers_dir}"
 
+readonly print_json_installers_dir="${stubs_dir}/print_json_leaf_nodes.runfiles/"
+mkdir -p "${print_json_installers_dir}"
+
+for PRINT_INSTALLER_PATH in $(print_json_leaf_nodes_runfiles)
+do
+  mkdir -p "${print_json_installers_dir}/$(dirname $PRINT_INSTALLER_PATH)"
+  cp "${PWD}/../$PRINT_INSTALLER_PATH" "${print_json_installers_dir}/$PRINT_INSTALLER_PATH"
+done
+
 for INSTALLER_PATH in $(installer_runfile_short_paths)
 do
   cp "$INSTALLER_PATH" "${installers_dir}/"
