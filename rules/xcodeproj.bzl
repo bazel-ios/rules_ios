@@ -193,7 +193,6 @@ def _xcodeproj_aspect_impl(target, ctx):
         if SwiftInfo in target:
             swift_defines.append(depset(target[SwiftInfo].direct_defines))
             swift_defines.append(target[SwiftInfo].transitive_defines)
-            print("Got SwiftInfo for target with name %s %s" % (target.label.name, target[SwiftInfo].direct_swiftmodules[0].path))
             swift_module_paths = [m.path for m in target[SwiftInfo].direct_swiftmodules]
 
         providers.append(
@@ -466,9 +465,9 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
 
         swiftmodulefiles = []
         for modulefilename in target_info.swift_module_paths.to_list():
-          swiftmodulefiles.append(modulefilename)
-          swiftmodulefiles.append(modulefilename.replace('.swiftmodule', '.swiftdoc'))
-          swiftmodulefiles.append(modulefilename.replace('.swiftmodule', '.swiftsourceinfo'))
+            swiftmodulefiles.append(modulefilename)
+            swiftmodulefiles.append(modulefilename.replace(".swiftmodule", ".swiftdoc"))
+            swiftmodulefiles.append(modulefilename.replace(".swiftmodule", ".swiftsourceinfo"))
         target_settings = {
             "PRODUCT_NAME": target_name,
             "BAZEL_BIN_SUBDIR": target_info.bazel_bin_subdir,

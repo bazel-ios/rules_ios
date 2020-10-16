@@ -5,6 +5,24 @@
    <BuildAction
       parallelizeBuildables = "NO"
       buildImplicitDependencies = "NO">
+      <PreActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Delete leftover build system info"
+               scriptText = "rm -rf $OBJROOT/XCBuildData">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "5AE0FC080FA6A17C35721D0C"
+                     BuildableName = "ExplicitHosted.xctest"
+                     BlueprintName = "ExplicitHosted"
+                     ReferencedContainer = "container:TestWithHostApp.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PreActions>
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"

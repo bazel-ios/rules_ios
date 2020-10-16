@@ -363,6 +363,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e11e4ada49a5/bin/tests/ios/app/FW\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e85ff352ea2d/bin/tests/ios/app/FW\"";
@@ -381,6 +382,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -399,6 +401,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -432,7 +435,7 @@
 				DONT_RUN_SWIFT_STDLIB_TOOL = 1;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				LD = "$BAZEL_STUBS_DIR/ld-stub";
-				LIBTOOL = /usr/bin/true;
+				LIBTOOL = "$BAZEL_STUBS_DIR/ld-stub";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_EXEC = "$BAZEL_STUBS_DIR/swiftc-stub";
@@ -447,6 +450,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -465,6 +469,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e11e4ada49a5/bin/tests/ios/app/FW\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e11e4ada49a5/bin/tests/ios/app/FW2\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-0010df40fd2e/bin/tests/ios/app/OnlySources\"";
@@ -485,6 +490,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e11e4ada49a5/bin/tests/ios/app/FW\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e85ff352ea2d/bin/tests/ios/app/FW\"";
@@ -503,6 +509,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e11e4ada49a5/bin/tests/ios/app/FW\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e11e4ada49a5/bin/tests/ios/app/FW2\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-0010df40fd2e/bin/tests/ios/app/OnlySources\"";
@@ -523,6 +530,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -555,7 +563,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DONT_RUN_SWIFT_STDLIB_TOOL = 1;
 				LD = "$BAZEL_STUBS_DIR/ld-stub";
-				LIBTOOL = /usr/bin/true;
+				LIBTOOL = "$BAZEL_STUBS_DIR/ld-stub";
 				SDKROOT = iphoneos;
 				SWIFT_EXEC = "$BAZEL_STUBS_DIR/swiftc-stub";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";

@@ -278,6 +278,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -311,7 +312,7 @@
 				DONT_RUN_SWIFT_STDLIB_TOOL = 1;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				LD = "$BAZEL_STUBS_DIR/ld-stub";
-				LIBTOOL = /usr/bin/true;
+				LIBTOOL = "$BAZEL_STUBS_DIR/ld-stub";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_EXEC = "$BAZEL_STUBS_DIR/swiftc-stub";
@@ -326,6 +327,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-f75cadb68314/bin/tests/ios/frameworks/objc/ObjcFramework\"";
@@ -344,6 +346,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -376,7 +379,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DONT_RUN_SWIFT_STDLIB_TOOL = 1;
 				LD = "$BAZEL_STUBS_DIR/ld-stub";
-				LIBTOOL = /usr/bin/true;
+				LIBTOOL = "$BAZEL_STUBS_DIR/ld-stub";
 				SDKROOT = iphoneos;
 				SWIFT_EXEC = "$BAZEL_STUBS_DIR/swiftc-stub";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
@@ -390,6 +393,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-f75cadb68314/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-0010df40fd2e/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-f75cadb68314/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-0010df40fd2e/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\"";
@@ -409,6 +413,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-f75cadb68314/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-0010df40fd2e/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-f75cadb68314/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-0010df40fd2e/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\"";
@@ -428,6 +433,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-f75cadb68314/bin/tests/ios/frameworks/objc/ObjcFramework\"";

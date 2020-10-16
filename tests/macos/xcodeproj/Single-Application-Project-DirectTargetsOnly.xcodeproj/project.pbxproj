@@ -284,6 +284,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-DREQUIRED_DEFINED_FLAG=1 -DFLAG_WITH_VALUE_ZERO=0";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftmodule bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftdoc bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -303,6 +304,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-DREQUIRED_DEFINED_FLAG=1 -DFLAG_WITH_VALUE_ZERO=0";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftmodule bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftdoc bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -336,7 +338,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DONT_RUN_SWIFT_STDLIB_TOOL = 1;
 				LD = "$BAZEL_STUBS_DIR/ld-stub";
-				LIBTOOL = /usr/bin/true;
+				LIBTOOL = "$BAZEL_STUBS_DIR/ld-stub";
 				SDKROOT = iphoneos;
 				SWIFT_EXEC = "$BAZEL_STUBS_DIR/swiftc-stub";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
@@ -350,6 +352,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -370,6 +373,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -390,6 +394,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-DREQUIRED_DEFINED_FLAG=1 -DFLAG_WITH_VALUE_ZERO=0";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftmodule bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftdoc bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -424,7 +429,7 @@
 				DONT_RUN_SWIFT_STDLIB_TOOL = 1;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				LD = "$BAZEL_STUBS_DIR/ld-stub";
-				LIBTOOL = /usr/bin/true;
+				LIBTOOL = "$BAZEL_STUBS_DIR/ld-stub";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_EXEC = "$BAZEL_STUBS_DIR/swiftc-stub";
@@ -439,6 +444,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-DREQUIRED_DEFINED_FLAG=1 -DFLAG_WITH_VALUE_ZERO=0";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftmodule bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftdoc bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";

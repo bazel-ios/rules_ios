@@ -5,6 +5,24 @@
    <BuildAction
       parallelizeBuildables = "NO"
       buildImplicitDependencies = "NO">
+      <PreActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Delete leftover build system info"
+               scriptText = "rm -rf $OBJROOT/XCBuildData">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "8869F51F3D726AA5FE196B17"
+                     BuildableName = "ObjcFramework.framework"
+                     BlueprintName = "ObjcFramework"
+                     ReferencedContainer = "container:Single-Static-Framework-Project.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PreActions>
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"

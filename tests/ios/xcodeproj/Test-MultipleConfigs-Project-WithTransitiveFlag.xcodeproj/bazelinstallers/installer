@@ -18,12 +18,12 @@ case "${PRODUCT_TYPE}" in
         # important_output {
         #   name: ".../SomeFramework.framework/SomeFramework"
         #   uri: "file:///private/var/tmp/.../.../SomeFramework.framework/SomeFramework"
-        #   path_prefix:... 
+        #   path_prefix:...
         #   ...
-        #  } 
+        #  }
         # We only care about the entry ending with TARGET_NAME" so that we can get the path to its directory
         QUERY=`grep -A 2 important_output "$BAZEL_BUILD_EVENT_TEXT_FILENAME" | grep -w uri | grep ${TARGET_NAME}\" | sed "s/uri: \"file:\/\///"`
-        if [[ -z $QUERY ]]; then 
+        if [[ -z $QUERY ]]; then
             echo "Unable to locate resource for framework of ${TARGET_NAME}"
             exit 1
         fi
@@ -41,6 +41,12 @@ case "${PRODUCT_TYPE}" in
         ;;
 esac
 output="$TARGET_BUILD_DIR/$FULL_PRODUCT_NAME"
+
+mkdir -p $CONFIGURATION_TEMP_DIR/${TARGET_NAME}.build/Objects-normal/$ARCHS/
+for swiftmodulefile in $BAZEL_SWIFTMODULEFILES_TO_COPY; do
+  # echo $swiftmodulefile $CONFIGURATION_TEMP_DIR/${TARGET_NAME}.build/Objects-normal/$ARCHS/
+  cp $swiftmodulefile $CONFIGURATION_TEMP_DIR/${TARGET_NAME}.build/Objects-normal/$ARCHS/
+done
 
 mkdir -p "$(dirname "$output")"
 
