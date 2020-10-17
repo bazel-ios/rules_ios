@@ -2,37 +2,26 @@
 
 verbose_default = False  # The default verbose level when running this rules
 
-def _create_buildfile_content(root, frameworks_subpath):
-    """Creates the content of the generated build file
+def _make_framework_filegroup(ctx, framework_path):
+    """Generate the filegroup information of the framework"""
 
-    Args:
-        root: The root path where the BUILD.bazel file will be created
-        frameworks_subpath: The path from the root where the frameworks are to be found
-    """
+    relative_path = str(framework_path).replace(str(ctx.path(".")) + "/", "")
+    name = framework_path.basename.replace(".framework", "")
 
-    buildfile_content = []
-
-    binaries_path = root
-    for element in frameworks_subpath.split("/"):
-        binaries_path = binaries_path.get_child(element)
-
-    if binaries_path.exists:
-        frameworks = [path for path in binaries_path.readdir() if str(path).endswith(".framework")]
-        for framework in frameworks:
-            new_content = """\
+    new_content = """\
 filegroup(
     name = "%s", 
-    srcs = glob(["%s/%s/**/*"]),
+    srcs = glob(["%s/**/*"]),
     visibility = ["//visibility:public"],
 )\
-            """ % (framework.basename.split(".framework")[0], frameworks_subpath, framework.basename)
-            buildfile_content.append(new_content)
+""" % (name, relative_path)
 
-    return buildfile_content
+    return new_content
 
-def _copy_files(ctx, files, destination):
-    """Copy the specified files to the destination"""
+def _copy_files(ctx, files):
+    """Copy the specified files to the root this repository rule"""
 
+    destination = ctx.path(".")
     for file in files:
         _execute(ctx, "cp -r \"%s\" \"%s\"" % (file, destination))
 
@@ -50,11 +39,36 @@ def _execute(ctx, cmd):
 %s
         """ % (cmd, result.return_code, result.stdout, result.stderr),
         )
+    return result.stdout
 
 def _get_absolute_paths(ctx, file_labels):
     """Return the absolut paths for the files"""
 
     return [ctx.path(file_label) for file_label in file_labels]
+
+def _find_frameworks_recursively(ctx, path):
+    """Return a list with all the frameworks found when searching recursively"""
+
+    absolute_path = str(ctx.path(path))
+
+    # Need to run an external command because recursion is not supported in bazel yet
+    # See: https://github.com/bazelbuild/bazel/issues/9163
+    output = _execute(ctx, "find %s -name '*.framework'" % absolute_path)
+    framework_paths = [ctx.path(string) for string in output.splitlines()]
+    return framework_paths
+
+def _generate_buildfile(ctx, frameworks_parent):
+    absolute_files = _get_absolute_paths(ctx, ctx.attr.file_labels)
+    _copy_files(ctx, absolute_files)
+    _execute(ctx, ctx.attr.cmd)
+
+    buildfile_content = []
+    frameworks = _find_frameworks_recursively(ctx, frameworks_parent)
+    for framework in frameworks:
+        framework_filegroup = _make_framework_filegroup(ctx, framework)
+        buildfile_content.append(framework_filegroup)
+
+    ctx.file("BUILD.bazel", "\n".join(buildfile_content))
 
 ###############
 # Carthage
@@ -94,29 +108,7 @@ def build_carthage_frameworks(
     )
 
 def _carthage_impl(ctx):
-    wd = ctx.path(".")
-
-    absolut_files = _get_absolute_paths(ctx, ctx.attr.file_labels)
-    _copy_files(ctx, absolut_files, wd)
-    _execute(ctx, ctx.attr.cmd)
-
-    buildfile_content = []
-
-    frameworks_subpath = "Carthage/Build"
-    for path in ctx.path(frameworks_subpath).readdir():  # Carthage organizes the built platforms in folders
-        if str(path).endswith(".version"):
-            continue  # Skip version files
-
-        dynamic_frameworks_subpath = frameworks_subpath + "/" + path.basename
-        buildfile_content = buildfile_content + _create_buildfile_content(wd, dynamic_frameworks_subpath)
-
-        static_frameworks_subpath = dynamic_frameworks_subpath + "/Static"
-        buildfile_content = buildfile_content + _create_buildfile_content(wd, static_frameworks_subpath)
-
-    ctx.file(
-        "BUILD.bazel",
-        "\n".join(buildfile_content),
-    )
+    _generate_buildfile(ctx, "Carthage/Build")
 
 ###############
 # Cocoapods
@@ -151,25 +143,10 @@ def build_cocoapods_frameworks(
     )
 
 def _cocoapods_impl(ctx):
-    wd = ctx.path(".")
-
     # Install all bundle infrastructure and cocoapods locally to the repository
     ctx.file(".bundle/config", "BUNDLE_PATH: 'vendor/bundle'")
 
-    absolut_files = _get_absolute_paths(ctx, ctx.attr.file_labels)
-    _copy_files(ctx, absolut_files, wd)
-    _execute(ctx, ctx.attr.cmd)
-
-    buildfile_content = []
-    prebuild_subpath = "Pods/_Prebuild/GeneratedFrameworks"
-    for path in ctx.path(prebuild_subpath).readdir():
-        filegroups = _create_buildfile_content(wd, prebuild_subpath + "/" + path.basename)
-        buildfile_content = buildfile_content + filegroups
-
-    ctx.file(
-        "BUILD.bazel",
-        "\n".join(buildfile_content),
-    )
+    _generate_buildfile(ctx, "Pods/_Prebuild/GeneratedFrameworks")
 
 ###############
 # Shared repository_rule definition
