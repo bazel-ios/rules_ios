@@ -522,7 +522,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         if module_map:
             swiftc_inputs.append(module_map)
         if swift_objc_bridging_header:
-            swiftc_inputs.append(swift_objc_bridging_header)
+            if swift_objc_bridging_header not in objc_hdrs:
+                swiftc_inputs.append(swift_objc_bridging_header)
             swift_copts += [
                 "-import-objc-header",
                 "$(execpath :{})".format(swift_objc_bridging_header),
