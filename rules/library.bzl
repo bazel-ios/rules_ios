@@ -7,6 +7,7 @@ load("@build_bazel_rules_apple//apple:apple.bzl", "apple_dynamic_framework_impor
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 load("//rules:precompiled_apple_resource_bundle.bzl", "precompiled_apple_resource_bundle")
 load("//rules:hmap.bzl", "headermap")
+load("//rules/framework:vfs_overlay.bzl", "framework_vfs_overlay", VFS_OVERLAY_FRAMEWORK_SEARCH_PATH = "FRAMEWORK_SEARCH_PATH")
 load("//rules/library:resources.bzl", "wrap_resources_in_filegroup")
 load("//rules/library:xcconfig.bzl", "settings_from_xcconfig")
 
@@ -66,7 +67,7 @@ module {module_name}.Swift {{
         outputs = [ctx.outputs.destination],
         mnemonic = "ExtendModulemap",
         progress_message = "Extending %s" % ctx.file.source.basename,
-        command = "echo \"$1\" | cat <(echo -n 'framework ') $2 - > $3",
+        command = "echo \"$1\" | cat $2 - > $3",
         arguments = [args],
     )
 
@@ -383,28 +384,50 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
 
     # TODO: remove framework if set
     # Needs to happen before headermaps are made, so the generated umbrella header gets added to those headermaps
-    if namespace_is_module_name and not module_map and \
+    if namespace_is_module_name and \
        (objc_hdrs or objc_private_hdrs or swift_sources or objc_sources or cpp_sources):
-        umbrella_header = library_tools["umbrella_header_generator"](
-            name = name,
-            library_tools = library_tools,
-            public_headers = objc_hdrs,
-            private_headers = objc_private_hdrs,
-            module_name = module_name,
-            **kwargs
+        if not module_map:
+            umbrella_header = library_tools["umbrella_header_generator"](
+                name = name,
+                library_tools = library_tools,
+                public_headers = objc_hdrs,
+                private_headers = objc_private_hdrs,
+                module_name = module_name,
+                **kwargs
+            )
+            if umbrella_header:
+                objc_hdrs.append(umbrella_header)
+            module_map = library_tools["modulemap_generator"](
+                name = name,
+                library_tools = library_tools,
+                umbrella_header = paths.basename(umbrella_header),
+                public_headers = objc_hdrs,
+                private_headers = objc_private_hdrs,
+                module_name = module_name,
+                framework = True,
+                **kwargs
+            )
+
+        framework_vfs_overlay_name = name + "_vfs"
+        framework_vfs_overlay(
+            name = framework_vfs_overlay_name,
+            framework_name = namespace,
+            modulemap = module_map,
+            private_hdrs = objc_private_hdrs,
+            hdrs = objc_hdrs,
+            tags = _MANUAL,
         )
-        if umbrella_header:
-            objc_hdrs.append(umbrella_header)
-        module_map = library_tools["modulemap_generator"](
-            name = name,
-            library_tools = library_tools,
-            umbrella_header = paths.basename(umbrella_header),
-            public_headers = objc_hdrs,
-            private_headers = objc_private_hdrs,
-            module_name = module_name,
-            framework = False if swift_sources else True,
-            **kwargs
-        )
+        internal_deps.append(framework_vfs_overlay_name)
+        objc_copts += [
+            "-ivfsoverlay$(execpath :{})".format(framework_vfs_overlay_name),
+            "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
+        ]
+        swift_copts += [
+            "-Xcc",
+            "-ivfsoverlay$(execpath :{})".format(framework_vfs_overlay_name),
+            "-Xcc",
+            "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
+        ]
 
     ## BEGIN HMAP
 
@@ -458,10 +481,6 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
 
     ## END HMAP
 
-    # vfs_name = name + '_vfs'
-    # vfs_overlay(name = vfs_name, deps = deps)
-    # internal_deps.append(vfs_name)
-
     _append_headermap_copts(private_hmap_name, "-I", objc_copts, swift_copts, cc_copts)
     _append_headermap_copts(public_hmap_name, "-I", objc_copts, swift_copts, cc_copts)
     _append_headermap_copts(private_angled_hmap_name, "-I", objc_copts, swift_copts, cc_copts)
@@ -492,9 +511,10 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     if swift_sources:
         swift_copts.extend(("-Xcc", "-I."))
         if module_map:
+            # Frameworks find the modulemap file via the framework vfs overlay
+            if not namespace_is_module_name:
+                swift_copts += ["-Xcc", "-fmodule-map-file=" + "$(execpath " + module_map + ")"]
             swift_copts += [
-                "-Xcc",
-                "-fmodule-map-file=" + "$(execpath " + module_map + ")",
                 "-import-underlying-module",
             ]
         swiftc_inputs = other_inputs + objc_hdrs
