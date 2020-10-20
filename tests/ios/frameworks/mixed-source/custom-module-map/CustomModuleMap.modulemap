@@ -1,0 +1,24 @@
+framework module CustomModuleMap {
+    umbrella header "CustomModuleMap.h"
+
+    module CXX {
+        requires cplusplus11
+        header "B.h"
+    }
+
+    explicit module SuperSecret {
+        header "PleaseDontImport.h"
+    }
+
+    explicit module A_CustomModuleMapAdditions {
+        header "A+CustomModuleMapAdditions.h"
+    }
+
+    explicit module B_CustomModuleMapAdditions {
+        requires cplusplus11
+        header "B+CustomModuleMapAdditions.h"
+    }
+
+    export *
+    module * { export * }
+}
