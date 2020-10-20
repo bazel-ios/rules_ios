@@ -296,6 +296,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     module_name = kwargs.pop("module_name", name)
     namespace = module_name if namespace_is_module_name else name
     module_map = kwargs.pop("module_map", None)
+    swift_objc_bridging_header = kwargs.pop("swift_objc_bridging_header", None)
     cc_copts = kwargs.pop("cc_copts", [])
     swift_copts = kwargs.pop("swift_copts", [])
     ibtool_copts = kwargs.pop("ibtool_copts", [])
@@ -520,6 +521,12 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         swiftc_inputs = other_inputs + objc_hdrs
         if module_map:
             swiftc_inputs.append(module_map)
+        if swift_objc_bridging_header:
+            swiftc_inputs.append(swift_objc_bridging_header)
+            swift_copts += [
+                "-import-objc-header",
+                "$(execpath :{})".format(swift_objc_bridging_header),
+            ]
         generated_swift_header_name = module_name + "-Swift.h"
 
         swift_library(
