@@ -1,0 +1,12 @@
+load("//rules:test.bzl", "ios_unit_test")
+
+ios_unit_test(
+    name = "TestBridgingHeader",
+    srcs = [
+        "Tests/A.h",
+        "Tests/A.m",
+        "Tests/Test.swift",
+    ],
+    minimum_os_version = "13.0",
+    swift_objc_bridging_header = "Tests/Test-Bridging-Header.h",
+)
