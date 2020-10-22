@@ -515,9 +515,9 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             # Frameworks find the modulemap file via the framework vfs overlay
             if not namespace_is_module_name:
                 swift_copts += ["-Xcc", "-fmodule-map-file=" + "$(execpath " + module_map + ")"]
-            swift_copts += [
+            swift_copts.append(
                 "-import-underlying-module",
-            ]
+            )
         swiftc_inputs = other_inputs + objc_hdrs
         if module_map:
             swiftc_inputs.append(module_map)
