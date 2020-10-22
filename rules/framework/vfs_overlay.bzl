@@ -55,7 +55,6 @@ def _framework_vfs_overlay_impl(ctx):
 
     files = depset(direct = [vfsoverlay_file])
     objc_provider = apple_common.new_objc_provider(
-        # framework_search_path_only = FRAMEWORK_SEARCH_PATH,
         header = files,
     )
     cc_info = CcInfo(compilation_context = objc_provider.compilation_context)
