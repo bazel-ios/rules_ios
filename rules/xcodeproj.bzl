@@ -99,6 +99,12 @@ def _xcodeproj_aspect_impl(target, ctx):
     bazel_bin_subdir = "%s/%s" % (target.label.workspace_root, target.label.package)
 
     if AppleBundleInfo in target:
+        swift_objc_header_path = None
+        if SwiftInfo in target:
+            for h in target[apple_common.Objc].header.to_list():
+                if h.path.endswith("-Swift.h"):
+                    swift_objc_header_path = h.path
+                    
         bundle_info = target[AppleBundleInfo]
         test_host_appname = None
         test_host_target = None
@@ -134,6 +140,8 @@ def _xcodeproj_aspect_impl(target, ctx):
             minimum_os_version = bundle_info.minimum_os_version,
             test_host_appname = test_host_appname,
             env_vars = env_vars,
+            swift_objc_header_path = swift_objc_header_path,
+            swift_module_paths = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "swift_module_paths")),
             hmap_paths = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "hmap_paths")),
             commandline_args = commandline_args,
         )
@@ -149,6 +157,7 @@ def _xcodeproj_aspect_impl(target, ctx):
                     build_files = depset(_srcs_info_build_files(ctx)),
                     direct_srcs = [],
                     hmap_paths = info.hmap_paths,
+                    swift_module_paths = info.swift_module_paths,
                 ),
             )
 
@@ -187,9 +196,11 @@ def _xcodeproj_aspect_impl(target, ctx):
             framework_includes.append(target[CcInfo].compilation_context.framework_includes)
             cc_defines.append(target[CcInfo].compilation_context.defines)
 
+        swift_module_paths = []
         if SwiftInfo in target:
             swift_defines.append(depset(target[SwiftInfo].direct_defines))
             swift_defines.append(target[SwiftInfo].transitive_defines)
+            swift_module_paths = [m.path for m in target[SwiftInfo].direct_swiftmodules]
         providers.append(
             _SrcsInfo(
                 srcs = depset(srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
@@ -201,6 +212,7 @@ def _xcodeproj_aspect_impl(target, ctx):
                 swift_defines = depset([], transitive = swift_defines),
                 direct_srcs = srcs,
                 hmap_paths = depset(hmap_paths),
+                swift_module_paths = depset(swift_module_paths, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "swift_module_paths")),
             ),
         )
 
@@ -457,12 +469,19 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
 
         asset_sources = _gather_asset_sources(target_info, src_dot_dots)
 
+        swiftmodulefiles = []
+        for modulefilename in target_info.swift_module_paths.to_list():
+            swiftmodulefiles.append(modulefilename)
+            swiftmodulefiles.append(modulefilename.replace(".swiftmodule", ".swiftdoc"))
+            swiftmodulefiles.append(modulefilename.replace(".swiftmodule", ".swiftsourceinfo"))
+            
         target_settings = {
             "PRODUCT_NAME": target_name,
             "BAZEL_BIN_SUBDIR": target_info.bazel_bin_subdir,
             "MACH_O_TYPE": target_macho_type,
             "CLANG_ENABLE_MODULES": "YES",
             "CLANG_ENABLE_OBJC_ARC": "YES",
+            "BAZEL_SWIFTMODULEFILES_TO_COPY": " ".join(swiftmodulefiles),
         }
 
         target_settings["HEADER_SEARCH_PATHS"] = _header_search_paths_for_target(target_name, all_transitive_targets)
@@ -473,6 +492,9 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
         macros.append("$(inherited)")
         target_settings["GCC_PREPROCESSOR_DEFINITIONS"] = " ".join(macros)
 
+        if target_info.swift_objc_header_path:
+            target_settings["SWIFT_OBJC_INTERFACE_HEADER_NAME"] = paths.basename(target_info.swift_objc_header_path)
+        
         defines_without_equal_sign = ["$(inherited)"]
         for d in target_info.swift_defines.to_list():
             d = _exclude_swift_incompatible_define(d)

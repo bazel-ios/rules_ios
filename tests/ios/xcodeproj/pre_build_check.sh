@@ -21,3 +21,6 @@ for path in ${FSP}; do
         echo "Removed file at $FULL_PATH";
     fi
 done
+
+# Later we will confirm that there are no empty swiftmodules files under the build products directory
+rm -rf ~/Library/Developer/Xcode/DerivedData/Test-Imports-App-Project-*/Build/Products
