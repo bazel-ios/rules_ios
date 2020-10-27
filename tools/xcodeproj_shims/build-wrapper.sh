@@ -3,6 +3,8 @@ set -euxo pipefail
 
 BAZEL_BUILD_OPTIONS="--build_event_text_file=$BAZEL_BUILD_EVENT_TEXT_FILENAME"
 BAZEL_BUILD_OPTIONS+=" --build_event_publish_all_actions"
+BAZEL_BUILD_OPTIONS+=" --nobuild_event_text_file_path_conversion"
+BAZEL_BUILD_OPTIONS+=" --use_top_level_targets_for_symlinks"
 
 if [ $BAZEL_EXECUTION_LOG_ENABLED -gt 0 ]; then
     BAZEL_BUILD_OPTIONS+=" --experimental_execution_log_file=$BAZEL_BUILD_EXECUTION_LOG_FILENAME"
@@ -18,5 +20,5 @@ $BAZEL_PATH build \
     $BAZEL_BUILD_OPTIONS \
     $1 \
     $BAZEL_RULES_IOS_OPTIONS \
-    2>&1 \
-    | $BAZEL_OUTPUT_PROCESSOR
+    2>&1 |
+    $BAZEL_OUTPUT_PROCESSOR

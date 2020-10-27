@@ -11,6 +11,7 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@build_bazel_rules_apple//apple/internal:apple_product_type.bzl", "apple_product_type")
 load("@build_bazel_rules_apple//apple/internal:intermediates.bzl", "intermediates")
 load("@build_bazel_rules_apple//apple/internal:partials.bzl", "partials")
+load("@build_bazel_rules_apple//apple/internal:platform_support.bzl", "platform_support")
 load("@build_bazel_rules_apple//apple/internal:resource_actions.bzl", "resource_actions")
 load("@build_bazel_rules_apple//apple/internal:rule_factory.bzl", "rule_factory")
 load("//rules:transition_support.bzl", "transition_support")
@@ -25,32 +26,8 @@ _FAKE_BUNDLE_PRODUCT_TYPE_BY_PLATFORM_TYPE = {
 def _precompiled_apple_resource_bundle_impl(ctx):
     bundle_name = ctx.attr.bundle_name or ctx.label.name
 
-    attr_dict = {}
-    for k in dir(ctx.attr):
-        if k in ("to_json", "to_proto"):
-            continue
-        attr_dict[k] = getattr(ctx.attr, k)
-
     current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
-    attr_dict["platform_type"] = str(current_apple_platform.platform.platform_type)
-    attr_dict["minimum_os_version"] = str(current_apple_platform.target_os_version)
-    attr_dict["_product_type"] = _FAKE_BUNDLE_PRODUCT_TYPE_BY_PLATFORM_TYPE.get(attr_dict["platform_type"], ctx.attr._product_type)
-
-    file_dict = {}
-    for k in dir(ctx.file):
-        if k in ("to_json", "to_proto"):
-            continue
-        file_dict[k] = getattr(ctx.file, k)
-
-    file_dict["_environment_plist"] = [f for f in ctx.files._environment_plists if f.path.endswith("_{}.plist".format(attr_dict["platform_type"]))][0]
-
-    fake_ctx_dict = {}
-    for k in dir(ctx):
-        if k in ("aspect_ids", "build_setting_value", "rule", "to_json", "to_proto"):
-            continue
-        fake_ctx_dict[k] = getattr(ctx, k)
-    fake_ctx_dict["attr"] = struct(**attr_dict)
-    fake_ctx_dict["file"] = struct(**file_dict)
+    platform_type = str(current_apple_platform.platform.platform_type)
 
     # The label of this fake_ctx is used as the swift module associated with storyboards, nibs, xibs
     # and CoreData models.
@@ -67,12 +44,44 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     # The most common scenario happens when the bundle name is the same as the corresponding swift module.
     # If that is not the case, it is possible to customize the swift module by explicitly
     # passing a swift_module attr
-    fake_ctx_dict["label"] = Label("//fake_package:" + (ctx.attr.swift_module or bundle_name))
-    fake_ctx = struct(**fake_ctx_dict)
+    fake_rule_label = Label("//fake_package:" + (ctx.attr.swift_module or bundle_name))
 
-    partial_output = partial.call(partials.resources_partial(
-        top_level_attrs = ["resources"],
-    ), fake_ctx)
+    partials_args = dict(
+        actions = ctx.actions,
+        bundle_extension = ctx.attr.bundle_extension,
+        bundle_name = ctx.attr.bundle_name,
+        environment_plist = ctx.file.environment_plist,
+        executable_name = None,
+        launch_storyboard = None,
+        platform_prerequisites = platform_support.platform_prerequisites(
+            apple_fragment = ctx.fragments.apple,
+            config_vars = ctx.var,
+            device_families = ["iphone", "ipad"],
+            explicit_minimum_os = None,
+            objc_fragment = None,
+            platform_type_string = platform_type,
+            uses_swift = False,
+            xcode_path_wrapper = None,
+            xcode_version_config = ctx.attr._xcode_config[apple_common.XcodeVersionConfig],
+        ),
+        rule_descriptor = struct(
+            additional_infoplist_values = None,
+            bundle_package_type = "BNDL",
+            binary_infoplist = None,
+            product_type = _FAKE_BUNDLE_PRODUCT_TYPE_BY_PLATFORM_TYPE.get(platform_type, ctx.attr._product_type),
+        ),
+        rule_label = fake_rule_label,
+    )
+
+    partial_output = partial.call(
+        partials.resources_partial(
+            rule_attrs = ctx.attr,
+            rule_executables = ctx.executable,
+            top_level_attrs = ["resources"],
+            **partials_args
+        ),
+        ctx = ctx,
+    )
 
     # Process the plist ourselves. This is required because
     # include_executable_name defaults to True, which results in iTC rejecting
@@ -80,14 +89,15 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     output_plist = ctx.actions.declare_file(
         paths.join("%s-intermediates" % ctx.label.name, "Info.plist"),
     )
-    bundle_id = ctx.attr.bundle_id or "com.cocoapods." + bundle_name
+
     resource_actions.merge_root_infoplists(
-        fake_ctx,
-        ctx.files.infoplists,
-        output_plist,
-        None,
-        bundle_id = bundle_id,
-        include_executable_name = False,
+        bundle_id = ctx.attr.bundle_id or "com.cocoapods." + bundle_name,
+        input_plists = ctx.files.infoplists,
+        output_pkginfo = None,
+        output_plist = output_plist,
+        plisttool = ctx.executable._plisttool,
+        version = None,
+        **partials_args
     )
 
     # This is a list of files to pass to bundletool using its format, this has
@@ -183,7 +193,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         apple_common.new_objc_provider(),
     ]
 
-precompiled_apple_resource_bundle = rule(
+_precompiled_apple_resource_bundle = rule(
     implementation = _precompiled_apple_resource_bundle_impl,
     fragments = ["apple"],
     cfg = transition_support.apple_rule_transition,
@@ -232,14 +242,8 @@ the bundle as a dependency.""",
             executable = True,
             cfg = "exec",
         ),
-        _environment_plists = attr.label_list(
-            allow_files = True,
-            default = [
-                Label("@build_bazel_rules_apple//apple/internal:environment_plist_ios"),
-                Label("@build_bazel_rules_apple//apple/internal:environment_plist_macos"),
-                Label("@build_bazel_rules_apple//apple/internal:environment_plist_tvos"),
-                Label("@build_bazel_rules_apple//apple/internal:environment_plist_watchos"),
-            ],
+        environment_plist = attr.label(
+            allow_single_file = True,
         ),
         _xcode_config = attr.label(
             default = configuration_field(
@@ -254,3 +258,14 @@ the bundle as a dependency.""",
         ),
     ),
 )
+
+def precompiled_apple_resource_bundle(**kwargs):
+    _precompiled_apple_resource_bundle(
+        environment_plist = select({
+            "@build_bazel_rules_ios//rules/apple_platform:ios": "@build_bazel_rules_apple//apple/internal:environment_plist_ios",
+            "@build_bazel_rules_ios//rules/apple_platform:macos": "@build_bazel_rules_apple//apple/internal:environment_plist_macos",
+            "@build_bazel_rules_ios//rules/apple_platform:tvos": "@build_bazel_rules_apple//apple/internal:environment_plist_tvos",
+            "@build_bazel_rules_ios//rules/apple_platform:watchos": "@build_bazel_rules_apple//apple/internal:environment_plist_watchos",
+        }),
+        **kwargs
+    )

@@ -240,9 +240,6 @@ def _apple_framework_packaging_impl(ctx):
     _add_to_dict_if_present(objc_provider_fields, "module_map", depset(
         direct = modulemap_out,
     ))
-    _add_to_dict_if_present(objc_provider_fields, "static_framework_file", depset(
-        direct = binary_out,
-    ))
     for key in [
         "sdk_dylib",
         "sdk_framework",
@@ -257,6 +254,7 @@ def _apple_framework_packaging_impl(ctx):
         "include",
         "link_inputs",
         "linkopt",
+        "library",
     ]:
         set = depset(
             direct = [],
@@ -303,7 +301,7 @@ def _apple_framework_packaging_impl(ctx):
         objc_provider,
         cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider], cc_infos = [dep[CcInfo] for dep in ctx.attr.transitive_deps if CcInfo in dep]),
         swift_common.create_swift_info(**swift_info_fields),
-        DefaultInfo(files = depset(framework_files)),
+        DefaultInfo(files = depset(binary_out + swiftmodule_out)),  # bare minimum to ensure compilation
         AppleBundleInfo(
             archive = None,
             archive_root = None,

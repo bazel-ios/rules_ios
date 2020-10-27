@@ -42,16 +42,17 @@ def _cpu_string(platform_type, settings):
     fail("ERROR: Unknown platform type: {}".format(platform_type))
 
 def _min_os_version_or_none(attr, platform, attr_platform_type):
-    if attr_platform_type == platform:
-        if hasattr(attr, "platforms"):
-            platforms = attr.platforms
-            value = platforms.get(platform)
-            return value
-        elif hasattr(attr, "minimum_os_version"):
-            return attr.minimum_os_version
-        else:
-            fail("ERROR: must either specify a single platform/minimum_os_version, or specify a dict via platforms")
-    return None
+    if attr_platform_type != platform:
+        return None
+
+    if hasattr(attr, "platforms"):
+        platforms = attr.platforms
+        value = platforms.get(platform)
+        return value
+    elif hasattr(attr, "minimum_os_version"):
+        return attr.minimum_os_version
+    else:
+        fail("ERROR: must either specify a single platform/minimum_os_version, or specify a dict via platforms")
 
 def _apple_rule_transition_impl(settings, attr):
     """Rule transition for Apple rules."""
@@ -65,8 +66,9 @@ def _apple_rule_transition_impl(settings, attr):
         platform_type = attr_platform_type
     elif attr_platforms and platform_type not in attr_platforms:
         if fail_on_apple_rule_transition_platform_mismatches:
-            print("ERROR: {}: attribute platforms set to {}, but platform inferred to be {}".format(attr.name, attr_platforms, platform_type))
+            fail("ERROR: {}: attribute platforms set to {}, but platform inferred to be {}".format(attr.name, attr_platforms, platform_type))
         platform_type = attr_platforms.keys()[0]
+
     ret = {
         "//command_line_option:apple configuration distinguisher": "applebin_" + platform_type,
         "//command_line_option:apple_platform_type": platform_type,
