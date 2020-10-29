@@ -2,15 +2,24 @@ load("@build_bazel_rules_ios//rules:framework.bzl", "apple_framework")
 load("@build_bazel_rules_ios//rules:apple_patched.bzl", "apple_dynamic_framework_import")
 load("@build_bazel_rules_ios//rules:test.bzl", "ios_unit_test")
 
+# A framework built with carthage
 apple_dynamic_framework_import(
     name = "InputMask",
     framework_imports = ["@carthage//:InputMask"],
     visibility = ["//visibility:public"],
 )
 
+# A framework built with cocoapods-binary
 apple_dynamic_framework_import(
     name = "SnapKit",
     framework_imports = ["@cocoapods//:SnapKit"],
+    visibility = ["//visibility:public"],
+)
+
+# A prebuilt vendored_framework distributed with cocoapods
+apple_dynamic_framework_import(
+    name = "GoogleMobileAds",
+    framework_imports = ["@cocoapods//:GoogleMobileAds"],
     visibility = ["//visibility:public"],
 )
 
@@ -26,6 +35,7 @@ apple_framework(
     ),
     visibility = ["//visibility:public"],
     deps = [
+        ":GoogleMobileAds",
         ":InputMask",
         ":SnapKit",
     ],

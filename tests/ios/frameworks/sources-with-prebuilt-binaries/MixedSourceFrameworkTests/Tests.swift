@@ -7,5 +7,6 @@ class Tests: XCTestCase {
     func test() {
         XCTAssertEqual(snapKitClass, "SnapKit.Constraint")
         XCTAssertEqual(MaskedTextInputListener.inputMaskClass, "InputMask.MaskedTextInputListener")
+        XCTAssertEqual(googleMobileAdsClass, "DFPBannerView")
     }
 }

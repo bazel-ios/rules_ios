@@ -1,5 +1,6 @@
-import InputMask
-import SnapKit
+import GoogleMobileAds // A prebuilt vendored_framework distributed with cocoapods
+import InputMask // A framework built with carthage
+import SnapKit // A framework built with cocoapods-binary
 
 /* Declaring this extension used to make the framework build fail with the error:
  * ...MixedSourceFramework-Swift.h:184:9: fatal error: module 'SwiftLibrary' not found
@@ -14,3 +15,4 @@ public extension MaskedTextInputListener {
 }
 
 public let snapKitClass = String(reflecting: Constraint.self)
+public let googleMobileAdsClass = String(reflecting: GoogleMobileAds.DFPBannerView.self)
