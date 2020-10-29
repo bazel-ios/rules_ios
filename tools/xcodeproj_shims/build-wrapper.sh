@@ -1,15 +1,21 @@
 #!/bin/bash
 set -euxo pipefail
 
-EXEC_LOG_OPTION=""
+BAZEL_BUILD_OPTIONS="--build_event_text_file=$BAZEL_BUILD_EVENT_TEXT_FILENAME"
+BAZEL_BUILD_OPTIONS+=" --build_event_publish_all_actions"
+
 if [ $BAZEL_EXECUTION_LOG_ENABLED -gt 0 ]; then
-    EXEC_LOG_OPTION="--experimental_execution_log_file=$BAZEL_BUILD_EXECUTION_LOG_FILENAME"
+    BAZEL_BUILD_OPTIONS+=" --experimental_execution_log_file=$BAZEL_BUILD_EXECUTION_LOG_FILENAME"
+fi
+
+# When building for an iOS device in XCode, TARGET_DEVICE_IDENTIFIER is exported, and PLATFORM_NAME is iphoneos.
+if [ -n "$(export -p | grep TARGET_DEVICE_IDENTIFIER=)" ] && [ "$PLATFORM_NAME" = "iphoneos" ]; then
+    BAZEL_BUILD_OPTIONS+=" --ios_multi_cpus=arm64"
 fi
 
 $BAZEL_PATH build \
-    $EXEC_LOG_OPTION \
-    --build_event_text_file=$BAZEL_BUILD_EVENT_TEXT_FILENAME \
-    --build_event_publish_all_actions $1 \
+    $BAZEL_BUILD_OPTIONS \
+    $1 \
     $BAZEL_RULES_IOS_OPTIONS \
     2>&1 \
     | $BAZEL_OUTPUT_PROCESSOR
