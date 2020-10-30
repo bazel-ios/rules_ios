@@ -42,7 +42,7 @@ build_cocoapods_frameworks(<a href="#build_cocoapods_frameworks-name">name</a>, 
 | :------------- | :------------- | :------------- |
 | <a id="build_cocoapods_frameworks-name"></a>name |  the rule name   |  none |
 | <a id="build_cocoapods_frameworks-directory"></a>directory |  the path to the directory containing the cocoapods setup   |  <code>""</code> |
-| <a id="build_cocoapods_frameworks-files"></a>files |  the files required for cocoapods to run   |  <code>["Podfile", "Gemfile"]</code> |
+| <a id="build_cocoapods_frameworks-files"></a>files |  the files required for cocoapods to run   |  <code>["Podfile", "Podfile.lock", "Gemfile", "Gemfile.lock"]</code> |
 | <a id="build_cocoapods_frameworks-cmd"></a>cmd |  the command to install and run cocoapods   |  <code>"\n        bundle install\n        bundle exec pod install\n        "</code> |
 | <a id="build_cocoapods_frameworks-verbose"></a>verbose |  if true, it will show the output of running cocoapods in the command line   |  <code>False</code> |
 
