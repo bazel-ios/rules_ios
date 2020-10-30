@@ -9,7 +9,8 @@ if [ $BAZEL_EXECUTION_LOG_ENABLED -gt 0 ]; then
 fi
 
 # When building for an iOS device in XCode, TARGET_DEVICE_IDENTIFIER is exported, and PLATFORM_NAME is iphoneos.
-if [ -n "$(export -p | grep TARGET_DEVICE_IDENTIFIER=)" ] && [ "$PLATFORM_NAME" = "iphoneos" ]; then
+if [ -n "${TARGET_DEVICE_IDENTIFIER:-}" ] && [ "$PLATFORM_NAME" = "iphoneos" ]; then
+    echo "Builds with --ios_multi_cpus=arm64 since the target is an iOS device."
     BAZEL_BUILD_OPTIONS+=" --ios_multi_cpus=arm64"
 fi
 
