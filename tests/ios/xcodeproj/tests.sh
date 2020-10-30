@@ -2,7 +2,7 @@ set -eux
 
 cd $(dirname $0)
 
-# Make sure there are simulators avilable as destinations
+# Make sure there are simulators available as destinations
 xcrun simctl list
 
 export PROJECT_AND_SCHEME="-project Single-Static-Framework-Project.xcodeproj -scheme ObjcFrameworkTests"
