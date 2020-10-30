@@ -34,6 +34,7 @@ com.apple.product-type.bundle.unit-test)
         "bazel-bin/$BAZEL_BIN_SUBDIR/${FULL_PRODUCT_NAME}"
         "bazel-bin/$BAZEL_BIN_SUBDIR/$TARGET_NAME.__internal__.__test_bundle_archive-root/$TARGET_NAME${WRAPPER_SUFFIX:-}"
         "bazel-bin/$BAZEL_BIN_SUBDIR/${BAZEL_BUILD_TARGET_LABEL#*:}.runfiles/${BAZEL_BUILD_TARGET_WORKSPACE}/${BAZEL_BIN_SUBDIR}/${FULL_PRODUCT_NAME}"
+        "bazel-bin/$BAZEL_BIN_SUBDIR/${BAZEL_BUILD_TARGET_LABEL#*:}.runfiles/${BAZEL_BUILD_TARGET_WORKSPACE}/${BAZEL_BIN_SUBDIR}/$TARGET_NAME.zip"
     )
     ;;
 com.apple.product-type.application)
@@ -41,6 +42,7 @@ com.apple.product-type.application)
         "bazel-bin/$BAZEL_BIN_SUBDIR/${FULL_PRODUCT_NAME}"
         "bazel-bin/$BAZEL_BIN_SUBDIR/${TARGET_NAME}_archive-root/Payload/$TARGET_NAME${WRAPPER_SUFFIX:-}"
         "bazel-bin/$BAZEL_BIN_SUBDIR/${BAZEL_BUILD_TARGET_LABEL#*:}.runfiles/${BAZEL_BUILD_TARGET_WORKSPACE}/${BAZEL_BIN_SUBDIR}/${FULL_PRODUCT_NAME}"
+        "bazel-bin/$BAZEL_BIN_SUBDIR/${BAZEL_BUILD_TARGET_LABEL#*:}.runfiles/${BAZEL_BUILD_TARGET_WORKSPACE}/${BAZEL_BIN_SUBDIR}/$TARGET_NAME.zip"
     )
     ;;
 *)
@@ -72,16 +74,23 @@ for input in "${input_options[@]}"; do
         # Copy bundle contents, into the destination bundle.
         # This avoids self-nesting, like: Foo.app/Foo.app
         input+="/"
-    else
+    elif [[ ! -f $input ]] || [[ $input != *.zip ]]; then
         continue
     fi
 
-    rsync \
-        --recursive --chmod=u+w --delete \
-        "$input" "$output" >"$BAZEL_DIAGNOSTICS_DIR"/rsync-stdout-"$DATE_SUFFIX".log 2>"$BAZEL_DIAGNOSTICS_DIR"/rsync-stderr-"$DATE_SUFFIX".log
-    if [[ -n ${SWIFT_OBJC_INTERFACE_HEADER_NAME:-} ]]; then
-        cp -f $input/Headers/$SWIFT_OBJC_INTERFACE_HEADER_NAME $OBJECT_FILE_DIR_normal/$CURRENT_ARCH/
+    if [[ $input == *.zip ]]; then
+        rm -rf "$output"
+        unzip -qq -d "$TARGET_BUILD_DIR" "$input"
+    else
+        rsync \
+            --recursive --chmod=u+w --delete \
+            "$input" "$output" >"$BAZEL_DIAGNOSTICS_DIR"/rsync-stdout-"$DATE_SUFFIX".log 2>"$BAZEL_DIAGNOSTICS_DIR"/rsync-stderr-"$DATE_SUFFIX".log
     fi
+
+    if [[ -n "${SWIFT_OBJC_INTERFACE_HEADER_NAME:-}" ]]; then
+        cp -f "$input/Headers/$SWIFT_OBJC_INTERFACE_HEADER_NAME" "$OBJECT_FILE_DIR_normal/$CURRENT_ARCH/"
+    fi
+
     copied=true
     break
 done
