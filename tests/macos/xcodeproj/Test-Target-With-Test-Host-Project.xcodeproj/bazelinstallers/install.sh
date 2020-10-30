@@ -42,6 +42,12 @@ case "${PRODUCT_TYPE}" in
 esac
 output="$TARGET_BUILD_DIR/$FULL_PRODUCT_NAME"
 
+for swiftmodulefile in $BAZEL_SWIFTMODULEFILES_TO_COPY; do
+  cp $swiftmodulefile $OBJECT_FILE_DIR_normal/$NATIVE_ARCH/
+done
+
+chmod -R +w $OBJECT_FILE_DIR_normal/$NATIVE_ARCH/
+
 mkdir -p "$(dirname "$output")"
 
 for input in "${input_options[@]}"; do
@@ -61,6 +67,10 @@ for input in "${input_options[@]}"; do
     rsync \
         --recursive --chmod=u+w --delete \
         "$input" "$output" > "$BAZEL_DIAGNOSTICS_DIR"/rsync-stdout-"$DATE_SUFFIX".log 2> "$BAZEL_DIAGNOSTICS_DIR"/rsync-stderr-"$DATE_SUFFIX".log
+	if [[ -n ${SWIFT_OBJC_INTERFACE_HEADER_NAME:-} ]]
+	then
+	       cp -f $input/Headers/$SWIFT_OBJC_INTERFACE_HEADER_NAME $OBJECT_FILE_DIR_normal/$NATIVE_ARCH/
+	fi      	
     break
 done
 
