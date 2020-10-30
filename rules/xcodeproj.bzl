@@ -104,7 +104,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             for h in target[apple_common.Objc].header.to_list():
                 if h.path.endswith("-Swift.h"):
                     swift_objc_header_path = h.path
-                    
+
         bundle_info = target[AppleBundleInfo]
         test_host_appname = None
         test_host_target = None
@@ -474,7 +474,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
             swiftmodulefiles.append(modulefilename)
             swiftmodulefiles.append(modulefilename.replace(".swiftmodule", ".swiftdoc"))
             swiftmodulefiles.append(modulefilename.replace(".swiftmodule", ".swiftsourceinfo"))
-            
+
         target_settings = {
             "PRODUCT_NAME": target_name,
             "BAZEL_BIN_SUBDIR": target_info.bazel_bin_subdir,
@@ -494,7 +494,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
 
         if target_info.swift_objc_header_path:
             target_settings["SWIFT_OBJC_INTERFACE_HEADER_NAME"] = paths.basename(target_info.swift_objc_header_path)
-        
+
         defines_without_equal_sign = ["$(inherited)"]
         for d in target_info.swift_defines.to_list():
             d = _exclude_swift_incompatible_define(d)
