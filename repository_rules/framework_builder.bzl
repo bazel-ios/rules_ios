@@ -117,7 +117,7 @@ def _carthage_impl(ctx):
 def build_cocoapods_frameworks(
         name,
         directory = "",
-        files = ["Podfile", "Gemfile"],
+        files = ["Podfile", "Podfile.lock", "Gemfile", "Gemfile.lock"],
         cmd = """
         bundle install
         bundle exec pod install
