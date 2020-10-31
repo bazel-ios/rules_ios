@@ -7,19 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0BD7FD856ED50175FA3D3BC9 /* FooFrameworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 091655034CF618D208C22AE8 /* FooFrameworkTests.m */; };
+		523A35A873BDD558AB2EA0CF /* FooFrameworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 091655034CF618D208C22AE8 /* FooFrameworkTests.m */; };
 		5C8EED4DAAF3B4B069337569 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7A2F537C999952921627A8 /* main.m */; };
+		A69ED002F8D1E4FBF129570E /* FooFrameworkTesting.m in Sources */ = {isa = PBXBuildFile; fileRef = D7D26FCF8D7CCD3C802C6987 /* FooFrameworkTesting.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		091655034CF618D208C22AE8 /* FooFrameworkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FooFrameworkTests.m; sourceTree = "<group>"; };
 		11B98E6654D00F1E74B2DA47 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
+		1D0F320499C268F88E5BB697 /* FooFrameworkTesting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FooFrameworkTesting.h; sourceTree = "<group>"; };
 		24C22223D1434365B1D0A956 /* ObjcFrameworkTestLib.framework */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; path = ObjcFrameworkTestLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		413EA7F09E2ABDF7CFCB736D /* ObjcFrameworkTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ObjcFrameworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BB7A0F977B290B8648FFDB0 /* ObjcFramework.framework */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; path = ObjcFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD7402651F16555F753997F4 /* HeaderA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HeaderA.h; sourceTree = "<group>"; };
 		BD4894AC90711E6A55CB1657 /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.pch; sourceTree = "<group>"; };
 		CF7A2F537C999952921627A8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		D7D26FCF8D7CCD3C802C6987 /* FooFrameworkTesting.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FooFrameworkTesting.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -29,6 +32,7 @@
 				11B98E6654D00F1E74B2DA47 /* BUILD.bazel */,
 				AD7402651F16555F753997F4 /* HeaderA.h */,
 				CF7A2F537C999952921627A8 /* main.m */,
+				7CF4F5ED68FE1E9E6486ED55 /* testing */,
 				37D2E41255E69DF775A9E8A7 /* tests */,
 			);
 			path = objc;
@@ -48,6 +52,15 @@
 				091655034CF618D208C22AE8 /* FooFrameworkTests.m */,
 			);
 			path = tests;
+			sourceTree = "<group>";
+		};
+		7CF4F5ED68FE1E9E6486ED55 /* testing */ = {
+			isa = PBXGroup;
+			children = (
+				1D0F320499C268F88E5BB697 /* FooFrameworkTesting.h */,
+				D7D26FCF8D7CCD3C802C6987 /* FooFrameworkTesting.m */,
+			);
+			path = testing;
 			sourceTree = "<group>";
 		};
 		7EDC6B4DDC5CF54A9237A106 /* ios */ = {
@@ -259,6 +272,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				523A35A873BDD558AB2EA0CF /* FooFrameworkTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,7 +280,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0BD7FD856ED50175FA3D3BC9 /* FooFrameworkTests.m in Sources */,
+				A69ED002F8D1E4FBF129570E /* FooFrameworkTesting.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
