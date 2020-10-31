@@ -26,7 +26,7 @@ for path in ${FSP}; do
     fi
 done
 
-export EMPTY_SWIFTMODULE_FILES=`find ~/Library/Developer/Xcode/DerivedData/Test-Imports-App-Project-*/Build/Products -name *".swiftmodule" -size 0`
+export EMPTY_SWIFTMODULE_FILES=`find build/Debug-iphoneos -name *".swiftmodule" -size 0`
 for esf in ${EMPTY_SWIFTMODULE_FILES}; do
 	echo "Swiftmodule in build products dir at $esf is empty!";
 	exit 1;
