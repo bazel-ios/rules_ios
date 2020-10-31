@@ -303,8 +303,6 @@ def _swiftmodulepaths_for_target(target_name, all_transitive_targets):
 
     return " ".join(swiftmodulefiles)
 
-    
-
 def _header_search_paths_for_target(target_name, all_transitive_targets):
     """Helper method transforming valid hmap paths into full absolute paths and concat together
 
@@ -503,7 +501,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
             "CLANG_ENABLE_MODULES": "YES",
             "CLANG_ENABLE_OBJC_ARC": "YES",
         }
-        
+
         target_settings["BAZEL_SWIFTMODULEFILES_TO_COPY"] = _swiftmodulepaths_for_target(target_name, all_transitive_targets)
         target_settings["HEADER_SEARCH_PATHS"] = _header_search_paths_for_target(target_name, all_transitive_targets)
         target_settings["FRAMEWORK_SEARCH_PATHS"] = _framework_search_paths_for_target(target_name, all_transitive_targets)

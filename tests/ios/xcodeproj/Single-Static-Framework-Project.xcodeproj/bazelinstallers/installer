@@ -42,13 +42,16 @@ case "${PRODUCT_TYPE}" in
 esac
 output="$TARGET_BUILD_DIR/$FULL_PRODUCT_NAME"
 
-mkdir -p $OBJECT_FILE_DIR_normal/$NATIVE_ARCH_ACTUAL/
 
-for swiftmodulefile in ${BAZEL_SWIFTMODULEFILES_TO_COPY:-}; do
-  cp $swiftmodulefile $OBJECT_FILE_DIR_normal/$NATIVE_ARCH_ACTUAL/
+mkdir -p $OBJECT_FILE_DIR_normal/$CURRENT_ARCH/
+chmod -R +w $OBJECT_FILE_DIR_normal/$CURRENT_ARCH/
+
+for swiftmodulefile in ${BAZEL_SWIFTMODULEFILES_TO_COPY:-}; do 
+	if [[ -e $swiftmodulefile ]]; then
+		cp $swiftmodulefile $OBJECT_FILE_DIR_normal/$CURRENT_ARCH/
+  	fi
 done
 
-chmod -R +w $OBJECT_FILE_DIR_normal/$NATIVE_ARCH_ACTUAL/
 
 mkdir -p "$(dirname "$output")"
 
@@ -71,7 +74,7 @@ for input in "${input_options[@]}"; do
         "$input" "$output" > "$BAZEL_DIAGNOSTICS_DIR"/rsync-stdout-"$DATE_SUFFIX".log 2> "$BAZEL_DIAGNOSTICS_DIR"/rsync-stderr-"$DATE_SUFFIX".log
 	if [[ -n ${SWIFT_OBJC_INTERFACE_HEADER_NAME:-} ]]
 	then
-	       cp -f $input/Headers/$SWIFT_OBJC_INTERFACE_HEADER_NAME $OBJECT_FILE_DIR_normal/$NATIVE_ARCH_ACTUAL/
+		cp -f $input/Headers/$SWIFT_OBJC_INTERFACE_HEADER_NAME $OBJECT_FILE_DIR_normal/$CURRENT_ARCH/
 	fi      	
     break
 done

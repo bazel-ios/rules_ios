@@ -355,7 +355,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg/bin/tests/ios/unit-test/ExplicitHosted.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg/bin/tests/ios/unit-test/ExplicitHosted.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg/bin/tests/ios/unit-test/ExplicitHosted.swiftsourceinfo";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg/bin/tests/ios/unit-test/ExplicitHosted.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg/bin/tests/ios/unit-test/ExplicitHosted.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg/bin/tests/ios/unit-test/ExplicitHosted.swiftsourceinfo bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg/bin/tests/ios/unit-test/ExplicitHosted.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg/bin/tests/ios/unit-test/ExplicitHosted.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg/bin/tests/ios/unit-test/ExplicitHosted.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -376,7 +376,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg/bin/tests/ios/unit-test/ExplicitHosted.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg/bin/tests/ios/unit-test/ExplicitHosted.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg/bin/tests/ios/unit-test/ExplicitHosted.swiftsourceinfo";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg/bin/tests/ios/unit-test/ExplicitHosted.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg/bin/tests/ios/unit-test/ExplicitHosted.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg/bin/tests/ios/unit-test/ExplicitHosted.swiftsourceinfo bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg/bin/tests/ios/unit-test/ExplicitHosted.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg/bin/tests/ios/unit-test/ExplicitHosted.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg/bin/tests/ios/unit-test/ExplicitHosted.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
