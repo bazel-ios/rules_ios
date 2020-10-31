@@ -6,7 +6,7 @@ set -euo pipefail
 
 echo "Start remapping index files at `date`"
 
-FOUND_INDEXSTORES=`pcregrep -o1 'command_line: "(.*\.indexstore)' $BAZEL_BUILD_EVENT_TEXT_FILENAME | uniq`
+FOUND_INDEXSTORES=`grep -o 'command_line: "\(.*\.indexstore\)' $BAZEL_BUILD_EVENT_TEXT_FILENAME | sed 's/.*command_line: "//' | uniq`
 
 declare -a EXISTING_INDEXSTORES=()
 for i in $FOUND_INDEXSTORES

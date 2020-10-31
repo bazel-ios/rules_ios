@@ -21,3 +21,7 @@ for path in ${FSP}; do
         echo "Removed file at $FULL_PATH";
     fi
 done
+
+# Xcodebuild will place built products under the "build" directory next to the project file.
+# Later we will confirm that there are no empty swiftmodules files under the build products directory
+rm -rf build
