@@ -42,7 +42,6 @@ case "${PRODUCT_TYPE}" in
 esac
 output="$TARGET_BUILD_DIR/$FULL_PRODUCT_NAME"
 
-
 mkdir -p $OBJECT_FILE_DIR_normal/$CURRENT_ARCH/
 chmod -R +w $OBJECT_FILE_DIR_normal/$CURRENT_ARCH/
 

@@ -297,9 +297,10 @@ def _swiftmodulepaths_for_target(target_name, all_transitive_targets):
     for at in all_transitive_targets:
         if at.name == target_name:
             for modulefilename in at.swift_module_paths.to_list():
-                swiftmodulefiles.append(modulefilename)
-                swiftmodulefiles.append(modulefilename.replace(".swiftmodule", ".swiftdoc"))
-                swiftmodulefiles.append(modulefilename.replace(".swiftmodule", ".swiftsourceinfo"))
+                if modulefilename not in swiftmodulefiles:
+                    swiftmodulefiles.append(modulefilename)
+                    swiftmodulefiles.append(modulefilename.replace(".swiftmodule", ".swiftdoc"))
+                    swiftmodulefiles.append(modulefilename.replace(".swiftmodule", ".swiftsourceinfo"))
 
     return " ".join(swiftmodulefiles)
 
