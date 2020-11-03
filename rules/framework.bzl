@@ -302,7 +302,7 @@ def _apple_framework_packaging_impl(ctx):
         cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider], cc_infos = [dep[CcInfo] for dep in ctx.attr.transitive_deps if CcInfo in dep]),
         swift_common.create_swift_info(**swift_info_fields),
         # bare minimum to ensure compilation and package framework with modules and headers
-        DefaultInfo(files = depset(binary_out + swiftmodule_out + header_out + private_header_out + modulemap_out)),  
+        DefaultInfo(files = depset(binary_out + swiftmodule_out + header_out + private_header_out + modulemap_out)),
         AppleBundleInfo(
             archive = None,
             archive_root = None,
