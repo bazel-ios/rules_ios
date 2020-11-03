@@ -1,0 +1,13 @@
+# Create a set of public config_settings that can be used in select()s.
+[
+    config_setting(
+        name = arch,
+        values = {"apple_platform_type": arch},
+    )
+    for arch in [
+        "ios",
+        "macos",
+        "tvos",
+        "watchos",
+    ]
+]

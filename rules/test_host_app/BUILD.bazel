@@ -17,7 +17,6 @@ exports_files([
         ],
         launch_storyboard = "LaunchScreen.storyboard",
         minimum_os_version = version,
-        resource_bundles = {"iOS-{}-AppHost-Resources".format(version): glob(["AssetCatalogFixture.xcassets/**"])},
         visibility = ["//visibility:public"],
     )
     for version in [

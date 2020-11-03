@@ -126,6 +126,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             name = bundle_info.bundle_name,
             bundle_id = bundle_info.bundle_id,
             bundle_extension = bundle_info.bundle_extension,
+            bazel_build_target_workspace = target.label.workspace_name or ctx.workspace_name,
             bazel_build_target_name = bazel_build_target_name,
             bazel_bin_subdir = bazel_bin_subdir,
             srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
@@ -455,7 +456,7 @@ mkdir -p $BAZEL_DIAGNOSTICS_DIR
 export DATE_SUFFIX="$(date +%Y%m%d.%H%M%S%L)"
 export BAZEL_BUILD_EVENT_TEXT_FILENAME="$BAZEL_DIAGNOSTICS_DIR/build-event-$DATE_SUFFIX.txt"
 export BAZEL_BUILD_EXECUTION_LOG_FILENAME="$BAZEL_DIAGNOSTICS_DIR/build-execution-log-$DATE_SUFFIX.log"
-env -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC {bazel_build_target_name}
+env -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC $BAZEL_BUILD_TARGET_LABEL
 $BAZEL_INSTALLER
 """
 
@@ -501,6 +502,8 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
             "MACH_O_TYPE": target_macho_type,
             "CLANG_ENABLE_MODULES": "YES",
             "CLANG_ENABLE_OBJC_ARC": "YES",
+            "BAZEL_BUILD_TARGET_LABEL": target_info.bazel_build_target_name,
+            "BAZEL_BUILD_TARGET_WORKSPACE": target_info.bazel_build_target_workspace,
         }
 
         target_settings["BAZEL_SWIFTMODULEFILES_TO_COPY"] = _swiftmodulepaths_for_target(target_name, all_transitive_targets)
@@ -549,7 +552,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
             "dependencies": target_dependencies,
             "preBuildScripts": [{
                 "name": "Build with bazel",
-                "script": _BUILD_WITH_BAZEL_SCRIPT.format(bazel_build_target_name = target_info.bazel_build_target_name),
+                "script": _BUILD_WITH_BAZEL_SCRIPT,
             }],
         }
 

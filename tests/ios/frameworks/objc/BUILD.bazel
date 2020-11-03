@@ -15,8 +15,8 @@ apple_framework(
     name = "ObjcFrameworkTestLib",
     srcs = glob(
         [
-            "tests/**/*.h",
-            "tests/**/*.m",
+            "testing/**/*.h",
+            "testing/**/*.m",
         ],
     ),
     deps = [
@@ -26,6 +26,12 @@ apple_framework(
 
 ios_unit_test(
     name = "ObjcFrameworkTests",
+    srcs = glob(
+        [
+            "tests/**/*.h",
+            "tests/**/*.m",
+        ],
+    ),
     minimum_os_version = "10.0",
     visibility = ["//visibility:public"],
     deps = [":ObjcFrameworkTestLib"],
