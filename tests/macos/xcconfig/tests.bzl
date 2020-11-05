@@ -9,7 +9,7 @@ def _xcconfig_test_rule_impl(ctx):
     xcconfig.update(ctx.attr.str)
     xcconfig.update(ctx.attr.list)
     return [
-        _Settings(settings = settings_from_xcconfig(xcconfig)),
+        _Settings(settings = copts_from_xcconfig(xcconfig)),
     ]
 
 xcconfig_test_rule = rule(

@@ -177,7 +177,7 @@ def _add_copts_from_option(xcspec, name, option, value, value_escaper, xcconfigs
         for arg in new
     ]
 
-def settings_from_xcconfig(xcconfig):
+def copts_from_xcconfig(xcconfig):
     objc_copts = []
     cc_copts = []
     swift_copts = []
@@ -235,4 +235,69 @@ def settings_from_xcconfig(xcconfig):
         mapc_copts = mapc_copts,
         ibtool_copts = ibtool_copts,
         linkopts = linkopts,
+    )
+
+def copts_by_build_setting_with_defaults(xcconfig = {}, fetch_default_xcconfig = {}, xcconfig_by_build_setting = {}):
+    """Creates a struct containing copts behind 'select()' statements for each build setting in the keys of 'xcconfig_by_build_setting'
+
+    Each copts in the result struct contains a 'select()' statement where the keys are build settings names
+    and each value is the result of merging 'xcconfig' with the xcconfigs for that specific build setting and applying the
+    default values from 'fetch_default_xcconfig' if set.
+
+    Note that if 'xcconfig_by_build_setting' is empty this will still return the copts for 'xcconfig' plus the default values
+    in 'fetch_default_xcconfig' if set (since '//conditions:default' is being set).
+
+    Args:
+        xcconfig: A dictionary of Xcode build settings to be converted to
+                  different `copt` attributes.
+        fetch_default_xcconfig: A dictionary of default Xcode build settings
+                                to be applied for the keys that are not set.
+        xcconfig_by_build_setting: A dictionary where the keys are build settings names and
+                                   the values are the respective dictionary of Xcode build settings
+    Returns:
+        Struct with different copts behind 'select()' statements
+    """
+    xcconfig_with_defaults = xcconfig
+
+    for (xc_build_setting, value) in fetch_default_xcconfig.items():
+        if not xc_build_setting in xcconfig:
+            xcconfig_with_defaults[xc_build_setting] = value
+
+    copts_with_defaults = copts_from_xcconfig(xcconfig_with_defaults)
+    objc_copts_by_build_setting = {"//conditions:default": copts_with_defaults.objc_copts}
+    cc_copts_by_build_setting = {"//conditions:default": copts_with_defaults.cc_copts}
+    swift_copts_by_build_setting = {"//conditions:default": copts_with_defaults.swift_copts}
+    momc_copts_by_build_setting = {"//conditions:default": copts_with_defaults.momc_copts}
+    mapc_copts_by_build_setting = {"//conditions:default": copts_with_defaults.mapc_copts}
+    ibtool_copts_by_build_setting = {"//conditions:default": copts_with_defaults.ibtool_copts}
+    linkopts_by_build_setting = {"//conditions:default": copts_with_defaults.linkopts}
+
+    for (build_setting, build_setting_xcconfig) in xcconfig_by_build_setting.items():
+        merged_xcconfig = dict(xcconfig)
+
+        for (k, v) in build_setting_xcconfig.items():
+            merged_xcconfig[k] = v
+
+        for (xc_build_setting, value) in fetch_default_xcconfig.items():
+            if not xc_build_setting in merged_xcconfig:
+                merged_xcconfig[xc_build_setting] = value
+
+        copts = copts_from_xcconfig(merged_xcconfig)
+
+        objc_copts_by_build_setting[build_setting] = copts.objc_copts
+        cc_copts_by_build_setting[build_setting] = copts.cc_copts
+        swift_copts_by_build_setting[build_setting] = copts.swift_copts
+        momc_copts_by_build_setting[build_setting] = copts.momc_copts
+        mapc_copts_by_build_setting[build_setting] = copts.mapc_copts
+        ibtool_copts_by_build_setting[build_setting] = copts.ibtool_copts
+        linkopts_by_build_setting[build_setting] = copts.linkopts
+
+    return struct(
+        objc_copts = select(objc_copts_by_build_setting),
+        cc_copts = select(cc_copts_by_build_setting),
+        swift_copts = select(swift_copts_by_build_setting),
+        momc_copts = select(momc_copts_by_build_setting),
+        mapc_copts = select(mapc_copts_by_build_setting),
+        ibtool_copts = select(ibtool_copts_by_build_setting),
+        linkopts = select(linkopts_by_build_setting),
     )
