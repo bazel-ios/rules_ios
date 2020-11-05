@@ -66,7 +66,7 @@ Propagates private headers, so they can be accessed if necessary
 
 <pre>
 apple_library(<a href="#apple_library-name">name</a>, <a href="#apple_library-library_tools">library_tools</a>, <a href="#apple_library-export_private_headers">export_private_headers</a>, <a href="#apple_library-namespace_is_module_name">namespace_is_module_name</a>,
-              <a href="#apple_library-default_xcconfig_name">default_xcconfig_name</a>, <a href="#apple_library-xcconfig">xcconfig</a>, <a href="#apple_library-kwargs">kwargs</a>)
+              <a href="#apple_library-default_xcconfig_name">default_xcconfig_name</a>, <a href="#apple_library-xcconfig">xcconfig</a>, <a href="#apple_library-xcconfig_by_build_setting">xcconfig_by_build_setting</a>, <a href="#apple_library-kwargs">kwargs</a>)
 </pre>
 
 Create libraries for native source code on Apple platforms.
@@ -86,6 +86,7 @@ reasonable defaults that mimic Xcode's behavior.
 | <a id="apple_library-namespace_is_module_name"></a>namespace_is_module_name |  Whether the module name should be used as the                           namespace for header imports, instead of the target name.   |  <code>True</code> |
 | <a id="apple_library-default_xcconfig_name"></a>default_xcconfig_name |  The name of a default xcconfig to be applied to this target.   |  <code>None</code> |
 | <a id="apple_library-xcconfig"></a>xcconfig |  A dictionary of Xcode build settings to be applied to this target in the           form of different <code>copt</code> attributes.   |  <code>{}</code> |
+| <a id="apple_library-xcconfig_by_build_setting"></a>xcconfig_by_build_setting |  A dictionary of Xcode build settings grouped by bazel build settings,                            these will be applied (and override any value in 'xcconfig') if the respective                            bazel build setting is resolved in the analysis phase   |  <code>{}</code> |
 | <a id="apple_library-kwargs"></a>kwargs |  keyword arguments.   |  none |
 
 

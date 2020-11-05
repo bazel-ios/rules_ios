@@ -236,8 +236,9 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         default_xcconfig_name: The name of a default xcconfig to be applied to this target.
         xcconfig: A dictionary of Xcode build settings to be applied to this target in the
                   form of different `copt` attributes.
-        xcconfig_by_build_setting: A dictionary where the keys are build settings names and
-                                   the values are the respective dictionary of Xcode build settings
+        xcconfig_by_build_setting: A dictionary of Xcode build settings grouped by bazel build settings,
+                                   these will be applied (and override any value in 'xcconfig') if the respective
+                                   bazel build setting is resolved in the analysis phase
         **kwargs: keyword arguments.
 
     Returns:

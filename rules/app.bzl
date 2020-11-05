@@ -1,6 +1,7 @@
 load("@bazel_skylib//lib:types.bzl", "types")
 load("@build_bazel_rules_apple//apple:ios.bzl", rules_apple_ios_application = "ios_application")
 load("//rules:library.bzl", "apple_library", "write_file")
+load("//rules/library:xcconfig.bzl", "build_setting_name")
 
 _IOS_APPLICATION_KWARGS = [
     "bundle_id",
@@ -56,7 +57,16 @@ def ios_application(name, apple_library = apple_library, **kwargs):
         apple_library: The macro used to package sources into a library.
         **kwargs: Arguments passed to the apple_library and ios_application rules as appropriate.
     """
-    infoplists = write_info_plists_if_needed(name = name, plists = kwargs.pop("infoplists", []))
+
+    infoplists_by_build_setting = kwargs.pop("infoplists_by_build_setting", {})
+    for (build_setting, plists) in infoplists_by_build_setting.items():
+        name_suffix = build_setting_name(build_setting)
+        infoplists_by_build_setting[build_setting] = write_info_plists_if_needed(name = "%s.%s" % (name, name_suffix), plists = plists)
+
+    infoplists_by_build_setting["//conditions:default"] = write_info_plists_if_needed(name = name, plists = kwargs.pop("infoplists", []))
+
+    infoplists = select(infoplists_by_build_setting)
+
     application_kwargs = {arg: kwargs.pop(arg) for arg in _IOS_APPLICATION_KWARGS if arg in kwargs}
     library = apple_library(name = name, namespace_is_module_name = False, platforms = {"ios": application_kwargs.get("minimum_os_version")}, **kwargs)
 

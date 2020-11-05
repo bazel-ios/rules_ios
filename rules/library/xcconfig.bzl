@@ -237,15 +237,33 @@ def copts_from_xcconfig(xcconfig):
         linkopts = linkopts,
     )
 
+def build_setting_name(build_setting):
+    """Returns the name of a given bazel build setting from the fully-qualified label
+
+    Fails if 'build_setting' is not in the expected format
+
+    Args:
+        build_setting: The fully-qualified label for a bazel build setting, e.g.,
+                       '@repo_name//path/to/package:target_name'
+    Returns:
+        The string 'target_name' in '@repo_name//path/to/package:target_name'
+    """
+    build_setting_partition = build_setting.partition(":")
+
+    if len(build_setting_partition) == 3:
+        return build_setting_partition[2]
+    else:
+        fail("Invalid build setting name: %s" % build_setting)
+
 def copts_by_build_setting_with_defaults(xcconfig = {}, fetch_default_xcconfig = {}, xcconfig_by_build_setting = {}):
-    """Creates a struct containing copts behind 'select()' statements for each build setting in the keys of 'xcconfig_by_build_setting'
+    """Creates a struct containing different configurable copts
 
-    Each copts in the result struct contains a 'select()' statement where the keys are build settings names
-    and each value is the result of merging 'xcconfig' with the xcconfigs for that specific build setting and applying the
-    default values from 'fetch_default_xcconfig' if set.
+    Each returned copts is a 'select()' statement keyed by the bazel build settings in 'xcconfig_by_build_setting' and each
+    resolved value is the result of merging 'xcconfig' with the respective build setting xcconfig and applying the
+    default values from 'fetch_default_xcconfig' if necessary.
 
-    Note that if 'xcconfig_by_build_setting' is empty this will still return the copts for 'xcconfig' plus the default values
-    in 'fetch_default_xcconfig' if set (since '//conditions:default' is being set).
+    For the default value to be resolved ('//conditions:default') this macro follows the same logic described above without
+    the 'merging' step, so 'xcconfig' plus default values from 'fetch_default_xcconfig' if necessary.
 
     Args:
         xcconfig: A dictionary of Xcode build settings to be converted to
@@ -253,17 +271,20 @@ def copts_by_build_setting_with_defaults(xcconfig = {}, fetch_default_xcconfig =
         fetch_default_xcconfig: A dictionary of default Xcode build settings
                                 to be applied for the keys that are not set.
         xcconfig_by_build_setting: A dictionary where the keys are build settings names and
-                                   the values are the respective dictionary of Xcode build settings
+                                   the values are the respective dictionaries of Xcode build settings
     Returns:
         Struct with different copts behind 'select()' statements
     """
     xcconfig_with_defaults = xcconfig
 
+    # Adding default values if necessary
     for (xc_build_setting, value) in fetch_default_xcconfig.items():
         if not xc_build_setting in xcconfig:
             xcconfig_with_defaults[xc_build_setting] = value
 
+    # Default copts to be used in case no bazel build setting gets resolved
     copts_with_defaults = copts_from_xcconfig(xcconfig_with_defaults)
+
     objc_copts_by_build_setting = {"//conditions:default": copts_with_defaults.objc_copts}
     cc_copts_by_build_setting = {"//conditions:default": copts_with_defaults.cc_copts}
     swift_copts_by_build_setting = {"//conditions:default": copts_with_defaults.swift_copts}
@@ -275,13 +296,17 @@ def copts_by_build_setting_with_defaults(xcconfig = {}, fetch_default_xcconfig =
     for (build_setting, build_setting_xcconfig) in xcconfig_by_build_setting.items():
         merged_xcconfig = dict(xcconfig)
 
-        for (k, v) in build_setting_xcconfig.items():
-            merged_xcconfig[k] = v
+        # The values for this bazel build setting should override the values in
+        # 'xcconfig'
+        for (xc_build_setting, value) in build_setting_xcconfig.items():
+            merged_xcconfig[xc_build_setting] = value
 
+        # Adding default values if necessary
         for (xc_build_setting, value) in fetch_default_xcconfig.items():
             if not xc_build_setting in merged_xcconfig:
                 merged_xcconfig[xc_build_setting] = value
 
+        # The copts to be used in case this bazel build setting gets resolved
         copts = copts_from_xcconfig(merged_xcconfig)
 
         objc_copts_by_build_setting[build_setting] = copts.objc_copts

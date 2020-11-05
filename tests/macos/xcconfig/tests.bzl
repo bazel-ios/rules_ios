@@ -1,4 +1,4 @@
-load("//rules/library:xcconfig.bzl", "settings_from_xcconfig")
+load("//rules/library:xcconfig.bzl", "copts_from_xcconfig")
 load("@bazel_skylib//lib:unittest.bzl", "analysistest", "asserts")
 load("@bazel_skylib//lib:types.bzl", "types")
 

@@ -1,5 +1,6 @@
 load("//rules:framework.bzl", "apple_framework")
 load(":tests.bzl", "xcconfig_unit_test_suite")
+load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
 
 SRCS = [
     "empty.m",
@@ -56,6 +57,47 @@ apple_framework(
     ],
     xcconfig = {
         "APPLICATION_EXTENSION_API_ONLY": "YES",
+    },
+)
+
+# Configurable xcconfig
+#
+string_flag(
+    name = "flavor",
+    build_setting_default = "blue",
+)
+
+[
+    config_setting(
+        name = build_setting,
+        flag_values = {
+            ":flavor": build_setting,
+        },
+    )
+    for build_setting in [
+        "red",
+        "blue",
+    ]
+]
+
+apple_framework(
+    name = "configurable_xcconfig",
+    srcs = SRCS,
+    xcconfig = {
+        "FOO": "YES",
+        "GCC_TREAT_WARNINGS_AS_ERRORS": "YES",
+    },
+    xcconfig_by_build_setting = {
+        ":blue": {
+            "GCC_TREAT_WARNINGS_AS_ERRORS": "YES",
+            "FOO": "NO",
+            "FOO_blue": "blue",
+        },
+        ":red": {
+            "GCC_TREAT_WARNINGS_AS_ERRORS": "NO",
+            "FOO": "NO",
+            "FOO_red": "red",
+        },
     },
 )
 
