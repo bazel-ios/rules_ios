@@ -5,7 +5,7 @@ load(
     apple_dynamic_framework_import_original = "apple_dynamic_framework_import",
     apple_static_framework_import_original = "apple_static_framework_import",
 )
-load("@build_bazel_rules_apple//apple/internal:apple_framework_import.bzl", "AppleFrameworkImportInfo")
+load("@build_bazel_rules_apple//apple:providers.bzl", "AppleFrameworkImportInfo")
 load("@build_bazel_rules_swift//swift/internal:providers.bzl", "SwiftUsageInfo")
 
 def apple_dynamic_framework_import(name, **kwargs):
