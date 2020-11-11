@@ -41,6 +41,21 @@ ios_application(
 )
 
 ios_application(
+    name = "AppWithExtension",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    extensions = [
+        "//tests/ios/extensions:ExampleExtension",
+    ],
+    minimum_os_version = "10.0",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":FW",
+        ":OnlySources",
+    ],
+)
+
+ios_application(
     name = "AppWithEmptyDep",
     srcs = ["App/main.m"],
     bundle_id = "com.example.app",
