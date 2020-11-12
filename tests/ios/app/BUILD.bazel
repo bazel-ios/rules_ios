@@ -174,3 +174,49 @@ ios_application(
         ":OnlySources",
     ],
 )
+
+ios_application(
+    name = "AppWithConfigurableAttrsAndExplicitDefaults",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    infoplists = [
+        INFOPLIST,
+    ],
+    infoplists_by_build_setting = {
+        ":blue": [
+            INFOPLIST,
+        ],
+        ":red": [
+            INFOPLIST_2,
+        ],
+        "//conditions:default": [
+            INFOPLIST,
+        ],
+    },
+    minimum_os_version = "10.0",
+    xcconfig = {
+        "FOO": "YES",
+        "GCC_TREAT_WARNINGS_AS_ERRORS": "YES",
+    },
+    xcconfig_by_build_setting = {
+        ":blue": {
+            "GCC_TREAT_WARNINGS_AS_ERRORS": "YES",
+            "FOO": "NO",
+            "FOO_blue": "blue",
+        },
+        ":red": {
+            "GCC_TREAT_WARNINGS_AS_ERRORS": "NO",
+            "FOO": "NO",
+            "FOO_red": "red",
+        },
+        "//conditions:default": {
+            "FOO": "NO",
+            "GCC_TREAT_WARNINGS_AS_ERRORS": "NO",
+        },
+    },
+    deps = [
+        ":Empty",
+        ":FW",
+        ":OnlySources",
+    ],
+)

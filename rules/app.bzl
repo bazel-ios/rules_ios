@@ -63,7 +63,8 @@ def ios_application(name, apple_library = apple_library, **kwargs):
         name_suffix = build_setting_name(build_setting)
         infoplists_by_build_setting[build_setting] = write_info_plists_if_needed(name = "%s.%s" % (name, name_suffix), plists = plists)
 
-    infoplists_by_build_setting["//conditions:default"] = write_info_plists_if_needed(name = name, plists = kwargs.pop("infoplists", []))
+    default_infoplists = infoplists_by_build_setting.get("//conditions:default", kwargs.pop("infoplists", []))
+    infoplists_by_build_setting["//conditions:default"] = write_info_plists_if_needed(name = name, plists = default_infoplists)
 
     infoplists = select(infoplists_by_build_setting)
 
