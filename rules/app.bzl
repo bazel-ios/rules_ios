@@ -48,13 +48,20 @@ def write_info_plists_if_needed(name, plists):
 
     return already_written_plists + written_plists
 
-def ios_application(name, apple_library = apple_library, **kwargs):
+def ios_application(name, apple_library = apple_library, infoplists_by_build_setting = {}, **kwargs):
     """
     Builds and packages an iOS application.
 
     Args:
         name: The name of the iOS application.
         apple_library: The macro used to package sources into a library.
+        infoplists_by_build_setting: A dictionary of infoplists grouped by bazel build setting.
+
+                                     Each value is applied if the respective bazel build setting
+                                     is resolved during the analysis phase.
+
+                                     If '//conditions:default' is not set the value in 'infoplists'
+                                     is set as default.
         **kwargs: Arguments passed to the apple_library and ios_application rules as appropriate.
     """
 
