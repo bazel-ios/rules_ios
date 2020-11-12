@@ -1,4 +1,4 @@
-load("//rules/library:xcconfig.bzl", "settings_from_xcconfig")
+load("//rules/library:xcconfig.bzl", "copts_from_xcconfig")
 load("@bazel_skylib//lib:unittest.bzl", "analysistest", "asserts")
 load("@bazel_skylib//lib:types.bzl", "types")
 
@@ -9,7 +9,7 @@ def _xcconfig_test_rule_impl(ctx):
     xcconfig.update(ctx.attr.str)
     xcconfig.update(ctx.attr.list)
     return [
-        _Settings(settings = settings_from_xcconfig(xcconfig)),
+        _Settings(settings = copts_from_xcconfig(xcconfig)),
     ]
 
 xcconfig_test_rule = rule(

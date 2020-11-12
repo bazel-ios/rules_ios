@@ -25,7 +25,9 @@ def ios_unit_test(name, apple_library = apple_library, **kwargs):
         apple_library: The macro used to package sources into a library.
         **kwargs: Arguments passed to the apple_library and ios_unit_test rules as appropriate.
     """
+
     unit_test_kwargs = {arg: kwargs.pop(arg) for arg in _IOS_UNIT_TEST_KWARGS if arg in kwargs}
+
     unit_test_kwargs["data"] = kwargs.pop("test_data", [])
     if unit_test_kwargs.get("test_host", None) == True:
         unit_test_kwargs["test_host"] = "@build_bazel_rules_ios//rules/test_host_app:iOS-%s-AppHost" % unit_test_kwargs.get("minimum_os_version")

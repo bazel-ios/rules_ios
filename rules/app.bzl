@@ -1,6 +1,7 @@
 load("@bazel_skylib//lib:types.bzl", "types")
 load("@build_bazel_rules_apple//apple:ios.bzl", rules_apple_ios_application = "ios_application")
 load("//rules:library.bzl", "apple_library", "write_file")
+load("//rules/library:xcconfig.bzl", "build_setting_name")
 
 _IOS_APPLICATION_KWARGS = [
     "bundle_id",
@@ -47,16 +48,33 @@ def write_info_plists_if_needed(name, plists):
 
     return already_written_plists + written_plists
 
-def ios_application(name, apple_library = apple_library, **kwargs):
+def ios_application(name, apple_library = apple_library, infoplists_by_build_setting = {}, **kwargs):
     """
     Builds and packages an iOS application.
 
     Args:
         name: The name of the iOS application.
         apple_library: The macro used to package sources into a library.
+        infoplists_by_build_setting: A dictionary of infoplists grouped by bazel build setting.
+
+                                     Each value is applied if the respective bazel build setting
+                                     is resolved during the analysis phase.
+
+                                     If '//conditions:default' is not set the value in 'infoplists'
+                                     is set as default.
         **kwargs: Arguments passed to the apple_library and ios_application rules as appropriate.
     """
-    infoplists = write_info_plists_if_needed(name = name, plists = kwargs.pop("infoplists", []))
+
+    infoplists_by_build_setting = kwargs.pop("infoplists_by_build_setting", {})
+    for (build_setting, plists) in infoplists_by_build_setting.items():
+        name_suffix = build_setting_name(build_setting)
+        infoplists_by_build_setting[build_setting] = write_info_plists_if_needed(name = "%s.%s" % (name, name_suffix), plists = plists)
+
+    default_infoplists = infoplists_by_build_setting.get("//conditions:default", kwargs.pop("infoplists", []))
+    infoplists_by_build_setting["//conditions:default"] = write_info_plists_if_needed(name = name, plists = default_infoplists)
+
+    infoplists = select(infoplists_by_build_setting)
+
     application_kwargs = {arg: kwargs.pop(arg) for arg in _IOS_APPLICATION_KWARGS if arg in kwargs}
     library = apple_library(name = name, namespace_is_module_name = False, platforms = {"ios": application_kwargs.get("minimum_os_version")}, **kwargs)
 
