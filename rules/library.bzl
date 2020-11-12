@@ -306,7 +306,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     tags = kwargs.pop("tags", [])
     tags_manual = tags if "manual" in tags else tags + _MANUAL
     platforms = kwargs.pop("platforms", None)
-    internal_deps = []
+    private_deps = [] + kwargs.pop("private_deps", [])
     lib_names = []
     fetch_default_xcconfig = library_tools["fetch_default_xcconfig"](name, library_tools, default_xcconfig_name, **kwargs) if default_xcconfig_name else {}
     copts_by_build_setting = copts_by_build_setting_with_defaults(xcconfig, fetch_default_xcconfig, xcconfig_by_build_setting)
@@ -327,7 +327,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             name = linkopts_name,
             linkopts = copts_by_build_setting.linkopts + linkopts,
         )
-        internal_deps.append(linkopts_name)
+        private_deps.append(linkopts_name)
 
     vendored_deps = []
     for vendored_static_framework in kwargs.pop("vendored_static_frameworks", []):
@@ -404,7 +404,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             hdrs = objc_hdrs,
             tags = _MANUAL,
         )
-        internal_deps.append(framework_vfs_overlay_name)
+        private_deps.append(framework_vfs_overlay_name)
         objc_copts += [
             "-ivfsoverlay$(execpath :{})".format(framework_vfs_overlay_name),
             "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
@@ -435,7 +435,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         hdrs = [public_hdrs_filegroup],
         tags = _MANUAL,
     )
-    internal_deps.append(public_hmap_name)
+    private_deps.append(public_hmap_name)
 
     private_hmap_name = name + "_private_hmap"
     private_angled_hmap_name = name + "_private_angled_hmap"
@@ -457,14 +457,14 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         hdrs = [private_hdrs_filegroup],
         tags = _MANUAL,
     )
-    internal_deps.append(private_hmap_name)
+    private_deps.append(private_hmap_name)
     headermap(
         name = private_angled_hmap_name,
         namespace = namespace,
         hdrs = [private_angled_hdrs_filegroup],
         tags = _MANUAL,
     )
-    internal_deps.append(private_angled_hmap_name)
+    private_deps.append(private_angled_hmap_name)
 
     ## END HMAP
 
@@ -522,7 +522,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             generated_header_name = generated_swift_header_name,
             srcs = swift_sources,
             copts = copts_by_build_setting.swift_copts + swift_copts,
-            deps = deps + internal_deps + lib_names,
+            deps = deps + private_deps + lib_names,
             swiftc_inputs = swiftc_inputs,
             features = ["swift.no_generated_module_map"],
             data = [module_data],
@@ -540,7 +540,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             direct_hdr_providers = [swift_libname],
             tags = _MANUAL,
         )
-        internal_deps.append(swift_doublequote_hmap_name)
+        private_deps.append(swift_doublequote_hmap_name)
         _append_headermap_copts(swift_doublequote_hmap_name, "-iquote", objc_copts, swift_copts, cc_copts)
 
         # Add generated swift header to header maps for double quote imports
@@ -552,7 +552,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             direct_hdr_providers = [swift_libname],
             tags = _MANUAL,
         )
-        internal_deps.append(swift_angle_bracket_hmap_name)
+        private_deps.append(swift_angle_bracket_hmap_name)
         _append_headermap_copts(swift_angle_bracket_hmap_name, "-I", objc_copts, swift_copts, cc_copts)
 
         if module_map:
@@ -590,7 +590,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         non_arc_srcs = objc_non_arc_sources,
         hdrs = objc_hdrs,
         copts = copts_by_build_setting.objc_copts + objc_copts,
-        deps = deps + internal_deps + lib_names,
+        deps = deps + private_deps + lib_names,
         module_map = module_map,
         sdk_dylibs = sdk_dylibs,
         sdk_frameworks = sdk_frameworks,
