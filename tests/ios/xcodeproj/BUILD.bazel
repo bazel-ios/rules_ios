@@ -16,6 +16,22 @@ xcodeproj(
 )
 
 xcodeproj(
+    name = "Xcodebuild-Single-Static-Framework-Project",
+    testonly = True,
+    bazel_path = "bazelisk",
+    build_with_xcodebuild = True,
+    generate_schemes_for_product_types = [
+        "framework.static",
+        "bundle.unit-test",
+    ],
+    include_transitive_targets = True,
+    deps = [
+        "//tests/ios/frameworks/objc:ObjcFramework",
+        "//tests/ios/frameworks/objc:ObjcFrameworkTests",
+    ],
+)
+
+xcodeproj(
     name = "Test-Imports-App-Project",
     testonly = True,
     bazel_path = "bazelisk",
