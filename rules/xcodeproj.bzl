@@ -596,29 +596,23 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
             xcodeproj_schemes_by_name[target_name]["test"] = {"targets": [target_name]}
     return (xcodeproj_targets_by_name, xcodeproj_schemes_by_name)
 
-def _xcodeproj_impl(ctx):
-    xcodegen_jsonfile = ctx.actions.declare_file(
-        "%s-xcodegen.json" % ctx.attr.name,
-    )
-    project_name = (ctx.attr.project_name or ctx.attr.name) + ".xcodeproj"
-    if "/" in project_name:
-        fail("No / allowed in project_name")
-
-    project = ctx.actions.declare_directory(project_name)
-    nesting = ctx.label.package.count("/") + 1 if ctx.label.package else 0
-    src_dot_dots = "/".join([".." for x in range(nesting + 3)])
-    script_dot_dots = "/".join([".." for x in range(nesting)])
-
-    proj_options = {
-        "createIntermediateGroups": True,
-        "defaultConfig": "Debug",
-        "groupSortPosition": "none",
-        "settingPresets": "none",
+def _xcodebuild_proj_settings():
+    return {
+        "base": {
+            "DEBUG_INFORMATION_FORMAT": "dwarf",
+            "SWIFT_VERSION": 5,
+        },
+        "configs": {
+            "Debug": {
+                "GCC_PREPROCESSOR_DEFINITIONS": "DEBUG",
+                "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "DEBUG",
+            },
+        },
     }
-    proj_settings_base = {}
 
+def _bazel_proj_settings(ctx, script_dot_dots):
     # User defined macro for Bazel only
-    proj_settings_base.update({
+    proj_settings_base = {
         "BAZEL_BUILD_EXEC": "$BAZEL_STUBS_DIR/build-wrapper",
         "BAZEL_OUTPUT_PROCESSOR": "$BAZEL_STUBS_DIR/output-processor.rb",
         "BAZEL_PATH": ctx.attr.bazel_path,
@@ -628,9 +622,9 @@ def _xcodeproj_impl(ctx):
         "BAZEL_INSTALLERS_DIR": "$PROJECT_FILE_PATH/bazelinstallers",
         "BAZEL_INSTALLER": "$BAZEL_INSTALLERS_DIR/%s" % ctx.executable.installer.basename,
         "BAZEL_EXECUTION_LOG_ENABLED": False,
-    })
+    }
 
-    # Stubbding main executable used by xcode so no actual building happening on Xcode side
+    # Stubbing main executable used by xcode so no actual building happening on Xcode side
     proj_settings_base.update({
         "CC": "$BAZEL_STUBS_DIR/clang-stub",
         "CXX": "$CC",
@@ -659,12 +653,35 @@ def _xcodeproj_impl(ctx):
         "GCC_PREPROCESSOR_DEFINITIONS": "DEBUG",
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "DEBUG",
     }
-    proj_settings = {
+    return {
         "base": proj_settings_base,
         "configs": {
             "Debug": proj_settings_debug,
         },
     }
+
+def _xcodeproj_impl(ctx):
+    xcodegen_jsonfile = ctx.actions.declare_file(
+        "%s-xcodegen.json" % ctx.attr.name,
+    )
+    project_name = (ctx.attr.project_name or ctx.attr.name) + ".xcodeproj"
+    if "/" in project_name:
+        fail("No / allowed in project_name")
+
+    project = ctx.actions.declare_directory(project_name)
+    nesting = ctx.label.package.count("/") + 1 if ctx.label.package else 0
+    src_dot_dots = "/".join([".." for x in range(nesting + 3)])
+    script_dot_dots = "/".join([".." for x in range(nesting)])
+
+    proj_options = {
+        "createIntermediateGroups": True,
+        "defaultConfig": "Debug",
+        "groupSortPosition": "none",
+        "settingPresets": "none",
+    }
+
+    build_with_xcodebuild = ctx.attr.build_with_xcodebuild
+    proj_settings = _xcodebuild_proj_settings() if build_with_xcodebuild else _bazel_proj_settings(ctx, script_dot_dots)
 
     targets = []
     all_transitive_targets = depset(transitive = _get_attr_values_for_name(ctx.attr.deps, _TargetInfo, "targets")).to_list()
@@ -783,6 +800,7 @@ Product types must be valid apple product types, e.g. application, bundle.unit-t
 For a full list, see under keys of `PRODUCT_TYPE_UTI` under
 https://www.rubydoc.info/github/CocoaPods/Xcodeproj/Xcodeproj/Constants
 """),
+        "build_with_xcodebuild": attr.bool(default = False, mandatory = False, doc = "The generated Xcode project will build with xcodebuild instead of Bazel."),
         "_xcodeproj_installer_template": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:xcodeproj-installer.sh"), allow_single_file = ["sh"]),
         "_infoplist_stub": attr.label(executable = False, default = Label("//rules/test_host_app:Info.plist"), allow_single_file = ["plist"]),
         "_workspace_xcsettings": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:WorkspaceSettings.xcsettings"), allow_single_file = ["xcsettings"]),
