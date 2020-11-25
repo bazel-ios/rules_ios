@@ -181,6 +181,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 1020;
+				ORGANIZATIONNAME = rules_ios;
 				TargetAttributes = {
 				};
 			};
