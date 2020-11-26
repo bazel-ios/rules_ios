@@ -683,11 +683,9 @@ def _xcodeproj_impl(ctx):
         if _is_current_project_file(f)
     ]
 
-    attributes = {}
-    attributes.update(ctx.attr.project_attributes_overrides)
     xcodeproj_info = struct(
         name = paths.split_extension(project_name)[0],
-        attributes = attributes,
+        attributes = ctx.attr.project_attributes_overrides,
         options = proj_options,
         settings = proj_settings,
         targets = xcodeproj_targets_by_name,
