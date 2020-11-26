@@ -38,7 +38,7 @@ def apple_static_framework_import(name, **kwargs):
     """
 
     visibility = kwargs.pop("visibility", None)
-    tags = kwargs.get("tags", [])
+    tags = kwargs.pop("tags", [])
 
     legacy_target_label = "_" + name
     apple_static_framework_import_original(
