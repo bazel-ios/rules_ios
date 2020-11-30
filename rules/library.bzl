@@ -157,6 +157,17 @@ FOUNDATION_EXPORT const unsigned char {module_name}VersionString[];
     )
     return destination
 
+def _copy_bridging_header(name, library_tools, bridging_header_name, **kwargs):
+    destination = "tests/ios/unit-test/test-imports-app/%s" % bridging_header_name
+    print(destination)
+    write_file(
+        name = "%s_CopiedBridgingHeader" % name,
+        destination = destination,
+        content = "// Test",
+        tags = _MANUAL,
+    )
+    return destination
+
 def _generate_resource_bundles(name, library_tools, module_name, resource_bundles, platforms, **kwargs):
     bundle_target_names = []
     for bundle_name in resource_bundles:
@@ -185,6 +196,7 @@ _DEFAULT_LIBRARY_TOOLS = {
     "resource_bundle_generator": _generate_resource_bundles,
     "wrap_resources_in_filegroup": wrap_resources_in_filegroup,
     "fetch_default_xcconfig": _error_on_default_xcconfig,
+    "copy_bridging_header": _copy_bridging_header,
 }
 
 def _append_headermap_copts(hmap, flag, objc_copts, swift_copts, cc_copts):
@@ -510,6 +522,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         if swift_objc_bridging_header:
             if swift_objc_bridging_header not in objc_hdrs:
                 swiftc_inputs.append(swift_objc_bridging_header)
+            copied_bridging_header = library_tools["copy_bridging_header"](name, library_tools, swift_objc_bridging_header, **kwargs)
+            swiftc_inputs.append(copied_bridging_header)
             swift_copts += [
                 "-import-objc-header",
                 "$(execpath :{})".format(swift_objc_bridging_header),
