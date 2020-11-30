@@ -109,6 +109,8 @@ def _apple_framework_packaging_impl(ctx):
     swiftmodule_out = None
     swiftdoc_in = None
     swiftdoc_out = None
+    bridging_header_in = None
+    bridging_header_out = None
 
     # AppleBundleInfo fields
     bundle_id = ctx.attr.bundle_id
@@ -155,6 +157,9 @@ def _apple_framework_packaging_impl(ctx):
             has_header = False
             for hdr in dep[apple_common.Objc].direct_headers:
                 if hdr.path.endswith((".h", ".hh")):
+                    if hdr.path.endswith("Bridging-Header.h"):
+                        bridging_header_in = hdr
+                        bridging_header_out = [paths.join(framework_dir, hdr.path)]
                     has_header = True
                     header_in.append(hdr)
                     destination = paths.join(framework_dir, "Headers", hdr.basename)
@@ -297,12 +302,13 @@ def _apple_framework_packaging_impl(ctx):
     # and use CcInfo instead, see this issue for more details: https://github.com/bazelbuild/bazel/issues/10674
     objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
     cc_info_provider = CcInfo(compilation_context = objc_provider.compilation_context)
+    bridging_header_out = _framework_packaging(ctx, "bridging_header", [bridging_header_in], bridging_header_out, framework_manifest)
     return [
         objc_provider,
         cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider], cc_infos = [dep[CcInfo] for dep in ctx.attr.transitive_deps if CcInfo in dep]),
         swift_common.create_swift_info(**swift_info_fields),
         # bare minimum to ensure compilation and package framework with modules and headers
-        DefaultInfo(files = depset(binary_out + swiftmodule_out + header_out + private_header_out + modulemap_out)),
+        DefaultInfo(files = depset(binary_out + swiftmodule_out + header_out + private_header_out + modulemap_out + bridging_header_out)),
         AppleBundleInfo(
             archive = None,
             archive_root = None,

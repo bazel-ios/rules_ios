@@ -9,6 +9,6 @@ class SwiftTests : XCTestCase {
 
   func testForPrivateMemberExtension() {
       let object = FooFramework()
-      XCTAssertEqual(object.privateMethodThatReturnsTwo, 2)
+      XCTAssertEqual(object.privateMethodThatReturnsTwo(), 2)
   }
 }

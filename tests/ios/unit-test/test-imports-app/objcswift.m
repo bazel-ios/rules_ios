@@ -1,6 +1,6 @@
 #import "objcswift.h"
 
-#import <TestImports-App/TestImports-App-Swift.h>
+#import <TestImports-App/TestImports_App-Swift.h>
 
 @implementation FooFramework: NSObject
 

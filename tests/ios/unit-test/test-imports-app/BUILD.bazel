@@ -16,6 +16,7 @@ ios_application(
     srcs = [
         "Header.h",
         "Header2.h",
+        "TestImports_App-Bridging-Header.h",
         "empty.swift",
         "main.m",
         "objcswift.h",
@@ -44,12 +45,17 @@ apple_framework_packaging(
     platforms = {
         "ios": "12.0",
     },
-    skip_packaging = ["binary"],
+    skip_packaging = [
+        "binary",
+        "modulemap",
+    ],
     tags = [
         "manual",
         "xcodeproj-ignore-as-target",
     ],
-    transitive_deps = [],
+    transitive_deps = [
+        ":SomeFramework",
+    ],
     visibility = ["//visibility:public"],
     deps = [
         ":TestImports-App_objc",
