@@ -204,6 +204,9 @@ def copts_from_xcconfig(xcconfig):
         "MAPC_MODULE",  # derived by rules_apple
         "MOMC_MODULE",  # derived by rules_apple
         "SWIFT_MODULE_NAME",  # has its own attr for swift_library
+        "CLANG_BITCODE_GENERATION_MODE",  # handled by `--apple_bitcode` flag on Bazel side
+        "SWIFT_BITCODE_GENERATION_MODE",  # handled by `--apple_bitcode` flag on Bazel side
+        "LD_BITCODE_GENERATION_MODE",  # handled by `--apple_bitcode` flag on Bazel side
     )
 
     identifiers = [

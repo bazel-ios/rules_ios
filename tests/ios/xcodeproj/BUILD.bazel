@@ -9,6 +9,7 @@ xcodeproj(
         "bundle.unit-test",
     ],
     include_transitive_targets = True,
+    project_attributes_overrides = {"ORGANIZATIONNAME": "rules_ios"},
     deps = [
         "//tests/ios/frameworks/objc:ObjcFramework",
         "//tests/ios/frameworks/objc:ObjcFrameworkTests",
