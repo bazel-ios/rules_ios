@@ -54,7 +54,6 @@ apple_framework_packaging(
         "xcodeproj-ignore-as-target",
     ],
     transitive_deps = [
-        ":SomeFramework",
     ],
     visibility = ["//visibility:public"],
     deps = [
