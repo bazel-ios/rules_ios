@@ -47,9 +47,10 @@ def _copy_headers(framework_root, header_paths, dir = "Headers"):
             basenames[basename] = path
             dest = os.path.join(header_folder, basename)
             _cp(path, dest)
-            dest = os.path.join(header_folder, path)
-            _mkdir(os.path.dirname(dest))
-            _cp(path, dest)
+            if basename.endswith("Bridging-Header.h"):
+                dest = os.path.join(header_folder, path)
+                _mkdir(os.path.dirname(dest))
+                _cp(path, dest)
 
 
 def _merge_binaries(framework_root, framework_name, binary_in):

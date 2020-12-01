@@ -66,6 +66,7 @@ apple_framework_packaging(
 ios_unit_test(
     name = "TestImports-Unit-Tests",
     srcs = [
+        "objcswift.h",
         "test.m",
         "test.swift",
         "testhelper.h",
