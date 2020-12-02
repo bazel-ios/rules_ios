@@ -14,6 +14,7 @@ _IOS_UNIT_TEST_KWARGS = [
     "visibility",
     "resources",
     "tags",
+    "shard_count",
 ]
 
 def ios_unit_test(name, apple_library = apple_library, **kwargs):
