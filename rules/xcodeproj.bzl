@@ -18,11 +18,6 @@ _PLATFORM_MAPPING = {
     "macos": "macOS",
 }
 
-_ARCH_MAPPING = {
-    "ios": "arm64 arm64e",
-    "macos": "i386 x86_64",
-}
-
 _PRODUCT_SPECIFIER_LENGTH = len("com.apple.product-type.")
 
 _IGNORE_AS_TARGET_TAG = "xcodeproj-ignore-as-target"
@@ -498,6 +493,8 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
 
         target_settings = {
             "PRODUCT_NAME": target_name,
+            "ARCHS": "$(ARCHS_STANDARD)",
+            "EXCLUDED_ARCHS[sdk=iphonesimulator*]": "arm64",
             "BAZEL_BIN_SUBDIR": target_info.bazel_bin_subdir,
             "MACH_O_TYPE": target_macho_type,
             "CLANG_ENABLE_MODULES": "YES",
@@ -540,8 +537,6 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
         if test_host_appname:
             target_dependencies.append({"target": test_host_appname})
             target_settings["TEST_HOST"] = "$(BUILT_PRODUCTS_DIR)/{test_host_appname}.app/{test_host_appname}".format(test_host_appname = test_host_appname)
-
-        target_settings["VALID_ARCHS"] = _ARCH_MAPPING[target_info.platform_type]
 
         xcodeproj_targets_by_name[target_name] = {
             "sources": compiled_sources + compiled_non_arc_sources + asset_sources,
