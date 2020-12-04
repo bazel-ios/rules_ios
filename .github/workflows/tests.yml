@@ -46,6 +46,12 @@ jobs:
         run: sudo xcode-select -s /Applications/Xcode_11.6.app
       - name: Run tests
         run: ./tests/xcodeproj-tests.sh
+  xcodeproj_tests_xcode_12_2:
+    name: .xcodeproj Tests on Xcode 12.2
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
+      - name: Select Xcode 12.2
+        run: sudo xcode-select -s /Applications/Xcode_12.2.app
+      - name: Run tests
+        run: ./tests/xcodeproj-tests.sh
