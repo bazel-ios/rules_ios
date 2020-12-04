@@ -37,45 +37,15 @@ jobs:
         run: find . -type f \( -name 'WORKSPACE' -o -name '*.bzl' -o -name '*.bazel' \) | xargs buildifier -lint=fix && git diff --exit-code
       - name: Check docs
         run: bazelisk run docs && git diff --exit-code docs
-  xcodeproj_tests_macos:
-    name: .xcodeproj Tests for Mac OS platform
+  xcodeproj_tests_xcode_11_6:
+    name: .xcodeproj Tests on Xcode 11.6
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
       - name: Select Xcode 11.6
         run: sudo xcode-select -s /Applications/Xcode_11.6.app
-      - name: Generate Xcode projects and compare against existing record
-        run: |
-          set -euo pipefail
-          rm -rf tests/macos/xcodeproj/*.xcodeproj tests/macos/xcodeproj/build
-          bazelisk clean
-          bazelisk query 'kind(xcodeproj, tests/macos/xcodeproj/...)' | xargs -n 1 bazelisk run --@build_bazel_rules_ios//rules:local_debug_options_enabled
-          bazelisk query 'attr(executable, 1, kind(genrule, tests/macos/xcodeproj/...))' | xargs -n 1 bazelisk run
-          git diff --exit-code tests/macos/xcodeproj
-      - name: Run Xcode builds
-        run: ./tests/macos/xcodeproj/build.sh
-      - name: Run Unit tests
-        run: ./tests/macos/xcodeproj/tests.sh
-  xcodeproj_tests_ios:
-    name: .xcodeproj Tests for iOS platform
+      - name: Run tests
+        run: ./tests/xcodeproj-tests.sh
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Select Xcode 11.6
-        run: sudo xcode-select -s /Applications/Xcode_11.6.app
-      - name: Generate Xcode projects and compare against existing record
-        run: |
-          set -euo pipefail
-          rm -rf tests/ios/xcodeproj/*.xcodeproj tests/ios/xcodeproj/build
-          bazelisk clean
-          bazelisk query 'kind(xcodeproj, tests/ios/xcodeproj/...)' | xargs -n 1 bazelisk run --@build_bazel_rules_ios//rules:local_debug_options_enabled
-          bazelisk query 'attr(executable, 1, kind(genrule, tests/ios/xcodeproj/...))' | xargs -n 1 bazelisk run
-          git diff --exit-code tests/ios/xcodeproj
-      - name: Run pre build checks
-        run: ./tests/ios/xcodeproj/pre_build_check.sh
-      - name: Run Xcode builds
-        run: ./tests/ios/xcodeproj/build.sh
-      - name: Run post build checks
-        run: ./tests/ios/xcodeproj/post_build_check.sh
-      - name: Run Unit tests
-        run: ./tests/ios/xcodeproj/tests.sh
