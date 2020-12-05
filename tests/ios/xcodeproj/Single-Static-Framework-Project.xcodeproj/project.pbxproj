@@ -303,9 +303,9 @@
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e85ff352ea2d/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e85ff352ea2d/bin/tests/ios/frameworks/objc/ObjcFramework_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFramework_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = ObjcFramework;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
-				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Release;
 		};
@@ -354,9 +354,9 @@
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-5f4a932f1e7d/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-5f4a932f1e7d/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = ObjcFrameworkTestLib;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
-				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Debug;
 		};
@@ -375,9 +375,9 @@
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e85ff352ea2d/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e85ff352ea2d/bin/tests/ios/frameworks/objc/ObjcFramework_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFramework_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = ObjcFramework;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
-				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Debug;
 		};
@@ -424,10 +424,10 @@
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = ObjcFrameworkTests;
 				SUPPORTS_MACCATALYST = 0;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
-				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Debug;
 		};
@@ -446,10 +446,10 @@
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = ObjcFrameworkTests;
 				SUPPORTS_MACCATALYST = 0;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
-				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Release;
 		};
@@ -468,9 +468,9 @@
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-5f4a932f1e7d/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-5f4a932f1e7d/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = ObjcFrameworkTestLib;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
-				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Release;
 		};

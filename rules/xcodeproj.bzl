@@ -493,8 +493,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
 
         target_settings = {
             "PRODUCT_NAME": target_name,
-            "ARCHS": "$(ARCHS_STANDARD)",
-            "EXCLUDED_ARCHS[sdk=iphonesimulator*]": "arm64",
+            "ONLY_ACTIVE_ARCH": "YES",
             "BAZEL_BIN_SUBDIR": target_info.bazel_bin_subdir,
             "MACH_O_TYPE": target_macho_type,
             "CLANG_ENABLE_MODULES": "YES",

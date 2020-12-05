@@ -278,7 +278,6 @@
 		1ED5544822BB90C0310DECBF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				BAZEL_BUILD_TARGET_LABEL = "tests/macos/xcodeproj:Single-Application-UnitTests";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
@@ -286,12 +285,12 @@
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftmodule bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftdoc bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "\"REQUIRED_DEFINED_FLAG=1\" \"FLAG_WITH_VALUE_ZERO=0\" $(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single-Application-UnitTests_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single-Application-UnitTests_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single-Application-UnitTests_swift_doublequote_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single-Application-UnitTests_swift_angle_bracket_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single-Application-UnitTests_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single-Application-UnitTests_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single-Application-UnitTests_swift_doublequote_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single-Application-UnitTests_swift_angle_bracket_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "Single-Application-UnitTests";
 				SUPPORTS_MACCATALYST = 0;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\" \"REQUIRED_DEFINED_FLAG\"";
@@ -301,7 +300,6 @@
 		417C29AC852892B2A910C8D0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				BAZEL_BUILD_TARGET_LABEL = "rules/test_host_app:iOS-12.0-AppHost";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
@@ -309,13 +307,13 @@
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ios-app-host-12.0";
 				PRODUCT_NAME = "iOS-12.0-AppHost";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
@@ -325,7 +323,6 @@
 		54F7DEC875A2F5ED466FE588 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				BAZEL_BUILD_TARGET_LABEL = "rules/test_host_app:iOS-12.0-AppHost";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
@@ -333,13 +330,13 @@
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ios-app-host-12.0";
 				PRODUCT_NAME = "iOS-12.0-AppHost";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
@@ -407,7 +404,6 @@
 		9C8E43C684BA9BDEB3E3C791 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				BAZEL_BUILD_TARGET_LABEL = "tests/macos/xcodeproj:Single-Application-RunnableTestSuite_iPad-Air-2__12.4";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
@@ -415,12 +411,12 @@
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftmodule bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftdoc bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "\"REQUIRED_DEFINED_FLAG=1\" \"FLAG_WITH_VALUE_ZERO=0\" $(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single-Application-RunnableTestSuite_swift_doublequote_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single-Application-RunnableTestSuite_swift_angle_bracket_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "Single-Application-RunnableTestSuite";
 				SUPPORTS_MACCATALYST = 0;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\" \"REQUIRED_DEFINED_FLAG\"";
@@ -430,7 +426,6 @@
 		D0D546F48AD698CADC2B4CF4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				BAZEL_BUILD_TARGET_LABEL = "tests/macos/xcodeproj:Single-Application-RunnableTestSuite_iPad-Air-2__12.4";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
@@ -438,12 +433,12 @@
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftmodule bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftdoc bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "\"REQUIRED_DEFINED_FLAG=1\" \"FLAG_WITH_VALUE_ZERO=0\" $(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single-Application-RunnableTestSuite_swift_doublequote_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single-Application-RunnableTestSuite_swift_angle_bracket_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "Single-Application-RunnableTestSuite";
 				SUPPORTS_MACCATALYST = 0;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\" \"REQUIRED_DEFINED_FLAG\"";
@@ -453,7 +448,6 @@
 		D60C6B2C219D235429C548BD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				BAZEL_BUILD_TARGET_LABEL = "tests/macos/xcodeproj:Single-Application-UnitTests";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
@@ -461,12 +455,12 @@
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftmodule bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftdoc bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "\"REQUIRED_DEFINED_FLAG=1\" \"FLAG_WITH_VALUE_ZERO=0\" $(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single-Application-UnitTests_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single-Application-UnitTests_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single-Application-UnitTests_swift_doublequote_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single-Application-UnitTests_swift_angle_bracket_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single-Application-UnitTests_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single-Application-UnitTests_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single-Application-UnitTests_swift_doublequote_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-f3054017b701/bin/tests/macos/xcodeproj/Single-Application-UnitTests_swift_angle_bracket_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "Single-Application-UnitTests";
 				SUPPORTS_MACCATALYST = 0;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\" \"REQUIRED_DEFINED_FLAG\"";
