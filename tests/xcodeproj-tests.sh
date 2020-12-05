@@ -28,7 +28,6 @@ fi
 
 bazelisk query 'kind(xcodeproj, tests/macos/xcodeproj/...)' | xargs -n 1 bazelisk run --@build_bazel_rules_ios//rules:local_debug_options_enabled
 bazelisk query 'attr(executable, 1, kind(genrule, tests/macos/xcodeproj/...))' | xargs -n 1 bazelisk run
-git diff --exit-code tests/macos/xcodeproj
 
 ./tests/macos/xcodeproj/build.sh
 ./tests/macos/xcodeproj/tests.sh
@@ -42,9 +41,12 @@ fi
 
 bazelisk query 'kind(xcodeproj, tests/ios/xcodeproj/...)' | xargs -n 1 bazelisk run --@build_bazel_rules_ios//rules:local_debug_options_enabled
 bazelisk query 'attr(executable, 1, kind(genrule, tests/ios/xcodeproj/...))' | xargs -n 1 bazelisk run
-git diff --exit-code tests/ios/xcodeproj
 
 ./tests/ios/xcodeproj/pre_build_check.sh
 ./tests/ios/xcodeproj/build.sh
 ./tests/ios/xcodeproj/post_build_check.sh
 ./tests/ios/xcodeproj/tests.sh
+
+echo "Checking for .xcodeproj changes"
+
+git diff --exit-code tests/ios/xcodeproj tests/macos/xcodeproj
