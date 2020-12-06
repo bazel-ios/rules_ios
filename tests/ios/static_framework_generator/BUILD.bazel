@@ -1,0 +1,37 @@
+load("@build_bazel_rules_ios//rules:framework.bzl", "apple_framework")
+load("@build_bazel_rules_ios//rules:apple_patched.bzl", "apple_static_framework_import")
+load("@build_bazel_rules_ios//rules:test.bzl", "ios_unit_test")
+
+apple_framework(
+    name = "TargetXIB",
+    srcs = glob(["TargetXIB/**/*.swift"]),
+    platforms = {"ios": "11.0"},
+    resource_bundles = {
+        "TargetXIB": glob(["TargetXIB/**/*.xib"]),
+    },
+    visibility = ["//visibility:public"],
+)
+
+# In order to run below tests, you have to first generate the framework by running
+# the TargetXIBStaticFrameworkGenerator target:
+# > bazelisk run --apple_platform_type=ios --deleted_packages='' tools/static_framework_generator:TargetXIBStaticFrameworkGenerator
+
+apple_static_framework_import(
+    name = "TargetXIBStaticFramework",
+    framework_imports = glob(["bazel-generated/TargetXIB.framework/**"]),
+    visibility = ["//visibility:public"],
+)
+
+apple_framework(
+    name = "TargetXIBTestsLib",
+    srcs = glob(["TargetXIBTests/**/*.swift"]),
+    platforms = {"ios": "11.0"},
+    visibility = ["//visibility:public"],
+    deps = ["TargetXIBStaticFramework"],
+)
+
+ios_unit_test(
+    name = "TargetXIBTests",
+    minimum_os_version = "11.0",
+    deps = [":TargetXIBTestsLib"],
+)

@@ -5,7 +5,7 @@ load(
     apple_dynamic_framework_import_original = "apple_dynamic_framework_import",
     apple_static_framework_import_original = "apple_static_framework_import",
 )
-load("@build_bazel_rules_apple//apple:providers.bzl", "AppleFrameworkImportInfo")
+load("@build_bazel_rules_apple//apple:providers.bzl", "AppleFrameworkImportInfo", "AppleResourceInfo")
 load("@build_bazel_rules_swift//swift/internal:providers.bzl", "SwiftUsageInfo")
 
 def apple_dynamic_framework_import(name, **kwargs):
@@ -84,7 +84,7 @@ def _apple_framework_import_modulemap_impl(ctx):
     # is to list here the keys to all of them (you can see the keys for the existing providers of a
     # target by just printing the target)
     # For more information refer to https://groups.google.com/forum/#!topic/bazel-discuss/4KkflTjmUyk
-    other_provider_keys = [AppleFrameworkImportInfo, SwiftUsageInfo, apple_common.AppleDynamicFramework, OutputGroupInfo, DefaultInfo]
+    other_provider_keys = [AppleFrameworkImportInfo, SwiftUsageInfo, apple_common.AppleDynamicFramework, OutputGroupInfo, DefaultInfo, AppleResourceInfo]
     return [new_objc_provider, new_cc_info] + \
            [legacy_target[provider_key] for provider_key in other_provider_keys if provider_key in legacy_target]
 

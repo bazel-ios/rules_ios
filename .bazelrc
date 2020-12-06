@@ -15,7 +15,15 @@ build --test_output=errors # Prints log file output to the console on failure
 
 # By default do not build the tests for sources-with-prebuilt-binaries,
 # because it takes quite some time. They will only run on CI
-build --deleted_packages tests/ios/frameworks/sources-with-prebuilt-binaries
+#
+# By default do not run the tests under the static_framework_generator package, 
+# as it requires that tools/static_framework_generator:TargetXIBStaticFrameworkGenerator
+# is run first in order to generate the TargetXIB.framework to be consummed.
+# It will run only on CI
+build --deleted_packages \
+tests/ios/frameworks/sources-with-prebuilt-binaries,\
+tests/ios/static_framework_generator,\
+tools/static_framework_generator
 
 # Enable dbg compilation mode in this repo, so we can test xcodeproj-built
 # binaries contain debug symbol tables.
