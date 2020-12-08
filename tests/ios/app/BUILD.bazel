@@ -6,6 +6,7 @@ load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
 apple_framework(
     name = "CppLib",
     srcs = glob(["Cpp/*"]),
+    platforms = {"ios": "10.0"},
     swift_version = "5.1",
     visibility = ["//visibility:public"],
 )
@@ -33,6 +34,7 @@ apple_framework(
 apple_framework(
     name = "OnlySources",
     srcs = glob(["OnlySources/*.m"]),
+    platforms = {"ios": "10.0"},
 )
 
 apple_framework(
