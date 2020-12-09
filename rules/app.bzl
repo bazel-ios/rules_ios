@@ -66,7 +66,7 @@ def ios_application(name, apple_library = apple_library, infoplists_by_build_set
         **kwargs: Arguments passed to the apple_library and ios_application rules as appropriate.
     """
 
-    infoplists_by_build_setting = kwargs.pop("infoplists_by_build_setting", {})
+    infoplists_by_build_setting = dict(infoplists_by_build_setting)
     for (build_setting, plists) in infoplists_by_build_setting.items():
         name_suffix = build_setting_name(build_setting)
         infoplists_by_build_setting[build_setting] = write_info_plists_if_needed(name = "%s.%s" % (name, name_suffix), plists = plists)
