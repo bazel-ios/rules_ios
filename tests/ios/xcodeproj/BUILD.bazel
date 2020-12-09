@@ -4,6 +4,13 @@ xcodeproj(
     name = "Single-Static-Framework-Project",
     testonly = True,
     bazel_path = "bazelisk",
+    custom_build_options_by_config = {
+        "Release": [
+            "--define=BUILD_TYPE=release",
+            "--compilation_mode=dbg",
+        ],
+        "Debug": ["--compilation_mode=dbg"],
+    },
     generate_schemes_for_product_types = [
         "framework.static",
         "bundle.unit-test",

@@ -313,6 +313,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
+				BAZEL_CUSTOM_BUILD_OPTIONS = (
+					"--compilation_mode=dbg",
+				);
 				BAZEL_EXECUTION_LOG_ENABLED = 0;
 				BAZEL_INSTALLER = $BAZEL_INSTALLERS_DIR/installer;
 				BAZEL_INSTALLERS_DIR = $PROJECT_FILE_PATH/bazelinstallers;
@@ -385,6 +388,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
+				BAZEL_CUSTOM_BUILD_OPTIONS = (
+					"--define=BUILD_TYPE=release",
+					"--compilation_mode=dbg",
+				);
 				BAZEL_EXECUTION_LOG_ENABLED = 0;
 				BAZEL_INSTALLER = $BAZEL_INSTALLERS_DIR/installer;
 				BAZEL_INSTALLERS_DIR = $PROJECT_FILE_PATH/bazelinstallers;

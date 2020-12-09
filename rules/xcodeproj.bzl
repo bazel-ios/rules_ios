@@ -652,11 +652,19 @@ def _xcodeproj_impl(ctx):
     proj_settings_debug = {
         "GCC_PREPROCESSOR_DEFINITIONS": "DEBUG",
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "DEBUG",
+        "BAZEL_CUSTOM_BUILD_OPTIONS": ctx.attr.custom_build_options_by_config.get("Debug", []),
     }
+
+    # For release config only:
+    proj_settings_release = {
+        "BAZEL_CUSTOM_BUILD_OPTIONS": ctx.attr.custom_build_options_by_config.get("Release", []),
+    }
+
     proj_settings = {
         "base": proj_settings_base,
         "configs": {
             "Debug": proj_settings_debug,
+            "Release": proj_settings_release,
         },
     }
 
@@ -793,6 +801,10 @@ https://www.rubydoc.info/github/CocoaPods/Xcodeproj/Xcodeproj/Constants
         "installer": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:installer"), cfg = "host"),
         "build_wrapper": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:build-wrapper"), cfg = "host"),
         "additional_files": attr.label_list(allow_files = True, allow_empty = True, default = [], mandatory = False),
+        "custom_build_options_by_config": attr.string_list_dict(allow_empty = True, default = {}, mandatory = False, doc = """\
+The custom build options for different build configs. The key corresponds to the build configuration. Currently we only support `Debug` or `Release`.
+The value is a list of custom Bazel build options for the build configuration.
+"""),
     },
     executable = True,
 )

@@ -27,6 +27,11 @@ if [ -n "${TARGET_DEVICE_IDENTIFIER:-}" ] && [ "$PLATFORM_NAME" = "iphoneos" ]; 
     BAZEL_BUILD_OPTIONS+=("--ios_multi_cpus=arm64")
 fi
 
+# Applies custom bazel build options if available.
+if [ -n "${BAZEL_CUSTOM_BUILD_OPTIONS:-}" ]; then
+   BAZEL_BUILD_OPTIONS+=($BAZEL_CUSTOM_BUILD_OPTIONS)
+fi
+
 $BAZEL_PATH build \
     "${BAZEL_BUILD_OPTIONS[@]}" \
     $1 \
