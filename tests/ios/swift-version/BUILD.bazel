@@ -1,36 +1,3 @@
-load("//rules:framework.bzl", "apple_framework")
+load(":swift_version_tests.bzl", "apple_framework_swift_version_test_suite")
 
-SRCS = [
-    "empty.swift",
-]
-
-# Valid Versions
-
-[apple_framework(
-    name = "swift_version_" + version.replace(".", "_"),
-    srcs = SRCS,
-    swift_version = version,
-) for version in [
-    "4",
-    "4.0",
-    "4.0.0",
-    "4.2",
-    "4.2.0",
-    "5",
-    "5.0",
-    "5.1",
-]]
-
-# Invalid Versions (not tested, marked "manual")
-
-[apple_framework(
-    name = "swift_version_" + version.replace(".", "_"),
-    srcs = SRCS,
-    swift_version = version,
-    tags = ["manual"],
-) for version in [
-    "0",
-    "4.1",
-    "4.3.0",
-    "6",
-]]
+apple_framework_swift_version_test_suite()
