@@ -20,6 +20,7 @@ ios_application(
         "main.m",
     ],
     bundle_id = "com.example.TestImports-App",
+    families = ["ipad"],
     minimum_os_version = "12.0",
     module_name = "TestImports_App",
     resource_bundles = {"ResourceBundle": glob(
