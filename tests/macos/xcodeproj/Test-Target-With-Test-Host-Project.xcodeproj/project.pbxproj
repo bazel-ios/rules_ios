@@ -450,6 +450,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.TestImports-App";
 				PRODUCT_NAME = "TestImports-App";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
@@ -519,6 +520,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.TestImports-App";
 				PRODUCT_NAME = "TestImports-App";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};
@@ -570,6 +572,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ios-app-host-10.0";
 				PRODUCT_NAME = "iOS-10.0-AppHost";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -593,6 +596,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ios-app-host-10.0";
 				PRODUCT_NAME = "iOS-10.0-AppHost";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};

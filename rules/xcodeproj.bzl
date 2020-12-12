@@ -1,4 +1,5 @@
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo")
+load("@build_bazel_rules_apple//apple/internal:platform_support.bzl", "platform_support")
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//rules:hmap.bzl", "HeaderMapInfo")
@@ -62,6 +63,19 @@ def _xcodeproj_aspect_collect_hmap_paths(deps, target, ctx):
                 relative_path = getattr(file, "path")
                 hmap_paths.append(relative_path)
     return hmap_paths
+
+def _targeted_device_family(ctx):
+    """ The targeted device family of the rule
+
+    Args:
+        ctx: same as what is passed into aspect impl
+    Returns:
+        the targeted device family in the format recognized by xcode
+    """
+    families = platform_support.ui_device_family_plist_value(platform_prerequisites = struct(
+        device_families = getattr(ctx.rule.attr, "families", []),
+    ))
+    return ",".join(["%d" % family for family in families]) if families else None
 
 def _xcodeproj_aspect_impl(target, ctx):
     providers = []
@@ -140,6 +154,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             swift_module_paths = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "swift_module_paths")),
             hmap_paths = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "hmap_paths")),
             commandline_args = commandline_args,
+            targeted_device_family = _targeted_device_family(ctx),
         )
         if ctx.rule.kind != "apple_framework_packaging":
             providers.append(
@@ -536,6 +551,9 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
         if test_host_appname:
             target_dependencies.append({"target": test_host_appname})
             target_settings["TEST_HOST"] = "$(BUILT_PRODUCTS_DIR)/{test_host_appname}.app/{test_host_appname}".format(test_host_appname = test_host_appname)
+
+        if target_info.targeted_device_family:
+            target_settings["TARGETED_DEVICE_FAMILY"] = target_info.targeted_device_family
 
         xcodeproj_targets_by_name[target_name] = {
             "sources": compiled_sources + compiled_non_arc_sources + asset_sources,
