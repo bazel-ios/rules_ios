@@ -164,7 +164,7 @@ def _apple_framework_packaging_impl(ctx):
                 # only thing is the generated module map -- we don't want it
                 continue
 
-            if SwiftInfo in dep and dep[SwiftInfo].direct_swiftmodules:
+            if SwiftInfo in dep and dep[SwiftInfo].direct_modules:
                 # apple_common.Objc.direct_module_maps is broken coming from swift_library
                 # (it contains one level of transitive module maps), so ignore SwiftInfo from swift_library,
                 # since it doesn't have a module_map field anyway
