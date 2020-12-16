@@ -1,5 +1,8 @@
-# Extracted from Xcode 11.6
-# To update, in rules_ios run `bazel run data_generators:extract_xcspecs`
+############################################################################
+#                   THIS IS GENERATED CODE                                 #
+# Extracted from Xcode 12.2                                     #
+# To update, in rules_ios run `bazel run data_generators:extract_xcspecs`  #
+############################################################################
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_ARCHS__Condition(xcconfigs, id_configs):
     # $(USE_LLVM_TARGET_TRIPLES_FOR_CLANG) == YES
@@ -693,6 +696,10 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_UNREACHABLE_CODE__DefaultVal
     return (False, "NO")
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER__DefaultValue(xcconfigs, id_configs):
+    # NO
+    return (False, "NO")
+
+def _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_FRAMEWORK_INCLUDE_PRIVATE_FROM_PUBLIC__DefaultValue(xcconfigs, id_configs):
     # NO
     return (False, "NO")
 
@@ -2070,12 +2077,12 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_ARC_MIGRATE_EMIT_ERROR__DefaultVa
     return (False, "NO")
 
 def _com_apple_compilers_model_coredata__MOMC_OUTPUT_SUFFIX__DefaultValue(xcconfigs, id_configs):
-    # $(MOMC_OUTPUT_SUFFIX_$(InputFileSuffix))
+    # $(MOMC_OUTPUT_SUFFIX_$(InputFileSuffix:identifier))
 
     used_user_content = False
 
     eval_val_0 = ""
-    eval_key_0 = "InputFileSuffix"
+    eval_key_0 = "InputFileSuffix:identifier"
     if eval_key_0 in xcconfigs:
         eval_val_0 = xcconfigs[eval_key_0]
         used_user_content = True
@@ -4058,6 +4065,7 @@ XCSPEC_EVALS = {
     "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_EMPTY_BODY__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_EMPTY_BODY__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_ENUM_CONVERSION__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_ENUM_CONVERSION__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_FLOAT_CONVERSION__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_FLOAT_CONVERSION__DefaultValue,
+    "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_FRAMEWORK_INCLUDE_PRIVATE_FROM_PUBLIC__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_FRAMEWORK_INCLUDE_PRIVATE_FROM_PUBLIC__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_IMPLICIT_SIGN_CONVERSION__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_IMPLICIT_SIGN_CONVERSION__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_INFINITE_RECURSION__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_INFINITE_RECURSION__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_INT_CONVERSION__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_INT_CONVERSION__DefaultValue,

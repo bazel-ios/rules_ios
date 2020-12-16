@@ -1,5 +1,8 @@
-# Extracted from Xcode 11.6
-# To update, in rules_ios run `bazel run data_generators:extract_xcspecs`
+############################################################################
+#                   THIS IS GENERATED CODE                                 #
+# Extracted from Xcode 12.2                                     #
+# To update, in rules_ios run `bazel run data_generators:extract_xcspecs`  #
+############################################################################
 
 SETTINGS = {
     "com.apple.compilers.llvm.clang.1_0": {
@@ -8,8 +11,8 @@ SETTINGS = {
         "CommandOutputParser": "XCSimpleBufferedCommandOutputParser",
         "DashIFlagAcceptsHeadermaps": "Yes",
         "Description": "Apple Clang compiler",
-        "ExecDescription": "Compile $(InputFile)",
-        "ExecDescriptionForPrecompile": "Precompile $(InputFile)",
+        "ExecDescription": "Compile $(InputFileName)",
+        "ExecDescriptionForPrecompile": "Precompile $(InputFileName)",
         "ExecPath": "clang",
         "Identifier": "com.apple.compilers.llvm.clang.1_0",
         "InputFileTypes": [
@@ -628,6 +631,16 @@ SETTINGS = {
                 "DefaultValue": "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER__DefaultValue",
                 "Type": "Enumeration",
                 "Values": ["YES", "YES_ERROR", "NO"],
+            },
+            "CLANG_WARN_FRAMEWORK_INCLUDE_PRIVATE_FROM_PUBLIC": {
+                "Category": "Warnings",
+                "CommandLineArgs": {
+                    "NO": [],
+                    "YES": ["-Wframework-include-private-from-public"],
+                },
+                "DefaultValue": "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_FRAMEWORK_INCLUDE_PRIVATE_FROM_PUBLIC__DefaultValue",
+                "Type": "Enumeration",
+                "Values": ["YES", "NO"],
             },
             "CLANG_WARN_NULLABLE_TO_NONNULL_CONVERSION": {
                 "CommandLineArgs": {
@@ -1742,7 +1755,13 @@ SETTINGS = {
                 "Type": "Boolean",
             },
             "CLANG_BITCODE_GENERATION_MODE": {
-                "Architectures": ["arm64", "armv7", "armv7s", "armv7k"],
+                "Architectures": [
+                    "arm64",
+                    "arm64e",
+                    "armv7",
+                    "armv7s",
+                    "armv7k",
+                ],
                 "CommandLineArgs": {
                     "bitcode": ["-fembed-bitcode"],
                     "marker": ["-fembed-bitcode-marker"],
@@ -1911,7 +1930,7 @@ SETTINGS = {
         ],
         "DeeplyStatInputDirectories": "Yes",
         "Description": "MOMC: compiler of data model .xcdatamodeld/.xcdatamodel into .momd/.mom",
-        "ExecDescription": "Compile data model $(InputFile)",
+        "ExecDescription": "Compile data model $(InputFileName)",
         "Identifier": "com.apple.compilers.model.coredata",
         "InputFileTypes": ["wrapper.xcdatamodeld", "wrapper.xcdatamodel"],
         "IsArchitectureNeutral": "Yes",
@@ -1922,11 +1941,11 @@ SETTINGS = {
                 "DefaultValue": "com_apple_compilers_model_coredata__MOMC_OUTPUT_SUFFIX__DefaultValue",
                 "Type": "String",
             },
-            "MOMC_OUTPUT_SUFFIX_.xcdatamodeld": {
+            "MOMC_OUTPUT_SUFFIX__xcdatamodeld": {
                 "DefaultValue": "com_apple_compilers_model_coredata__MOMC_OUTPUT_SUFFIX__xcdatamodeld__DefaultValue",
                 "Type": "String",
             },
-            "MOMC_OUTPUT_SUFFIX_.xcdatamodel": {
+            "MOMC_OUTPUT_SUFFIX__xcdatamodel": {
                 "DefaultValue": "com_apple_compilers_model_coredata__MOMC_OUTPUT_SUFFIX__xcdatamodel__DefaultValue",
                 "Type": "String",
             },
@@ -1990,7 +2009,7 @@ SETTINGS = {
         ],
         "DeeplyStatInputDirectories": "Yes",
         "Description": "MAPC: compiler of mapping model files .xcmappingmodel into .cdm",
-        "ExecDescription": "Compile mapping model $(InputFile)",
+        "ExecDescription": "Compile mapping model $(InputFileName)",
         "Identifier": "com.apple.compilers.model.coredatamapping",
         "InputFileTypes": ["wrapper.xcmappingmodel"],
         "IsArchitectureNeutral": "Yes",
@@ -2026,7 +2045,6 @@ SETTINGS = {
         "Type": "Compiler",
     },
     "com.apple.pbx.linkers.ld": {
-        "Architectures": ["ppc", "ppc7400", "ppc7450", "ppc970", "ppc64", "i386", "x86_64"],
         "BinaryFormats": ["mach-o"],
         "Class": "PBXLinkerSpecificationLd",
         "CommandIdentifier": "create:$(OutputPath)",
@@ -2034,7 +2052,7 @@ SETTINGS = {
         "CommandOutputParser": "XCGccCommandOutputParser",
         "DependencyInfoFile": "$(LD_DEPENDENCY_INFO_FILE)",
         "Description": "Link executable using Apple Mach-O Linker (ld)",
-        "ExecDescription": "Link $(OutputPath)",
+        "ExecDescription": "Link $(OutputFile:file)",
         "Identifier": "com.apple.pbx.linkers.ld",
         "InputFileTypes": [
             "compiled.mach-o.objfile",
@@ -2270,7 +2288,7 @@ SETTINGS = {
                 "Type": "Boolean",
             },
             "LD_BITCODE_GENERATION_MODE": {
-                "Architectures": ["arm64", "armv7", "armv7s", "armv7k"],
+                "Architectures": ["arm64e", "arm64", "armv7", "armv7s", "armv7k"],
                 "CommandLineArgs": {
                     "bitcode": ["-fembed-bitcode"],
                     "marker": ["-fembed-bitcode-marker"],
@@ -2281,21 +2299,21 @@ SETTINGS = {
                 "Values": ["marker", "bitcode"],
             },
             "LD_VERIFY_BITCODE": {
-                "Architectures": ["arm64", "armv7", "armv7s", "armv7k"],
+                "Architectures": ["arm64e", "arm64", "armv7", "armv7s", "armv7k"],
                 "CommandLineArgs": {"NO": [], "YES": ["-Xlinker", "-bitcode_verify"]},
                 "Condition": "com_apple_pbx_linkers_ld__LD_VERIFY_BITCODE__Condition",
                 "DefaultValue": "com_apple_pbx_linkers_ld__LD_VERIFY_BITCODE__DefaultValue",
                 "Type": "Boolean",
             },
             "LD_HIDE_BITCODE_SYMBOLS": {
-                "Architectures": ["arm64", "armv7", "armv7s", "armv7k"],
+                "Architectures": ["arm64", "arm64e", "armv7", "armv7s", "armv7k"],
                 "CommandLineArgs": {"NO": [], "YES": ["-Xlinker", "-bitcode_hide_symbols"]},
                 "Condition": "com_apple_pbx_linkers_ld__LD_HIDE_BITCODE_SYMBOLS__Condition",
                 "DefaultValue": "com_apple_pbx_linkers_ld__LD_HIDE_BITCODE_SYMBOLS__DefaultValue",
                 "Type": "Boolean",
             },
             "LD_GENERATE_BITCODE_SYMBOL_MAP": {
-                "Architectures": ["arm64", "armv7", "armv7s", "armv7k"],
+                "Architectures": ["arm64", "arm64e", "armv7", "armv7s", "armv7k"],
                 "CommandLineArgs": {
                     "NO": [],
                     "YES": [
@@ -2390,7 +2408,7 @@ SETTINGS = {
         ],
         "Description": "Compiles Interface Builder XIB files into deployable NIB files.",
         "EnvironmentVariables": {"XCODE_DEVELOPER_USR_PATH": "$(DEVELOPER_BIN_DIR)/.."},
-        "ExecDescription": "Compile XIB file $(InputFile)",
+        "ExecDescription": "Compile XIB file $(InputFileName)",
         "GeneratedInfoPlistContentFilePath": "$(XIB_COMPILER_INFOPLIST_CONTENT_FILE)",
         "GenericCommandFailedErrorString": "Command %@ failed with exit code %d. The tool may have crashed. " +
                                            "Please file a bug report at https://feedbackassistant.apple.com with " +
@@ -2506,7 +2524,6 @@ SETTINGS = {
         "Type": "Compiler",
     },
     "com.apple.xcode.tools.swift.compiler": {
-        "Architectures": ["x86_64", "i386", "arm64", "armv7", "armv7s", "armv7k", "arm64_32"],
         "BuiltinJambaseRuleName": "ProcessSwift",
         "Class": "XCCompilerSpecificationSwift",
         "CommandOutputParser": "XCSwiftCommandOutputParser",
@@ -2850,6 +2867,7 @@ SETTINGS = {
             "SWIFT_BITCODE_GENERATION_MODE": {
                 "Architectures": [
                     "arm64",
+                    "arm64e",
                     "armv7",
                     "armv7s",
                     "armv7k",
