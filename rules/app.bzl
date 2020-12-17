@@ -10,6 +10,7 @@ _IOS_APPLICATION_KWARGS = [
     "test_host",
     "families",
     "entitlements",
+    "entitlements_validation",
     "extensions",
     "visibility",
     "launch_storyboard",
