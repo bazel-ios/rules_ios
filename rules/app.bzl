@@ -1,5 +1,6 @@
 load("@bazel_skylib//lib:types.bzl", "types")
 load("@build_bazel_rules_apple//apple:ios.bzl", rules_apple_ios_application = "ios_application")
+load("@build_bazel_rules_apple//apple:common.bzl", "entitlements_validation_mode")
 load("//rules:library.bzl", "apple_library", "write_file")
 load("//rules/library:xcconfig.bzl", "build_setting_name")
 
@@ -76,6 +77,9 @@ def ios_application(name, apple_library = apple_library, infoplists_by_build_set
 
     infoplists = select(infoplists_by_build_setting)
 
+    # Keep original default value 'entitlements_validation_mode.loose' if not set
+    entitlements_validation = kwargs.pop("entitlements_validation", entitlements_validation_mode.loose)
+
     application_kwargs = {arg: kwargs.pop(arg) for arg in _IOS_APPLICATION_KWARGS if arg in kwargs}
     library = apple_library(name = name, namespace_is_module_name = False, platforms = {"ios": application_kwargs.get("minimum_os_version")}, **kwargs)
 
@@ -96,5 +100,6 @@ def ios_application(name, apple_library = apple_library, infoplists_by_build_set
             "//conditions:default": [],
         }),
         infoplists = infoplists,
+        entitlements_validation = entitlements_validation,
         **application_kwargs
     )
