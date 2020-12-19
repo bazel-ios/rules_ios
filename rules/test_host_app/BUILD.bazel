@@ -2,6 +2,7 @@ load("//rules:app.bzl", "ios_application")
 
 exports_files([
     "Info.plist",
+    "ios.entitlements",
     "LaunchScreen.storyboard",
 ])
 
