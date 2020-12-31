@@ -20,7 +20,7 @@ ios_application(
         "main.m",
     ],
     bundle_id = "com.example.TestImports-App",
-    families = ["ipad"],
+    families = ["iphone"],
     minimum_os_version = "12.0",
     module_name = "TestImports_App",
     resource_bundles = {"ResourceBundle": glob(
@@ -61,10 +61,13 @@ ios_unit_test(
     srcs = [
         "test.m",
         "test.swift",
+        "testhelper.h",
+        "testhelper.m",
     ],
     minimum_os_version = "12.0",
     module_name = "TestImports_Unit_Tests",
     sdk_frameworks = ["XCTest"],
+    swift_objc_bridging_header = "TestImports-Unit-Tests-Bridging-Header.h",
     test_host = ":TestImports-App",
     # Adding visibility so the xcodeproject tests can depend on this target
     visibility = ["//visibility:public"],
