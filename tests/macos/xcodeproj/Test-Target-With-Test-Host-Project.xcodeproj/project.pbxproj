@@ -49,6 +49,7 @@
 		6B5478D8BA2BE2A548270A80 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
 		6E1E57A5D2E549D270B1B1A7 /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = resource_bundle.plist; sourceTree = "<group>"; };
 		8BBBE8333A9A3A09CEFFD917 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		9683E3E05D116FBB2D85DC23 /* TestImports-App-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestImports-App-Bridging-Header.h"; sourceTree = "<group>"; };
 		9E7E8177A9991D407C446EF6 /* TestImports-Unit-Tests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "TestImports-Unit-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A038F6999FF698D9E7E393F6 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		A5AC323968F3E7DC9BAFEC85 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
@@ -137,6 +138,7 @@
 				DC21B9839449D8D9195E4A22 /* Resources */,
 				EC2BF9F658BA7B0FF93BA215 /* test.m */,
 				5EF21FC7C23005F0603AD4F0 /* test.swift */,
+				9683E3E05D116FBB2D85DC23 /* TestImports-App-Bridging-Header.h */,
 			);
 			path = "test-imports-app";
 			sourceTree = "<group>";
