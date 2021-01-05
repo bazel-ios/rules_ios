@@ -28,6 +28,7 @@ ios_application(
         exclude_directories = 0,
     )},
     sdk_frameworks = ["UIKit"],
+    swift_objc_bridging_header = "TestImports-App-Bridging-Header.h",
     visibility = ["//visibility:public"],
     deps = [
         ":SomeFramework",
