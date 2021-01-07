@@ -180,7 +180,7 @@
 		1203D0689A9C5AF03A1C225D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = rules_ios;
 				TargetAttributes = {
 				};
@@ -190,6 +190,7 @@
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				Base,
 				en,
 			);
 			mainGroup = E8099B19B67C1115D200E916;
