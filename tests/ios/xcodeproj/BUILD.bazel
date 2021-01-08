@@ -4,6 +4,10 @@ xcodeproj(
     name = "Single-Static-Framework-Project",
     testonly = True,
     bazel_path = "bazelisk",
+    configs = [
+        "bar",
+        "foo",
+    ],
     generate_schemes_for_product_types = [
         "framework.static",
         "bundle.unit-test",
