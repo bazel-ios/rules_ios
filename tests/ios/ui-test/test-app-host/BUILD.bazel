@@ -1,0 +1,17 @@
+load("//rules:app.bzl", "ios_application")
+
+ios_application(
+    name = "TestAppHost",
+    srcs = [
+        "AppDelegate.swift",
+        "RootViewController.swift",
+    ],
+    bundle_id = "com.example.ios-ui-test-app-host",
+    families = [
+        "iphone",
+        "ipad",
+    ],
+    minimum_os_version = "11.0",
+    swift_version = "5.1",
+    visibility = ["//visibility:public"],
+)
