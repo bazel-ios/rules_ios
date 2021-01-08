@@ -13,6 +13,7 @@
 		A92FEA9E7CEAA5C1D707216B /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = EC2BF9F658BA7B0FF93BA215 /* test.m */; };
 		C61986BF5CBA4DAEAF33BE91 /* empty.m in Sources */ = {isa = PBXBuildFile; fileRef = 018DA4ABD245EA72FEA9BA46 /* empty.m */; };
 		C6B1D1CBC7730A53A2C04E0D /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5478D8BA2BE2A548270A80 /* empty.swift */; };
+		C95405553A2746A500C5E3E6 /* testhelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF0C0F5D81C125CD2559615 /* testhelper.m */; };
 		E676560B3EE63A86606530C8 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AC323968F3E7DC9BAFEC85 /* empty.swift */; };
 /* End PBXBuildFile section */
 
@@ -42,12 +43,15 @@
 		211B0D62D65A5D8BEFE42153 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3CCFF4E96CDD4C2949F0F71A /* Header2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header2.h; sourceTree = "<group>"; };
 		3ECF1D7133544DD5E82A3EB0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4BF0C0F5D81C125CD2559615 /* testhelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = testhelper.m; sourceTree = "<group>"; };
+		4DACF9F33F414B6BED4E227B /* testhelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = testhelper.h; sourceTree = "<group>"; };
 		57D04511C7357979F7EB5058 /* TestModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestModel.xcdatamodel; sourceTree = "<group>"; };
 		5BE4EAFF6C0B54947E66B439 /* ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ios.entitlements; sourceTree = "<group>"; };
 		5EF21FC7C23005F0603AD4F0 /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
 		61CE3CBBAD0BFAFC0953377B /* TestImports-App.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "TestImports-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B5478D8BA2BE2A548270A80 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
 		6E1E57A5D2E549D270B1B1A7 /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = resource_bundle.plist; sourceTree = "<group>"; };
+		6F61436FF5DC80B583273E47 /* TestImports-Unit-Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestImports-Unit-Tests-Bridging-Header.h"; sourceTree = "<group>"; };
 		8BBBE8333A9A3A09CEFFD917 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9683E3E05D116FBB2D85DC23 /* TestImports-App-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestImports-App-Bridging-Header.h"; sourceTree = "<group>"; };
 		9E7E8177A9991D407C446EF6 /* TestImports-Unit-Tests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "TestImports-Unit-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -138,7 +142,10 @@
 				DC21B9839449D8D9195E4A22 /* Resources */,
 				EC2BF9F658BA7B0FF93BA215 /* test.m */,
 				5EF21FC7C23005F0603AD4F0 /* test.swift */,
+				4DACF9F33F414B6BED4E227B /* testhelper.h */,
+				4BF0C0F5D81C125CD2559615 /* testhelper.m */,
 				9683E3E05D116FBB2D85DC23 /* TestImports-App-Bridging-Header.h */,
+				6F61436FF5DC80B583273E47 /* TestImports-Unit-Tests-Bridging-Header.h */,
 			);
 			path = "test-imports-app";
 			sourceTree = "<group>";
@@ -365,6 +372,7 @@
 			files = (
 				A92FEA9E7CEAA5C1D707216B /* test.m in Sources */,
 				9C997105C8FCCC97A52F3C37 /* test.swift in Sources */,
+				C95405553A2746A500C5E3E6 /* testhelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -422,7 +430,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-966875f8ada8/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-966875f8ada8/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_swift_doublequote_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_swift_angle_bracket_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_swift_doublequote_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_swift_angle_bracket_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_swift_doublequote_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_swift_angle_bracket_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_swift_doublequote_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_swift_angle_bracket_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
@@ -469,7 +477,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-966875f8ada8/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-966875f8ada8/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_swift_doublequote_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_swift_angle_bracket_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_swift_doublequote_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_swift_angle_bracket_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_swift_doublequote_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_swift_angle_bracket_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_swift_doublequote_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-9754431daf72/bin/tests/ios/unit-test/test-imports-app/TestImports-Unit-Tests_swift_angle_bracket_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
