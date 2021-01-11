@@ -623,7 +623,7 @@ def _xcodeproj_impl(ctx):
 
     proj_options = {
         "createIntermediateGroups": True,
-        "defaultConfig": "debug",
+        "defaultConfig": "Debug",
         "groupSortPosition": "none",
         "settingPresets": "none",
     }
@@ -676,7 +676,7 @@ def _xcodeproj_impl(ctx):
     proj_settings = {
         "base": proj_settings_base,
         "configs": {
-            "debug": proj_settings_debug,
+            "Debug": proj_settings_debug,
         },
     }
 
@@ -700,13 +700,11 @@ def _xcodeproj_impl(ctx):
     # The 'xcodegen' tool requires at least one build configuration
     # of each type 'debug' and 'release'. Add those and set all the others to 'none'
     #
-    # Note that the consumer can still set 'debug' and 'release' in 'ctx.attr.configs'
-    # and take advantage of the configs in the .bazelrc file. This is only a way to
-    # be consistent with what 'xcodegen' expects, no additional settings are being added
-    # since 'proj_settings' above has only common settings
+    # Note that the consumer can still set 'Debug' and 'Release' in 'ctx.attr.configs'
+    # and take advantage of the configs in the .bazelrc file.
     xcodeproj_info_configs = {k: "none" for k in ctx.attr.configs}
-    xcodeproj_info_configs["debug"] = "debug"
-    xcodeproj_info_configs["release"] = "release"
+    xcodeproj_info_configs["Debug"] = "debug"
+    xcodeproj_info_configs["Release"] = "release"
 
     xcodeproj_info = struct(
         name = paths.split_extension(project_name)[0],
@@ -806,7 +804,7 @@ Tags for configuration:
         be appended to the underlying bazel invocation. Effectively allowing the configs in the .bazelrc file
         to control how Xcode builds each build configuration.
 
-        If not present 'debug' and 'release' Xcode build configurations will be created by default without
+        If not present the 'Debug' and 'Release' Xcode build configurations will be created by default without
         appending any additional bazel invocation flags.
         """),
         "default_config": attr.string(mandatory = False),

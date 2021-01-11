@@ -289,6 +289,92 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		1091E1A1D257C1ADC644E9F0 /* bar */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
+				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFramework";
+				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e85ff352ea2d/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e85ff352ea2d/bin/tests/ios/frameworks/objc/ObjcFramework_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFramework_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = ObjcFramework;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
+			};
+			name = bar;
+		};
+		11520BEE91B7542C09C24BEE /* foo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
+				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFrameworkTestLib";
+				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFramework\"";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = ObjcFrameworkTestLib;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
+			};
+			name = foo;
+		};
+		1B74A3AF4785830CC1D9C38D /* foo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
+				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFrameworkTests";
+				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\"";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = ObjcFrameworkTests;
+				SUPPORTS_MACCATALYST = 0;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
+			};
+			name = foo;
+		};
+		2E9A5B98C9157080FA862FA2 /* bar */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
+				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFrameworkTests";
+				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\"";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = ObjcFrameworkTests;
+				SUPPORTS_MACCATALYST = 0;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
+			};
+			name = bar;
+		};
 		4A592014F4EE0EF133043433 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -314,6 +400,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
+				BAZEL_CONFIGS = (
+					bar,
+					foo,
+				);
 				BAZEL_EXECUTION_LOG_ENABLED = 0;
 				BAZEL_INSTALLER = $BAZEL_INSTALLERS_DIR/installer;
 				BAZEL_INSTALLERS_DIR = $PROJECT_FILE_PATH/bazelinstallers;
@@ -386,6 +476,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
+				BAZEL_CONFIGS = (
+					bar,
+					foo,
+				);
 				BAZEL_EXECUTION_LOG_ENABLED = 0;
 				BAZEL_INSTALLER = $BAZEL_INSTALLERS_DIR/installer;
 				BAZEL_INSTALLERS_DIR = $PROJECT_FILE_PATH/bazelinstallers;
@@ -431,6 +525,112 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
 			};
 			name = Debug;
+		};
+		B4136EFA862010617A28A0CB /* bar */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
+				BAZEL_CONFIGS = (
+					bar,
+					foo,
+				);
+				BAZEL_EXECUTION_LOG_ENABLED = 0;
+				BAZEL_INSTALLER = $BAZEL_INSTALLERS_DIR/installer;
+				BAZEL_INSTALLERS_DIR = $PROJECT_FILE_PATH/bazelinstallers;
+				BAZEL_OUTPUT_PROCESSOR = "$BAZEL_STUBS_DIR/output-processor.rb";
+				BAZEL_PATH = bazelisk;
+				BAZEL_RULES_IOS_OPTIONS = "--@build_bazel_rules_ios//rules:local_debug_options_enabled";
+				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
+				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../..;
+				CC = "$BAZEL_STUBS_DIR/clang-stub";
+				CLANG_ANALYZER_EXEC = $CC;
+				CODE_SIGNING_ALLOWED = 0;
+				CXX = $CC;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DONT_RUN_SWIFT_STDLIB_TOOL = 1;
+				LD = "$BAZEL_STUBS_DIR/ld-stub";
+				LIBTOOL = /usr/bin/true;
+				SDKROOT = iphoneos;
+				SWIFT_EXEC = "$BAZEL_STUBS_DIR/swiftc-stub";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
+				SWIFT_VERSION = 5;
+				USE_HEADERMAP = 0;
+			};
+			name = bar;
+		};
+		B544F8073405B9FBD9B2BB86 /* bar */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
+				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFrameworkTestLib";
+				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFramework\"";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = ObjcFrameworkTestLib;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
+			};
+			name = bar;
+		};
+		BF9CE7946680DD1C074D108C /* foo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
+				BAZEL_CONFIGS = (
+					bar,
+					foo,
+				);
+				BAZEL_EXECUTION_LOG_ENABLED = 0;
+				BAZEL_INSTALLER = $BAZEL_INSTALLERS_DIR/installer;
+				BAZEL_INSTALLERS_DIR = $PROJECT_FILE_PATH/bazelinstallers;
+				BAZEL_OUTPUT_PROCESSOR = "$BAZEL_STUBS_DIR/output-processor.rb";
+				BAZEL_PATH = bazelisk;
+				BAZEL_RULES_IOS_OPTIONS = "--@build_bazel_rules_ios//rules:local_debug_options_enabled";
+				BAZEL_STUBS_DIR = $PROJECT_FILE_PATH/bazelstubs;
+				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../..;
+				CC = "$BAZEL_STUBS_DIR/clang-stub";
+				CLANG_ANALYZER_EXEC = $CC;
+				CODE_SIGNING_ALLOWED = 0;
+				CXX = $CC;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DONT_RUN_SWIFT_STDLIB_TOOL = 1;
+				LD = "$BAZEL_STUBS_DIR/ld-stub";
+				LIBTOOL = /usr/bin/true;
+				SDKROOT = iphoneos;
+				SWIFT_EXEC = "$BAZEL_STUBS_DIR/swiftc-stub";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
+				SWIFT_VERSION = 5;
+				USE_HEADERMAP = 0;
+			};
+			name = foo;
+		};
+		C82A312768CB07FE3B333F4D /* foo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
+				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFramework";
+				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e85ff352ea2d/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-e85ff352ea2d/bin/tests/ios/frameworks/objc/ObjcFramework_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/applebin_ios-ios_x86_64-dbg-ST-4d4d6d15df54/bin/tests/ios/frameworks/objc/ObjcFramework_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = ObjcFramework;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
+			};
+			name = foo;
 		};
 		D29ECC7CF1047B3BFCB2E22E /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -483,6 +683,8 @@
 			buildConfigurations = (
 				AE361089BE1AD2D6C97F0FC7 /* Debug */,
 				D29ECC7CF1047B3BFCB2E22E /* Release */,
+				2E9A5B98C9157080FA862FA2 /* bar */,
+				1B74A3AF4785830CC1D9C38D /* foo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -492,6 +694,8 @@
 			buildConfigurations = (
 				553AD18D9E11E3EDA025191C /* Debug */,
 				EE2EC42390583A990E3D7E29 /* Release */,
+				B544F8073405B9FBD9B2BB86 /* bar */,
+				11520BEE91B7542C09C24BEE /* foo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -501,6 +705,8 @@
 			buildConfigurations = (
 				A248E1E9CD0AD51889E5D7DE /* Debug */,
 				4A592014F4EE0EF133043433 /* Release */,
+				1091E1A1D257C1ADC644E9F0 /* bar */,
+				C82A312768CB07FE3B333F4D /* foo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -510,6 +716,8 @@
 			buildConfigurations = (
 				52EE4EE37BBA0006C75B7793 /* Debug */,
 				A6B50790B7933226FB9F8B30 /* Release */,
+				B4136EFA862010617A28A0CB /* bar */,
+				BF9CE7946680DD1C074D108C /* foo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
