@@ -807,7 +807,6 @@ Tags for configuration:
         If not present the 'Debug' and 'Release' Xcode build configurations will be created by default without
         appending any additional bazel invocation flags.
         """),
-        "default_config": attr.string(mandatory = False),
         "deps": attr.label_list(mandatory = True, allow_empty = False, providers = [], aspects = [_xcodeproj_aspect]),
         "include_transitive_targets": attr.bool(default = False, mandatory = False),
         "project_name": attr.string(mandatory = False),

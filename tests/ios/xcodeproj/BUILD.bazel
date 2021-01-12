@@ -4,6 +4,8 @@ xcodeproj(
     name = "Single-Static-Framework-Project",
     testonly = True,
     bazel_path = "bazelisk",
+    # Not that 'configs' must hold names for configs present in your .bazelrc file
+    # in order to build with the respective Xcode build configurations active
     configs = [
         "bar",
         "foo",
