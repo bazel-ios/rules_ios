@@ -640,6 +640,7 @@ def _xcodeproj_impl(ctx):
         "BAZEL_INSTALLERS_DIR": "$PROJECT_FILE_PATH/bazelinstallers",
         "BAZEL_INSTALLER": "$BAZEL_INSTALLERS_DIR/%s" % ctx.executable.installer.basename,
         "BAZEL_EXECUTION_LOG_ENABLED": False,
+        "BAZEL_CONFIGS": ctx.attr.configs,
     })
 
     # Stubbding main executable used by xcode so no actual building happening on Xcode side
@@ -671,6 +672,7 @@ def _xcodeproj_impl(ctx):
         "GCC_PREPROCESSOR_DEFINITIONS": "DEBUG",
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "DEBUG",
     }
+
     proj_settings = {
         "base": proj_settings_base,
         "configs": {
@@ -695,11 +697,21 @@ def _xcodeproj_impl(ctx):
         if _is_current_project_file(f)
     ]
 
+    # The 'xcodegen' tool requires at least one build configuration
+    # of each type 'debug' and 'release'. Add those and set all the others to 'none'
+    #
+    # Note that the consumer can still set 'Debug' and 'Release' in 'ctx.attr.configs'
+    # and take advantage of the configs in the .bazelrc file.
+    xcodeproj_info_configs = {k: "none" for k in ctx.attr.configs}
+    xcodeproj_info_configs["Debug"] = "debug"
+    xcodeproj_info_configs["Release"] = "release"
+
     xcodeproj_info = struct(
         name = paths.split_extension(project_name)[0],
         attributes = ctx.attr.project_attributes_overrides,
         options = proj_options,
         settings = proj_settings,
+        configs = xcodeproj_info_configs,
         targets = xcodeproj_targets_by_name,
         schemes = xcodeproj_schemes_by_name,
         fileGroups = project_file_groups,
@@ -785,6 +797,16 @@ Tags for configuration:
     xcodeproj-ignore-as-target: Add this to a rule declaration so that this rule will not generates a scheme for this target
 """,
     attrs = {
+        "configs": attr.string_list(mandatory = False, default = [], doc = """
+        List of bazel configs present in the .bazelrc file that can be used to build targets.
+
+        A Xcode build configuration will be created for each entry and a '--config=$CONFIGURATION' will
+        be appended to the underlying bazel invocation. Effectively allowing the configs in the .bazelrc file
+        to control how Xcode builds each build configuration.
+
+        If not present the 'Debug' and 'Release' Xcode build configurations will be created by default without
+        appending any additional bazel invocation flags.
+        """),
         "deps": attr.label_list(mandatory = True, allow_empty = False, providers = [], aspects = [_xcodeproj_aspect]),
         "include_transitive_targets": attr.bool(default = False, mandatory = False),
         "project_name": attr.string(mandatory = False),
