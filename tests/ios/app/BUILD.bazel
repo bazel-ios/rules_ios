@@ -17,6 +17,7 @@ apple_framework(
     platforms = {"ios": "10.0"},
     private_headers = glob(["FW/*_Private.*"]),
     visibility = ["//visibility:public"],
+    deps = [":SwiftLib"] ,
 )
 
 apple_framework(
@@ -280,3 +281,12 @@ ios_application(
         ":SwiftLib",
     ],
 )
+
+genrule(
+    name = "TopLevelBundles",
+    cmd = "file $(SRCS) && touch $(OUTS)",
+    # Multiple top level bundles as an input
+    srcs = [":AppWithEmptyDep", ":FW2"],
+    outs = ["AppAndFWTests.dummy.out"],
+)
+

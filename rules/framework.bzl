@@ -337,6 +337,7 @@ apple_framework_packaging = rule(
         ),
         "deps": attr.label_list(
             mandatory = True,
+            cfg = apple_common.multi_arch_split,
             doc =
                 """Objc or Swift rules to be packed by the framework rule
 """,
@@ -407,6 +408,19 @@ the framework as a dependency.""",
             default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
             doc = "Needed to allow this rule to have an incoming edge configuration transition.",
         ),
+        "platform_type": attr.string(
+            mandatory = False,
+            doc =
+                """Internal - currently rules_ios uses the dict `platforms`
+""",
+        ),
+        "minimum_os_version": attr.string(
+            mandatory = False,
+            doc =
+                """Internal - currently rules_ios the dict `platforms`
+""",
+        ),
+
     },
     doc = "Packages compiled code into an Apple .framework package",
 )
