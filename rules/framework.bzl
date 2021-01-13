@@ -30,6 +30,13 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
         transitive_deps = library.transitive_deps,
         deps = library.lib_names,
         platforms = library.platforms,
+        platform_type = select({
+            "@build_bazel_rules_ios//rules:macos_build" : "macos",
+            "@build_bazel_rules_ios//rules:ios_build" : "ios",
+            "@build_bazel_rules_ios//rules:tvos_build" : "tvos",
+            "@build_bazel_rules_ios//rules:watchos_build" : "watchos",
+            "//conditions:default": "ios"
+        }),
         **framework_packaging_kwargs
     )
 

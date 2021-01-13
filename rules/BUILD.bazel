@@ -42,3 +42,35 @@ config_setting(
         ":local_debug_options_enabled": "True",
     },
 )
+
+config_setting(
+    name = "macos_build",
+    values = {
+        "apple_platform_type": "macos",
+    },
+    visibility = ["//visibility:public"],
+)
+
+config_setting(
+    name = "ios_build",
+    values = {
+        "apple_platform_type": "ios",
+    },
+    visibility = ["//visibility:public"],
+)
+
+config_setting(
+    name = "tvos_build",
+    values = {
+        "apple_platform_type": "tvos",
+    },
+    visibility = ["//visibility:public"],
+)
+
+config_setting(
+    name = "watchos_build",
+    values = {
+        "apple_platform_type": "watchos",
+    },
+    visibility = ["//visibility:public"],
+)
