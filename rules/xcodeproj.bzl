@@ -634,7 +634,6 @@ def _xcodeproj_impl(ctx):
         "BAZEL_BUILD_EXEC": "$BAZEL_STUBS_DIR/build-wrapper",
         "BAZEL_OUTPUT_PROCESSOR": "$BAZEL_STUBS_DIR/output-processor.rb",
         "BAZEL_PATH": ctx.attr.bazel_path,
-        "BAZEL_RULES_IOS_OPTIONS": "--@build_bazel_rules_ios//rules:local_debug_options_enabled",
         "BAZEL_WORKSPACE_ROOT": "$SRCROOT/%s" % script_dot_dots,
         "BAZEL_STUBS_DIR": "$PROJECT_FILE_PATH/bazelstubs",
         "BAZEL_INSTALLERS_DIR": "$PROJECT_FILE_PATH/bazelinstallers",
@@ -792,7 +791,7 @@ def _xcodeproj_impl(ctx):
 xcodeproj = rule(
     implementation = _xcodeproj_impl,
     doc = """\
-Generates a Xcode project file (.xcodeproj) with a reasonable set of defaults. Specify the --@build_bazel_rules_ios//rules:local_debug_options_enabled when generating the project to ensure debugging of swiftmodules works.
+Generates a Xcode project file (.xcodeproj) with a reasonable set of defaults. Specify the when generating the project to ensure debugging of swiftmodules works.
 Tags for configuration:
     xcodeproj-ignore-as-target: Add this to a rule declaration so that this rule will not generates a scheme for this target
 """,

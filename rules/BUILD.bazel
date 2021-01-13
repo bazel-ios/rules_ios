@@ -13,7 +13,8 @@ genrule(
 )
 
 # A dummy target that enables serialize-debugging-options but only in local development,
-# so that swiftmodule paths will refer to paths on the local machine and LLDB will work.
+# so that swiftmodule paths will refer to paths on the local machine and LLDB will work
+# in Xcode versions older than 11.5.
 # See details here: https://github.com/ios-bazel-users/ios-bazel-users/blob/master/DebuggableRemoteSwift.md
 swift_library(
     name = "_LocalDebugOptions",

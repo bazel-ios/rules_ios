@@ -38,6 +38,5 @@ fi
 $BAZEL_PATH build \
     "${BAZEL_BUILD_OPTIONS[@]}" \
     $1 \
-    $BAZEL_RULES_IOS_OPTIONS \
     2>&1 |
     $BAZEL_OUTPUT_PROCESSOR
