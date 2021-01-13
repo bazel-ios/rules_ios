@@ -791,7 +791,7 @@ def _xcodeproj_impl(ctx):
 xcodeproj = rule(
     implementation = _xcodeproj_impl,
     doc = """\
-Generates a Xcode project file (.xcodeproj) with a reasonable set of defaults. Specify the when generating the project to ensure debugging of swiftmodules works.
+Generates a Xcode project file (.xcodeproj) with a reasonable set of defaults.
 Tags for configuration:
     xcodeproj-ignore-as-target: Add this to a rule declaration so that this rule will not generates a scheme for this target
 """,
