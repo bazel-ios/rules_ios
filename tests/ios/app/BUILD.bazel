@@ -282,11 +282,3 @@ ios_application(
     ],
 )
 
-genrule(
-    name = "TopLevelBundles",
-    cmd = "file $(SRCS) && touch $(OUTS)",
-    # Multiple top level bundles as an input
-    srcs = [":AppWithEmptyDep", ":FW2"],
-    outs = ["AppAndFWTests.dummy.out"],
-)
-
