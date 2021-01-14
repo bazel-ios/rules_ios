@@ -17,7 +17,6 @@ apple_framework(
     platforms = {"ios": "10.0"},
     private_headers = glob(["FW/*_Private.*"]),
     visibility = ["//visibility:public"],
-    deps = [":SwiftLib"],
 )
 
 apple_framework(
@@ -281,4 +280,3 @@ ios_application(
         ":SwiftLib",
     ],
 )
-
