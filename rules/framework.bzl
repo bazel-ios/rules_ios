@@ -310,7 +310,7 @@ def _apple_framework_packaging_impl(ctx):
         AppleBundleInfo(
             archive = None,
             archive_root = None,
-            binary = binary_out,
+            binary = binary_out[0] if len(binary_out) > 0 else None,
             bundle_id = bundle_id,
             bundle_name = framework_name,
             bundle_extension = bundle_extension,
