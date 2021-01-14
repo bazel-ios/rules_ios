@@ -31,11 +31,11 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
         deps = library.lib_names,
         platforms = library.platforms,
         platform_type = select({
-            "@build_bazel_rules_ios//rules:macos_build" : "macos",
-            "@build_bazel_rules_ios//rules:ios_build" : "ios",
-            "@build_bazel_rules_ios//rules:tvos_build" : "tvos",
-            "@build_bazel_rules_ios//rules:watchos_build" : "watchos",
-            "//conditions:default": "ios"
+            "@build_bazel_rules_ios//rules/apple_platform:macos" : "macos",
+            "@build_bazel_rules_ios//rules/apple_platform:ios" : "ios",
+            "@build_bazel_rules_ios//rules/apple_platform:tvos" : "tvos",
+            "@build_bazel_rules_ios//rules/apple_platform:watchos" : "watchos",
+            "//conditions:default": ""
         }),
         **framework_packaging_kwargs
     )
