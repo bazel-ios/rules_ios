@@ -11,7 +11,7 @@ jobs:
     name: Build and Test
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Select Xcode 11.6
         run: sudo xcode-select -s /Applications/Xcode_11.6.app
       - name: Build and Test
@@ -19,7 +19,7 @@ jobs:
           bazelisk test --local_test_jobs=1 -- //... -//tests/ios/...
           # `deleted_packages` is needed below in order to override the value of the .bazelrc file
           bazelisk test --local_test_jobs=1 --apple_platform_type=ios --deleted_packages='' -- //tests/ios/...
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v2
         if: failure()
         with:
           name: bazel-testlogs
@@ -28,7 +28,7 @@ jobs:
     name: Check Starlark and Docs
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Select Xcode 11.6
         run: sudo xcode-select -s /Applications/Xcode_11.6.app
       - name: Install buildifier
@@ -41,7 +41,7 @@ jobs:
     name: .xcodeproj Tests on Xcode 11.6
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Select Xcode 11.6
         run: sudo xcode-select -s /Applications/Xcode_11.6.app
       - name: Run tests
@@ -50,7 +50,7 @@ jobs:
     name: .xcodeproj Tests on Xcode 12.2
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Select Xcode 12.2
         run: sudo xcode-select -s /Applications/Xcode_12.2.app
       - name: Run tests
