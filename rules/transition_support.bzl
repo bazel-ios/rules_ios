@@ -64,7 +64,8 @@ def _apple_rule_transition_impl(settings, attr):
         if fail_on_apple_rule_transition_platform_mismatches:
             fail("ERROR: {}: attribute platform_type set to {}, but inferred to be {}".format(attr.name, attr_platform_type, platform_type))
         platform_type = attr_platform_type
-    elif attr_platforms and platform_type not in attr_platforms:
+
+    if attr_platforms and platform_type not in attr_platforms:
         if fail_on_apple_rule_transition_platform_mismatches:
             fail("ERROR: {}: attribute platforms set to {}, but platform inferred to be {}".format(attr.name, attr_platforms, platform_type))
         platform_type = attr_platforms.keys()[0]
