@@ -2,6 +2,7 @@ load("//rules:framework.bzl", "apple_framework")
 load("//rules:app.bzl", "ios_application")
 load("//rules:test.bzl", "ios_unit_test")
 load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
+load(":analysis-tests.bzl", "make_tests")
 
 apple_framework(
     name = "CppLib",
@@ -280,3 +281,5 @@ ios_application(
         ":SwiftLib",
     ],
 )
+
+make_tests()
