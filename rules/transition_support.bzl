@@ -73,7 +73,7 @@ def _apple_rule_transition_impl(settings, attr):
     ret = {
         "//command_line_option:apple configuration distinguisher": "applebin_" + platform_type,
         "//command_line_option:apple_platform_type": platform_type,
-        "//command_line_option:apple_split_cpu": "",
+        "//command_line_option:apple_split_cpu": settings["//command_line_option:apple_split_cpu"],
         "//command_line_option:compiler": settings["//command_line_option:apple_compiler"],
         "//command_line_option:cpu": _cpu_string(platform_type, settings),
         "//command_line_option:crosstool_top": (
@@ -104,6 +104,7 @@ _apple_rule_transition = transition(
         "//command_line_option:macos_cpus",
         "//command_line_option:tvos_cpus",
         "//command_line_option:watchos_cpus",
+        "//command_line_option:apple_split_cpu",
     ],
     outputs = [
         "//command_line_option:apple configuration distinguisher",
