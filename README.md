@@ -103,4 +103,4 @@ directory for sample applications.
 ## Special notes about debugging xcode projects
 Note that when generating Xcode projects and building their targets with bazel, it is necessary to supply the `--@build_bazel_rules_ios//rules:local_debug_options_enabled` so that debugging of swift files will work in Xcode versions older than 11.5.
 
-Debugging does not work in sandbox mode, due to issue #108. The workaround for now is to disable sandboxing in the .bazelrc file.
+Debugging does not work in sandbox mode, due to issue [#108](https://github.com/bazel-ios/rules_ios/issues/108). The workaround for now is to disable sandboxing in the .bazelrc file.
