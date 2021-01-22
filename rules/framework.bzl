@@ -305,17 +305,6 @@ def _apple_framework_packaging_impl(ctx):
         )
         _add_to_dict_if_present(objc_provider_fields, key, set)
 
-    for key in ["defines", "includes"]:
-        collected = []
-        for dep in ctx.attr.deps:
-            if CcInfo in dep:
-                collected.append(getattr(dep[CcInfo].compilation_context, key))
-        set = depset(
-            direct = [],
-            transitive = collected,
-        )
-        _add_to_dict_if_present(compilation_context_fields, key, set)
-
     # gather swift info fields
     swift_info_fields = {
         "swift_infos": [dep[SwiftInfo] for dep in ctx.attr.transitive_deps if SwiftInfo in dep],
