@@ -211,8 +211,9 @@ def _xcodeproj_aspect_impl(target, ctx):
 
         swift_module_paths = []
         if SwiftInfo in target:
-            swift_defines.append(depset(target[SwiftInfo].direct_defines))
-            swift_defines.append(target[SwiftInfo].transitive_defines)
+            swift_info = target[SwiftInfo]
+            swift_defines.append(depset(_collect_swift_defines(swift_info.direct_modules)))
+            swift_defines.append(depset(_collect_swift_defines(swift_info.transitive_modules.to_list())))
             swift_module_paths = [m.swift.swiftmodule.path for m in target[SwiftInfo].direct_modules]
         providers.append(
             _SrcsInfo(
@@ -255,6 +256,15 @@ _xcodeproj_aspect = aspect(
     implementation = _xcodeproj_aspect_impl,
     attr_aspects = ["deps", "actual", "tests", "infoplists", "entitlements", "resources", "test_host"],
 )
+
+def _collect_swift_defines(modules):
+    defines = {}
+    for module in modules:
+        swift_module = module.swift
+        if swift_module and swift_module.defines:
+            for x in swift_module.defines:
+                defines[x] = None
+    return defines.keys()
 
 # Borrowed from rules_swift/compiling.bzl
 def _exclude_swift_incompatible_define(define):

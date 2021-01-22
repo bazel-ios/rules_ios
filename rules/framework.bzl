@@ -273,12 +273,13 @@ def _apple_framework_packaging_impl(ctx):
     objc_provider_fields = {
         "providers": [dep[apple_common.Objc] for dep in ctx.attr.transitive_deps],
     }
+    compilation_context_fields = {}
 
     if framework_root:
-        objc_provider_fields["framework_search_paths"] = depset(
-            direct = [framework_root],
+        compilation_context_fields["framework_includes"] = depset(
+            direct = [paths.dirname(framework_root)],
         )
-    _add_to_dict_if_present(objc_provider_fields, "header", depset(
+    _add_to_dict_if_present(compilation_context_fields, "headers", depset(
         direct = header_out + private_header_out + modulemap_out,
     ))
     _add_to_dict_if_present(objc_provider_fields, "module_map", depset(
@@ -294,8 +295,6 @@ def _apple_framework_packaging_impl(ctx):
         "multi_arch_linked_binaries",
         "multi_arch_dynamic_libraries",
         "source",
-        "define",
-        "include",
         "link_inputs",
         "linkopt",
         "library",
@@ -305,6 +304,17 @@ def _apple_framework_packaging_impl(ctx):
             transitive = [getattr(dep[apple_common.Objc], key) for dep in ctx.attr.deps],
         )
         _add_to_dict_if_present(objc_provider_fields, key, set)
+
+    for key in ["defines", "includes"]:
+        collected = []
+        for dep in ctx.attr.deps:
+            if CcInfo in dep:
+                collected.append(getattr(dep[CcInfo].compilation_context, key))
+        set = depset(
+            direct = [],
+            transitive = collected,
+        )
+        _add_to_dict_if_present(compilation_context_fields, key, set)
 
     # gather swift info fields
     swift_info_fields = {
@@ -340,7 +350,11 @@ def _apple_framework_packaging_impl(ctx):
     # Eventually we need to remove any reference to objc provider
     # and use CcInfo instead, see this issue for more details: https://github.com/bazelbuild/bazel/issues/10674
     objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
-    cc_info_provider = CcInfo(compilation_context = objc_provider.compilation_context)
+    cc_info_provider = CcInfo(
+        compilation_context = cc_common.create_compilation_context(
+            **compilation_context_fields
+        ),
+    )
     return [
         objc_provider,
         cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider], cc_infos = [dep[CcInfo] for dep in ctx.attr.transitive_deps if CcInfo in dep]),
