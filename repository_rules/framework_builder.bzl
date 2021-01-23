@@ -10,7 +10,7 @@ def _make_framework_filegroup(ctx, framework_path):
 
     new_content = """\
 filegroup(
-    name = "%s", 
+    name = "%s",
     srcs = glob(["%s/**/*"]),
     visibility = ["//visibility:public"],
 )\
@@ -28,7 +28,7 @@ def _copy_files(ctx, files):
 def _execute(ctx, cmd):
     """Execute the specified command"""
 
-    result = ctx.execute(["sh", "-c", cmd], quiet = not ctx.attr.verbose)
+    result = ctx.execute(["sh", "-c", cmd], quiet = not ctx.attr.verbose, timeout = ctx.attr.timeout)
     if result.return_code != 0:
         fail(
             """
@@ -169,6 +169,11 @@ def _prebuilt_frameworks_importer(
             "cmd": attr.string(
                 mandatory = True,
                 doc = "The command for running the tool that will build the frameworks (cocoapods/carthage)",
+            ),
+            "timeout": attr.int(
+                mandatory = False,
+                default = 600,
+                doc = "Execution timeout for prebuilding frameworks",
             ),
             "verbose": attr.bool(
                 mandatory = True,
