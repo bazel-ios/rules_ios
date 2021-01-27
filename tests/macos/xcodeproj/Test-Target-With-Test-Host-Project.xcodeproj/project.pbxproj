@@ -424,6 +424,7 @@
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test/test-imports-app:TestImports-Unit-Tests";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/TestImports-Unit-Tests.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
@@ -447,6 +448,7 @@
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test/test-imports-app:TestImports-App";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/TestImports-App.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
@@ -471,6 +473,7 @@
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test/test-imports-app:TestImports-Unit-Tests";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/TestImports-Unit-Tests.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
@@ -494,6 +497,7 @@
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test:DefaultHosted";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/DefaultHosted.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/unit-test/DefaultHosted.swiftmodule bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/unit-test/DefaultHosted.swiftdoc bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/unit-test/DefaultHosted.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
@@ -517,6 +521,7 @@
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test/test-imports-app:TestImports-App";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/TestImports-App.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
@@ -570,6 +575,7 @@
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				BAZEL_BUILD_TARGET_LABEL = "rules/test_host_app:iOS-10.0-AppHost";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/iOS-10.0-AppHost.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
@@ -594,6 +600,7 @@
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				BAZEL_BUILD_TARGET_LABEL = "rules/test_host_app:iOS-10.0-AppHost";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/iOS-10.0-AppHost.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
@@ -649,6 +656,7 @@
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test:DefaultHosted";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/DefaultHosted.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/unit-test/DefaultHosted.swiftmodule bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/unit-test/DefaultHosted.swiftdoc bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/unit-test/DefaultHosted.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
