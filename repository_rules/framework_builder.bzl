@@ -1,6 +1,7 @@
 """This file contains rules to build framework binaries from your podfile or cartfile"""
 
 verbose_default = False  # The default verbose level when running this rules
+timeout_default = 600  # Execution timeout for prebuilding frameworks (in seconds)
 
 def _make_framework_filegroup(ctx, framework_path):
     """Generate the filegroup information of the framework"""
@@ -84,6 +85,7 @@ def build_carthage_frameworks(
         git clone --branch %s --depth 1 %s carthage_repo
         swift run --package-path carthage_repo carthage bootstrap --no-use-binaries --platform iOS
         """,
+        timeout = timeout_default,
         verbose = verbose_default):
     """
     Builds the frameworks for the libraries specified in a Cartfile
@@ -95,6 +97,7 @@ def build_carthage_frameworks(
         directory: the path to the directory containing the carthage setup
         files: the files required for carthage to run
         cmd: the command to run and install carthage
+        timeout: Timeout in seconds for prebuilding carthage frameworks
         verbose: if true, it will show the output of running carthage in the command line
     """
 
@@ -104,6 +107,7 @@ def build_carthage_frameworks(
         directory = directory,
         files = files,
         cmd = cmd % (carthage_version, git_repository_url),
+        timeout = timeout,
         verbose = verbose,
     )
 
@@ -122,6 +126,7 @@ def build_cocoapods_frameworks(
         bundle install
         bundle exec pod install
         """,
+        timeout = timeout_default,
         verbose = verbose_default):
     """
     Builds the frameworks for the pods specified in a Podfile that are using the [cocoapods-binary plugin](https://github.com/leavez/cocoapods-binary)
@@ -131,6 +136,7 @@ def build_cocoapods_frameworks(
         directory: the path to the directory containing the cocoapods setup
         files: the files required for cocoapods to run
         cmd: the command to install and run cocoapods
+        timeout: Timeout in seconds for prebuilding cocoapods
         verbose: if true, it will show the output of running cocoapods in the command line
     """
     _prebuilt_frameworks_importer(
@@ -139,6 +145,7 @@ def build_cocoapods_frameworks(
         directory = directory,
         files = files,
         cmd = cmd,
+        timeout = timeout,
         verbose = verbose,
     )
 
@@ -158,6 +165,7 @@ def _prebuilt_frameworks_importer(
         directory,
         files,
         cmd,
+        timeout,
         verbose):
     prebuilt_frameworks_importer = repository_rule(
         implementation = implementation,
@@ -187,5 +195,6 @@ def _prebuilt_frameworks_importer(
         name = name,
         file_labels = ["//" + directory + ":" + file for file in files],
         cmd = cmd,
+        timeout = timeout,
         verbose = verbose,
     )
