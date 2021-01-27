@@ -487,6 +487,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
     for target_info in targets:
         target_name = target_info.name
         product_type = target_info.product_type
+        lldbinit_file = "$CONFIGURATION_TEMP_DIR/%s.lldbinit" % target_name
 
         if target_name in xcodeproj_targets_by_name:
             existing_type = xcodeproj_targets_by_name[target_name]["type"]
@@ -540,6 +541,8 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
             ["-D%s" % d for d in target_info.cc_defines.to_list()],
         )
 
+        target_settings["BAZEL_LLDB_INIT_FILE"] = lldbinit_file
+
         if product_type == "application":
             target_settings["INFOPLIST_FILE"] = "$BAZEL_STUBS_DIR/Info-stub.plist"
             target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
@@ -588,6 +591,13 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
         scheme_action_details["commandLineArguments"] = {}
         for arg in commandline_args_tuple:
             scheme_action_details["commandLineArguments"][arg] = True
+
+        # From https://developer.apple.com/documentation/xcode-release-notes/xcode-12-release-notes
+        #
+        # You can now specify a path for the LLDB init file to use in a Run and Test action.
+        # Configure this path in the Info tab of a scheme’s Run or Test action.
+        # The path can contain a build settings macro such as ${SRCROOT}, so the file can be part of a project. (38677796) (FB5425738)
+        scheme_action_details["customLLDBInit"] = lldbinit_file
 
         # See https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md#scheme
         # on structure of xcodeproj_schemes_by_name[target_info.name]
