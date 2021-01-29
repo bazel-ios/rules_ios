@@ -615,7 +615,10 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
 
         # They will show as `TestableReference` under the scheme
         if target_info.product_type == "bundle.unit-test":
-            xcodeproj_schemes_by_name[target_name]["test"] = {"targets": [target_name]}
+            xcodeproj_schemes_by_name[target_name]["test"] = {
+                "targets": [target_name],
+                "customLLDBInit": lldbinit_file,
+            }
     return (xcodeproj_targets_by_name, xcodeproj_schemes_by_name)
 
 def _xcodeproj_impl(ctx):
