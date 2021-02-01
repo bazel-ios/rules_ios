@@ -16,6 +16,8 @@ available from [rules_swift](https://github.com/bazelbuild/rules_swift).
 
 Bazel version required by current rules is [here](https://github.com/bazel-ios/rules_ios/blob/master/.bazelversion)
 
+**Xcode 12** and above supported, to find the last `SHA` with support for older versions see the list of git tags.
+
 ## Reference documentation
 
 [Click here](https://github.com/bazel-ios/rules_ios/tree/master/docs)
