@@ -284,6 +284,7 @@
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				BAZEL_BUILD_TARGET_LABEL = "rules/test_host_app:iOS-9.3-AppHost";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/iOS-9.3-AppHost.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
@@ -308,6 +309,7 @@
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				BAZEL_BUILD_TARGET_LABEL = "rules/test_host_app:iOS-9.3-AppHost";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/iOS-9.3-AppHost.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
@@ -361,6 +363,7 @@
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test:ExplicitHosted";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ExplicitHosted.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/ExplicitHosted.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/ExplicitHosted.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/ExplicitHosted.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
@@ -384,6 +387,7 @@
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test:ExplicitHosted";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ExplicitHosted.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/ExplicitHosted.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/ExplicitHosted.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/ExplicitHosted.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;

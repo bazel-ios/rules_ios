@@ -49,7 +49,8 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
-      allowLocationSimulation = "YES">
+      allowLocationSimulation = "YES"
+      customLLDBInitFile = "$CONFIGURATION_TEMP_DIR/iOS-10.0-AppHost.lldbinit">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference

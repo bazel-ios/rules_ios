@@ -49,16 +49,9 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, **kwargs):
 
     library = apple_library(name = name, namespace_is_module_name = False, platforms = {"ios": ios_test_kwargs.get("minimum_os_version")}, **kwargs)
 
-    local_debug_options_for_swift = []
-    if library.has_swift_sources and ios_test_kwargs.get("test_host", None) == None:
-        local_debug_options_for_swift.append("@build_bazel_rules_ios//rules:_LocalDebugOptions")
-
     rule(
         name = name,
-        deps = library.lib_names + select({
-            "@build_bazel_rules_ios//rules:local_debug_options": local_debug_options_for_swift,
-            "//conditions:default": [],
-        }),
+        deps = library.lib_names,
         **ios_test_kwargs
     )
 

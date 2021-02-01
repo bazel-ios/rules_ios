@@ -13,11 +13,7 @@ set -euo pipefail
 #
 # The platform settings one points the current working directory (cwd) to workspace root.
 # This is needed for features relying on lldb remote debugging, such as `oso_prefix_is_pwd`.
-#
-# NOTE: In order to use this, add this line to `~/.lldbinit`:
-#
-#     command source ~/.lldbinit-source-map
-cat <<-END > ~/.lldbinit-source-map
+cat > $BAZEL_LLDB_INIT_FILE <<-END
 platform settings -w "$BAZEL_WORKSPACE_ROOT/"
 
 settings set target.source-map ./ "$BAZEL_WORKSPACE_ROOT/"
@@ -27,7 +23,7 @@ END
 
 if [[ -n ${BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS:-} ]]
 then
-  cat <<-END >> ~/.lldbinit-source-map
+  cat >> $BAZEL_LLDB_INIT_FILE <<-END
 settings set -- target.swift-extra-clang-flags $BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS
 END
 fi
@@ -35,7 +31,7 @@ fi
 BAZEL_EXTERNAL_DIRNAME="$BAZEL_WORKSPACE_ROOT/bazel-$(basename "$BAZEL_WORKSPACE_ROOT")/external"
 if [ -d "$BAZEL_EXTERNAL_DIRNAME" ]
 then
-  cat <<-END >> ~/.lldbinit-source-map
+  cat >> $BAZEL_LLDB_INIT_FILE <<-END
 settings append target.source-map ./external/ "$BAZEL_EXTERNAL_DIRNAME"
 END
 fi

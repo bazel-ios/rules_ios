@@ -16,6 +16,8 @@ available from [rules_swift](https://github.com/bazelbuild/rules_swift).
 
 Bazel version required by current rules is [here](https://github.com/bazel-ios/rules_ios/blob/master/.bazelversion)
 
+**Xcode 12** and above supported, to find the last `SHA` with support for older versions see the list of git tags.
+
 ## Reference documentation
 
 [Click here](https://github.com/bazel-ios/rules_ios/tree/master/docs)
@@ -101,6 +103,4 @@ See the [tests](https://github.com/bazel-ios/rules_ios/tree/master/tests)
 directory for sample applications.
 
 ## Special notes about debugging xcode projects
-Note that when generating Xcode projects and building their targets with bazel, it is necessary to supply the `--@build_bazel_rules_ios//rules:local_debug_options_enabled` so that debugging of swift files will work in Xcode versions older than 11.5.
-
 Debugging does not work in sandbox mode, due to issue [#108](https://github.com/bazel-ios/rules_ios/issues/108). The workaround for now is to disable sandboxing in the .bazelrc file.
