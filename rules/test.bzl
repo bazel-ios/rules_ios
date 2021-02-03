@@ -15,6 +15,7 @@ _IOS_TEST_KWARGS = [
     "resources",
     "tags",
     "shard_count",
+    "test_type",
 ]
 
 def _ios_test(name, test_rule, test_suite_rule, apple_library, **kwargs):
