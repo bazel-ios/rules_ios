@@ -18,37 +18,6 @@ def _mkdir(path):
 def _cp(src, dest):
     shutil.copyfile(src, dest)
 
-
-def _copy_private_headers(framework_root, header_paths):
-    _copy_headers(framework_root, header_paths, "PrivateHeaders")
-
-def _copy_headers(framework_root, header_paths, dir = "Headers"):
-    """Copy header from source to framework/Header folder.
-
-    Args:
-        framework_root: root path of the framework
-        header_paths: a list of paths of headers
-    """
-    if not header_paths: return
-
-    header_folder = os.path.join(framework_root, dir)
-    _mkdir(header_folder)
-    basenames = {}
-    for path in header_paths:
-        basename = os.path.basename(path)
-        if basename in basenames and path != basenames[basename]:
-            print(
-                "Error: Multiple files with the same name {} exists\n"
-                "New path: {}\n Existing path: {}\n"
-                "in the same module. Please double "
-                "check".format(basename, path, basenames[basename]))
-            sys.exit(1)
-        else:
-            basenames[basename] = path
-            dest = os.path.join(header_folder, basename)
-            _cp(path, dest)
-
-
 def _merge_binaries(framework_root, framework_name, binary_in):
     """Process built binaries.
 
@@ -135,10 +104,6 @@ class Args(argparse.Namespace):
 def main():
     """Main function."""
     actions = {
-        "header":
-            lambda args: _copy_headers(args.framework_root, args.inputs),
-        "private_header":
-            lambda args: _copy_private_headers(args.framework_root, args.inputs),
         "binary":
             lambda args: _merge_binaries(args.framework_root, args.framework_name, args.inputs),
         "modulemap":
