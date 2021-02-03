@@ -1,3 +1,5 @@
+""" Xcode Project Generation Logic """
+
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo")
 load("@build_bazel_rules_apple//apple/internal:platform_support.bzl", "platform_support")
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo")
@@ -477,6 +479,9 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
         ctx: context provided to rule impl
         targets: each dict contains info of a bazel target (not xcode target)
         src_dot_dots: caller needs to figure out how many `../` needed to correctly points to an actual file
+        all_transitive_targets: includes all the targets built with their different configurations.
+        Some configurations are only applied when the target is reached transitively
+        (e.g. via an app or test that applies and propagates new build settings).
 
     Returns:
         A tuple where first argument a dict representing xcode targets.
@@ -558,6 +563,18 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
         if target_info.targeted_device_family:
             target_settings["TARGETED_DEVICE_FAMILY"] = target_info.targeted_device_family
 
+        pre_build_scripts = []
+        if len(ctx.attr.additional_prebuild_script) > 0:
+            pre_build_scripts.append({
+                "name": "Additional prebuild script",
+                "script": ctx.attr.additional_prebuild_script,
+            })
+
+        pre_build_scripts.append({
+            "name": "Build with bazel",
+            "script": _BUILD_WITH_BAZEL_SCRIPT,
+        })
+
         xcodeproj_targets_by_name[target_name] = {
             "sources": compiled_sources + compiled_non_arc_sources + asset_sources,
             "type": product_type,
@@ -565,10 +582,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
             "deploymentTarget": target_info.minimum_os_version,
             "settings": target_settings,
             "dependencies": target_dependencies,
-            "preBuildScripts": [{
-                "name": "Build with bazel",
-                "script": _BUILD_WITH_BAZEL_SCRIPT,
-            }],
+            "preBuildScripts": pre_build_scripts,
         }
 
         # Skip a scheme generation if allowlist is not empty
@@ -845,6 +859,7 @@ https://www.rubydoc.info/github/CocoaPods/Xcodeproj/Xcodeproj/Constants
         "installer": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:installer"), cfg = "host"),
         "build_wrapper": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:build-wrapper"), cfg = "host"),
         "additional_files": attr.label_list(allow_files = True, allow_empty = True, default = [], mandatory = False),
+        "additional_prebuild_script": attr.string(default = "", mandatory = False),  # Note this script will run BEFORE Bazel build script
     },
     executable = True,
 )
