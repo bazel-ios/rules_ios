@@ -46,6 +46,39 @@ def _find_framework_dir(outputs):
         return prefix + ".framework"
     return None
 
+def _framework_packaging_symlink_headers(ctx, inputs, outputs):
+    inputs_by_basename = {input.basename: input for input in inputs}
+
+    # If this check is true it means that multiple inputs have the same 'basename',
+    # an additional check is done to see if that was caused by 'action_inputs' containing
+    # two different paths to the same file
+    #
+    # In that case fails with a msg listing the differences found
+    if len(inputs_by_basename) < len(inputs):
+        inputs_by_basename_paths = [x.path for x in inputs_by_basename.values()]
+        inputs_with_duplicated_basename = [x for x in inputs if not x.path in inputs_by_basename_paths]
+        if len(inputs_with_duplicated_basename) > 0:
+            fail("""
+                [Error] Multiple files with the same name exists.\n
+                See below for the list of paths found for each basename:\n
+                {}
+            """.format({x.basename: (x.path, inputs_by_basename[x.basename].path) for x in inputs_with_duplicated_basename}))
+
+    # If no error occurs create symlinks for each output with
+    # each input as 'target_file'
+    output_input_dict = {output: inputs_by_basename[output.basename] for output in outputs}
+    for (output, input) in output_input_dict.items():
+        ctx.actions.symlink(output = output, target_file = input)
+
+def _framework_packaging_symlink_modulemap(ctx, inputs, outputs):
+    if len(inputs) != 1 or len(outputs) != 1:
+        fail("""
+        Multiple .modulemap files found, double check expected inputs and outputs:\n
+        inputs: {}\n
+        outputs: {}
+        """.format([x.path for x in inputs], [x.path for x in outputs]))
+    ctx.actions.symlink(output = outputs[0], target_file = inputs[0])
+
 def _framework_packaging(ctx, action, inputs, outputs, manifest = None):
     if not inputs:
         return []
@@ -63,13 +96,20 @@ def _framework_packaging(ctx, action, inputs, outputs, manifest = None):
     args.add("--action", action)
     args.add_all("--inputs", inputs)
     args.add_all("--outputs", outputs)
-    ctx.actions.run(
-        executable = ctx.executable._framework_packaging,
-        arguments = [args],
-        inputs = action_inputs,
-        outputs = outputs,
-        mnemonic = "PackagingFramework%s" % action.title().replace("_", ""),
-    )
+
+    if action in ["header", "private_header"]:
+        _framework_packaging_symlink_headers(ctx, inputs, outputs)
+    elif action == "modulemap":
+        _framework_packaging_symlink_modulemap(ctx, inputs, outputs)
+    else:
+        ctx.actions.run(
+            executable = ctx.executable._framework_packaging,
+            arguments = [args],
+            inputs = action_inputs,
+            outputs = outputs,
+            mnemonic = "PackagingFramework%s" % action.title().replace("_", ""),
+        )
+
     return outputs
 
 def _add_to_dict_if_present(dict, key, value):
