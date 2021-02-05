@@ -42,18 +42,6 @@ def _merge_binaries(framework_root, framework_name, binary_in):
                     ] + binary_in
         subprocess.check_call(commands)
 
-
-def _copy_modulemap(framework_root, modulemap_path):
-    """Copy modulemaps to its destination.
-
-    Args:
-        framework_root: root folder of the framework
-        modulemap_path: path of the original modulemap
-    """
-    dest = os.path.join(framework_root, "Modules", "module.modulemap")
-    _mkdir(os.path.dirname(dest))
-    _cp(modulemap_path, dest)
-
 def _clean(framework_root, manifest_file, output_manifest_file):
     """Remove stale files from the framework root.
 
@@ -106,8 +94,6 @@ def main():
     actions = {
         "binary":
             lambda args: _merge_binaries(args.framework_root, args.framework_name, args.inputs),
-        "modulemap":
-            lambda args: _copy_modulemap(args.framework_root, args.input()),
         "swiftmodule":
             lambda args: _cp(args.input(), args.output()),
         "swiftdoc":
