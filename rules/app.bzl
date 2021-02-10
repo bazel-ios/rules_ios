@@ -19,6 +19,7 @@ _IOS_APPLICATION_KWARGS = [
     "app_icons",
     "tags",
     "strings",
+    "alternate_icons",
 ]
 
 def write_info_plists_if_needed(name, plists):
