@@ -3,6 +3,7 @@
 load("@rules_cc//cc:defs.bzl", "cc_library", "objc_import", "objc_library")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:sets.bzl", "sets")
+load("@bazel_skylib//lib:selects.bzl", "selects")
 load("@build_bazel_rules_apple//apple:apple.bzl", "apple_dynamic_framework_import", "apple_static_framework_import")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 load("//rules:precompiled_apple_resource_bundle.bzl", "precompiled_apple_resource_bundle")
@@ -219,6 +220,82 @@ def _canonicalize_swift_version(swift_version):
 
     return swift_version
 
+def _xcframework_build_type(*, linkage, packaging):
+    return (linkage, packaging)
+
+def _xcframework_slice(*, xcframework_name, identifier, platform, platform_variant, supported_archs, build_type, path):
+    linkage, packaging = _xcframework_build_type(**build_type)
+    import_name = "{}-{}".format(xcframework_name, identifier)
+    if (linkage, packaging) == ("dynamic", "framework"):
+        apple_dynamic_framework_import(
+            name = import_name,
+            framework_imports = native.glob([path + "/**/*"]),
+            deps = [],
+            tags = _MANUAL,
+        )
+    elif (linkage, packaging) == ("static", "framework"):
+        apple_static_framework_import(
+            name = import_name,
+            framework_imports = native.glob([path + "/**/*"]),
+            deps = [],
+            tags = _MANUAL,
+        )
+    elif (linkage, packaging) == ("static", "library"):
+        objc_import(
+            name = import_name,
+            archives = [path],
+            tags = _MANUAL,
+        )
+    else:
+        fail("Unsupported xcframework slice type {} ({}) in {}".format(
+            build_type,
+            identifier,
+            xcframework_name,
+        ))
+    return (platform, platform_variant, supported_archs, import_name)
+
+def _xcframework(*, library_name, name, slices):
+    xcframework_name = "{}-import-{}.xcframework".format(library_name, name)
+    conditions = {}
+    for slice in slices:
+        platform, platform_variant, archs, name = _xcframework_slice(xcframework_name = xcframework_name, **slice)
+        platform_setting = "@build_bazel_rules_ios//rules/apple_platform:" + platform
+        # platform_variant_setting = "@build_bazel_rules_ios//rules/apple_platform:platform_variant_" + platform_variant if platform_variant else None
+
+        for arch in archs:
+            if arch == "arm64" and platform_variant == "simulator":
+                # TODO: support sim on apple silicon by having a config setting for platform_variant
+                continue
+
+            arch_setting = "@build_bazel_rules_apple//apple:{}_{}".format(platform, arch)
+            config_setting_name = "{}-{}".format(
+                xcframework_name,
+                "_".join([x for x in (platform, platform_variant, arch) if x]),
+            )
+            if config_setting_name in conditions:
+                fail("Duplicate slice for {}.xcframework used by {} ({}): {} and {}".format(
+                    name,
+                    library_name,
+                    config_setting_name,
+                    conditions[config_setting_name],
+                    name,
+                ))
+            conditions[config_setting_name] = name
+            selects.config_setting_group(
+                name = config_setting_name,
+                match_all = [platform_setting, arch_setting],
+            )
+
+    native.alias(
+        name = xcframework_name,
+        actual = select(conditions, no_match_error = "Unable to find a matching slice for {}.xcframework used by {}".format(
+            name,
+            library_name,
+        )),
+        tags = _MANUAL,
+    )
+    return xcframework_name
+
 def apple_library(name, library_tools = {}, export_private_headers = True, namespace_is_module_name = True, default_xcconfig_name = None, xcconfig = {}, xcconfig_by_build_setting = {}, **kwargs):
     """Create libraries for native source code on Apple platforms.
 
@@ -360,6 +437,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         vendored_deps.append(import_name)
     for vendored_dynamic_library in kwargs.pop("vendored_dynamic_libraries", []):
         fail("no import for %s" % vendored_dynamic_library)
+    for xcframework in kwargs.pop("vendored_xcframeworks", []):
+        vendored_deps.append(_xcframework(library_name = name, **xcframework))
     deps += vendored_deps
 
     resource_bundles = library_tools["resource_bundle_generator"](
