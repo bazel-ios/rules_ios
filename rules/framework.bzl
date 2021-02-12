@@ -70,15 +70,6 @@ def _framework_packaging_symlink_headers(ctx, inputs, outputs):
     for (output, input) in output_input_dict.items():
         ctx.actions.symlink(output = output, target_file = input)
 
-def _framework_packaging_symlink_modulemap(ctx, inputs, outputs):
-    if len(inputs) != 1 or len(outputs) != 1:
-        fail("""
-        Multiple .modulemap files found, double check expected inputs and outputs:\n
-        inputs: {}\n
-        outputs: {}
-        """.format([x.path for x in inputs], [x.path for x in outputs]))
-    ctx.actions.symlink(output = outputs[0], target_file = inputs[0])
-
 def _framework_packaging(ctx, action, inputs, outputs, manifest = None):
     if not inputs:
         return []
@@ -99,8 +90,6 @@ def _framework_packaging(ctx, action, inputs, outputs, manifest = None):
 
     if action in ["header", "private_header"]:
         _framework_packaging_symlink_headers(ctx, inputs, outputs)
-    elif action == "modulemap":
-        _framework_packaging_symlink_modulemap(ctx, inputs, outputs)
     else:
         ctx.actions.run(
             executable = ctx.executable._framework_packaging,
@@ -245,6 +234,10 @@ def _apple_framework_packaging_impl(ctx):
     binary_out = _framework_packaging(ctx, "binary", binary_in, binary_out, framework_manifest)
     header_out = _framework_packaging(ctx, "header", header_in, header_out, framework_manifest)
     private_header_out = _framework_packaging(ctx, "private_header", private_header_in, private_header_out, framework_manifest)
+
+    # Instead of creating a symlink of the modulemap, we need to copy it to modulemap_out.
+    # It's a hacky fix to guarantee running the clean action before compiling objc files depending on this framework in non-sandboxed mode.
+    # Otherwise, stale header files under framework_root will cause compilation failure in non-sandboxed mode.
     modulemap_out = _framework_packaging(ctx, "modulemap", [modulemap_in], modulemap_out, framework_manifest)
     swiftmodule_out = _framework_packaging(ctx, "swiftmodule", [swiftmodule_in], swiftmodule_out, framework_manifest)
     swiftdoc_out = _framework_packaging(ctx, "swiftdoc", [swiftdoc_in], swiftdoc_out, framework_manifest)
