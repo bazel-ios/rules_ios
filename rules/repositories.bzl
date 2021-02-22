@@ -83,9 +83,10 @@ def rules_ios_dependencies():
         sha256 = "1c531376ac7e5a180e0237938a2536de0c54d93f5c278634818e0efc952dd56c",
     )
 
+    # This seems to be overriding rules_swift - TODO:
     _maybe(
         http_archive,
-        name = "com_github_lyft_index_import",
+        name = "com_github_lyft_index_import_SOME",
         build_file_content = """\
 load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
 
