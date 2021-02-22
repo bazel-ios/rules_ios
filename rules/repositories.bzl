@@ -53,15 +53,15 @@ def rules_ios_dependencies():
         sha256 = "1fff3fa1e565111a8f678b4698792101844f57b2e78c5e374431d0ebe97f6b6c",
     )
 
-    native.local_repository(name = "build_bazel_rules_swift", path="/Users/jmarino/Development/rules_swift")
+    # native.local_repository(name = "build_bazel_rules_swift", path="/Users/jmarino/Development/rules_swift")
 
     _maybe(
         github_repo,
         name = "build_bazel_rules_swift",
-        ref = "ed81c15f9b577880c13b987101100cbac03f45c2",
-        project = "bazelbuild",
+        ref = "37a6779e497feb10d48d06ee9e0a6f53758ba13d",
+        project = "bazel-ios",
         repo = "rules_swift",
-        sha256 = "9527ef2617be16115ed514d442b6d53d8d824054fd97e5b3ab689fb9d978b8ed",
+        sha256 = "1199623c6f343aba99c3e5539bc0d3cee396b667626a434d29abef7fa2d4f8f0",
     )
 
     _maybe(
