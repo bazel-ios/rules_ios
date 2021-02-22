@@ -115,3 +115,16 @@ EOS
     executable = True,
     tools = [":Test-Imports-App-Project"],
 )
+
+xcodeproj(
+    name = "Test-With-Host-App-With-AdditionalPrebuildScript",
+    additional_prebuild_script = "echo 'DoSomething'",
+    bazel_path = "bazelisk",
+    generate_schemes_for_product_types = ["application"],
+    include_transitive_targets = True,
+    deps = [
+        "//tests/ios/app:App",
+        "//tests/ios/app:FW",
+        "//tests/ios/app:FW2",
+    ],
+)
