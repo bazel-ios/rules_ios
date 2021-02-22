@@ -1,6 +1,7 @@
-@import FW;
-@import OnlySources;
+//@import FW;
+//@import OnlySources;
 
 int main(int argc, char **argv) {
-    return UIApplicationMain(argc, argv, nil, nil);
+    //return UIApplicationMain(argc, argv, nil, nil);
+    return 0;
 }

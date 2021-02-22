@@ -1,0 +1,2 @@
+exports_files(["both.h", "both.pch"])
+objc_library(name="both", hdrs=["both.h"], srcs=["both.m"], enable_modules=True)

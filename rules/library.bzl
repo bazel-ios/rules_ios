@@ -495,6 +495,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
         ]
         additional_swift_copts += [
+            # "-whole-module-optimization",
             "-Xcc",
             "-ivfsoverlay$(execpath :{})".format(framework_vfs_overlay_name),
             "-Xcc",
