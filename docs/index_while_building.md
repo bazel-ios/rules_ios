@@ -1,9 +1,9 @@
 # Index While Building in Bazel
 
 This document summarizes the status of index while building in Bazel and the
-plan to implement it. "Index while building" encompases the writing of index
-data from swift and clang and then consumption of that inside of that data in
-Xcode.
+plan to improve it. "Index while building" encompases the writing of index data
+from swift and clang and then consumption of that inside of that data in Xcode.
+For a high level design of the feature in LLVM, check the whitepaper [Adding Index-While-Building support to Clang](https://docs.google.com/document/d/1cH2sTpgSnJZCkZtJl1aY-rzy4uGPcrI-6RrUpdATO2Q/edit)
 
 ## High level summary and status
 
