@@ -21,20 +21,22 @@ time.  Adding "Index while building" to bazel needs special consideration to
 preserve performance characteristics of the original architecture of a global
 index while interoperating with remote execution and caching.
 
-## rules_swift workers
+## Index while building V2
+
+### rules_swift workers
 
 Workers are extended to use a global index internally. Records and units into
 the remote cache by copying material from the worker's global index into
 `bazel-out`. This fixes
 
-## clang compilation
+### clang compilation
 
 The native rules don't have an extra output for indexstore. These rules are
 updated to use the global index and in M3 remote caching for clang compilation
 is added.
 
 
-### Incrementally - importing remotely compiled indexes
+#### Incrementally importing remotely compiled indexes
 
 In order to import indexs into Xcode incrementally, a program is invoked to
 "import" remotely compiled indexes. This may be an aspect that runs during the
@@ -74,9 +76,9 @@ xcbuild ( e.g. XCBuildKit ) protocol messages, in xcconfig by means of the
 1. Consider possibilities of improving performance of "Index while building"
 There are a couple avenues here:
 
-1a. A solution that works with remote caching
+- solution that works with remote caching
 
-1b. A solution that only runs locally. This is the status quo of objc right
+- A solution that only runs locally. This is the status quo of objc right
 now: it doesn't work with remote caching
 
 2. Disable "Index while building" and correspondingly index-import
