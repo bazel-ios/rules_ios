@@ -1,9 +1,9 @@
 # Index While Building in Bazel
 
 This document summarizes the status of index while building in Bazel and the
-plan to improve it. "Index while building" encompases the writing of index data
-from swift and clang and then consumption of that inside of that data in Xcode.
-For a high level design of the feature in LLVM, check the whitepaper [Adding Index-While-Building support to Clang](https://docs.google.com/document/d/1cH2sTpgSnJZCkZtJl1aY-rzy4uGPcrI-6RrUpdATO2Q/edit)
+plan to improve it. "Index while building" encompasses the writing of index data
+from swift and clang and the usage of that data in Xcode.
+For a high level design of the feature in LLVM, check the paper [Adding Index-While-Building support to Clang](https://docs.google.com/document/d/1cH2sTpgSnJZCkZtJl1aY-rzy4uGPcrI-6RrUpdATO2Q/edit)
 
 ## High level summary and status
 
@@ -15,7 +15,7 @@ time in testing.
 index-store-path. When using a transient per-swift-library index, it writes O(
 M imports * N libs) indexer data and slows down compilation significantly: to
 the tune of 300% slow down and 6GB+ index data in benchmarks. `rules_swift`
-likes to use per `swift_library` data in order to remote cache indexes
+likes to use per `swift_library` data in order to remote cache indexes.
 `rules_ios` uses a per `apple_library` index to reduce `index-import` wallclock
 time.  Adding "Index while building" to Bazel needs special consideration to
 both preserve performance characteristics of the original architecture of a
