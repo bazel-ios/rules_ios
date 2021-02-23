@@ -55,8 +55,8 @@ Initially the feature will work the same locally as it does remotely.
 However, one major shortcut exists locally to remove index-import. Xcode should
 read directly from Bazel's global index store. In other words, instead of
 writing to the per module index, and copying to `bazel-out` for remote caching,
-Xcode should pull right from that index. A sential can be added in order to
-noop the code path for `bazel-out` when writing remotely built indexes.
+Xcode should pull right from that index. A "out of band" sentenial value can noop
+the code path for `bazel-out`.
 
 In order to remove the requirement to "index-import" bazel indexes, there are
 special considerations in the way that Xcode and Bazel invoke compilation and
