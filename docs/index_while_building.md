@@ -23,6 +23,12 @@ global index and interoperate with Bazel's remote execution and caching.
 
 ## Index while building V2
 
+Like the current implementation, index while building V2 piggy backs on the
+`-index-store-path` feature in clang and swift. However, in V2 of index while
+building, `swift` and `clang` compilers use a global index cache internally to
+preserve performance. Finally, to integrate with remote caching, actions copy
+data into `bazel-out`.
+
 ### rules_swift workers
 
 Workers are extended to use a global index internally. Then, it writes records
