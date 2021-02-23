@@ -14,20 +14,20 @@ time in testing.
 `swift` and `clang` write index data based on the status of what resides in
 index-store-path. When using a transient per-swift-library index, it writes O(
 M imports * N libs) indexer data and slows down compilation significantly: to
-the tune of 300% slow down and 6GB+ index data in my testing. `rules_swift`
+the tune of 300% slow down and 6GB+ index data in benchmarks. `rules_swift`
 likes to use per `swift_library` data in order to remote cache indexes
 `rules_ios` uses a per `apple_library` index to reduce `index-import` wallclock
-time.  Adding "Index while building" to bazel needs special consideration to
-preserve performance characteristics of the original architecture of a global
-index while interoperating with remote execution and caching.
+time.  Adding "Index while building" to Bazel needs special consideration to
+both preserve performance characteristics of the original architecture of a
+global index and interoperate with Bazel's remote execution and caching.
 
 ## Index while building V2
 
 ### rules_swift workers
 
-Workers are extended to use a global index internally. Records and units into
-the remote cache by copying material from the worker's global index into
-`bazel-out`. This fixes
+Workers are extended to use a global index internally. Then, it writes records
+and units into the remote cache by copying material from the worker's global
+index into `bazel-out`. 
 
 ### clang compilation
 
