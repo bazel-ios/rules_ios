@@ -27,9 +27,8 @@ Like the current implementation, index while building V2 piggy backs on the
 `-index-store-path` feature in clang and swift. However, in V2 of index while
 building, `swift` and `clang` compilers use a global index cache internally to
 preserve performance. Finally, to integrate with remote caching, actions copy
-data into `bazel-out`. In other words, bazel actions import relevant units and
-records to a tree artifact output in to so Bazel can write to the tree artifact
-to caches.
+data into `bazel-out`. In other words, Bazel actions import relevant units and
+records to a tree artifact output so Bazel can write the data to caches.
 
 ### Per compilation index management
 
@@ -41,7 +40,7 @@ The program operates at the compilation level rather than caching the entire
 global index by mapping compiler outputs to unit files. The program uses the
 LLVM index store library to interface with index store primitives e.g. units and
 records. _[This program](https://github.com/lyft/index-import/pull/53) is
-orthogonal to and may may not end up as part of Lyft's index-import_.
+orthogonal to and may or may not end up as part of Lyft's index-import_.
 
 ### rules_swift workers
 
