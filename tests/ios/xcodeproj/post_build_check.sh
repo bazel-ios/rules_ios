@@ -19,11 +19,17 @@ for path in ${HSP}; do
 done
 
 export FSP=$(grep "FRAMEWORK_SEARCH_PATHS" *.xcodeproj/project.pbxproj | grep -o "bazel-out[^ \]*")
-echo "Make sure framework search paths exist after build"
+export LLDB_FSP=$(grep "BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS" *.xcodeproj/project.pbxproj | grep -o "bazel-out[^ \"\]*")
+echo "Make sure framework search paths exist after build and are being passed to LLDB"
 for path in ${FSP}; do
     FULL_PATH="../../../$path"
     if [ ! -e $FULL_PATH ]; then
         echo "File at $FULL_PATH not found!"
+        exit 1
+    fi
+
+    if [[ ! "$LLDB_FSP" == *"$path"* ]]; then
+        echo "The path '$FULL_PATH' won't be passed to LLDB! The setting 'BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS' should contain this path."
         exit 1
     fi
 done
