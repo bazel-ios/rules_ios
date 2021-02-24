@@ -542,8 +542,19 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
         target_settings["SWIFT_ACTIVE_COMPILATION_CONDITIONS"] = " ".join(
             ["\"%s\"" % d for d in defines_without_equal_sign],
         )
+
+        # Without `strip` here the paths won't be created
+        # correctly in the LLLDB init file
+        fmw_search_paths_lldb = target_settings["FRAMEWORK_SEARCH_PATHS"].strip("\"").split(" ")
+
         target_settings["BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS"] = " ".join(
-            ["-D%s" % d for d in target_info.cc_defines.to_list()],
+            ["-D%s" % d for d in target_info.cc_defines.to_list()] +
+            # Passing framework search paths via -F flag so
+            # LLDB has the necessary information to create the ASTs
+            #
+            # Fixes an issue where the debugger output was empty in Xcode
+            # when debugging .swift files
+            ["-F%s" % f for f in fmw_search_paths_lldb],
         )
 
         target_settings["BAZEL_LLDB_INIT_FILE"] = lldbinit_file
