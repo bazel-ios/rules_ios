@@ -296,7 +296,7 @@
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFramework";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFramework.lldbinit;
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-F$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -318,7 +318,7 @@
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFrameworkTestLib";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFrameworkTestLib.lldbinit;
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-F$(PLATFORM_DIR)/Developer/Library/Frameworks -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/frameworks/objc/ObjcFramework";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -340,7 +340,7 @@
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFrameworkTests";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFrameworkTests.lldbinit;
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-F$(PLATFORM_DIR)/Developer/Library/Frameworks -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/frameworks/objc/ObjcFramework\" -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/frameworks/objc/ObjcFramework\" -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -363,7 +363,7 @@
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFrameworkTests";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFrameworkTests.lldbinit;
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-F$(PLATFORM_DIR)/Developer/Library/Frameworks -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/frameworks/objc/ObjcFramework\" -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/frameworks/objc/ObjcFramework\" -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -386,7 +386,7 @@
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFramework";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFramework.lldbinit;
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-F$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -441,7 +441,7 @@
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFrameworkTestLib";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFrameworkTestLib.lldbinit;
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-F$(PLATFORM_DIR)/Developer/Library/Frameworks -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/frameworks/objc/ObjcFramework";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -463,7 +463,7 @@
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFramework";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFramework.lldbinit;
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-F$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -516,7 +516,7 @@
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFrameworkTests";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFrameworkTests.lldbinit;
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-F$(PLATFORM_DIR)/Developer/Library/Frameworks -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/frameworks/objc/ObjcFramework\" -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/frameworks/objc/ObjcFramework\" -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -570,7 +570,7 @@
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFrameworkTestLib";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFrameworkTestLib.lldbinit;
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-F$(PLATFORM_DIR)/Developer/Library/Frameworks -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/frameworks/objc/ObjcFramework";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -623,7 +623,7 @@
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFramework";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFramework.lldbinit;
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-F$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -645,7 +645,7 @@
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFrameworkTests";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFrameworkTests.lldbinit;
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-F$(PLATFORM_DIR)/Developer/Library/Frameworks -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/frameworks/objc/ObjcFramework\" -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/frameworks/objc/ObjcFramework\" -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -668,7 +668,7 @@
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFrameworkTestLib";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFrameworkTestLib.lldbinit;
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-F$(PLATFORM_DIR)/Developer/Library/Frameworks -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/frameworks/objc/ObjcFramework";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
