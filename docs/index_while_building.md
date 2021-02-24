@@ -5,7 +5,7 @@ plan to improve it. "Index while building" encompasses the writing of index data
 from swift and clang and the usage of that data in Xcode.
 For a high level design of the feature in LLVM, check the paper [Adding Index-While-Building support to Clang](https://docs.google.com/document/d/1cH2sTpgSnJZCkZtJl1aY-rzy4uGPcrI-6RrUpdATO2Q/edit)
 
-## High level summary and status
+## Current status
 
 At the time of writing there's prior art that adds `-index-store-path` to
 `rules_swift` and `rules_ios` but enabling these code paths slows down build
@@ -21,33 +21,51 @@ time.  Adding "Index while building" to Bazel needs special consideration to
 both preserve performance characteristics of the original architecture of a
 global index and interoperate with Bazel's remote execution and caching.
 
-## Index while building V2
+## Index while building V2 design
 
 Like the current implementation, index while building V2 piggy backs on the
 `-index-store-path` feature in clang and swift. However, in V2 of index while
 building, `swift` and `clang` compilers use a global index cache internally to
 preserve performance. Finally, to integrate with remote caching, actions copy
-data into `bazel-out`.
+data into `bazel-out`. In other words, bazel actions import relevant units and
+records to a tree artifact output in to so Bazel can write to the tree artifact
+to caches.
+
+### Per compilation index management
+
+As Bazel remote caching is oriented around action outputs, the index store data
+is also updated to fit into this paradigm and retaining the global cache.
+
+A program is implemented to clone a minimal per-action subset of an index store.
+The program operates at the compilation level rather than caching the entire
+global index by mapping compiler outputs to unit files. The program uses the
+LLVM index store library to interface with index store primitives e.g. units and
+records. _[This program](https://github.com/lyft/index-import/pull/53) is
+orthogonal to and may may not end up as part of Lyft's index-import_.
 
 ### rules_swift workers
 
 Workers are extended to use a global index internally. Then, it writes records
 and units into the remote cache by copying material from the worker's global
-index into `bazel-out`. 
+index into `bazel-out`. This logic lives in the action binary to optimize
+performance and interface per compilation records with Bazel. _note: it's also
+not currently possible or gainful to express the global index store in a Bazel
+action ouput._
 
 ### clang compilation
 
 The native rules don't have an extra output for indexstore. These rules are
-updated to use the global index and in M3 remote caching for clang compilation
-is added.
+updated to use the global index and in remote caching for clang compilation is
+added. Like swift, this is behavior is also internal to the action. _This will
+be added as a followup - see [Task 2](#Task roadmap)._
 
+### Incrementally importing remotely compiled indexes
 
-#### Incrementally importing remotely compiled indexes
-
-In order to import indexs into Xcode incrementally, a program is invoked to
-"import" remotely compiled indexes. This may be an aspect that runs during the
-Xcode build in order to pass an output file map to index import, or an ad-hoc
-program picking up output maps from build events.
+In order to import indexes into a local, global index incrementally, a program
+is invoked to "import" remotely compiled indexes based on action ouputs. This
+may be an aspect that runs during the Xcode build in order to pass an output
+file map to index import, or an ad-hoc program picking up output maps from build
+events.
 
 By default clang and swift seem to write absolute paths into the Index. If this
 is invariant continues to hold, it needs to be accounted for in Bazel. e.g.
@@ -58,13 +76,11 @@ only the files that were recompiled.
 
 ### Local optimization - sans index-import
 
-Initially the feature will work the same locally as it does remotely.
-
-However, one major shortcut exists locally to remove index-import. Xcode should
-read directly from Bazel's global index store. In other words, instead of
-writing to the per module index, and copying to `bazel-out` for remote caching,
-Xcode should pull right from that index. A "out of band" sentenial value can noop
-the code path for `bazel-out`.
+One major shortcut exists locally to remove index-import: Xcode is fixed to read
+directly from Bazel's global index store. Then, instead of writing to global
+index and copying to `bazel-out` for remote caching, Xcode should can read right
+from Bazels' globlal index. A "out of band" sentenial value can noop the code
+path for `bazel-out`.
 
 In order to remove the requirement to "index-import" bazel indexes, there are
 special considerations in the way that Xcode and Bazel invoke compilation and
@@ -75,10 +91,10 @@ xcbuild ( e.g. XCBuildKit ) protocol messages, in xcconfig by means of the
 `.xcspec` features, or by plugin.
 
 
-## Task roadmap 
+## Task roadmap
 
 
-## Determine direction forward with prototypes
+## T0 - Determine direction forward with prototypes
 1. Consider possibilities of improving performance of "Index while building"
 There are a couple avenues here:
 
@@ -88,15 +104,15 @@ There are a couple avenues here:
 now: it doesn't work with remote caching
 
 2. Disable "Index while building" and correspondingly index-import
-Need to consider the user facing impact  MDX-3735
+Need to consider the user facing impact
 
 
-## Land index while building V2 - first pass
+## T1 - Index while building V2 - first pass
 
 1. Propose changes to `rules_swift` for compilation
 2. Implement an aspect to quickly pull remotely built indexes
 3. Evaluate possibilities to remove `index-import` for local execution
 4. Patch `rules_ios` to pass the global index for objc/cpp
 
-## Land index while building V2 - objc support
+## T2 - Index while building V2 - objc support
 1. determine a pattern to add index while building to objc with remote caching
