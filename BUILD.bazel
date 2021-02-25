@@ -4,3 +4,10 @@ sh_binary(
     name = "buildifier",
     srcs = ["@buildifier.mac//file"],
 )
+
+config_setting(
+    name = "index_while_building_v2",
+    values = {
+        "features": "swift.index_while_building_v2",
+    },
+)
