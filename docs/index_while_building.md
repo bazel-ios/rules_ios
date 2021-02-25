@@ -49,19 +49,18 @@ and units into the remote cache by copying material from the worker's global
 index into `bazel-out`. This logic lives in the action binary to optimize
 performance and interface per compilation records with Bazel. _note: it's also
 not currently possible or gainful to express the global index store in a Bazel
-action ouput._
+action output. Multiple actions cannot specify the same indexstore directory as an output._
 
 ### clang compilation
 
-The native rules don't have an extra output for indexstore. These rules are
-updated to use the global index and in remote caching for clang compilation is
-added. Like swift, this is behavior is also internal to the action. _This will
-be added as a followup - see [Task 2](#Task roadmap)._
+The native rules currently don't have an specify indexstore as a clang compilation action output.
+[Task 2](#Task roadmap) is to update rules_cc compilation actions to write to a global index internally and
+then copy the updated units+records to an output directory to ensure remote caching will work.
 
 ### Incrementally importing remotely compiled indexes
 
 In order to import indexes into a local, global index incrementally, a program
-is invoked to "import" remotely compiled indexes based on action ouputs. This
+is invoked to "import" remotely compiled indexes based on action outputs. This
 may be an aspect that runs during the Xcode build in order to pass an output
 file map to index import, or an ad-hoc program picking up output maps from build
 events.
@@ -78,7 +77,7 @@ only the files that were recompiled.
 One major shortcut exists locally to remove index-import: Xcode is fixed to read
 directly from Bazel's global index store. Then, instead of writing to global
 index and copying to `bazel-out` for remote caching, Xcode should can read right
-from Bazels' globlal index. A "out of band" sentenial value can noop the code
+from Bazels' global index. A "out of band" sentenial value can noop the code
 path for `bazel-out`.
 
 In order to remove the requirement to "index-import" bazel indexes, there are
