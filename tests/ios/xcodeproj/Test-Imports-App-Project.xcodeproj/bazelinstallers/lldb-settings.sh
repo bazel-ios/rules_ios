@@ -35,7 +35,18 @@ fi
 # Look for this logic in 'rules/xcodeproj.bzl'
 if [[ -n "$BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE" ]]
 then
-  LLDB_SWIFT_EXTRA_CLANG_FLAGS+=("$(cat $BAZEL_WORKSPACE_ROOT/$BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE)")
+  # All framework search paths from file
+  FSPS="$(cat $BAZEL_WORKSPACE_ROOT/$BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE)"
+  # Xcode won't resolve these paths for us since we're
+  # passing it directly from file to file
+  #
+  # Manually solving 'BAZEL_WORKSPACE_ROOT' and 'PLATFORM_DIR' for now 
+  # until it's possible to pass bigger build settings to Xcode
+  #
+  # For context see: https://github.com/bazel-ios/rules_ios/pull/216
+  FSPS_WITH_ROOT_RESOLVED=${FSPS//"\$BAZEL_WORKSPACE_ROOT"/$BAZEL_WORKSPACE_ROOT}
+  FSPS_WITH_ROOT_RESOLVED=${FSPS_WITH_ROOT_RESOLVED//"\$(PLATFORM_DIR)"/$PLATFORM_DIR}
+  LLDB_SWIFT_EXTRA_CLANG_FLAGS+=($FSPS_WITH_ROOT_RESOLVED)
 fi
 # Set all swift-extra-clang-flags if 'LLDB_SWIFT_EXTRA_CLANG_FLAGS'
 # is not empty
