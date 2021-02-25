@@ -114,16 +114,17 @@ Need to consider the user facing impact
 
 ### Index while building V2 - first pass
 
-- [x] Propose changes to `rules_swift` for compilation
+- [x] Propose changes to `rules_swift` for compilation https://github.com/bazelbuild/rules_swift/pull/567
 - [x] Propose changes to `index-import` for Bazel action helper binary https://github.com/lyft/index-import/pull/53
 - [x] Evaluate possibilities to remove `index-import` for local execution
 - [x] Fork `rules_swift` to `rules_ios` to iterate until upstream PR lands
 - [ ] Fork `index-import` to `rules_ios`
+- [ ] CI script to compile `index-import`
 - [ ] Patch `rules_ios` to use first pass
 
 ### Sans index-import for local builds
 
-- [ ] Remove the need to use `index-import` for local builds
+- [ ] Remove the need to use `index-import` for local execution
 - [ ] Implement an aspect to quickly pull remotely built indexes
 
 ### objc remote cache support
