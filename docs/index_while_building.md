@@ -93,9 +93,9 @@ xcbuild ( e.g. XCBuildKit ) protocol messages, in xcconfig by means of the
 
 ### Preliminary
 
-- [x] Profile and determine impact of current state of IWB
-    compilation https://github.com/bazelbuild/rules_swift/issues/561
-    consumption of index in Xcode https://github.com/bazel-ios/rules_ios/issues/203
+- [x] Profile and determine impact of current state of IWB.
+- [x] Swift compilation https://github.com/bazelbuild/rules_swift/issues/561
+- [x] Consumption of index in Xcode https://github.com/bazel-ios/rules_ios/issues/203
 
 ### Determine direction forward with prototypes - spiking
 
@@ -110,7 +110,7 @@ There are a couple avenues here:
 now: it doesn't work with remote caching
 
 2. Disable "Index while building" and correspondingly index-import
-Need to consider the user facing impact
+Need to consider the user facing impact: e.g. faster build times, can't index out-of-focus impl files.
 
 ### Index while building V2 - first pass
 
@@ -122,7 +122,7 @@ Need to consider the user facing impact
 - [ ] CI script to compile `index-import`
 - [ ] Patch `rules_ios` to use first pass
 
-### Sans index-import for local builds
+### Sans index-import for local execution
 
 - [ ] Remove the need to use `index-import` for local execution
 - [ ] Implement an aspect to quickly pull remotely built indexes
