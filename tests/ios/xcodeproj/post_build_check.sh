@@ -18,8 +18,15 @@ for path in ${HSP}; do
     fi
 done
 
-export FSP=$(grep "FRAMEWORK_SEARCH_PATHS" *.xcodeproj/project.pbxproj | grep -o "bazel-out[^ \]*")
-export LLDB_FSP=$(grep "BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS" *.xcodeproj/project.pbxproj | grep -o "bazel-out[^ \"\]*")
+export FSP=$(grep -w "FRAMEWORK_SEARCH_PATHS" *.xcodeproj/project.pbxproj | grep -o "bazel-out[^ \]*")
+# 'cat' all generated files containing framework search paths
+# to be passed to LLDB
+#
+# This is used below to ensure all 'FRAMEWORK_SEARCH_PATHS'
+# are being passed to LLDB
+LLDB_FSP_FILES=$(grep "BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE" *.xcodeproj/project.pbxproj | grep -o "bazel-out[^ \"\]*" | sed 's/^/..\/..\/..\//')
+export LLDB_FSP=$(cat $LLDB_FSP_FILES)
+
 echo "Make sure framework search paths exist after build and are being passed to LLDB"
 for path in ${FSP}; do
     FULL_PATH="../../../$path"
