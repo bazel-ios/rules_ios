@@ -21,10 +21,28 @@ settings set target.sdk-path $SDKROOT
 settings set target.swift-framework-search-paths $FRAMEWORK_SEARCH_PATHS
 END
 
+# Holds all swift-extra-clang-flags
+LLDB_SWIFT_EXTRA_CLANG_FLAGS=()
+# Append extra clang flags if set
 if [[ -n ${BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS:-} ]]
 then
+  LLDB_SWIFT_EXTRA_CLANG_FLAGS+=($BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS)
+fi
+# Append the file 'BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE' exists
+# it memans that there are framework search paths that LLDB should
+# be aware of so append the contents of that file
+#
+# Look for this logic in 'rules/xcodeproj.bzl'
+if [[ -n "$BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE" ]]
+then
+  LLDB_SWIFT_EXTRA_CLANG_FLAGS+=("$(cat $BAZEL_WORKSPACE_ROOT/$BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE)")
+fi
+# Set all swift-extra-clang-flags if 'LLDB_SWIFT_EXTRA_CLANG_FLAGS'
+# is not empty
+if [[ ${#LLDB_SWIFT_EXTRA_CLANG_FLAGS[@]} -ne 0 ]]
+then
   cat >> $BAZEL_LLDB_INIT_FILE <<-END
-settings set -- target.swift-extra-clang-flags $BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS
+settings set -- target.swift-extra-clang-flags ${LLDB_SWIFT_EXTRA_CLANG_FLAGS[@]}
 END
 fi
 

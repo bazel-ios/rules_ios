@@ -441,8 +441,9 @@
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/app:FW";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE = "bazel-out/darwin-dbg/bin/tests/ios/xcodeproj/FW_BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE";
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/FW.lldbinit;
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-F$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -463,8 +464,9 @@
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/app:App";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE = "bazel-out/darwin-dbg/bin/tests/ios/xcodeproj/App_BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE";
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/App.lldbinit;
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-F$(PLATFORM_DIR)/Developer/Library/Frameworks -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/app/FW\" -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/app/FW2\" -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/app/OnlySources\"";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -488,8 +490,9 @@
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/app:FW";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE = "bazel-out/darwin-dbg/bin/tests/ios/xcodeproj/FW_BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE";
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/FW.lldbinit;
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-F$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -539,8 +542,9 @@
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/app:App";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE = "bazel-out/darwin-dbg/bin/tests/ios/xcodeproj/App_BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE";
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/App.lldbinit;
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-F$(PLATFORM_DIR)/Developer/Library/Frameworks -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/app/FW\" -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/app/FW2\" -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/app/OnlySources\"";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -564,8 +568,9 @@
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/app:OnlySources";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE = "bazel-out/darwin-dbg/bin/tests/ios/xcodeproj/OnlySources_BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE";
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/OnlySources.lldbinit;
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-F$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -617,8 +622,9 @@
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/app:OnlySources";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE = "bazel-out/darwin-dbg/bin/tests/ios/xcodeproj/OnlySources_BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE";
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/OnlySources.lldbinit;
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-F$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -639,8 +645,9 @@
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/app:FW2";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE = "bazel-out/darwin-dbg/bin/tests/ios/xcodeproj/FW2_BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE";
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/FW2.lldbinit;
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-F$(PLATFORM_DIR)/Developer/Library/Frameworks -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/app/FW\" -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/app/FW\"";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -661,8 +668,9 @@
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/app:FW2";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE = "bazel-out/darwin-dbg/bin/tests/ios/xcodeproj/FW2_BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE";
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/FW2.lldbinit;
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-F$(PLATFORM_DIR)/Developer/Library/Frameworks -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/app/FW\" -F\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-7bf874b56ea0/bin/tests/ios/app/FW\"";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
