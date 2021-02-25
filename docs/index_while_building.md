@@ -26,9 +26,10 @@ global index and interoperate with Bazel's remote execution and caching.
 Like the current implementation, index while building V2 piggy backs on the
 `-index-store-path` feature in clang and swift. However, in V2 of index while
 building, `swift` and `clang` compilers use a global index cache internally to
-preserve performance. Finally, to integrate with remote caching, actions copy
-data into `bazel-out`. In other words, Bazel actions import relevant units and
-records to a tree artifact output so Bazel can write the data to caches.
+preserve performance. Finally, to integrate with remote caching, actions copy a
+small subset of data into `bazel-out`. In other words, Bazel actions import
+relevant units and records to a tree artifact output so Bazel can write a small
+subset of the index data to caches.
 
 ### Per compilation index management
 
@@ -53,9 +54,11 @@ action output. Multiple actions cannot specify the same indexstore directory as 
 
 ### clang compilation
 
-The native rules currently don't have an specify indexstore as a clang compilation action output.
-[Task 2](#Task roadmap) is to update rules_cc compilation actions to write to a global index internally and
-then copy the updated units+records to an output directory to ensure remote caching will work.
+The native rules currently don't have an specify indexstore as a clang
+compilation action output.  It may use rules_cc compilation actions to write to
+a global index internally and then copy the updated units+records to an output
+directory to ensure remote caching will work. Here, it uses rules_cc to add an
+extra compilation output for the translation unit / source file.
 
 ### Incrementally importing remotely compiled indexes
 
