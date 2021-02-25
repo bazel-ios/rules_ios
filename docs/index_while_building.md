@@ -78,7 +78,7 @@ One major shortcut exists locally to remove index-import: Xcode is fixed to read
 directly from Bazel's global index store. Then, instead of writing to global
 index and copying to `bazel-out` for remote caching, Xcode should can read right
 from Bazels' global index. A "out of band" sentenial value can noop the code
-path for `bazel-out`.
+path for `bazel-out`. _(out of band means abstracted from Bazel)_
 
 In order to remove the requirement to "index-import" bazel indexes, there are
 special considerations in the way that Xcode and Bazel invoke compilation and
@@ -91,8 +91,16 @@ xcbuild ( e.g. XCBuildKit ) protocol messages, in xcconfig by means of the
 
 ## Task roadmap
 
+### Preliminary
 
-## T0 - Determine direction forward with prototypes
+- [x] Profile and determine impact of current state of IWB
+    compilation https://github.com/bazelbuild/rules_swift/issues/561
+    consumption of index in Xcode https://github.com/bazel-ios/rules_ios/issues/203
+
+### Determine direction forward with prototypes - spiking
+
+- [x] Output design doc and map out tasks
+
 1. Consider possibilities of improving performance of "Index while building"
 There are a couple avenues here:
 
@@ -104,13 +112,23 @@ now: it doesn't work with remote caching
 2. Disable "Index while building" and correspondingly index-import
 Need to consider the user facing impact
 
+### Index while building V2 - first pass
 
-## T1 - Index while building V2 - first pass
+- [x] Propose changes to `rules_swift` for compilation
+- [x] Propose changes to `index-import` for Bazel action helper binary https://github.com/lyft/index-import/pull/53
+- [x] Evaluate possibilities to remove `index-import` for local execution
+- [x] Fork `rules_swift` to `rules_ios` to iterate until upstream PR lands
+- [ ] Fork `index-import` to `rules_ios`
+- [ ] Patch `rules_ios` to use first pass
 
-1. Propose changes to `rules_swift` for compilation
-2. Implement an aspect to quickly pull remotely built indexes
-3. Evaluate possibilities to remove `index-import` for local execution
-4. Patch `rules_ios` to pass the global index for objc/cpp
+### Sans index-import for local builds
 
-## T2 - Index while building V2 - objc support
-1. determine a pattern to add index while building to objc with remote caching
+- [ ] Remove the need to use `index-import` for local builds
+- [ ] Implement an aspect to quickly pull remotely built indexes
+
+### objc remote cache support
+
+- [ ] determine a pattern to add Index While Building to objc with remote caching
+- [ ] consider adding an extra action output for `rules_ios` for translation
+    unit index
+
