@@ -1,0 +1,6 @@
+# Pull buildifer.mac as an http_file, then depend on the file group to make an
+# executable
+sh_binary(
+    name = "buildifier",
+    srcs = ["@buildifier.mac//file"],
+)
