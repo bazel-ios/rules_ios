@@ -489,7 +489,6 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
     """
     xcodeproj_targets_by_name = {}
     xcodeproj_schemes_by_name = {}
-    lldb_framework_search_paths_files = []
     for target_info in targets:
         target_name = target_info.name
         product_type = target_info.product_type
@@ -545,22 +544,6 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
         target_settings["SWIFT_ACTIVE_COMPILATION_CONDITIONS"] = " ".join(
             ["\"%s\"" % d for d in defines_without_equal_sign],
         )
-
-        # Passing framework search paths via -F flag so
-        # LLDB has the necessary information to create the ASTs
-        #
-        # Fixes an issue where the debugger output was empty in Xcode
-        # when debugging .swift files
-        #
-        # Writing to a file and loading this in 'tools/xcodeproj_shims/installers/lldb-settings.sh'
-        # because for big projects Xcode will complain about the size of 'BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE'
-        lldb_framework_search_paths_filename = "%s_BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE" % (target_name)
-        lldb_framework_search_paths_file = ctx.actions.declare_file(lldb_framework_search_paths_filename)
-        ctx.actions.write(lldb_framework_search_paths_file, " ".join(["-F%s" % f for f in framework_search_paths]))
-        lldb_framework_search_paths_files.append(lldb_framework_search_paths_file)
-
-        target_settings["BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE"] = lldb_framework_search_paths_file.path
-
         target_settings["BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS"] = " ".join(
             ["-D%s" % d for d in target_info.cc_defines.to_list()],
         )
@@ -652,7 +635,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
                 "targets": [target_name],
                 "customLLDBInit": lldbinit_file,
             }
-    return (xcodeproj_targets_by_name, xcodeproj_schemes_by_name, lldb_framework_search_paths_files)
+    return (xcodeproj_targets_by_name, xcodeproj_schemes_by_name)
 
 def _xcodeproj_impl(ctx):
     xcodegen_jsonfile = ctx.actions.declare_file(
@@ -734,7 +717,7 @@ def _xcodeproj_impl(ctx):
         for t in _get_attr_values_for_name(ctx.attr.deps, _TargetInfo, "direct_targets"):
             targets.extend(t)
 
-    (xcodeproj_targets_by_name, xcodeproj_schemes_by_name, lldb_framework_search_paths_files) = _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_transitive_targets)
+    (xcodeproj_targets_by_name, xcodeproj_schemes_by_name) = _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_transitive_targets)
 
     project_file_groups = [
         {"path": paths.join(src_dot_dots, f.short_path), "optional": True}
@@ -813,7 +796,7 @@ def _xcodeproj_impl(ctx):
     return [
         DefaultInfo(
             executable = install_script,
-            files = depset([xcodegen_jsonfile, project] + lldb_framework_search_paths_files),
+            files = depset([xcodegen_jsonfile, project]),
             runfiles = ctx.runfiles(files = [xcodegen_jsonfile, project], transitive_files = depset(
                 direct = ctx.files.build_wrapper +
                          ctx.files.installer +

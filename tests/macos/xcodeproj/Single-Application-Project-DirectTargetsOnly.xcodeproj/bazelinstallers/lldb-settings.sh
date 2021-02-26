@@ -28,26 +28,18 @@ if [[ -n ${BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS:-} ]]
 then
   LLDB_SWIFT_EXTRA_CLANG_FLAGS+=($BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS)
 fi
-# Append the file 'BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE' exists
-# it memans that there are framework search paths that LLDB should
-# be aware of so append the contents of that file
+# Pass all 'FRAMEWORK_SEARCH_PATHS' to lldb
+# so debugging swift files in mixed swift/objc
+# projects work
 #
-# Look for this logic in 'rules/xcodeproj.bzl'
-if [[ -n "$BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE" ]]
-then
-  # All framework search paths from file
-  FSPS="$(cat $BAZEL_WORKSPACE_ROOT/$BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE)"
-  # Xcode won't resolve these paths for us since we're
-  # passing it directly from file to file
-  #
-  # Manually solving 'BAZEL_WORKSPACE_ROOT' and 'PLATFORM_DIR' for now 
-  # until it's possible to pass bigger build settings to Xcode
-  #
-  # For context see: https://github.com/bazel-ios/rules_ios/pull/216
-  FSPS_WITH_ROOT_RESOLVED=${FSPS//"\$BAZEL_WORKSPACE_ROOT"/$BAZEL_WORKSPACE_ROOT}
-  FSPS_WITH_ROOT_RESOLVED=${FSPS_WITH_ROOT_RESOLVED//"\$(PLATFORM_DIR)"/$PLATFORM_DIR}
-  LLDB_SWIFT_EXTRA_CLANG_FLAGS+=($FSPS_WITH_ROOT_RESOLVED)
-fi
+# See original approach to fix this for more details
+# https://github.com/bazel-ios/rules_ios/pull/213
+for fsp in $FRAMEWORK_SEARCH_PATHS; do
+  # Note that these paths will come quoted
+  # and with the Xcode env vars already resolved
+  # so we can just pass them without any modification
+  LLDB_SWIFT_EXTRA_CLANG_FLAGS+=(" -F$fsp")
+done
 # Set all swift-extra-clang-flags if 'LLDB_SWIFT_EXTRA_CLANG_FLAGS'
 # is not empty
 if [[ ${#LLDB_SWIFT_EXTRA_CLANG_FLAGS[@]} -ne 0 ]]

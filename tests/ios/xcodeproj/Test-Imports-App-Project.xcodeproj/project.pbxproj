@@ -357,7 +357,6 @@
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test/test-imports-app:TestImports-Unit-Tests";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
-				BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE = "bazel-out/darwin-dbg/bin/tests/ios/xcodeproj/TestImports-Unit-Tests_BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE";
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/TestImports-Unit-Tests.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftsourceinfo";
@@ -382,7 +381,6 @@
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test/test-imports-app:TestImports-App";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
-				BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE = "bazel-out/darwin-dbg/bin/tests/ios/xcodeproj/TestImports-App_BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE";
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/TestImports-App.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftsourceinfo";
@@ -408,7 +406,6 @@
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test/test-imports-app:TestImports-App";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
-				BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE = "bazel-out/darwin-dbg/bin/tests/ios/xcodeproj/TestImports-App_BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE";
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/TestImports-App.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftsourceinfo";
@@ -434,7 +431,6 @@
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test/test-imports-app:TestImports-Unit-Tests";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
-				BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE = "bazel-out/darwin-dbg/bin/tests/ios/xcodeproj/TestImports-Unit-Tests_BAZEL_LLDB_FRAMEWORK_SEARCH_PATHS_FILE";
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/TestImports-Unit-Tests.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-5dc50b810145/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftsourceinfo";
