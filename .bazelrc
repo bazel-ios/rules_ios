@@ -26,3 +26,7 @@ build --strategy=SwiftCompile=worker
 
 # This flips index_while_building_v2 on
 build --features swift.index_while_building_v2
+
+# Default WMO enabled. As a followup rules_ios should have variant with and
+# without this enabled.
+build --swiftcopt -whole-module-optimization
