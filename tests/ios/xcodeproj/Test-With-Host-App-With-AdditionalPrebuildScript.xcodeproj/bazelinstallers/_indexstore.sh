@@ -32,6 +32,7 @@ readonly xcode_external="$BAZEL_WORKSPACE_ROOT/bazel-$(basename "$SRCROOT")/exte
 
 
 $BAZEL_INSTALLERS_DIR/index-import \
+    -incremental \
     -remap "$bazel_module=$xcode_module" \
     -remap "$bazel_swift_object=$xcode_object" \
     -remap "$bazel_objc_object=$xcode_object" \
