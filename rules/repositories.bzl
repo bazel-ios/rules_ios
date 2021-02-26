@@ -53,15 +53,15 @@ def rules_ios_dependencies():
         sha256 = "1fff3fa1e565111a8f678b4698792101844f57b2e78c5e374431d0ebe97f6b6c",
     )
 
-    # Note: this is a branch of the rules_swift PR
+    # Note: this ref is a cherry-pick of the rules_swift PR
     # https://github.com/bazelbuild/rules_swift/pull/567
     _maybe(
         github_repo,
         name = "build_bazel_rules_swift",
-        ref = "d8fff1f3ef0b057085c875421c15cfd83fcbee28",
+        ref = "632d80e7f20c558945229f6469a2c1ade23f1cfe",
         project = "bazel-ios",
         repo = "rules_swift",
-        sha256 = "c8768b871e9726efe0245b3b3a60b18f6a41f9735d864bfe97f17bf7d0ae47e9",
+        sha256 = "b9187b32ac3f0754b5b134b4ae97378ba43b727a1f6a6dc40666d5565231fe32",
     )
 
     _maybe(
@@ -85,6 +85,7 @@ def rules_ios_dependencies():
 
     # Note: it relies on `index-import` to import indexes. Longer term this
     # dependency may be added by rules_swift
+    # This release is a build of this PR https://github.com/lyft/index-import/pull/53
     _maybe(
         http_archive,
         name = "build_bazel_rules_swift_index_import",
