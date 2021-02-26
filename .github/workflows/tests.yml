@@ -31,10 +31,9 @@ jobs:
       - uses: actions/checkout@v2
       - name: Select Xcode 12.2
         run: sudo xcode-select -s /Applications/Xcode_12.2.app
-      - name: Install buildifier
-        run: brew install buildifier
+        # Note: we need to pass the absolute to the Bazel run
       - name: buildifier
-        run: find . -type f \( -name 'WORKSPACE' -o -name '*.bzl' -o -name '*.bazel' \) | xargs buildifier -lint=fix && git diff --exit-code
+        run: find $PWD -type f \( -name 'WORKSPACE' -o -name '*.bzl' -o -name '*.bazel' \) | xargs bazel run buildifier -- -lint=fix && git diff --exit-code
       - name: Check docs
         run: bazelisk run docs && git diff --exit-code docs
   xcodeproj_tests_xcode_12_2:
