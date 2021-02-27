@@ -1,6 +1,7 @@
 load("@build_bazel_rules_apple//apple:ios.bzl", rules_apple_ios_ui_test = "ios_ui_test", rules_apple_ios_ui_test_suite = "ios_ui_test_suite", rules_apple_ios_unit_test = "ios_unit_test", rules_apple_ios_unit_test_suite = "ios_unit_test_suite")
 load("@bazel_skylib//lib:types.bzl", "types")
 load("//rules:library.bzl", "apple_library")
+load("//rules:plists.bzl", "info_plists_by_setting")
 
 _IOS_TEST_KWARGS = [
     "bundle_id",
@@ -17,7 +18,7 @@ _IOS_TEST_KWARGS = [
     "shard_count",
 ]
 
-def _ios_test(name, test_rule, test_suite_rule, apple_library, **kwargs):
+def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_build_setting = {}, **kwargs):
     """
     Builds and packages iOS Unit/UI Tests.
 
@@ -26,6 +27,13 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, **kwargs):
         test_rule: The underlying rules_apple test rule.
         test_suite_rule: The underlying rules_apple test suite rule.
         apple_library: The macro used to package sources into a library.
+        infoplists_by_build_setting: A dictionary of infoplists grouped by bazel build setting.
+
+                                     Each value is applied if the respective bazel build setting
+                                     is resolved during the analysis phase.
+
+                                     If '//conditions:default' is not set the value in 'infoplists'
+                                     is set as default.
         **kwargs: Arguments passed to the apple_library and test_rule rules as appropriate.
     """
 
@@ -52,6 +60,7 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, **kwargs):
     rule(
         name = name,
         deps = library.lib_names,
+        infoplists = info_plists_by_setting(name = name, infoplists_by_build_setting = infoplists_by_build_setting, default_infoplists = ios_test_kwargs.pop("infoplists", [])),
         **ios_test_kwargs
     )
 
