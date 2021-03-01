@@ -6,6 +6,7 @@ ios_unit_test(
         "empty.m",
         "empty.swift",
     ],
+    infoplists = [{"UNHOSTED_KEY_1": True}],
     minimum_os_version = "11.0",
 )
 

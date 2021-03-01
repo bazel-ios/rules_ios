@@ -9,6 +9,7 @@ _RULES = [
     "framework",
     "hmap",
     "library",
+    "plists",
     "precompiled_apple_resource_bundle",
     "substitute_build_settings",
     "test",
