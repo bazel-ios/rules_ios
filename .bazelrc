@@ -24,5 +24,6 @@ build --compilation_mode=dbg
 # Use 'worker' strategy for swift compilation
 build --strategy=SwiftCompile=worker
 
-# This flips index_while_building_v2 on
+# This flips index_while_building_v2 - see docs/index_while_building.md for a
+# detailed summary
 build --features swift.index_while_building_v2
