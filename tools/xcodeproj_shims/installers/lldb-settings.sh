@@ -44,7 +44,7 @@ done
 # the `-D DEBUG` flag so the debugger
 # works properly
 #
-# Not that this is connected to the available
+# Note that this is connected to the available
 # build configurations and at this time we're
 # creating `Debug` and `Release` by default
 #
