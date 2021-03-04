@@ -40,6 +40,24 @@ for fsp in $FRAMEWORK_SEARCH_PATHS; do
   # so we can just pass them without any modification
   LLDB_SWIFT_EXTRA_CLANG_FLAGS+=(" -F$fsp")
 done
+# If on the `Debug` config append
+# the `-D DEBUG` flag so the debugger
+# works properly
+#
+# Not that this is connected to the available
+# build configurations and at this time we're
+# creating `Debug` and `Release` by default
+#
+# Once we move away from that approach and start
+# fully mirroring the configs in the `.bazelrc`
+# file this needs to be changed and added to all
+# configs of type `debug`
+#
+# See: https://github.com/bazel-ios/rules_ios/blob/master/rules/xcodeproj.bzl#L828-L837
+if [[ "$CONFIGURATION" = "Debug" ]]
+then
+  LLDB_SWIFT_EXTRA_CLANG_FLAGS+=(" -D DEBUG")
+fi
 # Set all swift-extra-clang-flags if 'LLDB_SWIFT_EXTRA_CLANG_FLAGS'
 # is not empty
 if [[ ${#LLDB_SWIFT_EXTRA_CLANG_FLAGS[@]} -ne 0 ]]
