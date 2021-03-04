@@ -825,6 +825,12 @@ Tags for configuration:
     xcodeproj-ignore-as-target: Add this to a rule declaration so that this rule will not generates a scheme for this target
 """,
     attrs = {
+        # Important! The `Debug` is being used to conditionally pass
+        # flags to LLDB, so if this behaviour ever changes that needs
+        # to be considered otherwise debugging swift files will stop working
+        #
+        # See the logic around setting the `-D DEBUG` flag in
+        # https://github.com/bazel-ios/rules_ios/blob/master/tools/xcodeproj_shims/installers/lldb-settings.sh
         "configs": attr.string_list(mandatory = False, default = [], doc = """
         List of bazel configs present in the .bazelrc file that can be used to build targets.
 
