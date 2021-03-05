@@ -35,10 +35,16 @@ fi
 # See original approach to fix this for more details
 # https://github.com/bazel-ios/rules_ios/pull/213
 for fsp in $FRAMEWORK_SEARCH_PATHS; do
-  # Note that these paths will come quoted
-  # and with the Xcode env vars already resolved
-  # so we can just pass them without any modification
-  LLDB_SWIFT_EXTRA_CLANG_FLAGS+=(" -F$fsp")
+  # We don't want LLDB so look for things under DerivedData
+  # given the fact that all relevant paths are being created
+  # under 'bazel-out'
+  if [[ "$fsp" != *"$BUILT_PRODUCTS_DIR"* ]]
+  then
+    # Note that these paths will come quoted
+    # and with the Xcode env vars already resolved
+    # so we can just pass them without any modification
+    LLDB_SWIFT_EXTRA_CLANG_FLAGS+=(" -F$fsp")
+  fi
 done
 # If on the `Debug` config append
 # the `-D DEBUG` flag so the debugger
