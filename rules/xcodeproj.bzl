@@ -671,7 +671,7 @@ def _xcodeproj_impl(ctx):
         "BAZEL_CONFIGS": ctx.attr.configs,
     })
 
-    # Stubbding main executable used by xcode so no actual building happening on Xcode side
+    # Stubbing compiler, linker executables used by xcode so no actual building happening on Xcode side
     proj_settings_base.update({
         "CC": "$BAZEL_STUBS_DIR/clang-stub",
         "CXX": "$CC",
@@ -679,6 +679,8 @@ def _xcodeproj_impl(ctx):
         "LD": "$BAZEL_STUBS_DIR/ld-stub",
         "LIBTOOL": "/usr/bin/true",
         "SWIFT_EXEC": "$BAZEL_STUBS_DIR/swiftc-stub",
+        # LD isn't used for all use cases - direct it to use this LD
+        "OTHER_LDFLAGS": "-fuse-ld=$BAZEL_STUBS_DIR/ld-stub",
     })
 
     # Change of settings to help params used for compiling individual files to match closer to Bazel
