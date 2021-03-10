@@ -229,14 +229,20 @@ def _xcframework_slice(*, xcframework_name, identifier, platform, platform_varia
     if (linkage, packaging) == ("dynamic", "framework"):
         apple_dynamic_framework_import(
             name = import_name,
-            framework_imports = native.glob([path + "/**/*"]),
+            framework_imports = native.glob(
+                [path + "/**/*"],
+                exclude = ["**/.DS_Store"],
+            ),
             deps = [],
             tags = _MANUAL,
         )
     elif (linkage, packaging) == ("static", "framework"):
         apple_static_framework_import(
             name = import_name,
-            framework_imports = native.glob([path + "/**/*"]),
+            framework_imports = native.glob(
+                [path + "/**/*"],
+                exclude = ["**/.DS_Store"],
+            ),
             deps = [],
             tags = _MANUAL,
         )
@@ -417,7 +423,10 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         import_name = "%s-%s-import" % (name, paths.basename(vendored_static_framework))
         apple_static_framework_import(
             name = import_name,
-            framework_imports = native.glob(["%s/**/*" % vendored_static_framework]),
+            framework_imports = native.glob(
+                ["%s/**/*" % vendored_static_framework],
+                exclude = ["**/.DS_Store"],
+            ),
             tags = _MANUAL,
         )
         vendored_deps.append(import_name)
@@ -425,7 +434,10 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         import_name = "%s-%s-import" % (name, paths.basename(vendored_dynamic_framework))
         apple_dynamic_framework_import(
             name = import_name,
-            framework_imports = native.glob(["%s/**/*" % vendored_dynamic_framework]),
+            framework_imports = native.glob(
+                ["%s/**/*" % vendored_dynamic_framework],
+                exclude = ["**/.DS_Store"],
+            ),
             deps = [],
             tags = _MANUAL,
         )
