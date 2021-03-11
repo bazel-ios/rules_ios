@@ -68,7 +68,7 @@ module {module_name}.Swift {{
         outputs = [ctx.outputs.destination],
         mnemonic = "ExtendModulemap",
         progress_message = "Extending %s" % ctx.file.source.basename,
-        command = "echo \"$1\" | cat $2 - > $3",
+        command = "echo \"$1\" | cat \"$2\" - > \"$3\"",
         arguments = [args],
     )
 

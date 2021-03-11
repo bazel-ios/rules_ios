@@ -11,7 +11,7 @@ apple_framework(
             "Sources/*.swift",
         ],
     ),
-    module_map = "CustomModuleMap.modulemap",
+    module_map = "Module Map/CustomModuleMap.modulemap",
     objc_copts = ["-fcxx-modules"],
     platforms = {"ios": "13.0"},
     private_headers = ["Sources/PleaseDontImport.h"],
