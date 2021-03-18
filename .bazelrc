@@ -1,6 +1,7 @@
 # Required for bazel 3.4+
 # See https://github.com/bazelbuild/bazel/issues/10674#issuecomment-658270895
 build --incompatible_objc_compile_info_migration
+build --incompatible_objc_provider_remove_compile_info
 
 # We can't create a bzl_library for rules-swift because of its visibility,
 # so circumvent by not using the sandbox

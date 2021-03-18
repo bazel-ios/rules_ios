@@ -69,13 +69,14 @@ def _make_headermap_impl(ctx):
         hdrs_lists = hdrs_lists,
     )
 
-    objc_provider = apple_common.new_objc_provider(
-        header = depset([ctx.outputs.headermap]),
+    cc_info_provider = CcInfo(
+        compilation_context = cc_common.create_compilation_context(
+            headers = depset([ctx.outputs.headermap]),
+        ),
     )
-    cc_info_provider = CcInfo(compilation_context = objc_provider.compilation_context)
 
     providers = [
-        objc_provider,
+        apple_common.new_objc_provider(),
         cc_info_provider,
     ]
 
