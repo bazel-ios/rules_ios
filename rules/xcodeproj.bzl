@@ -478,6 +478,7 @@ mkdir -p $BAZEL_DIAGNOSTICS_DIR
 export DATE_SUFFIX="$(date +%Y%m%d.%H%M%S%L)"
 export BAZEL_BUILD_EVENT_TEXT_FILENAME="$BAZEL_DIAGNOSTICS_DIR/build-event-$DATE_SUFFIX.txt"
 export BAZEL_BUILD_EXECUTION_LOG_FILENAME="$BAZEL_DIAGNOSTICS_DIR/build-execution-log-$DATE_SUFFIX.log"
+export BAZEL_PROFILE_FILENAME="$BAZEL_DIAGNOSTICS_DIR/build-profile-$DATE_SUFFIX.log"
 env -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC $BAZEL_BUILD_TARGET_LABEL
 $BAZEL_INSTALLER
 """
@@ -677,7 +678,8 @@ def _xcodeproj_impl(ctx):
         "BAZEL_STUBS_DIR": "$PROJECT_FILE_PATH/bazelstubs",
         "BAZEL_INSTALLERS_DIR": "$PROJECT_FILE_PATH/bazelinstallers",
         "BAZEL_INSTALLER": "$BAZEL_INSTALLERS_DIR/%s" % ctx.executable.installer.basename,
-        "BAZEL_EXECUTION_LOG_ENABLED": False,
+        "BAZEL_EXECUTION_LOG_ENABLED": ctx.attr.bazel_execution_log_enabled,
+        "BAZEL_PROFILE_ENABLED": ctx.attr.bazel_profile_enabled,
         "BAZEL_CONFIGS": ctx.attr.configs,
     })
 
@@ -880,6 +882,8 @@ https://www.rubydoc.info/github/CocoaPods/Xcodeproj/Xcodeproj/Constants
         "build_wrapper": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:build-wrapper"), cfg = "host"),
         "additional_files": attr.label_list(allow_files = True, allow_empty = True, default = [], mandatory = False),
         "additional_prebuild_script": attr.string(default = "", mandatory = False),  # Note this script will run BEFORE Bazel build script
+        "bazel_execution_log_enabled": attr.bool(default = False, mandatory = False),
+        "bazel_profile_enabled": attr.bool(default = False, mandatory = False),
     },
     executable = True,
 )
