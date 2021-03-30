@@ -282,6 +282,10 @@ def _apple_framework_packaging_impl(ctx):
     _add_to_dict_if_present(compilation_context_fields, "headers", depset(
         direct = header_out + private_header_out + modulemap_out,
     ))
+    _add_to_dict_if_present(compilation_context_fields, "defines", depset(
+        direct = [],
+        transitive = [getattr(dep[CcInfo].compilation_context, "defines") for dep in ctx.attr.deps if CcInfo in dep],
+    ))
     _add_to_dict_if_present(objc_provider_fields, "module_map", depset(
         direct = modulemap_out,
     ))
