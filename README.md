@@ -77,6 +77,20 @@ load(
 protobuf_deps()
 ```
 
+### Note about rules_swift
+
+Currently `rules_ios` relies on a cherry picked commit of `rules_swift` found [here](https://github.com/bazelbuild/rules_swift/pull/567). If you do not want to rely on this version of `rules_swift` use the following declaration in your `WORKSPACE` file.
+
+```python
+git_repository(
+    name = "build_bazel_rules_ios",
+    remote = "https://github.com/bazel-ios/rules_ios.git",
+    branch = "master",
+    patch_args = ["-p1"],
+    patches = ["@build_bazel_rules_ios//patches:disable_index_while_building_v2.patch"],
+)
+```
+
 ## Examples
 
 Minimal example:

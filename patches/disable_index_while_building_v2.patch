@@ -1,0 +1,21 @@
+diff --git a/BUILD.bazel b/BUILD.bazel
+index ef1ec1c..77d5396 100644
+--- a/BUILD.bazel
++++ b/BUILD.bazel
+@@ -1,6 +1,7 @@
+ # Pull buildifer.mac as an http_file, then depend on the file group to make an
+ # executable
+-load("@build_bazel_rules_swift//swift/internal:feature_names.bzl", "SWIFT_FEATURE_INDEX_WHILE_BUILDING_V2")
++# Disabled until SWIFT_FEATURE_INDEX_WHILE_BUILDING_V2 is merged into rules_swift https://github.com/bazelbuild/rules_swift/pull/567
++# load("@build_bazel_rules_swift//swift/internal:feature_names.bzl", "SWIFT_FEATURE_INDEX_WHILE_BUILDING_V2")
+
+ sh_binary(
+     name = "buildifier",
+@@ -10,6 +11,6 @@ sh_binary(
+ config_setting(
+     name = "index_while_building_v2",
+     values = {
+-        "features": SWIFT_FEATURE_INDEX_WHILE_BUILDING_V2,
++        "features": "swift.FORCE_SWIFT_FEATURE_INDEX_WHILE_BUILDING_V2",
+     },
+ )
