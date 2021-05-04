@@ -12,6 +12,14 @@ load(
     "apple_rules_dependencies",
 )
 
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "rules_python",
+    url = "https://github.com/bazelbuild/rules_python/releases/download/0.2.0/rules_python-0.2.0.tar.gz",
+    sha256 = "778197e26c5fbeb07ac2a2c5ae405b30f6cb7ad1f5510ea6fdac03bded96cc6f",
+)
+
 apple_rules_dependencies()
 
 load(
@@ -22,18 +30,20 @@ load(
 swift_rules_dependencies()
 
 load(
+    "@build_bazel_rules_swift//swift:extras.bzl",
+    "swift_rules_extra_dependencies",
+)
+
+swift_rules_extra_dependencies()
+
+load(
     "@build_bazel_apple_support//lib:repositories.bzl",
     "apple_support_dependencies",
 )
 
 apple_support_dependencies()
 
-load(
-    "@com_google_protobuf//:protobuf_deps.bzl",
-    "protobuf_deps",
-)
 
-protobuf_deps()
 
 load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 
