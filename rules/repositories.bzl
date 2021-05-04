@@ -44,6 +44,18 @@ def github_repo(name, project, repo, ref, sha256 = None):
 def rules_ios_dependencies():
     """Fetches repositories that are dependencies of the `rules_apple` workspace.
     """
+    # Note: please remove Thii's fork once the PR lands
+    # https://github.com/google/xctestrunner/pull/29
+    _maybe(
+        http_archive,
+        name = "xctestrunner",
+        urls = [
+            "https://github.com/thii/xctestrunner/archive/6a86a20bda6fd93f97e5aff7cdd89518eeabb26f.tar.gz",
+        ],
+        strip_prefix = "xctestrunner-6a86a20bda6fd93f97e5aff7cdd89518eeabb26f",
+        sha256 = "1c9dbe1a6a376ce2f15914e09656f5a95e1159dd41c8583dc8da9b82decc4b79",
+    )
+
     _maybe(
         github_repo,
         name = "build_bazel_rules_apple",
@@ -62,15 +74,6 @@ def rules_ios_dependencies():
         project = "bazel-ios",
         repo = "rules_swift",
         sha256 = "8d87afbb43fa4f12ffd02c639bbc5a80eda0141bfaf74e4028d8f570d25d032c",
-    )
-
-    _maybe(
-        github_repo,
-        name = "build_bazel_apple_support",
-        ref = "2583fa0bfd6909e7936da5b30e3547ba13e198dc",
-        project = "bazelbuild",
-        repo = "apple_support",
-        sha256 = "9bec12891ac89db763f625c5f26975e104ace492f19ea37b664e1520897be761",
     )
 
     _maybe(
@@ -137,3 +140,5 @@ native_binary(
         strip_prefix = "xcodegen",
         urls = ["https://github.com/segiddins/XcodeGen/releases/download/2.18.0-12-g04d6749/xcodegen.zip"],
     )
+
+
