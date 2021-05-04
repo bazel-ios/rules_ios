@@ -44,19 +44,6 @@ def github_repo(name, project, repo, ref, sha256 = None):
 def rules_ios_dependencies():
     """Fetches repositories that are dependencies of the `rules_apple` workspace.
     """
-
-    # Note: please remove Thii's fork once the PR lands
-    # https://github.com/google/xctestrunner/pull/29
-    _maybe(
-        http_archive,
-        name = "xctestrunner",
-        urls = [
-            "https://github.com/thii/xctestrunner/archive/6a86a20bda6fd93f97e5aff7cdd89518eeabb26f.tar.gz",
-        ],
-        strip_prefix = "xctestrunner-6a86a20bda6fd93f97e5aff7cdd89518eeabb26f",
-        sha256 = "1c9dbe1a6a376ce2f15914e09656f5a95e1159dd41c8583dc8da9b82decc4b79",
-    )
-
     _maybe(
         github_repo,
         name = "build_bazel_rules_apple",
