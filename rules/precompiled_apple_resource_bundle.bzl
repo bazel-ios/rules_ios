@@ -15,9 +15,7 @@ load("@build_bazel_rules_apple//apple/internal:platform_support.bzl", "platform_
 load("@build_bazel_rules_apple//apple/internal:resource_actions.bzl", "resource_actions")
 load("@build_bazel_rules_apple//apple/internal:rule_factory.bzl", "rule_factory")
 load("//rules:transition_support.bzl", "transition_support")
-load("@build_bazel_rules_apple//apple:providers.bzl", "AppleResourceBundleInfo", "AppleResourceInfo")
-load("@build_bazel_rules_apple//apple:providers.bzl", "AppleSupportToolchainInfo")
-load("@build_bazel_rules_apple//apple/internal:bundling_support.bzl", "bundling_support")
+load("@build_bazel_rules_apple//apple:providers.bzl", "AppleResourceBundleInfo", "AppleResourceInfo", "AppleSupportToolchainInfo")
 
 _FAKE_BUNDLE_PRODUCT_TYPE_BY_PLATFORM_TYPE = {
     "ios": apple_product_type.application,

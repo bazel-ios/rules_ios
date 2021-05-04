@@ -44,6 +44,7 @@ def github_repo(name, project, repo, ref, sha256 = None):
 def rules_ios_dependencies():
     """Fetches repositories that are dependencies of the `rules_apple` workspace.
     """
+
     # Note: please remove Thii's fork once the PR lands
     # https://github.com/google/xctestrunner/pull/29
     _maybe(
@@ -140,5 +141,3 @@ native_binary(
         strip_prefix = "xcodegen",
         urls = ["https://github.com/segiddins/XcodeGen/releases/download/2.18.0-12-g04d6749/xcodegen.zip"],
     )
-
-
