@@ -29,5 +29,5 @@ build --strategy=SwiftCompile=worker
 # detailed summary
 build --features swift.index_while_building_v2
 
-# Prevents leaking unexpected binaries via PATH to rules
-build --action_env=PATH=/usr/bin:/bin:/usr/sbin:/sbin
+# Prevents leaking unexpected binaries via PATH to tests
+build --test_env=PATH=/usr/bin:/bin:/usr/sbin:/sbin
