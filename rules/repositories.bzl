@@ -47,10 +47,10 @@ def rules_ios_dependencies():
     _maybe(
         github_repo,
         name = "build_bazel_rules_apple",
-        ref = "572aee29236aa6aa850484d5706b79aa2a098219",
+        ref = "ed2bceef7ac5a3071b023e3122a045a133d2245c",
         project = "bazelbuild",
         repo = "rules_apple",
-        sha256 = "1fff3fa1e565111a8f678b4698792101844f57b2e78c5e374431d0ebe97f6b6c",
+        sha256 = "3bbbc0ffa8aad392bc9a5032bccc366edb96723544dbdf89137d0223cf7350c1",
     )
 
     # Note: this ref is a cherry-pick of the rules_swift PR
@@ -58,19 +58,10 @@ def rules_ios_dependencies():
     _maybe(
         github_repo,
         name = "build_bazel_rules_swift",
-        ref = "703165622cf87cabe253bf746a8129f8021ec001",
+        ref = "14d26dcedf0290bd777f6fe83cde3586dc616513",
         project = "bazel-ios",
         repo = "rules_swift",
-        sha256 = "cf553875aae12744846b5e484879098e9c9153883febfc4074aa9305765a923f",
-    )
-
-    _maybe(
-        github_repo,
-        name = "build_bazel_apple_support",
-        ref = "2583fa0bfd6909e7936da5b30e3547ba13e198dc",
-        project = "bazelbuild",
-        repo = "apple_support",
-        sha256 = "9bec12891ac89db763f625c5f26975e104ace492f19ea37b664e1520897be761",
+        sha256 = "8d87afbb43fa4f12ffd02c639bbc5a80eda0141bfaf74e4028d8f570d25d032c",
     )
 
     _maybe(

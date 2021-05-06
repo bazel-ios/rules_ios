@@ -28,3 +28,6 @@ build --strategy=SwiftCompile=worker
 # This flips index_while_building_v2 - see docs/index_while_building.md for a
 # detailed summary
 build --features swift.index_while_building_v2
+
+# Prevents leaking unexpected binaries via PATH to tests
+build --test_env=PATH=/usr/bin:/bin:/usr/sbin:/sbin

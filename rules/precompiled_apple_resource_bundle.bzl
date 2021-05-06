@@ -15,7 +15,7 @@ load("@build_bazel_rules_apple//apple/internal:platform_support.bzl", "platform_
 load("@build_bazel_rules_apple//apple/internal:resource_actions.bzl", "resource_actions")
 load("@build_bazel_rules_apple//apple/internal:rule_factory.bzl", "rule_factory")
 load("//rules:transition_support.bzl", "transition_support")
-load("@build_bazel_rules_apple//apple:providers.bzl", "AppleResourceBundleInfo", "AppleResourceInfo")
+load("@build_bazel_rules_apple//apple:providers.bzl", "AppleResourceBundleInfo", "AppleResourceInfo", "AppleSupportToolchainInfo")
 
 _FAKE_BUNDLE_PRODUCT_TYPE_BY_PLATFORM_TYPE = {
     "ios": apple_product_type.application,
@@ -63,6 +63,8 @@ def _precompiled_apple_resource_bundle_impl(ctx):
             uses_swift = False,
             xcode_path_wrapper = None,
             xcode_version_config = ctx.attr._xcode_config[apple_common.XcodeVersionConfig],
+            disabled_features = [],
+            features = [],
         ),
         rule_descriptor = struct(
             additional_infoplist_values = None,
@@ -73,14 +75,14 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         rule_label = fake_rule_label,
     )
 
+    apple_toolchain_info = ctx.attr._toolchain[AppleSupportToolchainInfo]
     partial_output = partial.call(
         partials.resources_partial(
             rule_attrs = ctx.attr,
-            rule_executables = ctx.executable,
             top_level_attrs = ["resources"],
+            apple_toolchain_info = apple_toolchain_info,
             **partials_args
         ),
-        ctx = ctx,
     )
 
     # Process the plist ourselves. This is required because
@@ -95,7 +97,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         input_plists = ctx.files.infoplists,
         output_pkginfo = None,
         output_plist = output_plist,
-        plisttool = ctx.executable._plisttool,
+        resolved_plisttool = apple_toolchain_info.resolved_plisttool,
         version = None,
         **partials_args
     )
@@ -163,10 +165,10 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         content = bundletool_instructions.to_json(),
     )
     ctx.actions.run(
-        executable = ctx.executable._bundletool_experimental,
+        executable = apple_toolchain_info.resolved_bundletool_experimental.executable,
         mnemonic = "BundleResources",
-        progress_message = "Bundling " + bundle_name,
-        inputs = input_files + [bundletool_instructions_file],
+        progress_message = "Bundling Precompiled Resource Bundle " + bundle_name,
+        inputs = input_files + [bundletool_instructions_file] + apple_toolchain_info.resolved_bundletool_experimental.inputs.to_list(),
         outputs = [output_bundle_dir],
         arguments = [bundletool_instructions_file.path],
     )
@@ -255,6 +257,10 @@ the bundle as a dependency.""",
         _allowlist_function_transition = attr.label(
             default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
             doc = "Needed to allow this rule to have an incoming edge configuration transition.",
+        ),
+        _toolchain = attr.label(
+            default = Label("@build_bazel_rules_apple//apple/internal:toolchain_support"),
+            providers = [[AppleSupportToolchainInfo]],
         ),
     ),
 )
