@@ -5,6 +5,7 @@ load("@build_bazel_rules_apple//apple/internal:platform_support.bzl", "platform_
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//rules:hmap.bzl", "HeaderMapInfo")
+load("//rules:additional_scheme_info.bzl", "AdditionalSchemeInfo")
 
 def _get_attr_values_for_name(deps, provider, field):
     return [
@@ -640,12 +641,34 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
             "run": scheme_action_details,
         }
 
+        scheme_infos = [target[AdditionalSchemeInfo] for target in ctx.attr.additional_scheme_infos]
+        build_target_to_scheme_info = {scheme_info.build_target: scheme_info for scheme_info in scheme_infos}
+
         # They will show as `TestableReference` under the scheme
         if target_info.product_type == "bundle.unit-test":
+            # All test targets will by default have a test action for themselves.
             xcodeproj_schemes_by_name[target_name]["test"] = {
                 "targets": [target_name],
                 "customLLDBInit": lldbinit_file,
             }
+
+        elif target_name in build_target_to_scheme_info:
+            # Add additional scheme information provided by any provided scheme infos.
+            scheme_info_for_target = build_target_to_scheme_info[target_name]
+            xcodeproj_schemes_by_name[target_name]["test"] = {
+                "targets": scheme_info_for_target.test_action_targets,
+                "customLLDBInit": lldbinit_file,
+                "environmentVariables": [
+                    {
+                        "variable": env_var_name,
+                        "value": env_var_value,
+                        "isEnabled": True,
+                    }
+                    for target in scheme_info_for_target.test_action_targets
+                    for env_var_name, env_var_value in target.environment_variables.items()
+                ],
+            }
+
     return (xcodeproj_targets_by_name, xcodeproj_schemes_by_name)
 
 def _xcodeproj_impl(ctx):
@@ -861,6 +884,10 @@ Tags for configuration:
         "bazel_path": attr.string(mandatory = False, default = "bazel"),
         "scheme_existing_envvar_overrides": attr.string_dict(allow_empty = True, default = {}, mandatory = False),
         "project_attributes_overrides": attr.string_dict(allow_empty = True, mandatory = False, default = {}, doc = "Overrides for attributes that can be set at the project base level."),
+        "additional_scheme_infos": attr.label_list(mandatory = False, allow_empty = True, providers = [], aspects = [], doc = """
+        List of additional_scheme_info labels that append scheme information to the generated scheme for a build target.
+        Currently supports test actions, and test environment variables.
+"""),
         "generate_schemes_for_product_types": attr.string_list(mandatory = False, allow_empty = True, default = [], doc = """\
 Generate schemes only for the specified product types if this list is not empty.
 Product types must be valid apple product types, e.g. application, bundle.unit-test, framework.
