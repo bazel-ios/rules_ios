@@ -799,7 +799,7 @@ def _xcodeproj_impl(ctx):
             "$(print_json_leaf_nodes_path)": ctx.executable.print_json_leaf_nodes.short_path,
             "$(print_json_leaf_nodes_runfiles)": " ".join(print_json_leaf_nodes_runfiles),
             "$(build_wrapper_path)": ctx.executable.build_wrapper.short_path,
-            "$(infoplist_stub)": ctx.file._infoplist_stub.short_path,
+            "$(infoplist_stub)": ctx.file.infoplist_stub.short_path,
             "$(output_processor_path)": ctx.file.output_processor.short_path,
             "$(workspacesettings_xcsettings_short_path)": ctx.file._workspace_xcsettings.short_path,
             "$(ideworkspacechecks_plist_short_path)": ctx.file._workspace_checks.short_path,
@@ -818,7 +818,7 @@ def _xcodeproj_impl(ctx):
                          ctx.files.index_import +
                          ctx.files.ld_stub +
                          ctx.files.swiftc_stub +
-                         ctx.files._infoplist_stub +
+                         ctx.files.infoplist_stub +
                          ctx.files.print_json_leaf_nodes +
                          ctx.files._workspace_xcsettings +
                          ctx.files._workspace_checks +
@@ -868,7 +868,7 @@ For a full list, see under keys of `PRODUCT_TYPE_UTI` under
 https://www.rubydoc.info/github/CocoaPods/Xcodeproj/Xcodeproj/Constants
 """),
         "_xcodeproj_installer_template": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:xcodeproj-installer.sh"), allow_single_file = ["sh"]),
-        "_infoplist_stub": attr.label(executable = False, default = Label("//rules/test_host_app:Info.plist"), allow_single_file = ["plist"]),
+        "infoplist_stub": attr.label(executable = False, default = Label("//rules/test_host_app:Info.plist"), allow_single_file = ["plist"]),
         "_workspace_xcsettings": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:WorkspaceSettings.xcsettings"), allow_single_file = ["xcsettings"]),
         "_workspace_checks": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:IDEWorkspaceChecks.plist"), allow_single_file = ["plist"]),
         "output_processor": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:output-processor.rb"), cfg = "host", allow_single_file = True),
