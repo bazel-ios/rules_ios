@@ -16,6 +16,7 @@ _IOS_TEST_KWARGS = [
     "resources",
     "tags",
     "shard_count",
+    "flaky",
 ]
 
 def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_build_setting = {}, **kwargs):
