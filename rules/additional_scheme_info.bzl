@@ -40,14 +40,17 @@ additional_scheme_info = rule(
         ),
         "test_action_targets": attr.label_list(
             mandatory = False,
-            doc = "A list of test targets that should be appended to the build_target",
+            doc = "A list of test targets that should be appended to the build_target.",
             allow_empty = True,
             providers = [AppleBundleInfo],
         ),
         "test_environment": attr.string_dict(
             mandatory = False,
             allow_empty = True,
-            doc = "Extra environment variables to pass during tests",
+            doc = """
+Extra environment variables to pass during tests. This will overwrite 
+any value provided in scheme_existing_envvar_overrides.
+            """,
             default = {},
         ),
     },
