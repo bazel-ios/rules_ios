@@ -1,8 +1,12 @@
 load("//rules:xcodeproj.bzl", "xcodeproj")
+load("//rules:additional_scheme_info.bzl", "additional_scheme_info")
 
 xcodeproj(
     name = "Single-Static-Framework-Project",
     testonly = True,
+    additional_scheme_infos = [
+        ":ObjcFrameworkSchemeInfo",
+    ],
     bazel_path = "bazelisk",
     # Not that 'configs' must hold names for configs present in your .bazelrc file
     # in order to build with the respective Xcode build configurations active
@@ -20,6 +24,19 @@ xcodeproj(
         "//tests/ios/frameworks/objc:ObjcFramework",
         "//tests/ios/frameworks/objc:ObjcFrameworkTests",
     ],
+)
+
+additional_scheme_info(
+    name = "ObjcFrameworkSchemeInfo",
+    testonly = True,
+    build_target = "//tests/ios/frameworks/objc:ObjcFramework",
+    test_action_targets = [
+        "//tests/ios/frameworks/objc:ObjcFrameworkTests",
+    ],
+    test_environment = {
+        "ENV1": "/tmp/dir",
+        "ENV2": "🍌",
+    },
 )
 
 xcodeproj(
