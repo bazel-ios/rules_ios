@@ -58,10 +58,10 @@ def rules_ios_dependencies():
     _maybe(
         github_repo,
         name = "build_bazel_rules_swift",
-        ref = "14d26dcedf0290bd777f6fe83cde3586dc616513",
+        ref = "542a8bd2d70bb7b6a844a8602636e235e8343406",
         project = "bazel-ios",
         repo = "rules_swift",
-        sha256 = "8d87afbb43fa4f12ffd02c639bbc5a80eda0141bfaf74e4028d8f570d25d032c",
+        sha256 = "ce1ba86de697b74380b0735ea623757150a74f99adcdd6af7deeb0083ce00d62",
     )
 
     _maybe(
@@ -72,41 +72,6 @@ def rules_ios_dependencies():
             "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.0.3/bazel-skylib-1.0.3.tar.gz",
         ],
         sha256 = "1c531376ac7e5a180e0237938a2536de0c54d93f5c278634818e0efc952dd56c",
-    )
-
-    # Note: it relies on `index-import` to import indexes. Longer term this
-    # dependency may be added by rules_swift
-    # This release is a build of this PR https://github.com/lyft/index-import/pull/53
-    _maybe(
-        http_archive,
-        name = "build_bazel_rules_swift_index_import",
-        build_file_content = """\
-load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
-
-native_binary(
-    name = "index_import",
-    src = "index-import",
-    out = "index-import",
-    visibility = ["//visibility:public"],
-)
-
-native_binary(
-    name = "validate_index",
-    src = "validate-index",
-    out = "validate-index",
-    visibility = ["//visibility:public"],
-)
-
-native_binary(
-    name = "absolute_unit",
-    src = "absolute-unit",
-    out = "absolute-unit",
-    visibility = ["//visibility:public"],
-)
-""",
-        canonical_id = "index-import-5.3.2.5",
-        urls = ["https://github.com/bazel-ios/index-import/releases/download/5.3.2.5/index-import.zip"],
-        sha256 = "79e9b2cd3e988155b86668c56d95705e1a4a7c7b6d702ff5ded3a18d1291a39a",
     )
 
     _maybe(

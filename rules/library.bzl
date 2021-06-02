@@ -678,7 +678,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
 
     additional_objc_copts.append("-I.")
     index_while_building_objc_copts = select({
-        "@build_bazel_rules_ios//:index_while_building_v2": [
+        "@build_bazel_rules_ios//:use_global_index_store": [
             # Note: this won't work work for remote caching yet. It uses a
             # _different_ global index for objc than so that the BEP grep in
             # rules_ios picks this up.

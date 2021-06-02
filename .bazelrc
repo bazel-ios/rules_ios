@@ -25,9 +25,10 @@ build --compilation_mode=dbg
 # Use 'worker' strategy for swift compilation
 build --strategy=SwiftCompile=worker
 
-# This flips index_while_building_v2 - see docs/index_while_building.md for a
+# This flips enable_global_index_store - see docs/index_while_building.md for a
 # detailed summary
-build --features swift.index_while_building_v2
+build --features swift.use_global_index_store
+build --features swift.index_while_building
 
 # Prevents leaking unexpected binaries via PATH to tests
 build --test_env=PATH=/usr/bin:/bin:/usr/sbin:/sbin

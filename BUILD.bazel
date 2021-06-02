@@ -1,6 +1,6 @@
 # Pull buildifer.mac as an http_file, then depend on the file group to make an
 # executable
-load("@build_bazel_rules_swift//swift/internal:feature_names.bzl", "SWIFT_FEATURE_INDEX_WHILE_BUILDING_V2")
+load("@build_bazel_rules_swift//swift/internal:feature_names.bzl", "SWIFT_FEATURE_USE_GLOBAL_INDEX_STORE")
 
 sh_binary(
     name = "buildifier",
@@ -8,8 +8,8 @@ sh_binary(
 )
 
 config_setting(
-    name = "index_while_building_v2",
+    name = "use_global_index_store",
     values = {
-        "features": SWIFT_FEATURE_INDEX_WHILE_BUILDING_V2,
+        "features": SWIFT_FEATURE_USE_GLOBAL_INDEX_STORE,
     },
 )
