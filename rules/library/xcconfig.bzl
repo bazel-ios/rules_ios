@@ -278,7 +278,7 @@ def copts_by_build_setting_with_defaults(xcconfig = {}, fetch_default_xcconfig =
     Returns:
         Struct with different copts behind 'select()' statements
     """
-    xcconfig_with_defaults = xcconfig
+    xcconfig_with_defaults = dict(xcconfig)
 
     # Adding default values if necessary
     for (xc_build_setting, value) in fetch_default_xcconfig.items():
