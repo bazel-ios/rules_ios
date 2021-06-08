@@ -13,3 +13,11 @@ config_setting(
         "features": SWIFT_FEATURE_USE_GLOBAL_INDEX_STORE,
     },
 )
+
+load("//rules:swift_toolchain.bzl", _swift_toolchain="swift_toolchain")
+
+_swift_toolchain(
+    name = "swift_toolchain",
+    visibility = ["//visibility:public"],
+)
+
