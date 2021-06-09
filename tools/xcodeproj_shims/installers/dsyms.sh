@@ -8,7 +8,7 @@ echo "Start copying dSYMs at `date`"
 # In this case, we aren't sure what confiuration is used for profiling,
 # so just copy them over if they exist.
 
-readonly dsym_input="bazel-bin/$BAZEL_BIN_SUBDIR/${FULL_PRODUCT_NAME}.dSYM"
+readonly dsym_input=`find bazel-bin/$BAZEL_BIN_SUBDIR/ -name "*.dSYM"`
 readonly dsym_output="$TARGET_BUILD_DIR"
 
 if [[ -z $dsym_input ]]; then
