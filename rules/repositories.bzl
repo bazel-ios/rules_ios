@@ -53,7 +53,6 @@ def rules_ios_dependencies():
         sha256 = "3bbbc0ffa8aad392bc9a5032bccc366edb96723544dbdf89137d0223cf7350c1",
     )
 
-
     _maybe(
         github_repo,
         name = "build_bazel_rules_swift",
