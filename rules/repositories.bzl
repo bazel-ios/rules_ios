@@ -53,6 +53,10 @@ def rules_ios_dependencies():
         sha256 = "3bbbc0ffa8aad392bc9a5032bccc366edb96723544dbdf89137d0223cf7350c1",
     )
 
+    # Note: this omits recent refactoring as it has broken rules_apple.
+    # someone needs to go in and handle the integration work there.
+    # see thread here https://github.com/bazelbuild/rules_swift/pull/646
+    # running on the tag: rules-ios/4.1.0
     _maybe(
         github_repo,
         name = "build_bazel_rules_swift",
