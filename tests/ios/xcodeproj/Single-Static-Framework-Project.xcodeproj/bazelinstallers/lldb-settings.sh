@@ -46,6 +46,23 @@ for fsp in $FRAMEWORK_SEARCH_PATHS; do
     LLDB_SWIFT_EXTRA_CLANG_FLAGS+=(" -F$fsp")
   fi
 done
+# So LLDB is aware of all headers that are not visible
+# from $FRAMEWORK_SEARCH_PATHS above
+#
+# Fox example, test hosts that depend on objc -> swift
+# bridging headers that only exists in .hmap files
+for hdr in $HEADER_SEARCH_PATHS; do
+  # We don't want LLDB so look for things under DerivedData
+  # given the fact that all relevant paths are being created
+  # under 'bazel-out'
+  if [[ "$hdr" != *"$BUILT_PRODUCTS_DIR"* ]]
+  then
+    # Note that these paths will come quoted
+    # and with the Xcode env vars already resolved
+    # so we can just pass them without any modification
+    LLDB_SWIFT_EXTRA_CLANG_FLAGS+=(" -I$hdr")
+  fi
+done
 # If on the `Debug` config append
 # the `-D DEBUG` flag so the debugger
 # works properly
