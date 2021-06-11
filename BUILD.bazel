@@ -1,6 +1,7 @@
 # Pull buildifer.mac as an http_file, then depend on the file group to make an
 # executable
 load("@build_bazel_rules_swift//swift/internal:feature_names.bzl", "SWIFT_FEATURE_USE_GLOBAL_INDEX_STORE")
+load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
 
 sh_binary(
     name = "buildifier",
@@ -12,4 +13,24 @@ config_setting(
     values = {
         "features": SWIFT_FEATURE_USE_GLOBAL_INDEX_STORE,
     },
+)
+
+string_flag(
+    name = "pinned_ios_os_version",
+    build_setting_default = "",
+)
+
+string_flag(
+    name = "pinned_macos_os_version",
+    build_setting_default = "",
+)
+
+string_flag(
+    name = "pinned_tvos_os_version",
+    build_setting_default = "",
+)
+
+string_flag(
+    name = "pinned_watchos_os_version",
+    build_setting_default = "",
 )

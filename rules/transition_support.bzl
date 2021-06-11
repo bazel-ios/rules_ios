@@ -41,9 +41,17 @@ def _cpu_string(platform_type, settings):
 
     fail("ERROR: Unknown platform type: {}".format(platform_type))
 
-def _min_os_version_or_none(attr, platform, attr_platform_type):
+def _min_os_version_or_none(attr, settings, platform, attr_platform_type):
     if attr_platform_type != platform:
         return None
+
+    # If we have a bunch of individually set OS versions pin them to one.
+    # Because this is touched in a transition we can't `select` on it. Finally,
+    # this takes precedence over platform minimum versions
+    setting_name = "@build_bazel_rules_ios//:pinned_{}_os_version".format(platform)
+    pinned_setting = settings.get(setting_name, None)
+    if pinned_setting and len(pinned_setting):
+        return pinned_setting
 
     if hasattr(attr, "platforms"):
         platforms = attr.platforms
@@ -81,10 +89,10 @@ def _apple_rule_transition_impl(settings, attr):
         ),
         "//command_line_option:fission": [],
         "//command_line_option:grte_top": settings["//command_line_option:apple_grte_top"],
-        "//command_line_option:ios_minimum_os": _min_os_version_or_none(attr, "ios", platform_type),
-        "//command_line_option:macos_minimum_os": _min_os_version_or_none(attr, "macos", platform_type),
-        "//command_line_option:tvos_minimum_os": _min_os_version_or_none(attr, "tvos", platform_type),
-        "//command_line_option:watchos_minimum_os": _min_os_version_or_none(attr, "watchos", platform_type),
+        "//command_line_option:ios_minimum_os": _min_os_version_or_none(attr, settings, "ios", platform_type),
+        "//command_line_option:macos_minimum_os": _min_os_version_or_none(attr, settings, "macos", platform_type),
+        "//command_line_option:tvos_minimum_os": _min_os_version_or_none(attr, settings, "tvos", platform_type),
+        "//command_line_option:watchos_minimum_os": _min_os_version_or_none(attr, settings, "watchos", platform_type),
     }
     return ret
 
@@ -105,6 +113,10 @@ _apple_rule_transition = transition(
         "//command_line_option:tvos_cpus",
         "//command_line_option:watchos_cpus",
         "//command_line_option:apple_split_cpu",
+        "@build_bazel_rules_ios//:pinned_ios_os_version",
+        "@build_bazel_rules_ios//:pinned_macos_os_version",
+        "@build_bazel_rules_ios//:pinned_tvos_os_version",
+        "@build_bazel_rules_ios//:pinned_watchos_os_version",
     ],
     outputs = [
         "//command_line_option:apple configuration distinguisher",
