@@ -14,6 +14,13 @@ in Bazel, and by the
 [`swift_library` rule](https://github.com/bazelbuild/rules_swift/blob/master/doc/rules.md#swift_library)
 available from [rules_swift](https://github.com/bazelbuild/rules_swift).
 
+The goal of rules_ios has always been to allow seamlessly transitioning a set of targets from being built
+in Xcode to being built in bazel, with minimal-to-no code changes.
+In that vein, it acts as glue between the underlying rules (rules_apple and rules_swift and the native objc rules),
+applying defaults that mirror what Xcode does. 
+Additionally, rules_ios comes built-in with extension points that act as a quasi-toolchain,
+allowing users to customize things such as generated modulemaps.
+
 Bazel version required by current rules is [here](https://github.com/bazel-ios/rules_ios/blob/master/.bazelversion)
 
 **Xcode 12** and above supported, to find the last `SHA` with support for older versions see the list of git tags.
