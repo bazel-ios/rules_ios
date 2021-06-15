@@ -4,6 +4,7 @@ exports_files([
     "Info.plist",
     "ios.entitlements",
     "LaunchScreen.storyboard",
+    "main.m",
 ])
 
 generate_test_host_apps()

@@ -26,14 +26,14 @@ def generate_test_host_apps(**kwargs):
     for version in versions:
         ios_application(
             name = "iOS-{}-AppHost".format(version),
-            srcs = ["main.m"],
+            srcs = ["@build_bazel_rules_ios//rules/test_host_app:main.m"],
             bundle_id = "com.example.ios-app-host-{}".format(version),
-            entitlements = "ios.entitlements",
+            entitlements = "@build_bazel_rules_ios//rules/test_host_app:ios.entitlements",
             families = [
                 "iphone",
                 "ipad",
             ],
-            launch_storyboard = "LaunchScreen.storyboard",
+            launch_storyboard = "@build_bazel_rules_ios//rules/test_host_app:LaunchScreen.storyboard",
             minimum_os_version = version,
             visibility = ["//visibility:public"],
             **kwargs
