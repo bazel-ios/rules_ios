@@ -145,3 +145,22 @@ xcodeproj(
         "//tests/ios/app:FW2",
     ],
 )
+
+xcodeproj(
+    name = "Test-BuildForDevice-Project",
+    additional_bazel_build_options = [
+        "--ios_multi_cpus=arm64",
+        # So no signing identity check happens when building :AppWithProvisioningProfile
+        # since it depends on ':integration-test.mobileprovision' which is a fake
+        # provisioning profile used only for testing
+        "--ios_signing_cert_name=-",
+    ],
+    bazel_path = "bazelisk",
+    generate_schemes_for_product_types = ["application"],
+    include_transitive_targets = True,
+    deps = [
+        "//tests/ios/app:AppWithProvisioningProfile",
+        "//tests/ios/app:FW",
+        "//tests/ios/app:FW2",
+    ],
+)
