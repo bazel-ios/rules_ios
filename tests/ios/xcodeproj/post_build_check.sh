@@ -9,7 +9,7 @@ fi
 # XCODE_PROJ is used to find the '.xcodeproj' files, by default its value is '*'
 # but one can pass a filename without the extension to this script to
 # run all the logic in this script only for that one project
-XCODE_PROJ=${2:-*}
+XCODE_PROJ_GLOB=${2:-*}
 
 cd $(dirname $0)
 
@@ -19,7 +19,7 @@ binary=$(ls ../../../bazel-out/*/bin/tests/ios/unit-test/test-imports-app/TestIm
 export NUM_LINKED_ASTS=$(dsymutil -s "$binary" | grep -c N_AST)
 [[ $NUM_LINKED_ASTS == 2 ]]
 
-export HSP=$(grep "HEADER_SEARCH_PATHS" $XCODE_PROJ.xcodeproj/project.pbxproj | grep -o "bazel-out\S*\.hmap")
+export HSP=$(grep "HEADER_SEARCH_PATHS" $XCODE_PROJ_GLOB.xcodeproj/project.pbxproj | grep -o "bazel-out\S*\.hmap")
 echo "Make sure hmap files exist after build"
 for path in ${HSP}; do
     FULL_PATH="../../../$path"
@@ -29,7 +29,7 @@ for path in ${HSP}; do
     fi
 done
 
-export FSP=$(grep -w "FRAMEWORK_SEARCH_PATHS" $XCODE_PROJ.xcodeproj/project.pbxproj | grep -o "bazel-out[^ \]*")
+export FSP=$(grep -w "FRAMEWORK_SEARCH_PATHS" $XCODE_PROJ_GLOB.xcodeproj/project.pbxproj | grep -o "bazel-out[^ \]*")
 echo "Make sure framework search paths exist after build"
 for path in ${FSP}; do
     FULL_PATH="../../../$path"
@@ -52,7 +52,7 @@ done
 # If 'target.swift-extra-clang-flags' does not contain all those paths debugging '.swift' files
 # that depends on objc (via bridging headers for example) wont' work
 echo "Make sure all LLDB configuration files contain the expexted search paths"
-XCODE_PROJS=$(find . -name "$XCODE_PROJ.xcodeproj")
+XCODE_PROJS=$(find . -name "$XCODE_PROJ_GLOB.xcodeproj")
 for PROJ in $XCODE_PROJS; do
     if [ $DESTINATION_TYPE = "simulator" ]; then
         ALL_TARGETS=$(xcodebuild -project $PROJ -sdk iphonesimulator -alltargets -showBuildSettings | grep "TARGET_NAME" | sed -e "s/TARGET_NAME = //g" | xargs)
