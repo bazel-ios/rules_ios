@@ -731,6 +731,7 @@ def _xcodeproj_impl(ctx):
         "BAZEL_PROFILE_ENABLED": ctx.attr.bazel_profile_enabled,
         "BAZEL_CONFIGS": ctx.attr.configs,
         "BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS": " ".join(["{} ".format(opt) for opt in ctx.attr.additional_bazel_build_options]),
+        "BAZEL_ADDITIONAL_LLDB_SETTINGS": "\n".join(ctx.attr.additional_lldb_settings),
     })
 
     # Stubbing compiler, linker executables used by xcode so no actual building happening on Xcode side
@@ -946,6 +947,9 @@ And it will not surface any error or output through build log.
 Configure a list of post-actions for build/run/test in each scheme generated. 
 For each entry the key is one of build/test/run and value is a list of scripts.
 And it will not surface any error or output through build log.
+        """),
+        "additional_lldb_settings": attr.string_list(default = [], mandatory = False, doc = """
+Additional LLDB settings to be added in each target's .lldbinit configuration file.
         """),
         "bazel_execution_log_enabled": attr.bool(default = False, mandatory = False),
         "bazel_profile_enabled": attr.bool(default = False, mandatory = False),

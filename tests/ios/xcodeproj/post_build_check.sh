@@ -51,7 +51,7 @@ done
 #
 # If 'target.swift-extra-clang-flags' does not contain all those paths debugging '.swift' files
 # that depends on objc (via bridging headers for example) wont' work
-echo "Make sure all LLDB configuration files contain the expexted search paths"
+echo "Make sure all LLDB configuration files contain the expected settings"
 XCODE_PROJS=$(find . -name "$XCODE_PROJ_GLOB.xcodeproj")
 for PROJ in $XCODE_PROJS; do
     if [ $DESTINATION_TYPE = "simulator" ]; then
@@ -61,13 +61,6 @@ for PROJ in $XCODE_PROJS; do
     fi
 
     for TARGET in $ALL_TARGETS; do
-        if [ $DESTINATION_TYPE = "simulator" ]; then
-            XCSETTINGS=$(xcodebuild -project $PROJ -sdk iphonesimulator -target $TARGET -showBuildSettings)
-        else
-            XCSETTINGS=$(xcodebuild -project $PROJ -sdk iphoneos -target $TARGET -showBuildSettings)
-        fi
-        HSP=$(echo "$XCSETTINGS" | grep "^[ ]*HEADER_SEARCH_PATHS = " | sed -e "s/HEADER_SEARCH_PATHS = //g" | xargs)
-        FSP=$(echo "$XCSETTINGS" | grep "^[ ]*FRAMEWORK_SEARCH_PATHS = " | sed -e "s/FRAMEWORK_SEARCH_PATHS = //g" | xargs)
         PROJ_BASENAME=$(basename $PROJ .xcodeproj)
         LLDB_CONFIG=$(find build -name "*$TARGET.lldbinit" | grep $PROJ_BASENAME.build)
 
@@ -76,19 +69,43 @@ for PROJ in $XCODE_PROJS; do
             exit 1
         fi
 
+        if [ $DESTINATION_TYPE = "simulator" ]; then
+            XCSETTINGS=$(xcodebuild -project $PROJ -sdk iphonesimulator -target $TARGET -showBuildSettings)
+        else
+            XCSETTINGS=$(xcodebuild -project $PROJ -sdk iphoneos -target $TARGET -showBuildSettings)
+        fi
+
+        # Testing if HEADER_SEARCH_PATHS and FRAMEWORK_SEARCH_PATHS
+        # are being passed to 'target.swift-extra-clang-flags' LLDB setting
         SWIFT_EXTRA_CLANG_FLAGS=$(grep "target.swift-extra-clang-flags" $LLDB_CONFIG)
 
+        HSP=$(echo "$XCSETTINGS" | grep "^[ ]*HEADER_SEARCH_PATHS = " | sed -e "s/HEADER_SEARCH_PATHS = //g" | xargs)
         for H in $HSP; do
             if [[ "$SWIFT_EXTRA_CLANG_FLAGS" != *"$H"* ]]; then
                 echo "Header search path $H not found $LLDB_CONFIG file"
                 exit 1
             fi
         done
+
+        FSP=$(echo "$XCSETTINGS" | grep "^[ ]*FRAMEWORK_SEARCH_PATHS = " | sed -e "s/FRAMEWORK_SEARCH_PATHS = //g" | xargs)
         for F in $FSP; do
             if [[ "$SWIFT_EXTRA_CLANG_FLAGS" != *"$F"* ]]; then
                 echo "Framework search path $F not found $LLDB_CONFIG file"
                 exit 1
             fi
         done
+
+        # If additional LLDB settings were specified by a consumer of the 'xcodeproj' rule
+        # check if all expected entries exist in the generated LLDB configuration file
+        BAZEL_LLDB_LOG_FILE=$(echo "$XCSETTINGS" | grep "^[ ]*BAZEL_LLDB_LOG_FILE = " | sed -e "s/BAZEL_LLDB_LOG_FILE = //g" | xargs)
+
+        if [ ! -z ${BAZEL_ADDITIONAL_LLDB_SETTINGS+x} ]; then
+            ADDITIONAL_LLDB_SETTINGS_CALL=$(grep "$BAZEL_ADDITIONAL_LLDB_SETTINGS" $LLDB_CONFIG)
+            if [ -z "$ADDITIONAL_LLDB_SETTINGS_CALL" ]; then
+                echo "LLDB settings $ADDITIONAL_LLDB_SETTINGS_CALL specified but not found in configuration file $LLDB_CONFIG"
+                exit 1
+            fi
+        fi
+
     done
 done
