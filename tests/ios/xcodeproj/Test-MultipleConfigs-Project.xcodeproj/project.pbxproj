@@ -356,6 +356,7 @@
 		221830DDC933DEC8FE0EA0F0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS = "";
 				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
 				BAZEL_CONFIGS = (
 				);
@@ -411,6 +412,7 @@
 		5B4B01971638CD778D69AA72 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS = "";
 				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
 				BAZEL_CONFIGS = (
 				);

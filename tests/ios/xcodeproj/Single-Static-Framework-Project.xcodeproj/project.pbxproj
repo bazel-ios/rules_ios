@@ -404,6 +404,7 @@
 		52EE4EE37BBA0006C75B7793 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS = "";
 				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
 				BAZEL_CONFIGS = (
 					bar,
@@ -483,6 +484,7 @@
 		A6B50790B7933226FB9F8B30 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS = "";
 				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
 				BAZEL_CONFIGS = (
 					bar,
@@ -539,6 +541,7 @@
 		B4136EFA862010617A28A0CB /* bar */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS = "";
 				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
 				BAZEL_CONFIGS = (
 					bar,
@@ -594,6 +597,7 @@
 		BF9CE7946680DD1C074D108C /* foo */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS = "";
 				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
 				BAZEL_CONFIGS = (
 					bar,

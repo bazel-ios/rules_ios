@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+    This is a fake provisioning profile used for integration tests. These tests
+    force the identity to be "-", so these files will not be read to detect the
+    identity, but can be used to validate that they are embedded correctly.
+-->
+<plist version="1.0">
+<dict>
+    <key>AppIDName</key>
+    <string>Wildcard</string>
+    <key>ApplicationIdentifierPrefix</key>
+    <array>
+    <string>FOOBAR</string>
+    </array>
+    <key>CreationDate</key>
+    <date>2021-04-27T08:07:40Z</date>
+    <key>Platform</key>
+    <array>
+        <string>iOS</string>
+    </array>
+    <key>Entitlements</key>
+    <dict>
+    </dict>
+    <key>ExpirationDate</key>
+    <date>2100-04-27T08:07:40Z</date>
+    <key>Name</key>
+    <string>Test</string>
+    <key>TeamIdentifier</key>
+    <array>
+        <string>FOOBAR</string>
+    </array>
+    <key>TeamName</key>
+    <string>FOOBAR</string>
+    <key>TimeToLive</key>
+    <integer>36500</integer>
+    <key>UUID</key>
+    <string>eaf3d44a-f20e-11e6-bc64-92361f002671</string>
+    <key>Version</key>
+    <integer>1</integer>
+</dict>
+</plist>

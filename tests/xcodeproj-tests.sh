@@ -32,7 +32,7 @@ bazelisk query 'attr(executable, 1, kind(genrule, tests/macos/xcodeproj/...))' |
 ./tests/macos/xcodeproj/build.sh
 ./tests/macos/xcodeproj/tests.sh
 
-echo ".xcodeproj Tests for iOS platform"
+echo ".xcodeproj Tests for iOS platform (simulator)"
 
 if [[ CLEAN = 1 ]]; then
     rm -rf tests/ios/xcodeproj/*.xcodeproj tests/ios/xcodeproj/build
@@ -43,9 +43,23 @@ bazelisk query 'kind(xcodeproj, tests/ios/xcodeproj/...)' | xargs -n 1 bazelisk 
 bazelisk query 'attr(executable, 1, kind(genrule, tests/ios/xcodeproj/...))' | xargs -n 1 bazelisk run
 
 ./tests/ios/xcodeproj/pre_build_check.sh
-./tests/ios/xcodeproj/build.sh
-./tests/ios/xcodeproj/post_build_check.sh
+./tests/ios/xcodeproj/build.sh simulator
+./tests/ios/xcodeproj/post_build_check.sh simulator
 ./tests/ios/xcodeproj/tests.sh
+
+echo ".xcodeproj Tests for iOS platform (device)"
+
+if [[ CLEAN = 1 ]]; then
+    rm -rf tests/ios/xcodeproj/*.xcodeproj tests/ios/xcodeproj/build
+    bazelisk clean
+fi
+
+XCODE_PROJ_NAME="Test-BuildForDevice-Project"
+bazelisk run //tests/ios/xcodeproj:$XCODE_PROJ_NAME --ios_multi_cpus=arm64
+
+./tests/ios/xcodeproj/pre_build_check.sh $XCODE_PROJ_NAME
+./tests/ios/xcodeproj/build.sh device $XCODE_PROJ_NAME
+./tests/ios/xcodeproj/post_build_check.sh device $XCODE_PROJ_NAME
 
 echo "Checking for .xcodeproj changes"
 

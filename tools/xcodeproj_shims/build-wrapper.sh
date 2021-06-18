@@ -38,6 +38,14 @@ if [ ! -z ${BAZEL_CONFIGS+x} ]; then
         BAZEL_BUILD_OPTIONS+=("--config=$CONFIGURATION")
     fi
 fi
+# Additional `bazel build` options that can be set in the
+# 'additional_prebuild_script' attribute if the 'xcodeproj' rule
+#
+# Particularly useful for integration tests where one might want
+# to generate an Xcode project that builds with specific additional parameters to simulate a use case
+if [ ! -z ${BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS+x} ]; then
+    BAZEL_BUILD_OPTIONS+=($BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS)
+fi
 
 $BAZEL_PATH build \
     "${BAZEL_BUILD_OPTIONS[@]}" \

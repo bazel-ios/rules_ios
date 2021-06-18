@@ -704,6 +704,7 @@ def _xcodeproj_impl(ctx):
         "BAZEL_EXECUTION_LOG_ENABLED": ctx.attr.bazel_execution_log_enabled,
         "BAZEL_PROFILE_ENABLED": ctx.attr.bazel_profile_enabled,
         "BAZEL_CONFIGS": ctx.attr.configs,
+        "BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS": " ".join(["{} ".format(opt) for opt in ctx.attr.additional_bazel_build_options]),
     })
 
     # Stubbing compiler, linker executables used by xcode so no actual building happening on Xcode side
@@ -909,6 +910,7 @@ https://www.rubydoc.info/github/CocoaPods/Xcodeproj/Xcodeproj/Constants
         "build_wrapper": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:build-wrapper"), cfg = "host"),
         "additional_files": attr.label_list(allow_files = True, allow_empty = True, default = [], mandatory = False),
         "additional_prebuild_script": attr.string(default = "", mandatory = False),  # Note this script will run BEFORE Bazel build script
+        "additional_bazel_build_options": attr.string_list(default = [], mandatory = False),
         "bazel_execution_log_enabled": attr.bool(default = False, mandatory = False),
         "bazel_profile_enabled": attr.bool(default = False, mandatory = False),
     },
