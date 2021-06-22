@@ -20,6 +20,7 @@ _IOS_APPLICATION_KWARGS = [
     "tags",
     "strings",
     "alternate_icons",
+    "settings_bundle",
 ]
 
 def ios_application(name, apple_library = apple_library, infoplists_by_build_setting = {}, **kwargs):
