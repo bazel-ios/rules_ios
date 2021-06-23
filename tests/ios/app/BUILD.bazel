@@ -52,6 +52,7 @@ ios_application(
     srcs = ["App/main.m"],
     bundle_id = "com.example.app",
     minimum_os_version = "10.0",
+    use_apple_framework = True,
     visibility = ["//visibility:public"],
     deps = [
         ":FW",
