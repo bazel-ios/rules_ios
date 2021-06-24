@@ -12,6 +12,7 @@ load("@build_bazel_rules_apple//apple/internal:apple_product_type.bzl", "apple_p
 load("@build_bazel_rules_apple//apple/internal:intermediates.bzl", "intermediates")
 load("@build_bazel_rules_apple//apple/internal:partials.bzl", "partials")
 load("@build_bazel_rules_apple//apple/internal:platform_support.bzl", "platform_support")
+load("@build_bazel_rules_apple//apple/internal:resources.bzl", "resources")
 load("@build_bazel_rules_apple//apple/internal:resource_actions.bzl", "resource_actions")
 load("@build_bazel_rules_apple//apple/internal:rule_factory.bzl", "rule_factory")
 load("//rules:transition_support.bzl", "transition_support")
@@ -73,14 +74,22 @@ def _precompiled_apple_resource_bundle_impl(ctx):
             product_type = _FAKE_BUNDLE_PRODUCT_TYPE_BY_PLATFORM_TYPE.get(platform_type, ctx.attr._product_type),
         ),
         rule_label = fake_rule_label,
+        version = None,
     )
 
     apple_toolchain_info = ctx.attr._toolchain[AppleSupportToolchainInfo]
     partial_output = partial.call(
         partials.resources_partial(
-            rule_attrs = ctx.attr,
-            top_level_attrs = ["resources"],
             apple_toolchain_info = apple_toolchain_info,
+            resource_deps = ctx.attr.resources,
+            top_level_infoplists = resources.collect(
+                attr = ctx.attr,
+                res_attrs = ["infoplists"],
+            ),
+            top_level_resources = resources.collect(
+                attr = ctx.attr,
+                res_attrs = ["resources"],
+            ),
             **partials_args
         ),
     )
@@ -98,7 +107,6 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         output_pkginfo = None,
         output_plist = output_plist,
         resolved_plisttool = apple_toolchain_info.resolved_plisttool,
-        version = None,
         **partials_args
     )
 
