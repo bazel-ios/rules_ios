@@ -47,23 +47,10 @@ def rules_ios_dependencies():
     _maybe(
         github_repo,
         name = "build_bazel_rules_apple",
-        ref = "fe15e1cc5cd47708d76c8cfe77fbddd0371b3166",
+        ref = "c99b0fd9f58a75ecc5324b073bc1e901d9e0e55b",
         project = "bazelbuild",
         repo = "rules_apple",
-        sha256 = "6d6ad776b9b161ec099b61577bd9cbc4d975fbba04537ae603903609bf54c23b",
-    )
-
-    # Note: this omits recent refactoring as it has broken rules_apple.
-    # someone needs to go in and handle the integration work there.
-    # see thread here https://github.com/bazelbuild/rules_swift/pull/646
-    # running on the tag: rules-ios/4.1.0
-    _maybe(
-        github_repo,
-        name = "build_bazel_rules_swift",
-        ref = "093299e8f5c7aecd2e4d7689327648690d38ca54",
-        project = "bazel-ios",
-        repo = "rules_swift",
-        sha256 = "df806dfdffd0447841a550fff5355be750837ea1b402c8be828afbf0ef89fc47",
+        sha256 = "7ab9af8529aea6d347b136140132d558ee164eb62367637f568321a941b0ddba",
     )
 
     _maybe(
