@@ -50,6 +50,12 @@ xcodeproj(
         "//tests/ios/unit-test/test-imports-app:TestImports-App_framework_unlinked",
         "//tests/ios/unit-test/test-imports-app:TestImports-Unit-Tests",
     ],
+    additional_pre_actions = {
+        "build": ["echo 'pre_build_action_1'", "echo 'pre_build_action_2'"],
+    },
+    additional_post_actions = {
+        "build": ["echo 'post_build_action_1'", "echo 'post_build_action_2'"],
+    }
 )
 
 xcodeproj(

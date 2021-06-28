@@ -669,7 +669,34 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
                 ],
             }
 
+        pre_actions_attr = ctx.attr.additional_pre_actions
+        _add_pre_post_actions(xcodeproj_schemes_by_name[target_name], "preActions", pre_actions_attr)
+        post_actions_attr = ctx.attr.additional_post_actions
+        _add_pre_post_actions(xcodeproj_schemes_by_name[target_name], "postActions", post_actions_attr)
     return (xcodeproj_targets_by_name, xcodeproj_schemes_by_name)
+
+def _add_pre_post_actions(scheme, key, actions):
+    """Helper method to populate passed in scheme with pre/post actions. Note their output won't show up in build log.
+
+    Args:
+        scheme: target scheme to update for
+        key: one of preActions or postActions
+        actions: original attribute passed in from ctx.attr.additional_pre_actions or ctx.attr.additional_post_actions
+    Returns:
+        nothing, scheme will be updated a the end
+    """
+    supproted_keys = ["preActions", "postActions"]
+    if key not in supproted_keys:
+        fail("Key must be one of %s" % supproted_keys)
+    for action_type in actions:
+        if action_type not in scheme:
+            break
+        actions_to_add = actions[action_type]
+        payload = scheme[action_type]
+        list = []
+        for action in actions_to_add:
+            list.append({"script": action})
+        payload[key] = list
 
 def _xcodeproj_impl(ctx):
     xcodegen_jsonfile = ctx.actions.declare_file(
@@ -911,6 +938,8 @@ https://www.rubydoc.info/github/CocoaPods/Xcodeproj/Xcodeproj/Constants
         "additional_files": attr.label_list(allow_files = True, allow_empty = True, default = [], mandatory = False),
         "additional_prebuild_script": attr.string(default = "", mandatory = False),  # Note this script will run BEFORE Bazel build script
         "additional_bazel_build_options": attr.string_list(default = [], mandatory = False),
+        "additional_pre_actions": attr.string_list_dict(default = {}, mandatory = False, doc = "Configure a list of pre-actions for build/run etc. For each entry the key is one of build/test/run and value is a list of scripts"),
+        "additional_post_actions": attr.string_list_dict(default = {}, mandatory = False, doc = "Configure a list of post-actions, see additional_pre_actions for details"),
         "bazel_execution_log_enabled": attr.bool(default = False, mandatory = False),
         "bazel_profile_enabled": attr.bool(default = False, mandatory = False),
     },
