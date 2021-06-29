@@ -42,6 +42,18 @@ additional_scheme_info(
 xcodeproj(
     name = "Test-Imports-App-Project",
     testonly = True,
+    additional_post_actions = {
+        "build": [
+            "echo 'post_build_action_1'",
+            "echo 'post_build_action_2'",
+        ],
+    },
+    additional_pre_actions = {
+        "build": [
+            "echo 'pre_build_action_1'",
+            "echo 'pre_build_action_2'",
+        ],
+    },
     bazel_path = "bazelisk",
     generate_schemes_for_product_types = ["application"],
     include_transitive_targets = False,
@@ -50,12 +62,6 @@ xcodeproj(
         "//tests/ios/unit-test/test-imports-app:TestImports-App_framework_unlinked",
         "//tests/ios/unit-test/test-imports-app:TestImports-Unit-Tests",
     ],
-    additional_pre_actions = {
-        "build": ["echo 'pre_build_action_1'", "echo 'pre_build_action_2'"],
-    },
-    additional_post_actions = {
-        "build": ["echo 'post_build_action_1'", "echo 'post_build_action_2'"],
-    }
 )
 
 xcodeproj(

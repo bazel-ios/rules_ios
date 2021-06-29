@@ -683,12 +683,10 @@ def _add_pre_post_actions(target_name, scheme, key, actions):
         scheme: target scheme to update for
         key: one of preActions or postActions
         actions: original attribute passed in from ctx.attr.additional_pre_actions or ctx.attr.additional_post_actions
-    Returns:
-        nothing, scheme will be updated a the end
     """
-    supproted_keys = ["preActions", "postActions"]
-    if key not in supproted_keys:
-        fail("Key must be one of %s" % supproted_keys)
+    supported_keys = ["preActions", "postActions"]
+    if key not in supported_keys:
+        fail("Key must be one of %s" % supported_keys)
     for action_type in actions:
         if action_type not in scheme:
             break
@@ -939,8 +937,16 @@ https://www.rubydoc.info/github/CocoaPods/Xcodeproj/Xcodeproj/Constants
         "additional_files": attr.label_list(allow_files = True, allow_empty = True, default = [], mandatory = False),
         "additional_prebuild_script": attr.string(default = "", mandatory = False),  # Note this script will run BEFORE Bazel build script
         "additional_bazel_build_options": attr.string_list(default = [], mandatory = False),
-        "additional_pre_actions": attr.string_list_dict(default = {}, mandatory = False, doc = "Configure a list of pre-actions for build/run etc. For each entry the key is one of build/test/run and value is a list of scripts"),
-        "additional_post_actions": attr.string_list_dict(default = {}, mandatory = False, doc = "Configure a list of post-actions, see additional_pre_actions for details"),
+        "additional_pre_actions": attr.string_list_dict(default = {}, mandatory = False, doc = """
+Configure a list of pre-actions for build/run/test in each scheme generated. 
+For each entry the key is one of build/test/run and value is a list of scripts.
+And it will not surface any error or output through build log.
+        """),
+        "additional_post_actions": attr.string_list_dict(default = {}, mandatory = False, doc = """
+Configure a list of post-actions for build/run/test in each scheme generated. 
+For each entry the key is one of build/test/run and value is a list of scripts.
+And it will not surface any error or output through build log.
+        """),
         "bazel_execution_log_enabled": attr.bool(default = False, mandatory = False),
         "bazel_profile_enabled": attr.bool(default = False, mandatory = False),
     },
