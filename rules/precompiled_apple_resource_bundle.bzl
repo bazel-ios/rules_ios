@@ -59,6 +59,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
             config_vars = ctx.var,
             device_families = ["iphone", "ipad"],
             explicit_minimum_os = None,
+            explicit_minimum_deployment_os = None,
             objc_fragment = None,
             platform_type_string = platform_type,
             uses_swift = False,
