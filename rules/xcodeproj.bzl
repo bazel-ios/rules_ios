@@ -670,15 +670,16 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
             }
 
         pre_actions_attr = ctx.attr.additional_pre_actions
-        _add_pre_post_actions(xcodeproj_schemes_by_name[target_name], "preActions", pre_actions_attr)
+        _add_pre_post_actions(target_name, xcodeproj_schemes_by_name[target_name], "preActions", pre_actions_attr)
         post_actions_attr = ctx.attr.additional_post_actions
-        _add_pre_post_actions(xcodeproj_schemes_by_name[target_name], "postActions", post_actions_attr)
+        _add_pre_post_actions(target_name, xcodeproj_schemes_by_name[target_name], "postActions", post_actions_attr)
     return (xcodeproj_targets_by_name, xcodeproj_schemes_by_name)
 
-def _add_pre_post_actions(scheme, key, actions):
+def _add_pre_post_actions(target_name, scheme, key, actions):
     """Helper method to populate passed in scheme with pre/post actions. Note their output won't show up in build log.
 
     Args:
+        target_name: Target the scheme is aiming at
         scheme: target scheme to update for
         key: one of preActions or postActions
         actions: original attribute passed in from ctx.attr.additional_pre_actions or ctx.attr.additional_post_actions
@@ -695,7 +696,7 @@ def _add_pre_post_actions(scheme, key, actions):
         payload = scheme[action_type]
         list = []
         for action in actions_to_add:
-            list.append({"script": action})
+            list.append({"script": action, "settingsTarget": target_name})
         payload[key] = list
 
 def _xcodeproj_impl(ctx):
