@@ -133,6 +133,12 @@ def _xcodeproj_aspect_impl(target, ctx):
             if test_host_target:
                 test_host_appname = test_host_target[_TargetInfo].direct_targets[0].name
 
+        # Collect any extension names associated with this bundle. Schemes are then generated that build both.
+        application_extension_names = []
+        application_extensions = getattr(ctx.rule.attr, "extensions", [])
+        if application_extensions:
+            application_extension_names = [extension[AppleBundleInfo].bundle_name for extension in application_extensions]
+
         framework_includes = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "framework_includes"))
         info = struct(
             name = bundle_info.bundle_name,
@@ -152,6 +158,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             platform_type = bundle_info.platform_type,
             minimum_os_version = bundle_info.minimum_os_version,
             test_host_appname = test_host_appname,
+            extension_names = depset(application_extension_names),
             env_vars = env_vars,
             swift_objc_header_path = swift_objc_header_path,
             swift_module_paths = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "swift_module_paths")),
@@ -484,6 +491,22 @@ env -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC $BAZEL_BUILD_TARGET_LA
 $BAZEL_INSTALLER
 """
 
+# See https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md#scheme
+# on structure of xcodeproj_schemes_by_name[target_info.name]
+def _create_scheme_for_target(target_name, xcodeproj_schemes_by_name):
+    if target_name in xcodeproj_schemes_by_name:
+        return
+
+    xcodeproj_schemes_by_name[target_name] = {
+        "build": {
+            "parallelizeBuild": False,
+            "buildImplicitDependencies": False,
+            "targets": {
+                target_name: ["run", "test", "profile"],
+            },
+        },
+    }
+
 def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_transitive_targets):
     """Helper method to generate dicts for targets and schemes inside Xcode context
 
@@ -627,19 +650,15 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
         # The path can contain a build settings macro such as ${SRCROOT}, so the file can be part of a project. (38677796) (FB5425738)
         scheme_action_details["customLLDBInit"] = lldbinit_file
 
-        # See https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md#scheme
-        # on structure of xcodeproj_schemes_by_name[target_info.name]
-        xcodeproj_schemes_by_name[target_name] = {
-            "build": {
-                "parallelizeBuild": False,
-                "buildImplicitDependencies": False,
-                "targets": {
-                    target_name: ["run", "test", "profile"],
-                },
-            },
-            # By putting under run action, test action will just use them automatically
-            "run": scheme_action_details,
-        }
+        _create_scheme_for_target(target_name, xcodeproj_schemes_by_name)
+
+        # By putting under run action, test action will just use them automatically
+        xcodeproj_schemes_by_name[target_name]["run"] = scheme_action_details
+
+        if target_info.extension_names:
+            for extension in target_info.extension_names.to_list():
+                _create_scheme_for_target(extension, xcodeproj_schemes_by_name)
+                xcodeproj_schemes_by_name[extension]["build"]["targets"][target_name] = ["run", "test", "profile"]
 
         scheme_infos = [target[AdditionalSchemeInfo] for target in ctx.attr.additional_scheme_infos]
         build_target_to_scheme_info = {scheme_info.build_target: scheme_info for scheme_info in scheme_infos}
