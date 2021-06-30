@@ -2,6 +2,12 @@ load("@build_bazel_rules_apple//apple:ios.bzl", rules_apple_ios_application = "i
 load("//rules:library.bzl", "apple_library")
 load("//rules:plists.bzl", "info_plists_by_setting")
 
+# We need to try and partition out arguments for obj_library / swift_library
+# from ios_application since this creates source file libs internally.
+#
+# The docs for ios_application are at rules_apple
+# https://github.com/bazelbuild/rules_apple/blob/master/doc/rules-ios.md#ios_application
+# - Perhaps we can just remove this wrapper longer term.
 _IOS_APPLICATION_KWARGS = [
     "bundle_id",
     "infoplists",
@@ -21,6 +27,7 @@ _IOS_APPLICATION_KWARGS = [
     "strings",
     "alternate_icons",
     "settings_bundle",
+    "minimum_deployment_os_version",
 ]
 
 def ios_application(name, apple_library = apple_library, infoplists_by_build_setting = {}, **kwargs):

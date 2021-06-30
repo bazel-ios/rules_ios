@@ -207,6 +207,16 @@ def copts_from_xcconfig(xcconfig):
         "CLANG_BITCODE_GENERATION_MODE",  # handled by `--apple_bitcode` flag on Bazel side
         "SWIFT_BITCODE_GENERATION_MODE",  # handled by `--apple_bitcode` flag on Bazel side
         "LD_BITCODE_GENERATION_MODE",  # handled by `--apple_bitcode` flag on Bazel side
+
+        # Bazel platform / target specific attributes - handled by toolchains
+        "SWIFT_TARGET_TRIPLE_VARIANTS",
+        "SWIFT_TARGET_TRIPLE",
+        "SWIFT_DEPLOYMENT_TARGET",
+        "LD_TARGET_TRIPLE_VARIANT",
+        "LD_TARGET_TRIPLE_ARCHS",
+        "CLANG_TARGET_TRIPLE_ARCHS",
+        "CLANG_TARGET_TRIPLE_VARIANTS",
+        "arch",
     )
 
     identifiers = [
