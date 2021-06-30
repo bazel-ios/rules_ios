@@ -176,3 +176,13 @@ xcodeproj(
         "//tests/ios/app:FW2",
     ],
 )
+
+xcodeproj(
+    name = "Test-LLDB-Logs-Project",
+    additional_lldb_settings = [
+        "log enable -f /tmp/lldb.log lldb types",
+    ],
+    deps = [
+        "//tests/ios/app:FW",
+    ],
+)

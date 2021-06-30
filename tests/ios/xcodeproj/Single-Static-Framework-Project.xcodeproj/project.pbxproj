@@ -405,6 +405,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS = "";
+				BAZEL_ADDITIONAL_LLDB_SETTINGS = "";
 				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
 				BAZEL_CONFIGS = (
 					bar,
@@ -485,6 +486,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS = "";
+				BAZEL_ADDITIONAL_LLDB_SETTINGS = "";
 				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
 				BAZEL_CONFIGS = (
 					bar,
@@ -542,6 +544,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS = "";
+				BAZEL_ADDITIONAL_LLDB_SETTINGS = "";
 				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
 				BAZEL_CONFIGS = (
 					bar,
@@ -598,6 +601,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS = "";
+				BAZEL_ADDITIONAL_LLDB_SETTINGS = "";
 				BAZEL_BUILD_EXEC = "$BAZEL_STUBS_DIR/build-wrapper";
 				BAZEL_CONFIGS = (
 					bar,

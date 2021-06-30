@@ -21,6 +21,10 @@ settings set target.sdk-path $SDKROOT
 settings set target.swift-framework-search-paths $FRAMEWORK_SEARCH_PATHS
 END
 
+if [ ! -z ${BAZEL_ADDITIONAL_LLDB_SETTINGS+x} ]; then
+  echo $BAZEL_ADDITIONAL_LLDB_SETTINGS >> $BAZEL_LLDB_INIT_FILE
+fi
+
 # Holds all swift-extra-clang-flags
 LLDB_SWIFT_EXTRA_CLANG_FLAGS=()
 # Append extra clang flags if set
