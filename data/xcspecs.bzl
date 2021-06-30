@@ -27,6 +27,26 @@ SETTINGS = {
         "Name": "Apple Clang",
         "OptionConditionFlavors": ["arch", "sdk"],
         "Options": {
+            "CLANG_TARGET_TRIPLE_ARCHS": {
+                "CommandLineArgs": [
+                    "-target",
+                    "$(value)-$(LLVM_TARGET_TRIPLE_VENDOR)-$(LLVM_TARGET_TRIPLE_OS_VERSION)$(LLVM_TARGET_TRIPLE_SUFFIX)",
+                ],
+                "Condition": "com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_ARCHS__Condition",
+                "DefaultValue": "com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_ARCHS__DefaultValue",
+                "Type": "StringList",
+            },
+            "CLANG_TARGET_TRIPLE_VARIANTS": {
+                "CommandLineFlag": "-target-variant",
+                "Condition": "com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_VARIANTS__Condition",
+                "ConditionFlavors": ["arch"],
+                "Type": "StringList",
+            },
+            "arch": {
+                "CommandLineFlag": "-arch",
+                "Condition": "com_apple_compilers_llvm_clang_1_0__arch__Condition",
+                "Type": "String",
+            },
             "CLANG_TOOLCHAIN_FLAGS": {"CommandLineArgs": ["$(value)"], "Type": "StringList"},
             "diagnostic_message_length": {
                 "CommandLinePrefixFlag": "-fmessage-length=",
@@ -2044,6 +2064,21 @@ SETTINGS = {
         "IsAbstract": "Yes",
         "Name": "Ld",
         "Options": {
+            "LD_TARGET_TRIPLE_ARCHS": {
+                "CommandLineArgs": [
+                    "-target",
+                    "$(value)-$(LLVM_TARGET_TRIPLE_VENDOR)-$(LLVM_TARGET_TRIPLE_OS_VERSION)$(LLVM_TARGET_TRIPLE_SUFFIX)",
+                ],
+                "Condition": "com_apple_pbx_linkers_ld__LD_TARGET_TRIPLE_ARCHS__Condition",
+                "DefaultValue": "com_apple_pbx_linkers_ld__LD_TARGET_TRIPLE_ARCHS__DefaultValue",
+                "Type": "StringList",
+            },
+            "LD_TARGET_TRIPLE_VARIANTS": {
+                "CommandLineFlag": "-target-variant",
+                "Condition": "com_apple_pbx_linkers_ld__LD_TARGET_TRIPLE_VARIANTS__Condition",
+                "ConditionFlavors": ["arch"],
+                "Type": "StringList",
+            },
             "LD_ADDITIONAL_DEPLOYMENT_TARGET_FLAGS": {
                 "CommandLineArgs": "$(value)",
                 "ConditionFlavors": ["arch"],
@@ -2732,6 +2767,20 @@ SETTINGS = {
                 "Description": "A list of additional flags to pass to the Swift " +
                                "compiler.",
                 "DisplayName": "Other Swift Flags",
+                "Type": "StringList",
+            },
+            "SWIFT_DEPLOYMENT_TARGET": {
+                "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_DEPLOYMENT_TARGET__DefaultValue",
+                "Type": "String",
+            },
+            "SWIFT_TARGET_TRIPLE": {
+                "CommandLineFlag": "-target",
+                "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_TARGET_TRIPLE__DefaultValue",
+                "Type": "String",
+            },
+            "SWIFT_TARGET_TRIPLE_VARIANTS": {
+                "CommandLineFlag": "-target-variant",
+                "ConditionFlavors": ["arch"],
                 "Type": "StringList",
             },
             "SWIFT_VERSION": {
