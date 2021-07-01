@@ -54,6 +54,15 @@ def rules_ios_dependencies():
     )
 
     _maybe(
+        github_repo,
+        name = "build_bazel_rules_swift",
+        ref = "618151af28d1aaf04612e75c142f4b48961d5012",
+        project = "bazelbuild",
+        repo = "rules_swift",
+        sha256 = "5b7c7d67dc3d1276ee87d66940bdf726aba809335685c76e2a51980f0ffc0729",
+    )
+
+    _maybe(
         http_archive,
         name = "bazel_skylib",
         urls = [
