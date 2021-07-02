@@ -19,7 +19,7 @@ def _run_darwin_xcode_configure(repository_ctx):
         repository_ctx.path(repository_ctx.attr.package_files[0]).dirname,
         "XcodeAutoConfigure",
     ], execute_timeout)
-    print("auto_configure", xcrun_result.stdout, xcrun_result.stderr)
+    print("auto_configure (" + xcrun_result.stdout  + ") (" + xcrun_result.stderr)
 
     if xcrun_result.return_code != 0:
         fail("Failed to auto_configure", xcrun_result.stdout, xcrun_result.stderr)
