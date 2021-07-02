@@ -191,6 +191,7 @@ def _xcodeproj_aspect_impl(target, ctx):
     deps = []
     deps += getattr(ctx.rule.attr, "deps", [])
     deps += getattr(ctx.rule.attr, "infoplists", [])
+    deps += getattr(ctx.rule.attr, "extensions", [])
     tags = getattr(ctx.rule.attr, "tags", [])
 
     entitlements = getattr(ctx.rule.attr, "entitlements", None)
@@ -383,7 +384,7 @@ def _xcodeproj_aspect_impl(target, ctx):
 
 _xcodeproj_aspect = aspect(
     implementation = _xcodeproj_aspect_impl,
-    attr_aspects = ["deps", "actual", "tests", "infoplists", "entitlements", "resources", "test_host"],
+    attr_aspects = ["deps", "actual", "tests", "infoplists", "entitlements", "resources", "test_host", "extensions"],
 )
 
 def _collect_swift_defines(modules):
