@@ -12,23 +12,44 @@ import Foundation
 
 /* Needs something that looking like this:
 xcode_version(
-  name = 'version11_2_1_11B500',
-  version = '11.2.1.11B500',
-  aliases = ['11.2.1' ,'11.2.1.11B500' ,'11.2' ,'11'],
-  default_ios_sdk_version = '13.2',
-  default_tvos_sdk_version = '13.2',
+  name = 'version12_1_0_12A7403',
+  version = '12.1.0.12A7403',
+  aliases = ['12.1.0' ,'12' ,'12.1.0.12A7403' ,'12.1'],
+  default_ios_sdk_version = '14.1',
+  default_tvos_sdk_version = '14.0',
   default_macos_sdk_version = '10.15',
-  default_watchos_sdk_version = '6.1',
+  default_watchos_sdk_version = '7.0',
 )
 xcode_config(name = 'host_xcodes',
-  versions = [':version12_1_0_12A7403', ':version11_6_0_11E708', ':version11_2_1_11B500'],
-  default = ':version11_2_1_11B500',
+  versions = [':version12_1_0_12A7403'],
+  default = ':version12_1_0_12A7403',
 )
 available_xcodes(name = 'host_available_xcodes',
-  versions = [':version12_1_0_12A7403', ':version11_6_0_11E708', ':version11_2_1_11B500'],
-  default = ':version11_2_1_11B500',
+  versions = [':version12_1_0_12A7403'],
+  default = ':version12_1_0_12A7403',
 )
 */
+
+let STR="""
+package(default_visibility = ['//visibility:public'])
+xcode_version(
+  name = 'version12_1_0_12A7403',
+  version = '12.1.0.12A7403',
+  aliases = ['12.1.0' ,'12' ,'12.1.0.12A7403' ,'12.1'],
+  default_ios_sdk_version = '14.1',
+  default_tvos_sdk_version = '14.0',
+  default_macos_sdk_version = '10.15',
+  default_watchos_sdk_version = '7.0',
+)
+xcode_config(name = 'host_xcodes',
+  versions = [':version12_1_0_12A7403'],
+  default = ':version12_1_0_12A7403',
+)
+available_xcodes(name = 'host_available_xcodes',
+  versions = [':version12_1_0_12A7403'],
+  default = ':version12_1_0_12A7403',
+)
+"""
 
 func GetVersion(developerDir: String) throws -> String {
     let url = try URL(fileURLWithPath: developerDir)
@@ -123,7 +144,7 @@ let _ = {
     do {
         print("TRY")
         try Write()
-        let buildFileContents = "#HELLO WORLD"
+        let buildFileContents = STR
         try buildFileContents.write(toFile: "BUILD.bazel", atomically: true, encoding: .utf8)
     } catch {
         print("ERROR \(error)")

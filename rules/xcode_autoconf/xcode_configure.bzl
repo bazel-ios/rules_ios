@@ -2,8 +2,16 @@
 # is ~100-200ms
 def _run_darwin_xcode_configure(repository_ctx):
     execute_timeout = 10
-    xcrun_result = repository_ctx.execute([
-        "xcrun",
+    env = repository_ctx.os.environ
+
+    args = []
+    if env.get("DEVELOPER_DIR"):
+        args.extend(["env",
+        "-i",
+        "PATH={}".format(env.get("PATH", default = "")),
+        "DEVELOPER_DIR={}".format(env.get("DEVELOPER_DIR", default = ""))])
+    xcrun_result = repository_ctx.execute(args + [
+        "/usr/bin/xcrun",
         "swift",
         "run",
 
