@@ -86,6 +86,7 @@ def _xcodeproj_aspect_impl(target, ctx):
     deps = []
     deps += getattr(ctx.rule.attr, "deps", [])
     deps += getattr(ctx.rule.attr, "infoplists", [])
+    deps += getattr(ctx.rule.attr, "extensions", [])
     tags = getattr(ctx.rule.attr, "tags", [])
 
     entitlements = getattr(ctx.rule.attr, "entitlements", None)
@@ -262,7 +263,7 @@ def _xcodeproj_aspect_impl(target, ctx):
 
 _xcodeproj_aspect = aspect(
     implementation = _xcodeproj_aspect_impl,
-    attr_aspects = ["deps", "actual", "tests", "infoplists", "entitlements", "resources", "test_host"],
+    attr_aspects = ["deps", "actual", "tests", "infoplists", "entitlements", "resources", "test_host", "extensions"],
 )
 
 def _collect_swift_defines(modules):
@@ -585,7 +586,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
 
         target_settings["BAZEL_LLDB_INIT_FILE"] = lldbinit_file
 
-        if product_type == "application":
+        if product_type == "application" or product_type == "app-extension":
             target_settings["INFOPLIST_FILE"] = "$BAZEL_STUBS_DIR/Info-stub.plist"
             target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
 
