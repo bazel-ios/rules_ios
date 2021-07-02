@@ -10,20 +10,18 @@ import Foundation
 // TODO:
 // Write a BUILD file for the current executing Xcode
 
-
 func GetSDKS() throws -> String {
     guard #available(macOS 10.13, *) else {
-        fatalError("X")
+        fatalError("unsupported macOS version")
     }
-    guard let developerDir = ProcessInfo.processInfo.environment["DEVELOPER_DIR"] else {
-        fatalError("MissingDeveloperDir")
-    }
-    print("DeveloperDir", developerDir)
+
+    // Assume that this combination of xcrun and xcodebuild prints the versions
+    // for the current developer dir. If there is no developer dir, it falls
+    // back to xcode-select's value
     let binPath = "/usr/bin/xcrun"
     let process = Process()
     process.executableURL = URL(fileURLWithPath: binPath)
-
-    process.arguments = [ "xcodebuild", "-version", "-sdk"  ]
+    process.arguments = [ "xcodebuild", "-version", "-sdk" "-json" ]
     let pipe = Pipe()
     process.standardOutput = pipe
 
@@ -32,7 +30,6 @@ func GetSDKS() throws -> String {
 
     let data = pipe.fileHandleForReading.readDataToEndOfFile()
     let output = String(data: data, encoding: .utf8)
-    print("OUT", output)
     return ""
 }
 
