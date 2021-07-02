@@ -10,28 +10,7 @@ import Foundation
 // TODO:
 // Write a BUILD file for the current executing Xcode
 
-/* Needs something that looking like this:
-xcode_version(
-  name = 'version12_1_0_12A7403',
-  version = '12.1.0.12A7403',
-  aliases = ['12.1.0' ,'12' ,'12.1.0.12A7403' ,'12.1'],
-  default_ios_sdk_version = '14.1',
-  default_tvos_sdk_version = '14.0',
-  default_macos_sdk_version = '10.15',
-  default_watchos_sdk_version = '7.0',
-)
-xcode_config(name = 'host_xcodes',
-  versions = [':version12_1_0_12A7403'],
-  default = ':version12_1_0_12A7403',
-)
-available_xcodes(name = 'host_available_xcodes',
-  versions = [':version12_1_0_12A7403'],
-  default = ':version12_1_0_12A7403',
-)
-*/
-
-let STR="""
-package(default_visibility = ['//visibility:public'])
+let STR = """
 xcode_version(
   name = 'version12_1_0_12A7403',
   version = '12.1.0.12A7403',
@@ -51,8 +30,9 @@ available_xcodes(name = 'host_available_xcodes',
 )
 """
 
+
 func GetVersion(developerDir: String) throws -> String {
-    let url = try URL(fileURLWithPath: developerDir)
+    let url = URL(fileURLWithPath: developerDir)
     guard url.lastPathComponent == "Developer" else {
         print("Invalid Developer dir")
         exit(1)
@@ -63,6 +43,7 @@ func GetVersion(developerDir: String) throws -> String {
         print("Error")
         exit(1)
     }
+    print("DICTP:", infoDictionary)
 
     //print("InfoDict", infoDictionary)
     guard let shortVersion = infoDictionary["CFBundleShortVersionString"] as? String else {
@@ -70,11 +51,11 @@ func GetVersion(developerDir: String) throws -> String {
         exit(1)
     }
 
-    guard let buildVersion = infoDictionary["DTPlatformBuild"] as? String else {
+    guard let buildVersion = infoDictionary["DTXcodeBuild"] as? String else {
         print("Missing Xcode build version")
         exit(1)
     }
-    return shortVersion + "." + buildVersion
+    return shortVersion + ".0." + buildVersion
 }
 
 func GetDeveloperDir() throws -> String {
@@ -105,8 +86,12 @@ func GetDeveloperDir() throws -> String {
     return output.trimmingCharacters(in: .whitespacesAndNewlines)
 }
 
+struct XcodeSDKVersionEntry: Codable {
+    var platform: String
+    var sdkVersion: String
+}
 
-func GetSDKS() throws -> String {
+func GetSDKS() throws -> [XcodeSDKVersionEntry] {
     guard #available(macOS 10.13, *) else {
         fatalError("unsupported macOS version")
     }
@@ -123,29 +108,64 @@ func GetSDKS() throws -> String {
 
     try process.run()
     process.waitUntilExit()
-
-    let data = pipe.fileHandleForReading.readDataToEndOfFile()
-    let output = String(data: data, encoding: .utf8)
-    return ""
+    let jsonData = pipe.fileHandleForReading.readDataToEndOfFile()
+    let entries = try JSONDecoder().decode([XcodeSDKVersionEntry].self, from: jsonData)
+    return entries
 }
 
-func Write() throws -> Void {
+func GetBuildFile() throws -> String {
     let dir = try GetDeveloperDir()
-    print("DIR", dir)
     let version = try GetVersion(developerDir: dir)
-    print("VERSION", version)
-    //let SDKContents = try GetSDKS()
+    let SDKContents = try GetSDKS()
+
+    // Load the SDKAttributes
+    let SDKAttributes = SDKContents.reduce(into: [String: String]()) {
+        accum, next in
+        switch next.platform {
+        case "watchos":
+            accum["default_watchos_sdk_version"] = "'\(next.sdkVersion)'"
+        case "iphoneos":
+            accum["default_ios_sdk_version"] = "'\(next.sdkVersion)'"
+        case "appletvos":
+            accum["default_tvos_sdk_version"] = "'\(next.sdkVersion)'"
+        case "macosx":
+            accum["default_macos_sdk_version"] = "'\(next.sdkVersion)'"
+        default:
+            break
+        }
+    }
+    var allAttributes = SDKAttributes
+    let versionP = "version12_1_0_12A7403"
+    let nameAttr = "'\(version)'"
+    allAttributes["version"] = "'\(version)'"
+    allAttributes["aliases"] = "['\(version)']"
+    allAttributes["name"] = nameAttr
+    let arguments = allAttributes.reduce(into: "") {
+        accum, next in
+        accum += "\(next.key)=\(next.value),\n"
+    }
+    return """
+    xcode_version(\(arguments))
+    available_xcodes(name = 'host_available_xcodes',
+      versions = [\(nameAttr)],
+      default = \(nameAttr),
+    )
+    xcode_config(name = 'host_xcodes',
+      versions = [\(nameAttr)],
+      default = \(nameAttr),
+    )
+    """
 }
 
 let _ = {
     setbuf(__stdoutp, nil);
-
-
     do {
-        print("TRY")
-        try Write()
-        let buildFileContents = STR
+        let buildFileContents = try GetBuildFile()
+        //let buildFileContents = STR
+        print(buildFileContents)
+        let ws = "workspace(name = \"local_config_xcode\")"
         try buildFileContents.write(toFile: "BUILD.bazel", atomically: true, encoding: .utf8)
+        try ws.write(toFile: "WORKSPACE", atomically: true, encoding: .utf8)
     } catch {
         print("ERROR \(error)")
         exit(1)
