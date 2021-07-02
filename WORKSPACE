@@ -82,3 +82,10 @@ http_file(
     # .bazelversion uses 4.0
     urls = ["https://github.com/bazelbuild/buildtools/releases/download/3.5.0/buildifier.mac"],
 )
+
+load(
+    "//rules/xcode_autoconf:xcode_configure.bzl",
+    "xcode_autoconf",
+)
+
+xcode_autoconf(name = "rules_ios_local_config_xcode")
