@@ -43,7 +43,8 @@ def _impl(repository_ctx):
 
 xcode_autoconf = repository_rule(
     implementation = _impl,
-    local = True,
+    local = False,
+    environ = ["DEVELOPER_DIR"],
     attrs = {
         # This remote xcode needs to be handled when remote caching is enabled
         "remote_xcode": attr.string(),

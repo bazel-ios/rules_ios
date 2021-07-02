@@ -1,1 +1,1 @@
-exports_files(glob(["**/*.swift"])
+exports_files(glob(["**/*.swift"]))
