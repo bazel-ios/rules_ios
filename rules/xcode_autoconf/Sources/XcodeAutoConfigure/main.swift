@@ -31,24 +31,29 @@ available_xcodes(name = 'host_available_xcodes',
 */
 
 func GetVersion(developerDir: String) throws -> String {
-    return ""
-    var propertyListFormat =  PropertyListSerialization.PropertyListFormat.xml //Format of the Property List.
-    var plistData: [String: AnyObject] = [:] //Our data
-    let url = URL(fileURLWithPath: developerDir)
-    print("BundleURL", url)
+    let url = try URL(fileURLWithPath: developerDir)
+    guard url.lastPathComponent == "Developer" else {
+        print("Invalid Developer dir")
+        exit(1)
+    }
+
     let bundleURL = url.deletingLastPathComponent().deletingLastPathComponent()
-    print("BundleURL", bundleURL)
-    guard let plistPath: String? = Bundle.main.path(forResource: "data", ofType:
-                                                    "plist") else {
-      fatalError("Missing plist")
+    guard let infoDictionary = Bundle(url: bundleURL)?.infoDictionary else {
+        print("Error")
+        exit(1)
     }
-    let plistXML = FileManager.default.contents(atPath: plistPath!)!
-    do {//convert the data to a dictionary and handle errors.
-       plistData = try PropertyListSerialization.propertyList(from: plistXML, options: .mutableContainersAndLeaves, format: &propertyListFormat) as! [String:AnyObject]
-    } catch {
-        print("Error reading plist: \(error), format: \(propertyListFormat)")
+
+    //print("InfoDict", infoDictionary)
+    guard let shortVersion = infoDictionary["CFBundleShortVersionString"] as? String else {
+        print("Missing Xcode short version")
+        exit(1)
     }
-    return ""
+
+    guard let buildVersion = infoDictionary["DTPlatformBuild"] as? String else {
+        print("Missing Xcode build version")
+        exit(1)
+    }
+    return shortVersion + "." + buildVersion
 }
 
 func GetDeveloperDir() throws -> String {
@@ -76,7 +81,7 @@ func GetDeveloperDir() throws -> String {
     guard let output = String(data: data, encoding: .utf8) else {
       fatalError("Invalid output")
     }
-    return output
+    return output.trimmingCharacters(in: .whitespacesAndNewlines)
 }
 
 
@@ -105,8 +110,9 @@ func GetSDKS() throws -> String {
 
 func Write() throws -> Void {
     let dir = try GetDeveloperDir()
-    let version = try GetVersion(developerDir: )
-    //print("VERSION", version)
+    print("DIR", dir)
+    let version = try GetVersion(developerDir: dir)
+    print("VERSION", version)
     //let SDKContents = try GetSDKS()
 }
 
