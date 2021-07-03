@@ -38,11 +38,21 @@ func GetVersion(developerDir: String) throws -> String {
         exit(1)
     }
 
-    let bundleURL = url.deletingLastPathComponent().deletingLastPathComponent()
-    guard let infoDictionary = Bundle(url: bundleURL)?.infoDictionary else {
-        print("Error")
-        exit(1)
+    var propertyListFormat =  PropertyListSerialization.PropertyListFormat.xml //Format of the Property List.
+
+    let bundleURL = url.deletingLastPathComponent().appendingPathComponent("version.plist")
+
+    guard let plistXML = FileManager.default.contents(atPath: bundleURL.path) else {
+        print("Cant load" + bundleURL.path)
+exit(1)
     }
+
+   print("Cant load\(plistXML)")
+    let plistData = try PropertyListSerialization.propertyList(from: plistXML,
+        options: .mutableContainersAndLeaves, format: &propertyListFormat)
+
+
+    let infoDictionary = plistData as! [String: AnyObject]
     print("DICTP:", infoDictionary)
 
     //print("InfoDict", infoDictionary)
@@ -51,7 +61,7 @@ func GetVersion(developerDir: String) throws -> String {
         exit(1)
     }
 
-    guard let buildVersion = infoDictionary["DTXcodeBuild"] as? String else {
+    guard let buildVersion = infoDictionary["ProductBuildVersion"] as? String else {
         print("Missing Xcode build version")
         exit(1)
     }
@@ -113,6 +123,10 @@ func GetSDKS() throws -> [XcodeSDKVersionEntry] {
     return entries
 }
 
+func getSDKVersion(sdkPath: String) -> String {
+   return ""
+}
+
 func GetBuildFile() throws -> String {
     let dir = try GetDeveloperDir()
     let version = try GetVersion(developerDir: dir)
@@ -130,6 +144,7 @@ func GetBuildFile() throws -> String {
             accum["default_tvos_sdk_version"] = "'\(next.sdkVersion)'"
         case "macosx":
             accum["default_macos_sdk_version"] = "'\(next.sdkVersion)'"
+            accum["default_macos_sdk_version"] = "'10.15'"
         default:
             break
         }
