@@ -1,35 +1,4 @@
 import Foundation
-// TODO:
-// Determines selected Xcode based on env: intelligent noop here
-
-// TODO:
-// Otherwise, dump the JSON SDKS to starlark if it's changed. Note: This needs
-// a dep on the DEVELOPER_DIR and env.
-// ( "xcrun", )
-
-// TODO:
-// Write a BUILD file for the current executing Xcode
-
-let STR = """
-xcode_version(
-  name = 'version12_1_0_12A7403',
-  version = '12.1.0.12A7403',
-  aliases = ['12.1.0' ,'12' ,'12.1.0.12A7403' ,'12.1'],
-  default_ios_sdk_version = '14.1',
-  default_tvos_sdk_version = '14.0',
-  default_macos_sdk_version = '10.15',
-  default_watchos_sdk_version = '7.0',
-)
-xcode_config(name = 'host_xcodes',
-  versions = [':version12_1_0_12A7403'],
-  default = ':version12_1_0_12A7403',
-)
-available_xcodes(name = 'host_available_xcodes',
-  versions = [':version12_1_0_12A7403'],
-  default = ':version12_1_0_12A7403',
-)
-"""
-
 
 func GetVersion(developerDir: String) throws -> String {
     let url = URL(fileURLWithPath: developerDir)
@@ -38,29 +7,22 @@ func GetVersion(developerDir: String) throws -> String {
         exit(1)
     }
 
-    var propertyListFormat =  PropertyListSerialization.PropertyListFormat.xml //Format of the Property List.
-
+    // Note: Bazel seems to be reading from this path
+    var propertyListFormat = PropertyListSerialization.PropertyListFormat.xml
     let bundleURL = url.deletingLastPathComponent().appendingPathComponent("version.plist")
-
     guard let plistXML = FileManager.default.contents(atPath: bundleURL.path) else {
         print("Cant load" + bundleURL.path)
 exit(1)
     }
 
-   print("Cant load\(plistXML)")
     let plistData = try PropertyListSerialization.propertyList(from: plistXML,
         options: .mutableContainersAndLeaves, format: &propertyListFormat)
 
-
-    let infoDictionary = plistData as! [String: AnyObject]
-    print("DICTP:", infoDictionary)
-
-    //print("InfoDict", infoDictionary)
+    let infoDictionary = plistData as? [String: AnyObject] ?? [:]
     guard let shortVersion = infoDictionary["CFBundleShortVersionString"] as? String else {
         print("Missing Xcode short version")
         exit(1)
     }
-
     guard let buildVersion = infoDictionary["ProductBuildVersion"] as? String else {
         print("Missing Xcode build version")
         exit(1)
@@ -144,7 +106,7 @@ func GetBuildFile() throws -> String {
             accum["default_tvos_sdk_version"] = "'\(next.sdkVersion)'"
         case "macosx":
             accum["default_macos_sdk_version"] = "'\(next.sdkVersion)'"
-            accum["default_macos_sdk_version"] = "'10.15'"
+            accum["default_macos_sdk_version"] = "'10.15'" // we need to take the sdkPath and read the SDKVersion.plist or whatever
         default:
             break
         }
