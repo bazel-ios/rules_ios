@@ -822,6 +822,7 @@ def _xcodeproj_impl(ctx):
     )
     installer_runfile_paths = [i.short_path for i in ctx.attr.installer[DefaultInfo].default_runfiles.files.to_list()]
     build_wrapper_runfile_paths = [i.short_path for i in ctx.attr.build_wrapper[DefaultInfo].default_runfiles.files.to_list()]
+
     # In order to be runnable, the print_json_leaf_nodes script needs to live
     # next to a print_json_leaf_nodes.runfiles directory that contains its runfiles.
     # The print_json_leaf_nodes_runfiles array will be populated with the subdirectories
