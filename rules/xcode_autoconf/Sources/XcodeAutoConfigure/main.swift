@@ -112,7 +112,6 @@ func GetBuildFile() throws -> String {
         }
     }
     var allAttributes = SDKAttributes
-    let versionP = "version12_1_0_12A7403"
     let nameAttr = "'\(version)'"
     allAttributes["version"] = "'\(version)'"
     allAttributes["aliases"] = "['\(version)']"
@@ -122,6 +121,7 @@ func GetBuildFile() throws -> String {
         accum += "\(next.key)=\(next.value),\n"
     }
     return """
+    package(default_visibility = ['//visibility:public'])
     xcode_version(\(arguments))
     available_xcodes(name = 'host_available_xcodes',
       versions = [\(nameAttr)],

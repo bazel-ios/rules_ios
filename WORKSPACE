@@ -84,8 +84,8 @@ http_file(
 )
 
 load(
-    "//rules/xcode_autoconf:xcode_configure.bzl",
+    "@build_bazel_rules_ios//rules/xcode_autoconf:xcode_configure.bzl",
     "xcode_autoconf",
 )
 
-xcode_autoconf(name = "rules_ios_local_config_xcode")
+# xcode_autoconf(name = "local_config_xcode")
