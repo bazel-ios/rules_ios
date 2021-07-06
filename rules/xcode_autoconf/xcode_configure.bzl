@@ -151,7 +151,7 @@ def _run_darwin_xcode_configure(repository_ctx):
         buildcontents += "\n)\n"
     return buildcontents
 
-def _impl(repository_ctx):
+def _xcode_auto_conf_impl(repository_ctx):
     """Implementation for the local_config_xcode repository rule.
 
     Generates a BUILD file containing a root xcode_config target named 'host_xcodes',
@@ -161,24 +161,24 @@ def _impl(repository_ctx):
     """
     os_name = repository_ctx.os.name.lower()
     if (os_name.startswith("mac os")):
-        build_contents = """
-        package(default_visibility = ['//visibility:public'])
-        """
+        build_contents = "package(default_visibility = ['//visibility:public'])\n"
         build_contents += _run_darwin_xcode_configure(repository_ctx)
     else:
         build_contents = """
-        package(default_visibility = ['//visibility:public'])
-        xcode_config(name = 'host_xcodes')
+package(default_visibility = ['//visibility:public'])
+xcode_config(name = 'host_xcodes')
         """
     repository_ctx.file("BUILD.bazel", build_contents)
 
+
 xcode_autoconf = repository_rule(
-    implementation = _impl,
+    implementation = _xcode_auto_conf_impl,
     local = False,
     environ = ["DEVELOPER_DIR"],
     attrs = {
         # This remote xcode needs to be handled when remote caching is enabled
         "remote_xcode": attr.string(),
+        "xcode_locator": attr.string(default="@bazel_tools//tools/osx:xcode_locator.m"),
         "package_files": attr.label_list(default = [
             # Take a dependency on source files of the xcode configurator
             "@build_bazel_rules_ios//rules/xcode_autoconf:Package.swift",

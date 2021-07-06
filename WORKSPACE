@@ -88,4 +88,4 @@ load(
     "xcode_autoconf",
 )
 
-# xcode_autoconf(name = "local_config_xcode")
+xcode_autoconf(name = "rules_ios_local_config_xcode")
