@@ -27,6 +27,11 @@ def _private_headers_impl(ctx):
             headers = depset(direct = ctx.files.headers),
         ),
         apple_common.new_objc_provider(),
+        CcInfo(
+            compilation_context = cc_common.create_compilation_context(
+                headers = depset(direct = ctx.files.headers),
+            ),
+        ),
     ]
 
 _private_headers = rule(
@@ -305,6 +310,17 @@ def _xcframework(*, library_name, name, slices):
     )
     return xcframework_name
 
+# Note: safely assume for an import the paths will be relative to the
+# .framework directory ( afterall, that is what a .framework means )
+def _find_imported_framework_name(outputs):
+    for output in outputs:
+        if not ".framework" in output:
+            continue
+        prefix = output.split(".framework/")[0]
+        fw_name = prefix.split("/")[-1]
+        return fw_name
+    return None
+
 def apple_library(name, library_tools = {}, export_private_headers = True, namespace_is_module_name = True, default_xcconfig_name = None, xcconfig = {}, xcconfig_by_build_setting = {}, **kwargs):
     """Create libraries for native source code on Apple platforms.
 
@@ -419,6 +435,12 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         private_deps.append(linkopts_name)
 
     vendored_deps = []
+    import_vfsoverlays = []
+
+    # Note: for these, we'll need to output the VFS rule for each of the imports
+    # The depend on that rule in the top level one
+    # There are some frameworks imported with private headers - this is totally
+    # expected.
     for vendored_static_framework in kwargs.pop("vendored_static_frameworks", []):
         import_name = "%s-%s-import" % (name, paths.basename(vendored_static_framework))
         apple_static_framework_import(
@@ -429,7 +451,32 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             ),
             tags = _MANUAL,
         )
+
+        import_headers = native.glob(
+            ["%s/**/*.h" % vendored_static_framework],
+        )
+        import_module_maps = native.glob(
+            ["%s/**/*.modulemap" % vendored_static_framework],
+        )
+        vfs_root = vendored_static_framework
+        if len(import_module_maps) > 0:
+            import_module_map = import_module_maps[0]
+        else:
+            import_module_map = None
+
+        vfs_imported_framework = _find_imported_framework_name(import_headers)
+        vfs_framework_name = vfs_imported_framework if vfs_imported_framework else namespace
+        framework_vfs_overlay(
+            name = import_name + "_vfs",
+            framework_name = vfs_framework_name,
+            modulemap = import_module_map,
+            hdrs = import_headers,
+            tags = _MANUAL,
+            extra_search_paths = vfs_root,
+        )
+        import_vfsoverlays.append(import_name + "_vfs")
         vendored_deps.append(import_name)
+
     for vendored_dynamic_framework in kwargs.pop("vendored_dynamic_frameworks", []):
         import_name = "%s-%s-import" % (name, paths.basename(vendored_dynamic_framework))
         apple_dynamic_framework_import(
@@ -442,6 +489,32 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             tags = _MANUAL,
         )
         vendored_deps.append(import_name)
+        import_headers = native.glob(
+            ["%s/**/*.h" % vendored_dynamic_framework],
+        )
+        import_module_maps = native.glob(
+            ["%s/**/*.modulemap" % vendored_dynamic_framework],
+        )
+
+        if len(import_module_maps) > 0:
+            import_module_map = import_module_maps[0]
+        else:
+            import_module_map = None
+
+        vfs_root = vendored_dynamic_framework
+
+        vfs_imported_framework = _find_imported_framework_name(import_headers)
+        vfs_framework_name = vfs_imported_framework if vfs_imported_framework else namespace
+        framework_vfs_overlay(
+            name = import_name + "_vfs",
+            framework_name = vfs_framework_name,
+            modulemap = import_module_map,
+            hdrs = import_headers,
+            tags = _MANUAL,
+            extra_search_paths = vfs_root,
+        )
+        import_vfsoverlays.append(import_name + "_vfs")
+
     for vendored_static_library in kwargs.pop("vendored_static_libraries", []):
         import_name = "%s-%s-library-import" % (name, paths.basename(vendored_static_library))
         objc_import(
@@ -450,10 +523,56 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             tags = _MANUAL,
         )
         vendored_deps.append(import_name)
+        import_headers = native.glob(
+            ["**/*.h"],
+        )
+        import_module_maps = native.glob(
+            ["**/*.modulemap"],
+        )
+        if len(import_module_maps) > 0:
+            import_module_map = import_module_maps[0]
+        else:
+            import_module_map = None
+        vfs_imported_framework = _find_imported_framework_name(import_headers)
+        vfs_framework_name = vfs_imported_framework if vfs_imported_framework else namespace
+        framework_vfs_overlay(
+            name = import_name + "_vfs",
+            framework_name = vfs_framework_name,
+            modulemap = import_module_map,
+            hdrs = import_headers,
+            tags = _MANUAL,
+        )
+        import_vfsoverlays.append(import_name + "_vfs")
+
     for vendored_dynamic_library in kwargs.pop("vendored_dynamic_libraries", []):
         fail("no import for %s" % vendored_dynamic_library)
+        import_headers += native.glob(
+            ["**/*.h"],
+        )
+        import_module_map = native.glob(
+            ["**/*.modulemap"],
+        )
+
+        if len(import_module_maps) > 0:
+            import_module_map = import_module_maps[0]
+        else:
+            import_module_map = None
+
+        vfs_imported_framework = _find_imported_framework_name(import_headers)
+        vfs_framework_name = vfs_imported_framework if vfs_imported_framework else namespace
+        framework_vfs_overlay(
+            name = import_name + "_vfs",
+            framework_name = vfs_framework_name,
+            modulemap = import_module_map,
+            hdrs = import_headers,
+            tags = _MANUAL,
+        )
+        import_vfsoverlays.append(import_name + "_vfs")
+
     for xcframework in kwargs.pop("vendored_xcframeworks", []):
         vendored_deps.append(_xcframework(library_name = name, **xcframework))
+        # TODO: for virtual frameworks we'll need to add this
+
     deps += vendored_deps
 
     resource_bundles = library_tools["resource_bundle_generator"](
@@ -466,10 +585,17 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     )
     deps += resource_bundles
 
+    objc_libname = "%s_objc" % name
+    swift_libname = "%s_swift" % name
+    cpp_libname = "%s_cpp" % name
+
+    framework_vfs_overlay_name = name + "_vfs"
+    framework_vfs_overlay_name_swift = swift_libname + "_vfs"
+
     # TODO: remove framework if set
     # Needs to happen before headermaps are made, so the generated umbrella header gets added to those headermaps
     if namespace_is_module_name and \
-       (objc_hdrs or objc_private_hdrs or swift_sources or objc_sources or cpp_sources):
+       (len(objc_hdrs) or len(objc_private_hdrs) or len(swift_sources) or len(objc_sources) or len(cpp_sources)):
         if not module_map:
             umbrella_header = library_tools["umbrella_header_generator"](
                 name = name,
@@ -492,26 +618,33 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                 **kwargs
             )
 
-        framework_vfs_overlay_name = name + "_vfs"
-        framework_vfs_overlay(
-            name = framework_vfs_overlay_name,
-            framework_name = namespace,
-            modulemap = module_map,
-            private_hdrs = objc_private_hdrs,
-            hdrs = objc_hdrs,
-            tags = _MANUAL,
-        )
-        private_deps.append(framework_vfs_overlay_name)
-        additional_objc_copts += [
-            "-ivfsoverlay$(execpath :{})".format(framework_vfs_overlay_name),
-            "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
-        ]
-        additional_swift_copts += [
-            "-Xcc",
-            "-ivfsoverlay$(execpath :{})".format(framework_vfs_overlay_name),
-            "-Xcc",
-            "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
-        ]
+    framework_vfs_overlay(
+        name = framework_vfs_overlay_name_swift,
+        framework_name = module_name,
+        modulemap = module_map,
+        has_swift = len(swift_sources) > 0,
+        private_hdrs = objc_private_hdrs,
+        hdrs = objc_hdrs,
+        tags = _MANUAL,
+        deps = deps + private_deps + lib_names + import_vfsoverlays,
+    )
+    private_deps.append(framework_vfs_overlay_name_swift)
+
+    additional_objc_copts += [
+        "-ivfsoverlay$(execpath :{})".format(framework_vfs_overlay_name),
+        "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
+    ]
+    additional_swift_copts += [
+        "-Xfrontend",
+        "-vfsoverlay$(execpath :{})".format(framework_vfs_overlay_name_swift),
+        "-Xfrontend",
+        "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
+        "-I{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
+        "-Xcc",
+        "-ivfsoverlay$(execpath :{})".format(framework_vfs_overlay_name_swift),
+        "-Xcc",
+        "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
+    ]
 
     ## BEGIN HMAP
 
@@ -538,6 +671,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     private_angled_hmap_name = name + "_private_angled_hmap"
     private_hdrs_filegroup = name + "_private_hdrs"
     private_angled_hdrs_filegroup = name + "_private_angled_hdrs"
+
     native.filegroup(
         name = private_hdrs_filegroup,
         srcs = objc_non_exported_hdrs + objc_private_hdrs + objc_hdrs,
@@ -586,10 +720,6 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     if swift_version:
         additional_swift_copts += ["-swift-version", swift_version]
 
-    objc_libname = "%s_objc" % name
-    swift_libname = "%s_swift" % name
-    cpp_libname = "%s_cpp" % name
-
     module_data = library_tools["wrap_resources_in_filegroup"](name = module_name + "_data", srcs = data)
 
     if swift_sources:
@@ -613,6 +743,31 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             ]
         generated_swift_header_name = module_name + "-Swift.h"
 
+        if module_map:
+            extend_modulemap(
+                name = module_map + ".extended." + name,
+                destination = "%s.extended.modulemap" % name,
+                source = module_map,
+                swift_header = generated_swift_header_name,
+                module_name = module_name,
+                tags = _MANUAL,
+            )
+            module_map = "%s.extended.modulemap" % name
+
+    # Note: this needs to go here, in order to virtualize the extended module
+    framework_vfs_overlay(
+        name = framework_vfs_overlay_name,
+        framework_name = module_name,
+        has_swift = len(swift_sources) > 0,
+        modulemap = module_map,
+        private_hdrs = objc_private_hdrs,
+        hdrs = objc_hdrs,
+        tags = _MANUAL,
+        deps = deps + private_deps + lib_names + import_vfsoverlays,
+    )
+    private_deps.append(framework_vfs_overlay_name)
+
+    if swift_sources:
         swift_library(
             name = swift_libname,
             module_name = module_name,
@@ -653,17 +808,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         private_deps.append(swift_angle_bracket_hmap_name)
         _append_headermap_copts(swift_angle_bracket_hmap_name, "-I", additional_objc_copts, additional_swift_copts, additional_cc_copts)
 
-        if module_map:
-            extend_modulemap(
-                name = module_map + ".extended." + name,
-                destination = "%s.extended.modulemap" % name,
-                source = module_map,
-                swift_header = generated_swift_header_name,
-                module_name = module_name,
-                tags = _MANUAL,
-            )
-            module_map = "%s.extended.modulemap" % name
-
+    # Note: this line is intentionally disabled
     if cpp_sources and False:
         additional_cc_copts.append("-I.")
         cc_library(
@@ -729,6 +874,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
 
     return struct(
         lib_names = lib_names,
+        import_vfsoverlays = import_vfsoverlays,
         transitive_deps = deps,
         deps = lib_names + deps,
         module_name = module_name,
