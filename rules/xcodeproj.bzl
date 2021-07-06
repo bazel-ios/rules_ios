@@ -821,7 +821,7 @@ def _xcodeproj_impl(ctx):
         "%s-install-xcodeproj.sh" % ctx.attr.name,
     )
     installer_runfile_paths = [i.short_path for i in ctx.attr.installer[DefaultInfo].default_runfiles.files.to_list()]
-
+    build_wrapper_runfile_paths = [i.short_path for i in ctx.attr.build_wrapper[DefaultInfo].default_runfiles.files.to_list()]
     # In order to be runnable, the print_json_leaf_nodes script needs to live
     # next to a print_json_leaf_nodes.runfiles directory that contains its runfiles.
     # The print_json_leaf_nodes_runfiles array will be populated with the subdirectories
@@ -850,6 +850,7 @@ def _xcodeproj_impl(ctx):
             "$(print_json_leaf_nodes_path)": ctx.executable.print_json_leaf_nodes.short_path,
             "$(print_json_leaf_nodes_runfiles)": " ".join(print_json_leaf_nodes_runfiles),
             "$(build_wrapper_path)": ctx.executable.build_wrapper.short_path,
+            "$(build_wrapper_runfile_short_paths)": " ".join(build_wrapper_runfile_paths),
             "$(infoplist_stub)": ctx.file.infoplist_stub.short_path,
             "$(output_processor_path)": ctx.file.output_processor.short_path,
             "$(workspacesettings_xcsettings_short_path)": ctx.file._workspace_xcsettings.short_path,
@@ -875,6 +876,7 @@ def _xcodeproj_impl(ctx):
                          ctx.files._workspace_checks +
                          ctx.files.output_processor,
                 transitive = [
+                    ctx.attr.build_wrapper[DefaultInfo].default_runfiles.files,
                     ctx.attr.installer[DefaultInfo].default_runfiles.files,
                     ctx.attr.print_json_leaf_nodes[DefaultInfo].default_runfiles.files,
                 ],

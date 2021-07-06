@@ -1,0 +1,7 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+
+swift_binary(
+    name = "xcode_version_computation",
+    srcs = ["main.swift"],
+    visibility = ["//visibility:public"],
+)

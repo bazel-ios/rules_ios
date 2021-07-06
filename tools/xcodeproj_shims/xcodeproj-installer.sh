@@ -34,6 +34,12 @@ do
 done
 cp "$(installer_short_path)" "${installers_dir}/"
 
+build_wrapper_runfile_short_paths="$(build_wrapper_runfile_short_paths)"
+for BUILD_WRAPPER_PATH in $build_wrapper_runfile_short_paths
+do
+  cp -r "$BUILD_WRAPPER_PATH" "${stubs_dir}/"
+done
+
 cp "$(clang_stub_short_path)" "${stubs_dir}/clang-stub"
 cp "$(clang_stub_ld_path)" "${stubs_dir}/ld-stub"
 cp "$(clang_stub_swiftc_path)" "${stubs_dir}/swiftc-stub"
