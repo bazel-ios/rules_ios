@@ -1,0 +1,8 @@
+load("//rules:framework.bzl", "apple_framework")
+
+apple_framework(
+    name = "c",
+    srcs = glob(["*.swift"]),
+    platforms = {"ios": "10.0"},
+    visibility = ["//visibility:public"],
+)
