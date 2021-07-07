@@ -33,10 +33,10 @@ func GetFullBazelXcodeVersion(developerDir: String) throws -> String {
         options: [], format: &plistFormat)
     let plist = plistData as? [String: AnyObject] ?? [:]
     guard let shortVersion = plist["CFBundleShortVersionString"] as? String else {
-        throw LoadError.error("Missing Xcode short version")
+        throw LoadError.error("Missing Xcode CFBundleShortVersionString in version.plist")
     }
     guard let buildVersion = plist["ProductBuildVersion"] as? String else {
-        throw LoadError.error("Missing Xcode build version")
+        throw LoadError.error("Missing Xcode ProductBuildVersion in version.plist")
     }
     return ExpandVersion(version: shortVersion) + "." + buildVersion
 }

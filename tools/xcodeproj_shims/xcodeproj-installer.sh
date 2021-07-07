@@ -22,6 +22,8 @@ mkdir -p "${installers_dir}"
 readonly print_json_installers_dir="${stubs_dir}/print_json_leaf_nodes.runfiles/"
 mkdir -p "${print_json_installers_dir}"
 
+# Project runfile installation: these scripts install various runfiles into the
+# project
 for PRINT_INSTALLER_PATH in $(print_json_leaf_nodes_runfiles)
 do
   mkdir -p "${print_json_installers_dir}/$(dirname $PRINT_INSTALLER_PATH)"
