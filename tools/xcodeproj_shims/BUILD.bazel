@@ -39,11 +39,17 @@ sh_binary(
     visibility = STUB_VISIBILITY,
 )
 
+sh_library(
+    name = "build-wrapper-deps",
+    srcs = ["//tools/xcode_version_computation"],
+)
+
 sh_binary(
     name = "build-wrapper",
     srcs = [
         "build-wrapper.sh",
     ],
+    data = ["build-wrapper-deps"],
     visibility = STUB_VISIBILITY,
 )
 

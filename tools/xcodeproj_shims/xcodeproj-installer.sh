@@ -22,6 +22,8 @@ mkdir -p "${installers_dir}"
 readonly print_json_installers_dir="${stubs_dir}/print_json_leaf_nodes.runfiles/"
 mkdir -p "${print_json_installers_dir}"
 
+# Project runfile installation: these scripts install various runfiles into the
+# project
 for PRINT_INSTALLER_PATH in $(print_json_leaf_nodes_runfiles)
 do
   mkdir -p "${print_json_installers_dir}/$(dirname $PRINT_INSTALLER_PATH)"
@@ -33,6 +35,12 @@ do
   cp "$INSTALLER_PATH" "${installers_dir}/"
 done
 cp "$(installer_short_path)" "${installers_dir}/"
+
+build_wrapper_runfile_short_paths="$(build_wrapper_runfile_short_paths)"
+for BUILD_WRAPPER_PATH in $build_wrapper_runfile_short_paths
+do
+  cp -r "$BUILD_WRAPPER_PATH" "${stubs_dir}/"
+done
 
 cp "$(clang_stub_short_path)" "${stubs_dir}/clang-stub"
 cp "$(clang_stub_ld_path)" "${stubs_dir}/ld-stub"
