@@ -18,15 +18,6 @@
             <ActionContent
                title = "Run Script"
                scriptText = "echo &apos;pre_build_action_2&apos;">
-               <EnvironmentBuildable>
-                  <BuildableReference
-                     BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "BAE883963A69FF9CDA89E73E"
-                     BuildableName = "TestImports-App.app"
-                     BlueprintName = "TestImports-App"
-                     ReferencedContainer = "container:Test-Imports-App-Project.xcodeproj">
-                  </BuildableReference>
-               </EnvironmentBuildable>
             </ActionContent>
          </ExecutionAction>
       </PreActions>
@@ -43,15 +34,6 @@
             <ActionContent
                title = "Run Script"
                scriptText = "echo &apos;post_build_action_2&apos;">
-               <EnvironmentBuildable>
-                  <BuildableReference
-                     BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "BAE883963A69FF9CDA89E73E"
-                     BuildableName = "TestImports-App.app"
-                     BlueprintName = "TestImports-App"
-                     ReferencedContainer = "container:Test-Imports-App-Project.xcodeproj">
-                  </BuildableReference>
-               </EnvironmentBuildable>
             </ActionContent>
          </ExecutionAction>
       </PostActions>

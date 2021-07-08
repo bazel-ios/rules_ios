@@ -693,6 +693,9 @@ def _add_pre_post_actions(target_name, scheme, key, actions):
         actions_to_add = actions[action_type]
         payload = scheme[action_type]
         list = []
+
+        # Note `settingsTarget` is explicitly omitted because
+        # for a target with lots of env vars we might exceed Xcode arg_max limit
         for action in actions_to_add:
             list.append({"script": action})
         payload[key] = list
