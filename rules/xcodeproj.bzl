@@ -694,7 +694,7 @@ def _add_pre_post_actions(target_name, scheme, key, actions):
         payload = scheme[action_type]
         list = []
         for action in actions_to_add:
-            list.append({"script": action, "settingsTarget": target_name})
+            list.append({"script": action})
         payload[key] = list
 
 def _xcodeproj_impl(ctx):
