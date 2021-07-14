@@ -552,7 +552,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             hdrs = import_headers,
             tags = _MANUAL,
             deps = [],
-            extra_vfs_root = vfs_root,
+            extra_vfs_root = None,
         )
         import_vfsoverlays.append(import_name + "_vfs")
 
@@ -564,7 +564,6 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         import_module_map = native.glob(
             ["**/*.modulemap"],
         )
-        vfs_root = None
 
         if len(import_module_maps) > 0:
             import_module_map = import_module_maps[0]
@@ -582,7 +581,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             hdrs = import_headers,
             tags = _MANUAL,
             deps = [],
-            extra_vfs_root = vfs_root,
+            extra_vfs_root = None,
         )
         import_vfsoverlays.append(import_name + "_vfs")
 
