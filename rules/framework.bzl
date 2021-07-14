@@ -6,6 +6,9 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo", "swift_common")
 load("//rules:library.bzl", "PrivateHeadersInfo", "apple_library")
 load("//rules:transition_support.bzl", "transition_support")
+load("//rules:internal.bzl", "FrameworkInfo")
+load("//rules:hmap.bzl", "HeaderMapInfo")
+load("//rules/framework:vfs_overlay.bzl", "VFSOverlayInfo", "write_vfs")
 
 _APPLE_FRAMEWORK_PACKAGING_KWARGS = [
     "visibility",
@@ -28,6 +31,7 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
         name = name,
         framework_name = library.namespace,
         transitive_deps = library.transitive_deps,
+        vfs = library.output_vfs,
         deps = library.lib_names,
         platforms = library.platforms,
         platform_type = select({
@@ -54,7 +58,7 @@ def _framework_packaging_symlink_headers(ctx, inputs, outputs):
     # two different paths to the same file
     #
     # In that case fails with a msg listing the differences found
-    if len(inputs_by_basename) < len(inputs):
+    if len(inputs_by_basename) != len(inputs):
         inputs_by_basename_paths = [x.path for x in inputs_by_basename.values()]
         inputs_with_duplicated_basename = [x for x in inputs if not x.path in inputs_by_basename_paths]
         if len(inputs_with_duplicated_basename) > 0:
@@ -75,6 +79,10 @@ def _framework_packaging(ctx, action, inputs, outputs, manifest = None):
         return []
     if inputs == [None]:
         return []
+
+    if ctx.attr._virtualize:
+        return inputs
+
     if action in ctx.attr.skip_packaging:
         return []
     action_inputs = [manifest] + inputs if manifest else inputs
@@ -152,6 +160,8 @@ def _apple_framework_packaging_impl(ctx):
     current_apple_platform = transition_support.current_apple_platform(ctx.fragments.apple, ctx.attr._xcode_config)
 
     # collect files
+    #print("ctx.attr.transitive_deps", ctx.attr.name, ":", ctx.attr.transitive_deps)
+    #print("ctx.attr.deps", ctx.attr.name, ":", ctx.attr.deps)
     for dep in ctx.attr.deps:
         files = dep.files.to_list()
         for file in files:
@@ -225,7 +235,10 @@ def _apple_framework_packaging_impl(ctx):
             paths.join(framework_dir, "Modules", "module.modulemap"),
         ]
 
-    framework_manifest = ctx.actions.declare_file(framework_dir + ".manifest")
+    if not ctx.attr._virtualize:
+        framework_manifest = ctx.actions.declare_file(framework_dir + ".manifest")
+    else:
+        framework_manifest = None
 
     # Package each part of the framework separately,
     # so inputs that do not depend on compilation
@@ -241,47 +254,56 @@ def _apple_framework_packaging_impl(ctx):
     modulemap_out = _framework_packaging(ctx, "modulemap", [modulemap_in], modulemap_out, framework_manifest)
     swiftmodule_out = _framework_packaging(ctx, "swiftmodule", [swiftmodule_in], swiftmodule_out, framework_manifest)
     swiftdoc_out = _framework_packaging(ctx, "swiftdoc", [swiftdoc_in], swiftdoc_out, framework_manifest)
-    framework_files = _concat(binary_out, modulemap_out, header_out, private_header_out, swiftmodule_out, swiftdoc_out)
-    framework_root = _find_framework_dir(framework_files)
 
-    if framework_root:
-        ctx.actions.run(
-            executable = ctx.executable._framework_packaging,
-            arguments = [
-                "--action",
-                "clean",
-                "--framework_name",
-                framework_name,
-                "--framework_root",
-                framework_root,
-                "--inputs",
-                ctx.actions.args().use_param_file("%s", use_always = True).set_param_file_format("multiline")
-                    .add_all(framework_files),
-                "--outputs",
-                framework_manifest.path,
-            ],
-            outputs = [framework_manifest],
-            mnemonic = "CleaningFramework",
-            execution_requirements = {
-                "local": "True",
-            },
-        )
-    else:
-        ctx.actions.write(framework_manifest, "# Empty framework\n")
+    compilation_context_fields = {}
+    if not ctx.attr._virtualize:
+        framework_root = _find_framework_dir(framework_files)
+        if framework_root:
+            framework_files = _concat(binary_out, modulemap_out, header_out, private_header_out, swiftmodule_out, swiftdoc_out)
+            ctx.actions.run(
+                executable = ctx.executable._framework_packaging,
+                arguments = [
+                    "--action",
+                    "clean",
+                    "--framework_name",
+                    framework_name,
+                    "--framework_root",
+                    framework_root,
+                    "--inputs",
+                    ctx.actions.args().use_param_file("%s", use_always = True).set_param_file_format("multiline")
+                        .add_all(framework_files),
+                    "--outputs",
+                    framework_manifest.path,
+                ],
+                outputs = [framework_manifest],
+                mnemonic = "CleaningFramework",
+                execution_requirements = {
+                    "local": "True",
+                },
+            )
+            compilation_context_fields["framework_includes"] = depset(
+                direct = [paths.dirname(framework_root)],
+            )
+            framework_includes = depset(
+                direct = [paths.dirname(framework_root)],
+            )
+        else:
+            ctx.actions.write(framework_manifest, "# Empty framework\n")
+
+    # Note: we need to turn of includes inside of rules_swift
+    # Potentially, we can piggy back on swift.vfsoverlay
+    # swiftmodule_out = []
 
     # gather objc provider fields
+    # Note; this is needed for the framework stuff
     objc_provider_fields = {
         "providers": [dep[apple_common.Objc] for dep in ctx.attr.transitive_deps],
     }
-    compilation_context_fields = {}
 
-    if framework_root:
-        compilation_context_fields["framework_includes"] = depset(
-            direct = [paths.dirname(framework_root)],
-        )
     _add_to_dict_if_present(compilation_context_fields, "headers", depset(
         direct = header_out + private_header_out + modulemap_out,
     ))
+
     _add_to_dict_if_present(compilation_context_fields, "defines", depset(
         direct = [],
         transitive = [getattr(dep[CcInfo].compilation_context, "defines") for dep in ctx.attr.deps if CcInfo in dep],
@@ -298,13 +320,13 @@ def _apple_framework_packaging_impl(ctx):
         "multi_arch_linked_archives",
         "multi_arch_linked_binaries",
         "multi_arch_dynamic_libraries",
-        "source",
         "link_inputs",
         "linkopt",
         "library",
     ]:
         set = depset(
             direct = [],
+            # Note: this seems like an issue
             transitive = [getattr(dep[apple_common.Objc], key) for dep in ctx.attr.deps],
         )
         _add_to_dict_if_present(objc_provider_fields, key, set)
@@ -314,7 +336,7 @@ def _apple_framework_packaging_impl(ctx):
         "swift_infos": [dep[SwiftInfo] for dep in ctx.attr.transitive_deps if SwiftInfo in dep],
     }
 
-    if swiftmodule_out:
+    if not ctx.attr._virtualize and swiftmodule_out:
         # only add a swift module to the SwiftInfo if we've actually got a swiftmodule
         swiftmodule_name = paths.split_extension(swiftmodule_in.basename)[0]
 
@@ -342,18 +364,99 @@ def _apple_framework_packaging_impl(ctx):
 
     # Eventually we need to remove any reference to objc provider
     # and use CcInfo instead, see this issue for more details: https://github.com/bazelbuild/bazel/issues/10674
-    objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
+
+    unpropagated_cc_infos = []
+    direct_headers = []
+    hmaps = []
+    merge_vfsoverlays = []
+
+    import_vfsoverlays = []
+    for dep in ctx.attr.vfs:
+        if VFSOverlayInfo in dep:
+            import_vfsoverlays.append(dep[VFSOverlayInfo].files)
+
+    # Progated interface headers - this must encompass all of them
+    propagated_interface_headers = []
+    swift_hdrs = []
+
+    # We need to map all the deps here - for both swift headers and others
+    fw_dep_vfsoverlays = []
+    for dep in ctx.attr.transitive_deps + ctx.attr.deps:
+        if not FrameworkInfo in dep:
+            continue
+        framework_info = dep[FrameworkInfo]
+        fw_dep_vfsoverlays.append(framework_info.vfsoverlay_infos)
+        propagated_interface_headers.append(framework_info.framework_headers)
+
+        # Need swiftc gend' headers inside of the VFS
+        if CcInfo in dep:
+            for h in dep[CcInfo].compilation_context.headers.to_list():
+                if "-Swift.h" in h.path:
+                    swift_hdrs.append([h])
+                    propagated_interface_headers.append(depset([h]))
+
+    vfs_output = ctx.actions.declare_file(ctx.attr.name + "public_vfs.yaml")
+
+    vfs_ret = write_vfs(
+        ctx,
+        hdrs = header_out,
+        module_map = modulemap_out,
+        private_hdrs = private_header_out,  # Note: we probably don't want this but some need it
+        has_swift = len(swiftmodule_out) > 0,
+        vfs_providers = [],
+        merge_vfsoverlays = import_vfsoverlays + fw_dep_vfsoverlays,
+        vfsoverlay_file = vfs_output,
+        merge_tool = ctx.attr.merge_tool,
+        extra_vfs_root = None,
+    )
+
+    _add_to_dict_if_present(compilation_context_fields, "headers", depset(
+        direct = header_out + private_header_out + modulemap_out,
+        # Note: this blows up the hmap
+        transitive = propagated_interface_headers + import_vfsoverlays + fw_dep_vfsoverlays + [depset([vfs_ret.vfsoverlay_file, vfs_ret.vfsoverlay_file_merged])],
+    ))
+
     cc_info_provider = CcInfo(
         compilation_context = cc_common.create_compilation_context(
             **compilation_context_fields
         ),
     )
+
+    objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
+
+    framework_headers = depset(header_out + modulemap_out + private_header_out)
+
+    out_files = []
+    out_files.extend(binary_out)
+    out_files.extend(swiftmodule_out)
+    out_files.extend(header_out)
+    out_files.extend(private_header_out)
+    out_files.extend(modulemap_out)
+
     return [
+        FrameworkInfo(
+            direct_framework_includes = None,
+            cc_info = cc_info_provider,
+            cc_info_merged = None,
+            unpropagated_cc_infos = unpropagated_cc_infos,
+            headermap_infos = depset(transitive = hmaps),
+
+            # Consider propgating only framework ones, or the merged ones,
+            # Note: we don't merge the top level VFS here, so we need to propagate the tuple
+            # Consider trying to collapse
+            vfsoverlay_infos = depset([vfs_ret.vfsoverlay_file, vfs_ret.vfsoverlay_file_merged], transitive = import_vfsoverlays),
+            framework_headers = framework_headers,
+        ),
         objc_provider,
-        cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider], cc_infos = [dep[CcInfo] for dep in ctx.attr.transitive_deps if CcInfo in dep]),
-        swift_common.create_swift_info(**swift_info_fields),
+
         # bare minimum to ensure compilation and package framework with modules and headers
-        DefaultInfo(files = depset(binary_out + swiftmodule_out + header_out + private_header_out + modulemap_out)),
+        # TODO: we'll need to switch this?
+        cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider]),
+
+        # Switch here?
+        # cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider], cc_infos = [dep[CcInfo] for dep in ctx.attr.transitive_deps if CcInfo in dep]),
+        swift_common.create_swift_info(**swift_info_fields),
+        DefaultInfo(files = depset(out_files)),
         AppleBundleInfo(
             archive = None,
             archive_root = None,
@@ -373,7 +476,7 @@ def _apple_framework_packaging_impl(ctx):
 apple_framework_packaging = rule(
     implementation = _apple_framework_packaging_impl,
     cfg = transition_support.apple_rule_transition,
-    fragments = ["apple"],
+    fragments = ["apple", "objc"],
     output_to_genfiles = True,
     attrs = {
         "framework_name": attr.string(
@@ -384,6 +487,13 @@ apple_framework_packaging = rule(
         ),
         "deps": attr.label_list(
             mandatory = True,
+            cfg = apple_common.multi_arch_split,
+            doc =
+                """Objc or Swift rules to be packed by the framework rule
+""",
+        ),
+        "vfs": attr.label_list(
+            mandatory = False,
             cfg = apple_common.multi_arch_split,
             doc =
                 """Objc or Swift rules to be packed by the framework rule
@@ -422,6 +532,9 @@ Valid values are:
             default = Label(
                 "//rules/hmap:hmaptool",
             ),
+        ),
+        "_virtualize": attr.bool(
+            default = True,
         ),
         "bundle_id": attr.string(
             mandatory = False,
@@ -467,6 +580,8 @@ the framework as a dependency.""",
                 """Internal - currently rules_ios the dict `platforms`
 """,
         ),
+        # TODO: consider renaming if we keep this
+        "merge_tool": attr.label(executable = True, default = Label("//rules/framework:merge_vfs_overlay"), cfg = "host"),
     },
     doc = "Packages compiled code into an Apple .framework package",
 )

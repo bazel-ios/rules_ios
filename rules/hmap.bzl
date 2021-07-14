@@ -1,5 +1,6 @@
 """Header Map rules"""
 
+load("//rules:internal.bzl", "FrameworkInfo")
 HeaderMapInfo = provider(
     doc = "Propagates header maps",
     fields = {
@@ -7,7 +8,7 @@ HeaderMapInfo = provider(
     },
 )
 
-def _make_hmap(actions, headermap_builder, output, namespace, hdrs_lists):
+def _make_hmap(actions, headermap_builder, output, namespace, hdrs_lists, hmaps = []):
     """Makes an hmap file.
 
     Args:
@@ -17,7 +18,6 @@ def _make_hmap(actions, headermap_builder, output, namespace, hdrs_lists):
         namespace: the prefix to be used for header imports
         hdrs_lists: an array of enumerables containing headers to be added to the hmap
     """
-
     args = actions.args()
     if namespace:
         args.add("--namespace", namespace)
@@ -27,12 +27,20 @@ def _make_hmap(actions, headermap_builder, output, namespace, hdrs_lists):
     for hdrs in hdrs_lists:
         args.add_all(hdrs)
 
+    inputs = []
+    for hmap in hmaps:
+        for _hmap in hmap.to_list():
+            inputs.append(_hmap)
+            args.add(":" + _hmap.path)
+
+    #args.add(":" + "/tmp/x.hmap")
     args.set_param_file_format(format = "multiline")
     args.use_param_file("@%s")
 
     actions.run(
         mnemonic = "HmapCreate",
         arguments = [args],
+        inputs = depset(inputs),
         executable = headermap_builder,
         outputs = [output],
     )
@@ -50,23 +58,33 @@ def _make_headermap_impl(ctx):
     :return: provider with the info for this rule
     """
     hdrs_lists = [ctx.files.hdrs]
-
+    hmaps = []
     for provider in ctx.attr.direct_hdr_providers:
+        if FrameworkInfo in provider:
+            continue
+
         if apple_common.Objc in provider:
             hdrs_lists.append(provider[apple_common.Objc].direct_headers)
         if CcInfo in provider:
             hdrs_lists.append(provider[CcInfo].compilation_context.direct_headers)
 
+        # We'd need a way to add a prefix into the path for this
+        #if HeaderMapInfo in provider:
+        #    print("DEP.HeaderMapInfo:", ctx.attr.name, ":", provider[HeaderMapInfo])
+        
         if len(hdrs_lists) == 1:
             # means neither apple_common.Objc nor CcInfo in hdr provider target
             fail("direct_hdr_provider %s must contain either 'CcInfo' or 'objc' provider" % provider)
 
+    # Note: this tool doesn't very well virtualize the includes: we can't put a
+    # prefix on the arguments
     hmap.make_hmap(
         actions = ctx.actions,
         headermap_builder = ctx.executable._headermap_builder,
         output = ctx.outputs.headermap,
         namespace = ctx.attr.namespace,
         hdrs_lists = hdrs_lists,
+        hmaps = hmaps,
     )
 
     cc_info_provider = CcInfo(

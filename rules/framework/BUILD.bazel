@@ -5,3 +5,12 @@ py_binary(
     srcs = ["framework_packaging.py"],
     visibility = ["//visibility:public"],
 )
+
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+
+swift_binary(
+    name = "merge_vfs_overlay",
+    srcs = ["merge_vfs_overlay.swift"],
+    visibility = ["//visibility:public"],
+)
+
