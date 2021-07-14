@@ -2,8 +2,12 @@ load("//rules:framework.bzl", "apple_framework")
 
 apple_framework(
     name = "b",
-    deps = ["//tests/ios/frameworks/strict-deps/c"],
+    deps = [
+            "//tests/ios/frameworks/strict-deps/c",
+            "//tests/ios/frameworks/mixed-source/custom-module-map:CustomModuleMap",
+            "//tests/ios/frameworks/sources-with-prebuilt-binaries:GoogleMobileAds"
+    ],
     srcs = glob(["*.swift"]),
-    platforms = {"ios": "10.0"},
+    platforms = {"ios": "13.0"},
     visibility = ["//visibility:public"],
 )

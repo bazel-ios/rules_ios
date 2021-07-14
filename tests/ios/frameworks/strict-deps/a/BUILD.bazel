@@ -4,6 +4,6 @@ apple_framework(
     name = "a",
     srcs = glob(["*.swift"]),
     deps = ["//tests/ios/frameworks/strict-deps/b"],
-    platforms = {"ios": "10.0"},
+    platforms = {"ios": "13.0"},
     visibility = ["//visibility:public"],
 )
