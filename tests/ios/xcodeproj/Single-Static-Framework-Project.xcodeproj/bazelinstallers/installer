@@ -106,3 +106,4 @@ fi
 # which XCode will use for indexing. Let's keep those.
 "$BAZEL_INSTALLERS_DIR"/swiftmodules.sh >"$BAZEL_DIAGNOSTICS_DIR"/swiftmodules-stdout-"$DATE_SUFFIX".log 2>"$BAZEL_DIAGNOSTICS_DIR"/swiftmodules-stderr-"$DATE_SUFFIX".log &
 "$BAZEL_INSTALLERS_DIR"/indexstores.sh >"$BAZEL_DIAGNOSTICS_DIR"/indexstores-stdout-"$DATE_SUFFIX".log 2>"$BAZEL_DIAGNOSTICS_DIR"/indexstores-stderr-"$DATE_SUFFIX".log &
+"$BAZEL_INSTALLERS_DIR"/dsyms.sh >"$BAZEL_DIAGNOSTICS_DIR"/dsyms-stdout-"$DATE_SUFFIX".log 2>"$BAZEL_DIAGNOSTICS_DIR"/dsyms-stderr-"$DATE_SUFFIX".log &
