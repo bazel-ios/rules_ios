@@ -88,7 +88,7 @@ def _make_root(ctx, framework_name, root_dir, extra_search_paths, module_map, hd
 
     roots = []
     if len(headers) or len(private_headers) or len(modules):
-        .append({
+        roots.append({
             "name": root_dir,
             "type": "directory",
             "contents": headers + private_headers + modules,
