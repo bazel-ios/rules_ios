@@ -591,9 +591,11 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     framework_vfs_overlay_name = name + "_vfs"
     framework_vfs_overlay_name_swift = swift_libname + "_vfs"
 
-    # TODO: remove framework if set
+    # TODO: remove under certian circumstances when framework if set
     # Needs to happen before headermaps are made, so the generated umbrella header gets added to those headermaps
-    if namespace_is_module_name:
+    has_compile_srcs = (objc_hdrs or objc_private_hdrs or swift_sources or objc_sources or cpp_sources)
+    generate_umbrella_module = (namespace_is_module_name and has_compile_srcs)
+    if generate_umbrella_module:
         if not module_map:
             umbrella_header = library_tools["umbrella_header_generator"](
                 name = name,
