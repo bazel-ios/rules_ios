@@ -26,6 +26,8 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
         **kwargs: Arguments passed to the apple_library and apple_framework_packaging rules as appropriate.
     """
     framework_packaging_kwargs = {arg: kwargs.pop(arg) for arg in _APPLE_FRAMEWORK_PACKAGING_KWARGS if arg in kwargs}
+    kwargs["enable_framework_vfs"] = kwargs.pop("enable_framework_vfs", True)
+
     library = apple_library(name = name, **kwargs)
     apple_framework_packaging(
         name = name,
@@ -128,7 +130,7 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
             continue
         import_vfsoverlays.append(dep[VFSOverlayInfo].vfs_info)
 
-    # Progated interface headers - this must encompass all of them
+    # Propagated interface headers - this must encompass all of them
     propagated_interface_headers = []
 
     # We need to map all the deps here - for both swift headers and others
@@ -156,10 +158,10 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
         module_map = outputs.modulemap,
         private_hdrs = outputs.private_headers,
         has_swift = len(outputs.swiftmodule) > 0,
-        merge_vfsoverlays = import_vfsoverlays + fw_dep_vfsoverlays,
+        merge_vfsoverlays = fw_dep_vfsoverlays + import_vfsoverlays,
     )
 
-    framework_headers = depset(outputs.headers + outputs.module_map + outputs.private_headerss)
+    framework_headers = depset(outputs.headers + outputs.modulemap + outputs.private_headers)
 
     # Includes interface headers here ( handled in cc_info merge for no virtual )
     compilation_context_fields["headers"] = depset(
@@ -449,7 +451,7 @@ def _apple_framework_packaging_impl(ctx):
     # Compute cc_info and swift_info
     virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
     if virtualize_frameworks:
-        framework_info = _get_virtual_framework_info(ctx, compilation_context_fields)
+        framework_info = _get_virtual_framework_info(ctx, framework_files, compilation_context_fields)
     else:
         # This is empty by default
         framework_info = FrameworkInfo()
@@ -528,7 +530,7 @@ apple_framework_packaging = rule(
             mandatory = False,
             cfg = apple_common.multi_arch_split,
             doc =
-                """Objc or Swift rules to be packed by the framework rule
+                """Additional VFS for the framework to export
 """,
         ),
         "transitive_deps": attr.label_list(

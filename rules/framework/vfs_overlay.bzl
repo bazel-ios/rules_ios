@@ -156,10 +156,7 @@ def _framework_vfs_overlay_impl(ctx):
 
 def _merge_vfs_infos(base, vfs_infos):
     for vfs_info in vfs_infos:
-        for key in vfs_info:
-            if key in base:
-                continue
-            base[key] = vfs_info[key]
+        base.update(vfs_info)
     return base
 
 # Internally the "vfs obj" is represented as a dictionary, which is keyed on
