@@ -45,6 +45,14 @@ com.apple.product-type.application)
         "bazel-bin/$BAZEL_BIN_SUBDIR/${BAZEL_BUILD_TARGET_LABEL#*:}.runfiles/${BAZEL_BUILD_TARGET_WORKSPACE}/${BAZEL_BIN_SUBDIR}/$TARGET_NAME.zip"
     )
     ;;
+com.apple.product-type.app-extension)
+    input_options=(
+        "bazel-bin/$BAZEL_BIN_SUBDIR/${FULL_PRODUCT_NAME}"
+        "bazel-bin/$BAZEL_BIN_SUBDIR/${TARGET_NAME}_archive-root/$TARGET_NAME${WRAPPER_SUFFIX:-}"
+        "bazel-bin/$BAZEL_BIN_SUBDIR/${BAZEL_BUILD_TARGET_LABEL#*:}.runfiles/${BAZEL_BUILD_TARGET_WORKSPACE}/${BAZEL_BIN_SUBDIR}/${FULL_PRODUCT_NAME}"
+        "bazel-bin/$BAZEL_BIN_SUBDIR/${BAZEL_BUILD_TARGET_LABEL#*:}.runfiles/${BAZEL_BUILD_TARGET_WORKSPACE}/${BAZEL_BIN_SUBDIR}/$TARGET_NAME.zip"
+    )
+    ;;
 *)
     echo "Error: Installing ${TARGET_NAME} of type ${PRODUCT_TYPE} is unsupported" >&2
     exit 1
