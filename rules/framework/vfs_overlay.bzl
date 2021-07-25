@@ -33,8 +33,7 @@ def _get_vfs_parent(ctx):
 # Make roots for a given framework. For now this is done in starlark for speed
 # and incrementality. For imported frameworks, there is additional search paths
 # enabled
-def _make_root(vfs_parent, bin_dir_path, build_file_path, framework_name, root_dir, extra_search_paths, module_map, hdrs, private_hdrs, has_swift):
-    extra_roots = []
+def _make_root(vfs_parent, bin_dir_path, build_file_path, framework_name, swiftmodule, root_dir, extra_search_paths, module_map, hdrs, private_hdrs, has_swift):
     vfs_prefix = _make_relative_prefix(len(vfs_parent.split("/")) - 1)
     if extra_search_paths:
         sub_dir = "Headers"
@@ -61,6 +60,20 @@ def _make_root(vfs_parent, bin_dir_path, build_file_path, framework_name, root_d
             "type": "file",
             "name": "module.modulemap",
             "external-contents": _get_external_contents(vfs_prefix, module_map[0].path),
+        })
+
+    if len(swiftmodule):
+        modules_contents.append({
+            "type": "directory",
+            "name": swiftmodule[0].dirname.split("/").pop(),
+            "contents": [
+                {
+                    "type": "file",
+                    "name": file.basename,
+                    "external-contents": file.path,
+                }
+                for file in swiftmodule
+            ],
         })
 
     modules = []
@@ -113,6 +126,7 @@ def _make_root(vfs_parent, bin_dir_path, build_file_path, framework_name, root_d
             "type": "directory",
             "contents": headers + private_headers + modules,
         })
+
     if has_swift:
         roots.append(_vfs_swift_module_contents(bin_dir_path, build_file_path, vfs_prefix, framework_name, FRAMEWORK_SEARCH_PATH))
 
@@ -153,6 +167,7 @@ def _framework_vfs_overlay_impl(ctx):
         module_map = ctx.files.modulemap,
         private_hdrs = ctx.files.private_hdrs,
         has_swift = ctx.attr.has_swift,
+        swiftmodule = ctx.files.swiftmodule,
         merge_vfsoverlays = vfsoverlays,
         output = ctx.outputs.vfsoverlay_file,
         extra_search_paths = ctx.attr.extra_search_paths,
@@ -204,7 +219,7 @@ def _roots_from_datas(vfs_parent, datas):
         ))
     return roots
 
-def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, merge_vfsoverlays = [], extra_search_paths = None, output = None):
+def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodule = [], merge_vfsoverlays = [], extra_search_paths = None, output = None):
     framework_name = ctx.attr.framework_name
     framework_path = "{search_path}/{framework_name}.framework".format(
         search_path = FRAMEWORK_SEARCH_PATH,
@@ -233,6 +248,7 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, merge_vfsove
         root_dir = framework_path,
         extra_search_paths = extra_search_paths,
         module_map = module_map,
+        swiftmodule = swiftmodule,
         hdrs = hdrs,
         private_hdrs = private_hdrs,
         has_swift = has_swift,
@@ -268,6 +284,7 @@ framework_vfs_overlay = rule(
         "extra_search_paths": attr.string(mandatory = False),
         "has_swift": attr.bool(default = False),
         "modulemap": attr.label(allow_single_file = True),
+        "swiftmodule": attr.label_list(allow_files = True),
         "hdrs": attr.label_list(allow_files = True),
         "private_hdrs": attr.label_list(allow_files = True, default = []),
         "deps": attr.label_list(allow_files = True, default = []),

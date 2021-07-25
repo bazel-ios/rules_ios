@@ -157,6 +157,7 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
         ctx,
         hdrs = outputs.headers,
         module_map = outputs.modulemap,
+        swiftmodule = outputs.swiftmodule,
         private_hdrs = outputs.private_headers,
         has_swift = len(outputs.swiftmodule) > 0,
         merge_vfsoverlays = fw_dep_vfsoverlays + import_vfsoverlays,
