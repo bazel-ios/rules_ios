@@ -140,7 +140,8 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
             continue
         framework_info = dep[FrameworkInfo]
         fw_dep_vfsoverlays.extend(framework_info.vfsoverlay_infos)
-        propagated_interface_headers.append(framework_info.framework_headers)
+        framework_headers = depset(framework_info.headers + framework_info.modulemap + framework_info.private_headers)
+        propagated_interface_headers.append(framework_headers)
 
         # Collect generated headers. consider exposing all required generated
         # headers in respective providers: -Swift, modulemap, -umbrella.h
@@ -161,8 +162,6 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
         merge_vfsoverlays = fw_dep_vfsoverlays + import_vfsoverlays,
     )
 
-    framework_headers = depset(outputs.headers + outputs.modulemap + outputs.private_headers)
-
     # Includes interface headers here ( handled in cc_info merge for no virtual )
     compilation_context_fields["headers"] = depset(
         direct = outputs.headers + outputs.private_headers + outputs.modulemap,
@@ -171,7 +170,11 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
 
     return FrameworkInfo(
         vfsoverlay_infos = [vfs.vfs_info],
-        framework_headers = framework_headers,
+        headers = outputs.headers,
+        private_headers = outputs.private_headers,
+        modulemap = outputs.modulemap,
+        swiftmodule = outputs.swiftmodule,
+        swiftdoc = outputs.swiftdoc,
     )
 
 def _get_framework_files(ctx):
@@ -453,8 +456,13 @@ def _apple_framework_packaging_impl(ctx):
     if virtualize_frameworks:
         framework_info = _get_virtual_framework_info(ctx, framework_files, compilation_context_fields)
     else:
-        # This is empty by default
-        framework_info = FrameworkInfo()
+        framework_info = FrameworkInfo(
+            headers = outputs.headers,
+            private_headers = outputs.private_headers,
+            modulemap = outputs.modulemap,
+            swiftmodule = outputs.swiftmodule,
+            swiftdoc = outputs.swiftdoc,
+        )
 
         # If not virtualizing the framework - then it runs a "clean"
         _get_symlinked_framework_clean_action(ctx, framework_files, compilation_context_fields)
