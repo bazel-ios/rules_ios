@@ -11,11 +11,33 @@ VFSOverlayInfo = provider(
     },
 )
 
+# Computes the "back" segment for a path length
+def _make_relative_prefix(length):
+    dots = "../"
+    prefix = ""
+    for i in range(0, length + 1):
+        prefix += dots
+    return prefix
+
+# The LLVM `VirtualFileSystem` object can serialize paths relative to the
+# absolute path of the overlay. This requires the paths are relative to the
+# overlay. While deriving the in-memory tree roots, it pre-pends the prefix of
+# the `vfsoverlay` path to each of the entries.
+def _get_external_contents(prefix, path_str):
+    return prefix + path_str
+
 # Make roots for a given framework. For now this is done in starlark for speed
 # and incrementality. For imported frameworks, there is additional search paths
 # enabled
 def _make_root(ctx, framework_name, root_dir, extra_search_paths, module_map, hdrs, private_hdrs, has_swift):
     extra_roots = []
+
+    # Compute with the build file path, assuming the build file path is adjacent
+    # and not nested. This method is used in contexts like frameworks which
+    # don't actually output the VFS
+    prefix_len = len((ctx.bin_dir.path + ctx.build_file_path).split("/")) - 1
+    vfs_prefix = _make_relative_prefix(prefix_len)
+
     if extra_search_paths:
         sub_dir = "Headers"
 
@@ -26,13 +48,13 @@ def _make_root(ctx, framework_name, root_dir, extra_search_paths, module_map, hd
         extra_roots = [{
             "type": "file",
             "name": file.path.replace(rooted_path, ""),
-            "external-contents": file.path,
+            "external-contents": _get_external_contents(vfs_prefix, file.path),
         } for file in hdrs]
 
         extra_roots += [{
             "type": "file",
             "name": framework_name + "/" + file.path.replace(rooted_path, ""),
-            "external-contents": file.path,
+            "external-contents": _get_external_contents(vfs_prefix, file.path),
         } for file in hdrs]
 
     modules_contents = []
@@ -40,7 +62,7 @@ def _make_root(ctx, framework_name, root_dir, extra_search_paths, module_map, hd
         modules_contents.append({
             "type": "file",
             "name": "module.modulemap",
-            "external-contents": module_map[0].path,
+            "external-contents": _get_external_contents(vfs_prefix, module_map[0].path),
         })
 
     modules = []
@@ -56,7 +78,7 @@ def _make_root(ctx, framework_name, root_dir, extra_search_paths, module_map, hd
         {
             "type": "file",
             "name": file.basename,
-            "external-contents": file.path,
+            "external-contents": _get_external_contents(vfs_prefix, file.path),
         }
         for file in hdrs
     ])
@@ -76,7 +98,7 @@ def _make_root(ctx, framework_name, root_dir, extra_search_paths, module_map, hd
             {
                 "type": "file",
                 "name": file.basename,
-                "external-contents": file.path,
+                "external-contents": _get_external_contents(vfs_prefix, file.path),
             }
             for file in private_hdrs
         ],
@@ -94,11 +116,11 @@ def _make_root(ctx, framework_name, root_dir, extra_search_paths, module_map, hd
             "contents": headers + private_headers + modules,
         })
     if has_swift:
-        roots.append(_vfs_swift_module_contents(ctx, framework_name, FRAMEWORK_SEARCH_PATH))
+        roots.append(_vfs_swift_module_contents(ctx, vfs_prefix, framework_name, FRAMEWORK_SEARCH_PATH))
 
     return roots
 
-def _vfs_swift_module_contents(ctx, framework_name, root_dir):
+def _vfs_swift_module_contents(ctx, vfs_prefix, framework_name, root_dir):
     # Forumlate the framework's swiftmodule - don't have the swiftmodule when
     # creating with apple_library. Consider removing that codepath to make this
     # and other situations easier
@@ -113,7 +135,7 @@ def _vfs_swift_module_contents(ctx, framework_name, root_dir):
     return {
         "type": "file",
         "name": root_dir + "/" + name,
-        "external-contents": external_contents,
+        "external-contents": _get_external_contents(vfs_prefix, external_contents),
     }
 
 def _framework_vfs_overlay_impl(ctx):
@@ -184,12 +206,10 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, merge_vfsove
     if output == None:
         return struct(vfsoverlay_file = None, vfs_info = vfs_info)
 
-    # These explicit settings ensure that the VFS actually improves search
-    # performance.
     vfsoverlay_object = {
         "version": 0,
         "case-sensitive": True,
-        "overlay-relative": False,
+        "overlay-relative": True,
         "use-external-names": False,
         "roots": roots,
     }
