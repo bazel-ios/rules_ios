@@ -15,34 +15,32 @@ VFSOverlayInfo = provider(
 def _make_relative_prefix(length):
     dots = "../"
     prefix = ""
-    for i in range(0, length + 1):
+    for i in range(0, length):
         prefix += dots
     return prefix
 
-# The LLVM `VirtualFileSystem` object can serialize paths relative to the
-# absolute path of the overlay. This requires the paths are relative to the
-# overlay. While deriving the in-memory tree roots, it pre-pends the prefix of
-# the `vfsoverlay` path to each of the entries.
+# Internal to swift and clang - LLVM `VirtualFileSystem` object can
+# serialize paths relative to the absolute path of the overlay. This
+# requires the paths are relative to the overlay. While deriving the
+# in-memory tree roots, it pre-pends the prefix of the `vfsoverlay` path
+# to each of the entries.
 def _get_external_contents(prefix, path_str):
     return prefix + path_str
+
+def _get_vfs_parent(ctx):
+    return (ctx.bin_dir.path + "/" + ctx.build_file_path)
 
 # Make roots for a given framework. For now this is done in starlark for speed
 # and incrementality. For imported frameworks, there is additional search paths
 # enabled
-def _make_root(ctx, framework_name, root_dir, extra_search_paths, module_map, hdrs, private_hdrs, has_swift):
+def _make_root(vfs_parent, bin_dir_path, build_file_path, framework_name, root_dir, extra_search_paths, module_map, hdrs, private_hdrs, has_swift):
     extra_roots = []
-
-    # Compute with the build file path, assuming the build file path is adjacent
-    # and not nested. This method is used in contexts like frameworks which
-    # don't actually output the VFS
-    prefix_len = len((ctx.bin_dir.path + ctx.build_file_path).split("/")) - 1
-    vfs_prefix = _make_relative_prefix(prefix_len)
-
+    vfs_prefix = _make_relative_prefix(len(vfs_parent.split("/")) - 1)
     if extra_search_paths:
         sub_dir = "Headers"
 
         # Strip the build file path
-        base_path = "/".join(ctx.build_file_path.split("/")[:-1])
+        base_path = "/".join(build_file_path.split("/")[:-1])
         rooted_path = base_path + "/" + extra_search_paths + "/" + sub_dir + "/"
 
         extra_roots = [{
@@ -116,17 +114,16 @@ def _make_root(ctx, framework_name, root_dir, extra_search_paths, module_map, hd
             "contents": headers + private_headers + modules,
         })
     if has_swift:
-        roots.append(_vfs_swift_module_contents(ctx, vfs_prefix, framework_name, FRAMEWORK_SEARCH_PATH))
+        roots.append(_vfs_swift_module_contents(bin_dir_path, build_file_path, vfs_prefix, framework_name, FRAMEWORK_SEARCH_PATH))
 
     return roots
 
-def _vfs_swift_module_contents(ctx, vfs_prefix, framework_name, root_dir):
+def _vfs_swift_module_contents(bin_dir_path, build_file_path, vfs_prefix, framework_name, root_dir):
     # Forumlate the framework's swiftmodule - don't have the swiftmodule when
     # creating with apple_library. Consider removing that codepath to make this
     # and other situations easier
-    base_path = "/".join(ctx.build_file_path.split("/")[:-1])
-    bin_dir = ctx.bin_dir.path
-    rooted_path = bin_dir + "/" + base_path
+    base_path = "/".join(build_file_path.split("/")[:-1])
+    rooted_path = bin_dir_path + "/" + base_path
 
     # Note: Swift translates the input framework name to this because - is an
     # invalid character in module name
@@ -183,12 +180,29 @@ def _merge_vfs_infos(base, vfs_infos):
 
 # Internally the "vfs obj" is represented as a dictionary, which is keyed on
 # the name of the root. This is an opaque value to consumers
-def _make_vfs_info(roots):
+def _make_vfs_info(name, data):
     keys = {}
-    for root in roots:
-        name = root["name"]
-        keys[name] = root
+    keys[name] = data
     return keys
+
+# Roots must be computed _relative_ to the vfs_parent. It is no longer possible
+# to memoize VFS computations because of this.
+def _roots_from_datas(vfs_parent, datas):
+    roots = []
+    for data in datas:
+        roots.extend(_make_root(
+            vfs_parent = vfs_parent,
+            bin_dir_path = data.bin_dir_path,
+            build_file_path = data.build_file_path,
+            framework_name = data.framework_name,
+            root_dir = data.framework_path,
+            extra_search_paths = data.extra_search_paths,
+            module_map = data.module_map,
+            hdrs = data.hdrs,
+            private_hdrs = data.private_hdrs,
+            has_swift = data.has_swift,
+        ))
+    return roots
 
 def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, merge_vfsoverlays = [], extra_search_paths = None, output = None):
     framework_name = ctx.attr.framework_name
@@ -197,11 +211,37 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, merge_vfsove
         framework_name = framework_name,
     )
 
-    roots = _make_root(ctx, framework_name, framework_path, extra_search_paths, module_map, hdrs, private_hdrs, has_swift)
-    vfs_info = _make_vfs_info(roots)
+    vfs_parent = _get_vfs_parent(ctx)
+
+    data = struct(
+        bin_dir_path = ctx.bin_dir.path,
+        build_file_path = ctx.build_file_path,
+        framework_name = framework_name,
+        framework_path = framework_path,
+        extra_search_paths = extra_search_paths,
+        module_map = module_map,
+        hdrs = hdrs,
+        private_hdrs = private_hdrs,
+        has_swift = has_swift,
+    )
+
+    roots = _make_root(
+        vfs_parent,
+        bin_dir_path = ctx.bin_dir.path,
+        build_file_path = ctx.build_file_path,
+        framework_name = framework_name,
+        root_dir = framework_path,
+        extra_search_paths = extra_search_paths,
+        module_map = module_map,
+        hdrs = hdrs,
+        private_hdrs = private_hdrs,
+        has_swift = has_swift,
+    )
+
+    vfs_info = _make_vfs_info(framework_name, data)
     if len(merge_vfsoverlays) > 0:
         vfs_info = _merge_vfs_infos(vfs_info, merge_vfsoverlays)
-        roots = vfs_info.values()
+        roots = _roots_from_datas(vfs_parent, vfs_info.values() + [data])
 
     if output == None:
         return struct(vfsoverlay_file = None, vfs_info = vfs_info)
