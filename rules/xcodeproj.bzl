@@ -5,7 +5,9 @@ load("@build_bazel_rules_apple//apple/internal:platform_support.bzl", "platform_
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//rules:hmap.bzl", "HeaderMapInfo")
+load("//rules/framework:vfs_overlay.bzl", "VFSOverlayInfo", VFS_OVERLAY_FRAMEWORK_SEARCH_PATH = "FRAMEWORK_SEARCH_PATH")
 load("//rules:additional_scheme_info.bzl", "AdditionalSchemeInfo")
+load("//rules:features.bzl", "feature_names")
 
 def _get_attr_values_for_name(deps, provider, field):
     return [
@@ -67,6 +69,107 @@ def _xcodeproj_aspect_collect_hmap_paths(deps, target, ctx):
                 hmap_paths.append(relative_path)
     return hmap_paths
 
+def _make_swift_vfs_args(vfs_path):
+    return [
+        "-Xfrontend",
+        "-vfsoverlay$BAZEL_WORKSPACE_ROOT/{}".format(vfs_path),
+        "-Xfrontend",
+        "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
+        "-I{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
+        "-Xcc",
+        "-ivfsoverlay$BAZEL_WORKSPACE_ROOT/{}".format(vfs_path),
+        "-Xcc",
+        "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
+        "-vfsoverlay$BAZEL_WORKSPACE_ROOT/{}".format(vfs_path),
+        "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
+    ]
+
+def _make_swift_copts(target, deps, ctx):
+    hmap_files = []
+    vfs_files = []
+    for dep in deps:
+        if VFSOverlayInfo in dep:
+            vfs_files.extend(dep[VFSOverlayInfo].files.to_list())
+            break
+        if HeaderMapInfo in dep:
+            hmap_files.extend(dep[HeaderMapInfo].files.to_list())
+
+    copts = []
+    for hmap in hmap_files:
+        copts.append("-Xcc")
+        hmap_arg = "-I$BAZEL_WORKSPACE_ROOT/%s" % hmap
+        copts.append("\"%s\"" % hmap_arg)
+
+    # Include the root
+    copts.append("-Xcc")
+    copts.append("-I\"$BAZEL_WORKSPACE_ROOT\"")
+
+    for vfs in vfs_files:
+        copts.extend(_make_swift_vfs_args(vfs.path))
+    return copts
+
+# Put copts inside of a depset as a string
+def _join_copts(copts):
+    if not copts:
+        return []
+    return [" ".join(copts)]
+
+# Get the swift_libaries' copts propagate the deps copts. This is needed to
+# push the copts upwards from the libraries to top level bundles.
+def _xcodeproj_aspect_collect_swift_copts(deps, target, ctx):
+    copts = None
+    if ctx.rule.kind == "swift_library":
+        copts = _make_swift_copts(target, deps, ctx)
+    else:
+        for dep in deps:
+            if _SrcsInfo in dep:
+                if len(dep[_SrcsInfo].swift_copts.to_list()):
+                    return dep[_SrcsInfo].swift_copts
+    return _join_copts(copts)
+
+def _make_objc_vfs_args(vfs_path):
+    return [
+        "-vfsoverlay$BAZEL_WORKSPACE_ROOT/{}".format(vfs_path),
+        "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
+    ]
+
+# Derives hmap copts and vfs copts from the inputs as rules_ios handles them.
+# This is similar to what it does for HEADER_SEARCH_PATHS. Longer term, perhaps
+# code can be removed in-favor for XCHammer.
+def _make_objc_copts(target, deps, ctx):
+    hmap_files = []
+    vfs_files = []
+    for dep in deps:
+        if VFSOverlayInfo in dep:
+            vfs_files.extend(dep[VFSOverlayInfo].files.to_list())
+            break
+        if HeaderMapInfo in dep:
+            hmap_files.extend(dep[HeaderMapInfo].files.to_list())
+
+    copts = []
+    for hmap in hmap_files:
+        hmap_arg = "-I$BAZEL_WORKSPACE_ROOT/%s" % hmap.path
+        copts.append("\"%s\"" % hmap_arg)
+
+    # Include the root
+    copts.append("-I\"$BAZEL_WORKSPACE_ROOT\"")
+
+    for vfs in vfs_files:
+        copts.extend(_make_objc_vfs_args(vfs.path))
+    return copts
+
+# Similar to above but for objc
+def _xcodeproj_aspect_collect_objc_copts(deps, target, ctx):
+    copts = None
+    if ctx.rule.kind == "objc_library":
+        copts = _make_objc_copts(target, deps, ctx)
+    else:
+        for dep in deps:
+            if _SrcsInfo in dep:
+                if len(dep[_SrcsInfo].objc_copts.to_list()):
+                    return dep[_SrcsInfo].objc_copts
+    return _join_copts(copts)
+
 def _targeted_device_family(ctx):
     """ The targeted device family of the rule
 
@@ -92,7 +195,17 @@ def _xcodeproj_aspect_impl(target, ctx):
     if entitlements:
         deps.append(entitlements)
 
-    hmap_paths = _xcodeproj_aspect_collect_hmap_paths(deps, target, ctx)
+    virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
+    if virtualize_frameworks:
+        # Effectivly for virtual frameworks we don't need to copy the files
+        # because they are read directly from the VFS
+        objc_copts = _xcodeproj_aspect_collect_objc_copts(deps, target, ctx)
+        swift_copts = _xcodeproj_aspect_collect_swift_copts(deps, target, ctx)
+        hmap_paths = []
+    else:
+        objc_copts = []
+        swift_copts = []
+        hmap_paths = _xcodeproj_aspect_collect_hmap_paths(deps, target, ctx)
 
     # TODO: handle apple_resource_bundle targets
     env_vars = ()
@@ -156,6 +269,8 @@ def _xcodeproj_aspect_impl(target, ctx):
             swift_objc_header_path = swift_objc_header_path,
             swift_module_paths = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "swift_module_paths")),
             hmap_paths = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "hmap_paths")),
+            swift_copts = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "swift_copts")),
+            objc_copts = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "objc_copts")),
             commandline_args = commandline_args,
             targeted_device_family = _targeted_device_family(ctx),
         )
@@ -171,6 +286,8 @@ def _xcodeproj_aspect_impl(target, ctx):
                     build_files = depset(_srcs_info_build_files(ctx)),
                     direct_srcs = [],
                     hmap_paths = info.hmap_paths,
+                    swift_copts = depset(info.swift_copts),
+                    objc_copts = depset(info.objc_copts),
                     swift_module_paths = info.swift_module_paths,
                 ),
             )
@@ -227,6 +344,8 @@ def _xcodeproj_aspect_impl(target, ctx):
                 swift_defines = depset([], transitive = swift_defines),
                 direct_srcs = srcs,
                 hmap_paths = depset(hmap_paths),
+                swift_copts = depset(swift_copts),
+                objc_copts = depset(objc_copts),
                 swift_module_paths = depset(swift_module_paths, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "swift_module_paths")),
             ),
         )
@@ -357,6 +476,25 @@ def _header_search_paths_for_target(target_name, all_transitive_targets):
     # We always need to include a search path at workspace root
     header_search_paths.append("\"$BAZEL_WORKSPACE_ROOT\"")
     return " ".join(header_search_paths)
+
+def _swift_copts_for_target(target_name, all_transitive_targets):
+    copts = []
+    for at in all_transitive_targets:
+        # Returns the first matching targets - consider finding this in another
+        # routine
+        if at.name == target_name:
+            copts.extend(at.swift_copts.to_list())
+            break
+    return copts
+
+# Similar to above but for objc
+def _objc_copts_for_target(target_name, all_transitive_targets):
+    copts = []
+    for at in all_transitive_targets:
+        if at.name == target_name:
+            copts.extend(at.objc_copts.to_list())
+            break
+    return copts
 
 _XCASSETS = "xcassets"
 _XCDATAMODELD = "xcdatamodeld"
@@ -535,8 +673,13 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
             "BAZEL_BUILD_TARGET_WORKSPACE": target_info.bazel_build_target_workspace,
         }
 
-        target_settings["BAZEL_SWIFTMODULEFILES_TO_COPY"] = _swiftmodulepaths_for_target(target_name, all_transitive_targets)
-        target_settings["HEADER_SEARCH_PATHS"] = _header_search_paths_for_target(target_name, all_transitive_targets)
+        virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
+        if virtualize_frameworks:
+            target_settings["OTHER_SWIFT_FLAGS"] = _swift_copts_for_target(target_name, all_transitive_targets)
+            target_settings["OTHER_CFLAGS"] = _objc_copts_for_target(target_name, all_transitive_targets)
+        else:
+            target_settings["BAZEL_SWIFTMODULEFILES_TO_COPY"] = _swiftmodulepaths_for_target(target_name, all_transitive_targets)
+            target_settings["HEADER_SEARCH_PATHS"] = _header_search_paths_for_target(target_name, all_transitive_targets)
 
         framework_search_paths = _framework_search_paths_for_target(target_name, all_transitive_targets)
         target_settings["FRAMEWORK_SEARCH_PATHS"] = " ".join(framework_search_paths)
