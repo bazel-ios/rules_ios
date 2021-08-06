@@ -287,9 +287,9 @@ framework_vfs_overlay = rule(
     attrs = {
         "framework_name": attr.string(mandatory = True),
         "extra_search_paths": attr.string(mandatory = False),
-        "has_swift": attr.bool(default = False),
         "modulemap": attr.label(allow_single_file = True),
-        "swiftmodule_contents": attr.label_list(allow_files = True),
+        "has_swift": attr.bool(default = False, doc = "Set to True only if there are Swift source files"),
+        "swiftmodule_contents": attr.label_list(allow_files = True, doc = "Everything under a .swiftmodule dir if exists"),
         "hdrs": attr.label_list(allow_files = True),
         "private_hdrs": attr.label_list(allow_files = True, default = []),
         "deps": attr.label_list(allow_files = True, default = []),

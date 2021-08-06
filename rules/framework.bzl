@@ -157,6 +157,8 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
         ctx,
         hdrs = outputs.headers,
         module_map = outputs.modulemap,
+        # We might need to pass in .swiftinterface files here as well
+        # esp. if the error is `swift declaration not found` for some module
         swiftmodule_contents = outputs.swiftmodule + outputs.swiftdoc,
         private_hdrs = outputs.private_headers,
         has_swift = len(outputs.swiftmodule) > 0,
