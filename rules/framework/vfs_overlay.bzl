@@ -70,7 +70,7 @@ def _make_root(vfs_parent, bin_dir_path, build_file_path, framework_name, swiftm
                 {
                     "type": "file",
                     "name": file.basename,
-                    "external-contents": file.path,
+                    "external-contents": _get_external_contents(vfs_prefix, file.path),
                 }
                 for file in swiftmodule
             ],
@@ -213,6 +213,7 @@ def _roots_from_datas(vfs_parent, datas):
             root_dir = data.framework_path,
             extra_search_paths = data.extra_search_paths,
             module_map = data.module_map,
+            swiftmodule = data.swiftmodule,
             hdrs = data.hdrs,
             private_hdrs = data.private_hdrs,
             has_swift = data.has_swift,
@@ -235,6 +236,7 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodule 
         framework_path = framework_path,
         extra_search_paths = extra_search_paths,
         module_map = module_map,
+        swiftmodule = swiftmodule,
         hdrs = hdrs,
         private_hdrs = private_hdrs,
         has_swift = has_swift,
