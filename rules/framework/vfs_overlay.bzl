@@ -35,6 +35,7 @@ def _get_vfs_parent(ctx):
 # enabled
 def _make_root(vfs_parent, bin_dir_path, build_file_path, framework_name, swiftmodule_contents, root_dir, extra_search_paths, module_map, hdrs, private_hdrs, has_swift):
     vfs_prefix = _make_relative_prefix(len(vfs_parent.split("/")) - 1)
+    extra_roots = []
     if extra_search_paths:
         sub_dir = "Headers"
 
