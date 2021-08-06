@@ -354,9 +354,9 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     cpp_sources = []
     public_headers = kwargs.pop("public_headers", [])
     private_headers = kwargs.pop("private_headers", [])
-    objc_hdrs = [f for f in public_headers if f.endswith((".h", ".hh"))]
+    objc_hdrs = [f for f in public_headers if f.endswith((".h", ".hh", ".hpp"))]
     objc_non_exported_hdrs = []
-    objc_private_hdrs = [f for f in private_headers if f.endswith((".h", ".hh"))]
+    objc_private_hdrs = [f for f in private_headers if f.endswith((".h", ".hh", ".hpp"))]
     if public_headers:
         public_headers = sets.make(public_headers)
     if private_headers:
@@ -367,7 +367,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         else:
             kwargs["srcs"] = kwargs.pop("srcs", []) + [f]
     for f in sorted(kwargs.pop("srcs", []), key = _uppercase_string):
-        if f.endswith((".h", ".hh")):
+        if f.endswith((".h", ".hh", ".hpp")):
             if (private_headers and sets.contains(private_headers, f)) or \
                (public_headers and sets.contains(public_headers, f)):
                 pass

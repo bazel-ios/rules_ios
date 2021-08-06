@@ -253,7 +253,7 @@ def _get_framework_files(ctx):
             # collect headers
             has_header = False
             for hdr in dep[apple_common.Objc].direct_headers:
-                if hdr.path.endswith((".h", ".hh")):
+                if hdr.path.endswith((".h", ".hh", ".hpp")):
                     has_header = True
                     header_in.append(hdr)
                     destination = paths.join(framework_dir, "Headers", hdr.basename)
