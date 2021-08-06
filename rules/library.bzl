@@ -272,7 +272,7 @@ def _xcframework_slice(*, xcframework_name, identifier, platform, platform_varia
     import_module_maps = native.glob(
         ["%s/**/*.modulemap" % path],
     )
-    import_swiftmodule_contents = native.glob(
+    import_swiftmodules = native.glob(
         ["%s/**/*.swiftmodule/*.*" % path],
     )
     if len(import_module_maps) > 0:
@@ -286,7 +286,7 @@ def _xcframework_slice(*, xcframework_name, identifier, platform, platform_varia
             name = resolved_target_name_vfs_overlay,
             framework_name = vfs_imported_framework,
             modulemap = import_module_map,
-            swiftmodule_contents = import_swiftmodule_contents,
+            swiftmodules = import_swiftmodules,
             hdrs = import_headers,
             tags = _MANUAL,
             extra_search_paths = xcframework_name,
@@ -518,7 +518,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             name = import_name + "_vfs",
             framework_name = vfs_framework_name,
             modulemap = import_module_map,
-            swiftmodule_contents = import_swiftmodules,
+            swiftmodules = import_swiftmodules,
             hdrs = import_headers,
             tags = _MANUAL,
             extra_search_paths = vfs_root,
@@ -560,7 +560,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             name = import_name + "_vfs",
             framework_name = vfs_framework_name,
             modulemap = import_module_map,
-            swiftmodule_contents = import_swiftmodules,
+            swiftmodules = import_swiftmodules,
             hdrs = import_headers,
             tags = _MANUAL,
             extra_search_paths = vfs_root,
@@ -594,7 +594,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             name = import_name + "_vfs",
             framework_name = vfs_framework_name,
             modulemap = import_module_map,
-            swiftmodule_contents = import_swiftmodules,
+            swiftmodules = import_swiftmodules,
             hdrs = import_headers,
             tags = _MANUAL,
         )
