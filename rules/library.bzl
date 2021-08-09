@@ -280,17 +280,17 @@ def _xcframework_slice(*, xcframework_name, identifier, platform, platform_varia
     else:
         import_module_map = None
 
-    vfs_imported_framework = _find_imported_framework_name(import_headers)
-    if vfs_imported_framework != None:
-        framework_vfs_overlay(
-            name = resolved_target_name_vfs_overlay,
-            framework_name = vfs_imported_framework,
-            modulemap = import_module_map,
-            swiftmodules = import_swiftmodules,
-            hdrs = import_headers,
-            tags = _MANUAL,
-            extra_search_paths = xcframework_name,
-        )
+    imported_framework_name = _find_imported_framework_name(import_headers)
+    vfs_framework_name = imported_framework_name if imported_framework_name else xcframework_name
+    framework_vfs_overlay(
+        name = resolved_target_name_vfs_overlay,
+        framework_name = vfs_framework_name,
+        modulemap = import_module_map,
+        swiftmodules = import_swiftmodules,
+        hdrs = import_headers,
+        tags = _MANUAL,
+        extra_search_paths = xcframework_name,
+    )
     return (platform, platform_variant, supported_archs, resolved_target_name, resolved_target_name_vfs_overlay)
 
 def _xcframework(*, library_name, name, slices):
