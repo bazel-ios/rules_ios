@@ -97,7 +97,7 @@ def _make_swift_copts(target, deps, ctx):
     copts = []
     for hmap in hmap_files:
         copts.append("-Xcc")
-        hmap_arg = "-I$BAZEL_WORKSPACE_ROOT/%s" % hmap
+        hmap_arg = "-I$BAZEL_WORKSPACE_ROOT/%s" % hmap.path
         copts.append("\"%s\"" % hmap_arg)
 
     # Include the root
