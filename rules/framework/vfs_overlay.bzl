@@ -30,6 +30,12 @@ def _get_external_contents(prefix, path_str):
 def _get_vfs_parent(ctx):
     return (ctx.bin_dir.path + "/" + ctx.build_file_path)
 
+def _find_top_swiftmodule_file(swiftmodules):
+    for file in swiftmodules:
+        if file.basename.endswith(".swiftmodule"):
+            return file
+    return None
+
 # Make roots for a given framework. For now this is done in starlark for speed
 # and incrementality. For imported frameworks, there is additional search paths
 # enabled
@@ -64,20 +70,24 @@ def _make_root(vfs_parent, bin_dir_path, build_file_path, framework_name, swiftm
         })
 
     if len(swiftmodules):
-        # Assuming each swift module content share the same parent
-        parent_dir_base_name = swiftmodules[0].dirname.split("/").pop()
-        modules_contents.append({
-            "type": "directory",
-            "name": parent_dir_base_name,
-            "contents": [
-                {
-                    "type": "file",
-                    "name": file.basename,
-                    "external-contents": _get_external_contents(vfs_prefix, file.path),
-                }
-                for file in swiftmodules
-            ],
-        })
+        any_swiftmodule_file = swiftmodules[0]
+        if any_swiftmodule_file.is_source:
+            # Handle a glob of files inside of a .swiftmodule e.g. for xcframework
+            parent_dir_base_name = any_swiftmodule_file.dirname.split("/").pop()
+            swiftmodule_file = _find_top_swiftmodule_file(swiftmodules)
+            if not swiftmodule_file and parent_dir_base_name.endswith(".swiftmodule"):
+                modules_contents.append({
+                    "type": "directory",
+                    "name": parent_dir_base_name,
+                    "contents": [
+                        {
+                            "type": "file",
+                            "name": file.basename,
+                            "external-contents": _get_external_contents(vfs_prefix, file.path),
+                        }
+                        for file in swiftmodules
+                    ],
+                })
 
     modules = []
     if len(modules_contents):
@@ -130,12 +140,31 @@ def _make_root(vfs_parent, bin_dir_path, build_file_path, framework_name, swiftm
             "contents": headers + private_headers + modules,
         })
 
-    if has_swift:
-        roots.append(_vfs_swift_module_contents(bin_dir_path, build_file_path, vfs_prefix, framework_name, FRAMEWORK_SEARCH_PATH))
+    if len(swiftmodules) > 0:
+        contents = _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix, FRAMEWORK_SEARCH_PATH)
+        if contents:
+            roots.append(contents)
+    elif has_swift:
+        roots.append(_assumed_vfs_swift_module_contents(bin_dir_path, build_file_path, vfs_prefix, framework_name, FRAMEWORK_SEARCH_PATH))
 
     return roots
 
-def _vfs_swift_module_contents(bin_dir_path, build_file_path, vfs_prefix, framework_name, root_dir):
+def _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix, root_dir):
+    swiftmodule_file = _find_top_swiftmodule_file(swiftmodules)
+
+    # Note: here we need to import the "top" swiftmodule where the compiler can
+    # find it. Followup if it's possible and gainful to present this inside of
+    # a framework. User provided directory swiftmodules are presented under
+    # frameworks above.
+    if swiftmodule_file == None or swiftmodule_file.is_source:
+        return None
+    return {
+        "type": "file",
+        "name": root_dir + "/" + swiftmodule_file.basename,
+        "external-contents": _get_external_contents(vfs_prefix, swiftmodule_file.path),
+    }
+
+def _assumed_vfs_swift_module_contents(bin_dir_path, build_file_path, vfs_prefix, framework_name, root_dir):
     # Forumlate the framework's swiftmodule - don't have the swiftmodule when
     # creating with apple_library. Consider removing that codepath to make this
     # and other situations easier
