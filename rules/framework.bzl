@@ -458,6 +458,8 @@ def _apple_framework_packaging_impl(ctx):
     virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
     if virtualize_frameworks:
         framework_info = _get_virtual_framework_info(ctx, framework_files, compilation_context_fields)
+        if outputs.swiftmodule:
+            swift_info_fields["modules"] = _copy_swiftmodule(ctx, framework_files)
     else:
         framework_info = FrameworkInfo(
             headers = outputs.headers,
