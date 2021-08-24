@@ -1,0 +1,13 @@
+load("//rules:app.bzl", "ios_application")
+
+ios_application(
+    name = "App",
+    srcs = ["App/main.swift"],
+    bundle_id = "com.example.app",
+    minimum_os_version = "10.0",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//tests/ios/frameworks/mixed-source/only-source:SwiftLibrary",
+        "//tests/ios/frameworks/strict-deps/a",
+    ],
+)
