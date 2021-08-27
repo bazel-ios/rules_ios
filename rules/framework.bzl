@@ -434,6 +434,14 @@ def _get_merged_objc_provider(ctx):
 
     return apple_common.new_objc_provider(**objc_provider_fields)
 
+def _get_merged_swift_info(ctx, framework_files):
+    swift_info_fields = {
+        "swift_infos": [dep[SwiftInfo] for dep in ctx.attr.transitive_deps if SwiftInfo in dep],
+    }
+    if framework_files.outputs.swiftmodule:
+        swift_info_fields["modules"] = _copy_swiftmodule(ctx, framework_files)
+    return swift_common.create_swift_info(**swift_info_fields)
+
 def _apple_framework_packaging_impl(ctx):
     framework_files = _get_framework_files(ctx)
     outputs = framework_files.outputs
@@ -450,16 +458,10 @@ def _apple_framework_packaging_impl(ctx):
         transitive = [getattr(dep[CcInfo].compilation_context, "defines") for dep in ctx.attr.deps if CcInfo in dep],
     ))
 
-    swift_info_fields = {
-        "swift_infos": [dep[SwiftInfo] for dep in ctx.attr.transitive_deps if SwiftInfo in dep],
-    }
-
     # Compute cc_info and swift_info
     virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
     if virtualize_frameworks:
         framework_info = _get_virtual_framework_info(ctx, framework_files, compilation_context_fields)
-        if outputs.swiftmodule:
-            swift_info_fields["modules"] = _copy_swiftmodule(ctx, framework_files)
     else:
         framework_info = FrameworkInfo(
             headers = outputs.headers,
@@ -472,10 +474,6 @@ def _apple_framework_packaging_impl(ctx):
         # If not virtualizing the framework - then it runs a "clean"
         _get_symlinked_framework_clean_action(ctx, framework_files, compilation_context_fields)
 
-        # It puts a swiftmodule under the framework in some cases.
-        if outputs.swiftmodule:
-            swift_info_fields["modules"] = _copy_swiftmodule(ctx, framework_files)
-
     cc_info_provider = CcInfo(
         compilation_context = cc_common.create_compilation_context(
             **compilation_context_fields
@@ -487,6 +485,8 @@ def _apple_framework_packaging_impl(ctx):
     else:
         dep_cc_infos = [dep[CcInfo] for dep in ctx.attr.transitive_deps if CcInfo in dep]
         cc_info = cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider], cc_infos = dep_cc_infos)
+
+    swift_info = _get_merged_swift_info(ctx, framework_files)
 
     # Build out the default info provider
     out_files = []
@@ -502,7 +502,7 @@ def _apple_framework_packaging_impl(ctx):
         framework_info,
         _get_merged_objc_provider(ctx),
         cc_info,
-        swift_common.create_swift_info(**swift_info_fields),
+        swift_info,
         default_info,
         AppleBundleInfo(
             archive = None,
