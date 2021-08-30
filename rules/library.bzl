@@ -827,7 +827,12 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             copts = copts_by_build_setting.swift_copts + swift_copts + additional_swift_copts,
             deps = deps + private_deps + lib_names,
             swiftc_inputs = swiftc_inputs,
-            features = ["swift.no_generated_module_map"],
+            features = ["swift.no_generated_module_map"] + select({
+                # rules_swift propagates swiftmodules to includes when they exist as a
+                # dep.
+                "@build_bazel_rules_ios//:virtualize_frameworks": ["swift.vfsoverlay"],
+                "//conditions:default": [],
+            }),
             data = [module_data],
             tags = tags_manual,
             **kwargs
