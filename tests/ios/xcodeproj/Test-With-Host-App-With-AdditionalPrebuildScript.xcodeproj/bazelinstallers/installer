@@ -24,8 +24,8 @@ com.apple.product-type.framework.static)
     # We only care about the entry ending with TARGET_NAME" so that we can get the path to its directory
     QUERY=$(grep -A 2 important_output "$BAZEL_BUILD_EVENT_TEXT_FILENAME" | grep -w uri | grep ${TARGET_NAME}\" | sed "s/uri: \"file:\/\///")
     if [[ -z $QUERY ]]; then
-        echo "Unable to locate resource for framework of ${TARGET_NAME}"
-        exit 1
+        # For virtual frameworks, this is disabled
+        exit 0
     fi
     input_options=($(dirname "${QUERY}"))
     ;;
