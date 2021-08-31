@@ -36,31 +36,83 @@ def _find_top_swiftmodule_file(swiftmodules):
             return file
     return None
 
+# Builds out the VFS subtrees for a given set of paths. This is useful to
+# construct an in-memory rep of a tree on the file system
+def _build_subtrees(paths, vfs_prefix):
+    # It uses a O(NVFSParts) sized helper dict to avoid O(NPathComponents^2)
+    # worst case runtime
+    subdirs_json = {"contents": [], "type": "directory", "name": "root"}
+    subdirs = struct(dict = {}, json = subdirs_json)
+    for path_info in paths:
+        path = path_info.framework_path
+
+        parts = path.split("/")
+
+        # current pointer to the current subdirs while walking the path
+        curr_subdirs = subdirs
+
+        # Loop the _framework_ path and add each dir to the current tree.
+        # Assume the last bit is a file then add it as a file
+        idx = 0
+        for part in parts:
+            if idx == len(parts) - 1:
+                ext_c = _get_external_contents(vfs_prefix, path_info.path)
+                curr_subdirs.dict[part] = -1
+                curr_subdirs.json["contents"].append({"name": part, "type": "file", "external-contents": ext_c})
+                break
+
+            # Lookup a value for the current subdirs, otherwise append
+            next_subdirs = curr_subdirs.dict.get(part, None)
+            if not next_subdirs:
+                next_subdirs_json = {"contents": [], "type": "directory", "name": part}
+                next_subdirs = struct(dict = {}, json = next_subdirs_json)
+
+                curr_subdirs.dict[part] = next_subdirs
+                curr_subdirs.json["contents"].append(next_subdirs_json)
+
+            curr_subdirs = next_subdirs
+            idx += 1
+    return subdirs_json
+
 # Make roots for a given framework. For now this is done in starlark for speed
 # and incrementality. For imported frameworks, there is additional search paths
 # enabled
 def _make_root(vfs_parent, bin_dir_path, build_file_path, framework_name, swiftmodules, root_dir, extra_search_paths, module_map, hdrs, private_hdrs, has_swift):
     vfs_prefix = _make_relative_prefix(len(vfs_parent.split("/")) - 1)
     extra_roots = []
+    private_headers_contents = []
+    headers_contents = []
+    vfs_prefix = _make_relative_prefix(len(vfs_parent.split("/")) - 1)
     if extra_search_paths:
         sub_dir = "Headers"
+        paths = []
+        for hdr in hdrs:
+            path = hdr.path
 
-        # Strip the build file path
-        base_path = "/".join(build_file_path.split("/")[:-1])
-        rooted_path = base_path + "/" + extra_search_paths + "/" + sub_dir + "/"
+            # We need to nest this path under the search_path.
+            last_parts = path.split(extra_search_paths + "/" + sub_dir + "/")
+            if len(last_parts) < 2:
+                # If the search path doesn't reside in the path then skip.
+                # Consider pulling out the the sub_dir here, the re-appending
+                # below.
+                continue
+            paths.append(struct(path = hdr.path, framework_path = last_parts[1]))
+        subtrees = _build_subtrees(paths, vfs_prefix)
+        headers_contents.extend(subtrees["contents"])
 
-        extra_roots = [{
-            "type": "file",
-            "name": file.path.replace(rooted_path, ""),
-            "external-contents": _get_external_contents(vfs_prefix, file.path),
-        } for file in hdrs]
+        # Same as above
+        sub_dir = "PrivateHeaders"
+        paths = []
+        for hdr in private_hdrs:
+            path = hdr.path
+            last_parts = path.split(extra_search_paths + "/" + sub_dir + "/")
+            if len(last_parts) < 2:
+                continue
+            paths.append(struct(path = hdr.path, framework_path = last_parts[1]))
+        subtrees = _build_subtrees(paths, vfs_prefix)
+        private_headers_contents.extend(subtrees["contents"])
 
-        extra_roots += [{
-            "type": "file",
-            "name": framework_name + "/" + file.path.replace(rooted_path, ""),
-            "external-contents": _get_external_contents(vfs_prefix, file.path),
-        } for file in hdrs]
-
+    # Swiftmodules: should we factor this  upwards
     modules_contents = []
     if len(module_map):
         modules_contents.append({
@@ -97,7 +149,6 @@ def _make_root(vfs_parent, bin_dir_path, build_file_path, framework_name, swiftm
             "contents": modules_contents,
         }]
 
-    headers_contents = extra_roots
     headers_contents.extend([
         {
             "type": "file",
