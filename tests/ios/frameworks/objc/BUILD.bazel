@@ -6,6 +6,7 @@ apple_framework(
     srcs = [
         "HeaderA.h",
         "main.m",
+        "DummyAssembly.S",
     ],
     platforms = {"ios": "10.0"},
     visibility = ["//visibility:public"],
