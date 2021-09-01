@@ -1,7 +1,10 @@
 """Framework rules"""
 
 load("@build_bazel_rules_apple//apple/internal:apple_product_type.bzl", "apple_product_type")
-load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo")
+load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo", "AppleSupportToolchainInfo")
+load("@build_bazel_rules_apple//apple/internal:platform_support.bzl", "platform_support")
+load("@build_bazel_rules_apple//apple/internal:resource_actions.bzl", "resource_actions")
+load("@build_bazel_rules_apple//apple/internal:rule_support.bzl", "rule_support")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo", "swift_common")
 load("//rules:library.bzl", "PrivateHeadersInfo", "apple_library")
@@ -9,6 +12,7 @@ load("//rules:transition_support.bzl", "transition_support")
 load("//rules:providers.bzl", "FrameworkInfo")
 load("//rules/framework:vfs_overlay.bzl", "VFSOverlayInfo", "make_vfsoverlay")
 load("//rules:features.bzl", "feature_names")
+load("//rules:plists.bzl", "info_plists_by_setting")
 
 _APPLE_FRAMEWORK_PACKAGING_KWARGS = [
     "visibility",
@@ -28,17 +32,36 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
     framework_packaging_kwargs = {arg: kwargs.pop(arg) for arg in _APPLE_FRAMEWORK_PACKAGING_KWARGS if arg in kwargs}
     kwargs["enable_framework_vfs"] = kwargs.pop("enable_framework_vfs", True)
 
+    infoplists_by_build_setting = kwargs.pop("infoplists_by_build_setting", {})
+    default_infoplists = kwargs.pop("infoplists", [])
+    infoplists = None
+    if len(infoplists_by_build_setting.values()) > 0 or len(default_infoplists) > 0:
+        infoplists = info_plists_by_setting(
+            name = name,
+            infoplists_by_build_setting = infoplists_by_build_setting,
+            default_infoplists = default_infoplists,
+        )
+    environment_plist = kwargs.pop("environment_plist", select({
+        "@build_bazel_rules_ios//rules/apple_platform:ios": "@build_bazel_rules_apple//apple/internal:environment_plist_ios",
+        "@build_bazel_rules_ios//rules/apple_platform:macos": "@build_bazel_rules_apple//apple/internal:environment_plist_macos",
+        "@build_bazel_rules_ios//rules/apple_platform:tvos": "@build_bazel_rules_apple//apple/internal:environment_plist_tvos",
+        "@build_bazel_rules_ios//rules/apple_platform:watchos": "@build_bazel_rules_apple//apple/internal:environment_plist_watchos",
+        "//conditions:default": None,
+    }))
+
     library = apple_library(name = name, **kwargs)
     apple_framework_packaging(
         name = name,
         framework_name = library.namespace,
+        infoplists = infoplists,
+        environment_plist = environment_plist,
         transitive_deps = library.transitive_deps,
         vfs = library.import_vfsoverlays,
         deps = library.lib_names,
         platforms = library.platforms,
         platform_type = select({
-            "@build_bazel_rules_ios//rules/apple_platform:macos": "macos",
             "@build_bazel_rules_ios//rules/apple_platform:ios": "ios",
+            "@build_bazel_rules_ios//rules/apple_platform:macos": "macos",
             "@build_bazel_rules_ios//rules/apple_platform:tvos": "tvos",
             "@build_bazel_rules_ios//rules/apple_platform:watchos": "watchos",
             "//conditions:default": "",
@@ -442,6 +465,53 @@ def _get_merged_swift_info(ctx, framework_files):
         swift_info_fields["modules"] = _copy_swiftmodule(ctx, framework_files)
     return swift_common.create_swift_info(**swift_info_fields)
 
+def _merge_root_infoplists(ctx):
+    if ctx.attr.infoplists == None or len(ctx.attr.infoplists) == 0:
+        return None
+
+    output_plist = ctx.actions.declare_file(
+        paths.join("%s-intermediates" % ctx.label.name, "Info.plist"),
+    )
+
+    bundle_name = ctx.attr.framework_name
+    current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
+    platform_type = str(current_apple_platform.platform.platform_type)
+    apple_toolchain_info = ctx.attr._toolchain[AppleSupportToolchainInfo]
+    rule_descriptor = rule_support.rule_descriptor(ctx)
+
+    resource_actions.merge_root_infoplists(
+        actions = ctx.actions,
+        bundle_name = bundle_name,
+        bundle_id = ctx.attr.bundle_id,
+        bundle_extension = ctx.attr.bundle_extension,
+        executable_name = bundle_name,
+        environment_plist = ctx.file.environment_plist,
+        input_plists = ctx.files.infoplists,
+        launch_storyboard = None,
+        output_plist = output_plist,
+        output_pkginfo = None,
+        platform_prerequisites = platform_support.platform_prerequisites(
+            apple_fragment = ctx.fragments.apple,
+            config_vars = ctx.var,
+            device_families = rule_descriptor.allowed_device_families,
+            explicit_minimum_os = None,
+            explicit_minimum_deployment_os = None,
+            objc_fragment = None,
+            platform_type_string = platform_type,
+            uses_swift = False,
+            xcode_path_wrapper = None,
+            xcode_version_config = ctx.attr._xcode_config[apple_common.XcodeVersionConfig],
+            disabled_features = [],
+            features = [],
+        ),
+        resolved_plisttool = apple_toolchain_info.resolved_plisttool,
+        rule_descriptor = rule_descriptor,
+        rule_label = ctx.label,
+        version = None,
+    )
+
+    return output_plist
+
 def _apple_framework_packaging_impl(ctx):
     framework_files = _get_framework_files(ctx)
     outputs = framework_files.outputs
@@ -497,6 +567,9 @@ def _apple_framework_packaging_impl(ctx):
     out_files.extend(outputs.modulemap)
     default_info = DefaultInfo(files = depset(out_files))
 
+    # Merges Info.plists and converts them into binary
+    infoplist = _merge_root_infoplists(ctx)
+
     current_apple_platform = transition_support.current_apple_platform(ctx.fragments.apple, ctx.attr._xcode_config)
     return [
         framework_info,
@@ -512,7 +585,7 @@ def _apple_framework_packaging_impl(ctx):
             bundle_name = ctx.attr.framework_name,
             bundle_extension = ctx.attr.bundle_extension,
             entitlements = None,
-            infoplist = None,
+            infoplist = infoplist,
             minimum_os_version = str(current_apple_platform.target_os_version),
             platform_type = str(current_apple_platform.platform.platform_type),
             product_type = ctx.attr._product_type,
@@ -551,6 +624,17 @@ apple_framework_packaging = rule(
             doc =
                 """Deps of the deps
 """,
+        ),
+        "infoplists": attr.label_list(
+            mandatory = False,
+            allow_files = [".plist"],
+            doc = "The infoplists for the framework",
+        ),
+        "environment_plist": attr.label(
+            allow_single_file = True,
+            doc = """An executable file referencing the environment_plist tool. Used to merge infoplists.
+See https://github.com/bazelbuild/rules_apple/blob/master/apple/internal/environment_plist.bzl#L69
+            """,
         ),
         "skip_packaging": attr.string_list(
             mandatory = False,
@@ -611,6 +695,10 @@ the framework as a dependency.""",
         "_allowlist_function_transition": attr.label(
             default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
             doc = "Needed to allow this rule to have an incoming edge configuration transition.",
+        ),
+        "_toolchain": attr.label(
+            default = Label("@build_bazel_rules_apple//apple/internal:toolchain_support"),
+            providers = [[AppleSupportToolchainInfo]],
         ),
         "platform_type": attr.string(
             mandatory = False,
