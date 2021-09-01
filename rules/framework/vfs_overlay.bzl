@@ -74,6 +74,18 @@ def _build_subtrees(paths, vfs_prefix):
             idx += 1
     return subdirs_json
 
+def _get_private_framework_header(path):
+    last_parts = path.split("/PrivateHeaders/")
+    if len(last_parts) < 2:
+        return None
+    return last_parts[1]
+
+def _get_public_framework_header(path):
+    last_parts = path.split("/Headers/")
+    if len(last_parts) < 2:
+        return None
+    return last_parts[1]
+
 # Make roots for a given framework. For now this is done in starlark for speed
 # and incrementality. For imported frameworks, there is additional search paths
 # enabled
@@ -83,32 +95,25 @@ def _make_root(vfs_parent, bin_dir_path, build_file_path, framework_name, swiftm
     private_headers_contents = []
     headers_contents = []
     vfs_prefix = _make_relative_prefix(len(vfs_parent.split("/")) - 1)
+
     if extra_search_paths:
-        sub_dir = "Headers"
         paths = []
         for hdr in hdrs:
             path = hdr.path
-
-            # We need to nest this path under the search_path.
-            last_parts = path.split(extra_search_paths + "/" + sub_dir + "/")
-            if len(last_parts) < 2:
-                # If the search path doesn't reside in the path then skip.
-                # Consider pulling out the the sub_dir here, the re-appending
-                # below.
+            framework_path = _get_public_framework_header(path)
+            if not framework_path:
                 continue
-            paths.append(struct(path = hdr.path, framework_path = last_parts[1]))
+            paths.append(struct(path = hdr.path, framework_path = framework_path))
         subtrees = _build_subtrees(paths, vfs_prefix)
         headers_contents.extend(subtrees["contents"])
 
-        # Same as above
-        sub_dir = "PrivateHeaders"
         paths = []
-        for hdr in private_hdrs:
+        for hdr in (private_hdrs + hdrs):
             path = hdr.path
-            last_parts = path.split(extra_search_paths + "/" + sub_dir + "/")
-            if len(last_parts) < 2:
+            framework_path = _get_private_framework_header(path)
+            if not framework_path:
                 continue
-            paths.append(struct(path = hdr.path, framework_path = last_parts[1]))
+            paths.append(struct(path = hdr.path, framework_path = framework_path))
         subtrees = _build_subtrees(paths, vfs_prefix)
         private_headers_contents.extend(subtrees["contents"])
 
@@ -149,7 +154,10 @@ def _make_root(vfs_parent, bin_dir_path, build_file_path, framework_name, swiftm
             "contents": modules_contents,
         }]
 
-    headers_contents.extend([
+    # If there isn't an extra search path build the default paths. Perhaps we
+    # can build this out if-empty as a followup
+    if not extra_search_paths:
+        headers_contents.extend([
         {
             "type": "file",
             "name": file.basename,
