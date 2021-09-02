@@ -158,13 +158,13 @@ def _make_root(vfs_parent, bin_dir_path, build_file_path, framework_name, swiftm
     # can build this out if-empty as a followup
     if not extra_search_paths:
         headers_contents.extend([
-        {
-            "type": "file",
-            "name": file.basename,
-            "external-contents": _get_external_contents(vfs_prefix, file.path),
-        }
-        for file in hdrs
-    ])
+            {
+                "type": "file",
+                "name": file.basename,
+                "external-contents": _get_external_contents(vfs_prefix, file.path),
+            }
+            for file in hdrs
+        ])
 
     headers = []
     if len(headers_contents):
