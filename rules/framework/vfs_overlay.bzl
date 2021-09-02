@@ -174,22 +174,23 @@ def _make_root(vfs_parent, bin_dir_path, build_file_path, framework_name, swiftm
             "contents": headers_contents,
         }]
 
-    private_headers_contents = {
-        "name": "PrivateHeaders",
-        "type": "directory",
-        "contents": [
+    if not extra_search_paths:
+        private_headers_contents.extend([
             {
                 "type": "file",
                 "name": file.basename,
                 "external-contents": _get_external_contents(vfs_prefix, file.path),
             }
             for file in private_hdrs
-        ],
-    }
+        ])
 
     private_headers = []
-    if len(private_hdrs):
-        private_headers = [private_headers_contents]
+    if len(private_headers_contents):
+        private_headers = [{
+            "name": "PrivateHeaders",
+            "type": "directory",
+            "contents": private_headers_contents,
+        }]
 
     roots = []
     if len(headers) or len(private_headers) or len(modules):
