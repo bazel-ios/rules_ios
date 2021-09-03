@@ -87,10 +87,11 @@ def _make_swift_vfs_args(vfs_path):
 def _make_swift_copts(target, deps, ctx):
     hmap_files = []
     vfs_files = []
+    collected_vfs = False
     for dep in deps:
-        if VFSOverlayInfo in dep:
+        if VFSOverlayInfo in dep and not collected_vfs:
             vfs_files.extend(dep[VFSOverlayInfo].files.to_list())
-            break
+            collected_vfs = True
         if HeaderMapInfo in dep:
             hmap_files.extend(dep[HeaderMapInfo].files.to_list())
 
@@ -129,7 +130,7 @@ def _xcodeproj_aspect_collect_swift_copts(deps, target, ctx):
 
 def _make_objc_vfs_args(vfs_path):
     return [
-        "-vfsoverlay$BAZEL_WORKSPACE_ROOT/{}".format(vfs_path),
+        "-ivfsoverlay$BAZEL_WORKSPACE_ROOT/{}".format(vfs_path),
         "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
     ]
 
@@ -139,10 +140,11 @@ def _make_objc_vfs_args(vfs_path):
 def _make_objc_copts(target, deps, ctx):
     hmap_files = []
     vfs_files = []
+    collected_vfs = False
     for dep in deps:
-        if VFSOverlayInfo in dep:
+        if VFSOverlayInfo in dep and not collected_vfs:
             vfs_files.extend(dep[VFSOverlayInfo].files.to_list())
-            break
+            collected_vfs = True
         if HeaderMapInfo in dep:
             hmap_files.extend(dep[HeaderMapInfo].files.to_list())
 
