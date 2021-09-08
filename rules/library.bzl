@@ -494,6 +494,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                 ["%s/**/*" % vendored_static_framework],
                 exclude = ["**/.DS_Store"],
             ),
+            deps = deps,
             tags = _MANUAL,
         )
 
