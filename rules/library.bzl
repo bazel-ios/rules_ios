@@ -307,7 +307,7 @@ def _xcframework(*, library_name, name, slices):
             if arch == "arm64" and platform_variant == "simulator":
                 # TODO: support sim on apple silicon by having a config setting for platform_variant
                 continue
-            elif arch == "x86_64" and platform_variant == "maccatalyst":
+            elif (arch == "x86_64" or arch == "arm64") and platform_variant == "maccatalyst":
                 # TODO: support maccatalyst
                 continue
 
