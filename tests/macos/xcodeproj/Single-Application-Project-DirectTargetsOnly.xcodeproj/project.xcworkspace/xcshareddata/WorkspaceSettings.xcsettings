@@ -6,5 +6,7 @@
 	<string>Original</string>
 	<key>IDEWorkspaceSharedSettings_AutocreateContextsIfNeeded</key>
 	<false/>
+	<key>DisableBuildSystemDeprecationDiagnostic</key>
+	<true/>
 </dict>
 </plist>
