@@ -1071,7 +1071,8 @@ Tags for configuration:
         "include_transitive_targets": attr.bool(default = False, mandatory = False),
         "project_name": attr.string(mandatory = False),
         "output_path": attr.string(mandatory = False, default = "", doc = """
-        The output path to use when generating the xcode project
+        The output path to use when generating the xcode project.
+        Must be a relative path beneath the package where the xcodeproj rule is defined
         """),
         "bazel_path": attr.string(mandatory = False, default = "bazel"),
         "scheme_existing_envvar_overrides": attr.string_dict(allow_empty = True, default = {}, mandatory = False),
