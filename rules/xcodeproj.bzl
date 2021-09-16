@@ -845,18 +845,28 @@ def _add_pre_post_actions(target_name, scheme, key, actions):
             list.append({"script": action})
         payload[key] = list
 
+def _validate_output_path(output_path):
+    output_path_components = output_path.split("/")
+    prohibited_components = [".", ".."]
+    contains_dot_paths = any([elem in output_path_components for elem in prohibited_components])
+    if contains_dot_paths:
+        fail("The output_path provided cant contain the following path components: <%s>" % prohibited_components)
+
 def _xcodeproj_impl(ctx):
+    _validate_output_path(ctx.attr.output_path)
+
     xcodegen_jsonfile = ctx.actions.declare_file(
-        "%s-xcodegen.json" % ctx.attr.name,
+        paths.join(ctx.attr.output_path, "%s-xcodegen.json" % ctx.attr.name),
     )
     project_name = (ctx.attr.project_name or ctx.attr.name) + ".xcodeproj"
     if "/" in project_name:
         fail("No / allowed in project_name")
 
-    project = ctx.actions.declare_directory(project_name)
-    nesting = ctx.label.package.count("/") + 1 if ctx.label.package else 0
-    src_dot_dots = "/".join([".." for x in range(nesting + 3)])
-    script_dot_dots = "/".join([".." for x in range(nesting)])
+    project = ctx.actions.declare_directory(paths.join(ctx.attr.output_path, project_name))
+    destination_path = paths.normalize(paths.join(ctx.label.package, ctx.attr.output_path))
+    nesting = destination_path.count("/") + 1 if destination_path else 0
+    src_dot_dots = "/".join([".."] * (nesting + 3))
+    script_dot_dots = "/".join([".."] * nesting)
 
     proj_options = {
         "createIntermediateGroups": True,
@@ -1060,6 +1070,9 @@ Tags for configuration:
         "deps": attr.label_list(mandatory = True, allow_empty = False, providers = [], aspects = [_xcodeproj_aspect]),
         "include_transitive_targets": attr.bool(default = False, mandatory = False),
         "project_name": attr.string(mandatory = False),
+        "output_path": attr.string(mandatory = False, default = "", doc = """
+        The output path to use when generating the xcode project
+        """),
         "bazel_path": attr.string(mandatory = False, default = "bazel"),
         "scheme_existing_envvar_overrides": attr.string_dict(allow_empty = True, default = {}, mandatory = False),
         "project_attributes_overrides": attr.string_dict(allow_empty = True, mandatory = False, default = {}, doc = "Overrides for attributes that can be set at the project base level."),

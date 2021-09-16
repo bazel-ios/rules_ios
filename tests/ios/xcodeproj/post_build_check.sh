@@ -52,7 +52,7 @@ done
 # If 'target.swift-extra-clang-flags' does not contain all those paths debugging '.swift' files
 # that depends on objc (via bridging headers for example) wont' work
 echo "Make sure all LLDB configuration files contain the expected settings"
-XCODE_PROJS=$(find . -name "$XCODE_PROJ_GLOB.xcodeproj")
+XCODE_PROJS=$(find . -name "$XCODE_PROJ_GLOB.xcodeproj" -maxdepth 1)
 for PROJ in $XCODE_PROJS; do
     if [ $DESTINATION_TYPE = "simulator" ]; then
         ALL_TARGETS=$(xcodebuild -project $PROJ -sdk iphonesimulator -alltargets -showBuildSettings | grep "TARGET_NAME" | sed -e "s/TARGET_NAME = //g" | xargs)

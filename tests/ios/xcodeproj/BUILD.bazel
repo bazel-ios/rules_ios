@@ -186,3 +186,15 @@ xcodeproj(
         "//tests/ios/app:FW",
     ],
 )
+
+xcodeproj(
+    name = "Test-Custom-Output-Path",
+    additional_lldb_settings = [
+        "log enable -f /tmp/lldb.log lldb types",
+    ],
+    output_path = "custom_output_path",
+    project_name = "Test-LLDB-Logs-Project",
+    deps = [
+        "//tests/ios/app:FW",
+    ],
+)
