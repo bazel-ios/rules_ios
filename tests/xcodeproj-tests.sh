@@ -51,7 +51,7 @@ bazelisk query 'attr(executable, 1, kind(genrule, tests/ios/xcodeproj/...))' | x
 echo ".xcodeproj Tests for iOS platform (simulator), for project generated under custom_output_path"
 
 diff_result=$(diff -r ./tests/ios/xcodeproj/Test-LLDB-Logs-Project.xcodeproj ./tests/ios/xcodeproj/custom_output_path/Test-LLDB-Logs-Project.xcodeproj || true)
-expected_diff_result=$(cat ./tests/ios/xcodeproj/custom_output_path/test_expected_diff.txt)
+expected_diff_result=$(cat ./tests/ios/xcodeproj/fixtures/test_custom_output_path_expected_diff.txt)
 if [[ "$diff_result" != "$expected_diff_result" ]]; then
     echo "The project under custom_output_path differs from the expectation"
     exit 1
