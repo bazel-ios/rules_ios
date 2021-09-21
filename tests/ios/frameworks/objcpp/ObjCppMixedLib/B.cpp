@@ -1,0 +1,6 @@
+namespace dummy
+{
+    void bar()
+    {
+    }
+}
