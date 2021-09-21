@@ -898,7 +898,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
 
     objc_library(
         name = objc_libname,
-        srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,
+        srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs + cpp_sources,
         non_arc_srcs = objc_non_arc_sources,
         hdrs = objc_hdrs,
         copts = copts_by_build_setting.objc_copts + objc_copts + additional_objc_copts + index_while_building_objc_copts,
