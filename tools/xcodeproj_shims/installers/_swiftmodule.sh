@@ -18,7 +18,6 @@ for index_dir in "${dirs[@]}"; do
         doc="${module%.swiftmodule}.swiftdoc"
         module_name=$(basename "$module")
         module_bundle="$index_dir/$module_name"
-        echo "mkdir -p $module_bundle"
         mkdir -p "$module_bundle"
 
         cp "$module" "$module_bundle/$CURRENT_ARCH.swiftmodule" || true
