@@ -1,0 +1,9 @@
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+
+build_test(
+    name = "swift_collections_build_test",
+    targets = [
+        "@com_github_apple_swiftcollections//:DequeModule",
+        "@com_github_apple_swiftcollections//:OrderedCollections",
+    ],
+)
