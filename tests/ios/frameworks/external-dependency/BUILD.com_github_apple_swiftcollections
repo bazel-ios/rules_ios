@@ -1,0 +1,17 @@
+load("@build_bazel_rules_ios//rules:framework.bzl", "apple_framework")
+
+_platforms = {"ios": "13.3"}
+
+apple_framework(
+    name = "DequeModule",
+    srcs = glob(["Sources/DequeModule/**/*.swift"]),
+    platforms = _platforms,
+    visibility = ["//visibility:public"],
+)
+
+apple_framework(
+    name = "OrderedCollections",
+    srcs = glob(["Sources/OrderedCollections/**/*.swift"]),
+    platforms = _platforms,
+    visibility = ["//visibility:public"],
+)

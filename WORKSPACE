@@ -82,3 +82,10 @@ http_file(
     # .bazelversion uses 4.0
     urls = ["https://github.com/bazelbuild/buildtools/releases/download/3.5.0/buildifier.mac"],
 )
+
+load(
+    "//tests/ios/frameworks/external-dependency:external_dependency.bzl",
+    "load_external_test_dependency",
+)
+
+load_external_test_dependency()
