@@ -201,15 +201,15 @@ def _make_root(vfs_parent, bin_dir_path, build_file_path, framework_name, swiftm
         })
 
     if len(swiftmodules) > 0:
-        contents = _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix, FRAMEWORK_SEARCH_PATH)
+        contents = _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix)
         if contents:
             roots.append(contents)
     elif has_swift:
-        roots.append(_assumed_vfs_swift_module_contents(bin_dir_path, build_file_path, vfs_prefix, framework_name, FRAMEWORK_SEARCH_PATH))
+        roots.append(_assumed_vfs_swift_module_contents(bin_dir_path, build_file_path, vfs_prefix, framework_name))
 
     return roots
 
-def _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix, root_dir):
+def _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix):
     swiftmodule_file = _find_top_swiftmodule_file(swiftmodules)
 
     # Note: here we need to import the "top" swiftmodule where the compiler can
@@ -220,11 +220,11 @@ def _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix, root_dir):
         return None
     return {
         "type": "file",
-        "name": root_dir + "/" + swiftmodule_file.basename,
+        "name": swiftmodule_file.basename,
         "external-contents": _get_external_contents(vfs_prefix, swiftmodule_file.path),
     }
 
-def _assumed_vfs_swift_module_contents(bin_dir_path, build_file_path, vfs_prefix, framework_name, root_dir):
+def _assumed_vfs_swift_module_contents(bin_dir_path, build_file_path, vfs_prefix, framework_name):
     # Forumlate the framework's swiftmodule - don't have the swiftmodule when
     # creating with apple_library. Consider removing that codepath to make this
     # and other situations easier
@@ -237,7 +237,7 @@ def _assumed_vfs_swift_module_contents(bin_dir_path, build_file_path, vfs_prefix
     external_contents = rooted_path + "/" + name
     return {
         "type": "file",
-        "name": root_dir + "/" + name,
+        "name": name,
         "external-contents": _get_external_contents(vfs_prefix, external_contents),
     }
 
@@ -314,8 +314,7 @@ def _roots_from_datas(vfs_parent, datas):
 
 def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules = [], merge_vfsoverlays = [], extra_search_paths = None, output = None):
     framework_name = ctx.attr.framework_name
-    framework_path = "{search_path}/{framework_name}.framework".format(
-        search_path = FRAMEWORK_SEARCH_PATH,
+    framework_path = "{framework_name}.framework".format(
         framework_name = framework_name,
     )
 
@@ -360,8 +359,12 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules
         "version": 0,
         "case-sensitive": True,
         "overlay-relative": True,
-        "use-external-names": False,
-        "roots": roots,
+        "use-external-names": True,
+        "roots": [{
+            "name": FRAMEWORK_SEARCH_PATH,
+            "type": "directory",
+            "contents": roots,
+        }],
     }
     vfsoverlay_yaml = struct(**vfsoverlay_object).to_json()
     ctx.actions.write(
