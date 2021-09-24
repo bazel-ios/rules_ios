@@ -66,4 +66,5 @@ sed -i.bak -E -e 's|^([[:space:]]*path = )../../..;$|\1.;|g' "${tmp_dest}/projec
 sed -i.bak -E -e 's|([ "])../../../|\1|g' "${tmp_dest}/project.pbxproj"
 rm "${tmp_dest}/project.pbxproj.bak"
 
+mkdir -p "$(dirname "${dest}")"
 rsync --recursive --quiet --copy-links "${tmp_dest}" "${dest}"
