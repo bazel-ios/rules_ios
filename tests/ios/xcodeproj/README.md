@@ -41,6 +41,6 @@ and all `HEADER_SEARCH_PATHS` and `FRAMEWORK_SEARCH_PATHS` for the respective ta
 
 In `tests/ios/xcodeproj/post_build_check.sh` one will find this message
 ```sh
-echo "Make sure all LLDB configuration files contain the expexted search paths"
+echo "Make sure all LLDB configuration files contain the expected search paths"
 ```
 , the code that follows is testing exactly what was described above by comparing the `target.swift-extra-clang-flags` setting in the generated `.lldbinit` file with the `HEADER_SEARCH_PATHS` and `FRAMEWORK_SEARCH_PATHS` extracted using `xcodebuild` with the `-showBuildSettings` flag.
