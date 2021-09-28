@@ -16,7 +16,7 @@ if [[ -z $dsym_input ]]; then
   exit 0
 fi
 
-echo "Found ${#dsym_input[@]} DSYMS"
+echo "Found $dsym_input"
 
 rsync \
   --recursive --chmod=u+w --delete -i \
