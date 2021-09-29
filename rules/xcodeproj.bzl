@@ -864,7 +864,7 @@ def _xcodeproj_impl(ctx):
 
     project = ctx.actions.declare_directory(paths.join(ctx.attr.output_path, project_name))
     destination_path = paths.normalize(paths.join(ctx.label.package, ctx.attr.output_path))
-    nesting = destination_path.count("/") + 1 if destination_path else 0
+    nesting = destination_path.count("/") + 1 if destination_path != "." else 0
     src_dot_dots = "/".join([".."] * (nesting + 3))
     script_dot_dots = "/".join([".."] * nesting)
 
