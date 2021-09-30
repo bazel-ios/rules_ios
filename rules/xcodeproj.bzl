@@ -701,9 +701,12 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
         target_settings["SWIFT_ACTIVE_COMPILATION_CONDITIONS"] = " ".join(
             ["\"%s\"" % d for d in defines_without_equal_sign],
         )
-        target_settings["BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS"] = " ".join(
-            ["-D%s" % d for d in target_info.cc_defines.to_list()],
-        )
+        extra_clang_flags = ["-D%s" % d for d in target_info.cc_defines.to_list()]
+
+        if virtualize_frameworks:
+            extra_clang_flags += ["-Xcc %s" % d for d in _objc_copts_for_target(target_name, all_transitive_targets)]
+
+        target_settings["BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS"] = " ".join(extra_clang_flags)
 
         target_settings["BAZEL_LLDB_INIT_FILE"] = lldbinit_file
 
