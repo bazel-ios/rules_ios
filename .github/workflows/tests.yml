@@ -45,3 +45,12 @@ jobs:
         run: sudo xcode-select -s /Applications/Xcode_12.2.app
       - name: Run tests
         run: ./tests/xcodeproj-tests.sh --clean
+  multi_arch_support:
+    name: Build iOS App for Multiple Architecture
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Select Xcode 12.2
+        run: sudo xcode-select -s /Applications/Xcode_12.2.app
+      - name: Build App
+        run: bazelisk build -s tests/ios/app/App --apple_platform_type=ios --ios_minimum_os=10.2  --ios_multi_cpus=i386,x86_64

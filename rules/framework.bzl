@@ -146,9 +146,9 @@ def _concat(*args):
             arr += x
     return arr
 
-def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields):
+def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields, deps, transitive_deps, vfs):
     import_vfsoverlays = []
-    for dep in ctx.attr.vfs:
+    for dep in vfs:
         if not VFSOverlayInfo in dep:
             continue
         import_vfsoverlays.append(dep[VFSOverlayInfo].vfs_info)
@@ -158,7 +158,7 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
 
     # We need to map all the deps here - for both swift headers and others
     fw_dep_vfsoverlays = []
-    for dep in ctx.attr.transitive_deps + ctx.attr.deps:
+    for dep in transitive_deps + deps:
         if not FrameworkInfo in dep:
             continue
         framework_info = dep[FrameworkInfo]
@@ -203,7 +203,7 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
         swiftdoc = outputs.swiftdoc,
     )
 
-def _get_framework_files(ctx):
+def _get_framework_files(ctx, deps):
     framework_name = ctx.attr.framework_name
     bundle_extension = ctx.attr.bundle_extension
 
@@ -241,7 +241,7 @@ def _get_framework_files(ctx):
     bundle_id = ctx.attr.bundle_id
 
     # collect files
-    for dep in ctx.attr.deps:
+    for dep in deps:
         files = dep.files.to_list()
         for file in files:
             if file.is_source:
@@ -427,12 +427,12 @@ def _copy_swiftmodule(ctx, framework_files):
         swift_common.create_module(name = swiftmodule_name, swift = swift_module),
     ]
 
-def _get_merged_objc_provider(ctx):
+def _get_merged_objc_provider(ctx, deps, transitive_deps):
     # Gather objc provider fields
     # Eventually we need to remove any reference to objc provider
     # and use CcInfo instead, see this issue for more details: https://github.com/bazelbuild/bazel/issues/10674
     objc_provider_fields = {
-        "providers": [dep[apple_common.Objc] for dep in ctx.attr.transitive_deps],
+        "providers": [dep[apple_common.Objc] for dep in transitive_deps],
     }
 
     for key in [
@@ -451,15 +451,15 @@ def _get_merged_objc_provider(ctx):
     ]:
         set = depset(
             direct = [],
-            transitive = [getattr(dep[apple_common.Objc], key) for dep in ctx.attr.deps],
+            transitive = [getattr(dep[apple_common.Objc], key) for dep in deps],
         )
         _add_to_dict_if_present(objc_provider_fields, key, set)
 
     return apple_common.new_objc_provider(**objc_provider_fields)
 
-def _get_merged_swift_info(ctx, framework_files):
+def _get_merged_swift_info(ctx, framework_files, transitive_deps):
     swift_info_fields = {
-        "swift_infos": [dep[SwiftInfo] for dep in ctx.attr.transitive_deps if SwiftInfo in dep],
+        "swift_infos": [dep[SwiftInfo] for dep in transitive_deps if SwiftInfo in dep],
     }
     if framework_files.outputs.swiftmodule:
         swift_info_fields["modules"] = _copy_swiftmodule(ctx, framework_files)
@@ -512,8 +512,28 @@ def _merge_root_infoplists(ctx):
 
     return output_plist
 
+def _attrs_for_split_slice(attrs_by_split_slices, split_slice_key):
+    if len(attrs_by_split_slices.keys()) == 0:
+        return []
+    elif len(attrs_by_split_slices.keys()) == 1:
+        return attrs_by_split_slices.values()[0]
+    else:
+        return attrs_by_split_slices[split_slice_key]
+
 def _apple_framework_packaging_impl(ctx):
-    framework_files = _get_framework_files(ctx)
+    # The current build architecture
+    arch = ctx.fragments.apple.single_arch_cpu
+
+    # The current Apple platform type, such as iOS, macOS, tvOS, or watchOS
+    platform = str(ctx.fragments.apple.single_arch_platform.platform_type)
+
+    # When building with multiple architectures (e.g., --ios_multi_cpus=x86_64,arm64), we should only pick the slice for the current configuration.
+    split_slice_key = "{}_{}".format(platform, arch)
+    deps = _attrs_for_split_slice(ctx.split_attr.deps, split_slice_key)
+    transitive_deps = _attrs_for_split_slice(ctx.split_attr.transitive_deps, split_slice_key)
+    vfs = _attrs_for_split_slice(ctx.split_attr.vfs, split_slice_key)
+
+    framework_files = _get_framework_files(ctx, deps)
     outputs = framework_files.outputs
     inputs = framework_files.inputs
 
@@ -525,13 +545,13 @@ def _apple_framework_packaging_impl(ctx):
 
     _add_to_dict_if_present(compilation_context_fields, "defines", depset(
         direct = [],
-        transitive = [getattr(dep[CcInfo].compilation_context, "defines") for dep in ctx.attr.deps if CcInfo in dep],
+        transitive = [getattr(dep[CcInfo].compilation_context, "defines") for dep in deps if CcInfo in dep],
     ))
 
     # Compute cc_info and swift_info
     virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
     if virtualize_frameworks:
-        framework_info = _get_virtual_framework_info(ctx, framework_files, compilation_context_fields)
+        framework_info = _get_virtual_framework_info(ctx, framework_files, compilation_context_fields, deps, transitive_deps, vfs)
     else:
         framework_info = FrameworkInfo(
             headers = outputs.headers,
@@ -553,10 +573,10 @@ def _apple_framework_packaging_impl(ctx):
     if virtualize_frameworks:
         cc_info = cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider])
     else:
-        dep_cc_infos = [dep[CcInfo] for dep in ctx.attr.transitive_deps if CcInfo in dep]
+        dep_cc_infos = [dep[CcInfo] for dep in transitive_deps if CcInfo in dep]
         cc_info = cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider], cc_infos = dep_cc_infos)
 
-    swift_info = _get_merged_swift_info(ctx, framework_files)
+    swift_info = _get_merged_swift_info(ctx, framework_files, transitive_deps)
 
     # Build out the default info provider
     out_files = []
@@ -573,7 +593,7 @@ def _apple_framework_packaging_impl(ctx):
     current_apple_platform = transition_support.current_apple_platform(ctx.fragments.apple, ctx.attr._xcode_config)
     return [
         framework_info,
-        _get_merged_objc_provider(ctx),
+        _get_merged_objc_provider(ctx, deps, transitive_deps),
         cc_info,
         swift_info,
         default_info,
@@ -621,6 +641,7 @@ apple_framework_packaging = rule(
         ),
         "transitive_deps": attr.label_list(
             mandatory = True,
+            cfg = apple_common.multi_arch_split,
             doc =
                 """Deps of the deps
 """,
