@@ -15,13 +15,17 @@ def _current_apple_platform(apple_fragment, xcode_config):
 
 def _cpu_string(platform_type, settings):
     """Generates a <platform>_<arch> string for the current target based on the given parameters."""
+
+    # If the cpu value has already been transformed to the correct value, we must not change it anymore.
+    # Otherwise, we may build for the wrong arch.
+    cpu_value = settings["//command_line_option:cpu"]
+    if (platform_type == "macos" and cpu_value.startswith("{}_".format(platform_type))) or cpu_value.startswith("{}_".format(platform_type)):
+        return cpu_value
+
     if platform_type == "ios":
         ios_cpus = settings["//command_line_option:ios_multi_cpus"]
         if ios_cpus:
             return "ios_{}".format(ios_cpus[0])
-        cpu_value = settings["//command_line_option:cpu"]
-        if cpu_value.startswith("ios_"):
-            return cpu_value
         return "ios_x86_64"
     if platform_type == "macos":
         macos_cpus = settings["//command_line_option:macos_cpus"]
