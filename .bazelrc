@@ -32,8 +32,3 @@ build --features swift.index_while_building
 
 # Prevents leaking unexpected binaries via PATH to tests
 build --test_env=PATH=/usr/bin:/bin:/usr/sbin:/sbin
-
-build --features apple.virtualize_frameworks
-build --objc_use_dotd_pruning=false
-build --features=swift.cacheable_swiftmodules
-build --features=swift.use_global_module_cache
