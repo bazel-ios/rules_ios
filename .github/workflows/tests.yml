@@ -24,6 +24,24 @@ jobs:
         with:
           name: bazel-testlogs
           path: bazel-testlogs
+  build_virtual_frameworks:
+    # Build the entire tree with this feature enabled. Longer term, we'll likely
+    # consider merging this feature into the default behavior and can re-align
+    # the CI job
+    name: Build ( Virutal Frameworks )
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Select Xcode 12.2
+        run: sudo xcode-select -s /Applications/Xcode_12.2.app
+      - name: Build and Test
+        run: |
+          bazelisk build //... --features apple.virtualize_frameworks
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: bazel-testlogs
+          path: bazel-testlogs
   buildifier:
     name: Check Starlark and Docs
     runs-on: macos-latest

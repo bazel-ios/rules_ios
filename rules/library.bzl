@@ -669,34 +669,32 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                 **kwargs
             )
 
-    if enable_framework_vfs:
-        framework_vfs_overlay(
-            name = framework_vfs_overlay_name_swift,
-            framework_name = module_name,
-            modulemap = module_map,
-            has_swift = len(swift_sources) > 0,
-            private_hdrs = objc_private_hdrs,
-            hdrs = objc_hdrs,
-            tags = _MANUAL,
-            deps = deps + private_deps + lib_names + import_vfsoverlays,
-        )
-        private_deps.append(framework_vfs_overlay_name_swift)
+    framework_vfs_overlay(
+        name = framework_vfs_overlay_name_swift,
+        framework_name = module_name,
+        modulemap = module_map,
+        has_swift = len(swift_sources) > 0,
+        private_hdrs = objc_private_hdrs,
+        hdrs = objc_hdrs,
+        tags = _MANUAL,
+        deps = deps + private_deps + lib_names + import_vfsoverlays,
+    )
 
-        additional_objc_copts += [
-            "-ivfsoverlay$(execpath :{})".format(framework_vfs_overlay_name),
-            "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
-        ]
-        additional_swift_copts += [
-            "-Xfrontend",
-            "-vfsoverlay$(execpath :{})".format(framework_vfs_overlay_name_swift),
-            "-Xfrontend",
-            "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
-            "-I{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
-            "-Xcc",
-            "-ivfsoverlay$(execpath :{})".format(framework_vfs_overlay_name_swift),
-            "-Xcc",
-            "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
-        ]
+    framework_vfs_objc_copts = [
+        "-ivfsoverlay$(execpath :{})".format(framework_vfs_overlay_name),
+        "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
+    ]
+    framework_vfs_swift_copts = [
+        "-Xfrontend",
+        "-vfsoverlay$(execpath :{})".format(framework_vfs_overlay_name_swift),
+        "-Xfrontend",
+        "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
+        "-I{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
+        "-Xcc",
+        "-ivfsoverlay$(execpath :{})".format(framework_vfs_overlay_name_swift),
+        "-Xcc",
+        "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
+    ]
 
     ## BEGIN HMAP
 
@@ -806,19 +804,18 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             )
             module_map = "%s.extended.modulemap" % name
 
-    if enable_framework_vfs:
-        # Note: this needs to go here, in order to virtualize the extended module
-        framework_vfs_overlay(
-            name = framework_vfs_overlay_name,
-            framework_name = module_name,
-            has_swift = len(swift_sources) > 0,
-            modulemap = module_map,
-            private_hdrs = objc_private_hdrs,
-            hdrs = objc_hdrs,
-            tags = _MANUAL,
-            deps = deps + private_deps + lib_names + import_vfsoverlays,
-        )
-        private_deps.append(framework_vfs_overlay_name)
+    # Note: this needs to go here, in order to virtualize the extended module
+    framework_vfs_overlay(
+        name = framework_vfs_overlay_name,
+        framework_name = module_name,
+        has_swift = len(swift_sources) > 0,
+        modulemap = module_map,
+        private_hdrs = objc_private_hdrs,
+        hdrs = objc_hdrs,
+        tags = _MANUAL,
+        deps = deps + private_deps + lib_names + import_vfsoverlays,
+        #enable_framework_vfs = enable_framework_vfs
+    )
 
     if swift_sources:
         swift_library(
@@ -827,12 +824,18 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             generated_header_name = generated_swift_header_name,
             generates_header = True,
             srcs = swift_sources,
-            copts = copts_by_build_setting.swift_copts + swift_copts + additional_swift_copts,
-            deps = deps + private_deps + lib_names,
+            # Note: by default it used a vfs but not the entire virtual framwork
+            # feature.
+            copts = select({
+                "@build_bazel_rules_ios//:virtualize_frameworks": framework_vfs_swift_copts,
+                "//conditions:default": framework_vfs_swift_copts if enable_framework_vfs else [],
+            }) + copts_by_build_setting.swift_copts + swift_copts + additional_swift_copts,
+            deps = deps + private_deps + lib_names + select({
+                "@build_bazel_rules_ios//:virtualize_frameworks": [framework_vfs_overlay_name_swift],
+                "//conditions:default": [framework_vfs_overlay_name_swift] if enable_framework_vfs else [],
+            }),
             swiftc_inputs = swiftc_inputs,
             features = ["swift.no_generated_module_map"] + select({
-                # rules_swift propagates swiftmodules to includes when they exist as a
-                # dep.
                 "@build_bazel_rules_ios//:virtualize_frameworks": ["swift.vfsoverlay"],
                 "//conditions:default": [],
             }),
@@ -899,13 +902,31 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         ],
     })
 
+    # FIXME: if the user has specifcied an imported framework, then we want to
+    # use that as the source of truth. Consider matching on the name or
+    # ensuring the VFS compute logic takes care of that. Mainly, VFS generated
+    # must match the framework on disk, instead of putting "private_headers"
+    # into the VFS.  Further testing should be done around private headers as
+    # well.
+    additional_objc_vfs_deps = []
+    additional_objc_vfs_copts = []
+    if len(import_vfsoverlays) == 0:
+        additional_objc_vfs_deps = select({
+            "@build_bazel_rules_ios//:virtualize_frameworks": [framework_vfs_overlay_name_swift] + [framework_vfs_overlay_name],
+            "//conditions:default": [framework_vfs_overlay_name_swift] + [framework_vfs_overlay_name] if enable_framework_vfs else [],
+        })
+        additional_objc_vfs_copts = select({
+            "@build_bazel_rules_ios//:virtualize_frameworks": framework_vfs_objc_copts,
+            "//conditions:default": framework_vfs_objc_copts if enable_framework_vfs else [],
+        })
+
     objc_library(
         name = objc_libname,
         srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,
         non_arc_srcs = objc_non_arc_sources,
         hdrs = objc_hdrs,
-        copts = copts_by_build_setting.objc_copts + objc_copts + additional_objc_copts + index_while_building_objc_copts,
-        deps = deps + private_deps + lib_names,
+        copts = copts_by_build_setting.objc_copts + objc_copts + additional_objc_copts + additional_objc_vfs_copts + index_while_building_objc_copts,
+        deps = deps + private_deps + lib_names + additional_objc_vfs_deps,
         module_map = module_map,
         sdk_dylibs = sdk_dylibs,
         sdk_frameworks = sdk_frameworks,
