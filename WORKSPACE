@@ -89,3 +89,10 @@ load(
 )
 
 load_external_test_dependency()
+
+load(
+    "//tests/ios/unit-test/test-imports-app:external_dependency.bzl",
+    "load_framework_dependencies",
+)
+
+load_framework_dependencies()

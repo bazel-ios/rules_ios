@@ -1,5 +1,7 @@
 import Foundation
 import SomeFramework
+import TensorFlowLiteC
+import TensorFlowLiteCCoreML
 
 @objc public class EmptyClass: NSObject {
 

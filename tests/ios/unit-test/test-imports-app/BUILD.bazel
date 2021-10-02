@@ -35,6 +35,8 @@ ios_application(
     visibility = ["//visibility:public"],
     deps = [
         ":SomeFramework",
+        "@TensorFlowLiteC",
+        "@TensorFlowLiteC//:TensorFlowLiteCCoreML",
     ],
 )
 
@@ -51,7 +53,10 @@ apple_framework_packaging(
         "manual",
         "xcodeproj-ignore-as-target",
     ],
-    transitive_deps = [],
+    transitive_deps = [
+        "@TensorFlowLiteC//:TensorFlowLiteC",
+        "@TensorFlowLiteC//:TensorFlowLiteCCoreML",
+    ],
     visibility = ["//visibility:public"],
     deps = [
         ":TestImports-App_objc",
