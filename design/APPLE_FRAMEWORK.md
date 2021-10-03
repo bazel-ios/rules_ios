@@ -52,7 +52,6 @@ apple_framework(
     # The Right Thing(tm)
     runtime_deps = [],
     sdk_dylibs = [],
-    sdk_dylibs = [],
     sdk_frameworks = [],
     sdk_includes = [],
     weak_sdk_frameworks = [],
