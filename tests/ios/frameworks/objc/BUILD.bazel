@@ -4,9 +4,9 @@ load("//rules:test.bzl", "ios_unit_test")
 apple_framework(
     name = "ObjcFramework",
     srcs = [
+        "DummyAssembly.S",
         "HeaderA.h",
         "main.m",
-        "DummyAssembly.S",
     ],
     platforms = {"ios": "10.0"},
     visibility = ["//visibility:public"],
