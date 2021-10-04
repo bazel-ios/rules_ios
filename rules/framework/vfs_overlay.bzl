@@ -28,7 +28,13 @@ def _get_external_contents(prefix, path_str):
     return prefix + path_str
 
 def _get_vfs_parent(ctx):
-    return (ctx.bin_dir.path + "/" + ctx.build_file_path)
+    root_path = ctx.bin_dir.path + "/"
+
+    # For an external package, the BUILD file will be rooted relative to the
+    # workspace_root, account for this
+    if len(ctx.label.workspace_root):
+        root_path += ctx.label.workspace_root + "/"
+    return root_path + ctx.build_file_path
 
 def _find_top_swiftmodule_file(swiftmodules):
     for file in swiftmodules:
