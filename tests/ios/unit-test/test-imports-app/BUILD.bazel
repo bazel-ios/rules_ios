@@ -77,9 +77,11 @@ ios_unit_test(
     deps = [
         ":TestImports-App_framework_unlinked",
     ] + select({
-        # Note: without using apple_framework, it won't set enable_framework_vfs
-        # imported it won't actually be seen
-        "@build_bazel_rules_ios//:virtualize_frameworks": [":SomeFramework"],
+        # It isn't seeing the `deps` attribute when using
+        # apple_framework_packaging directly
+        "@build_bazel_rules_ios//:virtualize_frameworks": [
+            ":SomeFramework",
+        ],
         "//conditions:default": [],
     }),
 )
