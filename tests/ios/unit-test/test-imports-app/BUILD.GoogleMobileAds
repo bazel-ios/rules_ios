@@ -33,4 +33,5 @@ apple_static_framework_import(
         "libsqlite3",
         "libz"
     ],
+    visibility = ["//visibility:public"],
 )
