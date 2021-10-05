@@ -210,9 +210,6 @@ def _make_root(vfs_parent, bin_dir_path, build_file_path, framework_name, swiftm
         contents = _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix)
         if contents:
             roots.append(contents)
-    elif has_swift:
-        roots.append(_assumed_vfs_swift_module_contents(bin_dir_path, build_file_path, vfs_prefix, framework_name))
-
     return roots
 
 def _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix):
@@ -228,23 +225,6 @@ def _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix):
         "type": "file",
         "name": swiftmodule_file.basename,
         "external-contents": _get_external_contents(vfs_prefix, swiftmodule_file.path),
-    }
-
-def _assumed_vfs_swift_module_contents(bin_dir_path, build_file_path, vfs_prefix, framework_name):
-    # Forumlate the framework's swiftmodule - don't have the swiftmodule when
-    # creating with apple_library. Consider removing that codepath to make this
-    # and other situations easier
-    base_path = "/".join(build_file_path.split("/")[:-1])
-    rooted_path = bin_dir_path + "/" + base_path
-
-    # Note: Swift translates the input framework name to this because - is an
-    # invalid character in module name
-    name = framework_name.replace("-", "_") + ".swiftmodule"
-    external_contents = rooted_path + "/" + name
-    return {
-        "type": "file",
-        "name": name,
-        "external-contents": _get_external_contents(vfs_prefix, external_contents),
     }
 
 def _framework_vfs_overlay_impl(ctx):
