@@ -7,7 +7,7 @@ load(
 )
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleFrameworkImportInfo")
 load("@build_bazel_rules_swift//swift/internal:providers.bzl", "SwiftUsageInfo")
-load("//rules/framework:vfs_overlay.bzl", "VFSOverlayInfo", "make_vfsoverlay")
+load("//rules/framework:vfs_overlay.bzl", "make_vfsoverlay")
 load("//rules:providers.bzl", "FrameworkInfo")
 load("//rules:features.bzl", "feature_names")
 
