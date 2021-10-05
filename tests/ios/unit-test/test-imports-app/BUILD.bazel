@@ -81,16 +81,6 @@ ios_unit_test(
     visibility = ["//visibility:public"],
     deps = [
         ":TestImports-App_framework_unlinked",
-<<<<<<< HEAD
-    ] + select({
-        # Note: without using apple_framework, it won't set enable_framework_vfs
-        # imported it won't actually be seen
-        "@build_bazel_rules_ios//:virtualize_frameworks": [":SomeFramework"],
-        "//conditions:default": [],
-    }),
-||||||| parent of 791d5ee (Supply FrameworkInfo from ad-hoc framework imports)
-    ],
-=======
     ] + select({
         # Note: without using apple_framework, it won't set enable_framework_vfs
         # imported it won't actually be seen
@@ -99,5 +89,4 @@ ios_unit_test(
         ],
         "//conditions:default": [],
     }),
->>>>>>> 791d5ee (Supply FrameworkInfo from ad-hoc framework imports)
 )

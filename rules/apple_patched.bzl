@@ -9,6 +9,7 @@ load("@build_bazel_rules_apple//apple:providers.bzl", "AppleFrameworkImportInfo"
 load("@build_bazel_rules_swift//swift/internal:providers.bzl", "SwiftUsageInfo")
 load("//rules/framework:vfs_overlay.bzl", "VFSOverlayInfo", "make_vfsoverlay")
 load("//rules:providers.bzl", "FrameworkInfo")
+load("//rules:features.bzl", "feature_names")
 
 def apple_dynamic_framework_import(name, **kwargs):
     """Patches an apple_dynamic_framework_import target based on the problems reported in https://github.com/bazel-ios/rules_ios/issues/55
@@ -119,12 +120,15 @@ def _apple_framework_import_modulemap_impl(ctx):
         swiftdoc = [],
     )
 
+    virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
+    additional_providers = [framework_info] if virtualize_frameworks else []
+
     # Seems that there is no way to iterate on the existing providers, so what is possible instead
     # is to list here the keys to all of them (you can see the keys for the existing providers of a
     # target by just printing the target)
     # For more information refer to https://groups.google.com/forum/#!topic/bazel-discuss/4KkflTjmUyk
     other_provider_keys = [AppleFrameworkImportInfo, SwiftUsageInfo, apple_common.AppleDynamicFramework, OutputGroupInfo, DefaultInfo]
-    return [framework_info, new_objc_provider, new_cc_info] + \
+    return additional_providers + [new_objc_provider, new_cc_info] + \
            [legacy_target[provider_key] for provider_key in other_provider_keys if provider_key in legacy_target]
 
 _apple_framework_import_modulemap = rule(
