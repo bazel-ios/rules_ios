@@ -57,14 +57,14 @@ def apple_static_framework_import(name, **kwargs):
         tags = tags,
     )
 
-def _find_imported_framework_name(outputs):
+def _find_imported_framework_name(outputs, fallback_name):
     for output in outputs:
         if not ".framework" in output:
             continue
         prefix = output.split(".framework/")[0]
         fw_name = prefix.split("/")[-1]
         return fw_name
-    return None
+    return fallback_name
 
 def _apple_framework_import_modulemap_impl(ctx):
     legacy_target = ctx.attr.legacy_target
@@ -96,7 +96,7 @@ def _apple_framework_import_modulemap_impl(ctx):
     hdrs_list = old_cc_info.compilation_context.headers.to_list()
     hdrs = [h.path for h in hdrs_list]
 
-    imported_framework_name = _find_imported_framework_name(hdrs)
+    imported_framework_name = _find_imported_framework_name(hdrs, ctx.attr.name)
     vfs = make_vfsoverlay(
         ctx,
         hdrs = hdrs_list,
