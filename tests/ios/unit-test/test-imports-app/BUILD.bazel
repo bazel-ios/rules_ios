@@ -35,7 +35,7 @@ ios_application(
     visibility = ["//visibility:public"],
     deps = [
         ":SomeFramework",
-        "@GoogleMobileAdsSDK",
+        "@GoogleMobileAdsSDK//:GoogleMobileAds",
         "@TensorFlowLiteC",
         "@TensorFlowLiteC//:TensorFlowLiteCCoreML",
     ],
@@ -57,7 +57,7 @@ apple_framework_packaging(
     transitive_deps = [
         "@TensorFlowLiteC//:TensorFlowLiteC",
         "@TensorFlowLiteC//:TensorFlowLiteCCoreML",
-        "@GoogleMobileAdsSDK//:GoogleMobileAdsSDK",
+        "@GoogleMobileAdsSDK//:GoogleMobileAds",
     ],
     visibility = ["//visibility:public"],
     deps = [
