@@ -426,7 +426,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                 objc_private_hdrs.append(f)
             else:
                 objc_hdrs.append(f)
-        elif f.endswith((".m", ".mm", ".c")):
+        elif f.endswith((".m", ".mm", ".c", ".s", ".S")):
             objc_sources.append(f)
         elif f.endswith((".swift")):
             swift_sources.append(f)

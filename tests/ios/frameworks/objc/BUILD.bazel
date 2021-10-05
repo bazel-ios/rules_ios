@@ -4,6 +4,7 @@ load("//rules:test.bzl", "ios_unit_test")
 apple_framework(
     name = "ObjcFramework",
     srcs = [
+        "DummyAssembly.S",
         "HeaderA.h",
         "main.m",
     ],

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0885BB7826170B11D31035F7 /* DummyAssembly.S in Sources */ = {isa = PBXBuildFile; fileRef = D6DF3200A22C76322C4A8B04 /* DummyAssembly.S */; };
 		523A35A873BDD558AB2EA0CF /* FooFrameworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 091655034CF618D208C22AE8 /* FooFrameworkTests.m */; };
 		5C8EED4DAAF3B4B069337569 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7A2F537C999952921627A8 /* main.m */; };
 		A69ED002F8D1E4FBF129570E /* FooFrameworkTesting.m in Sources */ = {isa = PBXBuildFile; fileRef = D7D26FCF8D7CCD3C802C6987 /* FooFrameworkTesting.m */; };
@@ -22,6 +23,7 @@
 		AD7402651F16555F753997F4 /* HeaderA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HeaderA.h; sourceTree = "<group>"; };
 		BD4894AC90711E6A55CB1657 /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.pch; sourceTree = "<group>"; };
 		CF7A2F537C999952921627A8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		D6DF3200A22C76322C4A8B04 /* DummyAssembly.S */ = {isa = PBXFileReference; path = DummyAssembly.S; sourceTree = "<group>"; };
 		D7D26FCF8D7CCD3C802C6987 /* FooFrameworkTesting.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FooFrameworkTesting.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -30,6 +32,7 @@
 			isa = PBXGroup;
 			children = (
 				11B98E6654D00F1E74B2DA47 /* BUILD.bazel */,
+				D6DF3200A22C76322C4A8B04 /* DummyAssembly.S */,
 				AD7402651F16555F753997F4 /* HeaderA.h */,
 				CF7A2F537C999952921627A8 /* main.m */,
 				7CF4F5ED68FE1E9E6486ED55 /* testing */,
@@ -266,6 +269,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0885BB7826170B11D31035F7 /* DummyAssembly.S in Sources */,
 				5C8EED4DAAF3B4B069337569 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
