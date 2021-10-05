@@ -7,6 +7,8 @@ load(
 )
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleFrameworkImportInfo")
 load("@build_bazel_rules_swift//swift/internal:providers.bzl", "SwiftUsageInfo")
+load("//rules/framework:vfs_overlay.bzl", "VFSOverlayInfo", "make_vfsoverlay")
+load("//rules:providers.bzl", "FrameworkInfo")
 
 def apple_dynamic_framework_import(name, **kwargs):
     """Patches an apple_dynamic_framework_import target based on the problems reported in https://github.com/bazel-ios/rules_ios/issues/55
@@ -54,6 +56,15 @@ def apple_static_framework_import(name, **kwargs):
         tags = tags,
     )
 
+def _find_imported_framework_name(outputs):
+    for output in outputs:
+        if not ".framework" in output:
+            continue
+        prefix = output.split(".framework/")[0]
+        fw_name = prefix.split("/")[-1]
+        return fw_name
+    return None
+
 def _apple_framework_import_modulemap_impl(ctx):
     legacy_target = ctx.attr.legacy_target
     old_objc_provider = legacy_target[apple_common.Objc]
@@ -80,12 +91,40 @@ def _apple_framework_import_modulemap_impl(ctx):
         ],
     )
 
+    modulemap_list = old_objc_provider.module_map.to_list()
+    hdrs_list = old_cc_info.compilation_context.headers.to_list()
+    hdrs = [h.path for h in hdrs_list]
+
+    imported_framework_name = _find_imported_framework_name(hdrs)
+    vfs = make_vfsoverlay(
+        ctx,
+        hdrs = hdrs_list,
+        module_map = modulemap_list,
+        # Consider aligning this code with the way that frameworks are
+        # imported from rules/library.bzl. There are effectivly 2 different ways
+        # that frameworks are being imported.  Otherwise, a test case for
+        # swiftmodules ensuring it extracts from the provider. The swiftmodules
+        # for this case should be loaded into the VFS
+        swiftmodules = [],
+        private_hdrs = [],
+        has_swift = False,
+        framework_name = imported_framework_name,
+    )
+    framework_info = FrameworkInfo(
+        vfsoverlay_infos = [vfs.vfs_info],
+        headers = hdrs_list,
+        private_headers = [],
+        modulemap = modulemap_list,
+        swiftmodule = [],
+        swiftdoc = [],
+    )
+
     # Seems that there is no way to iterate on the existing providers, so what is possible instead
     # is to list here the keys to all of them (you can see the keys for the existing providers of a
     # target by just printing the target)
     # For more information refer to https://groups.google.com/forum/#!topic/bazel-discuss/4KkflTjmUyk
     other_provider_keys = [AppleFrameworkImportInfo, SwiftUsageInfo, apple_common.AppleDynamicFramework, OutputGroupInfo, DefaultInfo]
-    return [new_objc_provider, new_cc_info] + \
+    return [framework_info, new_objc_provider, new_cc_info] + \
            [legacy_target[provider_key] for provider_key in other_provider_keys if provider_key in legacy_target]
 
 _apple_framework_import_modulemap = rule(
