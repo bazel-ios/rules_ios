@@ -28,7 +28,7 @@ jobs:
     # Build the entire tree with this feature enabled. Longer term, we'll likely
     # consider merging this feature into the default behavior and can re-align
     # the CI job
-    name: Build ( Virutal Frameworks )
+    name: Build ( Virtual Frameworks )
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
