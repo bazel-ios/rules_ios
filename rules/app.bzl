@@ -28,6 +28,7 @@ _IOS_APPLICATION_KWARGS = [
     "alternate_icons",
     "settings_bundle",
     "minimum_deployment_os_version",
+    "ipa_post_processor",
 ]
 
 def ios_application(name, apple_library = apple_library, infoplists_by_build_setting = {}, **kwargs):
