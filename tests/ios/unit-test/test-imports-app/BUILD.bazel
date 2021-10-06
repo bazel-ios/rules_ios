@@ -24,6 +24,7 @@ ios_application(
         "ipad",
         "iphone",
     ],
+    infoplists = [":Info.plist"],
     minimum_os_version = "12.0",
     module_name = "TestImports_App",
     resource_bundles = {"ResourceBundle": glob(
@@ -35,6 +36,7 @@ ios_application(
     visibility = ["//visibility:public"],
     deps = [
         ":SomeFramework",
+        "@GoogleMobileAdsSDK//:GoogleMobileAds",
         "@TensorFlowLiteC",
         "@TensorFlowLiteC//:TensorFlowLiteCCoreML",
     ],
@@ -56,6 +58,7 @@ apple_framework_packaging(
     transitive_deps = [
         "@TensorFlowLiteC//:TensorFlowLiteC",
         "@TensorFlowLiteC//:TensorFlowLiteCCoreML",
+        "@GoogleMobileAdsSDK//:GoogleMobileAds",
     ],
     visibility = ["//visibility:public"],
     deps = [

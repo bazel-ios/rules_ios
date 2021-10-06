@@ -8,3 +8,10 @@ def load_framework_dependencies():
         build_file = "@//tests/ios/unit-test/test-imports-app:BUILD.TensorFlowLiteC",
         strip_prefix = "TensorFlowLiteC-2.6.0",
     )
+
+    http_archive(
+        name = "GoogleMobileAdsSDK",
+        url = "https://dl.google.com/dl/cpdc/e0dda986a9f84d14/Google-Mobile-Ads-SDK-8.10.0.tar.gz",
+        sha256 = "0726df5d92165912c9e60a79504a159ad9b7231dda851abede8f8792b266dba5",
+        build_file = "@//tests/ios/unit-test/test-imports-app:BUILD.GoogleMobileAds",
+    )
