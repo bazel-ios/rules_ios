@@ -37,6 +37,7 @@ jobs:
       - name: Build and Test
         run: |
           bazelisk build //... --features apple.virtualize_frameworks
+          bazelisk test //... --features apple.virtualize_frameworks
       - uses: actions/upload-artifact@v2
         if: failure()
         with:

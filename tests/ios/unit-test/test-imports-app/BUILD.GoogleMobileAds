@@ -1,12 +1,18 @@
-
 load(
     "@build_bazel_rules_ios//rules:apple_patched.bzl",
-    "apple_static_framework_import"
+    "apple_static_framework_import",
 )
 
 apple_static_framework_import(
     name = "GoogleMobileAds",
-    framework_imports = glob(["Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator/GoogleMobileAds.framework/**"], allow_empty = False),
+    framework_imports = glob(
+        ["Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator/GoogleMobileAds.framework/**"],
+        allow_empty = False,
+    ),
+    sdk_dylibs = [
+        "libsqlite3",
+        "libz",
+    ],
     sdk_frameworks = [
         "AudioToolbox",
         "AVFoundation",
@@ -21,17 +27,13 @@ apple_static_framework_import(
         "QuartzCore",
         "Security",
         "StoreKit",
-        "SystemConfiguration"
+        "SystemConfiguration",
     ],
+    visibility = ["//visibility:public"],
     weak_sdk_frameworks = [
         "AdSupport",
         "JavaScriptCore",
         "SafariServices",
-        "WebKit"
+        "WebKit",
     ],
-    sdk_dylibs = [
-        "libsqlite3",
-        "libz"
-    ],
-    visibility = ["//visibility:public"],
 )
