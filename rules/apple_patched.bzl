@@ -95,6 +95,7 @@ def _get_framework_info_providers(ctx, old_cc_info, old_objc_provider):
         private_hdrs = [],
         has_swift = False,
         framework_name = imported_framework_name,
+        extra_search_paths = imported_framework_name,
     )
     framework_info = FrameworkInfo(
         vfsoverlay_infos = [vfs.vfs_info],

@@ -16,7 +16,9 @@ jobs:
         run: sudo xcode-select -s /Applications/Xcode_12.2.app
       - name: Build and Test
         run: |
+          # Host config
           bazelisk test --local_test_jobs=1 -- //... -//tests/ios/...
+
           # `deleted_packages` is needed below in order to override the value of the .bazelrc file
           bazelisk test --local_test_jobs=1 --apple_platform_type=ios --deleted_packages='' -- //tests/ios/...
       - uses: actions/upload-artifact@v2
@@ -28,7 +30,7 @@ jobs:
     # Build the entire tree with this feature enabled. Longer term, we'll likely
     # consider merging this feature into the default behavior and can re-align
     # the CI job
-    name: Build ( Virtual Frameworks )
+    name: Build and Test ( Virtual Frameworks )
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
@@ -36,7 +38,16 @@ jobs:
         run: sudo xcode-select -s /Applications/Xcode_12.2.app
       - name: Build and Test
         run: |
-          bazelisk build //... --features apple.virtualize_frameworks
+          # Host config
+          bazelisk test --features apple.virtualize_frameworks --local_test_jobs=1 -- //... -//tests/ios/...
+
+          # `deleted_packages` is needed below in order to override the value of the .bazelrc file
+          bazelisk test  --features apple.virtualize_frameworks \
+              --local_test_jobs=1 \
+              --apple_platform_type=ios \
+              --deleted_packages='' \
+              -- //tests/ios/... \
+              -//tests/ios/frameworks/sources-with-prebuilt-binaries/... # Needs more work for pre-built binaries
       - uses: actions/upload-artifact@v2
         if: failure()
         with:

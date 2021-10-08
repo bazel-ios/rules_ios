@@ -159,21 +159,16 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
     # We need to map all the deps here - for both swift headers and others
     fw_dep_vfsoverlays = []
     for dep in transitive_deps + deps:
-        if not FrameworkInfo in dep:
-            continue
-        framework_info = dep[FrameworkInfo]
-        fw_dep_vfsoverlays.extend(framework_info.vfsoverlay_infos)
-        framework_headers = depset(framework_info.headers + framework_info.modulemap + framework_info.private_headers)
-        propagated_interface_headers.append(framework_headers)
-
-        # Collect generated headers. consider exposing all required generated
-        # headers in respective providers: -Swift, modulemap, -umbrella.h
-        if not CcInfo in dep:
-            continue
-        for h in dep[CcInfo].compilation_context.headers.to_list():
-            if h.is_source:
-                continue
-            propagated_interface_headers.append(depset([h]))
+        # Collect transitive headers. For now, this needs to include all of the
+        # transitive headers
+        if CcInfo in dep:
+            compilation_context = dep[CcInfo].compilation_context
+            propagated_interface_headers.append(compilation_context.headers)
+        if FrameworkInfo in dep:
+            framework_info = dep[FrameworkInfo]
+            fw_dep_vfsoverlays.extend(framework_info.vfsoverlay_infos)
+            framework_headers = depset(framework_info.headers + framework_info.modulemap + framework_info.private_headers)
+            propagated_interface_headers.append(framework_headers)
 
     outputs = framework_files.outputs
     vfs = make_vfsoverlay(

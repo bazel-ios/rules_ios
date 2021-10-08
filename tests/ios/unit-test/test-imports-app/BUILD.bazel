@@ -1,6 +1,7 @@
 load("//rules:app.bzl", "ios_application")
 load("//rules:framework.bzl", "apple_framework", "apple_framework_packaging")
 load("//rules:test.bzl", "ios_unit_test")
+load(":analysis-tests.bzl", "make_tests")
 
 apple_framework(
     name = "SomeFramework",
@@ -9,6 +10,7 @@ apple_framework(
         "ios": "12.0",
     },
     visibility = ["//visibility:public"],
+    deps = ["//tests/ios/unit-test/test-imports-app/frameworks/Basic"],
 )
 
 ios_application(
@@ -93,3 +95,5 @@ ios_unit_test(
         "//conditions:default": [],
     }),
 )
+
+make_tests()

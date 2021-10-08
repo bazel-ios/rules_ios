@@ -1,0 +1,4 @@
+framework module NestedHeaders {
+    header "NestedHeaders.h"
+    export *
+}
