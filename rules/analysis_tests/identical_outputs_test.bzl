@@ -22,7 +22,7 @@ def _identical_outputs_test_impl(ctx):
         for input in dep[_TestFiles].files.to_list():
             all_files.append(input.root.path)
 
-    # Expect that we have recieved multiple swiftmodules
+    # Expect that we have received multiple swiftmodules
     asserts.true(env, len(all_files) > 1)
 
     # Assert all swiftmodules have identical outputs ( and most importantly an
