@@ -1,5 +1,4 @@
 load("@bazel_skylib//lib:unittest.bzl", "analysistest", "asserts")
-load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo", "swift_common")
 
 def _transitive_header_test_impl(ctx):
     env = analysistest.begin(ctx)

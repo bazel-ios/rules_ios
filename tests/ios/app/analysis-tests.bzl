@@ -1,5 +1,4 @@
 load("//rules/analysis_tests:identical_outputs_test.bzl", "identical_outputs_test")
-load("//rules/analysis_tests:transitive_header_test.bzl", "transitive_header_test")
 
 def make_tests():
     identical_outputs_test(

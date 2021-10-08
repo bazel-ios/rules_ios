@@ -13,7 +13,6 @@ load("//rules:providers.bzl", "FrameworkInfo")
 load("//rules/framework:vfs_overlay.bzl", "VFSOverlayInfo", "make_vfsoverlay")
 load("//rules:features.bzl", "feature_names")
 load("//rules:plists.bzl", "info_plists_by_setting")
-load("//rules:hmap.bzl", "HeaderMapInfo")
 
 _APPLE_FRAMEWORK_PACKAGING_KWARGS = [
     "visibility",
