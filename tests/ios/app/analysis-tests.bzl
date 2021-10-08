@@ -11,16 +11,9 @@ def make_tests():
         deps = [":AppWithSelectableCopts", ":SwiftLib"],
     )
 
-    transitive_header_test(
-        name = "test_SwiftCompilationHeaders",
-        target_under_test = ":AppWithSelectableCopts_objc",
-        deps = [":SwiftLib"],
-    )
-
     native.test_suite(
         name = "AnalysisTests",
         tests = [
             ":test_DependencyEquivilance",
-            ":test_SwiftCompilationHeaders",
         ],
     )

@@ -164,8 +164,8 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
         # transitive headers
         if not CcInfo in dep:
             continue
-        for h in dep[CcInfo].compilation_context.headers.to_list():
-            propagated_interface_headers.append(depset([h]))
+        compilation_context = dep[CcInfo].compilation_context
+        propagated_interface_headers.append(compilation_context.headers)
 
         if not FrameworkInfo in dep:
             continue

@@ -11,7 +11,12 @@ def _transitive_header_test_impl(ctx):
         dep_headers = dep[CcInfo].compilation_context.headers.to_list()
         for dep_header in dep_headers:
             # Assert that all of the dep headers are in the target
+            if not dep_header.extension == "h":
+                continue
+
             has_header = dep_header in target_headers
+            if not has_header:
+                print("Missing header", dep_header, target_headers)
             asserts.true(env, has_header)
     return analysistest.end(env)
 
