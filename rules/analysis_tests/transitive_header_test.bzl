@@ -21,7 +21,7 @@ def _transitive_header_test_impl(ctx):
 
 # The headers test allows a user to assert that tests are propagated to actions
 # from arbitrary deps. Given a target_under_test, supply transitive deps or
-# virutally any file group.
+# virtually any file group.
 transitive_header_test = analysistest.make(
     _transitive_header_test_impl,
     expect_failure = False,
