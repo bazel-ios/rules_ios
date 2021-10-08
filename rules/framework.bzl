@@ -161,17 +161,14 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
     for dep in transitive_deps + deps:
         # Collect transitive headers. For now, this needs to include all of the
         # transitive headers
-        if not CcInfo in dep:
-            continue
-        compilation_context = dep[CcInfo].compilation_context
-        propagated_interface_headers.append(compilation_context.headers)
-
-        if not FrameworkInfo in dep:
-            continue
-        framework_info = dep[FrameworkInfo]
-        fw_dep_vfsoverlays.extend(framework_info.vfsoverlay_infos)
-        framework_headers = depset(framework_info.headers + framework_info.modulemap + framework_info.private_headers)
-        propagated_interface_headers.append(framework_headers)
+        if CcInfo in dep:
+            compilation_context = dep[CcInfo].compilation_context
+            propagated_interface_headers.append(compilation_context.headers)
+        if FrameworkInfo in dep:
+            framework_info = dep[FrameworkInfo]
+            fw_dep_vfsoverlays.extend(framework_info.vfsoverlay_infos)
+            framework_headers = depset(framework_info.headers + framework_info.modulemap + framework_info.private_headers)
+            propagated_interface_headers.append(framework_headers)
 
     outputs = framework_files.outputs
     vfs = make_vfsoverlay(
