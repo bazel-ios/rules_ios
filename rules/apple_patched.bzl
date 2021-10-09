@@ -126,21 +126,30 @@ def _apple_framework_import_modulemap_impl(ctx):
         "header": old_objc_provider.module_map,
     }
     new_objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
-    new_cc_info = cc_common.merge_cc_infos(
+    original_cc_info = CcInfo(compilation_context = cc_common.create_compilation_context(headers = depset(old_objc_provider.module_map)))
+    merged_cc_info = cc_common.merge_cc_infos(
         cc_infos = [
             old_cc_info,
-            CcInfo(compilation_context = cc_common.create_compilation_context(headers = depset(old_objc_provider.module_map))),
+            original_cc_info,
         ],
     )
 
     additional_providers = _get_framework_info_providers(ctx, old_cc_info, old_objc_provider)
+
+    virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
+    passed_cc_providers = [new_objc_provider]
+    if virtualize_frameworks:
+        # Pass original cc_info when virtual_frameworks is enabled, fixes #335
+        passed_cc_providers.append(original_cc_info)
+    else:
+        passed_cc_providers.append(merged_cc_info)
 
     # Seems that there is no way to iterate on the existing providers, so what is possible instead
     # is to list here the keys to all of them (you can see the keys for the existing providers of a
     # target by just printing the target)
     # For more information refer to https://groups.google.com/forum/#!topic/bazel-discuss/4KkflTjmUyk
     other_provider_keys = [AppleFrameworkImportInfo, SwiftUsageInfo, apple_common.AppleDynamicFramework, OutputGroupInfo, DefaultInfo]
-    return additional_providers + [new_objc_provider, new_cc_info] + \
+    return additional_providers + passed_cc_providers + \
            [legacy_target[provider_key] for provider_key in other_provider_keys if provider_key in legacy_target]
 
 _apple_framework_import_modulemap = rule(
