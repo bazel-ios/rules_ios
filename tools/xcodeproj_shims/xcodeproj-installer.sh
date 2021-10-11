@@ -6,8 +6,6 @@ readonly project_path="${PWD}/$(project_short_path)"
 readonly dest="${BUILD_WORKSPACE_DIRECTORY}/$(project_short_path)/"
 readonly tmp_dest=$(mktemp -d)/$(project_full_path)/
 
-readonly installer="$(installer_short_path)"
-
 rm -fr "${tmp_dest}"
 mkdir -p "$(dirname $tmp_dest)"
 cp -r "${project_path}" "$tmp_dest"
@@ -66,5 +64,26 @@ sed -i.bak -E -e 's|^([[:space:]]*path = )../../..;$|\1.;|g' "${tmp_dest}/projec
 sed -i.bak -E -e 's|([ "])../../../|\1|g' "${tmp_dest}/project.pbxproj"
 rm "${tmp_dest}/project.pbxproj.bak"
 
-mkdir -p "$(dirname "${dest}")"
-rsync --recursive --quiet --copy-links "${tmp_dest}" "${dest}"
+if [[ -d $dest ]]; then
+  # An existing xcodeproj exists. Only copy over the important bits to avoid Xcode prompting a reload.
+
+  # Copy over just the pbxproj
+  cp "${tmp_dest}/project.pbxproj" "${dest}"
+
+  # Copy rules_ios helpers
+  rsync --recursive --delete "${stubs_dir}" "${dest}"
+  rsync --recursive --delete  "${installers_dir}" "${dest}"
+
+  # Copy Xcode settings
+  cp "${tmp_dest}/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings" "${dest}/project.xcworkspace/xcshareddata"
+  cp "${tmp_dest}/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" "${dest}/project.xcworkspace/xcshareddata"
+
+  # Sync the xcschemes
+  mkdir -p "$dest/xcshareddata/xcschemes/"
+  rsync --recursive --delete "${tmp_dest}/xcshareddata/xcschemes" "${dest}/xcshareddata"
+else
+  # No existing project. Copy the entire .xcodeproj
+
+  mkdir -p "$(dirname "${dest}")"
+  rsync --recursive --quiet --copy-links "${tmp_dest}" "${dest}"
+fi
