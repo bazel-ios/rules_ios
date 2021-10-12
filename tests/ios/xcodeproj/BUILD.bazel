@@ -42,6 +42,9 @@ additional_scheme_info(
 xcodeproj(
     name = "Test-Imports-App-Project",
     testonly = True,
+    additional_lldb_settings = [
+        "log enable -f /tmp/lldb_rulesios.log lldb types",
+    ],
     additional_post_actions = {
         "build": [
             "echo 'post_build_action_1'",

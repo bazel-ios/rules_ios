@@ -3,6 +3,7 @@
 #import <TestImports-App/TestImports_App-Swift.h>
 
 @import GoogleMobileAds;
+@import MBProgressHUD;
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 @import UIKit;
