@@ -83,7 +83,7 @@ for input in "${input_options[@]}"; do
         unzip -qq -d "$TARGET_BUILD_DIR" "$input"
     else
         rsync \
-            --recursive --chmod=u+w --delete \
+            --recursive --chmod=u+w --delete --copy-links \
             "$input" "$output" >"$BAZEL_DIAGNOSTICS_DIR"/rsync-stdout-"$DATE_SUFFIX".log 2>"$BAZEL_DIAGNOSTICS_DIR"/rsync-stderr-"$DATE_SUFFIX".log
     fi
 
