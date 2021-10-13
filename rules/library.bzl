@@ -826,10 +826,10 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             srcs = swift_sources,
             # Note: by default it used a vfs but not the entire virtual framwork
             # feature.
-            copts = select({
+            copts = copts_by_build_setting.swift_copts + swift_copts + select({
                 "@build_bazel_rules_ios//:virtualize_frameworks": framework_vfs_swift_copts,
                 "//conditions:default": framework_vfs_swift_copts if enable_framework_vfs else [],
-            }) + copts_by_build_setting.swift_copts + swift_copts + additional_swift_copts,
+            }) + additional_swift_copts,
             deps = deps + private_deps + lib_names + select({
                 "@build_bazel_rules_ios//:virtualize_frameworks": [framework_vfs_overlay_name_swift],
                 "//conditions:default": [framework_vfs_overlay_name_swift] if enable_framework_vfs else [],
@@ -925,7 +925,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,
         non_arc_srcs = objc_non_arc_sources,
         hdrs = objc_hdrs,
-        copts = copts_by_build_setting.objc_copts + objc_copts + additional_objc_copts + additional_objc_vfs_copts + index_while_building_objc_copts,
+        copts = copts_by_build_setting.objc_copts + objc_copts + additional_objc_vfs_copts + additional_objc_copts + index_while_building_objc_copts,
         deps = deps + private_deps + lib_names + additional_objc_vfs_deps,
         module_map = module_map,
         sdk_dylibs = sdk_dylibs,
