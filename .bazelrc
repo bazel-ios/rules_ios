@@ -8,8 +8,9 @@ build --incompatible_objc_provider_remove_compile_info
 build --strategy=Stardoc=standalone
 
 # Debugging does not work in sandbox mode. Uncomment these lines to turn off sandboxing.
-# build --genrule_strategy=standalone
-# build --spawn_strategy=standalone
+build --genrule_strategy=standalone
+build --spawn_strategy=standalone
+build --features apple.virtualize_frameworks
 
 build --verbose_failures # Print the full command line for commands that failed
 build --test_output=errors # Prints log file output to the console on failure
