@@ -23,4 +23,6 @@ def load_framework_dependencies():
         build_file = "@//tests/ios/unit-test/test-imports-app:BUILD.MBProgressHUD",
         commit = "bca42b801100b2b3a4eda0ba8dd33d858c780b0d",
         shallow_since = "1578948320 +0100",
+        patch_args = ["-p1"],
+        patches = ["@//tests/ios/unit-test/test-imports-app:mbprogresshud_remove_includes_dir.patch"],
     )

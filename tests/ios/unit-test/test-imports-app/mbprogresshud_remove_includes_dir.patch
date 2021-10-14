@@ -1,0 +1,11 @@
+diff --git a/include/module.modulemap b/include/module.modulemap
+deleted file mode 100644
+index e90bf2a8edb6b921f9dc38aef4efd5f636aa9eea..0000000000000000000000000000000000000000
+--- a/include/module.modulemap
++++ /dev/null
+@@ -1,5 +0,0 @@
+-module MBProgressHUD {
+-     umbrella header "MBProgressHUD/MBProgressHUD.h"
+-     export *
+-     module * { export * }
+- }
