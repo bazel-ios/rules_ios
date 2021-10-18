@@ -16,6 +16,7 @@ apple_framework(
 ios_application(
     name = "TestImports-App",
     srcs = [
+        "AppDelegate.swift",
         "Header.h",
         "Header2.h",
         "empty.swift",

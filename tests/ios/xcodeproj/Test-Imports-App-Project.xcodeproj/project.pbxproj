@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		28DC502501A36DE46FB2FDAE /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EF81609D3AA2C86BD531FC9 /* test.m */; };
 		318F5B16837DD5CFA4D00889 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B776E1DCA016E54FFA3DD126 /* main.m */; };
+		B3F6B7AF2BB1D68E45DEBBEE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DBADD20789973AD69484BB /* AppDelegate.swift */; };
 		C7087EC243FF0E3AB1AB011E /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9CDCA4AFFA244654BAAF8B /* test.swift */; };
 		E99867EE1F1D782F81A4FE00 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED99215913B1CD2AA84B255 /* empty.swift */; };
 		EFADD50C4F0A43EB535E96A2 /* testhelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 40DADB6CCA7C34899493F0DF /* testhelper.m */; };
@@ -35,6 +36,7 @@
 		4EA47E87D37B93163DC37DFE /* Header2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header2.h; sourceTree = "<group>"; };
 		4ED99215913B1CD2AA84B255 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
 		632CFB9DFB491CE5041EE814 /* TestStickers.xcstickers */ = {isa = PBXFileReference; lastKnownFileType = folder.stickers; path = TestStickers.xcstickers; sourceTree = "<group>"; };
+		77DBADD20789973AD69484BB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8CEB7F29BE7079D1C68021EB /* TestImports-Unit-Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestImports-Unit-Tests-Bridging-Header.h"; sourceTree = "<group>"; };
 		9A0FD8DAF9B3FB660F838C23 /* testhelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = testhelper.h; sourceTree = "<group>"; };
 		A1558B75425B9A00EAECC6AA /* TestImports-App-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestImports-App-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 		429F6F81AE5D3CA395FC38CC /* test-imports-app */ = {
 			isa = PBXGroup;
 			children = (
+				77DBADD20789973AD69484BB /* AppDelegate.swift */,
 				3D8C6FABE401A5C37EEACCF7 /* BUILD.bazel */,
 				4ED99215913B1CD2AA84B255 /* empty.swift */,
 				B4CD841B3F2A7DEE174D9413 /* Header.h */,
@@ -277,6 +280,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3F6B7AF2BB1D68E45DEBBEE /* AppDelegate.swift in Sources */,
 				E99867EE1F1D782F81A4FE00 /* empty.swift in Sources */,
 				318F5B16837DD5CFA4D00889 /* main.m in Sources */,
 			);

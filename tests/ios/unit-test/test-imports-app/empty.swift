@@ -1,8 +1,5 @@
 import Foundation
 import SomeFramework
-import TensorFlowLiteC
-import TensorFlowLiteCCoreML
-import MBProgressHUD
 
 @objc public class EmptyClass: NSObject {
 
