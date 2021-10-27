@@ -2,10 +2,6 @@
 
 ![master](https://github.com/bazel-ios/rules_ios/workflows/CI-master/badge.svg)
 
-> :warning: **This is alpha software.** We are developing these rules in the open so you should only use them if you know what you are doing and are willing to help develop them.
-
-
-
 These rules provide some macros and rules that make it easier to build iOS
 application with Bazel. The heavy lifting of compiling, and packaging is
 still done by the existing
