@@ -1,0 +1,6 @@
+sh_binary(
+    name = "update_in_place",
+    srcs = ["update_in_place.sh"],
+    visibility = ["//visibility:public"],
+)
+

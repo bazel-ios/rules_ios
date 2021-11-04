@@ -1,6 +1,7 @@
 load("@build_bazel_rules_apple//apple:ios.bzl", rules_apple_ios_application = "ios_application")
 load("//rules:library.bzl", "apple_library")
 load("//rules:plists.bzl", "info_plists_by_setting")
+load("//rules:import_middleman.bzl", "import_middleman")
 
 # We need to try and partition out arguments for obj_library / swift_library
 # from ios_application since this creates source file libs internally.
@@ -55,9 +56,15 @@ def ios_application(name, apple_library = apple_library, infoplists_by_build_set
     application_kwargs["launch_storyboard"] = application_kwargs.pop("launch_storyboard", library.launch_screen_storyboard_name)
     application_kwargs["families"] = application_kwargs.pop("families", ["iphone", "ipad"])
 
+    import_middleman(name = name + ".import_middleman", deps = library.deps)
     rules_apple_ios_application(
         name = name,
-        deps = library.lib_names,
+        # TODO: add a conditional define for this feature
+        deps = [name + ".import_middleman"],
+
+        # TODO: add a conditional define for apple silicon
+        # deps = library.deps,
+        output_discriminator = None,
         infoplists = info_plists_by_setting(name = name, infoplists_by_build_setting = infoplists_by_build_setting, default_infoplists = application_kwargs.pop("infoplists", [])),
         **application_kwargs
     )
