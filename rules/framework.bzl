@@ -485,6 +485,7 @@ def _merge_root_infoplists(ctx):
         launch_storyboard = None,
         output_plist = output_plist,
         output_pkginfo = None,
+        output_discriminator = None,
         platform_prerequisites = platform_support.platform_prerequisites(
             apple_fragment = ctx.fragments.apple,
             config_vars = ctx.var,

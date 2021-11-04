@@ -107,6 +107,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         input_plists = ctx.files.infoplists,
         output_pkginfo = None,
         output_plist = output_plist,
+        output_discriminator = None,
         resolved_plisttool = apple_toolchain_info.resolved_plisttool,
         **partials_args
     )
@@ -165,9 +166,10 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         post_processor = "",
     )
     bundletool_instructions_file = intermediates.file(
-        ctx.actions,
-        ctx.label.name,
-        "bundletool_actions.json",
+        actions = ctx.actions,
+        target_name = ctx.label.name,
+        output_discriminator = None,
+        file_name = "bundletool_actions.json",
     )
     ctx.actions.write(
         output = bundletool_instructions_file,
