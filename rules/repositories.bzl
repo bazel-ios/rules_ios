@@ -55,7 +55,6 @@ def rules_ios_dependencies():
         # sha256 = "2d4b0b1616cb7a7fe5d35dfbd1c813c5ae216169ff34c7a81f7a85f1b99a9cf2",
     )
 
-
     _maybe(
         http_archive,
         name = "bazel_skylib",
