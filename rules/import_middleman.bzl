@@ -179,12 +179,12 @@ def _file_collector_rule_impl(ctx):
     objc_provider_fields["linkopt"] = depset(
         ["\"-F" + "/".join(f.path.split("/")[:-2]) + "\"" for f in all_frameworks],
         transitive = [
-            objc_provider_fields["linkopt"],
+            objc_provider_fields.get("linkopt", depset([])),
         ],
     )
     objc_provider_fields["link_inputs"] = depset(
         transitive = [
-            objc_provider_fields["link_inputs"],
+            objc_provider_fields.get("link_inputs", depset([])),
             depset(static_framework_files + dynamic_framework_files),
         ],
     )
