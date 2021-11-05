@@ -162,7 +162,7 @@ def _file_collector_rule_impl(ctx):
         existing_libs[li.path] = True
         filtered_libs.append(_do_lib(ctx, li))
 
-    exisiting_imported_librarys = objc_provider_fields["imported_library"]
+    exisiting_imported_librarys = objc_provider_fields.get("imported_library", depset([]))
     for li in exisiting_imported_librarys.to_list():
         if not existing_libs.get(li.path, False):
             filtered_libs.append(li)
@@ -189,10 +189,14 @@ def _file_collector_rule_impl(ctx):
         ],
     )
     objc_provider_fields["static_framework_file"] = depset(transitive = [
-        objc_provider_fields["static_framework_file"],
+        objc_provider_fields.get("static_framework_file", depset([])),
         depset(static_framework_files),
     ])
-    objc_provider_fields["dynamic_framework_file"] = depset(dynamic_framework_files)
+
+    objc_provider_fields["dynamic_framework_file"] = depset(transitive = [
+        objc_provider_fields.get("dynamic_framework_file", depset([])),
+        depset(dynamic_framework_files),
+    ])
 
     objc = apple_common.new_objc_provider(
         **objc_provider_fields
