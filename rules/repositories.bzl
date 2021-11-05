@@ -55,6 +55,15 @@ def rules_ios_dependencies():
         sha256 = "159a100b4dd6a9debb8e514abc3c0d929285d329741772406604c23393464b5f",
     )
 
+    # Hacks for Bazel 4 + arm
+    github_repo(
+        name = "build_bazel_rules_swift",
+        project = "bazel-ios",
+        ref = "ceb7ae7e24ec633ee5e8faeee777a6411a473603",
+        repo = "rules_swift",
+        sha256 = "c3ebb3be1e3494988af90f46731cf31e0d9d3a98d86526a653f61298df4ad6b1",
+    )
+
     _maybe(
         http_archive,
         name = "bazel_skylib",
