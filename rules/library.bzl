@@ -122,12 +122,23 @@ module {module_name} {{
     )
     return destination
 
-def _write_umbrella_header(name, library_tools, public_headers = [], private_headers = [], module_name = None, **kwargs):
+def _write_umbrella_header(
+    name, 
+    library_tools,
+    generate_legacy_umbrella_header,
+    public_headers = [], 
+    private_headers = [], 
+    module_name = None, 
+    **kwargs):
     basename = "{name}-umbrella.h".format(name = name)
     destination = paths.join(name + "-modulemap", basename)
     if not module_name:
         module_name = name
-    content = """\
+
+    content = ""
+
+    if generate_legacy_umbrella_header:
+        content += """\
 #ifdef __OBJC__
 #    import <Foundation/Foundation.h>
 #    if __has_include(<UIKit/UIKit.h>)
@@ -148,7 +159,8 @@ def _write_umbrella_header(name, library_tools, public_headers = [], private_hea
     for header in public_headers:
         content += "#import \"{header}\"\n".format(header = paths.basename(header))
 
-    content += """
+    if generate_legacy_umbrella_header:
+        content += """
 FOUNDATION_EXPORT double {module_name}VersionNumber;
 FOUNDATION_EXPORT const unsigned char {module_name}VersionString[];
 """.format(
@@ -439,6 +451,23 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     namespace = module_name if namespace_is_module_name else name
     module_map = kwargs.pop("module_map", None)
     swift_objc_bridging_header = kwargs.pop("swift_objc_bridging_header", None)
+    # Historically, xcode and cocoapods use an umbrella header that imports Foundation and UIKit at the
+    # beginning of it. See:
+    # * https://github.com/CocoaPods/CocoaPods/issues/6815#issuecomment-330046236
+    # * https://github.com/facebookarchive/xcbuild/issues/92#issuecomment-234372926
+    #
+    # As a result, when writing swift code, there is no need for importing neither Foundation nor 
+    # UIKit. See:
+    # * https://github.com/facebookarchive/xcbuild/issues/92#issuecomment-234400427
+    #
+    # But these automatic imports are a problem when strict imports are wanted. See:
+    # * https://forums.swift.org/t/supporting-strict-imports/42472
+    #
+    # So provide here two behaviours:
+    # * By default, follow xcode and cocoapods and populate the umbrella header with the usual content
+    # * Optionally, allow the consumers to set generate_legacy_umbrella_header to False, so the 
+    #   generated umbrella header does not contain any imports
+    generate_legacy_umbrella_header = kwargs.pop("generate_legacy_umbrella_header", True)
     cc_copts = kwargs.pop("cc_copts", [])
     additional_cc_copts = []
     swift_copts = kwargs.pop("swift_copts", [])
@@ -651,6 +680,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             umbrella_header = library_tools["umbrella_header_generator"](
                 name = name,
                 library_tools = library_tools,
+                generate_legacy_umbrella_header = generate_legacy_umbrella_header,
                 public_headers = objc_hdrs,
                 private_headers = objc_private_hdrs,
                 module_name = module_name,
