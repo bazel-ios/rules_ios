@@ -314,7 +314,8 @@ def _xcframework(*, library_name, name, slices):
                 # TODO: support maccatalyst
                 continue
 
-            arch_setting = "@build_bazel_rules_apple//apple:{}_{}".format(platform, arch)
+            rules_apple_platfrom = "darwin" if platform == "macos" else platform
+            arch_setting = "@build_bazel_rules_apple//apple:{}_{}".format(rules_apple_platfrom, arch)
             config_setting_name = "{}-{}".format(
                 xcframework_name,
                 "_".join([x for x in (platform, platform_variant, arch) if x]),
