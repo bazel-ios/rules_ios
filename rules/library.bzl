@@ -123,13 +123,13 @@ module {module_name} {{
     return destination
 
 def _write_umbrella_header(
-    name, 
-    library_tools,
-    generate_legacy_umbrella_header,
-    public_headers = [], 
-    private_headers = [], 
-    module_name = None, 
-    **kwargs):
+        name,
+        library_tools,
+        generate_legacy_umbrella_header,
+        public_headers = [],
+        private_headers = [],
+        module_name = None,
+        **kwargs):
     basename = "{name}-umbrella.h".format(name = name)
     destination = paths.join(name + "-modulemap", basename)
     if not module_name:
@@ -164,8 +164,8 @@ def _write_umbrella_header(
 FOUNDATION_EXPORT double {module_name}VersionNumber;
 FOUNDATION_EXPORT const unsigned char {module_name}VersionString[];
 """.format(
-        module_name = module_name,
-    )
+            module_name = module_name,
+        )
 
     write_file(
         name = basename + "~",
@@ -451,12 +451,13 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     namespace = module_name if namespace_is_module_name else name
     module_map = kwargs.pop("module_map", None)
     swift_objc_bridging_header = kwargs.pop("swift_objc_bridging_header", None)
+
     # Historically, xcode and cocoapods use an umbrella header that imports Foundation and UIKit at the
     # beginning of it. See:
     # * https://github.com/CocoaPods/CocoaPods/issues/6815#issuecomment-330046236
     # * https://github.com/facebookarchive/xcbuild/issues/92#issuecomment-234372926
     #
-    # As a result, when writing swift code, there is no need for importing neither Foundation nor 
+    # As a result, when writing swift code, there is no need for importing neither Foundation nor
     # UIKit. See:
     # * https://github.com/facebookarchive/xcbuild/issues/92#issuecomment-234400427
     #
@@ -465,7 +466,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     #
     # So provide here two behaviours:
     # * By default, follow xcode and cocoapods and populate the umbrella header with the usual content
-    # * Optionally, allow the consumers to set generate_legacy_umbrella_header to False, so the 
+    # * Optionally, allow the consumers to set generate_legacy_umbrella_header to False, so the
     #   generated umbrella header does not contain any imports
     generate_legacy_umbrella_header = kwargs.pop("generate_legacy_umbrella_header", True)
     cc_copts = kwargs.pop("cc_copts", [])
