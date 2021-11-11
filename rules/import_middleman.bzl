@@ -9,7 +9,7 @@ _Provider = provider(fields = {
 })
 
 def _do_framework(ctx, framework):
-    # Enusre that this will correctly propagate all framework files
+    # Ensure that this will correctly propagate all framework files
     out_file = ctx.actions.declare_file(ctx.attr.name + "/" + framework.basename + ".framework" + "/" + framework.basename)
     out_dir = ctx.actions.declare_file(ctx.attr.name + "/" + framework.basename + ".framework")
     cmd = """
