@@ -55,12 +55,15 @@ patch() {
 
      touch link.filelist
 
+     # See comment in tools/m1_utils/BUILD.bazel
+     ARM64_TO_SIM_PATH=$SCRIPT_DIR/arm64-to-sim 
+
      # Update each of the files
      for file in *.o; do
          chmod 777 "$file"
 
          # TODO: Versions should be input from the build system - hardcoded to 11
-         $SCRIPT_DIR/arm64-to-sim "$file" 11 11 --obj || true
+         "$ARM64_TO_SIM_PATH" "$file" 11 11 --obj || true
          echo "$PWD/$file" >> link.filelist
      done;
      ARGS=(xcrun libtool)

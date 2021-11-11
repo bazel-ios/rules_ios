@@ -107,7 +107,7 @@ find_imports = aspect(
     implementation = _find_imports_impl,
     attr_aspects = ["transitve_deps", "deps"],
     doc = """
-Internal spect for the `import_middleman` see below for a description.
+Internal aspect for the `import_middleman` see below for a description.
 """,
 )
 
@@ -242,7 +242,7 @@ many caveats and eceptions but getting it running is better than nothing. ( e.g.
 This solves the problem at the build system level with the power of bazel. The
 idea is pretty straight forward:
 1. collect all imported paths
-2. update the macho headers with Apples vtool and arm-to-sim
+2. update the macho headers with Apples vtool and arm64-to-sim
 3. update the linker invocation to use the new libs
     
 Now it updates all of the inputs automatically - the action can be taught to do
