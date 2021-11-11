@@ -14,7 +14,7 @@ def _do_framework(ctx, framework):
     out_dir = ctx.actions.declare_file(ctx.attr.name + "/" + framework.basename + ".framework")
     cmd = """
      set -e
-     
+
      TOOL="external/build_bazel_rules_ios/tools/m1_utils/{}.sh"
      FRAMEWORK_BINARY="{}"
      OUT_DIR="{}"
@@ -70,12 +70,6 @@ def _find_imports_impl(target, ctx):
     imported_library_file = []
     dynamic_framework_file = []
     import_infos = {}
-
-    if _Provider in target:
-        static_framework_file.append(target[_Provider].static_framework_file)
-        imported_library_file.append(target[_Provider].imported_library_file)
-        dynamic_framework_file.append(target[_Provider].dynamic_framework_file)
-        import_infos.update(target[_Provider].import_infos)
 
     deps_to_search = []
     if hasattr(ctx.rule.attr, "deps"):

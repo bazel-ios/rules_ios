@@ -43,7 +43,8 @@ unarchive() {
 patch() {
      EXTDIR=$(mktemp -d)
      OUTD=$PWD
-     pushd $EXTDIR
+     pushd $EXTDIR > /dev/null
+
      rm -rf "$OF.ar"
 
      lipo "$FWF" -thin arm64 -output "$OF.ar" || cp "$FWF" "$OF.ar"
@@ -58,18 +59,13 @@ patch() {
      for file in *.o; do
          chmod 777 "$file"
 
-         # FIXME: Versions should be input from the build system - hardcoded to 11
+         # TODO: Versions should be input from the build system - hardcoded to 11
          $SCRIPT_DIR/arm64-to-sim "$file" 11 11 --obj || true
          echo "$PWD/$file" >> link.filelist
      done;
      ARGS=(xcrun libtool)
      ARGS+=(-static -arch_only arm64 -D)
-
-     # TODO: update this to use the actual SDKROOT
-     ARGS+=(-syslibroot /Applications/Xcode-13.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator15.0.sdk)
-
      ARGS+=(-filelist link.filelist  -o $OUTD/$OF)
-
      export IPHONEOS_DEPLOYMENT_TARGET\=15.0
      "${ARGS[@]}"
 }

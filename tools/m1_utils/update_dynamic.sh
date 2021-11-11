@@ -5,7 +5,7 @@ set -e
 patch() {
      EXTDIR=$(mktemp -d)
      OUTD="$PWD"
-     pushd $EXTDIR
+     pushd $EXTDIR > /dev/null
      lipo "$FWF" -thin arm64 -output "$OF.ar" || cp "$FWF" "$OF.ar"
 
      # FIXME: Versions should be input from the build system
