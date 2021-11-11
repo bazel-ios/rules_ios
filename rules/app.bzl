@@ -59,11 +59,10 @@ def ios_application(name, apple_library = apple_library, infoplists_by_build_set
     import_middleman(name = name + ".import_middleman", deps = library.deps)
     rules_apple_ios_application(
         name = name,
-        # TODO: add a conditional define for this feature
-        deps = [name + ".import_middleman"],
-
-        # TODO: add a conditional define for apple silicon
-        # deps = library.deps,
+        deps = select({
+            "@build_bazel_rules_ios//:arm_simulator_use_device_deps": [name + ".import_middleman"],
+            "//conditions:default": library.lib_names,
+        }),
         output_discriminator = None,
         infoplists = info_plists_by_setting(name = name, infoplists_by_build_setting = infoplists_by_build_setting, default_infoplists = application_kwargs.pop("infoplists", [])),
         **application_kwargs

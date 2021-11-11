@@ -61,7 +61,7 @@ def _make_imports(transitive_sets):
     provider_fields["build_archs"] = depset(["arm64"])
     provider_fields["debug_info_binaries"] = depset(transitive_sets)
 
-    # FIXME: probably just pass along the dsyms? We may need to rework the provider a bit
+    # TODO: consider passing along the dsyms
     provider_fields["dsym_imports"] = depset()
     return AppleFrameworkImportInfo(**provider_fields)
 
@@ -181,7 +181,7 @@ def _file_collector_rule_impl(ctx):
         # Append ad-hoc framework files by name: e.g. ( Info.plist )
         ad_hoc_file = all_import_infos[f.path].framework_imports.to_list()
 
-        # Remove the input framework files from this rule
+        # Remove the replaced input framework file
         ad_hoc_file.remove(f)
         dynamic_framework_dirs.extend(ad_hoc_file)
 
@@ -193,9 +193,9 @@ def _file_collector_rule_impl(ctx):
 
     updated_frameworks = updated_dyanmic_framework.keys() + replaced_static_framework.updated
     if len(updated_frameworks):
-	# Triple quote the new path to put them first. Eliminating other paths
-	# may possible but needs more handling of other kinds of frameworks and
-	# has edge cases that require baking assumptions to handle.
+        # Triple quote the new path to put them first. Eliminating other paths
+        # may possible but needs more handling of other kinds of frameworks and
+        # has edge cases that require baking assumptions to handle.
         objc_provider_fields["linkopt"] = depset(
             ["\"\"\"-F" + "/".join(f.path.split("/")[:-2]) + "\"\"\"" for f in updated_frameworks],
             transitive = [objc_provider_fields.get("linkopt", depset([]))],
