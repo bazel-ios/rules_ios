@@ -5,15 +5,16 @@ _Provider = provider(fields = {
     "imported_library_files": "",
     "static_framework_files": "",
     "dynamic_framework_files": "",
+    "import_infos": "",
 })
 
 def _do_framework(ctx, framework):
     # Enusre that this will correctly propagate all framework files
-    out_file = ctx.actions.declare_file(framework.basename + ".framework" + "/" + framework.basename)
-    out_dir = ctx.actions.declare_file(framework.basename + ".framework")
+    out_file = ctx.actions.declare_file(ctx.attr.name + "/" + framework.basename + ".framework" + "/" + framework.basename)
+    out_dir = ctx.actions.declare_file(ctx.attr.name + "/" + framework.basename + ".framework")
     cmd = """
      set -e
-
+     
      TOOL="external/build_bazel_rules_ios/tools/m1_utils/{}.sh"
      FRAMEWORK_BINARY="{}"
      OUT_DIR="{}"
@@ -26,12 +27,12 @@ def _do_framework(ctx, framework):
      "$TOOL" "$OUT_DIR/$(basename "$FRAMEWORK_BINARY")"
    """.format(ctx.executable.update_in_place.basename, framework.path, out_dir.path)
 
-    ctx.actions.run_shell(outputs = [out_file, out_dir], inputs = depset([framework]), command = cmd)
+    ctx.actions.run_shell(outputs = [out_dir, out_file], inputs = depset([framework]), command = cmd)
     return out_file
 
 def _do_lib(ctx, imported_library):
     # Enusre that this will correctly propagate all framework files
-    out_file = ctx.actions.declare_file(imported_library.basename)
+    out_file = ctx.actions.declare_file(ctx.attr.name + "/" + imported_library.basename)
     cmd = """
      set -e
 
@@ -69,13 +70,14 @@ def _find_imports_impl(target, ctx):
     static_framework_files = []
     imported_library_files = []
     dynamic_framework_files = []
+    import_infos = {}
 
-    # FIXME: update merging to remove to_list()
     if _Provider in target:
-        static_framework_files.extend(target[_Provider].static_framework_files.to_list())
-        dynamic_framework_files.extend(target[_Provider].dynamic_framework_files.to_list())
+        static_framework_files.append(target[_Provider].static_framework_files)
+        imported_library_files.append(target[_Provider].static_framework_files)
+        dynamic_framework_files.append(target[_Provider].dynamic_framework_files)
+        import_infos.update(target[_Provider].import_infos)
 
-    # FIXME: do we really need to deal with this
     deps_to_search = []
     if hasattr(ctx.rule.attr, "deps"):
         deps_to_search = ctx.rule.attr.deps
@@ -86,27 +88,28 @@ def _find_imports_impl(target, ctx):
     dynamic_framework_file = depset()
     for dep in deps_to_search:
         if _Provider in dep:
-            # FIXME: update merging to use depset
-            static_framework_files.extend(dep[_Provider].static_framework_files.to_list())
-            imported_library_files.extend(dep[_Provider].imported_library_files.to_list())
-            dynamic_framework_files.extend(dep[_Provider].dynamic_framework_files.to_list())
+            static_framework_files.append(dep[_Provider].static_framework_files)
+            imported_library_files.append(dep[_Provider].imported_library_files)
+            dynamic_framework_files.append(dep[_Provider].dynamic_framework_files)
+            import_infos.update(dep[_Provider].import_infos)
 
-        # FIXME: Probably not necessary
-        if AppleFrameworkImportInfo in dep:
-            static_framework_files.extend(dep[apple_common.Objc].static_framework_file.to_list())
-            dynamic_framework_files.extend(dep[apple_common.Objc].dynamic_framework_file.to_list())
-
-    # FIXME: update merging to use depset
     if ctx.rule.kind == "objc_import":
-        imported_library_files.extend(target[apple_common.Objc].imported_library.to_list())
+        imported_library_files.append(target[apple_common.Objc].imported_library)
     elif AppleFrameworkImportInfo in target:
-        static_framework_files.extend(target[apple_common.Objc].static_framework_file.to_list())
-        dynamic_framework_files.extend(target[apple_common.Objc].dynamic_framework_file.to_list())
+        static_framework_files.append(target[apple_common.Objc].static_framework_file)
+
+        dynamic_framework_file = target[apple_common.Objc].dynamic_framework_file
+        dynamic_framework_file_list = df.to_list()
+        if len(df_list) > 0:
+            import_infos[dynamic_framework_file_list[0].path] = target[AppleFrameworkImportInfo]
+
+        dynamic_framework_files.append(dynamic_framework_file)
 
     return [_Provider(
-        dynamic_framework_files = depset(dynamic_framework_files),
-        imported_library_files = depset(imported_library_files),
-        static_framework_files = depset(static_framework_files),
+        dynamic_framework_files = depset(transitive = dynamic_framework_files),
+        imported_library_files = depset(transitive = imported_library_files),
+        static_framework_files = depset(transitive = static_framework_files),
+        import_infos = import_infos,
     )]
 
 find_imports = aspect(
@@ -116,17 +119,20 @@ find_imports = aspect(
 
 def _file_collector_rule_impl(ctx):
     # Merge depsets - consider doing this a better way
-    all_static_framework_files = []
-    all_imported_library_files = []
-    all_dynamic_framework_files = []
+    all_static_framework_files = [depset()]
+    all_imported_library_files = [depset()]
+    all_dynamic_framework_files = [depset()]
+    all_import_infos = {}
     for dep in ctx.attr.deps:
         if _Provider in dep:
-            all_static_framework_files.extend(dep[_Provider].static_framework_files.to_list())
-            all_imported_library_files.extend(dep[_Provider].imported_library_files.to_list())
-            all_dynamic_framework_files.extend(dep[_Provider].dynamic_framework_files.to_list())
-    input_static_frameworks = depset(all_static_framework_files).to_list()
-    input_imported_librarys = depset(all_imported_library_files).to_list()
-    input_dynamic_frameworks = depset(all_dynamic_framework_files).to_list()
+            all_static_framework_files.append(dep[_Provider].static_framework_files)
+            all_imported_library_files.append(dep[_Provider].imported_library_files)
+            all_dynamic_framework_files.append(dep[_Provider].dynamic_framework_files)
+            all_import_infos.update(dep[_Provider].import_infos)
+
+    input_static_frameworks = depset(transitive = all_static_framework_files).to_list()
+    input_imported_librarys = depset(transitive = all_imported_library_files).to_list()
+    input_dynamic_frameworks = depset(transitive = all_dynamic_framework_files).to_list()
 
     objc_provider_fields = {}
 
@@ -136,10 +142,6 @@ def _file_collector_rule_impl(ctx):
         "weak_sdk_framework",
         "imported_library",
         "force_load_library",
-        # Note(Bazel5): This is no longer supported
-        #"multi_arch_linked_archives",
-        #"multi_arch_linked_binaries",
-        #"multi_arch_dynamic_libraries",
         "source",
         "link_inputs",
         "linkopt",
@@ -171,19 +173,34 @@ def _file_collector_rule_impl(ctx):
     # Build out framework inputs
     # FIXME: this should follow the above logic, or simplify
     static_framework_files = [_do_framework(ctx, f) for f in input_static_frameworks]
-    dynamic_framework_files = [_do_framework(ctx, f) for f in input_dynamic_frameworks]
+
+    print("All imports", all_import_infos)
+    dynamic_framework_files = []
+    dynamic_framework_dirs = []
+    for f in depset(input_dynamic_frameworks).to_list():
+        out = _do_framework(ctx, f)
+        dynamic_framework_files.append(out)
+        dynamic_framework_dirs.append(out)
+        ad_hoc_files = all_import_infos[f.path].framework_imports.to_list()
+
+        # Remove the input framework files from this rule
+        # Perhaps we should put this logic into do_framework
+        # It's specific to dynamic
+        ad_hoc_files.remove(f)
+        dynamic_framework_dirs.extend(ad_hoc_files)
+
     all_frameworks = static_framework_files + dynamic_framework_files
 
-    # FIXME: see above comment
+    # TODO: see above comment
     objc_provider_fields["linkopt"] = depset(
-        ["\"-F" + "/".join(f.path.split("/")[:-2]) + "\"" for f in all_frameworks],
+        ["\"-F" + "/".join(f.path.split("/")[:-2]) + "\"" for f in static_framework_files],
         transitive = [
-            objc_provider_fields["linkopt"],
+            objc_provider_fields.get("linkopt", depset([])),
         ],
     )
     objc_provider_fields["link_inputs"] = depset(
         transitive = [
-            objc_provider_fields["link_inputs"],
+            objc_provider_fields.get("link_inputs", depset([])),
             depset(static_framework_files + dynamic_framework_files),
         ],
     )
@@ -202,8 +219,9 @@ def _file_collector_rule_impl(ctx):
     )
 
     return [
+        DefaultInfo(files = depset(dynamic_framework_dirs)),
         objc,
-        _make_imports([depset(dynamic_framework_files)]),
+        _make_imports([depset(dynamic_framework_dirs)]),
     ]
 
 import_middleman = rule(
