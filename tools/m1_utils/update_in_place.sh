@@ -5,7 +5,7 @@ SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 INPUT="$PWD/$1"
 
-# FIXME - mutli-processing edge case with Bazel
+# TODO - verify mutli-processing edge case with Bazel
 OF="$(basename "$INPUT").tmp"
 if file $INPUT | grep -q dynamic; then
    echo update_dynamic "$INPUT"

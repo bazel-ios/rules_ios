@@ -6,7 +6,6 @@ SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 # This is an unarchive algorithm that deals with duplicate objects
 # just extracting with ar won't do that and there isn't a great existing way
 unarchive() {
-    set -ex
     FILE="$PWD/$1"
 
     rm -rf *.o 

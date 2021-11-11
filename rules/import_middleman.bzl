@@ -2,9 +2,9 @@ load("@build_bazel_rules_apple//apple:providers.bzl", "AppleFrameworkImportInfo"
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo", "AppleSupportToolchainInfo")
 
 _Provider = provider(fields = {
-    "imported_library_files": "",
-    "static_framework_files": "",
-    "dynamic_framework_files": "",
+    "imported_library_file": "",
+    "static_framework_file": "",
+    "dynamic_framework_file": "",
     "import_infos": "",
 })
 
@@ -66,16 +66,15 @@ def _make_imports(transitive_sets):
     return AppleFrameworkImportInfo(**provider_fields)
 
 def _find_imports_impl(target, ctx):
-    # Collect trans swift_library outputs
-    static_framework_files = []
-    imported_library_files = []
-    dynamic_framework_files = []
+    static_framework_file = []
+    imported_library_file = []
+    dynamic_framework_file = []
     import_infos = {}
 
     if _Provider in target:
-        static_framework_files.append(target[_Provider].static_framework_files)
-        imported_library_files.append(target[_Provider].static_framework_files)
-        dynamic_framework_files.append(target[_Provider].dynamic_framework_files)
+        static_framework_file.append(target[_Provider].static_framework_file)
+        imported_library_file.append(target[_Provider].imported_library_file)
+        dynamic_framework_file.append(target[_Provider].dynamic_framework_file)
         import_infos.update(target[_Provider].import_infos)
 
     deps_to_search = []
@@ -84,31 +83,29 @@ def _find_imports_impl(target, ctx):
     if hasattr(ctx.rule.attr, "transitive_deps"):
         deps_to_search = deps_to_search + ctx.rule.attr.transitive_deps
 
-    static_framework_file = depset()
-    dynamic_framework_file = depset()
     for dep in deps_to_search:
         if _Provider in dep:
-            static_framework_files.append(dep[_Provider].static_framework_files)
-            imported_library_files.append(dep[_Provider].imported_library_files)
-            dynamic_framework_files.append(dep[_Provider].dynamic_framework_files)
+            static_framework_file.append(dep[_Provider].static_framework_file)
+            imported_library_file.append(dep[_Provider].imported_library_file)
+            dynamic_framework_file.append(dep[_Provider].dynamic_framework_file)
             import_infos.update(dep[_Provider].import_infos)
 
     if ctx.rule.kind == "objc_import":
-        imported_library_files.append(target[apple_common.Objc].imported_library)
+        imported_library_file.append(target[apple_common.Objc].imported_library)
     elif AppleFrameworkImportInfo in target:
-        static_framework_files.append(target[apple_common.Objc].static_framework_file)
+        static_framework_file.append(target[apple_common.Objc].static_framework_file)
 
-        dynamic_framework_file = target[apple_common.Objc].dynamic_framework_file
-        dynamic_framework_file_list = df.to_list()
-        if len(df_list) > 0:
-            import_infos[dynamic_framework_file_list[0].path] = target[AppleFrameworkImportInfo]
+        target_dynamic_framework_file = target[apple_common.Objc].dynamic_framework_file
+        target_dynamic_framework_file_list = target_dynamic_framework_file.to_list()
+        if len(target_dynamic_framework_file_list) > 0:
+            import_infos[target_dynamic_framework_file_list[0].path] = target[AppleFrameworkImportInfo]
 
-        dynamic_framework_files.append(dynamic_framework_file)
+        dynamic_framework_file.append(target_dynamic_framework_file)
 
     return [_Provider(
-        dynamic_framework_files = depset(transitive = dynamic_framework_files),
-        imported_library_files = depset(transitive = imported_library_files),
-        static_framework_files = depset(transitive = static_framework_files),
+        dynamic_framework_file = depset(transitive = dynamic_framework_file),
+        imported_library_file = depset(transitive = imported_library_file),
+        static_framework_file = depset(transitive = static_framework_file),
         import_infos = import_infos,
     )]
 
@@ -118,21 +115,20 @@ find_imports = aspect(
 )
 
 def _file_collector_rule_impl(ctx):
-    # Merge depsets - consider doing this a better way
-    all_static_framework_files = [depset()]
-    all_imported_library_files = [depset()]
-    all_dynamic_framework_files = [depset()]
+    all_static_framework_file = [depset()]
+    all_imported_library_file = [depset()]
+    all_dynamic_framework_file = [depset()]
     all_import_infos = {}
     for dep in ctx.attr.deps:
         if _Provider in dep:
-            all_static_framework_files.append(dep[_Provider].static_framework_files)
-            all_imported_library_files.append(dep[_Provider].imported_library_files)
-            all_dynamic_framework_files.append(dep[_Provider].dynamic_framework_files)
+            all_static_framework_file.append(dep[_Provider].static_framework_file)
+            all_imported_library_file.append(dep[_Provider].imported_library_file)
+            all_dynamic_framework_file.append(dep[_Provider].dynamic_framework_file)
             all_import_infos.update(dep[_Provider].import_infos)
 
-    input_static_frameworks = depset(transitive = all_static_framework_files).to_list()
-    input_imported_librarys = depset(transitive = all_imported_library_files).to_list()
-    input_dynamic_frameworks = depset(transitive = all_dynamic_framework_files).to_list()
+    input_static_frameworks = depset(transitive = all_static_framework_file).to_list()
+    input_imported_libraries = depset(transitive = all_imported_library_file).to_list()
+    input_dynamic_frameworks = depset(transitive = all_dynamic_framework_file).to_list()
 
     objc_provider_fields = {}
 
@@ -159,12 +155,12 @@ def _file_collector_rule_impl(ctx):
     # Build out the imported libraries replacing each one along the way
     filtered_libs = []
     existing_libs = {}
-    for li in input_imported_librarys:
+    for li in input_imported_libraries:
         existing_libs[li.path] = True
         filtered_libs.append(_do_lib(ctx, li))
 
-    exisiting_imported_librarys = objc_provider_fields.get("imported_library", depset([]))
-    for li in exisiting_imported_librarys.to_list():
+    exisiting_imported_libraries = objc_provider_fields.get("imported_library", depset([]))
+    for li in exisiting_imported_libraries.to_list():
         if not existing_libs.get(li.path, False):
             filtered_libs.append(li)
 
@@ -172,28 +168,26 @@ def _file_collector_rule_impl(ctx):
 
     # Build out framework inputs
     # FIXME: this should follow the above logic, or simplify
-    static_framework_files = [_do_framework(ctx, f) for f in input_static_frameworks]
-
-    print("All imports", all_import_infos)
-    dynamic_framework_files = []
+    static_framework_file = [_do_framework(ctx, f) for f in input_static_frameworks]
+    dynamic_framework_file = []
     dynamic_framework_dirs = []
-    for f in depset(input_dynamic_frameworks).to_list():
+    for f in input_dynamic_frameworks:
         out = _do_framework(ctx, f)
-        dynamic_framework_files.append(out)
+        dynamic_framework_file.append(out)
         dynamic_framework_dirs.append(out)
-        ad_hoc_files = all_import_infos[f.path].framework_imports.to_list()
+
+        # Append ad-hoc framework files by name: e.g. ( Info.plist )
+        ad_hoc_file = all_import_infos[f.path].framework_imports.to_list()
 
         # Remove the input framework files from this rule
-        # Perhaps we should put this logic into do_framework
-        # It's specific to dynamic
-        ad_hoc_files.remove(f)
-        dynamic_framework_dirs.extend(ad_hoc_files)
+        ad_hoc_file.remove(f)
+        dynamic_framework_dirs.extend(ad_hoc_file)
 
-    all_frameworks = static_framework_files + dynamic_framework_files
+    all_frameworks = static_framework_file + dynamic_framework_file
 
     # TODO: see above comment
     objc_provider_fields["linkopt"] = depset(
-        ["\"-F" + "/".join(f.path.split("/")[:-2]) + "\"" for f in static_framework_files],
+        ["\"-F" + "/".join(f.path.split("/")[:-2]) + "\"" for f in static_framework_file],
         transitive = [
             objc_provider_fields.get("linkopt", depset([])),
         ],
@@ -201,17 +195,17 @@ def _file_collector_rule_impl(ctx):
     objc_provider_fields["link_inputs"] = depset(
         transitive = [
             objc_provider_fields.get("link_inputs", depset([])),
-            depset(static_framework_files + dynamic_framework_files),
+            depset(static_framework_file + dynamic_framework_file),
         ],
     )
     objc_provider_fields["static_framework_file"] = depset(transitive = [
         objc_provider_fields.get("static_framework_file", depset([])),
-        depset(static_framework_files),
+        depset(static_framework_file),
     ])
 
     objc_provider_fields["dynamic_framework_file"] = depset(transitive = [
         objc_provider_fields.get("dynamic_framework_file", depset([])),
-        depset(dynamic_framework_files),
+        depset(dynamic_framework_file),
     ])
 
     objc = apple_common.new_objc_provider(
