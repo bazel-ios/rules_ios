@@ -1,15 +1,15 @@
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleFrameworkImportInfo")
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo", "AppleSupportToolchainInfo")
 
-_Provider = provider(fields = {
+_FindImportsAspectInfo = provider(fields = {
     "imported_library_file": "",
     "static_framework_file": "",
     "dynamic_framework_file": "",
     "import_infos": "",
 })
 
-def _do_framework(ctx, framework):
-    # Ensure that this will correctly propagate all framework files
+def _update_framework(ctx, framework):
+    # Updates the `framework` for Apple Silicon
     out_file = ctx.actions.declare_file(ctx.attr.name + "/" + framework.basename + ".framework" + "/" + framework.basename)
     out_dir = ctx.actions.declare_file(ctx.attr.name + "/" + framework.basename + ".framework")
     cmd = """
@@ -30,8 +30,8 @@ def _do_framework(ctx, framework):
     ctx.actions.run_shell(outputs = [out_dir, out_file], inputs = depset([framework]), command = cmd)
     return out_file
 
-def _do_lib(ctx, imported_library):
-    # Enusre that this will correctly propagate all framework files
+def _update_lib(ctx, imported_library):
+    # Updates the `imported_library` for Apple Silicon
     out_file = ctx.actions.declare_file(ctx.attr.name + "/" + imported_library.basename)
     cmd = """
      set -e
@@ -78,11 +78,11 @@ def _find_imports_impl(target, ctx):
         deps_to_search = deps_to_search + ctx.rule.attr.transitive_deps
 
     for dep in deps_to_search:
-        if _Provider in dep:
-            static_framework_file.append(dep[_Provider].static_framework_file)
-            imported_library_file.append(dep[_Provider].imported_library_file)
-            dynamic_framework_file.append(dep[_Provider].dynamic_framework_file)
-            import_infos.update(dep[_Provider].import_infos)
+        if _FindImportsAspectInfo in dep:
+            static_framework_file.append(dep[_FindImportsAspectInfo].static_framework_file)
+            imported_library_file.append(dep[_FindImportsAspectInfo].imported_library_file)
+            dynamic_framework_file.append(dep[_FindImportsAspectInfo].dynamic_framework_file)
+            import_infos.update(dep[_FindImportsAspectInfo].import_infos)
 
     if ctx.rule.kind == "objc_import":
         imported_library_file.append(target[apple_common.Objc].imported_library)
@@ -96,7 +96,7 @@ def _find_imports_impl(target, ctx):
 
         dynamic_framework_file.append(target_dynamic_framework_file)
 
-    return [_Provider(
+    return [_FindImportsAspectInfo(
         dynamic_framework_file = depset(transitive = dynamic_framework_file),
         imported_library_file = depset(transitive = imported_library_file),
         static_framework_file = depset(transitive = static_framework_file),
@@ -105,7 +105,10 @@ def _find_imports_impl(target, ctx):
 
 find_imports = aspect(
     implementation = _find_imports_impl,
-    attr_aspects = ["transitve_deps", "deps", "srcs"],
+    attr_aspects = ["transitve_deps", "deps"],
+    doc = """
+Internal spect for the `import_middleman` see below for a description.
+""",
 )
 
 # Returns an updated array inputs with new_inputs if they exist
@@ -127,11 +130,11 @@ def _file_collector_rule_impl(ctx):
     all_dynamic_framework_file = [depset()]
     all_import_infos = {}
     for dep in ctx.attr.deps:
-        if _Provider in dep:
-            all_static_framework_file.append(dep[_Provider].static_framework_file)
-            all_imported_library_file.append(dep[_Provider].imported_library_file)
-            all_dynamic_framework_file.append(dep[_Provider].dynamic_framework_file)
-            all_import_infos.update(dep[_Provider].import_infos)
+        if _FindImportsAspectInfo in dep:
+            all_static_framework_file.append(dep[_FindImportsAspectInfo].static_framework_file)
+            all_imported_library_file.append(dep[_FindImportsAspectInfo].imported_library_file)
+            all_dynamic_framework_file.append(dep[_FindImportsAspectInfo].dynamic_framework_file)
+            all_import_infos.update(dep[_FindImportsAspectInfo].import_infos)
 
     input_static_frameworks = depset(transitive = all_static_framework_file).to_list()
     input_imported_libraries = depset(transitive = all_imported_library_file).to_list()
@@ -160,10 +163,10 @@ def _file_collector_rule_impl(ctx):
         _add_to_dict_if_present(objc_provider_fields, key, set)
 
     exisiting_imported_libraries = objc_provider_fields.get("imported_library", depset([]))
-    objc_provider_fields["imported_library"] = depset(_replace_inputs(ctx, exisiting_imported_libraries, input_imported_libraries, _do_lib).replaced)
+    objc_provider_fields["imported_library"] = depset(_replace_inputs(ctx, exisiting_imported_libraries, input_imported_libraries, _update_lib).replaced)
 
     exisiting_static_framework = objc_provider_fields.get("static_framework_file", depset([]))
-    replaced_static_framework = _replace_inputs(ctx, exisiting_static_framework, input_static_frameworks, _do_framework)
+    replaced_static_framework = _replace_inputs(ctx, exisiting_static_framework, input_static_frameworks, _update_framework)
     objc_provider_fields["static_framework_file"] = depset(replaced_static_framework.replaced)
 
     # Update dynamic frameworks - note that we need to do some additional
@@ -173,7 +176,7 @@ def _file_collector_rule_impl(ctx):
     dynamic_framework_dirs = []
     updated_dyanmic_framework = {}
     for f in input_dynamic_frameworks:
-        out = _do_framework(ctx, f)
+        out = _update_framework(ctx, f)
         updated_dyanmic_framework[f] = True
         dynamic_framework_file.append(out)
         dynamic_framework_dirs.append(out)
@@ -181,7 +184,7 @@ def _file_collector_rule_impl(ctx):
         # Append ad-hoc framework files by name: e.g. ( Info.plist )
         ad_hoc_file = all_import_infos[f.path].framework_imports.to_list()
 
-        # Remove the replaced input framework file
+        # Remove the input framework files from this rule
         ad_hoc_file.remove(f)
         dynamic_framework_dirs.extend(ad_hoc_file)
 
@@ -224,4 +227,29 @@ import_middleman = rule(
         "deps": attr.label_list(aspects = [find_imports]),
         "update_in_place": attr.label(executable = True, default = Label("//tools/m1_utils:update_in_place"), cfg = "host"),
     },
+    doc = """
+This rule adds the ability to update the Mach-o header on imported
+libraries and frameworks to get arm64 binaires running on Apple silicon
+simulator. For rules_ios, it's added in `app.bzl` and `test.bzl`
+    
+Why bother doing this? Well some apps have many dependencies which could take
+along time on vendors or other parties to update. Because the M1 chip has the
+same ISA as ARM64, most binaries will run transparently. Most iOS developers
+code is high level enough and isn't specifc to a device or simulator. There are
+many caveats and eceptions but getting it running is better than nothing. ( e.g.
+`TARGET_OS_SIMULATOR` )
+    
+This solves the problem at the build system level with the power of bazel. The
+idea is pretty straight forward:
+1. collect all imported paths
+2. update the macho headers with Apples vtool and arm-to-sim
+3. update the linker invocation to use the new libs
+    
+Now it updates all of the inputs automatically - the action can be taught to do
+all of this conditionally if necessary.
+    
+Note: The action happens in a rule for a few reasons.  This has an interesting
+propery: you get a single path for framework lookups at linktime. Perhaps this
+can be updated to work without the other behavior
+""",
 )
