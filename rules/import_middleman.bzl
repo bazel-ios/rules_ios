@@ -1,5 +1,4 @@
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleFrameworkImportInfo")
-load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo", "AppleSupportToolchainInfo")
 
 _FindImportsAspectInfo = provider(fields = {
     "imported_library_file": "",

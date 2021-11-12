@@ -56,7 +56,7 @@ def ios_application(name, apple_library = apple_library, infoplists_by_build_set
     application_kwargs["launch_storyboard"] = application_kwargs.pop("launch_storyboard", library.launch_screen_storyboard_name)
     application_kwargs["families"] = application_kwargs.pop("families", ["iphone", "ipad"])
 
-    import_middleman(name = name + ".import_middleman", deps = library.deps)
+    import_middleman(name = name + ".import_middleman", deps = library.deps, tags = ["manual"])
     rules_apple_ios_application(
         name = name,
         deps = select({
