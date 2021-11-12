@@ -25,7 +25,7 @@ def _resources_filegroup_impl(ctx):
 
     providers = [
         DefaultInfo(
-            files = depset(items = files),
+            files = depset(files),
         ),
     ]
 

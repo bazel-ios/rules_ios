@@ -21,3 +21,10 @@ config_setting(
         "features": feature_names.virtualize_frameworks,
     },
 )
+
+config_setting(
+    name = "arm_simulator_use_device_deps",
+    values = {
+        "features": feature_names.arm_simulator_use_device_deps,
+    },
+)
