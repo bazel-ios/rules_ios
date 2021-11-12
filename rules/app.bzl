@@ -60,7 +60,7 @@ def ios_application(name, apple_library = apple_library, infoplists_by_build_set
     rules_apple_ios_application(
         name = name,
         deps = select({
-            "@build_bazel_rules_ios//:arm_simulator_use_device_deps": [name + ".import_middleman"],
+            "@build_bazel_rules_ios//:arm64_simulator_use_device_deps": [name + ".import_middleman"],
             "//conditions:default": library.lib_names,
         }),
         output_discriminator = None,

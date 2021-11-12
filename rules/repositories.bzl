@@ -101,3 +101,36 @@ swift_binary(
 )
         """,
     )
+
+def _impl(ctx):
+    ctx.symlink(str(ctx.path(ctx.attr.rules_ios).dirname) + "/" + ctx.attr.path, "")
+
+sub_repository = repository_rule(
+    implementation = _impl,
+    local = True,
+    attrs = {
+        "path": attr.string(mandatory = True),
+        "rules_ios": attr.label(default = "@build_bazel_rules_ios//:BUILD.bazel"),
+    },
+)
+
+def rules_ios_bazel4_arm64_sim_dependencies():
+    # Setup all of the repositories for Bazel4 arm64
+    # See .bazelrc for an example of the features
+    github_repo(
+        name = "build_bazel_rules_swift",
+        project = "bazel-ios",
+        ref = "9eb85293c7a42940ec5253a410513a4a968d5d90",
+        repo = "rules_swift",
+        sha256 = "bb28f95eb24422a3f446d3622bb9538f3175707543f66e7a7e02823d4c932ef8",
+    )
+
+    sub_repository(
+        name = "local_config_cc",
+        path = "tools/toolchains/bazel4_local_config_cc",
+    )
+
+    sub_repository(
+        name = "local_config_cc_toolchains",
+        path = "tools/toolchains/bazel4_local_config_cc_toolchains",
+    )

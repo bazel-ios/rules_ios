@@ -63,7 +63,7 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
     rule(
         name = name,
         deps = select({
-            "@build_bazel_rules_ios//:arm_simulator_use_device_deps": [name + ".import_middleman"],
+            "@build_bazel_rules_ios//:arm64_simulator_use_device_deps": [name + ".import_middleman"],
             "//conditions:default": library.lib_names,
         }),
         infoplists = info_plists_by_setting(name = name, infoplists_by_build_setting = infoplists_by_build_setting, default_infoplists = ios_test_kwargs.pop("infoplists", [])),

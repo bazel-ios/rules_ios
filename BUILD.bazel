@@ -23,8 +23,8 @@ config_setting(
 )
 
 config_setting(
-    name = "arm_simulator_use_device_deps",
+    name = "arm64_simulator_use_device_deps",
     values = {
-        "features": feature_names.arm_simulator_use_device_deps,
+        "features": feature_names.arm64_simulator_use_device_deps,
     },
 )

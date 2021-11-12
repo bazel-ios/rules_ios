@@ -13,8 +13,7 @@ def _update_framework(ctx, framework):
     out_dir = ctx.actions.declare_file(ctx.attr.name + "/" + framework.basename + ".framework")
     cmd = """
      set -e
-
-     TOOL="external/build_bazel_rules_ios/tools/m1_utils/{}.sh"
+     TOOL="{}"
      FRAMEWORK_BINARY="{}"
      OUT_DIR="{}"
      FW_DIR="$(dirname "$FRAMEWORK_BINARY")"
@@ -24,9 +23,8 @@ def _update_framework(ctx, framework):
 
      ditto "$FW_DIR" "$OUT_DIR"
      "$TOOL" "$OUT_DIR/$(basename "$FRAMEWORK_BINARY")"
-   """.format(ctx.executable.update_in_place.basename, framework.path, out_dir.path)
-
-    ctx.actions.run_shell(outputs = [out_dir, out_file], inputs = depset([framework]), command = cmd)
+   """.format(ctx.files.update_in_place[0].path, framework.path, out_dir.path)
+    ctx.actions.run_shell(outputs = [out_dir, out_file], inputs = depset([framework] + ctx.attr.update_in_place[DefaultInfo].default_runfiles.files.to_list()), command = cmd)
     return out_file
 
 def _update_lib(ctx, imported_library):
