@@ -41,7 +41,7 @@ unarchive() {
 # Note: this program is the simplest version of patching a static library
 # Other code should handle making frameworks, etc
 patch() {
-     EXTDIR=$(mktemp -d)
+     EXTDIR="$(mktemp -d "${TMPDIR:-/tmp}/bazel_m1_utils.XXXXXXXX")"
      OUTD=$PWD
      pushd $EXTDIR > /dev/null
 

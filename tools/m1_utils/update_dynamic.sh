@@ -3,7 +3,7 @@ set -e
 # Note: this program is the simplest version of patching a dynamic library
 # Other code should handle making frameworks, etc
 patch() {
-     EXTDIR=$(mktemp -d)
+     EXTDIR="$(mktemp -d "${TMPDIR:-/tmp}/bazel_m1_utils.XXXXXXXX")"
      OUTD="$PWD"
      pushd $EXTDIR > /dev/null
      lipo "$FWF" -thin arm64 -output "$OF.ar" || cp "$FWF" "$OF.ar"

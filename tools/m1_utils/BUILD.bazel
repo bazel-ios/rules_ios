@@ -1,7 +1,10 @@
 sh_binary(
     name = "update_in_place",
     srcs = ["update_in_place.sh"],
-    data = ["update_in_place_deps", "@arm64-to-sim//:arm64-to-sim"],
+    data = [
+        "update_in_place_deps",
+        "@arm64-to-sim//:arm64-to-sim",
+    ],
     # See below comment
     # env = {"ARM64_TO_SIM_PATH": "$(location @arm64-to-sim//:arm64-to-sim)"},
     visibility = ["//visibility:public"],
@@ -15,5 +18,9 @@ sh_library(
     # bazel-out/darwin_arm64-dbg/bin/external/arm64-to-sim/libarm64-to-sim.a,
     # building for macOS-arm64 but attempting to link with file built for
     # macOS-x86_64. Requires fixing or updating rules_swift
-    srcs = ["arm64-to-sim", "update_static.sh", "update_dynamic.sh"],
+    srcs = [
+        "arm64-to-sim",
+        "update_dynamic.sh",
+        "update_static.sh",
+    ],
 )

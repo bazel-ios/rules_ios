@@ -116,13 +116,14 @@ def _replace_inputs(ctx, inputs, new_inputs, update_fn):
     replaced = []
     updated_inputs = {}
     for f in new_inputs:
-        updated_inputs[f] = True
-        replaced.append(update_fn(ctx, f))
+        out = update_fn(ctx, f)
+        updated_inputs[f] = out
+        replaced.append(out)
 
     for f in inputs.to_list():
         if not updated_inputs.get(f, False):
             replaced.append(f)
-    return struct(replaced = replaced, updated = updated_inputs.keys())
+    return struct(inputs = replaced, replaced = updated_inputs)
 
 def _file_collector_rule_impl(ctx):
     all_static_framework_file = [depset()]
@@ -163,21 +164,21 @@ def _file_collector_rule_impl(ctx):
         _add_to_dict_if_present(objc_provider_fields, key, set)
 
     exisiting_imported_libraries = objc_provider_fields.get("imported_library", depset([]))
-    objc_provider_fields["imported_library"] = depset(_replace_inputs(ctx, exisiting_imported_libraries, input_imported_libraries, _update_lib).replaced)
+    objc_provider_fields["imported_library"] = depset(_replace_inputs(ctx, exisiting_imported_libraries, input_imported_libraries, _update_lib).inputs)
 
     exisiting_static_framework = objc_provider_fields.get("static_framework_file", depset([]))
     replaced_static_framework = _replace_inputs(ctx, exisiting_static_framework, input_static_frameworks, _update_framework)
-    objc_provider_fields["static_framework_file"] = depset(replaced_static_framework.replaced)
+    objc_provider_fields["static_framework_file"] = depset(replaced_static_framework.inputs)
 
     # Update dynamic frameworks - note that we need to do some additional
     # processing for the ad-hoc files e.g. ( Info.plist )
     exisiting_dynamic_framework = objc_provider_fields.get("dynamic_framework_file", depset([]))
     dynamic_framework_file = []
     dynamic_framework_dirs = []
-    updated_dyanmic_framework = {}
+    replaced_dyanmic_framework = {}
     for f in input_dynamic_frameworks:
         out = _update_framework(ctx, f)
-        updated_dyanmic_framework[f] = True
+        replaced_dyanmic_framework[f] = out
         dynamic_framework_file.append(out)
         dynamic_framework_dirs.append(out)
 
@@ -189,25 +190,25 @@ def _file_collector_rule_impl(ctx):
         dynamic_framework_dirs.extend(ad_hoc_file)
 
     for f in exisiting_dynamic_framework.to_list():
-        if not updated_dyanmic_framework.get(f, False):
+        if not replaced_dyanmic_framework.get(f, False):
             dynamic_framework_file.append(f)
             dynamic_framework_dirs.append(f)
     objc_provider_fields["dynamic_framework_file"] = depset(dynamic_framework_file)
 
-    updated_frameworks = updated_dyanmic_framework.keys() + replaced_static_framework.updated
-    if len(updated_frameworks):
+    replaced_frameworks = replaced_dyanmic_framework.values() + replaced_static_framework.replaced.values()
+    if len(replaced_frameworks):
         # Triple quote the new path to put them first. Eliminating other paths
         # may possible but needs more handling of other kinds of frameworks and
         # has edge cases that require baking assumptions to handle.
         objc_provider_fields["linkopt"] = depset(
-            ["\"\"\"-F" + "/".join(f.path.split("/")[:-2]) + "\"\"\"" for f in updated_frameworks],
+            ["\"\"\"-F" + "/".join(f.path.split("/")[:-2]) + "\"\"\"" for f in replaced_frameworks],
             transitive = [objc_provider_fields.get("linkopt", depset([]))],
         )
 
     objc_provider_fields["link_inputs"] = depset(
         transitive = [
             objc_provider_fields.get("link_inputs", depset([])),
-            depset(updated_frameworks),
+            depset(replaced_frameworks),
         ],
     )
 
