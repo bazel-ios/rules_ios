@@ -16,7 +16,6 @@ build --test_output=errors # Prints log file output to the console on failure
 
 # By default do not build the tests for sources-with-prebuilt-binaries,
 # because it takes quite some time. They will only run on CI
-build --deleted_packages tests/ios/frameworks/sources-with-prebuilt-binaries
 
 # Enable dbg compilation mode in this repo, so we can test xcodeproj-built
 # binaries contain debug symbol tables.
@@ -32,3 +31,5 @@ build --features swift.index_while_building
 
 # Prevents leaking unexpected binaries via PATH to tests
 build --test_env=PATH=/usr/bin:/bin:/usr/sbin:/sbin
+
+build --features apple.virtualize_frameworks

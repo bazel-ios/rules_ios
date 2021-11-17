@@ -232,9 +232,11 @@ def _framework_vfs_overlay_impl(ctx):
 
     # Conditionally collect and pass in the VFS overlay here.
     virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
+    additional_cc_infos = []
     if virtualize_frameworks:
         for dep in ctx.attr.deps:
             if FrameworkInfo in dep:
+                additional_cc_infos.append(dep[CcInfo])
                 vfsoverlays.extend(dep[FrameworkInfo].vfsoverlay_infos)
             if VFSOverlayInfo in dep:
                 vfsoverlays.append(dep[VFSOverlayInfo].vfs_info)
@@ -252,10 +254,11 @@ def _framework_vfs_overlay_impl(ctx):
     )
 
     headers = depset([vfs.vfsoverlay_file])
-    cc_info = CcInfo(
-        compilation_context = cc_common.create_compilation_context(
-            headers = headers,
-        ),
+    print(additional_cc_infos)
+    cc_info = cc_common.merge_cc_infos(
+        cc_infos = [
+            CcInfo(compilation_context = cc_common.create_compilation_context(headers = headers)),
+        ] + additional_cc_infos,
     )
     return [
         apple_common.new_objc_provider(),
