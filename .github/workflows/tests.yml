@@ -46,8 +46,7 @@ jobs:
               --local_test_jobs=1 \
               --apple_platform_type=ios \
               --deleted_packages='' \
-              -- //tests/ios/... \
-              -//tests/ios/frameworks/sources-with-prebuilt-binaries/... # Needs more work for pre-built binaries
+              -- //tests/ios/...
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
