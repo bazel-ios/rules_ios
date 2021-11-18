@@ -110,13 +110,12 @@ def _impl(ctx):
         abi_version = "local"
     arch = ctx.attr.cpu.split("_", 1)[-1]
 
-    # HACK - see above comment marked HACK
+    # Patch the target system for arm64
     if target_system_name == "arm64-apple-ios-simulator":
         arch = "arm64"
 
-    #if ctx.attr.cpu == "ios_sim_arm64":
-    #if ctx.attr.cpu == "ios_x86_64":
-    if "bazel4.override_host_cpu_arm64" in ctx.features and ctx.environment == "":
+    # Patch the host system for arm64
+    if "bazel4.override_host_cpu_arm64" in ctx.features:
         arch = "arm64"
         host_system_name = "arm64-apple-macosx"
     else:
