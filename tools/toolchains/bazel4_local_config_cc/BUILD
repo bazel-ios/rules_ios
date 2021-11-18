@@ -91,11 +91,6 @@ cc_toolchain_suite(
         cxx_builtin_include_directories = [
             "/Applications/",
             "/Library/",
-            # Note: we may sub this out
-            "/Users/jmarino/Library/",
-
-            # FIXME: we may need this
-            "/Applications/Xcode-13.1.app/Contents/Developer",
         ],
         tool_paths_overrides = {},
     )
