@@ -83,8 +83,6 @@ cc_toolchain_suite(
     for arch in OSX_TOOLS_ARCHS
 ]
 
-print("ARCH", OSX_TOOLS_ARCHS)
-
 [
     cc_toolchain_config(
         name = arch,
