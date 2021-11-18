@@ -1,0 +1,2 @@
+# DO NOT EDIT: automatically generated WORKSPACE file for cc_autoconf_toolchains rule
+workspace(name = "local_config_cc_toolchains")

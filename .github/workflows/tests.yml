@@ -53,6 +53,35 @@ jobs:
         with:
           name: bazel-testlogs
           path: bazel-testlogs
+
+  build_bazel4_arm64_simulator:
+    name: Build arm64 Simulator
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Select Xcode 12.2
+        run: sudo xcode-select -s /Applications/Xcode_12.2.app
+      - name: Build and Test
+        run: |
+          bazelisk clean # Note: there is a problem with some reuse in rules_swift
+          bazelisk build --config bazel4_arm64_simulator_x86_64_host  --features apple.virtualize_frameworks -- //... -//tests/ios/...
+
+          # Misc issues:
+          # Carthage is busted for -//tests/ios/frameworks/sources-with-prebuilt-binaries/...
+          # Fails on a non fat framework for //tests/ios/unit-test/test-imports-app/
+          bazelisk build --config bazel4_arm64_simulator_x86_64_host  --features apple.virtualize_frameworks \
+              --apple_platform_type=ios \
+              --deleted_packages='' \
+              -- //tests/ios/... \
+              -//tests/ios/frameworks/sources-with-prebuilt-binaries/... \
+              -//tests/ios/unit-test/test-imports-app/...
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: bazel-testlogs
+          path: bazel-testlogs
+
   buildifier:
     name: Check Starlark and Docs
     runs-on: macos-latest
