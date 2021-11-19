@@ -956,6 +956,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         lib_names = lib_names,
         import_vfsoverlays = import_vfsoverlays,
         transitive_deps = deps,
+        module_map = module_map,
         deps = lib_names + deps,
         module_name = module_name,
         launch_screen_storyboard_name = launch_screen_storyboard_name,
