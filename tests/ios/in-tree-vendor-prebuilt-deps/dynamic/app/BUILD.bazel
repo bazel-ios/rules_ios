@@ -1,0 +1,309 @@
+load("@build_bazel_rules_ios//rules:framework.bzl", "apple_framework")
+load("@build_bazel_rules_ios//rules:app.bzl", "ios_application")
+load("@build_bazel_rules_ios//rules:test.bzl", "ios_ui_test", "ios_unit_test")
+load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
+load("@build_bazel_rules_apple//apple:resources.bzl", "apple_bundle_import")
+
+apple_framework(
+    name = "CppLib",
+    srcs = glob(["Cpp/*"]),
+    platforms = {"ios": "10.0"},
+    swift_version = "5.1",
+    visibility = ["//visibility:public"],
+)
+
+apple_framework(
+    name = "FW",
+    srcs = glob(["FW/*"]),
+    platforms = {"ios": "10.0"},
+    private_headers = glob(["FW/*_Private.*"]),
+    visibility = ["//visibility:public"],
+)
+
+apple_framework(
+    name = "FW2",
+    srcs = glob(["FW2/*"]),
+    platforms = {"ios": "10.0"},
+    visibility = ["//visibility:public"],
+    deps = [":FW"],
+)
+
+apple_framework(
+    name = "Empty",
+)
+
+apple_framework(
+    name = "OnlySources",
+    srcs = glob(["OnlySources/*.m"]),
+    platforms = {"ios": "10.0"},
+)
+
+apple_framework(
+    name = "SwiftLib",
+    srcs = glob(["Swift/*"]),
+    platforms = {"ios": "10.0"},
+    swift_version = "5.1",
+    deps = ["//tests/ios/in-tree-vendor-prebuilt-deps/Pods/MobileFlow"],
+    visibility = ["//visibility:public"],
+)
+
+ios_application(
+    name = "App",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    minimum_os_version = "10.0",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":FW",
+        ":FW2",
+        ":OnlySources",
+        ":SwiftLib",
+    ] + ["//tests/ios/in-tree-vendor-prebuilt-deps/Pods/MobileFlow"],
+
+)
+
+ios_application(
+    name = "AppWithProvisioningProfile",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    minimum_os_version = "10.0",
+    provisioning_profile = "@build_bazel_rules_ios//tests/ios:integration-test.mobileprovision",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":FW",
+        ":FW2",
+        ":OnlySources",
+    ],
+)
+
+ios_application(
+    name = "AppWithEmptyDep",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    minimum_os_version = "10.0",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":Empty",
+        ":FW",
+        ":FW2",
+        ":OnlySources",
+    ],
+)
+
+ios_application(
+    name = "AppWithResources",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    minimum_os_version = "10.0",
+    resources = [
+        "Resources/CustomView.xib",
+    ],
+    deps = [
+        ":Empty",
+        ":FW",
+        ":OnlySources",
+    ],
+)
+
+ios_application(
+    name = "AppWithSettings",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    minimum_os_version = "10.0",
+    settings_bundle = ":settings_bundle",
+    deps = [
+        ":Empty",
+        ":FW",
+        ":OnlySources",
+    ],
+)
+
+apple_bundle_import(
+    name = "settings_bundle",
+    bundle_imports = [":settings_files"],
+)
+
+filegroup(
+    name = "settings_files",
+    srcs = glob(["Settings.bundle/**"]),
+)
+
+INFOPLIST = {
+    "NSPhotoLibraryAddUsageDescription": "This app requires access to the photo library.",
+    "NSPhotoLibraryUsageDescription": "This app requires access to the photo library.",
+    "UISupportedExternalAccessoryProtocols": [
+        "com.example.eap",
+    ],
+    "Int": 1,
+    "Dict": {
+        "A": "a",
+        "B": "b",
+    },
+}
+
+ios_application(
+    name = "AppWithInfoPlist",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    infoplists = [INFOPLIST],
+    minimum_os_version = "10.0",
+    deps = [
+        ":Empty",
+        ":FW",
+        ":OnlySources",
+    ],
+)
+
+ios_unit_test(
+    name = "TestAppWithInfoPlist",
+    srcs = ["infoplist_test.m"],
+    minimum_os_version = "10.0",
+    test_host = ":AppWithInfoPlist",
+)
+
+# Configurable xcconfig, infoplist and entitlements
+#
+string_flag(
+    name = "flavor",
+    build_setting_default = "blue",
+)
+
+[
+    config_setting(
+        name = build_setting,
+        flag_values = {
+            ":flavor": build_setting,
+        },
+    )
+    for build_setting in [
+        "red",
+        "blue",
+    ]
+]
+
+INFOPLIST_2 = {
+    "NSPhotoLibraryAddUsageDescription": "This app requires access to the photo library.",
+    "NSPhotoLibraryUsageDescription": "This app requires access to the photo library.",
+    "UISupportedExternalAccessoryProtocols": [
+        "com.example.eap.2",
+    ],
+    "Int": 2,
+    "Dict": {
+        "C": "c",
+        "D": "d",
+    },
+}
+
+ios_application(
+    name = "AppWithConfigurableAttrs",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    infoplists = [
+        INFOPLIST,
+    ],
+    infoplists_by_build_setting = {
+        ":blue": [
+            INFOPLIST,
+        ],
+        ":red": [
+            INFOPLIST_2,
+        ],
+    },
+    minimum_os_version = "10.0",
+    xcconfig = {
+        "FOO": "YES",
+        "GCC_TREAT_WARNINGS_AS_ERRORS": "YES",
+    },
+    xcconfig_by_build_setting = {
+        ":blue": {
+            "GCC_TREAT_WARNINGS_AS_ERRORS": "YES",
+            "FOO": "NO",
+            "FOO_blue": "blue",
+        },
+        ":red": {
+            "GCC_TREAT_WARNINGS_AS_ERRORS": "NO",
+            "FOO": "NO",
+            "FOO_red": "red",
+        },
+    },
+    deps = [
+        ":Empty",
+        ":FW",
+        ":OnlySources",
+    ],
+)
+
+ios_application(
+    name = "AppWithConfigurableAttrsAndExplicitDefaults",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    infoplists = [
+        INFOPLIST,
+    ],
+    infoplists_by_build_setting = {
+        ":blue": [
+            INFOPLIST,
+        ],
+        ":red": [
+            INFOPLIST_2,
+        ],
+        "//conditions:default": [
+            INFOPLIST,
+        ],
+    },
+    minimum_os_version = "10.0",
+    xcconfig = {
+        "FOO": "YES",
+        "GCC_TREAT_WARNINGS_AS_ERRORS": "YES",
+    },
+    xcconfig_by_build_setting = {
+        ":blue": {
+            "GCC_TREAT_WARNINGS_AS_ERRORS": "YES",
+            "FOO": "NO",
+            "FOO_blue": "blue",
+        },
+        ":red": {
+            "GCC_TREAT_WARNINGS_AS_ERRORS": "NO",
+            "FOO": "NO",
+            "FOO_red": "red",
+        },
+        "//conditions:default": {
+            "FOO": "NO",
+            "GCC_TREAT_WARNINGS_AS_ERRORS": "NO",
+        },
+    },
+    deps = [
+        ":Empty",
+        ":FW",
+        ":OnlySources",
+    ],
+)
+
+ios_application(
+    name = "AppWithSelectableCopts",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    cc_copts = select({
+        ":blue": [],
+        ":red": [],
+    }),
+    infoplists = [INFOPLIST],
+    minimum_os_version = "10.0",
+    objc_copts = select({
+        ":blue": ["-Wno-error=at-protocol"],
+        ":red": [],
+    }),
+    swift_copts = select({
+        ":blue": ["-DDEBUG"],
+        ":red": [],
+    }),
+    swift_version = "5.1",
+    deps = [
+        ":CppLib",
+        ":Empty",
+        ":FW",
+        ":OnlySources",
+        ":SwiftLib",
+    ],
+)
+
