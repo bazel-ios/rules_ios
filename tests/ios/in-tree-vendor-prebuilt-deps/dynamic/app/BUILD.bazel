@@ -43,8 +43,8 @@ apple_framework(
     srcs = glob(["Swift/*"]),
     platforms = {"ios": "10.0"},
     swift_version = "5.1",
-    deps = ["//tests/ios/in-tree-vendor-prebuilt-deps/Pods/MobileFlow"],
     visibility = ["//visibility:public"],
+    deps = ["//tests/ios/in-tree-vendor-prebuilt-deps/Pods/MobileFlow"],
 )
 
 ios_application(
@@ -59,7 +59,6 @@ ios_application(
         ":OnlySources",
         ":SwiftLib",
     ] + ["//tests/ios/in-tree-vendor-prebuilt-deps/Pods/MobileFlow"],
-
 )
 
 ios_application(
@@ -306,4 +305,3 @@ ios_application(
         ":SwiftLib",
     ],
 )
-

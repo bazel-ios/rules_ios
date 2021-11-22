@@ -47,7 +47,16 @@ patch() {
 
      rm -rf "$OF.ar"
 
-     lipo "$FWF" -thin arm64 -output "$OF.ar" || cp "$FWF" "$OF.ar"
+     # Attempt lipo if it's a fat binary
+     ARCHS=()
+     while read ARCH; do
+          ARCHS+=($ARCH)
+     done < <(lipo -archs "$FWF")
+     if test "${#ARCHS[@]}" -gt 1; then 
+         lipo "$FWF" -thin arm64 -output "$OF.ar" || cp "$FWF" "$OF.ar"
+     else
+         cp "$FWF" "$OF.ar"
+     fi
 
      # If unarchive fails assume it was a single object file
      # consider better handling that case
