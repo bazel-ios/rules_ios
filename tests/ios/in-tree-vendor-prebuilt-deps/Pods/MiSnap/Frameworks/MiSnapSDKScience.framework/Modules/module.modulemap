@@ -1,0 +1,6 @@
+framework module MiSnapSDKScience {
+  umbrella header "MiSnapSDKScience.h"
+
+  export *
+  module * { export * }
+}

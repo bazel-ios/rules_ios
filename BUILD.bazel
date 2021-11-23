@@ -28,3 +28,10 @@ config_setting(
         "features": feature_names.arm64_simulator_use_device_deps,
     },
 )
+
+config_setting(
+    name = "bazel4_override_simulator_cpu_arm64",
+    values = {
+        "features": feature_names.bazel4_override_simulator_cpu_arm64,
+    },
+)

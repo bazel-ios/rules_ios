@@ -310,6 +310,7 @@ def _xcframework(*, library_name, name, slices):
     xcframework_name_vfs = xcframework_name + "_vfs"
     conditions = {}
     conditions_vfs = {}
+    any_ios_arm64_slice = None
     for slice in slices:
         platform, platform_variant, archs, name, vfs_overlay_target_name = _xcframework_slice(xcframework_name = xcframework_name, **slice)
         platform_setting = "@build_bazel_rules_ios//rules/apple_platform:" + platform
@@ -318,6 +319,7 @@ def _xcframework(*, library_name, name, slices):
         for arch in archs:
             if arch == "arm64" and platform_variant == "simulator":
                 # TODO: support sim on apple silicon by having a config setting for platform_variant
+                any_ios_arm64_slice = name
                 continue
             elif (arch == "armv7s" or arch == "arm64e") and platform == "ios":
                 # unsupported platform-arch by rules_apple
@@ -325,6 +327,9 @@ def _xcframework(*, library_name, name, slices):
             elif (arch == "x86_64" or arch == "arm64") and platform_variant == "maccatalyst":
                 # TODO: support maccatalyst
                 continue
+            elif arch == "arm64" and platform == "ios":
+                if not any_ios_arm64_slice:
+                    any_ios_arm64_slice = name
 
             rules_apple_platfrom = "darwin" if platform == "macos" else platform
             arch_setting = "@build_bazel_rules_apple//apple:{}_{}".format(rules_apple_platfrom, arch)
@@ -354,6 +359,21 @@ def _xcframework(*, library_name, name, slices):
                 name = config_setting_name,
                 match_all = [platform_setting, arch_setting],
             )
+
+    # Use the arm64 slice when overriding the CPU
+    if any_ios_arm64_slice:
+        native.alias(name = xcframework_name + "default", actual = select(conditions))
+        native.alias(name = xcframework_name + "default_vfs", actual = select(conditions_vfs))
+
+        conditions = {
+            "//conditions:default": xcframework_name + "default",
+            "@build_bazel_rules_ios//:bazel4_override_simulator_cpu_arm64": any_ios_arm64_slice,
+        }
+        conditions_vfs = {
+            "//conditions:default": xcframework_name + "default_vfs",
+            "@build_bazel_rules_ios//:bazel4_override_simulator_cpu_arm64": any_ios_arm64_slice + "_vfs",
+        }
+
     native.alias(
         name = xcframework_name,
         actual = select(conditions, no_match_error = "Unable to find a matching slice for {}.xcframework used by {}".format(
