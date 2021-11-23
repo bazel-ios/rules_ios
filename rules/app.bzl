@@ -57,7 +57,7 @@ def ios_application(name, apple_library = apple_library, infoplists_by_build_set
     application_kwargs["launch_storyboard"] = application_kwargs.pop("launch_storyboard", library.launch_screen_storyboard_name)
     application_kwargs["families"] = application_kwargs.pop("families", ["iphone", "ipad"])
 
-    force_load_direct_deps(name = name + ".__internal__.force_load_direct_deps", deps = library.deps)
+    force_load_direct_deps(name = name + ".__internal__.force_load_direct_deps", deps = library.deps, tags = ["manual"])
 
     import_middleman(name = name + ".import_middleman", deps = library.deps + [name + ".force_load"], tags = ["manual"])
     rules_apple_ios_application(
