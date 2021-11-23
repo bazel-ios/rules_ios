@@ -57,13 +57,13 @@ end
 
 class CompilerMessageLine < RegexMatchLine
   def initialize(line)
-    @regex = /^(.+:) (error:|warning:|note:) (.+)/
+    @regex = /^(.+execroot\/[^\/]+\/)(.+:) (error:|warning:|note:) (.+)/
 
     super(line)
 
     return unless (@match_data = line.match(@regex))
 
-    file_path, error_level, message = match_data.captures
+    _, file_path, error_level, message = match_data.captures
     expanded_file_path = File.expand_path(file_path, BAZEL_WORKSPACE)
 
     full_output = "#{expanded_file_path} #{error_level} #{message}"
