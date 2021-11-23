@@ -1,6 +1,6 @@
 load("@build_bazel_rules_ios//rules:framework.bzl", "apple_framework")
 load("@build_bazel_rules_ios//rules:app.bzl", "ios_application")
-load("@build_bazel_rules_ios//rules:test.bzl", "ios_ui_test", "ios_unit_test")
+load("@build_bazel_rules_ios//rules:test.bzl", "ios_unit_test")
 load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_bundle_import")
 
