@@ -57,14 +57,16 @@ def ios_application(name, apple_library = apple_library, infoplists_by_build_set
     application_kwargs["launch_storyboard"] = application_kwargs.pop("launch_storyboard", library.launch_screen_storyboard_name)
     application_kwargs["families"] = application_kwargs.pop("families", ["iphone", "ipad"])
 
-    force_load_direct_deps(name = name + ".__internal__.force_load_direct_deps", deps = library.deps, tags = ["manual"])
+    force_load_name = name + ".force_load_direct_deps"
+    force_load_direct_deps(name = force_load_name, deps = library.lib_names, tags = ["manual"])
+    default_deps = [force_load_name] + library.lib_names
 
-    import_middleman(name = name + ".import_middleman", deps = library.deps + [name + ".force_load"], tags = ["manual"])
+    import_middleman(name = name + ".import_middleman", deps = default_deps, tags = ["manual"])
     rules_apple_ios_application(
         name = name,
         deps = select({
             "@build_bazel_rules_ios//:arm64_simulator_use_device_deps": [name + ".import_middleman"],
-            "//conditions:default": library.lib_names + [name + ".__internal__.force_load_direct_deps"],
+            "//conditions:default": default_deps,
         }),
         output_discriminator = None,
         infoplists = info_plists_by_setting(name = name, infoplists_by_build_setting = infoplists_by_build_setting, default_infoplists = application_kwargs.pop("infoplists", [])),

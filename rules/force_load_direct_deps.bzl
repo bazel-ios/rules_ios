@@ -1,12 +1,11 @@
 def _impl(ctx):
-    linkopts = []
+    force_load = []
     for dep in ctx.attr.deps:
         if apple_common.Objc in dep:
-            for lib in dep[apple_common.Objc].library.to_list():
-                linkopts.extend(["-Wl,-force_load,{}".format(lib.path)])
+            force_load.append(dep[apple_common.Objc].library)
 
     return apple_common.new_objc_provider(
-        linkopt = depset(linkopts),
+        force_load_library = depset(transitive = force_load),
     )
 
 force_load_direct_deps = rule(
