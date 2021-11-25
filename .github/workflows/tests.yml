@@ -12,8 +12,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Select Xcode 12.2
-        run: sudo xcode-select -s /Applications/Xcode_12.2.app
+      - name: Select Xcode
+        run: .github/workflows/xcode_select.sh
       - name: Build and Test
         run: |
           # Host config
@@ -34,8 +34,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Select Xcode 12.2
-        run: sudo xcode-select -s /Applications/Xcode_12.2.app
+      - name: Select Xcode
+        run: .github/workflows/xcode_select.sh
       - name: Build and Test
         run: |
           # Host config
@@ -59,8 +59,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Select Xcode 12.2
-        run: sudo xcode-select -s /Applications/Xcode_12.2.app
+      - name: Select Xcode
+        run: .github/workflows/xcode_select.sh
       - name: Build and Test
         run: |
           bazelisk clean # Note: there is a problem with some reuse in rules_swift
@@ -87,8 +87,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Select Xcode 12.2
-        run: sudo xcode-select -s /Applications/Xcode_12.2.app
+      - name: Select Xcode
+        run: .github/workflows/xcode_select.sh
         # Note: we need to pass the absolute to the Bazel run
       - name: buildifier
         run: find $PWD -type f \( -name 'WORKSPACE' -o -name '*.bzl' -o -name '*.bazel' \) | xargs bazel run buildifier -- -lint=fix && git diff --exit-code
@@ -108,7 +108,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Select Xcode 12.2
-        run: sudo xcode-select -s /Applications/Xcode_12.2.app
+      - name: Select Xcode
+        run: .github/workflows/xcode_select.sh
       - name: Build App
         run: bazelisk build -s tests/ios/app/App --apple_platform_type=ios --ios_minimum_os=10.2  --ios_multi_cpus=i386,x86_64
