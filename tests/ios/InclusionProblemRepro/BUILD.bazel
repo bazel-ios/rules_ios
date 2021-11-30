@@ -1,4 +1,5 @@
 load("//rules:library.bzl", "apple_library")
+load("//rules:hmap.bzl", "headermap")
 
 apple_library(
     name = "LibraryA",
@@ -13,6 +14,68 @@ apple_library(
         "Classes/HeaderB.h",
         "Classes/HeaderC.h",
         "Classes/Extensions/D.h",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+
+headermap(
+    name="LibraryTest_private_hmap",
+    hdrs=glob([
+        "Classes/HeaderB.h",
+        "Classes/HeaderC.h",
+        "Classes/Extensions/D.h",
+    ]),
+)
+
+# it looks like the use of header maps combined with -fmodules is waht causes the problem to happen.
+objc_library(
+    name = "LibraryNoWorky_objc",
+    srcs = glob([
+        "Classes/HeaderB.h",
+        "Classes/HeaderC.h",
+        "Classes/Extensions/D.h",
+        "Classes/Extensions/D.m",
+    ]),
+    deps = ["LibraryTest_private_hmap"],
+    copts = [
+        "-fmodules",
+        "-fmodule-name=LibraryNoWorky",
+        "-iquote$(execpath :LibraryTest_private_hmap)",
+        "-I."
+    ],
+    visibility = ["//visibility:public"],
+)
+
+
+objc_library(
+    name = "LibraryWorky_objc",
+    srcs = glob([
+        "Classes/HeaderB.h",
+        "Classes/HeaderC.h",
+        "Classes/Extensions/D.h",
+        "Classes/Extensions/D.m",
+    ]),
+    copts = [
+        "-fmodules",
+        "-fmodule-name=LibraryWorky",
+        "-iquotetests/ios/InclusionProblemRepro/Classes",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+objc_library(
+    name = "LibraryWorkyToo_objc",
+    srcs = glob([
+        "Classes/HeaderB.h",
+        "Classes/HeaderC.h",
+        "Classes/Extensions/D.h",
+        "Classes/Extensions/D.m",
+    ]),
+    deps = ["LibraryTest_private_hmap"],    
+    copts = [
+        "-iquote$(execpath :LibraryTest_private_hmap)",
+        "-I."
     ],
     visibility = ["//visibility:public"],
 )
