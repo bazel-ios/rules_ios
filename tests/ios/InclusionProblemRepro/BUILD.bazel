@@ -1,0 +1,18 @@
+load("//rules:library.bzl", "apple_library")
+
+apple_library(
+    name = "LibraryA",
+    srcs = glob([
+        "Classes/HeaderB.h",
+        "Classes/HeaderC.h",
+        "Classes/Extensions/D.h",
+        "Classes/Extensions/D.m",
+    ]),
+    platforms = {"ios": "8.0"},
+    public_headers = [
+        "Classes/HeaderB.h",
+        "Classes/HeaderC.h",
+        "Classes/Extensions/D.h",
+    ],
+    visibility = ["//visibility:public"],
+)
