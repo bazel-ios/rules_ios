@@ -124,8 +124,9 @@ def _xcodeproj_aspect_collect_swift_copts(deps, target, ctx):
     else:
         for dep in deps:
             if _SrcsInfo in dep:
-                if len(dep[_SrcsInfo].swift_copts.to_list()):
-                    return dep[_SrcsInfo].swift_copts
+                dep_swift_opts_list = dep[_SrcsInfo].swift_copts.to_list()
+                if len(dep_swift_opts_list):
+                    return dep_swift_opts_list
     return _join_copts(copts)
 
 def _make_objc_vfs_args(vfs_path):
@@ -168,8 +169,9 @@ def _xcodeproj_aspect_collect_objc_copts(deps, target, ctx):
     else:
         for dep in deps:
             if _SrcsInfo in dep:
-                if len(dep[_SrcsInfo].objc_copts.to_list()):
-                    return dep[_SrcsInfo].objc_copts
+                dep_objc_copts = dep[_SrcsInfo].objc_copts.to_list()
+                if len(dep_objc_copts):
+                    return dep_objc_copts
     return _join_copts(copts)
 
 def _targeted_device_family(ctx):
@@ -288,8 +290,8 @@ def _xcodeproj_aspect_impl(target, ctx):
                     build_files = depset(_srcs_info_build_files(ctx)),
                     direct_srcs = [],
                     hmap_paths = info.hmap_paths,
-                    swift_copts = depset(info.swift_copts),
-                    objc_copts = depset(info.objc_copts),
+                    swift_copts = info.swift_copts,
+                    objc_copts = info.objc_copts,
                     swift_module_paths = info.swift_module_paths,
                 ),
             )
@@ -346,8 +348,8 @@ def _xcodeproj_aspect_impl(target, ctx):
                 swift_defines = depset([], transitive = swift_defines),
                 direct_srcs = srcs,
                 hmap_paths = depset(hmap_paths),
-                swift_copts = depset(swift_copts),
-                objc_copts = depset(objc_copts),
+                swift_copts = depset(direct = swift_copts),
+                objc_copts = depset(direct = objc_copts),
                 swift_module_paths = depset(swift_module_paths, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "swift_module_paths")),
             ),
         )
