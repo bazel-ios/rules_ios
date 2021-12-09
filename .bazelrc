@@ -33,6 +33,10 @@ build --features swift.index_while_building
 # Prevents leaking unexpected binaries via PATH to tests
 build --test_env=PATH=/usr/bin:/bin:/usr/sbin:/sbin
 
+# Avoid running xcode-locator which can be super slow if the machine has many
+# Xcode versions
+build --xcode_version_config=//:host_xcodes
+
 # A toolchain to build the arm64 sim under Bazel 4. The problem is
 # that Bazel should have a new CPU but that needs much work in Bazel. The idea of
 # this toolchain is to conditionally compile x86_64 simulator as arm64. This has

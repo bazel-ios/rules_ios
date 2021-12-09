@@ -35,3 +35,27 @@ config_setting(
         "features": feature_names.bazel4_override_simulator_cpu_arm64,
     },
 )
+
+xcode_version(
+    name = "version12_2_0_12B45b",
+    aliases = [
+        "12",
+        "12.2",
+        "12.2.0",
+        "12.2.0.12B45b",
+    ],
+    default_ios_sdk_version = "14.2",
+    default_macos_sdk_version = "11.0",
+    default_tvos_sdk_version = "14.2",
+    default_watchos_sdk_version = "7.1",
+    version = "12.2.0.12B45b",
+)
+
+xcode_config(
+    name = "host_xcodes",
+    default = ":version12_2_0_12B45b",
+    versions = [
+        ":version12_2_0_12B45b",
+    ],
+    visibility = ["//visibility:public"],
+)
