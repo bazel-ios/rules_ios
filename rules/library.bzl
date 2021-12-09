@@ -974,7 +974,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             "@build_bazel_rules_ios//:virtualize_frameworks": framework_vfs_objc_copts,
             "//conditions:default": framework_vfs_objc_copts if enable_framework_vfs else [],
         })
-
+    if module_map:
+       objc_hdrs.append(module_map)
     objc_library(
         name = objc_libname,
         srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,
