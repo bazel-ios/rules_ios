@@ -161,6 +161,7 @@ def _file_collector_rule_impl(ctx):
         _add_to_dict_if_present(objc_provider_fields, key, set)
 
     exisiting_imported_libraries = objc_provider_fields.get("imported_library", depset([]))
+    # FIXME: do we need to plug this into the outputs?
     objc_provider_fields["imported_library"] = depset(_replace_inputs(ctx, exisiting_imported_libraries, input_imported_libraries, _update_lib).inputs)
 
     exisiting_static_framework = objc_provider_fields.get("static_framework_file", depset([]))
@@ -214,7 +215,7 @@ def _file_collector_rule_impl(ctx):
     )
 
     return [
-        DefaultInfo(files = depset(dynamic_framework_dirs)),
+        DefaultInfo(files = depset(dynamic_framework_dirs + replaced_frameworks)),
         objc,
         _make_imports([depset(dynamic_framework_dirs)]),
     ]
