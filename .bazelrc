@@ -33,6 +33,10 @@ build --features swift.index_while_building
 # Prevents leaking unexpected binaries via PATH to tests
 build --test_env=PATH=/usr/bin:/bin:/usr/sbin:/sbin
 
+build --remote_cache=grpcs://remote.buildbuddy.io
+build --remote_instance_name=rules_ios
+build --noremote_upload_local_results
+
 # A toolchain to build the arm64 sim under Bazel 4. The problem is
 # that Bazel should have a new CPU but that needs much work in Bazel. The idea of
 # this toolchain is to conditionally compile x86_64 simulator as arm64. This has
@@ -47,3 +51,5 @@ common:bazel4_arm64_simulator_arm64_host --features bazel4.override_simulator_cp
 # Similar to above but doesn't override the host CPU 
 common:bazel4_arm64_simulator_x86_64_host --features apple.arm64_simulator_use_device_deps 
 common:bazel4_arm64_simulator_x86_64_host --features bazel4.override_simulator_cpu_arm64
+
+try-import %workspace%/.bazelrc.ci

@@ -5,3 +5,4 @@ tests/ios/xcodeproj/**/xcuserdata
 **/*.xcodeproj/bazelinstallers/index-import
 /tests/ios/Index/
 /tests/macos/Index/
+/.bazelrc.ci
