@@ -13,7 +13,7 @@ fi
 declare -a EXISTING_SWIFTMODULES=()
 for i in $FOUND_SWIFTMODULES
 do
-  if [[ -f $i ]]
+  if [[ -f $i ]] && [[ $i == bazel-out/ios-* ]]
   then
     EXISTING_SWIFTMODULES+=($i)
   fi
