@@ -30,9 +30,13 @@ readonly xcode_module="$BUILT_PRODUCTS_DIR/\$1.swiftmodule/$ARCHS.swiftmodule"
 readonly bazel_external="$bazel_root/external"
 readonly xcode_external="$BAZEL_WORKSPACE_ROOT/bazel-$(basename "$SRCROOT")/external"
 
+readonly remote_developer_dir="^/.*/.+?\.app/Contents/Developer"
+readonly local_developer_dir="$DEVELOPER_DIR"
+
 
 $BAZEL_INSTALLERS_DIR/index-import \
     -incremental \
+    -remap "$remote_developer_dir=$local_developer_dir" \
     -remap "$bazel_module=$xcode_module" \
     -remap "$bazel_swift_object=$xcode_object" \
     -remap "$bazel_objc_object=$xcode_object" \
