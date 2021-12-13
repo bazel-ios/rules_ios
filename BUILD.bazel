@@ -53,9 +53,10 @@ xcode_version(
 
 xcode_config(
     name = "host_xcodes",
-    default = ":version12_2_0_12B45b",
+    default = ":version12_5_1_12E507",
     versions = [
         ":version12_2_0_12B45b",
+        ':version12_5_1_12E507'
     ],
     visibility = ["//visibility:public"],
 )
@@ -68,11 +69,6 @@ xcode_version(
   default_tvos_sdk_version = '14.5',
   default_macos_sdk_version = '11.3',
   default_watchos_sdk_version = '7.4',
-)
-
-xcode_config(name = 'host_xcodes',
-  versions = [':version12_5_1_12E507'],
-  default = ':version12_5_1_12E507',
 )
 
 available_xcodes(name = 'host_available_xcodes',
