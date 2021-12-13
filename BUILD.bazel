@@ -39,7 +39,6 @@ config_setting(
 xcode_version(
     name = "version12_2_0_12B45b",
     aliases = [
-        "12",
         "12.2",
         "12.2.0",
         "12.2.0.12B45b",
