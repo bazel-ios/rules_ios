@@ -100,7 +100,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Select Xcode 12.5.1
-        run: sudo xcode-select -s /Applications/Xcode_12.5.1.app
+        run: .github/workflows/xcode_select.sh
       - name: Run tests
         run: ./tests/xcodeproj-tests.sh --clean
   multi_arch_support:
