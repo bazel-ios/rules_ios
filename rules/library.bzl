@@ -362,8 +362,8 @@ def _xcframework(*, library_name, name, slices):
 
     # Use the arm64 slice when overriding the CPU
     if any_ios_arm64_slice:
-        native.alias(name = xcframework_name + "default", actual = select(conditions))
-        native.alias(name = xcframework_name + "default_vfs", actual = select(conditions_vfs))
+        native.alias(name = xcframework_name + "default", actual = select(conditions), tags = _MANUAL)
+        native.alias(name = xcframework_name + "default_vfs", actual = select(conditions_vfs), tags = _MANUAL)
 
         conditions = {
             "//conditions:default": xcframework_name + "default",
