@@ -39,7 +39,6 @@ config_setting(
 xcode_version(
     name = "version12_2_0_12B45b",
     aliases = [
-        "12",
         "12.2",
         "12.2.0",
         "12.2.0.12B45b",
@@ -53,9 +52,34 @@ xcode_version(
 
 xcode_config(
     name = "host_xcodes",
-    default = ":version12_2_0_12B45b",
+    default = ":version12_5_1_12E507",
     versions = [
         ":version12_2_0_12B45b",
+        ":version12_5_1_12E507",
     ],
     visibility = ["//visibility:public"],
+)
+
+xcode_version(
+    name = "version12_5_1_12E507",
+    aliases = [
+        "12.5.1",
+        "12",
+        "12.5",
+        "12.5.1.12E507",
+    ],
+    default_ios_sdk_version = "14.5",
+    default_macos_sdk_version = "11.3",
+    default_tvos_sdk_version = "14.5",
+    default_watchos_sdk_version = "7.4",
+    version = "12.5.1.12E507",
+)
+
+available_xcodes(
+    name = "host_available_xcodes",
+    default = ":version12_5_1_12E507",
+    versions = [
+        ":version12_5_1_12E507",
+        ":version12_2_0_12B45b",
+    ],
 )

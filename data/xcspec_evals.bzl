@@ -1,6 +1,6 @@
 ############################################################################
 #                   THIS IS GENERATED CODE                                 #
-# Extracted from Xcode 12.2                                     #
+# Extracted from Xcode 12.5.1.12E507                                     #
 # To update, in rules_ios run `bazel run data_generators:extract_xcspecs`  #
 ############################################################################
 
@@ -155,7 +155,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_MODULE_DEBUGGING__DefaultV
     return (False, "YES")
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_DEBUG_MODULES__Condition(xcconfigs, id_configs):
-    # $(GCC_GENERATE_DEBUGGING_SYMBOLS) == YES  &&  ( $(CLANG_ENABLE_MODULES) == YES  ||  ( $(GCC_PREFIX_HEADER) != ''  &&  $(GCC_PRECOMPILE_PREFIX_HEADER) == YES ) )
+    # $(GCC_GENERATE_DEBUGGING_SYMBOLS) == YES  &&  ! $(INDEX_ENABLE_BUILD_ARENA)  &&  ( $(CLANG_ENABLE_MODULES) == YES  ||  ( $(GCC_PREFIX_HEADER) != ''  &&  $(GCC_PRECOMPILE_PREFIX_HEADER) == YES ) )
 
     used_user_content = False
 
@@ -171,7 +171,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_DEBUG_MODULES__Condition(xcconfig
             used_user_content = used_user_content or eval_val_0_used_user_content
 
     eval_val_1 = ""
-    eval_key_1 = "CLANG_ENABLE_MODULES"
+    eval_key_1 = "INDEX_ENABLE_BUILD_ARENA"
     if eval_key_1 in xcconfigs:
         eval_val_1 = xcconfigs[eval_key_1]
         used_user_content = True
@@ -182,7 +182,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_DEBUG_MODULES__Condition(xcconfig
             used_user_content = used_user_content or eval_val_1_used_user_content
 
     eval_val_2 = ""
-    eval_key_2 = "GCC_PREFIX_HEADER"
+    eval_key_2 = "CLANG_ENABLE_MODULES"
     if eval_key_2 in xcconfigs:
         eval_val_2 = xcconfigs[eval_key_2]
         used_user_content = True
@@ -193,7 +193,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_DEBUG_MODULES__Condition(xcconfig
             used_user_content = used_user_content or eval_val_2_used_user_content
 
     eval_val_3 = ""
-    eval_key_3 = "GCC_PRECOMPILE_PREFIX_HEADER"
+    eval_key_3 = "GCC_PREFIX_HEADER"
     if eval_key_3 in xcconfigs:
         eval_val_3 = xcconfigs[eval_key_3]
         used_user_content = True
@@ -203,7 +203,18 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_DEBUG_MODULES__Condition(xcconfig
             (eval_val_3_used_user_content, eval_val_3) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_3_used_user_content
 
-    return (used_user_content, (eval_val_0 == "YES" and (eval_val_1 == "YES" or (eval_val_2 != "" and eval_val_3 == "YES"))))
+    eval_val_4 = ""
+    eval_key_4 = "GCC_PRECOMPILE_PREFIX_HEADER"
+    if eval_key_4 in xcconfigs:
+        eval_val_4 = xcconfigs[eval_key_4]
+        used_user_content = True
+    elif eval_key_4 in id_configs:
+        opt = id_configs[eval_key_4]
+        if "DefaultValue" in opt:
+            (eval_val_4_used_user_content, eval_val_4) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
+            used_user_content = used_user_content or eval_val_4_used_user_content
+
+    return (used_user_content, (eval_val_0 == "YES" and not eval_val_1 and (eval_val_2 == "YES" or (eval_val_3 != "" and eval_val_4 == "YES"))))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_DEBUG_MODULES__DefaultValue(xcconfigs, id_configs):
     # $(CLANG_ENABLE_MODULE_DEBUGGING)
@@ -2770,7 +2781,7 @@ def _com_apple_pbx_linkers_ld__LD_VERIFY_BITCODE__DefaultValue(xcconfigs, id_con
     return (False, "YES")
 
 def _com_apple_pbx_linkers_ld__LD_HIDE_BITCODE_SYMBOLS__Condition(xcconfigs, id_configs):
-    # $(ENABLE_BITCODE) == YES  &&  $(BITCODE_GENERATION_MODE) == bitcode
+    # $(ENABLE_BITCODE) == YES  &&  $(BITCODE_GENERATION_MODE) == bitcode  &&  $(MACH_O_TYPE) != mh_object
 
     used_user_content = False
 
@@ -2796,7 +2807,18 @@ def _com_apple_pbx_linkers_ld__LD_HIDE_BITCODE_SYMBOLS__Condition(xcconfigs, id_
             (eval_val_1_used_user_content, eval_val_1) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_1_used_user_content
 
-    return (used_user_content, (eval_val_0 == "YES" and eval_val_1 == "bitcode"))
+    eval_val_2 = ""
+    eval_key_2 = "MACH_O_TYPE"
+    if eval_key_2 in xcconfigs:
+        eval_val_2 = xcconfigs[eval_key_2]
+        used_user_content = True
+    elif eval_key_2 in id_configs:
+        opt = id_configs[eval_key_2]
+        if "DefaultValue" in opt:
+            (eval_val_2_used_user_content, eval_val_2) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
+            used_user_content = used_user_content or eval_val_2_used_user_content
+
+    return (used_user_content, (eval_val_0 == "YES" and eval_val_1 == "bitcode" and eval_val_2 != "mh_object"))
 
 def _com_apple_pbx_linkers_ld__LD_HIDE_BITCODE_SYMBOLS__DefaultValue(xcconfigs, id_configs):
     # $(HIDE_BITCODE_SYMBOLS)
@@ -3560,10 +3582,6 @@ def _com_apple_xcode_tools_swift_compiler____SWIFT_ENFORCE_EXCLUSIVE_ACCESS_DEBU
 def _com_apple_xcode_tools_swift_compiler____SWIFT_ENFORCE_EXCLUSIVE_ACCESS_DEBUG_ENFORCEMENT_DEBUG__DefaultValue(xcconfigs, id_configs):
     # YES
     return (False, "YES")
-
-def _com_apple_xcode_tools_swift_compiler__SWIFT_SWIFT3_OBJC_INFERENCE__DefaultValue(xcconfigs, id_configs):
-    # Default
-    return (False, "Default")
 
 def _com_apple_xcode_tools_swift_compiler__SWIFT_STDLIB__DefaultValue(xcconfigs, id_configs):
     # swiftCore
@@ -4330,7 +4348,6 @@ XCSPEC_EVALS = {
     "com_apple_xcode_tools_swift_compiler__SWIFT_SERIALIZE_DEBUGGING_OPTIONS__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_SERIALIZE_DEBUGGING_OPTIONS__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__SWIFT_STDLIB__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_STDLIB__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__SWIFT_SUPPRESS_WARNINGS__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_SUPPRESS_WARNINGS__DefaultValue,
-    "com_apple_xcode_tools_swift_compiler__SWIFT_SWIFT3_OBJC_INFERENCE__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_SWIFT3_OBJC_INFERENCE__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__SWIFT_TARGET_TRIPLE__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_TARGET_TRIPLE__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__SWIFT_THREAD_SANITIZER__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_THREAD_SANITIZER__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__SWIFT_TREAT_WARNINGS_AS_ERRORS__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_TREAT_WARNINGS_AS_ERRORS__DefaultValue,

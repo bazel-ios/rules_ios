@@ -1,6 +1,6 @@
 ############################################################################
 #                   THIS IS GENERATED CODE                                 #
-# Extracted from Xcode 12.2                                     #
+# Extracted from Xcode 12.5.1.12E507                                     #
 # To update, in rules_ios run `bazel run data_generators:extract_xcspecs`  #
 ############################################################################
 
@@ -2710,27 +2710,6 @@ SETTINGS = {
                 "Condition": "com_apple_xcode_tools_swift_compiler____SWIFT_ENFORCE_EXCLUSIVE_ACCESS_DEBUG_ENFORCEMENT_DEBUG__Condition",
                 "DefaultValue": "com_apple_xcode_tools_swift_compiler____SWIFT_ENFORCE_EXCLUSIVE_ACCESS_DEBUG_ENFORCEMENT_DEBUG__DefaultValue",
                 "Type": "Boolean",
-            },
-            "SWIFT_SWIFT3_OBJC_INFERENCE": {
-                "Category": "Code Generation",
-                "CommandLineArgs": {
-                    "Off": [
-                        "-Xfrontend",
-                        "-disable-swift3-objc-inference",
-                    ],
-                    "On": [
-                        "-Xfrontend",
-                        "-enable-swift3-objc-inference",
-                        "-Xfrontend",
-                        "-warn-swift3-objc-inference-minimal",
-                    ],
-                },
-                "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_SWIFT3_OBJC_INFERENCE__DefaultValue",
-                "Description": "Control how the Swift compiler infers @objc " +
-                               "for declarations.",
-                "DisplayName": "Swift 3 @objc Inference",
-                "Type": "Enumeration",
-                "Values": ["Default", "On", "Off"],
             },
             "SWIFT_STDLIB": {
                 "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_STDLIB__DefaultValue",
