@@ -214,7 +214,7 @@ def _file_collector_rule_impl(ctx):
     )
 
     return [
-        DefaultInfo(files = depset(dynamic_framework_dirs)),
+        DefaultInfo(files = depset(dynamic_framework_dirs + replaced_frameworks)),
         objc,
         _make_imports([depset(dynamic_framework_dirs)]),
     ]
