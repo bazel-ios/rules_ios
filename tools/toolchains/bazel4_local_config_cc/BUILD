@@ -89,7 +89,7 @@ cc_toolchain_suite(
         compiler = "compiler",
         cpu = arch,
         cxx_builtin_include_directories = [
-            "/Applications/",
+            "/",
             "/Library/",
         ],
         tool_paths_overrides = {},
