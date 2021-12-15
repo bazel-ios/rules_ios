@@ -81,6 +81,8 @@ def _find_imports_impl(target, ctx):
             dynamic_framework_file.append(dep[_FindImportsAspectInfo].dynamic_framework_file)
             import_infos.update(dep[_FindImportsAspectInfo].import_infos)
 
+    #if ctx.rule.kind == "import_middleman":
+    #    return []
     if ctx.rule.kind == "objc_import":
         imported_library_file.append(target[apple_common.Objc].imported_library)
     elif AppleFrameworkImportInfo in target:
@@ -145,11 +147,11 @@ def _deduplicate_test_deps(test_deps, deps):
     filtered = []
     if len(test_deps) == 0:
        return deps 
-    for dep in test_deps:
-       if dep in deps and not dep.is_source:
+    for dep in deps:
+       if not dep in test_deps:
           filtered.append(dep)
-       else:
-          print("SKIP", dep)
+    #   else:
+    #      print("SKIP", dep)
     return filtered
 
 def _file_collector_rule_impl(ctx):
@@ -201,8 +203,7 @@ def _file_collector_rule_impl(ctx):
     exisiting_static_framework = objc_provider_fields.get("static_framework_file", depset([]))
 
     deduped_static_framework = depset(_deduplicate_test_deps(test_linker_deps[0], exisiting_static_framework.to_list()))
-    print("Deduped", deduped_static_framework, input_static_frameworks)
-    print("Deduped2", deduped_static_framework)
+    #print("Deduped2", deduped_static_framework)
     replaced_static_framework = _replace_inputs(ctx, deduped_static_framework, input_static_frameworks, _update_framework)
     objc_provider_fields["static_framework_file"] = depset(replaced_static_framework.inputs)
 
