@@ -179,14 +179,14 @@ def _file_collector_rule_impl(ctx):
         "sdk_dylib",
         "sdk_framework",
         "weak_sdk_framework",
-        "imported_library",
         "force_load_library",
         "source",
         "link_inputs",
         "linkopt",
         "library",
-        "dynamic_framework_file",
-        "static_framework_file",
+        #"imported_library",
+        #"dynamic_framework_file",
+        #"static_framework_file",
     ]:
         set = depset(
             direct = [],
