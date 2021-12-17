@@ -122,12 +122,12 @@ def _replace_inputs(ctx, inputs, new_inputs, update_fn):
             replaced.append(f)
     return struct(inputs = replaced, replaced = updated_inputs)
 
-def _file_collector_rule_impl(ctx):
+def _merge_linked_inputs(deps):
     all_static_framework_file = [depset()]
     all_imported_library_file = [depset()]
     all_dynamic_framework_file = [depset()]
     all_import_infos = {}
-    for dep in ctx.attr.deps:
+    for dep in deps:
         if _FindImportsAspectInfo in dep:
             all_static_framework_file.append(dep[_FindImportsAspectInfo].static_framework_file)
             all_imported_library_file.append(dep[_FindImportsAspectInfo].imported_library_file)
@@ -138,20 +138,41 @@ def _file_collector_rule_impl(ctx):
     input_imported_libraries = depset(transitive = all_imported_library_file).to_list()
     input_dynamic_frameworks = depset(transitive = all_dynamic_framework_file).to_list()
 
+    return (input_static_frameworks, input_imported_libraries, input_dynamic_frameworks, all_import_infos)
+
+def _deduplicate_test_deps(test_deps, deps):
+    filtered = []
+    if len(test_deps) == 0:
+        return deps
+    for dep in deps:
+        if not dep in test_deps:
+            filtered.append(dep)
+    return filtered
+
+def _file_collector_rule_impl(ctx):
+    linker_deps = _merge_linked_inputs(ctx.attr.deps)
+    test_linker_deps = _merge_linked_inputs(ctx.attr.test_deps)
+    input_static_frameworks = _deduplicate_test_deps(test_linker_deps[0], linker_deps[0])
+    input_imported_libraries = _deduplicate_test_deps(test_linker_deps[1], linker_deps[1])
+    input_dynamic_frameworks = _deduplicate_test_deps(test_linker_deps[2], linker_deps[2])
+    all_import_infos = linker_deps[3]
+
     objc_provider_fields = {}
 
     for key in [
         "sdk_dylib",
         "sdk_framework",
         "weak_sdk_framework",
-        "imported_library",
         "force_load_library",
         "source",
         "link_inputs",
         "linkopt",
         "library",
-        "dynamic_framework_file",
-        "static_framework_file",
+        # TODO(jmarino) theoretically we don't need these, verify if that's the
+        # case
+        #"imported_library",
+        #"dynamic_framework_file",
+        #"static_framework_file",
     ]:
         set = depset(
             direct = [],
@@ -161,15 +182,19 @@ def _file_collector_rule_impl(ctx):
         _add_to_dict_if_present(objc_provider_fields, key, set)
 
     exisiting_imported_libraries = objc_provider_fields.get("imported_library", depset([]))
-    objc_provider_fields["imported_library"] = depset(_replace_inputs(ctx, exisiting_imported_libraries, input_imported_libraries, _update_lib).inputs)
+    replaced_imported_libraries = _replace_inputs(ctx, exisiting_imported_libraries, input_imported_libraries, _update_lib).inputs
+    objc_provider_fields["imported_library"] = depset(_deduplicate_test_deps(test_linker_deps[1], replaced_imported_libraries))
 
     exisiting_static_framework = objc_provider_fields.get("static_framework_file", depset([]))
-    replaced_static_framework = _replace_inputs(ctx, exisiting_static_framework, input_static_frameworks, _update_framework)
+
+    deduped_static_framework = depset(_deduplicate_test_deps(test_linker_deps[0], exisiting_static_framework.to_list()))
+    replaced_static_framework = _replace_inputs(ctx, deduped_static_framework, input_static_frameworks, _update_framework)
     objc_provider_fields["static_framework_file"] = depset(replaced_static_framework.inputs)
 
     # Update dynamic frameworks - note that we need to do some additional
     # processing for the ad-hoc files e.g. ( Info.plist )
     exisiting_dynamic_framework = objc_provider_fields.get("dynamic_framework_file", depset([]))
+    deduped_dynamic_framework = depset(_deduplicate_test_deps(test_linker_deps[2], exisiting_dynamic_framework.to_list()))
     dynamic_framework_file = []
     dynamic_framework_dirs = []
     replaced_dyanmic_framework = {}
@@ -186,7 +211,7 @@ def _file_collector_rule_impl(ctx):
         ad_hoc_file.remove(f)
         dynamic_framework_dirs.extend(ad_hoc_file)
 
-    for f in exisiting_dynamic_framework.to_list():
+    for f in deduped_dynamic_framework.to_list():
         if not replaced_dyanmic_framework.get(f, False):
             dynamic_framework_file.append(f)
             dynamic_framework_dirs.append(f)
@@ -223,6 +248,7 @@ import_middleman = rule(
     implementation = _file_collector_rule_impl,
     attrs = {
         "deps": attr.label_list(aspects = [find_imports]),
+        "test_deps": attr.label_list(aspects = [find_imports], allow_empty = True),
         "update_in_place": attr.label(executable = True, default = Label("//tools/m1_utils:update_in_place"), cfg = "host"),
     },
     doc = """
