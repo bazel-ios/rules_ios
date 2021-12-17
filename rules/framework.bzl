@@ -280,8 +280,8 @@ def _get_framework_files(ctx, deps):
                     destination = paths.join(framework_dir, "Headers", hdr.basename)
                     header_out.append(destination)
                 elif hdr.path.endswith(".modulemap") and hdr.owner != dep.label:
-                    modulemap_in = hdr     
-                
+                    modulemap_in = hdr
+
             if not has_header:
                 # only thing is the generated module map -- we don't want it
                 continue
@@ -299,7 +299,6 @@ def _get_framework_files(ctx, deps):
                     # from the attr
                     continue
                 modulemap_in = modulemap
-           
 
     binary_out = None
     modulemap_out = None
