@@ -328,6 +328,9 @@ def _xcframework(*, library_name, name, slices):
                 elif arch == "arm64":
                     if platform_variant == "simulator":
                         arm64_simulator_slice = name
+
+                        # Skip this - it's later defined
+                        continue
                     else:
                         arm64_ios_device_slice = name
 
