@@ -2,6 +2,7 @@
 # executable
 load("@build_bazel_rules_swift//swift/internal:feature_names.bzl", "SWIFT_FEATURE_USE_GLOBAL_INDEX_STORE")
 load("//rules:features.bzl", "feature_names")
+load("@bazel_skylib//lib:selects.bzl", "selects")
 
 sh_binary(
     name = "buildifier",
@@ -30,10 +31,28 @@ config_setting(
 )
 
 config_setting(
-    name = "bazel4_override_simulator_cpu_arm64",
+    name = "bazel4_override_simulator_cpu_arm64_default",
     values = {
+        "cpu": "",
         "features": feature_names.bazel4_override_simulator_cpu_arm64,
     },
+)
+
+config_setting(
+    name = "bazel4_override_simulator_cpu_arm64_default_intel",
+    values = {
+        "cpu": "x86_64",
+        "features": feature_names.bazel4_override_simulator_cpu_arm64,
+    },
+)
+
+# TODO(jmarino) for Bazel 5, we shoud have a config_setting for ios_sim_arm64
+selects.config_setting_group(
+    name = "bazel4_override_simulator_cpu_arm64",
+    match_any = [
+        ":bazel4_override_simulator_cpu_arm64_default",
+        ":bazel4_override_simulator_cpu_arm64_default_intel",
+    ],
 )
 
 xcode_version(

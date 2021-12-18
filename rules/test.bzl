@@ -59,7 +59,12 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
 
     library = apple_library(name = name, namespace_is_module_name = False, platforms = {"ios": ios_test_kwargs.get("minimum_os_version")}, **kwargs)
 
-    import_middleman(name = name + ".import_middleman", deps = library.lib_names, tags = ["manual"])
+    # Deduplicate against the test deps
+    if ios_test_kwargs.get("test_host", None):
+        host_args = [ios_test_kwargs["test_host"]]
+    else:
+        host_args = []
+    import_middleman(name = name + ".import_middleman", deps = library.lib_names, test_deps = host_args, tags = ["manual"])
     rule(
         name = name,
         deps = select({
