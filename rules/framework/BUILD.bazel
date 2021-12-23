@@ -4,4 +4,5 @@ py_binary(
     name = "framework_packaging",
     srcs = ["framework_packaging.py"],
     visibility = ["//visibility:public"],
+    python_version = "PY2",
 )
