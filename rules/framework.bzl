@@ -279,7 +279,7 @@ def _get_framework_files(ctx, deps):
                     header_in.append(hdr)
                     destination = paths.join(framework_dir, "Headers", hdr.basename)
                     header_out.append(destination)
-                elif hdr.path.endswith(".modulemap") and hdr.owner != dep.label:
+                elif hdr.path.endswith(".modulemap"):
                     modulemap_in = hdr
 
             if not has_header:
