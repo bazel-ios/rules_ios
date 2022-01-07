@@ -134,3 +134,24 @@ def rules_ios_bazel4_arm64_sim_dependencies():
         name = "local_config_cc_toolchains",
         path = "tools/toolchains/bazel4_local_config_cc_toolchains",
     )
+
+
+def rules_ios_bazel5_dependencies():
+    github_repo(
+        name = "build_bazel_rules_swift",
+        project = "bazel-ios",
+        ref = "dba78ba02092b9f94f520318742c532beb31689c",
+        repo = "rules_swift",
+        sha256 = "f3d30214281bfbc320baeea9d9aeeb4fd92fca421d0dca0ef790cd4f2ffbce93",
+    )
+
+    sub_repository(
+        name = "local_config_cc",
+        path = "tools/toolchains/bazel5_local_config_cc",
+    )
+
+    sub_repository(
+        name = "local_config_cc_toolchains",
+        path = "tools/toolchains/bazel5_local_config_cc_toolchains",
+    )
+
