@@ -41,7 +41,7 @@ config_setting(
 config_setting(
     name = "bazel4_override_simulator_cpu_arm64_default_intel",
     values = {
-        "cpu": "x86_64",
+        "cpu": "ios_x86_64",
         "features": feature_names.bazel4_override_simulator_cpu_arm64,
     },
 )
