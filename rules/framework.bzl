@@ -279,6 +279,8 @@ def _get_framework_files(ctx, deps):
                     header_in.append(hdr)
                     destination = paths.join(framework_dir, "Headers", hdr.basename)
                     header_out.append(destination)
+                elif hdr.path.endswith(".modulemap"):
+                    modulemap_in = hdr
 
             if not has_header:
                 # only thing is the generated module map -- we don't want it
@@ -436,9 +438,6 @@ def _get_merged_objc_provider(ctx, deps, transitive_deps):
         "weak_sdk_framework",
         "imported_library",
         "force_load_library",
-        "multi_arch_linked_archives",
-        "multi_arch_linked_binaries",
-        "multi_arch_dynamic_libraries",
         "source",
         "link_inputs",
         "linkopt",

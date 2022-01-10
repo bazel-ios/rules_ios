@@ -129,7 +129,7 @@ def _apple_framework_import_modulemap_impl(ctx):
     new_cc_info = cc_common.merge_cc_infos(
         cc_infos = [
             old_cc_info,
-            CcInfo(compilation_context = cc_common.create_compilation_context(headers = depset(old_objc_provider.module_map))),
+            CcInfo(compilation_context = cc_common.create_compilation_context(headers = old_objc_provider.module_map)),
         ],
     )
 
