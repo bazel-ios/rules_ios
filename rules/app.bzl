@@ -12,6 +12,7 @@ load("//rules:force_load_direct_deps.bzl", "force_load_direct_deps")
 # - Perhaps we can just remove this wrapper longer term.
 _IOS_APPLICATION_KWARGS = [
     "bundle_id",
+    "bundle_name",
     "infoplists",
     "env",
     "minimum_os_version",
