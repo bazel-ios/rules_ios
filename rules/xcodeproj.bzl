@@ -251,8 +251,13 @@ def _xcodeproj_aspect_impl(target, ctx):
                 test_host_appname = test_host_target[_TargetInfo].direct_targets[0].name
 
         framework_includes = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "framework_includes"))
+
+        target_name = getattr(ctx.rule.attr, "name")
+        bundle_name = bundle_info.bundle_name if bundle_info.bundle_name else target_name
+
         info = struct(
-            name = bundle_info.bundle_name,
+            name = target_name,
+            bundle_name = bundle_name,
             bundle_id = bundle_info.bundle_id,
             bundle_extension = bundle_info.bundle_extension,
             bazel_build_target_workspace = target.label.workspace_name or ctx.workspace_name,
@@ -667,7 +672,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
         asset_sources = _gather_asset_sources(target_info, src_dot_dots)
 
         target_settings = {
-            "PRODUCT_NAME": target_name,
+            "PRODUCT_NAME": target_info.bundle_name,
             "ONLY_ACTIVE_ARCH": "YES",
             "BAZEL_BIN_SUBDIR": target_info.bazel_bin_subdir,
             "MACH_O_TYPE": target_macho_type,
