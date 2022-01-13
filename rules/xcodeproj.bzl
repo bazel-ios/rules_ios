@@ -251,8 +251,9 @@ def _xcodeproj_aspect_impl(target, ctx):
                 test_host_appname = test_host_target[_TargetInfo].direct_targets[0].name
 
         framework_includes = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "framework_includes"))
+
         info = struct(
-            name = bundle_info.bundle_name,
+            name = bundle_info.bundle_name + bundle_info.bundle_extension,
             bundle_id = bundle_info.bundle_id,
             bundle_extension = bundle_info.bundle_extension,
             bazel_build_target_workspace = target.label.workspace_name or ctx.workspace_name,
