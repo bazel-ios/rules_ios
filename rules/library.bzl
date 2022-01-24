@@ -407,7 +407,7 @@ def _find_imported_framework_name(outputs):
         return fw_name
     return None
 
-def apple_library(name, library_tools = {}, export_private_headers = True, namespace_is_module_name = True, default_xcconfig_name = None, xcconfig = {}, xcconfig_by_build_setting = {}, **kwargs):
+def apple_library(name, library_tools = {}, export_private_headers = True, namespace_is_module_name = True, default_xcconfig_name = None, xcconfig = {}, xcconfig_by_build_setting = {}, objc_defines = [], swift_defines = [], **kwargs):
     """Create libraries for native source code on Apple platforms.
 
     Automatically handles mixed-source libraries and comes with
@@ -428,6 +428,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
 
                                    Each value is applied (overriding any matching setting in 'xcconfig') if
                                    the respective bazel build setting is resolved during the analysis phase.
+        objc_defines: A list of Objective-C defines to add to the compilation command line. They should be in the form KEY=VALUE or simply KEY and are passed not only to the compiler for this target (as copts are) but also to all objc_ dependers of this target.
+        swift_defines: A list of Swift defines to add to the compilation command line. Swift defines do not have values, so strings in this list should be simple identifiers and not KEY=VALUE pairs. (only expections are KEY=1 and KEY=0). These flags are added for the target and every target that depends on it.
         **kwargs: keyword arguments.
 
     Returns:
@@ -519,6 +521,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     fetch_default_xcconfig = library_tools["fetch_default_xcconfig"](name, library_tools, default_xcconfig_name, **kwargs) if default_xcconfig_name else {}
     copts_by_build_setting = copts_by_build_setting_with_defaults(xcconfig, fetch_default_xcconfig, xcconfig_by_build_setting)
     enable_framework_vfs = kwargs.pop("enable_framework_vfs", False) or namespace_is_module_name
+    defines = kwargs.pop("defines", [])
 
     for (k, v) in {"momc_copts": momc_copts, "mapc_copts": mapc_copts, "ibtool_copts": ibtool_copts}.items():
         if v:
@@ -896,6 +899,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             }),
             data = [module_data],
             tags = tags_manual,
+            defines = defines + swift_defines,
             **kwargs
         )
         lib_names.append(swift_libname)
@@ -976,6 +980,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         })
     if module_map:
         objc_hdrs.append(module_map)
+
     objc_library(
         name = objc_libname,
         srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,
@@ -991,6 +996,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         pch = pch,
         data = [] if swift_sources else [module_data],
         tags = tags_manual,
+        defines = defines + objc_defines,
         **kwargs
     )
     launch_screen_storyboard_name = name + "_launch_screen_storyboard"
