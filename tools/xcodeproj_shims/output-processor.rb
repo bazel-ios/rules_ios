@@ -13,6 +13,8 @@ class BazelOutputLine
   def self.from(line)
     if (message_line = CompilerMessageLine.create_from(line))
       message_line
+    elsif (message_line = AbsolutePathCompilerMessageLine.create_from(line))
+      message_line
     elsif (starlark_line = StarlarkLine.create_from(line))
       starlark_line
     else
@@ -57,10 +59,24 @@ end
 
 class CompilerMessageLine < RegexMatchLine
   def initialize(line)
+    @regex = /^(.+:) (error:|warning:|note:) (.+)/
+
+    super(line)
+    return unless (@match_data = line.match(@regex))
+
+    file_path, error_level, message = match_data.captures
+    expanded_file_path = File.expand_path(file_path, BAZEL_WORKSPACE)
+
+    full_output = "#{expanded_file_path} #{error_level} #{message}"
+    @text = full_output
+  end
+end
+
+class AbsolutePathCompilerMessageLine < RegexMatchLine
+  def initialize(line)
     @regex = /^(.+execroot\/[^\/]+\/)(.+:) (error:|warning:|note:) (.+)/
 
     super(line)
-
     return unless (@match_data = line.match(@regex))
 
     _, file_path, error_level, message = match_data.captures
