@@ -14,9 +14,10 @@ unarchive() {
     # Consider writing code to check for that case
     ar -x "$FILE" 
     ar t "$FILE" | grep \.o$ | sort > objs.txt
- 
-    if [[ "$(cat objs.txt | uniq | /sbin/md5)" == "$(cat objs.txt | /sbin/md5)" ]]; then
-       return -1
+
+    # Assume default extraction strategy is OK if no dupes
+    if [[ -z "$(uniq -d objs.txt)" ]]; then
+       return 0
     fi
 
     i=0
