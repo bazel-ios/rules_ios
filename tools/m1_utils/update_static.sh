@@ -74,7 +74,7 @@ patch() {
          chmod 777 "$file"
          # Test if the LC_BUILD_VERSION is 24, e.g. we already gave it an m1 arm64
          # object and exit
-         if otool -l "$file" | grep -q LC_BUILD_VERSION | tail -1; then
+         if otool -l "$file" | grep -q LC_BUILD_VERSION; then
             cp "$FWF" "$OF"
 
             exit 0
