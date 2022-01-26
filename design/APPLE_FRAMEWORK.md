@@ -43,9 +43,11 @@ apple_framework(
     swift_copts = ["-stuff"],
     objc_copts = ["--stuff"],
     cc_copts = ["--stuff"],
+    swift_defines = ["G", "H=1", "I=0"],
+    objc_defines = ["A=B", "\'C=D E F\'"],
 
     # propagated
-    defines = ["foo=bar"],
+    defines = ["FOO=BAR"],
     linkopts = ["--stuff"],
     other_inputs = [],  # stuff that you need, like swiftc_inputs
     linking_style = None,  # dynamic vs static, defaults to None, which does
