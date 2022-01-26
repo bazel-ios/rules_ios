@@ -47,6 +47,42 @@ apple_framework(
     visibility = ["//visibility:public"],
 )
 
+apple_framework(
+    name = "WithDefinesObjc",
+    srcs = glob(["WithDefinesObjc/*.m"]),
+    defines = [
+        "MACRO_A",
+        "MACRO_B=1",
+        "MACRO_C=0",
+    ],
+    objc_defines = [
+        "MACRO_D",
+        "MACRO_E=1",
+        "MACRO_F=0",
+        "\'MACRO_G=1 2 3\'",
+    ],
+    platforms = {"ios": "10.0"},
+    visibility = ["//visibility:public"],
+)
+
+apple_framework(
+    name = "WithDefinesSwift",
+    srcs = glob(["WithDefinesSwift/*.swift"]),
+    defines = [
+        "MACRO_H",
+        "MACRO_I=1",
+        "MACRO_J=0",
+    ],
+    platforms = {"ios": "10.0"},
+    swift_defines = [
+        "MACRO_K",
+        "MACRO_L=1",
+        "MACRO_M=0",
+    ],
+    swift_version = "5.1",
+    visibility = ["//visibility:public"],
+)
+
 ios_application(
     name = "App",
     srcs = ["App/main.m"],
@@ -128,6 +164,38 @@ ios_application(
         ":Empty",
         ":FW",
         ":OnlySources",
+    ],
+)
+
+ios_application(
+    name = "AppWithDefines",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    defines = [
+        "A",
+        "B=1",
+        "C=0",
+    ],
+    minimum_os_version = "10.0",
+    objc_defines = [
+        "D",
+        "E=1",
+        "F=0",
+        "\'G=H I J\'",
+    ],
+    settings_bundle = ":settings_bundle",
+    swift_defines = [
+        "K",
+        "L=1",
+        "M=0",
+    ],
+    swift_version = "5.1",
+    deps = [
+        ":Empty",
+        ":FW",
+        ":OnlySources",
+        ":WithDefinesObjc",
+        ":WithDefinesSwift",
     ],
 )
 
