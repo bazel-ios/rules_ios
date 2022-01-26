@@ -9,9 +9,6 @@ unarchive() {
     FILE="$PWD/$1"
 
     rm -rf *.o 
-
-    # Assume that if unarchiving fails, it's already an object.
-    # Consider writing code to check for that case
     ar -x "$FILE" 
     ar t "$FILE" | grep \.o$ | sort > objs.txt
 
