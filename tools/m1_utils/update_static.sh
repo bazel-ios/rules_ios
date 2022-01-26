@@ -41,6 +41,7 @@ unarchive() {
 patch() {
      EXTDIR="$(mktemp -d "${TMPDIR:-/tmp}/bazel_m1_utils.XXXXXXXX")"
      pushd $EXTDIR > /dev/null
+     trap "rm -rf $EXTDIR" EXIT
 
      # Attempt lipo if it's a fat binary
      ARCHS=()
