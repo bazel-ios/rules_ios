@@ -9,14 +9,12 @@ unarchive() {
     FILE="$PWD/$1"
 
     rm -rf *.o 
-
-    # Assume that if unarchiving fails, it's already an object.
-    # Consider writing code to check for that case
-    ar -x "$FILE" || (mv "$FILE" "$FILE.o" && return)
+    ar -x "$FILE" 
     ar t "$FILE" | grep \.o$ | sort > objs.txt
- 
-    if [[ "$(cat objs.txt | uniq | /sbin/md5)" == "$(cat objs.txt | /sbin/md5)" ]]; then
-       return -1
+
+    # Assume default extraction strategy is OK if no dupes
+    if [[ -z "$(uniq -d objs.txt)" ]]; then
+       return 0
     fi
 
     i=0
@@ -56,9 +54,13 @@ patch() {
          cp "$FWF" "OF.ar"
      fi
 
-     # If unarchive fails assume it was a single object file
-     # consider better handling that case
-     unarchive "OF.ar" || true
+     # Don't unarchive a 64-bit object arm64
+     FILE="OF.ar"
+     if file "$FILE" | grep -q "64-bit object arm64"; then
+         mv "$FILE" "$FILE.o"
+     else
+         unarchive "OF.ar"
+     fi
 
      touch link.filelist
 
@@ -68,12 +70,21 @@ patch() {
      # Update each of the files
      for file in *.o; do
          chmod 777 "$file"
-         # TODO: Versions should be input from the build system - hardcoded to 11
-         if ! "$ARM64_TO_SIM_PATH" "$file" 11 11 --obj; then 
+         # Test if the LC_BUILD_VERSION is 24, e.g. we already gave it an m1 arm64
+         # object and exit
+         if otool -l "$file" | grep -q LC_BUILD_VERSION; then
+            cp "$FWF" "$OF"
+
+            exit 0
+         elif ! "$ARM64_TO_SIM_PATH" "$file" 11 11 --obj; then 
+             # TODO: Versions should be input from the build system - hardcoded to 11
              cp "$FWF" "$OF"
+
              # This also allows gracefully failing on non-PIC code to include
              # special Apple LD flag and un-knowing frameworks. Consider
-             # removing this once there is a way to test for latter conditions.
+             # removing this once there is a way to test for latter condition.
+             # We should also provide a way to use the secret "linker flag" to
+             # allow the link to work
              echo "warning: falling back to input for $(basename $OF)"
              exit 0
          fi
