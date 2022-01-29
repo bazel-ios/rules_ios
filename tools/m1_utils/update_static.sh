@@ -47,7 +47,7 @@ patch() {
      ARCHS=()
      mkdir -p "$(dirname $OF)"
      while read ARCH; do
-          ARCHS+=($ARCH)
+          ARCHS+=("$ARCH")
      done < <(lipo -archs "$FWF")
      if test "${#ARCHS[@]}" -gt 1; then 
          lipo "$FWF" -thin arm64 -output "OF.ar" || cp "$FWF" "OF.ar"
