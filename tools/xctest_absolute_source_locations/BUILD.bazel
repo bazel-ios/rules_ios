@@ -1,0 +1,8 @@
+load("@rules_cc//cc:defs.bzl", "objc_library")
+
+objc_library(
+    name = "xctest_absolute_source_locations",
+    srcs = ["xctest_absolute_source_locations.m"],
+    sdk_frameworks = ["XCTest"],
+    visibility = ["//visibility:public"],
+)
