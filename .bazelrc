@@ -46,3 +46,6 @@ common:bazel4_arm64_simulator_arm64_host --features bazel4.override_simulator_cp
 # Similar to above but doesn't override the host CPU 
 common:bazel4_arm64_simulator_x86_64_host --features apple.arm64_simulator_use_device_deps 
 common:bazel4_arm64_simulator_x86_64_host --features bazel4.override_simulator_cpu_arm64
+
+# Turn on the middleman - it's now conditionally enabled when necessary
+build --features apple.arm64_simulator_use_device_deps 

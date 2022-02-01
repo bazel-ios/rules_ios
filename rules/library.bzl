@@ -371,11 +371,11 @@ def _xcframework(*, library_name, name, slices):
 
         conditions = {
             "//conditions:default": xcframework_name + "default",
-            "@build_bazel_rules_ios//:bazel4_override_simulator_cpu_arm64": alias_slice,
+            "@build_bazel_rules_ios//:arm64_simulator_use_device_deps": alias_slice,
         }
         conditions_vfs = {
             "//conditions:default": xcframework_name + "default_vfs",
-            "@build_bazel_rules_ios//:bazel4_override_simulator_cpu_arm64": alias_slice + "_vfs",
+            "@build_bazel_rules_ios//:arm64_simulator_use_device_deps": alias_slice + "_vfs",
         }
 
     native.alias(

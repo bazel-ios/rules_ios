@@ -26,7 +26,10 @@ def _cpu_string(platform_type, settings):
         ios_cpus = settings["//command_line_option:ios_multi_cpus"]
         if ios_cpus:
             return "ios_{}".format(ios_cpus[0])
-        return "ios_x86_64"
+        if settings["//command_line_option:cpu"] == "darwin_arm64":
+            return "ios_sim_arm64"
+        else:
+            return "ios_x86_64"
     if platform_type == "macos":
         macos_cpus = settings["//command_line_option:macos_cpus"]
         if macos_cpus:

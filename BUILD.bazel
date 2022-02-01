@@ -23,30 +23,97 @@ config_setting(
     },
 )
 
-config_setting(
+load("@bazel_skylib//lib:selects.bzl", "selects")
+# Implement this config_setting per-cpu given the feature
+
+selects.config_setting_group(
     name = "arm64_simulator_use_device_deps",
+    match_any = [
+        ":arm64_simulator_use_device_deps_default",
+        ":arm64_simulator_use_device_deps_intel",
+        ":arm64_simulator_use_device_deps_sim_arm64",
+    ],
+)
+
+config_setting(
+    name = "feature_arm64_simulator_use_device_deps",
     values = {
         "features": feature_names.arm64_simulator_use_device_deps,
     },
 )
 
 config_setting(
-    name = "bazel4_override_simulator_cpu_arm64_default",
+    name = "feature_bazel4_override_simulator_cpu_arm64",
     values = {
-        "cpu": "",
         "features": feature_names.bazel4_override_simulator_cpu_arm64,
     },
 )
 
 config_setting(
-    name = "bazel4_override_simulator_cpu_arm64_default_intel",
+    name = "cpu_default",
     values = {
-        "cpu": "ios_x86_64",
-        "features": feature_names.bazel4_override_simulator_cpu_arm64,
+        "cpu": "",
     },
 )
 
-# TODO(jmarino) for Bazel 5, we shoud have a config_setting for ios_sim_arm64
+config_setting(
+    name = "cpu_ios_x86_64",
+    values = {
+        "cpu": "ios_x86_64",
+    },
+)
+
+config_setting(
+    name = "cpu_ios_sim_arm64",
+    values = {
+        "cpu": "ios_sim_arm64",
+    },
+)
+
+# Default this on for simulators when platform is done
+selects.config_setting_group(
+    name = "arm64_simulator_use_device_deps_default",
+    match_all = [
+        ":cpu_default",
+        ":feature_arm64_simulator_use_device_deps",
+        ":feature_bazel4_override_simulator_cpu_arm64",
+    ],
+)
+
+selects.config_setting_group(
+    name = "arm64_simulator_use_device_deps_intel",
+    match_all = [
+        ":cpu_ios_x86_64",
+        ":feature_arm64_simulator_use_device_deps",
+        ":feature_bazel4_override_simulator_cpu_arm64",
+    ],
+)
+
+# Implement this feature per CPU
+selects.config_setting_group(
+    name = "arm64_simulator_use_device_deps_sim_arm64",
+    match_all = [
+        ":cpu_ios_sim_arm64",
+        ":feature_arm64_simulator_use_device_deps",
+    ],
+)
+
+selects.config_setting_group(
+    name = "bazel4_override_simulator_cpu_arm64_default",
+    match_all = [
+        ":cpu_default",
+        ":feature_bazel4_override_simulator_cpu_arm64",
+    ],
+)
+
+selects.config_setting_group(
+    name = "bazel4_override_simulator_cpu_arm64_default_intel",
+    match_all = [
+        ":cpu_ios_x86_64",
+        ":feature_bazel4_override_simulator_cpu_arm64",
+    ],
+)
+
 selects.config_setting_group(
     name = "bazel4_override_simulator_cpu_arm64",
     match_any = [

@@ -2,11 +2,8 @@ workspace(name = "build_bazel_rules_ios")
 
 load(
     "//rules:repositories.bzl",
-    "rules_ios_bazel4_arm64_sim_dependencies",
     "rules_ios_dependencies",
 )
-
-rules_ios_bazel4_arm64_sim_dependencies()
 
 rules_ios_dependencies()
 

@@ -54,7 +54,7 @@ jobs:
           name: bazel-testlogs
           path: bazel-testlogs
 
-  build_bazel4_arm64_simulator:
+  build_arm64_simulator:
     name: Build arm64 Simulator
     runs-on: macos-latest
     steps:
@@ -63,13 +63,12 @@ jobs:
         run: .github/workflows/xcode_select.sh
       - name: Build and Test
         run: |
-          bazelisk clean # Note: there is a problem with some reuse in rules_swift
-          bazelisk build --config bazel4_arm64_simulator_x86_64_host  --features apple.virtualize_frameworks -- //... -//tests/ios/...
+          bazelisk build --ios_multi_cpus=sim_arm64  --features apple.virtualize_frameworks -- //... -//tests/ios/...
 
           # Misc issues:
           # Carthage is busted for -//tests/ios/frameworks/sources-with-prebuilt-binaries/...
           # Fails on a non fat framework for //tests/ios/unit-test/test-imports-app/
-          bazelisk build --config bazel4_arm64_simulator_x86_64_host  --features apple.virtualize_frameworks \
+          bazelisk build --ios_multi_cpus=sim_arm64 --features apple.virtualize_frameworks \
               --apple_platform_type=ios \
               --deleted_packages='' \
               -- //tests/ios/... \
