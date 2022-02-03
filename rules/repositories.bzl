@@ -47,6 +47,15 @@ def github_repo(name, project, repo, ref, sha256 = None, **kwargs):
 def rules_ios_dependencies():
     """Fetches repositories that are dependencies of the `rules_apple` workspace.
     """
+
+    github_repo(
+        name = "build_bazel_rules_swift",
+        project = "bazel-ios",
+        ref = "dba78ba02092b9f94f520318742c532beb31689c",
+        repo = "rules_swift",
+        sha256 = "f3d30214281bfbc320baeea9d9aeeb4fd92fca421d0dca0ef790cd4f2ffbce93",
+    )
+
     _maybe(
         github_repo,
         name = "build_bazel_rules_apple",
