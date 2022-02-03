@@ -47,5 +47,8 @@ common:bazel4_arm64_simulator_arm64_host --features bazel4.override_simulator_cp
 common:bazel4_arm64_simulator_x86_64_host --features apple.arm64_simulator_use_device_deps 
 common:bazel4_arm64_simulator_x86_64_host --features bazel4.override_simulator_cpu_arm64
 
+# Broken on Intel + Bazel 5 so turnoff
+build --deleted_packages tools/toolchains/bazel4_local_config_cc
+
 # Turn on the middleman - it's now conditionally enabled when necessary
 build --features apple.arm64_simulator_use_device_deps 
