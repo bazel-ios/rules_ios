@@ -1,5 +1,7 @@
 <!-- Generated with Stardoc: http://skydoc.bazel.build -->
 
+This file contains rules to build framework binaries from your podfile or cartfile
+
 <a id="#build_carthage_frameworks"></a>
 
 ## build_carthage_frameworks

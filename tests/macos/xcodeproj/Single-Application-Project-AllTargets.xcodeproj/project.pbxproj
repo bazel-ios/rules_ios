@@ -16,7 +16,6 @@
 /* Begin PBXFileReference section */
 		0CED6BFA64273E7D643365B7 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		22A1FF4EF7BCD46937725C85 /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.pch; sourceTree = "<group>"; };
-		3936F6C85BC43D9ABF078420 /* ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ios.entitlements; sourceTree = "<group>"; };
 		5976518F3C0E5F4753E44514 /* Single-Application-RunnableTestSuite.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "Single-Application-RunnableTestSuite.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		705989AC65B3703138E736BB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		78FAC8B505DC9C839473A482 /* iOS-12.0-AppHost.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "iOS-12.0-AppHost.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -40,7 +39,6 @@
 			isa = PBXGroup;
 			children = (
 				0CED6BFA64273E7D643365B7 /* BUILD.bazel */,
-				3936F6C85BC43D9ABF078420 /* ios.entitlements */,
 				705989AC65B3703138E736BB /* main.m */,
 			);
 			path = test_host_app;

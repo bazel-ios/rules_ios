@@ -24,7 +24,6 @@
 		6A3CAE8C1B77C4BC5C1960B6 /* FW2.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FW2.m; sourceTree = "<group>"; };
 		6DB5C8D0CE82124392EAACEB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		937945179FAA050FE9F610DA /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.pch; sourceTree = "<group>"; };
-		A35C97FD0D317BAF0C4C2EF1 /* integration-test.mobileprovision */ = {isa = PBXFileReference; path = "integration-test.mobileprovision"; sourceTree = "<group>"; };
 		B88000279624D9AC2EBDEF30 /* FW.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FW.m; sourceTree = "<group>"; };
 		C7804EE4DD90FCBAA4296592 /* AppWithProvisioningProfile.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = AppWithProvisioningProfile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8A116AAC7C54F1C24C09DA6 /* FW_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FW_Private.h; sourceTree = "<group>"; };
@@ -80,7 +79,6 @@
 			isa = PBXGroup;
 			children = (
 				D95FDA3CD13E9B99D176659D /* app */,
-				A35C97FD0D317BAF0C4C2EF1 /* integration-test.mobileprovision */,
 			);
 			path = ios;
 			sourceTree = "<group>";

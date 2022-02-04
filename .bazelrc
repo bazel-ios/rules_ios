@@ -46,3 +46,10 @@ common:bazel4_arm64_simulator_arm64_host --features bazel4.override_simulator_cp
 # Similar to above but doesn't override the host CPU 
 common:bazel4_arm64_simulator_x86_64_host --features apple.arm64_simulator_use_device_deps 
 common:bazel4_arm64_simulator_x86_64_host --features bazel4.override_simulator_cpu_arm64
+
+# Broken on Intel + Bazel 5 so turnoff
+build --deleted_packages tools/toolchains/bazel4_local_config_cc
+
+# Enable device deps when the build matches the arm64 simulator
+# Bazel 5 - matches ios_sim_arm64 CPU, Bazel 4 - needs "override" flags
+build --features apple.arm64_simulator_use_device_deps
