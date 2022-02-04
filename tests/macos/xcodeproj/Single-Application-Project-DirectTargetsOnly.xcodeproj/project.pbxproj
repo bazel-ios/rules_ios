@@ -19,7 +19,6 @@
 		4D13FC12B4485F863BAAF03E /* NonArcObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NonArcObject.m; sourceTree = "<group>"; };
 		4E55BF6E6C589A4AA45D06C8 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		712BB7D3F966AAE042C40E4E /* iOS-12.0-AppHost.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "iOS-12.0-AppHost.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		71385EF3D5F3851B35F520C5 /* ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ios.entitlements; sourceTree = "<group>"; };
 		94000CEDD7AE8D8B38E4F95D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		9735D50F44B3B4D188BA18BF /* Single-Application-RunnableTestSuite.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "Single-Application-RunnableTestSuite.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0197AD7F0C86A837943EF5F /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.pch; sourceTree = "<group>"; };
@@ -78,7 +77,6 @@
 			isa = PBXGroup;
 			children = (
 				13B2E31F413103B9CBA4D1CB /* BUILD.bazel */,
-				71385EF3D5F3851B35F520C5 /* ios.entitlements */,
 				94000CEDD7AE8D8B38E4F95D /* main.m */,
 			);
 			path = test_host_app;

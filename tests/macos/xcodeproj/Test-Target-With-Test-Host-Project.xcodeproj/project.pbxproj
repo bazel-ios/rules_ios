@@ -46,7 +46,6 @@
 		4BF0C0F5D81C125CD2559615 /* testhelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = testhelper.m; sourceTree = "<group>"; };
 		4DACF9F33F414B6BED4E227B /* testhelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = testhelper.h; sourceTree = "<group>"; };
 		57D04511C7357979F7EB5058 /* TestModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestModel.xcdatamodel; sourceTree = "<group>"; };
-		5BE4EAFF6C0B54947E66B439 /* ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ios.entitlements; sourceTree = "<group>"; };
 		5EF21FC7C23005F0603AD4F0 /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
 		61CE3CBBAD0BFAFC0953377B /* TestImports-App.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "TestImports-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B5478D8BA2BE2A548270A80 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
@@ -80,7 +79,6 @@
 			isa = PBXGroup;
 			children = (
 				C3241F917953C6BD1D2BE62A /* BUILD.bazel */,
-				5BE4EAFF6C0B54947E66B439 /* ios.entitlements */,
 				211B0D62D65A5D8BEFE42153 /* main.m */,
 			);
 			path = test_host_app;
