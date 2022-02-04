@@ -100,6 +100,7 @@ native_binary(
         name = "arm64-to-sim",
         remote = "https://github.com/bogo/arm64-to-sim.git",
         commit = "25599a28689fa42679f23eb0ff031ebe57d3bb9b",
+        shallow_since = "1636567136 -0500",
         build_file_content = """
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
 
