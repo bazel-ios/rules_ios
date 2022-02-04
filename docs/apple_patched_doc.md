@@ -1,5 +1,7 @@
 <!-- Generated with Stardoc: http://skydoc.bazel.build -->
 
+This file contains drop-in replacements for rules in the rules_apple repository
+
 <a id="#apple_dynamic_framework_import"></a>
 
 ## apple_dynamic_framework_import

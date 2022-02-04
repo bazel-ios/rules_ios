@@ -1,5 +1,7 @@
 <!-- Generated with Stardoc: http://skydoc.bazel.build -->
 
+Header Map rules
+
 <a id="#headermap"></a>
 
 ## headermap

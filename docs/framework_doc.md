@@ -1,5 +1,7 @@
 <!-- Generated with Stardoc: http://skydoc.bazel.build -->
 
+Framework rules
+
 <a id="#apple_framework_packaging"></a>
 
 ## apple_framework_packaging

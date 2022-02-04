@@ -46,8 +46,8 @@ load(
 
 git_repository(
     name = "io_bazel_stardoc",
-    commit = "fa1878a1c4eae78a8aff016500777bedbc0bdf32",
-    remote = "https://github.com/segiddins/stardoc.git",
+    commit = "f4d4b3a965c9ae36feeff5eb3171d6ba17406b84",
+    remote = "https://github.com/bazelbuild/stardoc.git",
     shallow_since = "1599264569 -0700",
 )
 
