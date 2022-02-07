@@ -471,14 +471,6 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             swift_sources.append(f)
         elif f.endswith((".cc", ".cpp")):
             cpp_sources.append(f)
-        elif f.count("sample_objc_proto_srcs") > 0:
-            objc_sources.append(f)
-        elif f.count("sample_objc_proto_hdrs") > 0:
-            objc_hdrs.append(f)
-        elif f.count("second_objc_proto_srcs") > 0:
-            objc_sources.append(f)
-        elif f.count("second_objc_proto_hdrs") > 0:
-            objc_hdrs.append(f)
         else:
             fail("Unable to compile %s in apple_framework %s" % (f, name))
 

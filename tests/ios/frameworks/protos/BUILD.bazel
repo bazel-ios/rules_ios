@@ -4,7 +4,6 @@ load("//rules:framework.bzl", "apple_framework")
 
 exports_files(["*.proto"])
 
-
 proto_library(
     name = "sample_proto",
     srcs = ["sample.proto"],
@@ -17,22 +16,25 @@ objc_proto_compile(
 
 # Filter files to sources and headers
 filter_files(
-    name = "sample_objc_proto_srcs",
-    target = "sample_objc_proto",
+    name = "sample_objc_proto.m",
     extensions = ["m"],
+    target = "sample_objc_proto",
 )
 
 filter_files(
-    name = "sample_objc_proto_hdrs",
-    target = "sample_objc_proto",
+    name = "sample_objc_proto.h",
     extensions = ["h"],
+    target = "sample_objc_proto",
 )
 
 apple_framework(
-    name = "SampleProtoFramework",    
-    srcs = [":sample_objc_proto_srcs", ":sample_objc_proto_hdrs"],
-    deps = ["@com_google_protobuf//:protobuf_objc"],
+    name = "SampleProtoFramework",
+    srcs = [
+        ":sample_objc_proto.h",
+        ":sample_objc_proto.m",
+    ],
+    includes = ["sample_objc_proto"],
     platforms = {"ios": "10.0"},
     visibility = ["//visibility:public"],
-    includes = ["sample_objc_proto"],
+    deps = ["@com_google_protobuf//:protobuf_objc"],
 )
