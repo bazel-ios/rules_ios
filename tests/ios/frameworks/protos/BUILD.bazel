@@ -1,40 +1,39 @@
-load("@rules_proto_grpc//objc:defs.bzl", "objc_proto_compile")
-load("@rules_proto_grpc//internal:filter_files.bzl", "filter_files")
-load("//rules:framework.bzl", "apple_framework")
+load("proto_library.bzl", "apple_proto_libary")
+load("//rules:framework.bzl", "apple_framework", "apple_framework_packaging")
 
-exports_files(["*.proto"])
-
-proto_library(
-    name = "sample_proto",
-    srcs = ["sample.proto"],
+# Export protobuf into a framework module
+objc_library(
+    name = "Protobuf_hdrs",
+    hdrs = ["Protobuf/module.modulemap"],
 )
 
-objc_proto_compile(
-    name = "sample_objc_proto",
-    protos = [":sample_proto"],
+apple_framework_packaging(
+    name = "Protobuf",
+    framework_name = "Protobuf",
+    transitive_deps = [],
+    deps = [
+        "Protobuf_hdrs",
+        "@com_github_protocolbuffers_protobuf//:objectivec",
+    ],
 )
 
-# Filter files to sources and headers
-filter_files(
-    name = "sample_objc_proto.m",
-    extensions = ["m"],
-    target = "sample_objc_proto",
+# Note: the proto_map.txt needs to correspend with the names here
+# Specifically calling these Sample or SampleProto
+apple_proto_libary(
+    name = "Sample",
+    proto_srcs = ["sample.proto"],
+    deps = [":Dep"],
 )
 
-filter_files(
-    name = "sample_objc_proto.h",
-    extensions = ["h"],
-    target = "sample_objc_proto",
+apple_proto_libary(
+    name = "Dep",
+    proto_srcs = ["dep.proto"],
 )
 
 apple_framework(
-    name = "SampleProtoFramework",
-    srcs = [
-        ":sample_objc_proto.h",
-        ":sample_objc_proto.m",
-    ],
-    includes = ["sample_objc_proto"],
-    platforms = {"ios": "10.0"},
-    visibility = ["//visibility:public"],
-    deps = ["@com_google_protobuf//:protobuf_objc"],
+    name = "Some",
+    srcs = ["Some.swift"],
+    objc_defines = ["GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS=1"],
+    swift_defines = ["GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS=1"],
+    deps = ["Sample"],
 )

@@ -1,0 +1,2 @@
+Sample:tests/ios/frameworks/protos/sample.proto
+Dep:tests/ios/frameworks/protos/dep.proto
