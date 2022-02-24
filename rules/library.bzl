@@ -1019,6 +1019,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         transitive_deps = deps,
         deps = lib_names + deps,
         module_name = module_name,
+        data = module_data,
         launch_screen_storyboard_name = launch_screen_storyboard_name,
         namespace = namespace,
         linkopts = copts_by_build_setting.linkopts + linkopts,

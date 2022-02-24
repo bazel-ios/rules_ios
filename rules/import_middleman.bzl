@@ -63,14 +63,15 @@ def _add_to_dict_if_present(dict, key, value):
 
 def _make_imports(transitive_sets):
     provider_fields = {}
-    if transitive_sets:
-        provider_fields["framework_imports"] = depset(transitive = transitive_sets)
+    if len(transitive_sets):
+        provider_fields["framework_imports"] = depset(transitive_sets)
+
     provider_fields["build_archs"] = depset(["arm64"])
     provider_fields["debug_info_binaries"] = depset(transitive_sets)
 
     # TODO: consider passing along the dsyms
     provider_fields["dsym_imports"] = depset()
-    return AppleFrameworkImportInfo(**provider_fields)
+    return [AppleFrameworkImportInfo(**provider_fields)]
 
 def _find_imports_impl(target, ctx):
     static_framework_file = []
@@ -254,8 +255,7 @@ def _file_collector_rule_impl(ctx):
     return [
         DefaultInfo(files = depset(dynamic_framework_dirs + replaced_frameworks)),
         objc,
-        _make_imports([depset(dynamic_framework_dirs)]),
-    ]
+    ] + _make_imports(dynamic_framework_dirs)
 
 import_middleman = rule(
     implementation = _file_collector_rule_impl,
