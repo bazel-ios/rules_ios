@@ -1,11 +1,27 @@
+load("//rules:providers.bzl", "AvoidDepsInfo")
+
 def _impl(ctx):
+    force_load = []
+
+    avoid_deps = []
+    for dep in ctx.attr.deps:
+        if AvoidDepsInfo in dep:
+            avoid_deps.extend(dep[AvoidDepsInfo].libraries)
+
+    avoid_libraries = {}
+    for dep in avoid_deps:
+        if apple_common.Objc in dep:
+            for lib in dep[apple_common.Objc].library.to_list():
+                avoid_libraries[lib] = True
+
     force_load = []
     for dep in ctx.attr.deps:
         if apple_common.Objc in dep:
-            force_load.append(dep[apple_common.Objc].library)
-
+            for lib in dep[apple_common.Objc].library.to_list():
+                if not lib in avoid_libraries:
+                    force_load.append(lib)
     return apple_common.new_objc_provider(
-        force_load_library = depset(transitive = force_load),
+        force_load_library = depset(force_load),
     )
 
 force_load_direct_deps = rule(

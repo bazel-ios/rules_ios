@@ -33,6 +33,7 @@ _IOS_APPLICATION_KWARGS = [
     "minimum_deployment_os_version",
     "ipa_post_processor",
     "include_symbols_in_bundle",
+    "frameworks",
 ]
 
 def ios_application(name, apple_library = apple_library, infoplists_by_build_setting = {}, **kwargs):
@@ -59,9 +60,9 @@ def ios_application(name, apple_library = apple_library, infoplists_by_build_set
     application_kwargs["families"] = application_kwargs.pop("families", ["iphone", "ipad"])
 
     force_load_name = name + ".force_load_direct_deps"
-    force_load_direct_deps(name = force_load_name, deps = library.lib_names, tags = ["manual"])
-    default_deps = [force_load_name] + library.lib_names
+    force_load_direct_deps(name = force_load_name, deps = kwargs.get("deps"), tags = ["manual"])
 
+    default_deps = [force_load_name] + library.lib_names
     import_middleman(name = name + ".import_middleman", deps = default_deps, tags = ["manual"])
     rules_apple_ios_application(
         name = name,

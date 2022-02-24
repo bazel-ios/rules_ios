@@ -1,24 +1,34 @@
 """Framework rules"""
 
-load("@build_bazel_rules_apple//apple/internal:apple_product_type.bzl", "apple_product_type")
-load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo", "AppleSupportToolchainInfo")
-load("@build_bazel_rules_apple//apple/internal:platform_support.bzl", "platform_support")
-load("@build_bazel_rules_apple//apple/internal:resource_actions.bzl", "resource_actions")
-load("@build_bazel_rules_apple//apple/internal:rule_support.bzl", "rule_support")
-load("@bazel_skylib//lib:paths.bzl", "paths")
-load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo", "swift_common")
-load("//rules:library.bzl", "PrivateHeadersInfo", "apple_library")
-load("//rules:transition_support.bzl", "transition_support")
-load("//rules:providers.bzl", "FrameworkInfo")
 load("//rules/framework:vfs_overlay.bzl", "VFSOverlayInfo", "make_vfsoverlay")
 load("//rules:features.bzl", "feature_names")
+load("//rules:library.bzl", "PrivateHeadersInfo", "apple_library")
 load("//rules:plists.bzl", "info_plists_by_setting")
+load("//rules:providers.bzl", "AvoidDepsInfo", "FrameworkInfo")
+load("//rules:transition_support.bzl", "transition_support")
+load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@build_bazel_rules_apple//apple/internal:apple_product_type.bzl", "apple_product_type")
+load("@build_bazel_rules_apple//apple/internal:bundling_support.bzl", "bundling_support")
+load("@build_bazel_rules_apple//apple/internal:features_support.bzl", "features_support")
+load("@build_bazel_rules_apple//apple/internal:linking_support.bzl", "linking_support")
+load("@build_bazel_rules_apple//apple/internal:outputs.bzl", "outputs")
+load("@build_bazel_rules_apple//apple/internal:partials.bzl", "partials")
+load("@build_bazel_rules_apple//apple/internal:platform_support.bzl", "platform_support")
+load("@build_bazel_rules_apple//apple/internal:processor.bzl", "processor")
+load("@build_bazel_rules_apple//apple/internal:resource_actions.bzl", "resource_actions")
+load("@build_bazel_rules_apple//apple/internal:resources.bzl", "resources")
+load("@build_bazel_rules_apple//apple/internal:rule_support.bzl", "rule_support")
+load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo", "AppleSupportToolchainInfo", "IosFrameworkBundleInfo")
+load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo", "swift_common")
 
 _APPLE_FRAMEWORK_PACKAGING_KWARGS = [
     "visibility",
+    "frameworks",
     "tags",
+    "data",
     "bundle_id",
     "skip_packaging",
+    "link_dynamic",
 ]
 
 def apple_framework(name, apple_library = apple_library, **kwargs):
@@ -517,6 +527,252 @@ def _attrs_for_split_slice(attrs_by_split_slices, split_slice_key):
     else:
         return attrs_by_split_slices[split_slice_key]
 
+def _bundle_dynamic_framework(ctx, avoid_deps):
+    """Packages this as dynamic framework
+
+    Currently, this doesn't include headers or other interface files.
+    """
+    actions = ctx.actions
+    apple_toolchain_info = ctx.attr._toolchain[AppleSupportToolchainInfo]
+    bin_root_path = ctx.bin_dir.path
+    bundle_id = ctx.attr.bundle_id
+    bundle_name, bundle_extension = bundling_support.bundle_full_name_from_rule_ctx(ctx)
+    executable_name = bundling_support.executable_name(ctx)
+    features = features_support.compute_enabled_features(
+        requested_features = ctx.features,
+        unsupported_features = ctx.disabled_features,
+    )
+    label = ctx.label
+    platform_prerequisites = platform_support.platform_prerequisites_from_rule_ctx(ctx)
+
+    # This file is used as part of the rules_apple bundling logic
+    archive = actions.declare_file(ctx.attr.name + ".framework")
+    predeclared_outputs = struct(archive = archive)
+
+    provisioning_profile = None
+    resource_deps = ctx.attr.data
+    rule_descriptor = rule_support.rule_descriptor(ctx)
+    signed_frameworks = []
+    if provisioning_profile:
+        signed_frameworks = [
+            bundle_name + rule_descriptor.bundle_extension,
+        ]
+    top_level_resources = resources.collect(
+        attr = ctx.attr,
+        res_attrs = ["data"],
+    )
+
+    extra_linkopts = [
+        "-dynamiclib",
+        "-Wl,-install_name,@rpath/{name}{extension}/{name}".format(
+            extension = bundle_extension,
+            name = bundle_name,
+        ),
+    ]
+
+    top_level_infoplists = resources.collect(
+        attr = ctx.attr,
+        res_attrs = ["infoplists"],
+    )
+    link_result = linking_support.register_linking_action(
+        ctx,
+        avoid_deps = avoid_deps,
+        entitlements = None,
+        extra_linkopts = extra_linkopts,
+        platform_prerequisites = platform_prerequisites,
+        stamp = ctx.attr.stamp,
+    )
+    binary_artifact = link_result.binary
+    debug_outputs_provider = link_result.debug_outputs_provider
+
+    archive_for_embedding = outputs.archive_for_embedding(
+        actions = actions,
+        bundle_name = bundle_name,
+        bundle_extension = bundle_extension,
+        executable_name = executable_name,
+        label_name = label.name,
+        rule_descriptor = rule_descriptor,
+        platform_prerequisites = platform_prerequisites,
+        predeclared_outputs = predeclared_outputs,
+    )
+
+    # TODO(jmarino) - consider how to better handle frameworks of frameworks
+    dep_frameworks = ctx.attr.frameworks
+    processor_partials = [
+        partials.apple_bundle_info_partial(
+            actions = actions,
+            bundle_extension = bundle_extension,
+            bundle_id = bundle_id,
+            bundle_name = bundle_name,
+            executable_name = executable_name,
+            label_name = label.name,
+            platform_prerequisites = platform_prerequisites,
+            predeclared_outputs = predeclared_outputs,
+            product_type = rule_descriptor.product_type,
+        ),
+        partials.binary_partial(
+            actions = actions,
+            binary_artifact = binary_artifact,
+            bundle_name = bundle_name,
+            executable_name = executable_name,
+            label_name = label.name,
+        ),
+        partials.bitcode_symbols_partial(
+            actions = actions,
+            binary_artifact = binary_artifact,
+            debug_outputs_provider = debug_outputs_provider,
+            dependency_targets = dep_frameworks,
+            label_name = label.name,
+            platform_prerequisites = platform_prerequisites,
+        ),
+        partials.codesigning_dossier_partial(
+            actions = actions,
+            apple_toolchain_info = apple_toolchain_info,
+            bundle_extension = bundle_extension,
+            bundle_location = processor.location.framework,
+            bundle_name = bundle_name,
+            embed_target_dossiers = False,
+            embedded_targets = dep_frameworks,
+            label_name = label.name,
+            platform_prerequisites = platform_prerequisites,
+            provisioning_profile = provisioning_profile,
+            rule_descriptor = rule_descriptor,
+        ),
+        partials.clang_rt_dylibs_partial(
+            actions = actions,
+            apple_toolchain_info = apple_toolchain_info,
+            binary_artifact = binary_artifact,
+            features = features,
+            label_name = label.name,
+            platform_prerequisites = platform_prerequisites,
+        ),
+        partials.debug_symbols_partial(
+            actions = actions,
+            bin_root_path = bin_root_path,
+            bundle_extension = bundle_extension,
+            bundle_name = bundle_name,
+            debug_dependencies = dep_frameworks,
+            debug_outputs_provider = debug_outputs_provider,
+            dsym_info_plist_template = apple_toolchain_info.dsym_info_plist_template,
+            executable_name = executable_name,
+            platform_prerequisites = platform_prerequisites,
+            rule_label = label,
+        ),
+        partials.embedded_bundles_partial(
+            frameworks = [archive_for_embedding],
+            embeddable_targets = dep_frameworks,
+            platform_prerequisites = platform_prerequisites,
+            signed_frameworks = depset(signed_frameworks),
+        ),
+
+        # Don't bake the headers here - for distrobution mode, this is done with
+        # xcframework
+        partials.framework_provider_partial(
+            actions = actions,
+            bin_root_path = bin_root_path,
+            binary_artifact = binary_artifact,
+            bundle_name = bundle_name,
+            bundle_only = False,
+            objc_provider = link_result.objc,
+            rule_label = label,
+        ),
+        partials.resources_partial(
+            actions = actions,
+            apple_toolchain_info = apple_toolchain_info,
+            bundle_extension = bundle_extension,
+            bundle_id = bundle_id,
+            bundle_name = bundle_name,
+            environment_plist = ctx.file.environment_plist,
+            executable_name = executable_name,
+            launch_storyboard = None,
+            platform_prerequisites = platform_prerequisites,
+            resource_deps = resource_deps,
+            rule_descriptor = rule_descriptor,
+            rule_label = label,
+            targets_to_avoid = avoid_deps,
+            top_level_infoplists = top_level_infoplists,
+            top_level_resources = top_level_resources,
+            version = None,
+            version_keys_required = False,
+        ),
+        partials.swift_dylibs_partial(
+            actions = actions,
+            apple_toolchain_info = apple_toolchain_info,
+            binary_artifact = binary_artifact,
+            dependency_targets = dep_frameworks,
+            label_name = label.name,
+            platform_prerequisites = platform_prerequisites,
+        ),
+        partials.apple_symbols_file_partial(
+            actions = actions,
+            binary_artifact = binary_artifact,
+            debug_outputs_provider = debug_outputs_provider,
+            dependency_targets = dep_frameworks,
+            label_name = label.name,
+            include_symbols_in_bundle = False,
+            platform_prerequisites = platform_prerequisites,
+        ),
+    ]
+
+    processor_result = processor.process(
+        actions = actions,
+        apple_toolchain_info = apple_toolchain_info,
+        bundle_extension = bundle_extension,
+        bundle_name = bundle_name,
+        # TODO - consider adding this post_processor
+        # ipa_post_processor = ctx.executable.ipa_post_processor,
+        codesign_inputs = [],
+        codesignopts = [],
+        executable_name = executable_name,
+        features = features,
+        ipa_post_processor = None,
+        partials = processor_partials,
+        platform_prerequisites = platform_prerequisites,
+        predeclared_outputs = predeclared_outputs,
+        process_and_sign_template = apple_toolchain_info.process_and_sign_template,
+        provisioning_profile = provisioning_profile,
+        rule_descriptor = rule_descriptor,
+        rule_label = label,
+    )
+
+    return struct(
+        files = processor_result.output_files,
+        providers = [
+            IosFrameworkBundleInfo(),
+            OutputGroupInfo(
+                **outputs.merge_output_groups(
+                    link_result.output_groups,
+                    processor_result.output_groups,
+                )
+            ),
+        ] + processor_result.providers,
+    )
+
+def _bundle_static_framework(ctx, outputs):
+    """Returns bundle info for a static framework commonly used intra-build"""
+    infoplist = _merge_root_infoplists(ctx)
+
+    current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
+
+    # Static packaging - archives are passed from library deps
+    # Merges Info.plists and converts them into binary
+    return struct(files = depset([]), providers = [
+        AppleBundleInfo(
+            archive = None,
+            archive_root = None,
+            binary = outputs.binary[0] if outputs.binary else None,
+            bundle_id = ctx.attr.bundle_id,
+            bundle_name = ctx.attr.framework_name,
+            bundle_extension = ctx.attr.bundle_extension,
+            entitlements = None,
+            infoplist = infoplist,
+            minimum_os_version = str(current_apple_platform.target_os_version),
+            platform_type = str(current_apple_platform.platform.platform_type),
+            product_type = ctx.attr._product_type,
+            uses_swift = outputs.swiftmodule != None,
+        ),
+    ])
+
 def _apple_framework_packaging_impl(ctx):
     # The current build architecture
     arch = ctx.fragments.apple.single_arch_cpu
@@ -573,6 +829,21 @@ def _apple_framework_packaging_impl(ctx):
         dep_cc_infos = [dep[CcInfo] for dep in transitive_deps if CcInfo in dep]
         cc_info = cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider], cc_infos = dep_cc_infos)
 
+    # Propagate the avoid deps information upwards
+    avoid_deps = []
+    for dep in ctx.attr.transitive_deps:
+        if AvoidDepsInfo in dep:
+            avoid_deps.extend(dep[AvoidDepsInfo].libraries)
+            if dep[AvoidDepsInfo].link_dynamic:
+                avoid_deps.append(dep)
+
+    # If we link dynamic - then package it as dynamic
+    if ctx.attr.link_dynamic:
+        bundle_outs = _bundle_dynamic_framework(ctx, avoid_deps = avoid_deps)
+        avoid_deps_info = AvoidDepsInfo(libraries = depset(avoid_deps + ctx.attr.deps).to_list(), link_dynamic = True)
+    else:
+        bundle_outs = _bundle_static_framework(ctx, outputs = outputs)
+        avoid_deps_info = AvoidDepsInfo(libraries = depset(avoid_deps).to_list(), link_dynamic = False)
     swift_info = _get_merged_swift_info(ctx, framework_files, transitive_deps)
 
     # Build out the default info provider
@@ -582,38 +853,21 @@ def _apple_framework_packaging_impl(ctx):
     out_files.extend(outputs.headers)
     out_files.extend(outputs.private_headers)
     out_files.extend(outputs.modulemap)
-    default_info = DefaultInfo(files = depset(out_files))
+    default_info = DefaultInfo(files = depset(out_files + bundle_outs.files.to_list()))
 
-    # Merges Info.plists and converts them into binary
-    infoplist = _merge_root_infoplists(ctx)
-
-    current_apple_platform = transition_support.current_apple_platform(ctx.fragments.apple, ctx.attr._xcode_config)
     return [
+        avoid_deps_info,
         framework_info,
         _get_merged_objc_provider(ctx, deps, transitive_deps),
         cc_info,
         swift_info,
         default_info,
-        AppleBundleInfo(
-            archive = None,
-            archive_root = None,
-            binary = outputs.binary[0] if outputs.binary else None,
-            bundle_id = ctx.attr.bundle_id,
-            bundle_name = ctx.attr.framework_name,
-            bundle_extension = ctx.attr.bundle_extension,
-            entitlements = None,
-            infoplist = infoplist,
-            minimum_os_version = str(current_apple_platform.target_os_version),
-            platform_type = str(current_apple_platform.platform.platform_type),
-            product_type = ctx.attr._product_type,
-            uses_swift = outputs.swiftmodule != None,
-        ),
-    ]
+    ] + bundle_outs.providers
 
 apple_framework_packaging = rule(
     implementation = _apple_framework_packaging_impl,
     cfg = transition_support.apple_rule_transition,
-    fragments = ["apple"],
+    fragments = ["apple", "cpp", "objc"],
     output_to_genfiles = True,
     attrs = {
         "framework_name": attr.string(
@@ -627,6 +881,23 @@ apple_framework_packaging = rule(
             cfg = apple_common.multi_arch_split,
             doc =
                 """Objc or Swift rules to be packed by the framework rule
+""",
+        ),
+        "data": attr.label_list(
+            mandatory = False,
+            cfg = apple_common.multi_arch_split,
+            allow_files = True,
+            doc =
+                """Objc or Swift rules to be packed by the framework rule
+""",
+        ),
+        "link_dynamic": attr.bool(
+            mandatory = False,
+            default = False,
+            doc =
+                """Weather or not if this framework is dynamic
+
+The default behavior bakes this into the top level app. When false, it's statically linked.
 """,
         ),
         "vfs": attr.label_list(
@@ -675,12 +946,34 @@ Valid values are:
             ),
             executable = True,
         ),
+        "frameworks": attr.label_list(
+            providers = [[AppleBundleInfo, IosFrameworkBundleInfo]],
+            doc = """
+A list of framework targets (see
+[`ios_framework`](https://github.com/bazelbuild/rules_apple/blob/master/doc/rules-ios.md#ios_framework))
+that this target depends on.
+""",
+            cfg = apple_common.multi_arch_split,
+        ),
         "_headermap_builder": attr.label(
             executable = True,
             cfg = "host",
             default = Label(
                 "//rules/hmap:hmaptool",
             ),
+        ),
+        "stamp": attr.int(
+            mandatory = False,
+            default = 0,
+        ),
+        "exported_symbols_lists": attr.label_list(
+            allow_files = True,
+            doc = """
+            """,
+        ),
+        "_child_configuration_dummy": attr.label(
+            cfg = apple_common.multi_arch_split,
+            default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
         ),
         "bundle_id": attr.string(
             mandatory = False,
@@ -699,10 +992,6 @@ If not given, the framework will be built for the platform it inherits from the 
 the framework as a dependency.""",
         ),
         "_product_type": attr.string(default = apple_product_type.static_framework),
-        # TODO: allow customizing binary type between dynamic/static
-        #         "binary_type": attr.string(
-        #             default = "dylib",
-        #         ),
         "_xcode_config": attr.label(
             default = configuration_field(
                 name = "xcode_config_label",
@@ -729,6 +1018,16 @@ the framework as a dependency.""",
             doc =
                 """Internal - currently rules_ios the dict `platforms`
 """,
+        ),
+        "minimum_deployment_os_version": attr.string(
+            mandatory = False,
+            doc = "The bundle identifier of the framework. Currently unused.",
+            default = "",
+        ),
+        "_xcode_path_wrapper": attr.label(
+            cfg = "exec",
+            executable = True,
+            default = Label("@build_bazel_apple_support//tools:xcode_path_wrapper"),
         ),
     },
     doc = "Packages compiled code into an Apple .framework package",

@@ -9,3 +9,10 @@ FrameworkInfo = provider(
         "swiftdoc": " The Swift doc",
     },
 )
+
+AvoidDepsInfo = provider(
+    fields = {
+        "libraries": "Libraries to avoid",
+        "link_dynamic": "Weather or not if this dep is dynamic",
+    },
+)
