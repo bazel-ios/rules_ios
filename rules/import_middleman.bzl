@@ -170,7 +170,12 @@ def _file_collector_rule_impl(ctx):
 
     objc_provider_fields = {}
 
-    for key in [
+    arch = ctx.fragments.apple.single_arch_cpu
+    platform = str(ctx.fragments.apple.single_arch_platform.platform_type)
+    is_sim_arm64 = platform == "ios" and arch == "arm64" and not ctx.fragments.apple.single_arch_platform.is_device
+    if not is_sim_arm64:
+        fail(platform, arch, ctx.fragments.apple.single_arch_platform.is_device)
+    merge_keys = [
         "sdk_dylib",
         "sdk_framework",
         "weak_sdk_framework",

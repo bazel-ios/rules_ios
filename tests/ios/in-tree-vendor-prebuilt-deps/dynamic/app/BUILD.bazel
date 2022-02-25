@@ -305,3 +305,4 @@ ios_application(
         ":SwiftLib",
     ],
 )
+

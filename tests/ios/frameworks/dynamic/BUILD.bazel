@@ -1,5 +1,6 @@
 load("//rules:app.bzl", "ios_application")
 load("//rules:test.bzl", "ios_unit_test")
+load("@build_bazel_rules_apple//apple/internal:xcframework_rules.bzl", "apple_xcframework")
 
 ios_application(
     name = "App",
@@ -20,6 +21,37 @@ ios_application(
         "//tests/ios/frameworks/dynamic/a",
         "//tests/ios/frameworks/dynamic/b",
     ],
+)
+
+apple_xcframework(
+    name = "iOSSwiftXCFramework",
+    bundle_id = "com.google.example",
+    bundle_name = "c",
+    framework_type = ["dynamic"],
+    infoplists = [
+        "Info.plist",
+    ],
+    ios = {
+        "simulator": [
+            "arm64",
+            "x86_64",
+        ],
+        "device": [
+            "arm64",
+        ],
+    },
+    minimum_os_versions = {
+        "ios": "8.0",
+    },
+    # Note: rules_apple doesn't allow you to pass transtive swiftmodules and it
+    # also uses xcodebuild -create-xcframework which causes issues here. Incase
+    # anyone wants to use this ensure that it works.
+    deps = [
+        "//tests/ios/frameworks/dynamic/c",
+    ],
+
+    # On CI we set ios_multi_cpus - which causes swirl with the transitions here
+    tags = ["manual"]
 )
 
 ios_unit_test(

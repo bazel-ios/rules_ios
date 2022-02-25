@@ -106,6 +106,8 @@ def main():
             lambda args: _copy_modulemap(args.framework_root, args.input()),
         "swiftmodule":
             lambda args: _cp(args.input(), args.output()),
+        "swiftinterface":
+            lambda args: _cp(args.input(), args.output()),
         "swiftdoc":
             lambda args: _cp(args.input(), args.output()),
         "clean":
