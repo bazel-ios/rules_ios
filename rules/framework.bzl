@@ -239,6 +239,8 @@ def _get_framework_files(ctx, deps):
     # swift specific artifacts
     swiftmodule_in = None
     swiftmodule_out = None
+    swiftinterface_out = None
+    swiftinterface_in = None
     swiftdoc_in = None
     swiftdoc_out = None
 
@@ -264,6 +266,14 @@ def _get_framework_files(ctx, deps):
                     "Modules",
                     framework_name + ".swiftmodule",
                     arch + ".swiftmodule",
+                )]
+            if file.path.endswith(".swiftinterface"):
+                swiftinterface_in = file
+                swiftinterface_out = [paths.join(
+                    framework_dir,
+                    "Modules",
+                    framework_name + ".swiftinterface",
+                    arch + ".swiftinterface",
                 )]
             if file.path.endswith(".swiftdoc"):
                 swiftdoc_in = file
@@ -342,6 +352,7 @@ def _get_framework_files(ctx, deps):
     # Otherwise, stale header files under framework_root will cause compilation failure in non-sandboxed mode.
     modulemap_out = _framework_packaging(ctx, "modulemap", [modulemap_in], modulemap_out, framework_manifest)
     swiftmodule_out = _framework_packaging(ctx, "swiftmodule", [swiftmodule_in], swiftmodule_out, framework_manifest)
+    swiftinterface_out = _framework_packaging(ctx, "swiftinterface", [swiftinterface_in], swiftinterface_out, framework_manifest)
     swiftdoc_out = _framework_packaging(ctx, "swiftdoc", [swiftdoc_in], swiftdoc_out, framework_manifest)
 
     outputs = struct(
@@ -351,6 +362,7 @@ def _get_framework_files(ctx, deps):
         modulemap = modulemap_out,
         swiftmodule = swiftmodule_out,
         swiftdoc = swiftdoc_out,
+        swiftinterface = swiftinterface_out,
         manifest = framework_manifest,
     )
 
@@ -361,6 +373,7 @@ def _get_framework_files(ctx, deps):
         modulemap = modulemap_in,
         swiftmodule = swiftmodule_in,
         swiftdoc = swiftdoc_in,
+        swiftinterface = swiftinterface_in,
     )
     return struct(inputs = inputs, outputs = outputs)
 
@@ -419,6 +432,7 @@ def _copy_swiftmodule(ctx, framework_files):
     swift_module = swift_common.create_swift_module(
         swiftdoc = outputs.swiftdoc[0],
         swiftmodule = outputs.swiftmodule[0],
+        swiftinterface =  outputs.swiftinterface[0] if len(outputs.swiftinterface) > 0 else None
     )
 
     if swiftmodule_name != ctx.attr.framework_name:
@@ -428,6 +442,7 @@ def _copy_swiftmodule(ctx, framework_files):
         swift_module = swift_common.create_swift_module(
             swiftdoc = inputs.swiftdoc,
             swiftmodule = inputs.swiftmodule,
+            swiftinterface = inputs.swiftinterface
         )
 
     return [
@@ -546,7 +561,7 @@ def _bundle_dynamic_framework(ctx, avoid_deps):
     platform_prerequisites = platform_support.platform_prerequisites_from_rule_ctx(ctx)
 
     # This file is used as part of the rules_apple bundling logic
-    archive = actions.declare_file(ctx.attr.name + ".framework")
+    archive = actions.declare_file(ctx.attr.name + ".framework.zip")
     predeclared_outputs = struct(archive = archive)
 
     provisioning_profile = None
@@ -755,7 +770,6 @@ def _bundle_static_framework(ctx, outputs):
     current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
 
     # Static packaging - archives are passed from library deps
-    # Merges Info.plists and converts them into binary
     return struct(files = depset([]), providers = [
         AppleBundleInfo(
             archive = None,
