@@ -11,6 +11,7 @@ load("//rules:hmap.bzl", "headermap")
 load("//rules/framework:vfs_overlay.bzl", "framework_vfs_overlay", VFS_OVERLAY_FRAMEWORK_SEARCH_PATH = "FRAMEWORK_SEARCH_PATH")
 load("//rules/library:resources.bzl", "wrap_resources_in_filegroup")
 load("//rules/library:xcconfig.bzl", "copts_by_build_setting_with_defaults")
+load("//rules:import_middleman.bzl", "import_middleman")
 
 PrivateHeadersInfo = provider(
     doc = "Propagates private headers, so they can be accessed if necessary",
@@ -680,7 +681,13 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     for vendored_dynamic_library in kwargs.pop("vendored_dynamic_libraries", []):
         fail("no support for dynamic library: %s" % vendored_dynamic_library)
 
-    deps += vendored_deps
+    # TODO(jmarino)Perhaps it uses a import_middleman here
+    if len(vendored_deps):
+        import_middleman(name = name + ".import_middleman", deps = vendored_deps, tags = ["manual"])
+        deps += select({
+            "@build_bazel_rules_ios//:arm64_simulator_use_device_deps": [name + ".import_middleman"],
+            "//conditions:default": vendored_deps,
+        })
 
     resource_bundles = library_tools["resource_bundle_generator"](
         name = name,

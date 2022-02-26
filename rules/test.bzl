@@ -2,7 +2,6 @@ load("@build_bazel_rules_apple//apple:ios.bzl", rules_apple_ios_ui_test = "ios_u
 load("@bazel_skylib//lib:types.bzl", "types")
 load("//rules:library.bzl", "apple_library")
 load("//rules:plists.bzl", "info_plists_by_setting")
-load("//rules:import_middleman.bzl", "import_middleman")
 
 _IOS_TEST_KWARGS = [
     "bundle_id",
@@ -64,13 +63,9 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
         host_args = [ios_test_kwargs["test_host"]]
     else:
         host_args = []
-    import_middleman(name = name + ".import_middleman", deps = library.lib_names, test_deps = host_args, tags = ["manual"])
     rule(
         name = name,
-        deps = select({
-            "@build_bazel_rules_ios//:arm64_simulator_use_device_deps": [name + ".import_middleman"],
-            "//conditions:default": library.lib_names,
-        }),
+        deps = library.lib_names,
         infoplists = info_plists_by_setting(name = name, infoplists_by_build_setting = infoplists_by_build_setting, default_infoplists = ios_test_kwargs.pop("infoplists", [])),
         **ios_test_kwargs
     )

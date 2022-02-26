@@ -875,6 +875,7 @@ def _apple_framework_packaging_impl(ctx):
     out_files.extend(outputs.modulemap)
     default_info = DefaultInfo(files = depset(out_files + bundle_outs.files.to_list()))
 
+    objc_provider = _get_merged_objc_provider(ctx, deps, transitive_deps)
     return [
         avoid_deps_info,
         framework_info,
