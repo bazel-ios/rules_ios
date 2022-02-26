@@ -794,8 +794,14 @@ def _apple_framework_packaging_impl(ctx):
     # The current Apple platform type, such as iOS, macOS, tvOS, or watchOS
     platform = str(ctx.fragments.apple.single_arch_platform.platform_type)
 
-    # When building with multiple architectures (e.g., --ios_multi_cpus=x86_64,arm64), we should only pick the slice for the current configuration.
-    split_slice_key = "{}_{}".format(platform, arch)
+    # When building with multiple architectures (e.g.,
+    # --ios_multi_cpus=x86_64,arm64), we should only pick the slice for the
+    # current configuration.
+    split_slice_varint = ""
+    if platform == "ios" and arch == "arm64" and not ctx.fragments.apple.single_arch_platform.is_device:
+        split_slice_varint = "sim_"
+
+    split_slice_key = "{}_{}{}".format(platform, split_slice_varint, arch)
     deps = _attrs_for_split_slice(ctx.split_attr.deps, split_slice_key)
     transitive_deps = _attrs_for_split_slice(ctx.split_attr.transitive_deps, split_slice_key)
     vfs = _attrs_for_split_slice(ctx.split_attr.vfs, split_slice_key)
