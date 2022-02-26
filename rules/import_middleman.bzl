@@ -1,4 +1,5 @@
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleFrameworkImportInfo")
+load("//rules:features.bzl", "feature_names")
 
 _FindImportsAspectInfo = provider(fields = {
     "imported_library_file": "",
@@ -169,12 +170,14 @@ def _file_collector_rule_impl(ctx):
     all_import_infos = linker_deps[3]
 
     objc_provider_fields = {}
-
     arch = ctx.fragments.apple.single_arch_cpu
     platform = str(ctx.fragments.apple.single_arch_platform.platform_type)
     is_sim_arm64 = platform == "ios" and arch == "arm64" and not ctx.fragments.apple.single_arch_platform.is_device
     if not is_sim_arm64:
-        fail(platform, arch, ctx.fragments.apple.single_arch_platform.is_device)
+        # This should be correctly configured upstream: see setup in rules_ios
+        fail("using import_middleman ({}) on wrong transition ({},{},is_device={})", ctx.attr.lablel, platform, arch, ctx.fragments.apple.single_arch_platform.is_device)
+
+    virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
     merge_keys = [
         "sdk_dylib",
         "sdk_framework",
@@ -184,12 +187,14 @@ def _file_collector_rule_impl(ctx):
         "link_inputs",
         "linkopt",
         "library",
-        # TODO(jmarino) theoretically we don't need these, verify if that's the
-        # case
-        #"imported_library",
-        #"dynamic_framework_file",
-        #"static_framework_file",
-    ]:
+    ] + ([] if is_sim_arm64 else [
+        # Merge in the objc provider fields
+        "imported_library",
+        "dynamic_framework_file",
+        "static_framework_file",
+    ])
+
+    for key in merge_keys:
         set = depset(
             direct = [],
             # Note:  we may want to merge this with the below inputs?
@@ -257,13 +262,20 @@ def _file_collector_rule_impl(ctx):
         **objc_provider_fields
     )
 
+    additional_providers = []
+    if not virtualize_frameworks:
+        dep_cc_infos = [dep[CcInfo] for dep in ctx.attr.deps if CcInfo in dep]
+        cc_info = cc_common.merge_cc_infos(direct_cc_infos = [], cc_infos = dep_cc_infos)
+        additional_providers.append(cc_info)
+
     return [
         DefaultInfo(files = depset(dynamic_framework_dirs + replaced_frameworks)),
         objc,
-    ] + _make_imports(dynamic_framework_dirs)
+    ] + _make_imports(dynamic_framework_dirs) + additional_providers
 
 import_middleman = rule(
     implementation = _file_collector_rule_impl,
+    fragments = ["apple"],
     attrs = {
         "deps": attr.label_list(aspects = [find_imports]),
         "test_deps": attr.label_list(aspects = [find_imports], allow_empty = True),
