@@ -354,7 +354,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             ),
         )
 
-        infos = None
+        infos = []
         actual = None
         if ctx.rule.kind in ("test_suite"):
             actual = getattr(ctx.rule.attr, "tests")[0]
