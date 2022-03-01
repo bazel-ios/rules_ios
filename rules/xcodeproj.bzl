@@ -8,6 +8,8 @@ load("//rules:hmap.bzl", "HeaderMapInfo")
 load("//rules/framework:vfs_overlay.bzl", "VFSOverlayInfo", VFS_OVERLAY_FRAMEWORK_SEARCH_PATH = "FRAMEWORK_SEARCH_PATH")
 load("//rules:additional_scheme_info.bzl", "AdditionalSchemeInfo")
 load("//rules:features.bzl", "feature_names")
+load("@xchammer//:BazelExtensions/xcodeproject.bzl", "xcode_project")
+load("@xchammer//:BazelExtensions/xchammerconfig.bzl", "project_config")
 
 def _get_attr_values_for_name(deps, provider, field):
     return [
@@ -1152,7 +1154,7 @@ def _xcodeproj_impl(ctx):
         ),
     ]
 
-xcodeproj = rule(
+_xcodeproj = rule(
     implementation = _xcodeproj_impl,
     doc = """\
 Generates a Xcode project file (.xcodeproj) with a reasonable set of defaults.
@@ -1239,12 +1241,12 @@ https://www.rubydoc.info/github/CocoaPods/Xcodeproj/Xcodeproj/Constants
         "additional_prebuild_script": attr.string(default = "", mandatory = False),  # Note this script will run BEFORE Bazel build script
         "additional_bazel_build_options": attr.string_list(default = [], mandatory = False),
         "additional_pre_actions": attr.string_list_dict(default = {}, mandatory = False, doc = """
-Configure a list of pre-actions for build/run/test in each scheme generated. 
+Configure a list of pre-actions for build/run/test in each scheme generated.
 For each entry the key is one of build/test/run and value is a list of scripts.
 And it will not surface any error or output through build log.
         """),
         "additional_post_actions": attr.string_list_dict(default = {}, mandatory = False, doc = """
-Configure a list of post-actions for build/run/test in each scheme generated. 
+Configure a list of post-actions for build/run/test in each scheme generated.
 For each entry the key is one of build/test/run and value is a list of scripts.
 And it will not surface any error or output through build log.
         """),
@@ -1258,3 +1260,17 @@ Additional LLDB settings to be added in each target's .lldbinit configuration fi
     },
     executable = True,
 )
+
+def xcodeproj(name, use_xchammer = False, **kwargs):
+    if use_xchammer:
+        xcode_project(
+            name = name,
+            bazel = kwargs.get("bazel_path", "/usr/local/bin/bazel"),
+            project_config = project_config(
+                generate_xcode_schemes = False,
+                paths = ["**"],
+            ),
+            targets = kwargs.get("deps", []),
+        )
+    else:
+        _xcodeproj(name = name, **kwargs)

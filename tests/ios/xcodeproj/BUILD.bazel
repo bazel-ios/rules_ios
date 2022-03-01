@@ -199,3 +199,11 @@ xcodeproj(
         "//tests/ios/app:FW",
     ],
 )
+
+xcodeproj(
+    name = "App-XCHammer",
+    use_xchammer = True,
+    deps = [
+        "//tests/ios/app:App",
+    ],
+)

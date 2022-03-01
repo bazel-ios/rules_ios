@@ -108,3 +108,11 @@ xcode_configure(
     remote_xcode_label = "",
     xcode_locator_label = "//tools/toolchains/xcode_configure:xcode_locator.m",
 )
+
+load("@xchammer//third_party:repositories.bzl", "xchammer_dependencies")
+
+xchammer_dependencies()
+
+load("@xcbuildkit//third_party:repositories.bzl", xcbuildkit_dependencies = "dependencies")
+
+xcbuildkit_dependencies()
