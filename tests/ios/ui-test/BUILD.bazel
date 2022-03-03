@@ -16,4 +16,5 @@ ios_ui_test(
     ],
     minimum_os_version = "11.0",
     test_host = "//tests/ios/ui-test/test-app-host:TestAppHost",
+    visibility = ["//visibility:public"],
 )

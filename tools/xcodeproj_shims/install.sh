@@ -37,6 +37,14 @@ com.apple.product-type.bundle.unit-test)
         "bazel-bin/$BAZEL_BIN_SUBDIR/${BAZEL_BUILD_TARGET_LABEL#*:}.runfiles/${BAZEL_BUILD_TARGET_WORKSPACE}/${BAZEL_BIN_SUBDIR}/$TARGET_NAME.zip"
     )
     ;;
+com.apple.product-type.bundle.ui-testing)
+    input_options=(
+        "bazel-bin/$BAZEL_BIN_SUBDIR/${FULL_PRODUCT_NAME}"
+        "bazel-bin/$BAZEL_BIN_SUBDIR/${TARGET_NAME}_archive-root/Payload/$TARGET_NAME${WRAPPER_SUFFIX:-}"
+        "bazel-bin/$BAZEL_BIN_SUBDIR/${BAZEL_BUILD_TARGET_LABEL#*:}.runfiles/${BAZEL_BUILD_TARGET_WORKSPACE}/${BAZEL_BIN_SUBDIR}/${FULL_PRODUCT_NAME}"
+        "bazel-bin/$BAZEL_BIN_SUBDIR/${BAZEL_BUILD_TARGET_LABEL#*:}.runfiles/${BAZEL_BUILD_TARGET_WORKSPACE}/${BAZEL_BIN_SUBDIR}/$TARGET_NAME.zip"
+    )
+    ;;
 com.apple.product-type.application)
     input_options=(
         "bazel-bin/$BAZEL_BIN_SUBDIR/${FULL_PRODUCT_NAME}"
