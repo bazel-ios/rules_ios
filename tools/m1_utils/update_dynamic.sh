@@ -20,6 +20,9 @@ patch() {
 
      # FIXME: Versions should be input from the build system
      xcrun vtool -arch arm64 -set-build-version 7 11.0 11.0 -replace -output "$OF" "OF.ar"
+
+     # Xcode 13.1-13.2.1 workaround - see update_static.sh
+     strip -S "$OF"
 }
 
 # Framework file 
