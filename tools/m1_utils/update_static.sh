@@ -77,7 +77,7 @@ patch() {
             cp "$FWF" "$OF"
 
             exit 0
-         elif ! "$ARM64_TO_SIM_PATH" "$file" 11 11 --obj; then 
+         elif ! "$ARM64_TO_SIM_PATH" "$file" 11 11 --obj; then
              # TODO: Versions should be input from the build system - hardcoded to 11
              cp "$FWF" "$OF"
 
@@ -87,8 +87,22 @@ patch() {
              # We should also provide a way to use the secret "linker flag" to
              # allow the link to work
              echo "warning: falling back to input for $(basename $OF)"
+
+             # Xcode 13.1-13.2.1 workaround ( no issue for 12.5.1 ) Strip iOS
+             # device outputs file to mitigate LLDB default SDK selection from
+             # the DWARF entry - DW_AT_APPLE_sdk. No harm since many third party
+             # dist binaries ship with release + DSYM. Without this, Swift
+             # debugging is broken. To fix without stripping, implement a macho
+             # rewriter that removes or updates DW_AT_APPLE_sdk. Upstream LLVM
+             # has redesigned the logic and it's fixed there once devs have that
+             # patch
+             strip -S $OF
              exit 0
          fi
+
+         # Same as above
+         strip -S $file
+
          echo "$file" >> link.filelist
      done;
      ARGS=(xcrun libtool)

@@ -24,7 +24,13 @@ def _update_framework(ctx, framework):
      ditto "$FW_DIR" "$OUT_DIR"
      "$TOOL" "$OUT_DIR/$(basename "$FRAMEWORK_BINARY")"
    """.format(ctx.files.update_in_place[0].path, framework.path, out_dir.path)
-    ctx.actions.run_shell(outputs = [out_dir, out_file], inputs = depset([framework] + ctx.attr.update_in_place[DefaultInfo].default_runfiles.files.to_list()), command = cmd)
+
+    ctx.actions.run_shell(
+        outputs = [out_dir, out_file],
+        inputs = depset([framework] + ctx.attr.update_in_place[DefaultInfo].default_runfiles.files.to_list()),
+        command = cmd,
+        execution_requirements = {"no-remote": "1"},
+    )
     return out_file
 
 def _update_lib(ctx, imported_library):
@@ -33,18 +39,22 @@ def _update_lib(ctx, imported_library):
     cmd = """
      set -e
 
-     TOOL="external/build_bazel_rules_ios/tools/m1_utils/{}.sh"
+     TOOL="{}"
      BINARY="{}"
      OUT="{}"
 
-     # Duplicate the _entire_ input framework
+     # Duplicate the _entire_ input library
      mkdir -p "$(dirname "$BINARY")"
-
      ditto "$BINARY" "$OUT"
      "$TOOL" "$OUT"
-   """.format(ctx.executable.update_in_place.basename, imported_library.path, out_file.path)
+   """.format(ctx.files.update_in_place[0].path, imported_library.path, out_file.path)
 
-    ctx.actions.run_shell(outputs = [out_file], inputs = depset([imported_library]), command = cmd)
+    ctx.actions.run_shell(
+        outputs = [out_file],
+        inputs = depset([imported_library]),
+        command = cmd,
+        execution_requirements = {"no-remote": "1"},
+    )
     return out_file
 
 def _add_to_dict_if_present(dict, key, value):
