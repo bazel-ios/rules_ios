@@ -1,0 +1,67 @@
+load("@rules_python//python:defs.bzl", "py_binary")
+
+STUB_VISIBILITY = ["//visibility:public"]
+
+sh_binary(
+    name = "clang-stub",
+    srcs = ["clang-stub.sh"],
+    visibility = STUB_VISIBILITY,
+)
+
+sh_binary(
+    name = "ld-stub",
+    srcs = ["ld-stub.sh"],
+    visibility = STUB_VISIBILITY,
+)
+
+sh_binary(
+    name = "swiftc-stub",
+    srcs = ["swiftc-stub.sh"],
+    visibility = STUB_VISIBILITY,
+)
+
+py_binary(
+    name = "print_json_leaf_nodes",
+    srcs = ["print_json_leaf_nodes.py"],
+    visibility = STUB_VISIBILITY,
+)
+
+filegroup(
+    name = "installer_runfiles",
+    srcs = glob(["installers/*"]),
+    visibility = STUB_VISIBILITY,
+)
+
+sh_binary(
+    name = "installer",
+    srcs = ["install.sh"],
+    data = [":installer_runfiles"],
+    visibility = STUB_VISIBILITY,
+)
+
+sh_binary(
+    name = "lldb-settings",
+    srcs = ["installers/lldb-settings.sh"],
+    visibility = STUB_VISIBILITY,
+)
+
+sh_library(
+    name = "build-wrapper-deps",
+    srcs = ["//tools/xcode_version_computation"],
+)
+
+sh_binary(
+    name = "build-wrapper",
+    srcs = [
+        "build-wrapper.sh",
+    ],
+    data = ["build-wrapper-deps"],
+    visibility = STUB_VISIBILITY,
+)
+
+exports_files([
+    "IDEWorkspaceChecks.plist",
+    "output-processor.rb",
+    "WorkspaceSettings.xcsettings",
+    "xcodeproj-installer.sh",
+])
