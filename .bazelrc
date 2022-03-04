@@ -53,3 +53,5 @@ build --deleted_packages tools/toolchains/bazel4_local_config_cc
 # Enable device deps when the build matches the arm64 simulator
 # Bazel 5 - matches ios_sim_arm64 CPU, Bazel 4 - needs "override" flags
 build --features apple.arm64_simulator_use_device_deps
+
+build:lldb_ios_test --spawn_strategy=standalone --apple_platform_type=ios

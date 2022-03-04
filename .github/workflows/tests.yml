@@ -102,6 +102,16 @@ jobs:
         run: .github/workflows/xcode_select.sh
       - name: Run tests
         run: ./tests/xcodeproj-tests.sh --clean
+
+  lldb_ios_tests_xcode_12_5_1:
+    name: .xcodeproj Tests on Xcode 12.5.1
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Select Xcode 12.5.1
+        run: .github/workflows/xcode_select.sh
+      - name: Run tests
+        run: bazelisk test tests/ios/lldb:objc_app_test --config lldb_ios_test
   multi_arch_support:
     name: Build iOS App for Multiple Architecture
     runs-on: macos-latest
