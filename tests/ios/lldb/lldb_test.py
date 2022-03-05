@@ -163,8 +163,6 @@ def get_test_result(test_root):
 
     with open(lpath, 'r') as test_result:
         return json.load(test_result)
-    logger.error("Had result but faile do to parse", lpath)
-    exit(1)
 
 
 def setup_test_root(test_spec):
@@ -182,10 +180,14 @@ def setup_test_root(test_spec):
 
 def lldb_thread_entry(ctx, x):
     while not ctx.GetStartedAppPid() and ctx.GetCompletionStatus() == None:
-        logger.debug("Waiting for debugger")
+        logger.info(
+            "Waiting for %s.app to post to start debugger", ctx.app_name)
         time.sleep(1)
-    attach_debugger(ctx.GetTestRoot(), ctx.GetStartedAppPid())
-    logger.info("LLDB Completed")
+    try:
+        attach_debugger(ctx, ctx.GetTestRoot(), ctx.GetStartedAppPid())
+    except Exception:
+        traceback.print_exc()
+        ctx.Fail()
 
 
 def monitor_output(out, pid):
@@ -194,9 +196,11 @@ def monitor_output(out, pid):
     out.close()
 
 
-def attach_debugger(test_root, pid):
-    args = ["/usr/bin/lldb", "-p", str(pid), "--local-lldbinit"]
-    logger.info("spawning LLDB with args" + str(args))
+def attach_debugger(ctx, test_root, pid):
+    # TODO: ideally use Bazel's configured xcode LLDB if it exists
+    args = ["xcrun", "lldb", "-p", str(pid), "--local-lldbinit"]
+
+    logger.info("spawning LLDB with args %s", str(args))
     lldb_process = subprocess.Popen(
         args, cwd=test_root, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
@@ -210,6 +214,9 @@ def attach_debugger(test_root, pid):
     lldb_process.stdin.write(
         "command source test_setup.lldbinit\n".encode('utf-8'))
     lldb_process.stdin.flush()
+
+    # Consider validating this here
+    logger.info("LLDB Completed return code %s", str(lldb_process.poll()))
 
 
 def write_lldb_helpers(test_root):
@@ -231,7 +238,7 @@ def write_lldbinit(test_spec, test_root):
     with open(test_spec, 'r') as test_spec:
         test_spec_dict = json.load(test_spec)
 
-    logger.info("Write: " + lpath)
+    logger.info("Write inting lldbinit to %s ", lpath)
     with open(lpath, 'w') as initfile:
         initfile.write("""
 command script import --allow-reload ./breakpoint.py
@@ -241,45 +248,7 @@ continue
 """)
 
 
-def run_lldb_test(ipa_path, sdk, device, spec_path):
-    if not os.path.exists(ipa_path):
-        logger.error("Missing IPA / [ --app ]", ipa_path)
-        exit(1)
-
-    if not sdk:
-        logger.error("Missing SDK / [ --sdk ]")
-        exit(1)
-
-    if not device:
-        logger.error("Missing device / [ --device ] ")
-        exit(1)
-
-    if not os.path.exists(spec_path):
-        logger.error("Missing spec / [ --spec]", spec_path)
-        exit(1)
-
-    test_root = setup_test_root(spec_path)
-
-    # And a JSON file that has the runtime data
-    ctx = TestContext(None, "App", str(test_root))
-    # Wait for the process to launch then attach
-    sim_thread = threading.Thread(
-        target=sim_thread_entry, args=(ctx, device, sdk, ipa_path))
-    debugger_thread = threading.Thread(target=lldb_thread_entry, args=(ctx, 1))
-    try:
-        sim_thread.start()
-        debugger_thread.start()
-        while ctx.GetCompletionStatus() == None:
-            logger.debug('Main thread...')
-            time.sleep(1)
-        sim_thread.join()
-        debugger_thread.join()
-    except KeyboardInterrupt:
-        can_break = True
-    except Exception:
-        traceback.print_exc()
-        exit(1)
-
+def emit_test_result(ctx, spec_path):
     status = ctx.GetCompletionStatus()
     if status == -1:
         logger.error("Unknown failure..")
@@ -302,3 +271,48 @@ def run_lldb_test(ipa_path, sdk, device, spec_path):
         exit(1)
 
     logger.debug("SUCCESS")
+
+
+def cleanup(ctx):
+    shutil.rmtree(ctx.test_root)
+
+
+def run_lldb_test(ipa_path, sdk, device, spec_path):
+    if not os.path.exists(ipa_path):
+        logger.error("Missing IPA / [ --app ]", ipa_path)
+        exit(1)
+
+    if not sdk:
+        logger.error("Missing SDK / [ --sdk ]")
+        exit(1)
+
+    if not device:
+        logger.error("Missing device / [ --device ] ")
+        exit(1)
+
+    if not os.path.exists(spec_path):
+        logger.error("Missing spec / [ --spec]", spec_path)
+        exit(1)
+
+    try:
+        test_root = setup_test_root(spec_path)
+        ctx = TestContext(None, "App", str(test_root))
+
+        # Main runloop - polls completion status
+        sim_thread = threading.Thread(
+            target=sim_thread_entry, args=(ctx, device, sdk, ipa_path))
+        debugger_thread = threading.Thread(
+            target=lldb_thread_entry, args=(ctx, 1))
+        sim_thread.start()
+        debugger_thread.start()
+        while ctx.GetCompletionStatus() == None:
+            logger.debug('Main thread...')
+            time.sleep(1)
+        sim_thread.join()
+        debugger_thread.join()
+        emit_test_result(ctx, spec_path)
+    except Exception:
+        traceback.print_exc()
+        exit(1)
+    finally:
+        cleanup(ctx)
