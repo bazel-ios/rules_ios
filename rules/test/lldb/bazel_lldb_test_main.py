@@ -1,6 +1,9 @@
-import tests.ios.lldb.lldb_test as lldb_test
+# This program is a thin driver to connect the lldb_test to Bazel
+
+import rules.test.lldb.lldb_test as lldb_test
 import argparse
 import os
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--app")
 parser.add_argument("--sdk")

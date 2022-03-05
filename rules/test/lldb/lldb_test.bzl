@@ -23,9 +23,9 @@ def lldb_test(name, application, breakpoint_cmd, variable, expected_value, **kwa
     )
     py_test(
         name = name,
-        main = "App.py",
+        main = "@build_bazel_rules_ios//rules/test/lldb:bazel_lldb_test_main.py",
         srcs = [
-            "App.py",
+            "@build_bazel_rules_ios//rules/test/lldb:bazel_lldb_test_main.py",
         ],
         args = [
             "--app",
@@ -37,7 +37,7 @@ def lldb_test(name, application, breakpoint_cmd, variable, expected_value, **kwa
             "--spec",
             "$(execpath " + name + ".test_spec" + ")",
         ],
-        deps = [":lldb_test"],
+        deps = ["@build_bazel_rules_ios//rules/test/lldb:lldb_test"],
         data = [
             application,
             name + ".test_spec",
