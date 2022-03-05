@@ -238,11 +238,13 @@ def write_lldbinit(test_spec, test_root):
     with open(test_spec, 'r') as test_spec:
         test_spec_dict = json.load(test_spec)
 
+    cmd = test_spec_dict["breakpoint_cmd"]
+
     logger.info("Write inting lldbinit to %s ", lpath)
     with open(lpath, 'w') as initfile:
         initfile.write("""
 command script import --allow-reload ./breakpoint.py
-""" + test_spec_dict["breakpoint_cmd"] + """
+""" + cmd + """
 breakpoint command add --python-function breakpoint.breakpoint_info_fn  1
 continue
 """)
@@ -297,6 +299,20 @@ def run_lldb_test(ipa_path, sdk, device, spec_path):
     if not os.path.exists(spec_path):
         logger.error("Missing spec / [ --spec]", spec_path)
         exit(1)
+
+    with open(spec_path, 'r') as test_spec:
+        test_spec_dict = json.load(test_spec)
+        cmd = test_spec_dict["breakpoint_cmd"]
+
+        # Do some level of validation here - mainly to help the users figure out to
+        # use this. Warning: for now there is no timeout if the breakpoint
+        # doesn't resolve - consider failing fast here with a better message.
+        # Regardless, it's a broken state. The failure mode is the users
+        # timeout..
+        if (cmd.startswith("br ") or cmd.startswith("breakpoint ")) == False:
+            logger.error(
+                "breakpoint_cmd needs some breakpoint set to run to %s ", spec_path)
+            exit(1)
 
     exit_code = None
     ctx = None

@@ -30,8 +30,10 @@ def lldb_test(name, application, breakpoint_cmd, variable, expected_value, **kwa
         args = [
             "--app",
             "$(execpath " + application + ").ipa",
+            # FIXME: find a way to better express this for CI - it's tied into
+            # the xcode_version right now
             "--sdk",
-            "15.2",
+            "14.5",
             "--device",
             "'iPhone X'",
             "--spec",
