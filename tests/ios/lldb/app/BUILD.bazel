@@ -1,0 +1,12 @@
+load("//rules/test/lldb:lldb_test.bzl", "lldb_test")
+
+lldb_test(
+    name = "objc_app_test",
+    application = "//tests/ios/app:App",
+    breakpoint_cmd = "breakpoint set --file 'tests/ios/app/App/main.m' --line 6",
+    expected_value = "some",
+
+    # Manual for now, and run on a different shard
+    tags = ["manual"],
+    variable = "x",
+)

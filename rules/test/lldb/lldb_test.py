@@ -2,7 +2,7 @@
 # oriented around testing. It orchestrates a simulator thread, LLDB thread, to
 # run simulators and debuggers concurrently. It transmits information between
 # Bazel, the test, and the LLDB process with JSON files
-import tests.ios.lldb.sim_template as sim_template
+import rules.test.lldb.sim_template as sim_template
 import subprocess
 import os
 import logging
@@ -197,7 +197,7 @@ def monitor_output(out, pid):
 
 
 def attach_debugger(ctx, test_root, pid):
-    # TODO: ideally use Bazel's configured xcode LLDB if it exists
+    # TODO: ideally use Bazel's configured Xcode's LLDB if it exists
     args = ["xcrun", "lldb", "-p", str(pid), "--local-lldbinit"]
 
     logger.info("spawning LLDB with args %s", str(args))
@@ -251,8 +251,7 @@ continue
 def emit_test_result(ctx, spec_path):
     status = ctx.GetCompletionStatus()
     if status == -1:
-        logger.error("Unknown failure..")
-        exit(1)
+        return 1
 
     # This should check the exit code here?
     test_result = ctx.GetTestResult()
@@ -268,9 +267,10 @@ def emit_test_result(ctx, spec_path):
     if test_result["expression_result"] != expected_value:
         logger.error("Failed Expected", expected_value, "Got",
                      test_result["expression_result"])
-        exit(1)
+        return 1
 
     logger.debug("SUCCESS")
+    return 0
 
 
 def cleanup(ctx):
@@ -278,9 +278,13 @@ def cleanup(ctx):
 
 
 def run_lldb_test(ipa_path, sdk, device, spec_path):
-    if not os.path.exists(ipa_path):
-        logger.error("Missing IPA / [ --app ]", ipa_path)
+    if not os.path.exists(ipa_path) or not ipa_path.endswith(".ipa"):
+        logger.error("Missing IPA / [ --app ] %s", ipa_path)
         exit(1)
+
+    # Consider handling other IPAs here or types
+    ipa_name = os.path.basename(ipa_path)
+    app_name = ipa_name.replace(".ipa", "")
 
     if not sdk:
         logger.error("Missing SDK / [ --sdk ]")
@@ -294,9 +298,12 @@ def run_lldb_test(ipa_path, sdk, device, spec_path):
         logger.error("Missing spec / [ --spec]", spec_path)
         exit(1)
 
+    exit_code = None
+    ctx = None
+    logger.info("Got app name %s", app_name)
     try:
         test_root = setup_test_root(spec_path)
-        ctx = TestContext(None, "App", str(test_root))
+        ctx = TestContext(None, app_name, str(test_root))
 
         # Main runloop - polls completion status
         sim_thread = threading.Thread(
@@ -310,9 +317,10 @@ def run_lldb_test(ipa_path, sdk, device, spec_path):
             time.sleep(1)
         sim_thread.join()
         debugger_thread.join()
-        emit_test_result(ctx, spec_path)
+        exit_code = emit_test_result(ctx, spec_path)
     except Exception:
         traceback.print_exc()
-        exit(1)
     finally:
         cleanup(ctx)
+
+    exit(exit_code if exit_code == 0 else 1)
