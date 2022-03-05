@@ -43,7 +43,21 @@ def run_app_in_simulator(ctx, simulator_udid, developer_path, simctl_path,
                          ios_application_output_path, app_name):
     """Installs and runs an app in the specified simulator.
     """
-    sim_template.boot_simulator(developer_path, simctl_path, simulator_udid)
+    logger.info("Booting simulator App with path %s", developer_path)
+    try:
+        sim_template.boot_simulator(
+            developer_path, simctl_path, simulator_udid)
+    except:
+        logger.info(
+            "Second attempt to boot simulator App with path %s", developer_path)
+        # This is a hack - when rapidly iterating locally it can fail with:
+        # Simulator.app cannot be opened for an unexpected reason,
+        # error=Error Domain=NSOSStatusErrorDomain Code=-600 "procNotFound: no
+        # eligible process with specified descriptor" UserInfo={_LSLine=379,
+        # _LSFunction=_LSAnnotateAndSendAppleEventWithOptions}
+        sim_template.boot_simulator(
+            developer_path, simctl_path, simulator_udid)
+
     with sim_template.extracted_app(ios_application_output_path, app_name) as app_path:
         logger.debug("Installing app %s to simulator %s",
                      app_path, simulator_udid)
@@ -84,8 +98,6 @@ def sim_thread_main(ctx, sim_device, sim_os_version, ios_application_output_path
                                          stdout=subprocess.PIPE)
     developer_path = xcode_select_result.stdout.rstrip()
     simctl_path = os.path.join(developer_path, "usr", "bin", "simctl")
-
-    # FIXME: this needs to handle a simulator in a shutdown state
     with sim_template.ios_simulator(simctl_path, minimum_os, sim_device,
                                     sim_os_version) as simulator_udid:
         run_app_in_simulator(ctx, simulator_udid, developer_path, simctl_path,
@@ -178,7 +190,7 @@ def lldb_thread_entry(ctx, x):
 
 def monitor_output(out, pid):
     for line in iter(out.readline, b''):
-        logger.info("LLDB" + str(line))
+        logger.info("LLDB " + line.decode("utf8").rstrip("\n"))
     out.close()
 
 
