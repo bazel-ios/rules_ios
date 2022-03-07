@@ -112,6 +112,11 @@ jobs:
         run: .github/workflows/xcode_select.sh
       - name: Run tests
         run: bazelisk test tests/ios/lldb/app:objc_app_test --config lldb_ios_test
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: bazel-testlogs
+          path: bazel-testlogs
   multi_arch_support:
     name: Build iOS App for Multiple Architecture
     runs-on: macos-latest

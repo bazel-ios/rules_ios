@@ -74,6 +74,13 @@ def run_app_in_simulator(ctx, simulator_udid, developer_path, simctl_path,
         process = subprocess.Popen(args, env=sim_template.simctl_launch_environ(
         ),  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         sim_pid = process.pid
+
+        # Stream the simctl output to stdout, consider moving to a file
+        reader_t = threading.Thread(
+            target=monitor_output, args=(process.stdout, "simctl"))
+        reader_t.daemon = True
+        reader_t.start()
+
         logger.info("Find simctl PID %s", sim_pid)
 
         # After it boots, notify the `ctx` by calling SetStartedAppPid
@@ -81,8 +88,9 @@ def run_app_in_simulator(ctx, simulator_udid, developer_path, simctl_path,
         while not process.returncode and ctx.GetCompletionStatus() == None:
             if not app_started_pid:
                 app_started_pid = find_pid(ctx.app_name, simulator_udid)
-                logger.info("Got PID %s", app_started_pid)
-                ctx.SetStartedAppPid(app_started_pid)
+                if app_started_pid:
+                    logger.info("Got PID %s", app_started_pid)
+                    ctx.SetStartedAppPid(app_started_pid)
 
             logger.info("Poll simulator %s", process.poll())
             time.sleep(1)
@@ -190,9 +198,9 @@ def lldb_thread_entry(ctx, x):
         ctx.Fail()
 
 
-def monitor_output(out, pid):
+def monitor_output(out, prefix):
     for line in iter(out.readline, b''):
-        logger.info("LLDB " + line.decode("utf8").rstrip("\n"))
+        logger.info(prefix + " " + line.decode("utf8").rstrip("\n"))
     out.close()
 
 
@@ -206,7 +214,7 @@ def attach_debugger(ctx, test_root, pid):
 
     # Stream the LLDB output to stdout, consider moving to a file
     reader_t = threading.Thread(
-        target=monitor_output, args=(lldb_process.stdout, pid))
+        target=monitor_output, args=(lldb_process.stdout, "LLDB"))
     reader_t.daemon = True
     reader_t.start()
 
