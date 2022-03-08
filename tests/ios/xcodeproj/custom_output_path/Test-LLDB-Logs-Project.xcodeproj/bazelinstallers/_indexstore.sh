@@ -35,6 +35,7 @@ readonly local_developer_dir="$DEVELOPER_DIR"
 
 
 $BAZEL_INSTALLERS_DIR/index-import \
+    -parallel-stride $(sysctl -n hw.physicalcpu)
     -incremental \
     -remap "$remote_developer_dir=$local_developer_dir" \
     -remap "$bazel_module=$xcode_module" \
