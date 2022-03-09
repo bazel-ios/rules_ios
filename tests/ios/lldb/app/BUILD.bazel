@@ -1,12 +1,29 @@
-load("//rules/test/lldb:lldb_test.bzl", "lldb_test")
+load("//rules/test/lldb:lldb_test.bzl", "ios_lldb_breakpoint_command_test", "ios_lldb_breakpoint_po_test")
+load("//rules:app.bzl", "ios_application")
 
-lldb_test(
-    name = "objc_app_test",
-    application = "//tests/ios/app:App",
-    breakpoint_cmd = "breakpoint set --file 'tests/ios/app/App/main.m' --line 6",
+ios_application(
+    name = "ObjcApp",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    minimum_os_version = "10.0",
+    visibility = ["//visibility:public"],
+)
+
+ios_lldb_breakpoint_po_test(
+    name = "objc_app_variable_test",
+    application = "ObjcApp",
+    device = "iPhone X",
     expected_value = "some",
-
-    # Manual for now, and run on a different shard
-    tags = ["manual"],
+    sdk = "14.5",
+    set_cmd = "breakpoint set --file 'tests/ios/lldb/app/App/main.m' --line 6",
     variable = "x",
+)
+
+ios_lldb_breakpoint_command_test(
+    name = "objc_app_po_test",
+    application = "ObjcApp",
+    cmds = ["po x"],
+    device = "iPhone X",
+    sdk = "14.5",
+    set_cmd = "breakpoint set --file 'tests/ios/lldb/app/App/main.m' --line 6",
 )
