@@ -23,7 +23,7 @@ parser.add_argument("--lldbinit")
 args = parser.parse_args()
 
 
-def setup_test_root(test_root, test_spec):
+def setup_test_root(exec_root, test_root, test_spec):
     source_file = os.path.realpath(__file__)
     breakpoint_file = os.path.join(
         os.path.dirname(source_file), "breakpoint.py")
@@ -41,25 +41,26 @@ def get_test_result(test_root):
     lpath = test_root + "/test_result.json"
     if not os.path.exists(lpath):
         raise Exception(f"Test exited without result %s", test_root)
-
     with open(lpath, 'r') as test_result:
         return json.load(test_result)
 
 
-tmp_dir = os.environ["GTEST_TMP_DIR"]
-test_root = os.path.dirname(os.path.dirname(tmp_dir))
-test_tmp_dir = setup_test_root(test_root, args.spec)
-app_path = os.path.join(test_root, args.app)
+##
+tmp_dir = os.environ["TEST_TMPDIR"]
+exec_root = os.path.dirname(os.path.dirname(tmp_dir))
+test_spec = os.path.join(exec_root, args.spec)
+test_tmp_dir = setup_test_root(exec_root, tmp_dir, test_spec)
+app_path = os.path.join(exec_root, args.app)
 
 exit_code = lldb_sim_runner.run_lldb(ipa_path=app_path, sdk=args.sdk,
                                      device=args.device, lldbinit_path=os.path.join(
-                                         test_root, args.lldbinit),
+                                         exec_root, args.lldbinit),
                                      test_root=test_tmp_dir)
 if exit_code != 0:
     exit(exit_code)
 
 # Check to ensure that stdout was written
-stdout_path = os.path.join(test_root, "lldb.stdout")
+stdout_path = os.path.join(test_tmp_dir, "lldb.stdout")
 if not os.path.exists(stdout_path):
     raise Exception(f"Test exited without lldb.stdout %s", stdout_path)
 

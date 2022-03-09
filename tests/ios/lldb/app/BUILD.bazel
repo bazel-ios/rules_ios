@@ -16,6 +16,7 @@ ios_lldb_breakpoint_po_test(
     expected_value = "some",
     sdk = "14.5",
     set_cmd = "breakpoint set --file 'tests/ios/lldb/app/App/main.m' --line 6",
+    tags = ["manual"],
     variable = "x",
 )
 
@@ -26,4 +27,5 @@ ios_lldb_breakpoint_command_test(
     device = "iPhone X",
     sdk = "14.5",
     set_cmd = "breakpoint set --file 'tests/ios/lldb/app/App/main.m' --line 6",
+    tags = ["manual"],
 )
