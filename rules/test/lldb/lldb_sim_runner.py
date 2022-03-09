@@ -38,13 +38,28 @@ def find_pid(app_name, udid):
     return None
 
 
+def boot_simulator(developer_path, simctl_path, udid):
+    """Launches the iOS simulator for the given identifier.
+
+    Unlike the rules_apple runner we don't foreground it because of concurrency
+    problems
+    """
+    logger.info("Launching simulator with udid: %s", udid)
+    subprocess.run(
+        ["xcrun", "simctl", "boot",  udid],
+        check=True)
+    logger.debug("Simulator launched.")
+    if not sim_template.wait_for_sim_to_boot(simctl_path, udid):
+        raise Exception("Failed to launch simulator with UDID: " + udid)
+
+
 def run_app_in_simulator(ctx, simulator_udid, developer_path, simctl_path,
                          ios_application_output_path, app_name):
     """Installs and runs an app in the specified simulator.
     """
     logger.info("Booting simulator App with path %s", developer_path)
     try:
-        sim_template.boot_simulator(
+        boot_simulator(
             developer_path, simctl_path, simulator_udid)
     except:
         logger.info(
@@ -54,7 +69,7 @@ def run_app_in_simulator(ctx, simulator_udid, developer_path, simctl_path,
         # error=Error Domain=NSOSStatusErrorDomain Code=-600 "procNotFound: no
         # eligible process with specified descriptor" UserInfo={_LSLine=379,
         # _LSFunction=_LSAnnotateAndSendAppleEventWithOptions}
-        sim_template.boot_simulator(
+        boot_simulator(
             developer_path, simctl_path, simulator_udid)
 
     with sim_template.extracted_app(ios_application_output_path, app_name) as app_path:
