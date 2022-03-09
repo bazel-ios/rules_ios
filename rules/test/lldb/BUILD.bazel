@@ -1,6 +1,6 @@
 load("@rules_python//python:defs.bzl", "py_library")
 
-exports_files(["bazel_lldb_test_main.py"])
+exports_files(["lldb_breakpoint_test_main.py"])
 
 package(default_visibility = ["//visibility:public"])
 
@@ -25,7 +25,7 @@ py_library(
     name = "lldb_test",
     srcs = [
         "breakpoint.py",
-        "lldb_test.py",
+        "lldb_sim_runner.py",
     ],
     deps = [
         ":ios_sim_template_lib",
