@@ -33,9 +33,17 @@ readonly xcode_external="$BAZEL_WORKSPACE_ROOT/bazel-$(basename "$SRCROOT")/exte
 readonly remote_developer_dir="^/.*/.+?\.app/Contents/Developer"
 readonly local_developer_dir="$DEVELOPER_DIR"
 
+# Uses all available cores for intel and a fraction of the performance cores on M1
+PARALLEL_STRIDE=$(sysctl -n hw.physicalcpu)
+
+# M1s have more performance cores than efficiency so dividing by 2 here should take
+# a good percentage of the performance cores to do this work
+if [[ $(arch) == 'arm64' ]]; then
+  PARALLEL_STRIDE=$(expr $PARALLEL_STRIDE / 2)
+fi
 
 $BAZEL_INSTALLERS_DIR/index-import \
-    -parallel-stride $(sysctl -n hw.physicalcpu)
+    -parallel-stride $PARALLEL_STRIDE
     -incremental \
     -remap "$remote_developer_dir=$local_developer_dir" \
     -remap "$bazel_module=$xcode_module" \
