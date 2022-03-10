@@ -228,12 +228,15 @@ def _file_collector_rule_impl(ctx):
     objc_provider_fields["dynamic_framework_file"] = depset(dynamic_framework_file)
 
     replaced_frameworks = replaced_dyanmic_framework.values() + replaced_static_framework.replaced.values()
+
+    compat_link_opt = ["-L__BAZEL_XCODE_DEVELOPER_DIR__/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator", "-Wl,-weak-lswiftCompatibility51"]
+
     if len(replaced_frameworks):
         # Triple quote the new path to put them first. Eliminating other paths
         # may possible but needs more handling of other kinds of frameworks and
         # has edge cases that require baking assumptions to handle.
         objc_provider_fields["linkopt"] = depset(
-            ["\"\"\"-F" + "/".join(f.path.split("/")[:-2]) + "\"\"\"" for f in replaced_frameworks],
+            ["\"\"\"-F" + "/".join(f.path.split("/")[:-2]) + "\"\"\"" for f in replaced_frameworks] + compat_link_opt,
             transitive = [objc_provider_fields.get("linkopt", depset([]))],
         )
 
