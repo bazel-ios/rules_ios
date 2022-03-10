@@ -1,6 +1,5 @@
 load("@rules_python//python:defs.bzl", "py_test")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
-load("@build_bazel_rules_ios//rules:xcodeproj.bzl", "xcodeproj_lldbinit_2")
 
 # End to end "Shell" test that a breakpoint can resolve a location
 # Consider just allow running a breakpoint without crashing
@@ -10,23 +9,24 @@ load("@build_bazel_rules_ios//rules:xcodeproj.bzl", "xcodeproj_lldbinit_2")
 # 2. Set a breakpoint given the `set_cmd`
 # 3. When it stops on the breakpoint, it validates the `variable` matches the
 #    `expected_value`
-def ios_lldb_breakpoint_po_test(name, application, set_cmd, variable, expected_value, sdk, device, lldbinit=None, **kwargs):
+def ios_lldb_breakpoint_po_test(name, application, set_cmd, variable, sdk, device, expected_value = None, lldbinit = None, **kwargs):
     test_spec = struct(
         variable_name = variable,
-        expected_value = expected_value,
+        substrs = (["variable_result: " + variable + " = " + expected_value] if expected_value else []),
     )
     _check_cmd(set_cmd)
     initcmds = [
         set_cmd,
-        "command script import --allow-reload ./breakpoint.py",
+        # Ensure that the platform dir is set correctly here - "platform shell pwd"
+        "command script import --allow-reload $(location @build_bazel_rules_ios//rules/test/lldb:breakpoint.py)",
         "breakpoint command add --python-function breakpoint.breakpoint_info_fn  1",
-        "run",
+        "continue",
     ]
-    _ios_breakpoint_test_wrapper(name, application, initcmds, test_spec, sdk, device, lldbinit=lldbinit, **kwargs)
+    _ios_breakpoint_test_wrapper(name, application, initcmds, test_spec, sdk, device, lldbinit = lldbinit, **kwargs)
 
 def _lldbinit_impl(ctx):
     # Resolve the file expanding variables
-    cmd_tuple = ctx.resolve_command(command=ctx.attr.content, expand_locations=True)
+    cmd_tuple = ctx.resolve_command(command = ctx.attr.content, expand_locations = True)
     if len(cmd_tuple) < 1:
         fail("Unexpected resolution", cmd_tuple)
     content = cmd_tuple[1][2]
@@ -48,7 +48,7 @@ _lldbinit = rule(
     attrs = {
         "content": attr.string(mandatory = True),
         "out": attr.output(mandatory = True),
-        "deps": attr.label_list(mandatory = False),
+        "deps": attr.label_list(mandatory = False, allow_files = True),
     },
     doc = "Setup an lldbinit file",
 )
@@ -63,18 +63,20 @@ def _check_cmd(set_cmd):
 
 # Similar as above but just verify if cmds return successfully. `cmds` is an
 # array of LLDB commands that run when `set_cmd` is hit
-def ios_lldb_breakpoint_command_test(name, application, set_cmd, cmds, sdk, device, lldbinit=None, **kwargs):
+def ios_lldb_breakpoint_command_test(name, application, set_cmd, cmds, sdk, device, match_substrs = [], lldbinit = None, **kwargs):
     test_spec = struct(
         br_hit_commands = cmds,
+        substrs = match_substrs,
     )
     _check_cmd(set_cmd)
     initcmds = [
         set_cmd,
-        "command script import --allow-reload ./breakpoint.py",
+        # Ensure that the platform dir is set correctly here - "platform shell pwd"
+        "command script import --allow-reload $(location @build_bazel_rules_ios//rules/test/lldb:breakpoint.py)",
         "breakpoint command add --python-function breakpoint.breakpoint_cmd_fn  1",
-        "run",
+        "continue",
     ]
-    _ios_breakpoint_test_wrapper(name, application, initcmds, test_spec, sdk, device, lldbinit=lldbinit, **kwargs)
+    _ios_breakpoint_test_wrapper(name, application, initcmds, test_spec, sdk, device, lldbinit = lldbinit, **kwargs)
 
 def _ios_breakpoint_test_wrapper(name, application, cmds, test_spec, sdk, device, lldbinit, **kwargs):
     write_file(
@@ -82,14 +84,17 @@ def _ios_breakpoint_test_wrapper(name, application, cmds, test_spec, sdk, device
         out = name + ".test_spec.json",
         content = [test_spec.to_json()],
     )
+
+    lldbinit_deps = ["@build_bazel_rules_ios//rules/test/lldb:breakpoint.py"]
     if lldbinit:
-        cmds.append("command source $(location " + lldbinit + ")")
+        cmds = ["command source $(execpath " + lldbinit + ")"] + cmds
+        lldbinit_deps.append(lldbinit)
 
     _lldbinit(
         name = name + "_lldbinit",
         out = name + ".lldbinit",
         content = "\n".join(cmds),
-        deps = [lldbinit] if lldbinit else [],
+        deps = lldbinit_deps,
         visibility = ["//visibility:public"],
     )
 

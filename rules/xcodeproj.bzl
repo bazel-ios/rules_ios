@@ -381,7 +381,6 @@ _xcodeproj_aspect = aspect(
     attr_aspects = ["deps", "actual", "tests", "infoplists", "entitlements", "resources", "test_host"],
 )
 
-
 def _xcodeproj_lldbinit_impl(ctx):
     ## For now just process the build settings in a hacky way. Perhaps we can run something like this to make it more robust - harcode for now
     # xcodebuild -project tests/ios/xcodeproj/Test-Imports-App-Project.xcodeproj/
@@ -430,21 +429,20 @@ export CONFIGURATION=""
         command = "./" + rs_f.path,
     )
 
-
 xcodeproj_lldbinit = rule(
     implementation = _xcodeproj_lldbinit_impl,
     attrs = {
-        "runscript": attr.label(mandatory = False, executable=True,cfg="host", default="@build_bazel_rules_ios//tools/xcodeproj_shims:lldb-settings"),
+        "runscript": attr.label(mandatory = False, executable = True, cfg = "host", default = "@build_bazel_rules_ios//tools/xcodeproj_shims:lldb-settings"),
         "deps": attr.label_list(mandatory = True, allow_empty = False, providers = [], aspects = [_xcodeproj_aspect]),
         "out": attr.output(mandatory = True),
-        "include_transitive_targets": attr.bool(default=True),
-        "additional_prebuild_script": attr.string(default=""),
+        "include_transitive_targets": attr.bool(default = True),
+        "additional_prebuild_script": attr.string(default = ""),
         "target_name": attr.string(),
-        "generate_schemes_for_product_types": attr.string(default=""),
-        "additional_scheme_infos": attr.label_list(default=[]),
-        "additional_pre_actions": attr.label_list(default=[]),
-        "additional_post_actions": attr.label_list(default=[]),
-    }
+        "generate_schemes_for_product_types": attr.string(default = ""),
+        "additional_scheme_infos": attr.label_list(default = []),
+        "additional_pre_actions": attr.label_list(default = []),
+        "additional_post_actions": attr.label_list(default = []),
+    },
 )
 
 def _xcodeproj_lldbinit_2_impl(ctx):
@@ -462,6 +460,7 @@ def _xcodeproj_lldbinit_2_impl(ctx):
     cmd = """
 #!/bin/bash
 set -ex
+# FIXME: Cleanup
 py_script=$(mktemp /tmp/intemediate.XXXXXX)
 env_script=$(mktemp /tmp/intemediate.XXXXXX)
 cat > $py_script << "EOF"
@@ -472,17 +471,26 @@ print("set -e")
 for bs in build_settings:
     if bs == "UID" or bs == "EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES" or bs == "BAZEL_LLDB_INIT_FILE" or bs == "PATH":
        continue
-    print("export " + bs + "='" + str(' '.join(shlex.split(build_settings[bs]))) + "'")
+
+
+    parsed_cmds = shlex.split(build_settings[bs])
+    cmds = " ".join(["\\\'" + x + "\\\'" for x in  parsed_cmds])
+    if len(parsed_cmds) > 1:
+        print("export " + bs + "=(" + cmds  + ")")
+    else:
+        print("export " + bs + "=" + cmds  + "")
+
 EOF
 
 """ + target_cmd + """ 2> /dev/null | python $py_script > $env_script
 source $env_script
+cat $env_script
 export BAZEL_LLDB_INIT_FILE=$PWD/""" + ctx.outputs.out.path + """
 export BAZEL_WORKSPACE_ROOT=$PWD
 
 # This isn't set for virtualize frameworks
 export HEADER_SEARCH_PATHS=""
-source """ +  ctx.executable.runscript.path
+source """ + ctx.executable.runscript.path
     rs_f = ctx.actions.declare_file("rs")
     ctx.actions.write(rs_f, cmd)
     ctx.actions.run_shell(
@@ -502,13 +510,12 @@ source """ +  ctx.executable.runscript.path
 xcodeproj_lldbinit_2 = rule(
     implementation = _xcodeproj_lldbinit_2_impl,
     attrs = {
-        "runscript": attr.label(mandatory = False, executable=True,cfg="host", default="@build_bazel_rules_ios//tools/xcodeproj_shims:lldb-settings"),
+        "runscript": attr.label(mandatory = False, executable = True, cfg = "host", default = "@build_bazel_rules_ios//tools/xcodeproj_shims:lldb-settings"),
         "deps": attr.label_list(mandatory = True, allow_empty = False, providers = [], aspects = [_xcodeproj_aspect]),
         "out": attr.output(mandatory = True),
         "target_name": attr.string(),
-    }
+    },
 )
-
 
 def _collect_swift_defines(modules):
     defines = {}

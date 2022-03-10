@@ -1,11 +1,14 @@
 load("//rules/test/lldb:lldb_test.bzl", "ios_lldb_breakpoint_command_test", "ios_lldb_breakpoint_po_test")
-load("//rules/test/lldb:lldb_test.bzl", "ios_lldb_breakpoint_po_test", "ios_lldb_breakpoint_command_test")
 load("//rules:xcodeproj.bzl", "xcodeproj")
 load("//rules:app.bzl", "ios_application")
+load("@build_bazel_rules_ios//rules:xcodeproj.bzl", "xcodeproj_lldbinit_2")
 
 ios_application(
     name = "ObjcApp",
-    srcs = ["App/main.m", "App/main.h"],
+    srcs = [
+        "App/main.h",
+        "App/main.m",
+    ],
     bundle_id = "com.example.app",
     minimum_os_version = "10.0",
     visibility = ["//visibility:public"],
@@ -13,22 +16,20 @@ ios_application(
 
 xcodeproj(
     name = "Objc-Project",
-    visibility = ["//visibility:public"] ,
     bazel_path = "bazelisk",
     generate_schemes_for_product_types = ["application"],
     include_transitive_targets = True,
+    visibility = ["//visibility:public"],
     deps = [
         "ObjcApp",
     ],
 )
 
-load("@build_bazel_rules_ios//rules:xcodeproj.bzl", "xcodeproj_lldbinit_2")
-
 xcodeproj_lldbinit_2(
     name = "Objc-proj_xc_lldbinit",
     out = "Objc-proj_xc_lldbinit" + ".xc.lldbinit",
+    target_name = "ObjcApp",
     deps = [":Objc-Project"],
-    target_name = "ObjcApp"
 )
 
 ios_lldb_breakpoint_po_test(
@@ -36,11 +37,11 @@ ios_lldb_breakpoint_po_test(
     application = "ObjcApp",
     device = "iPhone X",
     expected_value = "some",
+    lldbinit = ":Objc-proj_xc_lldbinit",
     sdk = "14.5",
     set_cmd = "breakpoint set --file 'tests/ios/lldb/app/App/main.m' --line 6",
     tags = ["manual"],
     variable = "x",
-    lldbinit = ":Objc-proj_xc_lldbinit"
 )
 
 ios_lldb_breakpoint_command_test(
@@ -48,8 +49,12 @@ ios_lldb_breakpoint_command_test(
     application = "ObjcApp",
     cmds = ["po x"],
     device = "iPhone X",
+    lldbinit = ":Objc-proj_xc_lldbinit",
+    match_substrs = [
+        "execute: po x",
+        "cmd_result: po x some",
+    ],
     sdk = "14.5",
     set_cmd = "breakpoint set --file 'tests/ios/lldb/app/App/main.m' --line 6",
     tags = ["manual"],
-    lldbinit = ":Objc-proj_xc_lldbinit"
 )

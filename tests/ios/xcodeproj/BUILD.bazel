@@ -42,7 +42,6 @@ additional_scheme_info(
 xcodeproj(
     name = "Test-Imports-App-Project",
     testonly = True,
-    visibility = ["//visibility:public"] ,
     additional_post_actions = {
         "build": [
             "echo 'post_build_action_1'",
@@ -58,6 +57,7 @@ xcodeproj(
     bazel_path = "bazelisk",
     generate_schemes_for_product_types = ["application"],
     include_transitive_targets = False,
+    visibility = ["//visibility:public"],
     deps = [
         "//tests/ios/unit-test/test-imports-app:TestImports-App",
         "//tests/ios/unit-test/test-imports-app:TestImports-App_framework_unlinked",
@@ -101,10 +101,10 @@ xcodeproj(
     ],
     include_transitive_targets = True,
     project_name = "TestWithHostApp",  # Test that setting a custom project name works as expected
+    visibility = ["//visibility:public"],
     deps = [
         "//tests/ios/unit-test:ExplicitHosted",
     ],
-    visibility = ["//visibility:public"] 
 )
 
 genrule(

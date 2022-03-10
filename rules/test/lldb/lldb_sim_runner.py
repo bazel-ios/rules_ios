@@ -11,6 +11,7 @@ import traceback
 import tempfile
 import shutil
 import json
+import contextlib
 
 logging.basicConfig(
     format="%(asctime)s.%(msecs)03d %(levelname)s %(message)s",
@@ -51,6 +52,32 @@ def boot_simulator(developer_path, simctl_path, udid):
     logger.debug("Simulator launched.")
     if not sim_template.wait_for_sim_to_boot(simctl_path, udid):
         raise Exception("Failed to launch simulator with UDID: " + udid)
+
+
+@contextlib.contextmanager
+def temporary_ios_simulator(ctx, simctl_path, device, version):
+    """Creates a temporary iOS simulator, cleaned up automatically upon close.
+
+    Args:
+      simctl_path: The path to the `simctl` binary.
+      device: The name of the device (e.g. "iPhone 8 Plus").
+      version: The version of the iOS runtime (e.g. "13.2").
+
+    Yields:
+      The UDID of the newly-created iOS simulator.
+    """
+    runtime_version_name = version.replace(".", "-")
+    logger.info("Creating simulator, device=%s, version=%s", device, version)
+    simctl_create_result = subprocess.run([
+        simctl_path, "create", "TestDevice", device,
+        "com.apple.CoreSimulator.SimRuntime.iOS-" + runtime_version_name
+    ],
+        encoding="utf-8",
+        check=True,
+        stdout=subprocess.PIPE)
+    udid = simctl_create_result.stdout.rstrip()
+    ctx.SetStartedSimUDID(udid)
+    yield udid
 
 
 def run_app_in_simulator(ctx, simulator_udid, developer_path, simctl_path,
@@ -104,20 +131,19 @@ def run_app_in_simulator(ctx, simulator_udid, developer_path, simctl_path,
 
         # After it boots, notify the `ctx` by calling SetStartedAppPid
         app_started_pid = None
-        while simctl_process.returncode == None and app_started_pid == None:
-            if not app_started_pid:
-                app_started_pid = find_pid(ctx.app_name, simulator_udid)
-                if app_started_pid:
-                    logger.info("Got PID %s", app_started_pid)
-                    time.sleep(1)
-                    ctx.SetStartedAppPid(app_started_pid)
-
+        while not app_started_pid:
             logger.info("Poll simulator %s", simctl_process.poll())
+            app_started_pid = find_pid(ctx.app_name, simulator_udid)
+            poll_stat = simctl_process.poll()
+            if app_started_pid:
+                logger.info("Got PID %s", app_started_pid)
+                ctx.SetStartedAppPid(app_started_pid)
+            if simctl_process.returncode and simctl_process.returncode != 0:
+                break
             time.sleep(1)
-
         logger.info("Sim exited return code %d", simctl_process.returncode)
         if simctl_process.returncode != 0:
-            ctx.fail()
+            ctx.Fail()
 
 
 def sim_thread_main(ctx, sim_device, sim_os_version, ios_application_output_path, app_name,
@@ -128,21 +154,14 @@ def sim_thread_main(ctx, sim_device, sim_os_version, ios_application_output_path
                                          stdout=subprocess.PIPE)
     developer_path = xcode_select_result.stdout.rstrip()
     simctl_path = os.path.join(developer_path, "usr", "bin", "simctl")
-    with sim_template.ios_simulator(simctl_path, minimum_os, sim_device,
-                                    sim_os_version) as simulator_udid:
+    with temporary_ios_simulator(ctx, simctl_path, sim_device,
+                                 sim_os_version) as simulator_udid:
         run_app_in_simulator(ctx, simulator_udid, developer_path, simctl_path,
                              ios_application_output_path, app_name)
 
 
 def sim_thread_entry(ctx, device, sdk, ipa_path):
-    try:
-        sim_thread_main(ctx, device, sdk, ipa_path, ctx.app_name, sdk)
-    except Exception:
-        traceback.print_exc()
-        ctx.Fail()
-
-
-ctxlock = threading.RLock()
+    sim_thread_main(ctx, device, sdk, ipa_path, ctx.app_name, sdk)
 
 
 class TestContext():
@@ -153,14 +172,19 @@ class TestContext():
         # Not thread safe
         self.status = None
         self.pid = None
+        self.udid = None
 
     def SetStartedAppPid(self, app_pid):
-        with ctxlock:
-            self.pid = app_pid
+        self.pid = app_pid
+
+    def SetStartedSimUDID(self, udid):
+        self.udid = udid
+
+    def GetStartedSimUDID(self):
+        return self.udid
 
     def GetStartedAppPid(self):
-        with ctxlock:
-            return self.pid
+        return self.pid
 
     def Fail(self):
         traceback.print_exc()
@@ -170,12 +194,10 @@ class TestContext():
 
     # Returns None for in progress, -1 fail, 1 pass
     def GetCompletionStatus(self):
-        with ctxlock:
-            return self.status
+        return self.status
 
     def SetLLDBCompletionStatus(self, status):
-        with ctxlock:
-            self.status = status
+        self.status = status
         if status != 0:
             self.Fail()
 
@@ -183,17 +205,9 @@ class TestContext():
         return self.test_root
 
 
-def lldb_thread_entry(ctx, lldbinit):
-    while not ctx.GetStartedAppPid() and ctx.GetCompletionStatus() == None:
-        logger.info(
-            "Waiting for %s.app to post to start debugger", ctx.app_name)
-        time.sleep(1)
-    try:
-        attach_debugger(ctx, test_root=ctx.GetTestRoot(),
-                        pid=ctx.GetStartedAppPid(), lldbinit=lldbinit)
-    except Exception:
-        traceback.print_exc()
-        ctx.Fail()
+def lldb_thread_entry(ctx, lldbinit, stdout):
+    attach_debugger(ctx, test_root=ctx.GetTestRoot(),
+                    pid=ctx.GetStartedAppPid(), lldbinit=lldbinit, stdout=stdout)
 
 
 def monitor_output(out, prefix, dupe_file_path=None):
@@ -212,18 +226,24 @@ def monitor_output(out, prefix, dupe_file_path=None):
     logger.info(prefix + " output stream Closed")
 
 
-def attach_debugger(ctx, test_root, pid, lldbinit):
+def attach_debugger(ctx, test_root, pid, lldbinit, stdout):
     # TODO: ideally use Bazel's configured Xcode's LLDB if it exists
     args = ["xcrun", "lldb", "-p", str(pid)]
 
-    logger.info("spawning LLDB with args %s cwd=%s", str(args), test_root)
+    lldb_desc = " ".join(args)
+    x_str = "command source " + str(lldbinit) + "\n"
+    logger.info("spawning LLDB with args: cd %s && %s - init %s",
+                test_root, lldb_desc + " - " + x_str, lldbinit)
+    while False:
+        logger.info("spawning LLDB with args: cd %s && %s - init %s",
+                    test_root, lldb_desc + " - " + x_str, lldbinit)
+        time.sleep(1)
     lldb_process = subprocess.Popen(
         args, cwd=test_root, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     # Stream the LLDB output to stdout, consider moving to a file
-    stdout_path = os.path.join(test_root, "lldb.stdout")
     reader_t = threading.Thread(
-        target=monitor_output, args=(lldb_process.stdout, "LLDB", stdout_path))
+        target=monitor_output, args=(lldb_process.stdout, "LLDB", stdout))
     reader_t.daemon = True
     reader_t.start()
 
@@ -232,6 +252,8 @@ def attach_debugger(ctx, test_root, pid, lldbinit):
     reader_tstderr.daemon = True
     reader_tstderr.start()
 
+    if not os.path.exists(lldbinit):
+        ctx.Fail()
     # Source the users lldbinit
     lldb_process.stdin.write(
         ("command source " + str(lldbinit) + "\n").encode('utf-8'))
@@ -246,7 +268,23 @@ def attach_debugger(ctx, test_root, pid, lldbinit):
     ctx.SetLLDBCompletionStatus(lldb_process.returncode)
 
 
-def run_lldb(ipa_path, sdk, device, lldbinit_path, test_root):
+def cleanup(ctx):
+    udid = ctx.udid
+    xcode_select_result = subprocess.run(["xcode-select", "-p"],
+                                         encoding="utf-8",
+                                         check=True,
+                                         stdout=subprocess.PIPE)
+    developer_path = xcode_select_result.stdout.rstrip()
+    simctl_path = os.path.join(developer_path, "usr", "bin", "simctl")
+
+    subprocess.run([simctl_path, "shutdown", udid],
+                   stderr=subprocess.DEVNULL,
+                   check=False)
+    logger.info("Deleting simulator with udid: %s", udid)
+    subprocess.run([simctl_path, "delete", udid], check=True)
+
+
+def run_lldb(ipa_path, sdk, device, lldbinit_path, test_root, lldb_stdout):
     """ Spawns a simulator with the `ipa_path`, `sdk`, device wit the `.lldbinit`
 
         It waits for LLDB to exit and retuns the exit code
@@ -274,23 +312,13 @@ def run_lldb(ipa_path, sdk, device, lldbinit_path, test_root):
     logger.info("Got app name %s", app_name)
     try:
         ctx = TestContext(None, app_name, str(test_root))
-
-        # Main runloop - polls completion status
-        sim_thread = threading.Thread(
-            target=sim_thread_entry, args=(ctx, device, sdk, ipa_path))
-        debugger_thread = threading.Thread(
-            target=lldb_thread_entry, args=(ctx, lldbinit_path))
-        sim_thread.start()
-        debugger_thread.start()
-        while ctx.GetCompletionStatus() == None:
-            logger.debug('Main thread...')
-            time.sleep(1)
-        sim_thread.join()
-        debugger_thread.join()
+        sim_thread_entry(ctx, device, sdk, ipa_path)
+        lldb_thread_entry(ctx, lldbinit_path, lldb_stdout)
         exit_code = ctx.GetCompletionStatus()
     except Exception:
         traceback.print_exc()
-
+    finally:
+        cleanup(ctx)
     if exit_code != 0:
         raise Exception(f"LLDB exited with non-zero status %d", exit_code)
     return exit_code
