@@ -36,14 +36,25 @@ readonly local_developer_dir="$DEVELOPER_DIR"
 # Uses all available cores for intel and a fraction of the performance cores on M1
 PARALLEL_STRIDE=$(sysctl -n hw.physicalcpu)
 
-# M1s have more performance cores than efficiency so dividing by 2 here should take
+# M1 machines have more performance cores than efficiency cores so dividing by 2 here should take
 # a good percentage of the performance cores to do this work
 if [[ $(arch) == 'arm64' ]]; then
   PARALLEL_STRIDE=$(expr $PARALLEL_STRIDE / 2)
 fi
 
+# Kill existing index-import process if it's running
+# in some cases this process is taking too much resources on the machine so
+# givin priority only to the latest run
+DERIVED_DATA="$BUILD_DIR"/../../..
+if [[ -f $DERIVED_DATA/index-import.pid ]]; then
+  PID=$(cat $DERIVED_DATA/index-import.pid)
+  if ps -p $PID > /dev/null; then
+    kill -10 $PID
+  fi
+fi
+
 $BAZEL_INSTALLERS_DIR/index-import \
-    -parallel-stride $PARALLEL_STRIDE
+    -parallel-stride $PARALLEL_STRIDE \
     -incremental \
     -remap "$remote_developer_dir=$local_developer_dir" \
     -remap "$bazel_module=$xcode_module" \
@@ -53,4 +64,6 @@ $BAZEL_INSTALLERS_DIR/index-import \
     -remap "$bazel_root=$BAZEL_WORKSPACE_ROOT" \
     -remap "^([^//])=$BAZEL_WORKSPACE_ROOT/\$1" \
     "$@" \
-    "$BUILD_DIR"/../../Index/DataStore
+    "$BUILD_DIR"/../../Index/DataStore &
+
+echo $! > $DERIVED_DATA/index-import.pid
