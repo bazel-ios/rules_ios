@@ -29,16 +29,29 @@ class TestResult():
         }
 
 
-def emit_breakpoint_result(test_spec, po_expression_result):
-    expected_value = test_spec["expected_value"]
-    if po_expression_result != expected_value:
-        print("Failed Expected", expected_value, "Got",
-              po_expression_result)
-        result = TestResult(status=1)
-    else:
-        result = TestResult(status=0)
-    with open("test_result.json", "w") as out_file:
-        json.dump(result.to_json(), out_file)
+def test_file(f):
+    return os.path.join(os.environ["TEST_TMPDIR"], f)
+
+
+def emit_status(debugger, status):
+    result = TestResult(status=status)
+
+    with open(test_file("test_result.json"), "w") as out_file:
+        result_json = result.to_json()
+        json.dump(result_json, out_file)
+        json.dump(result_json, sys.stdout)
+        print("", flush=True)
+
+    # If we don't flush this it will never get written
+    print("exiting_process", flush=True)
+
+    # This will totally stop the process
+    debugger.HandleCommand("process kill")
+    debugger.HandleCommand("quit")
+
+    # This now relies on being able to terminate LLDB - this is the current
+    # state of the world, but do this instead of making our own API
+    os._exit(0)
 
 
 def breakpoint_info_fn(frame, bp_loc, extra_args, internal_dict):
@@ -46,7 +59,6 @@ def breakpoint_info_fn(frame, bp_loc, extra_args, internal_dict):
 
         It writes the status into `test_result.json` inside of the LLDB path
     """
-
     debugger = frame.GetThread().GetProcess().GetTarget().GetDebugger()
     hit_count = bp_loc.GetHitCount()
     print("got_hit_count:", hit_count)
@@ -63,7 +75,7 @@ def breakpoint_info_fn(frame, bp_loc, extra_args, internal_dict):
     print("got_compilation_unit_file:", compilation_unit_file)
 
     test_spec_dict = None
-    with open("test_spec.json", 'r') as test_spec:
+    with open(test_file("test_spec.json"), 'r') as test_spec:
         test_spec_dict = json.load(test_spec)
         print("test_spec: ", test_spec_dict)
         variable_name = test_spec_dict["variable_name"]
@@ -79,18 +91,9 @@ def breakpoint_info_fn(frame, bp_loc, extra_args, internal_dict):
 
     object_description = variable_result.GetObjectDescription()
     print("found_object_description:", object_description)
-    emit_breakpoint_result(test_spec_dict, object_description)
-
-    # If we don't flush this it will never get written
-    print("exiting_process", flush=True)
-
-    # This will totally stop the process
-    debugger.HandleCommand("process kill")
-    debugger.HandleCommand("quit")
-
-    # This now relies on being able to terminate LLDB - this is the current
-    # state of the world, but do this instead of making our own API
-    os._exit(0)
+    print("variable_result:", variable_name, "=", object_description)
+    # If it doesn't crash here this is fine
+    emit_status(debugger, 0)
 
 
 def breakpoint_cmd_fn(frame, bp_loc, extra_args, internal_dict):
@@ -101,7 +104,7 @@ def breakpoint_cmd_fn(frame, bp_loc, extra_args, internal_dict):
 
     test_spec_dict = None
     commands_succeeded = False
-    with open("test_spec.json", 'r') as test_spec:
+    with open(test_file("test_spec.json"), 'r') as test_spec:
         test_spec_dict = json.load(test_spec)
         for command in test_spec_dict["br_hit_commands"]:
             print("execute:", command, flush=True)
@@ -109,18 +112,9 @@ def breakpoint_cmd_fn(frame, bp_loc, extra_args, internal_dict):
             ci = debugger.GetCommandInterpreter()
             ci.HandleCommand(command, res)
             commands_succeeded = res.Succeeded()
-            print("result:", command, res.GetOutput(), flush=True)
+            print("cmd_result:", command, res.GetOutput(), flush=True)
 
-    result = TestResult(status=0 if commands_succeeded else 1)
-    with open("test_result.json", "w") as out_file:
-        json.dump(result.to_json(), out_file)
-
-    debugger.HandleCommand("process kill")
-    debugger.HandleCommand("quit")
-
-    # This now relies on being able to terminate LLDB - this is the current
-    # state of the world, but do this instead of making our own API
-    os._exit(0)
+    emit_status(debugger, status=0 if commands_succeeded else 1)
 
 
 def __lldb_init_module(debugger, internal_dict):

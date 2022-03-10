@@ -1,6 +1,9 @@
 load("@rules_python//python:defs.bzl", "py_library")
 
-exports_files(["lldb_breakpoint_test_main.py"])
+exports_files([
+    "lldb_breakpoint_test_main.py",
+    "breakpoint.py",
+])
 
 package(default_visibility = ["//visibility:public"])
 
@@ -24,7 +27,6 @@ genrule(
 py_library(
     name = "lldb_test",
     srcs = [
-        "breakpoint.py",
         "lldb_sim_runner.py",
     ],
     deps = [

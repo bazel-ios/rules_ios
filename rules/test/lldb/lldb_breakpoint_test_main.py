@@ -23,18 +23,14 @@ parser.add_argument("--lldbinit")
 args = parser.parse_args()
 
 
-def setup_test_root(exec_root, test_root, test_spec):
-    source_file = os.path.realpath(__file__)
-    breakpoint_file = os.path.join(
-        os.path.dirname(source_file), "breakpoint.py")
-
-    os.symlink(breakpoint_file, os.path.join(test_root, "breakpoint.py"))
-    logging.info("Symlinking breakpoint %s",
-                 os.path.join(test_root, "breakpoint.py"))
-    logger.info("Setup test root: " + test_root)
+def setup_test_tmp_dir(exec_root, test_tmp_dir, test_spec):
+    logger.info("Setup test root: " + test_tmp_dir)
     # LLDB needs to read this file later
-    os.symlink(test_spec, os.path.join(test_root, "test_spec.json"))
-    return test_root
+    os.symlink(test_spec, os.path.join(test_tmp_dir, "test_spec.json"))
+    logging.info("Symlinking spec %s to %s", test_spec,
+                 os.path.join(test_tmp_dir, "test_spec.json"))
+
+    return test_tmp_dir
 
 
 def get_test_result(test_root):
@@ -45,24 +41,54 @@ def get_test_result(test_root):
         return json.load(test_result)
 
 
-##
 tmp_dir = os.environ["TEST_TMPDIR"]
 exec_root = os.path.dirname(os.path.dirname(tmp_dir))
 test_spec = os.path.join(exec_root, args.spec)
-test_tmp_dir = setup_test_root(exec_root, tmp_dir, test_spec)
+test_tmp_dir = setup_test_tmp_dir(exec_root, tmp_dir, test_spec)
 app_path = os.path.join(exec_root, args.app)
+logger.info("Test Root " + test_tmp_dir)
 
-exit_code = lldb_sim_runner.run_lldb(ipa_path=app_path, sdk=args.sdk,
+stdout_path = os.path.join(test_tmp_dir, "lldb.stdout")
+exit_code = lldb_sim_runner.run_lldb(app_path=app_path, sdk=args.sdk,
                                      device=args.device, lldbinit_path=os.path.join(
                                          exec_root, args.lldbinit),
-                                     test_root=test_tmp_dir)
+                                     test_root=exec_root, lldb_stdout=stdout_path)
 if exit_code != 0:
     exit(exit_code)
 
 # Check to ensure that stdout was written
-stdout_path = os.path.join(test_tmp_dir, "lldb.stdout")
 if not os.path.exists(stdout_path):
     raise Exception(f"Test exited without lldb.stdout %s", stdout_path)
+
+
+def match_test_spec(stdout, test_spec):
+    with open(test_spec, 'r') as test_spec:
+        test_spec_dict = json.load(test_spec)
+        if not "substrs" in test_spec_dict:
+            logging.info(f"Skipping matching for spec %s", test_spec)
+
+        substrs = test_spec_dict["substrs"]
+        matches = {}
+        for substr in substrs:
+            logging.info("Load match: (" + substr + ")")
+            matches[substr] = 0
+
+        match_count = 0
+        for line in stdout:
+            match = line.strip()
+            logging.debug("Try match: (" + match + ")")
+            if match in matches:
+                logging.debug("Got match:" + match)
+                match_count += 1
+                matches[match] = matches[match] = 1
+
+        # Could add better output here, but use stdout for now
+        if match_count != len(substrs):
+            raise Exception(f"Invalid matches lldb.stdout %s", str(matches))
+
+
+with open(stdout_path, "r") as stdout:
+    match_test_spec(stdout, test_spec)
 
 result = get_test_result(test_tmp_dir)
 exit(exit_code if result["status"] == 0 else 1)
