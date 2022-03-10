@@ -42,6 +42,7 @@ additional_scheme_info(
 xcodeproj(
     name = "Test-Imports-App-Project",
     testonly = True,
+    visibility = ["//visibility:public"] ,
     additional_post_actions = {
         "build": [
             "echo 'post_build_action_1'",
@@ -103,6 +104,7 @@ xcodeproj(
     deps = [
         "//tests/ios/unit-test:ExplicitHosted",
     ],
+    visibility = ["//visibility:public"] 
 )
 
 genrule(

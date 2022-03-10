@@ -381,6 +381,132 @@ _xcodeproj_aspect = aspect(
     attr_aspects = ["deps", "actual", "tests", "infoplists", "entitlements", "resources", "test_host"],
 )
 
+
+def _xcodeproj_lldbinit_impl(ctx):
+    ## For now just process the build settings in a hacky way. Perhaps we can run something like this to make it more robust - harcode for now
+    # xcodebuild -project tests/ios/xcodeproj/Test-Imports-App-Project.xcodeproj/
+    # -showBuildSettings > /tmp/xcconfig.txt -target TestImports-App -json
+
+    all_transitive_targets = depset(transitive = _get_attr_values_for_name(ctx.attr.deps, _TargetInfo, "targets")).to_list()
+    if ctx.attr.include_transitive_targets:
+        targets = all_transitive_targets
+    else:
+        targets = []
+        for t in _get_attr_values_for_name(ctx.attr.deps, _TargetInfo, "direct_targets"):
+            targets.extend(t)
+
+    (xcodeproj_targets_by_name, xcodeproj_schemes_by_name) = _populate_xcodeproj_targets_and_schemes(ctx, targets, "", all_transitive_targets)
+    target = xcodeproj_targets_by_name[ctx.attr.target_name]
+
+    defaults = ""
+    for k in target["settings"]:
+        v = target["settings"][k]
+        if str(type(v)) == str("list"):
+            #v = "(" + " ".join(v) + ")"
+            v = " ".join(v)
+        defaults += "export " + k + "=( " + v + " )\n"
+    rs = ctx.executable.runscript
+    cmd = """
+export inherited=""
+function expand() {
+echo $1
+}
+
+export BAZEL_LLDB_INIT_FILE=""" + ctx.outputs.out.path + """
+export BAZEL_WORKSPACE_ROOT=$PWD
+export SDKROOT=""
+export PLATFORM_DIR=""
+export FRAMEWORK_SEARCH_PATHS=""
+export HEADER_SEARCH_PATHS=""
+export CONFIGURATION=""
+""" + defaults.replace("$(inherited)", "")
+
+    rs_f = ctx.actions.declare_file("rs")
+    ctx.actions.write(rs_f, cmd)
+    ctx.actions.run_shell(
+        inputs = depset(ctx.attr.runscript[DefaultInfo].files.to_list() + [rs_f]),
+        outputs = [ctx.outputs.out],
+        mnemonic = "XcodeLLDBInit",
+        command = "./" + rs_f.path,
+    )
+
+
+xcodeproj_lldbinit = rule(
+    implementation = _xcodeproj_lldbinit_impl,
+    attrs = {
+        "runscript": attr.label(mandatory = False, executable=True,cfg="host", default="@build_bazel_rules_ios//tools/xcodeproj_shims:lldb-settings"),
+        "deps": attr.label_list(mandatory = True, allow_empty = False, providers = [], aspects = [_xcodeproj_aspect]),
+        "out": attr.output(mandatory = True),
+        "include_transitive_targets": attr.bool(default=True),
+        "additional_prebuild_script": attr.string(default=""),
+        "target_name": attr.string(),
+        "generate_schemes_for_product_types": attr.string(default=""),
+        "additional_scheme_infos": attr.label_list(default=[]),
+        "additional_pre_actions": attr.label_list(default=[]),
+        "additional_post_actions": attr.label_list(default=[]),
+    }
+)
+
+def _xcodeproj_lldbinit_2_impl(ctx):
+    ## For now just process the build settings in a hacky way. Perhaps we can run something like this to make it more robust - harcode for now
+    # xcodebuild -project tests/ios/xcodeproj/Test-Imports-App-Project.xcodeproj/
+    # -showBuildSettings > /tmp/xcconfig.txt -target TestImports-App -json
+
+    rs = ctx.executable.runscript
+
+    proj = ctx.attr.deps[0][DefaultInfo].files.to_list()[1].path
+    target_cmd = "xcodebuild -showBuildSettings -project " + proj + " -scheme " + ctx.attr.target_name + " -json -sdk iphonesimulator"
+
+    # Export Xcode build settings JSON to an env file - run this in an action,
+    # the env file is not hermetic.
+    cmd = """
+#!/bin/bash
+set -ex
+py_script=$(mktemp /tmp/intemediate.XXXXXX)
+env_script=$(mktemp /tmp/intemediate.XXXXXX)
+cat > $py_script << "EOF"
+import json, sys, shlex
+build_settings = json.load(sys.stdin)[0]["buildSettings"]
+print("/bin/bash")
+print("set -e")
+for bs in build_settings:
+    if bs == "UID" or bs == "EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES" or bs == "BAZEL_LLDB_INIT_FILE" or bs == "PATH":
+       continue
+    print("export " + bs + "='" + str(' '.join(shlex.split(build_settings[bs]))) + "'")
+EOF
+
+""" + target_cmd + """ 2> /dev/null | python $py_script > $env_script
+source $env_script
+export BAZEL_LLDB_INIT_FILE=$PWD/""" + ctx.outputs.out.path + """
+export BAZEL_WORKSPACE_ROOT=$PWD
+source """ +  ctx.executable.runscript.path
+    rs_f = ctx.actions.declare_file("rs")
+    ctx.actions.write(rs_f, cmd)
+    ctx.actions.run_shell(
+        inputs = depset(ctx.attr.runscript[DefaultInfo].files.to_list() + [rs_f] + ctx.attr.deps[0][DefaultInfo].files.to_list()),
+        outputs = [ctx.outputs.out],
+        mnemonic = "XcodeLLDBInit",
+        command = "./" + rs_f.path,
+    )
+    files = depset(direct = [ctx.outputs.out])
+    runfiles = ctx.runfiles(files = [ctx.outputs.out])
+    is_executable = False
+    if is_executable:
+        return [DefaultInfo(files = files, runfiles = runfiles, executable = ctx.outputs.out)]
+    else:
+        return [DefaultInfo(files = files, runfiles = runfiles)]
+
+xcodeproj_lldbinit_2 = rule(
+    implementation = _xcodeproj_lldbinit_2_impl,
+    attrs = {
+        "runscript": attr.label(mandatory = False, executable=True,cfg="host", default="@build_bazel_rules_ios//tools/xcodeproj_shims:lldb-settings"),
+        "deps": attr.label_list(mandatory = True, allow_empty = False, providers = [], aspects = [_xcodeproj_aspect]),
+        "out": attr.output(mandatory = True),
+        "target_name": attr.string(),
+    }
+)
+
+
 def _collect_swift_defines(modules):
     defines = {}
     for module in modules:

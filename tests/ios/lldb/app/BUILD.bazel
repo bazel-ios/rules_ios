@@ -1,12 +1,34 @@
 load("//rules/test/lldb:lldb_test.bzl", "ios_lldb_breakpoint_command_test", "ios_lldb_breakpoint_po_test")
+load("//rules/test/lldb:lldb_test.bzl", "ios_lldb_breakpoint_po_test", "ios_lldb_breakpoint_command_test")
+load("//rules:xcodeproj.bzl", "xcodeproj")
 load("//rules:app.bzl", "ios_application")
 
 ios_application(
     name = "ObjcApp",
-    srcs = ["App/main.m"],
+    srcs = ["App/main.m", "App/main.h"],
     bundle_id = "com.example.app",
     minimum_os_version = "10.0",
     visibility = ["//visibility:public"],
+)
+
+xcodeproj(
+    name = "Objc-Project",
+    visibility = ["//visibility:public"] ,
+    bazel_path = "bazelisk",
+    generate_schemes_for_product_types = ["application"],
+    include_transitive_targets = True,
+    deps = [
+        "ObjcApp",
+    ],
+)
+
+load("@build_bazel_rules_ios//rules:xcodeproj.bzl", "xcodeproj_lldbinit_2")
+
+xcodeproj_lldbinit_2(
+    name = "Objc-proj_xc_lldbinit",
+    out = "Objc-proj_xc_lldbinit" + ".xc.lldbinit",
+    deps = [":Objc-Project"],
+    target_name = "ObjcApp"
 )
 
 ios_lldb_breakpoint_po_test(
@@ -18,6 +40,7 @@ ios_lldb_breakpoint_po_test(
     set_cmd = "breakpoint set --file 'tests/ios/lldb/app/App/main.m' --line 6",
     tags = ["manual"],
     variable = "x",
+    lldbinit = ":Objc-proj_xc_lldbinit"
 )
 
 ios_lldb_breakpoint_command_test(
@@ -28,4 +51,5 @@ ios_lldb_breakpoint_command_test(
     sdk = "14.5",
     set_cmd = "breakpoint set --file 'tests/ios/lldb/app/App/main.m' --line 6",
     tags = ["manual"],
+    lldbinit = ":Objc-proj_xc_lldbinit"
 )
