@@ -479,6 +479,9 @@ EOF
 source $env_script
 export BAZEL_LLDB_INIT_FILE=$PWD/""" + ctx.outputs.out.path + """
 export BAZEL_WORKSPACE_ROOT=$PWD
+
+# This isn't set for virtualize frameworks
+export HEADER_SEARCH_PATHS=""
 source """ +  ctx.executable.runscript.path
     rs_f = ctx.actions.declare_file("rs")
     ctx.actions.write(rs_f, cmd)
