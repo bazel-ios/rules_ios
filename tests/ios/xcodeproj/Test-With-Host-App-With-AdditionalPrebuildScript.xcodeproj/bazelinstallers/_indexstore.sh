@@ -38,7 +38,8 @@ PARALLEL_STRIDE=$(sysctl -n hw.physicalcpu)
 
 # M1 machines have more performance cores than efficiency cores so dividing by 2 here should take
 # a good percentage of the performance cores to do this work
-if [[ $(arch) == 'arm64' ]]; then
+ARCH=$(arch)
+if [[ $ARCH == 'arm64' ]]; then
   PARALLEL_STRIDE=$(expr $PARALLEL_STRIDE / 2)
 fi
 
@@ -49,9 +50,12 @@ DERIVED_DATA="$BUILD_DIR"/../../..
 if [[ -f $DERIVED_DATA/index-import.pid ]]; then
   PID=$(cat $DERIVED_DATA/index-import.pid)
   if ps -p $PID > /dev/null; then
+    echo "Killing index-import process before invoking it again"
     kill -10 $PID
   fi
 fi
+
+echo "Running index-import for arch $ARCH and parallel-stride set to $PARALLEL_STRIDE"
 
 $BAZEL_INSTALLERS_DIR/index-import \
     -parallel-stride $PARALLEL_STRIDE \
