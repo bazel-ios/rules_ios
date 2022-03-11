@@ -381,6 +381,77 @@ _xcodeproj_aspect = aspect(
     attr_aspects = ["deps", "actual", "tests", "infoplists", "entitlements", "resources", "test_host"],
 )
 
+def _xcodeproj_lldbinit_impl(ctx):
+    rs = ctx.executable.runscript
+
+    # Improve this
+    proj_files = ctx.attr.project[DefaultInfo].files.to_list()
+    proj = proj_files[1].path
+
+    # Gist is to dump showBuildSettings to replicate xcode runscript actions -
+    # this is an impl detail
+    target_cmd = "xcodebuild -showBuildSettings -project " + proj + " -scheme " + ctx.attr.target_name + " -json -sdk iphonesimulator"
+
+    # Export Xcode build settings JSON to an env file - run this in an action,
+    # the env file is not reproducible because the absolute paths. Theoretically
+    # the LLDBInit should be relative, the LLDBInit is less necessary it's
+    # current form with "virtual frameworks". Consider dealing with that
+    cmd = """
+#!/bin/bash
+set -ex
+# Consider moving this into an actual python script
+py_script=$(mktemp /tmp/bazel-xcodeproj-intermediate.XXXXXX)
+trap "rm -rf $py_script" EXIT
+env_script=$(mktemp /tmp/bazel-xcodeproj-intermediate.XXXXXX)
+trap "rm -rf $env_script" EXIT
+
+cat > $py_script << "EOF"
+import json, sys, shlex
+build_settings = json.load(sys.stdin)[0]["buildSettings"]
+print("/bin/bash")
+print("set -e")
+for bs in build_settings:
+    if bs == "UID" or bs == "EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES" or bs == "BAZEL_LLDB_INIT_FILE" or bs == "PATH":
+       continue
+    parsed_cmds = shlex.split(build_settings[bs])
+    cmds = " ".join(["\\\'" + x + "\\\'" for x in  parsed_cmds])
+    if len(parsed_cmds) > 1:
+        print("export " + bs + "=(" + cmds  + ")")
+    else:
+        print("export " + bs + "=" + cmds  + "")
+EOF
+""" + target_cmd + """ 2> /dev/null | python $py_script > $env_script
+source $env_script
+cat $env_script
+export BAZEL_LLDB_INIT_FILE=$PWD/""" + ctx.outputs.out.path + """
+export BAZEL_WORKSPACE_ROOT=$PWD
+
+# This isn't set for virtualize frameworks
+export HEADER_SEARCH_PATHS=""
+source """ + ctx.executable.runscript.path
+    rs_f = ctx.actions.declare_file("rs")
+    ctx.actions.write(rs_f, cmd)
+    ctx.actions.run_shell(
+        inputs = depset(ctx.attr.runscript[DefaultInfo].files.to_list() + [rs_f] + proj_files),
+        outputs = [ctx.outputs.out],
+        mnemonic = "XcodeLLDBInit",
+        command = "./" + rs_f.path,
+    )
+    files = depset(direct = [ctx.outputs.out])
+    runfiles = ctx.runfiles(files = [ctx.outputs.out])
+    return [DefaultInfo(files = files, runfiles = runfiles, executable = ctx.outputs.out)]
+
+xcodeproj_lldbinit = rule(
+    implementation = _xcodeproj_lldbinit_impl,
+    attrs = {
+        "runscript": attr.label(mandatory = False, executable = True, cfg = "host", default = "@build_bazel_rules_ios//tools/xcodeproj_shims:lldb-settings"),
+        "project": attr.label(mandatory = True, providers = []),
+        "out": attr.output(mandatory = True),
+        "target_name": attr.string(),
+    },
+    doc = "Internal testing rule relying on assumptions about the xcodeproj rule above"
+)
+
 def _collect_swift_defines(modules):
     defines = {}
     for module in modules:
