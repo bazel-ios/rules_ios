@@ -50,5 +50,5 @@ build --deleted_packages tools/toolchains/bazel4_local_config_cc
 # Bazel 5 - matches ios_sim_arm64 CPU, Bazel 4 - needs "override" flags
 build --features apple.arm64_simulator_use_device_deps
 
-# Note - tree artifacts needs to be off
+# Note - tree artifacts needs to be on
 build:lldb_ios_test --spawn_strategy=standalone --apple_platform_type=ios --define=apple.experimental.tree_artifact_outputs=1

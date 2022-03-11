@@ -84,11 +84,10 @@ def pack_tree_artifact(ios_application_output_path, app_name):
     """This slows it down a bit to copy and zip up the app, make it handle a .app
     in another way
     """
-    archive_root = os.path.join(os.path.dirname(
-        ios_application_output_path), "lldb-test-intermediate")
+    archive_root = os.environ.get("TEST_UNDECLARED_OUTPUTS_DIR", os.path.join(os.path.dirname(
+        ios_application_output_path), "lldb-test-intermediate"))
     archive_app_path = os.path.join(archive_root, "Payload")
     ipa_path = os.path.join(archive_root, app_name + ".ipa")
-    subprocess.run(["rm", "-rf", archive_root], check=True)
     subprocess.run(["mkdir", "-p", archive_app_path], check=True)
     subprocess.run(["/usr/bin/rsync",
                     "--archive",
