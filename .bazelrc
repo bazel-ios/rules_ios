@@ -28,10 +28,6 @@ build --features swift.index_while_building
 # Prevents leaking unexpected binaries via PATH to tests
 build --test_env=PATH=/usr/bin:/bin:/usr/sbin:/sbin
 
-# Avoid running xcode-locator which can be super slow if the machine has many
-# Xcode versions
-build --xcode_version_config=//:host_xcodes
-
 # A toolchain to build the arm64 sim under Bazel 4. The problem is
 # that Bazel should have a new CPU but that needs much work in Bazel. The idea of
 # this toolchain is to conditionally compile x86_64 simulator as arm64. This has
@@ -53,3 +49,9 @@ build --deleted_packages tools/toolchains/bazel4_local_config_cc
 # Enable device deps when the build matches the arm64 simulator
 # Bazel 5 - matches ios_sim_arm64 CPU, Bazel 4 - needs "override" flags
 build --features apple.arm64_simulator_use_device_deps
+
+# Note - tree artifacts needs to be on
+build:lldb_ios_test --spawn_strategy=standalone --apple_platform_type=ios --define=apple.experimental.tree_artifact_outputs=1
+
+# Load a user.bazelrc
+try-import %workspace%/user.bazelrc

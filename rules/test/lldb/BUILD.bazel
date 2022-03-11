@@ -1,0 +1,35 @@
+load("@rules_python//python:defs.bzl", "py_library")
+
+exports_files([
+    "lldb_breakpoint_test_main.py",
+    "breakpoint.py",
+])
+
+package(default_visibility = ["//visibility:public"])
+
+## Infra definitions
+# Re-use rules apple sim creation and running code path
+py_library(
+    name = "ios_sim_template_lib",
+    srcs = [
+        "sim_template",
+    ],
+)
+
+# Wrap this to feed into py_library - doesn't like the name with the dot in it
+genrule(
+    name = "sim_template",
+    srcs = ["@build_bazel_rules_apple//apple/internal/templates:ios_sim_template"],
+    outs = ["sim_template.py"],
+    cmd = "cp $(SRCS) $(OUTS)",
+)
+
+py_library(
+    name = "lldb_test",
+    srcs = [
+        "lldb_sim_runner.py",
+    ],
+    deps = [
+        ":ios_sim_template_lib",
+    ],
+)

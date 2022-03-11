@@ -39,6 +39,12 @@ sh_binary(
     visibility = STUB_VISIBILITY,
 )
 
+sh_binary(
+    name = "lldb-settings",
+    srcs = ["installers/lldb-settings.sh"],
+    visibility = STUB_VISIBILITY,
+)
+
 sh_library(
     name = "build-wrapper-deps",
     srcs = ["//tools/xcode_version_computation"],
