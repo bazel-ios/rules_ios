@@ -270,9 +270,17 @@ def _get_framework_files(ctx, deps):
                 destination = paths.join(framework_dir, "PrivateHeaders", hdr.basename)
                 private_header_out.append(destination)
 
+        has_header = False
+        if CcInfo in dep:
+            for hdr in dep[CcInfo].compilation_context.direct_headers:
+                if hdr.path.endswith((".h", ".hh", ".hpp")):
+                    has_header = True
+                    header_in.append(hdr)
+                    destination = paths.join(framework_dir, "Headers", hdr.basename)
+                    header_out.append(destination)
+
+        # backward compatibility with old versions of rules_swift
         if apple_common.Objc in dep:
-            # collect headers
-            has_header = False
             for hdr in dep[apple_common.Objc].direct_headers:
                 if hdr.path.endswith((".h", ".hh", ".hpp")):
                     has_header = True
