@@ -6,3 +6,4 @@ tests/ios/xcodeproj/**/xcuserdata
 /tests/ios/Index/
 /tests/macos/Index/
 /tests/index-import.pid
+user.bazelrc
