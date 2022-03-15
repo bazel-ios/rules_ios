@@ -157,7 +157,7 @@ def _write_umbrella_header(
 
 """
 
-    for header in public_headers:
+    for header in public_headers + private_headers:
         content += "#import \"{header}\"\n".format(header = paths.basename(header))
 
     if generate_default_umbrella_header:
