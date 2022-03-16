@@ -449,7 +449,7 @@ xcodeproj_lldbinit = rule(
         "out": attr.output(mandatory = True),
         "target_name": attr.string(),
     },
-    doc = "Internal testing rule relying on assumptions about the xcodeproj rule above"
+    doc = "Internal testing rule relying on assumptions about the xcodeproj rule above",
 )
 
 def _collect_swift_defines(modules):

@@ -28,8 +28,8 @@ xcodeproj(
 xcodeproj_lldbinit(
     name = "Objc-proj_xc_lldbinit",
     out = "Objc-proj_xc_lldbinit" + ".xc.lldbinit",
-    target_name = "ObjcApp",
     project = ":Objc-Project",
+    target_name = "ObjcApp",
 )
 
 ios_lldb_breakpoint_po_test(
