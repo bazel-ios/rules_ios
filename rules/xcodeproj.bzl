@@ -965,6 +965,7 @@ def _xcodeproj_impl(ctx):
         "BAZEL_PROFILE_ENABLED": ctx.attr.bazel_profile_enabled,
         "BAZEL_CONFIGS": ctx.attr.configs,
         "BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS": " ".join(["{} ".format(opt) for opt in ctx.attr.additional_bazel_build_options]),
+        "BAZEL_ADDITIONAL_BAZEL_STARTUP_OPTIONS": " ".join(["{} ".format(opt) for opt in ctx.attr.additional_bazel_startup_options]),
         "BAZEL_ADDITIONAL_LLDB_SETTINGS": "\n".join(ctx.attr.additional_lldb_settings),
     })
 
@@ -1179,6 +1180,7 @@ https://www.rubydoc.info/github/CocoaPods/Xcodeproj/Xcodeproj/Constants
         "additional_files": attr.label_list(allow_files = True, allow_empty = True, default = [], mandatory = False),
         "additional_prebuild_script": attr.string(default = "", mandatory = False),  # Note this script will run BEFORE Bazel build script
         "additional_bazel_build_options": attr.string_list(default = [], mandatory = False),
+        "additional_bazel_startup_options": attr.string_list(default = [], mandatory = False),
         "additional_pre_actions": attr.string_list_dict(default = {}, mandatory = False, doc = """
 Configure a list of pre-actions for build/run/test in each scheme generated. 
 For each entry the key is one of build/test/run and value is a list of scripts.
