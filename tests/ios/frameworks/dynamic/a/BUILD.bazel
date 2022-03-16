@@ -4,6 +4,7 @@ apple_framework(
     name = "a",
     srcs = glob(["*.swift"]),
     infoplists = ["Info.plist"],
+    bundle_id = "com.example.a",
     link_dynamic = True,
     platforms = {"ios": "10.0"},
     visibility = ["//visibility:public"],
