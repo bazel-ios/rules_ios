@@ -2,6 +2,7 @@ load("@build_bazel_rules_apple//apple:ios.bzl", rules_apple_ios_application = "i
 load("//rules:library.bzl", "apple_library")
 load("//rules:plists.bzl", "info_plists_by_setting")
 load("//rules:force_load_direct_deps.bzl", "force_load_direct_deps")
+load("//rules/internal:framework_middleman.bzl", "framework_middleman")
 
 # We need to try and partition out arguments for obj_library / swift_library
 # from ios_application since this creates source file libs internally.
@@ -60,6 +61,11 @@ def ios_application(name, apple_library = apple_library, infoplists_by_build_set
 
     force_load_name = name + ".force_load_direct_deps"
     force_load_direct_deps(name = force_load_name, deps = kwargs.get("deps"), tags = ["manual"])
+
+    if kwargs.get("deps"):
+        fw_name = name + ".framework_middleman"
+        framework_middleman(name = fw_name, framework_deps = kwargs.get("deps"), tags = ["manual"])
+        application_kwargs["frameworks"] = [fw_name]
 
     default_deps = [force_load_name] + library.lib_names
     rules_apple_ios_application(

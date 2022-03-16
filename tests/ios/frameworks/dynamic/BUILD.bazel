@@ -6,20 +6,11 @@ ios_application(
     name = "App",
     srcs = ["App/main.swift"],
     bundle_id = "com.example.app",
-
-    # FIXME: we still need this here because of infoplist merging
-    frameworks = [
-        "//tests/ios/frameworks/dynamic/a",
-        "//tests/ios/frameworks/dynamic/b",
-    ],
     minimum_os_version = "10.0",
     visibility = ["//visibility:public"],
-
-    # Internally the lib has a dep on a, so we need to pass the dep. Would be
-    # to pass that through the framework - it drops our providers though
+    # This should automatically bake in a,b
     deps = [
         "//tests/ios/frameworks/dynamic/a",
-        "//tests/ios/frameworks/dynamic/b",
     ],
 )
 
@@ -43,20 +34,29 @@ apple_xcframework(
     minimum_os_versions = {
         "ios": "8.0",
     },
+
+    # On CI we set ios_multi_cpus - which causes swirl with the transitions here
+    tags = ["manual"],
     # Note: rules_apple doesn't allow you to pass transtive swiftmodules and it
     # also uses xcodebuild -create-xcframework which causes issues here. Incase
     # anyone wants to use this ensure that it works.
     deps = [
         "//tests/ios/frameworks/dynamic/c",
     ],
-
-    # On CI we set ios_multi_cpus - which causes swirl with the transitions here
-    tags = ["manual"]
 )
 
 ios_unit_test(
     name = "TestAppWithDylibs",
     srcs = ["empty_tests.m"],
+    bundle_id = "com.foo.bar",
+    data = ["test_data.txt"],
+    frameworks = [
+        "//tests/ios/frameworks/dynamic/a",
+    ],
     minimum_os_version = "10.0",
     test_host = ":App",
+    #test_host = True,
+    deps = [
+        "//tests/ios/frameworks/dynamic/a",
+    ],
 )

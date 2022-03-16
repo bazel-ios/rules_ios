@@ -6,6 +6,7 @@ load("//rules:library.bzl", "PrivateHeadersInfo", "apple_library")
 load("//rules:plists.bzl", "info_plists_by_setting")
 load("//rules:providers.bzl", "AvoidDepsInfo", "FrameworkInfo")
 load("//rules:transition_support.bzl", "transition_support")
+load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@build_bazel_rules_apple//apple/internal:apple_product_type.bzl", "apple_product_type")
 load("@build_bazel_rules_apple//apple/internal:bundling_support.bzl", "bundling_support")
@@ -20,12 +21,16 @@ load("@build_bazel_rules_apple//apple/internal:resources.bzl", "resources")
 load("@build_bazel_rules_apple//apple/internal:rule_support.bzl", "rule_support")
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo", "AppleSupportToolchainInfo", "IosFrameworkBundleInfo")
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo", "swift_common")
+load(
+    "@build_bazel_rules_apple//apple/internal/aspects:resource_aspect.bzl",
+    "apple_resource_aspect",
+)
+load("//rules:force_load_direct_deps.bzl", "force_load_direct_deps")
 
 _APPLE_FRAMEWORK_PACKAGING_KWARGS = [
     "visibility",
     "frameworks",
     "tags",
-    "data",
     "bundle_id",
     "skip_packaging",
     "link_dynamic",
@@ -41,6 +46,10 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
     """
     framework_packaging_kwargs = {arg: kwargs.pop(arg) for arg in _APPLE_FRAMEWORK_PACKAGING_KWARGS if arg in kwargs}
     kwargs["enable_framework_vfs"] = kwargs.pop("enable_framework_vfs", True)
+
+    # Consider making this work for debug
+    force_load_name = name + ".force_load_direct_deps"
+    force_load_direct_deps(name = force_load_name, deps = kwargs.get("deps"), tags = ["manual"])
 
     infoplists_by_build_setting = kwargs.pop("infoplists_by_build_setting", {})
     default_infoplists = kwargs.pop("infoplists", [])
@@ -67,7 +76,7 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
         environment_plist = environment_plist,
         transitive_deps = library.transitive_deps,
         vfs = library.import_vfsoverlays,
-        deps = library.lib_names,
+        deps = library.lib_names + [force_load_name],
         platforms = library.platforms,
         platform_type = select({
             "@build_bazel_rules_ios//rules/apple_platform:ios": "ios",
@@ -430,9 +439,9 @@ def _copy_swiftmodule(ctx, framework_files):
     # need to include the swiftmodule here, even though it will be found through the framework search path,
     # since swift_library needs to know that the swiftdoc is an input to the compile action
     swift_module = swift_common.create_swift_module(
-        swiftdoc = outputs.swiftdoc[0],
+        swiftdoc = outputs.swiftdoc[0] if len(outputs.swiftdoc) > 0 else None,
         swiftmodule = outputs.swiftmodule[0],
-        swiftinterface =  outputs.swiftinterface[0] if len(outputs.swiftinterface) > 0 else None
+        swiftinterface = outputs.swiftinterface[0] if len(outputs.swiftinterface) > 0 else None,
     )
 
     if swiftmodule_name != ctx.attr.framework_name:
@@ -442,7 +451,7 @@ def _copy_swiftmodule(ctx, framework_files):
         swift_module = swift_common.create_swift_module(
             swiftdoc = inputs.swiftdoc,
             swiftmodule = inputs.swiftmodule,
-            swiftinterface = inputs.swiftinterface
+            swiftinterface = inputs.swiftinterface,
         )
 
     return [
@@ -450,33 +459,6 @@ def _copy_swiftmodule(ctx, framework_files):
         # and it will be discovered via the framework search path
         swift_common.create_module(name = swiftmodule_name, swift = swift_module),
     ]
-
-def _get_merged_objc_provider(ctx, deps, transitive_deps):
-    # Gather objc provider fields
-    # Eventually we need to remove any reference to objc provider
-    # and use CcInfo instead, see this issue for more details: https://github.com/bazelbuild/bazel/issues/10674
-    objc_provider_fields = {
-        "providers": [dep[apple_common.Objc] for dep in transitive_deps],
-    }
-
-    for key in [
-        "sdk_dylib",
-        "sdk_framework",
-        "weak_sdk_framework",
-        "imported_library",
-        "force_load_library",
-        "source",
-        "link_inputs",
-        "linkopt",
-        "library",
-    ]:
-        set = depset(
-            direct = [],
-            transitive = [getattr(dep[apple_common.Objc], key) for dep in deps],
-        )
-        _add_to_dict_if_present(objc_provider_fields, key, set)
-
-    return apple_common.new_objc_provider(**objc_provider_fields)
 
 def _get_merged_swift_info(ctx, framework_files, transitive_deps):
     swift_info_fields = {
@@ -565,7 +547,7 @@ def _bundle_dynamic_framework(ctx, avoid_deps):
     predeclared_outputs = struct(archive = archive)
 
     provisioning_profile = None
-    resource_deps = ctx.attr.data
+    resource_deps = ctx.attr.deps + ctx.attr.transitive_deps + ctx.attr.data
     rule_descriptor = rule_support.rule_descriptor(ctx)
     signed_frameworks = []
     if provisioning_profile:
@@ -680,7 +662,7 @@ def _bundle_dynamic_framework(ctx, avoid_deps):
             signed_frameworks = depset(signed_frameworks),
         ),
 
-        # Don't bake the headers here - for distrobution mode, this is done with
+        # Don't bake the headers here - for distro mode, this is done with
         # xcframework
         partials.framework_provider_partial(
             actions = actions,
@@ -734,8 +716,6 @@ def _bundle_dynamic_framework(ctx, avoid_deps):
         apple_toolchain_info = apple_toolchain_info,
         bundle_extension = bundle_extension,
         bundle_name = bundle_name,
-        # TODO - consider adding this post_processor
-        # ipa_post_processor = ctx.executable.ipa_post_processor,
         codesign_inputs = [],
         codesignopts = [],
         executable_name = executable_name,
@@ -749,7 +729,6 @@ def _bundle_dynamic_framework(ctx, avoid_deps):
         rule_descriptor = rule_descriptor,
         rule_label = label,
     )
-
     return struct(
         files = processor_result.output_files,
         providers = [
@@ -812,11 +791,10 @@ def _apple_framework_packaging_impl(ctx):
 
     # Perform a basic merging of compilation context fields
     compilation_context_fields = {}
-    _add_to_dict_if_present(compilation_context_fields, "headers", depset(
+    objc_provider_utils.add_to_dict_if_present(compilation_context_fields, "headers", depset(
         direct = outputs.headers + outputs.private_headers + outputs.modulemap,
     ))
-
-    _add_to_dict_if_present(compilation_context_fields, "defines", depset(
+    objc_provider_utils.add_to_dict_if_present(compilation_context_fields, "defines", depset(
         direct = [],
         transitive = [getattr(dep[CcInfo].compilation_context, "defines") for dep in deps if CcInfo in dep],
     ))
@@ -875,11 +853,15 @@ def _apple_framework_packaging_impl(ctx):
     out_files.extend(outputs.modulemap)
     default_info = DefaultInfo(files = depset(out_files + bundle_outs.files.to_list()))
 
-    objc_provider = _get_merged_objc_provider(ctx, deps, transitive_deps)
+    objc_provider_fields = objc_provider_utils.merge_objc_providers(
+        providers = [dep[apple_common.Objc] for dep in deps],
+        transitive = [dep[apple_common.Objc] for dep in transitive_deps],
+    )
+    objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
     return [
         avoid_deps_info,
         framework_info,
-        _get_merged_objc_provider(ctx, deps, transitive_deps),
+        objc_provider,
         cc_info,
         swift_info,
         default_info,
@@ -900,6 +882,7 @@ apple_framework_packaging = rule(
         "deps": attr.label_list(
             mandatory = True,
             cfg = apple_common.multi_arch_split,
+            aspects = [apple_resource_aspect],
             doc =
                 """Objc or Swift rules to be packed by the framework rule
 """,
