@@ -891,12 +891,12 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
             }
 
         pre_actions_attr = ctx.attr.additional_pre_actions
-        _add_pre_post_actions(target_name, xcodeproj_schemes_by_name[target_name], "preActions", pre_actions_attr)
+        _add_pre_post_actions(target_name, xcodeproj_schemes_by_name[target_name], "preActions", pre_actions_attr, ctx.attr.provide_build_settings_from_target_for_pre_post_actions)
         post_actions_attr = ctx.attr.additional_post_actions
-        _add_pre_post_actions(target_name, xcodeproj_schemes_by_name[target_name], "postActions", post_actions_attr)
+        _add_pre_post_actions(target_name, xcodeproj_schemes_by_name[target_name], "postActions", post_actions_attr,ctx.attr.provide_build_settings_from_target_for_pre_post_actions)
     return (xcodeproj_targets_by_name, xcodeproj_schemes_by_name)
 
-def _add_pre_post_actions(target_name, scheme, key, actions):
+def _add_pre_post_actions(target_name, scheme, key, actions, provide_build_settings_from_target):
     """Helper method to populate passed in scheme with pre/post actions. Note their output won't show up in build log.
 
     Args:
@@ -904,6 +904,7 @@ def _add_pre_post_actions(target_name, scheme, key, actions):
         scheme: target scheme to update for
         key: one of preActions or postActions
         actions: original attribute passed in from ctx.attr.additional_pre_actions or ctx.attr.additional_post_actions
+        provide_build_settings_from_target: whether settings of target will be available as environment variables in actions
     """
     supported_keys = ["preActions", "postActions"]
     if key not in supported_keys:
@@ -918,7 +919,12 @@ def _add_pre_post_actions(target_name, scheme, key, actions):
         # Note `settingsTarget` is explicitly omitted because
         # for a target with lots of env vars we might exceed Xcode arg_max limit
         for action in actions_to_add:
-            list.append({"script": action})
+            action_spec = {
+                "script": action,
+            }
+            if provide_build_settings_from_target:
+                action_spec["settingsTarget"] = target_name
+            list.append(action_spec)
         payload[key] = list
 
 def _validate_output_path(output_path):
@@ -1189,6 +1195,7 @@ Configure a list of post-actions for build/run/test in each scheme generated.
 For each entry the key is one of build/test/run and value is a list of scripts.
 And it will not surface any error or output through build log.
         """),
+        "provide_build_settings_from_target_for_pre_post_actions": attr.bool(default = False, mandatory = False),
         "additional_lldb_settings": attr.string_list(default = [], mandatory = False, doc = """
 Additional LLDB settings to be added in each target's .lldbinit configuration file.
         """),

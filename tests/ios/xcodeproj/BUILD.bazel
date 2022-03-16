@@ -198,3 +198,29 @@ xcodeproj(
         "//tests/ios/app:FW",
     ],
 )
+
+xcodeproj(
+    name = "Test-Provide-Build-Settings-From-Target-For-Pre-Post-Actions",
+    testonly = True,
+    provide_build_settings_from_target_for_pre_post_actions = True,
+    additional_post_actions = {
+        "build": [
+            "echo 'post_build_action_1'",
+            "echo 'post_build_action_2'",
+        ],
+    },
+    additional_pre_actions = {
+        "build": [
+            "echo 'pre_build_action_1'",
+            "echo 'pre_build_action_2'",
+        ],
+    },
+    bazel_path = "bazelisk",
+    generate_schemes_for_product_types = ["application"],
+    include_transitive_targets = False,
+    deps = [
+        "//tests/ios/unit-test/test-imports-app:TestImports-App",
+        "//tests/ios/unit-test/test-imports-app:TestImports-App_framework_unlinked",
+        "//tests/ios/unit-test/test-imports-app:TestImports-Unit-Tests",
+    ],
+)
