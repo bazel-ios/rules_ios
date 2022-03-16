@@ -4,7 +4,7 @@ load("@build_bazel_rules_apple//apple/internal:xcframework_rules.bzl", "apple_xc
 
 ios_application(
     name = "App",
-    srcs = ["App/main.swift"],
+    srcs = ["App/main.m"],
     bundle_id = "com.example.app",
     minimum_os_version = "10.0",
     visibility = ["//visibility:public"],

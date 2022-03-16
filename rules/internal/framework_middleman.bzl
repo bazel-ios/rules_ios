@@ -35,8 +35,8 @@ def _framework_middleman(ctx):
         if IosFrameworkBundleInfo in lib_dep:
             if CcInfo in lib_dep:
                 cc_providers.append(lib_dep[CcInfo])
-            if apple_common.Objc in lib_dep:
-                objc_providers.append(lib_dep[apple_common.Objc])
+        if apple_common.Objc in lib_dep:
+            objc_providers.append(lib_dep[apple_common.Objc])
         if apple_common.AppleDynamicFramework in lib_dep:
             dynamic_framework_providers.append(lib_dep[apple_common.AppleDynamicFramework])
         if AppleResourceInfo in lib_dep:

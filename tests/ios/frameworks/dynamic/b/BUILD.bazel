@@ -3,7 +3,7 @@ load("//rules:framework.bzl", "apple_framework")
 apple_framework(
     name = "b",
     srcs = glob(["*.swift"]),
-    bundle_id = "foo.bar.bang",
+    bundle_id = "com.example.b",
     data = ["b_data.txt"],
     infoplists = ["Info.plist"],
     link_dynamic = True,
