@@ -853,11 +853,10 @@ def _apple_framework_packaging_impl(ctx):
     out_files.extend(outputs.modulemap)
     default_info = DefaultInfo(files = depset(out_files + bundle_outs.files.to_list()))
 
-    objc_provider_fields = objc_provider_utils.merge_objc_providers(
+    objc_provider = objc_provider_utils.merge_objc_providers(
         providers = [dep[apple_common.Objc] for dep in deps],
         transitive = [dep[apple_common.Objc] for dep in transitive_deps],
     )
-    objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
     return [
         avoid_deps_info,
         framework_info,
