@@ -1,6 +1,7 @@
 load("//rules/test/lldb:lldb_test.bzl", "ios_lldb_breakpoint_command_test", "ios_lldb_breakpoint_po_test")
 load("//rules:xcodeproj.bzl", "xcodeproj")
 load("//rules:app.bzl", "ios_application")
+load("@build_bazel_rules_ios//rules:xcodeproj.bzl", "xcodeproj_lldbinit")
 
 ios_application(
     name = "ObjcApp",
@@ -24,13 +25,19 @@ xcodeproj(
     ],
 )
 
+xcodeproj_lldbinit(
+    name = "Objc-proj_xc_lldbinit",
+    out = "Objc-proj_xc_lldbinit" + ".xc.lldbinit",
+    project = ":Objc-Project",
+    target_name = "ObjcApp",
+)
+
 ios_lldb_breakpoint_po_test(
     name = "objc_app_variable_test",
     application = "ObjcApp",
     device = "iPhone X",
     expected_value = "some",
-    # TODO: Feed this from Xcode
-    lldbinit = None,
+    lldbinit = ":Objc-proj_xc_lldbinit",
     sdk = "14.5",
     set_cmd = "breakpoint set --file 'tests/ios/lldb/app/App/main.m' --line 6",
     tags = ["manual"],
@@ -42,8 +49,7 @@ ios_lldb_breakpoint_command_test(
     application = "ObjcApp",
     cmds = ["po x"],
     device = "iPhone X",
-    # TODO: Feed this from Xcode
-    lldbinit = None,
+    lldbinit = ":Objc-proj_xc_lldbinit",
     match_substrs = [
         "execute: po x",
         "cmd_result: po x some",

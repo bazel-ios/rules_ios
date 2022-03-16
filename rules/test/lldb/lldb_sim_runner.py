@@ -94,11 +94,10 @@ def pack_tree_artifact(ios_application_output_path, app_name):
                     "--delete",
                     "--checksum",
                     "--chmod=u+w",
-                    "--verbose",
                     os.path.realpath(ios_application_output_path),
                     archive_app_path
                     ], check=True)
-    subprocess.run(["zip", "-r",  ipa_path, "Payload", ],
+    subprocess.run(["zip", "-rq", ipa_path, "Payload", ],
                    check=True, cwd=archive_root)
 
     return ipa_path
