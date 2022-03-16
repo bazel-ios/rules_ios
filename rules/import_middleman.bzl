@@ -190,7 +190,7 @@ def _file_collector_rule_impl(ctx):
         "static_framework_file",
     ])
 
-    objc_provider_fields = objc_provider_utils.merge_objc_providers(
+    objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(
         providers = [dep[apple_common.Objc] for dep in ctx.attr.deps],
         merge_keys = merge_keys,
     )
