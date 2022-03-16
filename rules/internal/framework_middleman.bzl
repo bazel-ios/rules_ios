@@ -51,17 +51,8 @@ def _framework_middleman(ctx):
                 _collect_providers(lib_dep)
 
     objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(providers = objc_providers, merge_keys = [
-        "sdk_dylib",
-        "sdk_framework",
         "weak_sdk_framework",
-        "force_load_library",
-        "source",
-        "link_inputs",
-        "linkopt",
-        "library",
-        "imported_library",
         "dynamic_framework_file",
-        "static_framework_file",
     ])
 
     # Adds the frameworks to the linker command
