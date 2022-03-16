@@ -1,5 +1,6 @@
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleFrameworkImportInfo")
 load("//rules:features.bzl", "feature_names")
+load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
 
 _FindImportsAspectInfo = provider(fields = {
     "imported_library_file": "",
@@ -57,10 +58,6 @@ def _update_lib(ctx, imported_library):
         execution_requirements = {"no-remote": "1"},
     )
     return out_file
-
-def _add_to_dict_if_present(dict, key, value):
-    if value:
-        dict[key] = value
 
 def _make_imports(transitive_sets):
     provider_fields = {}
@@ -169,7 +166,6 @@ def _file_collector_rule_impl(ctx):
     input_dynamic_frameworks = _deduplicate_test_deps(test_linker_deps[2], linker_deps[2])
     all_import_infos = linker_deps[3]
 
-    objc_provider_fields = {}
     arch = ctx.fragments.apple.single_arch_cpu
     platform = str(ctx.fragments.apple.single_arch_platform.platform_type)
     is_sim_arm64 = platform == "ios" and arch == "arm64" and not ctx.fragments.apple.single_arch_platform.is_device
@@ -194,14 +190,10 @@ def _file_collector_rule_impl(ctx):
         "static_framework_file",
     ])
 
-    for key in merge_keys:
-        set = depset(
-            direct = [],
-            # Note:  we may want to merge this with the below inputs?
-            transitive = [getattr(dep[apple_common.Objc], key) for dep in ctx.attr.deps],
-        )
-        _add_to_dict_if_present(objc_provider_fields, key, set)
-
+    objc_provider_fields = objc_provider_utils.merge_objc_providers(
+        providers = [dep[apple_common.Objc] for dep in ctx.attr.deps],
+        merge_keys = merge_keys,
+    )
     exisiting_imported_libraries = objc_provider_fields.get("imported_library", depset([]))
     replaced_imported_libraries = _replace_inputs(ctx, exisiting_imported_libraries, input_imported_libraries, _update_lib).inputs
     objc_provider_fields["imported_library"] = depset(_deduplicate_test_deps(test_linker_deps[1], replaced_imported_libraries))

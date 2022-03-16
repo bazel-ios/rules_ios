@@ -2,6 +2,7 @@ load("@build_bazel_rules_apple//apple:ios.bzl", rules_apple_ios_ui_test = "ios_u
 load("@bazel_skylib//lib:types.bzl", "types")
 load("//rules:library.bzl", "apple_library")
 load("//rules:plists.bzl", "info_plists_by_setting")
+load("//rules/internal:framework_middleman.bzl", "framework_middleman")
 
 _IOS_TEST_KWARGS = [
     "bundle_id",
@@ -17,6 +18,7 @@ _IOS_TEST_KWARGS = [
     "tags",
     "shard_count",
     "flaky",
+    "frameworks",
 ]
 
 def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_build_setting = {}, **kwargs):
@@ -39,7 +41,6 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
     """
 
     ios_test_kwargs = {arg: kwargs.pop(arg) for arg in _IOS_TEST_KWARGS if arg in kwargs}
-
     ios_test_kwargs["data"] = kwargs.pop("test_data", [])
     if ios_test_kwargs.get("test_host", None) == True:
         ios_test_kwargs["test_host"] = "@build_bazel_rules_ios//rules/test_host_app:iOS-%s-AppHost" % ios_test_kwargs.get("minimum_os_version")
@@ -57,6 +58,10 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
             ios_test_kwargs["runner"] = runner
 
     library = apple_library(name = name, namespace_is_module_name = False, platforms = {"ios": ios_test_kwargs.get("minimum_os_version")}, **kwargs)
+
+    fw_name = name + ".framework_middleman"
+    framework_middleman(name = fw_name, framework_deps = library.deps, tags = ["manual"])
+    ios_test_kwargs["frameworks"] = [fw_name]
 
     # Deduplicate against the test deps
     if ios_test_kwargs.get("test_host", None):
