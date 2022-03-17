@@ -378,7 +378,9 @@ def _get_framework_files(ctx, deps):
 
 def _get_direct_headers(provider, dep):
     if provider == CcInfo:
-        return dep[provider].compilation_context.direct_headers
+        if PrivateHeadersInfo in dep:
+            return []
+        return dep[provider].compilation_context.direct_public_headers
     elif provider == apple_common.Objc:
         return dep[provider].direct_headers
     else:
