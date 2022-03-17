@@ -294,7 +294,7 @@ def _get_framework_files(ctx, deps):
         has_header = False
         for provider in [CcInfo, apple_common.Objc]:
             if provider in dep:
-                for hdr in _get_direct_headers(provider, dep):
+                for hdr in _get_direct_public_headers(provider, dep):
                     if hdr.path.endswith((".h", ".hh", ".hpp")):
                         has_header = True
                         header_in.append(hdr)
@@ -376,7 +376,7 @@ def _get_framework_files(ctx, deps):
     )
     return struct(inputs = inputs, outputs = outputs)
 
-def _get_direct_headers(provider, dep):
+def _get_direct_public_headers(provider, dep):
     if provider == CcInfo:
         if PrivateHeadersInfo in dep:
             return []
@@ -459,33 +459,6 @@ def _copy_swiftmodule(ctx, framework_files):
         # and it will be discovered via the framework search path
         swift_common.create_module(name = swiftmodule_name, swift = swift_module),
     ]
-
-def _get_merged_objc_provider(_ctx, deps, transitive_deps):
-    # Gather objc provider fields
-    # Eventually we need to remove any reference to objc provider
-    # and use CcInfo instead, see this issue for more details: https://github.com/bazelbuild/bazel/issues/10674
-    objc_provider_fields = {
-        "providers": [dep[apple_common.Objc] for dep in transitive_deps],
-    }
-
-    for key in [
-        "sdk_dylib",
-        "sdk_framework",
-        "weak_sdk_framework",
-        "imported_library",
-        "force_load_library",
-        "source",
-        "link_inputs",
-        "linkopt",
-        "library",
-    ]:
-        set = depset(
-            direct = [],
-            transitive = [getattr(dep[apple_common.Objc], key) for dep in deps],
-        )
-        _add_to_dict_if_present(objc_provider_fields, key, set)
-
-    return apple_common.new_objc_provider(**objc_provider_fields)
 
 def _get_merged_swift_info(ctx, framework_files, transitive_deps):
     swift_info_fields = {
