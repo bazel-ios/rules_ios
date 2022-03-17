@@ -77,7 +77,7 @@ load(
 http_file(
     name = "buildifier.mac.amd64",
     executable = True,
-    sha256 = "7ecd2dac543dd2371a2261bda3eb5cbe72f54596b73f372671368f0ed5c77646",
+    sha256 = "2cb0a54683633ef6de4e0491072e22e66ac9c6389051432b76200deeeeaf93fb",
     urls = ["https://github.com/bazelbuild/buildtools/releases/download/5.0.1/buildifier-darwin-amd64"],
 )
 
