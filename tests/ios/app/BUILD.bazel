@@ -16,7 +16,7 @@ apple_framework(
 apple_framework(
     name = "FW",
     srcs = glob(["FW/*"]),
-    platforms = {"ios": "10.0"},
+    platforms = {"ios": "13.0"},
     private_headers = glob(["FW/*_Private.*"]),
     visibility = ["//visibility:public"],
 )
@@ -87,7 +87,7 @@ ios_application(
     name = "App",
     srcs = ["App/main.m"],
     bundle_id = "com.example.app",
-    minimum_os_version = "10.0",
+    minimum_os_version = "13.0",
     visibility = ["//visibility:public"],
     deps = [
         ":FW",

@@ -3,4 +3,8 @@
 
 @implementation FW
 
+- (void)testSomething {
+
+}
+
 @end
