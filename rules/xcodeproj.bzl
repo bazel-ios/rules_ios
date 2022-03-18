@@ -893,7 +893,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
         pre_actions_attr = ctx.attr.additional_pre_actions
         _add_pre_post_actions(target_name, xcodeproj_schemes_by_name[target_name], "preActions", pre_actions_attr, ctx.attr.provide_build_settings_from_target_for_pre_post_actions)
         post_actions_attr = ctx.attr.additional_post_actions
-        _add_pre_post_actions(target_name, xcodeproj_schemes_by_name[target_name], "postActions", post_actions_attr,ctx.attr.provide_build_settings_from_target_for_pre_post_actions)
+        _add_pre_post_actions(target_name, xcodeproj_schemes_by_name[target_name], "postActions", post_actions_attr, ctx.attr.provide_build_settings_from_target_for_pre_post_actions)
     return (xcodeproj_targets_by_name, xcodeproj_schemes_by_name)
 
 def _add_pre_post_actions(target_name, scheme, key, actions, provide_build_settings_from_target):
