@@ -2,7 +2,7 @@ load("@build_bazel_rules_apple//apple:ios.bzl", rules_apple_ios_application = "i
 load("//rules:library.bzl", "apple_library")
 load("//rules:plists.bzl", "info_plists_by_setting")
 load("//rules:force_load_direct_deps.bzl", "force_load_direct_deps")
-load("//rules/internal:framework_middleman.bzl", "framework_middleman")
+load("//rules/internal:framework_middleman.bzl", "dep_middleman", "framework_middleman")
 
 # We need to try and partition out arguments for obj_library / swift_library
 # from ios_application since this creates source file libs internally.
@@ -59,18 +59,23 @@ def ios_application(name, apple_library = apple_library, infoplists_by_build_set
     application_kwargs["launch_storyboard"] = application_kwargs.pop("launch_storyboard", library.launch_screen_storyboard_name)
     application_kwargs["families"] = application_kwargs.pop("families", ["iphone", "ipad"])
 
+    # Setup force loading here - only for libs
     force_load_name = name + ".force_load_direct_deps"
-    force_load_direct_deps(name = force_load_name, deps = kwargs.get("deps"), tags = ["manual"])
+    force_load_direct_deps(name = force_load_name, deps = library.lib_names, tags = ["manual"])
 
-    if kwargs.get("deps"):
-        fw_name = name + ".framework_middleman"
-        framework_middleman(name = fw_name, framework_deps = kwargs.get("deps"), tags = ["manual"])
-        application_kwargs["frameworks"] = [fw_name]
+    # Setup framework middlemen - need to process deps and libs
+    fw_name = name + ".framework_middleman"
+    framework_middleman(name = fw_name, framework_deps = kwargs.get("deps", []) + library.lib_names, tags = ["manual"])
+    frameworks = [fw_name] + kwargs.pop("frameworks", [])
 
-    default_deps = [force_load_name] + library.lib_names
+    dep_name = name + ".dep_middleman"
+    dep_middleman(name = dep_name, deps = kwargs.get("deps", []) + library.lib_names, tags = ["manual"])
+    deps = [dep_name] + [force_load_name]
+
     rules_apple_ios_application(
         name = name,
-        deps = default_deps,
+        deps = deps,
+        frameworks = frameworks,
         output_discriminator = None,
         infoplists = info_plists_by_setting(name = name, infoplists_by_build_setting = infoplists_by_build_setting, default_infoplists = application_kwargs.pop("infoplists", [])),
         **application_kwargs

@@ -74,3 +74,12 @@ bazelisk run //tests/ios/xcodeproj:$XCODE_PROJ_NAME --ios_multi_cpus=arm64
 echo "Checking for .xcodeproj changes"
 
 git diff --exit-code tests/ios/xcodeproj tests/macos/xcodeproj
+STATUS=$?
+
+# Dump these to bazel-testlogs for easier updating
+find tests/ -name \*.xcodeproj \
+    -exec /bin/bash -c \
+    'mkdir -p bazel-testlogs/$(dirname {}) && ditto {} bazel-testlogs/$(dirname {})' \;
+
+exit $STATUS
+

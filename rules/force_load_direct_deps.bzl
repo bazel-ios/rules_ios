@@ -22,6 +22,7 @@ def _impl(ctx):
                     force_load.append(lib)
     return apple_common.new_objc_provider(
         force_load_library = depset(force_load),
+        link_inputs = depset(force_load),
     )
 
 force_load_direct_deps = rule(

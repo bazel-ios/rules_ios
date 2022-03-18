@@ -102,6 +102,11 @@ jobs:
         run: .github/workflows/xcode_select.sh
       - name: Run tests
         run: ./tests/xcodeproj-tests.sh --clean
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: bazel-testlogs
+          path: bazel-testlogs
 
   lldb_ios_tests_xcode_12_5_1:
     name: LLDB tests on Xcode 12.5.1
