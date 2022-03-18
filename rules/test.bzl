@@ -2,7 +2,7 @@ load("@build_bazel_rules_apple//apple:ios.bzl", rules_apple_ios_ui_test = "ios_u
 load("@bazel_skylib//lib:types.bzl", "types")
 load("//rules:library.bzl", "apple_library")
 load("//rules:plists.bzl", "info_plists_by_setting")
-load("//rules/internal:framework_middleman.bzl", "framework_middleman")
+load("//rules/internal:framework_middleman.bzl", "dep_middleman", "framework_middleman")
 
 _IOS_TEST_KWARGS = [
     "bundle_id",
@@ -57,20 +57,25 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
         else:
             ios_test_kwargs["runner"] = runner
 
-    library = apple_library(name = name, namespace_is_module_name = False, platforms = {"ios": ios_test_kwargs.get("minimum_os_version")}, **kwargs)
-
-    fw_name = name + ".framework_middleman"
-    framework_middleman(name = fw_name, framework_deps = library.deps, tags = ["manual"])
-    ios_test_kwargs["frameworks"] = [fw_name]
-
     # Deduplicate against the test deps
     if ios_test_kwargs.get("test_host", None):
         host_args = [ios_test_kwargs["test_host"]]
     else:
         host_args = []
+    library = apple_library(name = name, namespace_is_module_name = False, platforms = {"ios": ios_test_kwargs.get("minimum_os_version")}, **kwargs)
+
+    # Setup framework middlemen - need to process deps and libs
+    fw_name = name + ".framework_middleman"
+    framework_middleman(name = fw_name, framework_deps = kwargs.get("deps", []) + library.lib_names, tags = ["manual"])
+    frameworks = [fw_name] + ios_test_kwargs.pop("frameworks", [])
+
+    dep_name = name + ".dep_middleman"
+    dep_middleman(name = dep_name, deps = kwargs.get("deps", []) + library.lib_names, tags = ["manual"], test_deps = host_args)
+
     rule(
         name = name,
-        deps = library.lib_names,
+        deps = [dep_name],
+        frameworks = frameworks,
         infoplists = info_plists_by_setting(name = name, infoplists_by_build_setting = infoplists_by_build_setting, default_infoplists = ios_test_kwargs.pop("infoplists", [])),
         **ios_test_kwargs
     )

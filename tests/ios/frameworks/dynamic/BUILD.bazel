@@ -1,6 +1,7 @@
 load("//rules:app.bzl", "ios_application")
 load("//rules:test.bzl", "ios_unit_test")
 load("@build_bazel_rules_apple//apple/internal:xcframework_rules.bzl", "apple_xcframework")
+load("//rules/test/output:output_test.bzl", "output_test")
 
 ios_application(
     name = "App",
@@ -55,8 +56,40 @@ ios_unit_test(
     ],
     minimum_os_version = "10.0",
     test_host = ":App",
-    #test_host = True,
     deps = [
         "//tests/ios/frameworks/dynamic/a",
+        # Take dep on C
+        "//tests/ios/frameworks/dynamic/c",
     ],
+)
+
+output_test(
+    name = "App_output_test",
+    expect = [
+        "LaunchScreen.storyboardc",
+        "Info.plist",
+        "App",
+        "Frameworks/a.framework/a",
+        "Frameworks/a.framework/Info.plist",
+        # Assertions for B - see that transitive data is packed here
+        "Frameworks/b.framework/b",
+        "Frameworks/b.framework/b_data.txt",
+        "Frameworks/b.framework/c_data.txt",
+        "Frameworks/b.framework/Info.plist",
+    ],
+    target = ":App",
+)
+
+output_test(
+    name = "TestAppWithDylibs_output_test",
+    expect = [
+        "Frameworks/a.framework/a",
+        "Frameworks/a.framework/Info.plist",
+        # Assertions for B - see that transitive data is packed here
+        "Frameworks/b.framework/b",
+        "Frameworks/b.framework/b_data.txt",
+        "Frameworks/b.framework/c_data.txt",
+        "Frameworks/b.framework/Info.plist",
+    ],
+    target = ":TestAppWithDylibs",
 )

@@ -32,15 +32,19 @@ def _framework_middleman(ctx):
     def _collect_providers(lib_dep):
         if AppleEmbeddableInfo in lib_dep:
             apple_embeddable_infos.append(lib_dep[AppleEmbeddableInfo])
+
+        # Most of these providers will be passed into `deps` of apple rules.
+        # Don't feed them twice. There are several assumptions rules_apple on
+        # this
         if IosFrameworkBundleInfo in lib_dep:
             if CcInfo in lib_dep:
                 cc_providers.append(lib_dep[CcInfo])
+            if AppleResourceInfo in lib_dep:
+                resource_providers.append(lib_dep[AppleResourceInfo])
         if apple_common.Objc in lib_dep:
             objc_providers.append(lib_dep[apple_common.Objc])
         if apple_common.AppleDynamicFramework in lib_dep:
             dynamic_framework_providers.append(lib_dep[apple_common.AppleDynamicFramework])
-        if AppleResourceInfo in lib_dep:
-            resource_providers.append(lib_dep[AppleResourceInfo])
 
     for dep in ctx.attr.framework_deps:
         _collect_providers(dep)
@@ -50,44 +54,22 @@ def _framework_middleman(ctx):
             for lib_dep in dep[AvoidDepsInfo].libraries:
                 _collect_providers(lib_dep)
 
+    # Here we only need to loop a subset of the keys
     objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(providers = objc_providers, merge_keys = [
-        "weak_sdk_framework",
         "dynamic_framework_file",
     ])
 
-    # Adds the frameworks to the linker command
+    # Add the frameworks to the linker command
     dynamic_framework_provider = objc_provider_utils.merge_dynamic_framework_providers(ctx, dynamic_framework_providers)
-    linkopt = []
-    for f in dynamic_framework_provider.framework_files.to_list():
-        linkopt.append("\"-F" + "/".join(f.path.split("/")[:-2]) + "\"")
-
-        # This should take the suffix here - it seemes like that is not working
-        fw_name = f.basename.replace(".framework", "")
-        linkopt.append("-Wl,-framework," + fw_name)
-
-    objc_provider_fields["linkopt"] = depset(
-        linkopt,
-        transitive = [objc_provider_fields.get("linkopt", depset([]))],
-    )
-    objc_provider_fields["link_inputs"] = depset(
-        transitive = [getattr(dynamic_framework_provider, "framework_files")] + [objc_provider_fields.get("link_inputs", depset([]))],
+    objc_provider_fields["dynamic_framework_file"] = depset(
+        transitive = [dynamic_framework_provider.framework_files, objc_provider_fields.get("dynamic_framework_file", depset([]))],
     )
     objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
-
     cc_info_provider = cc_common.merge_cc_infos(direct_cc_infos = [], cc_infos = cc_providers)
-    if len(resource_providers) > 0:
-        resource_provider = resources.merge_providers(
-            default_owner = str(ctx.label),
-            providers = resource_providers,
-        )
-    else:
-        resource_provider = AppleResourceInfo(unowned_resources = depset([]), owners = depset([]))
-    embed_info_provider = embeddable_info.merge_providers(apple_embeddable_infos)
-    return [
+    providers = [
         dynamic_framework_provider,
         cc_info_provider,
         objc_provider,
-        resource_provider,
         IosFrameworkBundleInfo(),
         AppleBundleInfo(
             archive = None,
@@ -98,7 +80,20 @@ def _framework_middleman(ctx):
             bundle_id = "com.bazel_build_rules_ios.unused",
             bundle_name = "bazel_build_rules_ios_unused",
         ),
-    ] + ([embed_info_provider] if embed_info_provider else [])
+    ]
+
+    embed_info_provider = embeddable_info.merge_providers(apple_embeddable_infos)
+    if embed_info_provider:
+        providers.append(embed_info_provider)
+
+    if len(resource_providers) > 0:
+        resource_provider = resources.merge_providers(
+            default_owner = str(ctx.label),
+            providers = resource_providers,
+        )
+        providers.append(resource_provider)
+
+    return providers
 
 framework_middleman = rule(
     implementation = _framework_middleman,
@@ -107,8 +102,113 @@ framework_middleman = rule(
             cfg = apple_common.multi_arch_split,
             mandatory = True,
             doc =
-                """Deps of the deps
+                """Deps that may contain frameworks
 """,
+        ),
+        "platform_type": attr.string(
+            mandatory = False,
+            doc =
+                """Internal - currently rules_ios uses the dict `platforms`
+""",
+        ),
+        "minimum_os_version": attr.string(
+            mandatory = False,
+            doc =
+                """Internal - currently rules_ios the dict `platforms`
+""",
+        ),
+    },
+    doc = """
+        This is a volatile internal rule to make frameworks work with
+        rules_apples bundling logic
+
+        Longer term, we will likely get rid of this and call partial like
+        apple_framework directly so consider it an implementation detail
+        """,
+)
+
+def _dep_middleman(ctx):
+    objc_providers = []
+    cc_providers = []
+    avoid_libraries = {}
+
+    def _collect_providers(lib_dep):
+        if apple_common.Objc in lib_dep:
+            objc_providers.append(lib_dep[apple_common.Objc])
+
+    def _process_avoid_deps(avoid_dep_libs):
+        for dep in avoid_dep_libs:
+            if apple_common.Objc in dep:
+                for lib in dep[apple_common.Objc].library.to_list():
+                    avoid_libraries[lib] = True
+                for lib in dep[apple_common.Objc].static_framework_file.to_list():
+                    avoid_libraries[lib.basename] = True
+
+    for dep in ctx.attr.deps:
+        _collect_providers(dep)
+
+        # Loop AvoidDepsInfo here as well
+        if AvoidDepsInfo in dep:
+            _process_avoid_deps(dep[AvoidDepsInfo].libraries)
+            for lib_dep in dep[AvoidDepsInfo].libraries:
+                _collect_providers(lib_dep)
+
+    # Pull AvoidDeps from test deps
+    for dep in (ctx.attr.test_deps if ctx.attr.test_deps else []):
+        if AvoidDepsInfo in dep:
+            _process_avoid_deps(dep[AvoidDepsInfo].libraries)
+
+    # Merge the entire provider here
+    objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(providers = objc_providers, merge_keys = [
+        "force_load_library",
+        "imported_library",
+        "library",
+        "link_inputs",
+        "linkopt",
+        "sdk_dylib",
+        "sdk_framework",
+        "source",
+        "static_framework_file",
+        "weak_sdk_framework",
+    ])
+
+    # Ensure to strip out static link inputs
+    updated_library = []
+    exisiting_library = objc_provider_fields.get("library", depset([]))
+    for f in exisiting_library.to_list():
+        if f in avoid_libraries:
+            continue
+        updated_library.append(f)
+    objc_provider_fields["library"] = depset(updated_library)
+
+    updated_static_framework_file = []
+    exisiting_static_framework_file = objc_provider_fields.get("static_framework_file", depset([]))
+    for f in exisiting_static_framework_file.to_list():
+        if f.basename in avoid_libraries:
+            continue
+        updated_static_framework_file.append(f)
+    objc_provider_fields["static_framework_file"] = depset(updated_static_framework_file)
+    objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
+    cc_info_provider = cc_common.merge_cc_infos(direct_cc_infos = [], cc_infos = cc_providers)
+    providers = [
+        cc_info_provider,
+        objc_provider,
+    ]
+    return providers
+
+dep_middleman = rule(
+    implementation = _dep_middleman,
+    attrs = {
+        "deps": attr.label_list(
+            cfg = apple_common.multi_arch_split,
+            mandatory = True,
+            doc =
+                """Deps that may contain frameworks
+""",
+        ),
+        "test_deps": attr.label_list(
+            cfg = apple_common.multi_arch_split,
+            allow_empty = True,
         ),
         "platform_type": attr.string(
             mandatory = False,
