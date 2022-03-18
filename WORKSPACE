@@ -75,12 +75,17 @@ load(
 
 # Download offical release of buidifier.mac
 http_file(
-    name = "buildifier.mac",
+    name = "buildifier.mac.amd64",
     executable = True,
-    sha256 = "7ecd2dac543dd2371a2261bda3eb5cbe72f54596b73f372671368f0ed5c77646",
-    # This release should correpsond with the .bazelrc. e.g. use 4.0 when the
-    # .bazelversion uses 4.0
-    urls = ["https://github.com/bazelbuild/buildtools/releases/download/3.5.0/buildifier.mac"],
+    sha256 = "2cb0a54683633ef6de4e0491072e22e66ac9c6389051432b76200deeeeaf93fb",
+    urls = ["https://github.com/bazelbuild/buildtools/releases/download/5.0.1/buildifier-darwin-amd64"],
+)
+
+http_file(
+    name = "buildifier.mac.arm64",
+    executable = True,
+    sha256 = "4da23315f0dccabf878c8227fddbccf35545b23b3cb6225bfcf3107689cc4364",
+    urls = ["https://github.com/bazelbuild/buildtools/releases/download/5.0.1/buildifier-darwin-arm64"],
 )
 
 load(

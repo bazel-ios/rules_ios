@@ -1,6 +1,5 @@
 """Library rules"""
 
-load("@rules_cc//cc:defs.bzl", "cc_library", "objc_import", "objc_library")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@bazel_skylib//lib:selects.bzl", "selects")
@@ -266,7 +265,7 @@ def _xcframework_slice(*, xcframework_name, identifier, platform, platform_varia
             tags = _MANUAL,
         )
     elif (linkage, packaging) == ("static", "library"):
-        objc_import(
+        native.objc_import(
             name = resolved_target_name,
             archives = [path],
             tags = _MANUAL,
@@ -536,7 +535,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         linkopts_name = "%s_linkopts" % (name)
 
         # https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library
-        cc_library(
+        native.cc_library(
             name = linkopts_name,
             linkopts = copts_by_build_setting.linkopts + linkopts,
         )
@@ -630,7 +629,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
 
     for vendored_static_library in kwargs.pop("vendored_static_libraries", []):
         import_name = "%s-%s-library-import" % (name, paths.basename(vendored_static_library))
-        objc_import(
+        native.objc_import(
             name = import_name,
             archives = [vendored_static_library],
             tags = _MANUAL,
@@ -938,7 +937,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     # Note: this line is intentionally disabled
     if cpp_sources and False:
         additional_cc_copts.append("-I.")
-        cc_library(
+        native.cc_library(
             name = cpp_libname,
             srcs = cpp_sources + objc_private_hdrs,
             hdrs = objc_hdrs,
@@ -988,7 +987,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     if module_map:
         objc_hdrs.append(module_map)
 
-    objc_library(
+    native.objc_library(
         name = objc_libname,
         srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,
         non_arc_srcs = objc_non_arc_sources,

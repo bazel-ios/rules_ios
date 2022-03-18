@@ -21,15 +21,6 @@ _REPOSITORY_RULES = [
 ]
 
 bzl_library(
-    name = "rules_cc",
-    srcs = [
-        "@rules_cc//cc:srcs",
-    ],
-    tags = ["manual"],
-    visibility = ["//visibility:private"],
-)
-
-bzl_library(
     name = "data",
     srcs = [
         "//data:xcspecs.bzl",
@@ -47,7 +38,6 @@ bzl_library(
         visibility = ["//:__pkg__"],
         deps = [
             ":data",
-            ":rules_cc",
             "@build_bazel_rules_apple//apple",
         ],
     )
@@ -86,7 +76,7 @@ genrule(
     cmd = """
 echo "#!/bin/bash" > $(OUTS)
 echo "set -eu" > $(OUTS)
-echo 'function copy() { 
+echo 'function copy() {
     dest="$${BUILD_WORKSPACE_DIRECTORY}/docs/$$(basename $$1)"
     cp "$$1" "$$dest"
     chmod +w "$$dest"

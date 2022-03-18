@@ -6,7 +6,10 @@ load("@bazel_skylib//lib:selects.bzl", "selects")
 
 sh_binary(
     name = "buildifier",
-    srcs = ["@buildifier.mac//file"],
+    srcs = select({
+        "@bazel_tools//src/conditions:darwin_x86_64": ["@buildifier.mac.amd64//file"],
+        "@bazel_tools//src/conditions:darwin_arm64": ["@buildifier.mac.arm64//file"],
+    }),
 )
 
 config_setting(
