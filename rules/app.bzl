@@ -59,9 +59,9 @@ def ios_application(name, apple_library = apple_library, infoplists_by_build_set
     application_kwargs["launch_storyboard"] = application_kwargs.pop("launch_storyboard", library.launch_screen_storyboard_name)
     application_kwargs["families"] = application_kwargs.pop("families", ["iphone", "ipad"])
 
-    # Setup force loading here - only for libs
+    # Setup force loading here - need to process deps and libs
     force_load_name = name + ".force_load_direct_deps"
-    force_load_direct_deps(name = force_load_name, deps = library.lib_names, tags = ["manual"])
+    force_load_direct_deps(name = force_load_name, deps = kwargs.get("deps", []) + library.lib_names, tags = ["manual"])
 
     # Setup framework middlemen - need to process deps and libs
     fw_name = name + ".framework_middleman"
