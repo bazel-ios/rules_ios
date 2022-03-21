@@ -127,7 +127,7 @@ framework_middleman = rule(
         """,
 )
 
-def _dedupe_key(key, avoid_libraries, objc_provider_fields, check_name=False):
+def _dedupe_key(key, avoid_libraries, objc_provider_fields, check_name = False):
     updated_library = []
     exisiting_library = objc_provider_fields.get(key, depset([]))
     for f in exisiting_library.to_list():
@@ -189,9 +189,9 @@ def _dep_middleman(ctx):
     # Ensure to strip out static link inputs
     _dedupe_key("library", avoid_libraries, objc_provider_fields)
     _dedupe_key("force_load_library", avoid_libraries, objc_provider_fields)
-    _dedupe_key("imported_library", avoid_libraries, objc_provider_fields, check_name=True)
-    _dedupe_key("static_framework_file", avoid_libraries, objc_provider_fields, check_name=True)
-    
+    _dedupe_key("imported_library", avoid_libraries, objc_provider_fields, check_name = True)
+    _dedupe_key("static_framework_file", avoid_libraries, objc_provider_fields, check_name = True)
+
     objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
     cc_info_provider = cc_common.merge_cc_infos(direct_cc_infos = [], cc_infos = cc_providers)
     providers = [
