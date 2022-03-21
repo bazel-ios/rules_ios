@@ -967,23 +967,14 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         ],
     })
 
-    # FIXME: if the user has specifcied an imported framework, then we want to
-    # use that as the source of truth. Consider matching on the name or
-    # ensuring the VFS compute logic takes care of that. Mainly, VFS generated
-    # must match the framework on disk, instead of putting "private_headers"
-    # into the VFS.  Further testing should be done around private headers as
-    # well.
-    additional_objc_vfs_deps = []
-    additional_objc_vfs_copts = []
-    if len(import_vfsoverlays) == 0:
-        additional_objc_vfs_deps = select({
-            "@build_bazel_rules_ios//:virtualize_frameworks": [framework_vfs_overlay_name_swift] + [framework_vfs_overlay_name],
-            "//conditions:default": [framework_vfs_overlay_name_swift] + [framework_vfs_overlay_name] if enable_framework_vfs else [],
-        })
-        additional_objc_vfs_copts = select({
-            "@build_bazel_rules_ios//:virtualize_frameworks": framework_vfs_objc_copts,
-            "//conditions:default": framework_vfs_objc_copts if enable_framework_vfs else [],
-        })
+    additional_objc_vfs_deps = select({
+        "@build_bazel_rules_ios//:virtualize_frameworks": [framework_vfs_overlay_name_swift] + [framework_vfs_overlay_name],
+        "//conditions:default": [framework_vfs_overlay_name_swift] + [framework_vfs_overlay_name] if enable_framework_vfs else [],
+    })
+    additional_objc_vfs_copts = select({
+        "@build_bazel_rules_ios//:virtualize_frameworks": framework_vfs_objc_copts,
+        "//conditions:default": framework_vfs_objc_copts if enable_framework_vfs else [],
+    })
     if module_map:
         objc_hdrs.append(module_map)
 
