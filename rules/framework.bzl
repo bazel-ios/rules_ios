@@ -48,7 +48,7 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
     kwargs["enable_framework_vfs"] = kwargs.pop("enable_framework_vfs", True)
 
     framework_deps = []
-    if kwargs.get("link_dynamic") == True:
+    if framework_packaging_kwargs.get("link_dynamic") == True:
         # Setup force loading here - only for direct deps / direct libs
         force_load_name = name + ".force_load_direct_deps"
         force_load_direct_deps(name = force_load_name, deps = kwargs.get("deps"), tags = ["manual"])

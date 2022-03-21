@@ -71,6 +71,7 @@ output_test(
         "App",
         "Frameworks/a.framework/a",
         "Frameworks/a.framework/Info.plist",
+
         # Assertions for B - see that transitive data is packed here
         "Frameworks/b.framework/b",
         "Frameworks/b.framework/b_data.txt",
