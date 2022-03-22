@@ -47,13 +47,6 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
     framework_packaging_kwargs = {arg: kwargs.pop(arg) for arg in _APPLE_FRAMEWORK_PACKAGING_KWARGS if arg in kwargs}
     kwargs["enable_framework_vfs"] = kwargs.pop("enable_framework_vfs", True)
 
-    framework_deps = []
-    if framework_packaging_kwargs.get("link_dynamic") == True:
-        # Setup force loading here - only for direct deps / direct libs
-        force_load_name = name + ".force_load_direct_deps"
-        force_load_direct_deps(name = force_load_name, deps = kwargs.get("deps"), tags = ["manual"])
-        framework_deps.append(force_load_name)
-
     infoplists_by_build_setting = kwargs.pop("infoplists_by_build_setting", {})
     default_infoplists = kwargs.pop("infoplists", [])
     infoplists = None
@@ -72,6 +65,12 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
     }))
 
     library = apple_library(name = name, **kwargs)
+    framework_deps = []
+    if framework_packaging_kwargs.get("link_dynamic") == True:
+        # Setup force loading here - only for direct deps / direct libs
+        force_load_name = name + ".force_load_direct_deps"
+        force_load_direct_deps(name = force_load_name, deps = kwargs.get("deps") + library.lib_names, tags = ["manual"])
+        framework_deps.append(force_load_name)
     framework_deps += library.lib_names
     apple_framework_packaging(
         name = name,
