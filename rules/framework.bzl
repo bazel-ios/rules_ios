@@ -1041,6 +1041,11 @@ the framework as a dependency.""",
             executable = True,
             default = Label("@build_bazel_apple_support//tools:xcode_path_wrapper"),
         ),
+        "_xcrunwrapper": attr.label(
+            cfg = "exec",
+            default = Label("@bazel_tools//tools/objc:xcrunwrapper"),
+            executable = True,
+        ),
     },
     doc = "Packages compiled code into an Apple .framework package",
 )
