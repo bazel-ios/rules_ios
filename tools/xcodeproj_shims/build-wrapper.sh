@@ -40,8 +40,17 @@ if [ ! -z ${BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS+x} ]; then
     BAZEL_BUILD_OPTIONS+=($BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS)
 fi
 
-$BAZEL_PATH build \
-    "${BAZEL_BUILD_OPTIONS[@]}" \
-    $1 \
-    2>&1 |
-    $BAZEL_OUTPUT_PROCESSOR
+if [ ! -z ${BAZEL_ADDITIONAL_BAZEL_STARTUP_OPTIONS+x} ]; then
+    $BAZEL_PATH $BAZEL_ADDITIONAL_BAZEL_STARTUP_OPTIONS \
+        build \
+        "${BAZEL_BUILD_OPTIONS[@]}" \
+        $1 \
+        2>&1 |
+        $BAZEL_OUTPUT_PROCESSOR
+else
+    $BAZEL_PATH build \
+        "${BAZEL_BUILD_OPTIONS[@]}" \
+        $1 \
+        2>&1 |
+        $BAZEL_OUTPUT_PROCESSOR
+fi
