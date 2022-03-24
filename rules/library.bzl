@@ -277,12 +277,13 @@ def _xcframework_slice(*, xcframework_name, identifier, platform, platform_varia
             xcframework_name,
         ))
 
-    # Collecting interface files for VFS
+    # Collecting interface files for VFS. This doesn't currently traverse nested
+    # frameworks in Frameworks, however they will still link.
     import_headers = native.glob(
         ["%s/**/*.h" % path],
     )
     import_module_maps = native.glob(
-        ["%s/**/*.modulemap" % path],
+        ["%s/Modules/*.modulemap" % path],
     )
     import_swiftmodules = native.glob(
         ["%s/**/*.swiftmodule/*.*" % path],
