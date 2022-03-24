@@ -14,6 +14,7 @@ _RULES = [
     "substitute_build_settings",
     "test",
     "transition_support",
+    "xcodeproj",
 ]
 
 _REPOSITORY_RULES = [
