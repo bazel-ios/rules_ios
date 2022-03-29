@@ -697,6 +697,27 @@ env -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC $BAZEL_BUILD_TARGET_LA
 $BAZEL_INSTALLER
 """
 
+def _set_target_settings_by_config(ctx, target_settings):
+    if len(ctx.attr.target_settings_by_config.keys()) == 0:
+        return target_settings
+
+    updated_target_settings = {}
+    updated_target_settings["base"] = target_settings
+    settings_by_config = target_settings.get("configs", {})
+
+    for (config, settings) in ctx.attr.target_settings_by_config.items():
+        if config not in settings_by_config.keys():
+            settings_by_config[config] = {}
+
+        for setting in settings:
+            k = setting.rsplit("=", 1)[0]
+            v = setting.rsplit("=", 1)[1]
+            settings_by_config[config][k] = v
+
+    updated_target_settings["configs"] = settings_by_config
+
+    return updated_target_settings
+
 def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_transitive_targets):
     """Helper method to generate dicts for targets and schemes inside Xcode context
 
@@ -809,6 +830,8 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
             "name": "Build with bazel",
             "script": _BUILD_WITH_BAZEL_SCRIPT,
         })
+
+        target_settings = _set_target_settings_by_config(ctx, target_settings)
 
         xcodeproj_targets_by_name[target_name] = {
             "sources": compiled_sources + compiled_non_arc_sources + asset_sources,
@@ -969,7 +992,7 @@ def _xcodeproj_impl(ctx):
         "BAZEL_INSTALLER": "$BAZEL_INSTALLERS_DIR/%s" % ctx.executable.installer.basename,
         "BAZEL_EXECUTION_LOG_ENABLED": ctx.attr.bazel_execution_log_enabled,
         "BAZEL_PROFILE_ENABLED": ctx.attr.bazel_profile_enabled,
-        "BAZEL_CONFIGS": ctx.attr.configs,
+        "BAZEL_CONFIGS": ctx.attr.configs.keys(),
         "BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS": " ".join(["{} ".format(opt) for opt in ctx.attr.additional_bazel_build_options]),
         "BAZEL_ADDITIONAL_LLDB_SETTINGS": "\n".join(ctx.attr.additional_lldb_settings),
     })
@@ -1035,9 +1058,11 @@ def _xcodeproj_impl(ctx):
     #
     # Note that the consumer can still set 'Debug' and 'Release' in 'ctx.attr.configs'
     # and take advantage of the configs in the .bazelrc file.
-    xcodeproj_info_configs = {k: "none" for k in ctx.attr.configs}
+    xcodeproj_info_configs = {k: "none" for k in ctx.attr.configs.keys()}
     xcodeproj_info_configs["Debug"] = "debug"
     xcodeproj_info_configs["Release"] = "release"
+    for (config, build_type) in ctx.attr.configs.items():
+        xcodeproj_info_configs[config] = build_type
 
     xcodeproj_info = struct(
         name = paths.split_extension(project_name)[0],
@@ -1139,8 +1164,8 @@ Tags for configuration:
         #
         # See the logic around setting the `-D DEBUG` flag in
         # https://github.com/bazel-ios/rules_ios/blob/master/tools/xcodeproj_shims/installers/lldb-settings.sh
-        "configs": attr.string_list(mandatory = False, default = [], doc = """
-        List of bazel configs present in the .bazelrc file that can be used to build targets.
+        "configs": attr.string_dict(mandatory = False, default = {}, doc = """
+        Dictionary keyed at config name present in the .bazelrc file and values at one of these two config types: 'debug', 'release'
 
         A Xcode build configuration will be created for each entry and a '--config=$CONFIGURATION' will
         be appended to the underlying bazel invocation. Effectively allowing the configs in the .bazelrc file
@@ -1148,6 +1173,32 @@ Tags for configuration:
 
         If not present the 'Debug' and 'Release' Xcode build configurations will be created by default without
         appending any additional bazel invocation flags.
+        """),
+        "target_settings_by_config": attr.string_list_dict(default = {}, doc = """
+        Additional optinal dictionary with Xcode build settings to be added to all targets grouped by config (see 'configs' attribute).
+
+        Example:
+
+        target_settings_by_config = {
+            "my_config": [
+                "PRODUCT_BUNDLE_IDENTIFIER=com.company.app.my_config",
+                "FOO=bar_1",
+            ]
+            "Release": [
+                "PRODUCT_BUNDLE_IDENTIFIER=com.company.app",
+                "FOO=bar_2",
+            ],
+        }
+
+        Each config has to exist in 'configs' and be set to one of 'debug'/'release' so xcodegen knows about its existence when creating the target.
+
+        Also, note that bazel doesn't support attributes with strings as keys and values at dictionaries so the proposal here is
+        to pass the settings as an array of strings where each element has the format 'SETTING_NAME=VALUE'.
+
+        Read more:
+        - https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md#settings
+        - https://docs.bazel.build/versions/main/skylark/lib/attr.html
+
         """),
         "deps": attr.label_list(mandatory = True, allow_empty = False, providers = [], aspects = [_xcodeproj_aspect]),
         "include_transitive_targets": attr.bool(default = False, mandatory = False),

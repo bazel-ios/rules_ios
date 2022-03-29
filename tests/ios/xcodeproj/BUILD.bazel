@@ -10,10 +10,10 @@ xcodeproj(
     bazel_path = "bazelisk",
     # Not that 'configs' must hold names for configs present in your .bazelrc file
     # in order to build with the respective Xcode build configurations active
-    configs = [
-        "bar",
-        "foo",
-    ],
+    configs = {
+        "bar": "debug",
+        "foo": "release",
+    },
     generate_schemes_for_product_types = [
         "framework.static",
         "bundle.unit-test",
