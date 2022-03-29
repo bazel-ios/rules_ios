@@ -8,11 +8,11 @@ apple_framework(
         "HeaderA.h",
         "main.m",
     ],
+    platforms = {"ios": "10.0"},
     resource_bundles = {"FooResources": glob(
         ["Resources/**/*"],
         exclude_directories = 0,
     )},
-    platforms = {"ios": "10.0"},
     visibility = ["//visibility:public"],
 )
 
