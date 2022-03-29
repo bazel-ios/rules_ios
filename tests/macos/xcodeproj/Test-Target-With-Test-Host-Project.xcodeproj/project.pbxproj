@@ -59,7 +59,6 @@
 		A5AC323968F3E7DC9BAFEC85 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
 		AF7BF530BE9F3ED2CB34B356 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		BE18C5CC5D69DC93C244A788 /* TestModel2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestModel2.xcdatamodel; sourceTree = "<group>"; };
-		BFBF7DC447A9E302E7E2946B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		C3241F917953C6BD1D2BE62A /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		D08289E7727590A63B67489C /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header.h; sourceTree = "<group>"; };
 		D229E599DDBCC713FF997122 /* TestStickers.xcstickers */ = {isa = PBXFileReference; lastKnownFileType = folder.stickers; path = TestStickers.xcstickers; sourceTree = "<group>"; };
@@ -101,14 +100,6 @@
 				9E7E8177A9991D407C446EF6 /* TestImports-Unit-Tests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		53A1C0AA09C71D538BA9031C /* Resources2 */ = {
-			isa = PBXGroup;
-			children = (
-				BFBF7DC447A9E302E7E2946B /* Images.xcassets */,
-			);
-			path = Resources2;
 			sourceTree = "<group>";
 		};
 		64B768958760ECC68D48BCA8 /* unit-test */ = {
@@ -162,7 +153,6 @@
 			isa = PBXGroup;
 			children = (
 				8BBBE8333A9A3A09CEFFD917 /* Images.xcassets */,
-				53A1C0AA09C71D538BA9031C /* Resources2 */,
 				57D04511C7357979F7EB5058 /* TestModel.xcdatamodel */,
 				BE18C5CC5D69DC93C244A788 /* TestModel2.xcdatamodel */,
 				0A3BB7488A9B93655A5A80A7 /* TestModelMapping.xcmappingmodel */,
