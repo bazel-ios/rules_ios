@@ -4,8 +4,8 @@ def _is_apple_resource_file(file, extensions_to_filter):
 
     return True
 
-# Remvoe files whose parent folders are already in the list. E.g., when both "foo/" and "foo/bar" 
-# are in the files list, we should only return "foo/". This de-duplication is needed after this 
+# Remvoe files whose parent folders are already in the list. E.g., when both "foo/" and "foo/bar"
+# are in the files list, we should only return "foo/". This de-duplication is needed after this
 # rules-apple PR: https://github.com/bazelbuild/rules_apple/pull/1311. Otherwise 'clonefile' will
 # raise exceptions when both "foo/" and "foo/bar" are copied.
 def _deduplicate_paths(files):
