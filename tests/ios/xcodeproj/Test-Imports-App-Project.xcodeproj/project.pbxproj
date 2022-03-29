@@ -28,7 +28,6 @@
 		0A9CDCA4AFFA244654BAAF8B /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
 		0B582D2FC35395890994566A /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = resource_bundle.plist; sourceTree = "<group>"; };
 		13569230489FEDC63798F45E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		2782A0E3F33311285AE36FC8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		2EF81609D3AA2C86BD531FC9 /* test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = test.m; sourceTree = "<group>"; };
 		3D8C6FABE401A5C37EEACCF7 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		40DADB6CCA7C34899493F0DF /* testhelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = testhelper.m; sourceTree = "<group>"; };
@@ -62,7 +61,6 @@
 			isa = PBXGroup;
 			children = (
 				13569230489FEDC63798F45E /* Images.xcassets */,
-				49ACE10FF598298C0C4EA7D9 /* Resources2 */,
 				EE15C7CB8FDCDB50A2BC13CF /* TestModel.xcdatamodel */,
 				EDE6AD266A3FA658551F1143 /* TestModel2.xcdatamodel */,
 				D3853399B479656CD9D1B02D /* TestModelMapping.xcmappingmodel */,
@@ -104,14 +102,6 @@
 				8CEB7F29BE7079D1C68021EB /* TestImports-Unit-Tests-Bridging-Header.h */,
 			);
 			path = "test-imports-app";
-			sourceTree = "<group>";
-		};
-		49ACE10FF598298C0C4EA7D9 /* Resources2 */ = {
-			isa = PBXGroup;
-			children = (
-				2782A0E3F33311285AE36FC8 /* Images.xcassets */,
-			);
-			path = Resources2;
 			sourceTree = "<group>";
 		};
 		52753EA7175AA78967732213 /* rules */ = {
