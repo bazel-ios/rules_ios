@@ -4,23 +4,6 @@ def _is_apple_resource_file(file, extensions_to_filter):
 
     return True
 
-# Remvoe files whose parent folders are already in the list. E.g., when both "foo/" and "foo/bar"
-# are in the files list, we should only return "foo/". This de-duplication is needed after this
-# rules-apple PR: https://github.com/bazelbuild/rules_apple/pull/1311. Otherwise 'clonefile' will
-# raise exceptions when both "foo/" and "foo/bar" are copied.
-def _deduplicate_paths(files):
-    unique_files = []
-    prev_file = None
-    for file in sorted(files):
-        if prev_file and file.path.startswith(prev_file.path):
-            # prev_file, i.e., some parent directories have already been added, skipped this file
-            continue
-        else:
-            unique_files.append(file)
-            prev_file = file
-
-    return unique_files
-
 def _resources_filegroup_impl(ctx):
     files = []
     launch_screen_storyboard = None
@@ -42,7 +25,7 @@ def _resources_filegroup_impl(ctx):
 
     providers = [
         DefaultInfo(
-            files = depset(direct = _deduplicate_paths(files)),
+            files = depset(direct = files),
         ),
     ]
 
