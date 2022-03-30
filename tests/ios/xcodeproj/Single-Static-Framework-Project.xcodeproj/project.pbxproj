@@ -22,11 +22,14 @@
 		4BB7A0F977B290B8648FFDB0 /* ObjcFramework.framework */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; path = ObjcFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD7402651F16555F753997F4 /* HeaderA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HeaderA.h; sourceTree = "<group>"; };
 		BD4894AC90711E6A55CB1657 /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.pch; sourceTree = "<group>"; };
+		C1AF5CC3A2ED91B2C79A0BC8 /* en.lproj */ = {isa = PBXFileReference; path = en.lproj; sourceTree = "<group>"; };
 		CC33CF482DA7BAB0EC345526 /* en.lproj */ = {isa = PBXFileReference; path = en.lproj; sourceTree = "<group>"; };
 		CF7A2F537C999952921627A8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D6DF3200A22C76322C4A8B04 /* DummyAssembly.S */ = {isa = PBXFileReference; path = DummyAssembly.S; sourceTree = "<group>"; };
 		D7D26FCF8D7CCD3C802C6987 /* FooFrameworkTesting.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FooFrameworkTesting.m; sourceTree = "<group>"; };
 		E8F7A7CCC6810E21CBE7CE43 /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = resource_bundle.plist; sourceTree = "<group>"; };
+		"TEMP_1362867C-7437-4F58-9600-72EBBE249D91" /* foo.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = foo.strings; sourceTree = "<group>"; };
+		"TEMP_CA26C712-C223-45B1-A423-4C147001979C" /* bar.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = bar.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -38,6 +41,7 @@
 				AD7402651F16555F753997F4 /* HeaderA.h */,
 				CF7A2F537C999952921627A8 /* main.m */,
 				333566EAC3988ED73DE93D22 /* Resources */,
+				7890BEF147E8E576993FE3BA /* Resources2 */,
 				7CF4F5ED68FE1E9E6486ED55 /* testing */,
 				37D2E41255E69DF775A9E8A7 /* tests */,
 			);
@@ -66,6 +70,14 @@
 				091655034CF618D208C22AE8 /* FooFrameworkTests.m */,
 			);
 			path = tests;
+			sourceTree = "<group>";
+		};
+		7890BEF147E8E576993FE3BA /* Resources2 */ = {
+			isa = PBXGroup;
+			children = (
+				C1AF5CC3A2ED91B2C79A0BC8 /* en.lproj */,
+			);
+			path = Resources2;
 			sourceTree = "<group>";
 		};
 		7CF4F5ED68FE1E9E6486ED55 /* testing */ = {
@@ -136,6 +148,22 @@
 			);
 			name = build_bazel_rules_ios;
 			path = ../../..;
+			sourceTree = "<group>";
+		};
+		"TEMP_6B129231-C063-4DC9-B9DA-8E29F6C8E37C" /* en.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				"TEMP_CA26C712-C223-45B1-A423-4C147001979C" /* bar.strings */,
+			);
+			path = en.lproj;
+			sourceTree = "<group>";
+		};
+		"TEMP_921ADF68-334B-4453-B9BE-F8657C67A88E" /* en.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				"TEMP_1362867C-7437-4F58-9600-72EBBE249D91" /* foo.strings */,
+			);
+			path = en.lproj;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
