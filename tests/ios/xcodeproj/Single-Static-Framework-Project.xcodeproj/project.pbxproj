@@ -28,8 +28,8 @@
 		D6DF3200A22C76322C4A8B04 /* DummyAssembly.S */ = {isa = PBXFileReference; path = DummyAssembly.S; sourceTree = "<group>"; };
 		D7D26FCF8D7CCD3C802C6987 /* FooFrameworkTesting.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FooFrameworkTesting.m; sourceTree = "<group>"; };
 		E8F7A7CCC6810E21CBE7CE43 /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = resource_bundle.plist; sourceTree = "<group>"; };
-		"TEMP_1362867C-7437-4F58-9600-72EBBE249D91" /* foo.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = foo.strings; sourceTree = "<group>"; };
-		"TEMP_CA26C712-C223-45B1-A423-4C147001979C" /* bar.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = bar.strings; sourceTree = "<group>"; };
+		"TEMP_9CA258AC-4A31-4252-A751-593795A1D4B0" /* foo.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = foo.strings; sourceTree = "<group>"; };
+		"TEMP_B0803057-1C6D-43AB-9D97-00575C8E1B93" /* bar.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = bar.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -150,18 +150,18 @@
 			path = ../../..;
 			sourceTree = "<group>";
 		};
-		"TEMP_6B129231-C063-4DC9-B9DA-8E29F6C8E37C" /* en.lproj */ = {
+		"TEMP_EBCE7CC4-449E-4D11-8B3A-D2933C0F3F28" /* en.lproj */ = {
 			isa = PBXGroup;
 			children = (
-				"TEMP_CA26C712-C223-45B1-A423-4C147001979C" /* bar.strings */,
+				"TEMP_B0803057-1C6D-43AB-9D97-00575C8E1B93" /* bar.strings */,
 			);
 			path = en.lproj;
 			sourceTree = "<group>";
 		};
-		"TEMP_921ADF68-334B-4453-B9BE-F8657C67A88E" /* en.lproj */ = {
+		"TEMP_EBD16E4F-C0DA-44CB-AD40-DADC6C1D5E7D" /* en.lproj */ = {
 			isa = PBXGroup;
 			children = (
-				"TEMP_1362867C-7437-4F58-9600-72EBBE249D91" /* foo.strings */,
+				"TEMP_9CA258AC-4A31-4252-A751-593795A1D4B0" /* foo.strings */,
 			);
 			path = en.lproj;
 			sourceTree = "<group>";
