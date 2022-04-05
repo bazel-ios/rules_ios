@@ -70,6 +70,7 @@ build_cocoapods_frameworks(
 
 load(
     "@bazel_tools//tools/build_defs/repo:http.bzl",
+    "http_archive",
     "http_file",
 )
 
@@ -107,4 +108,10 @@ load("//tools/toolchains/xcode_configure:xcode_configure.bzl", "xcode_configure"
 xcode_configure(
     remote_xcode_label = "",
     xcode_locator_label = "//tools/toolchains/xcode_configure:xcode_locator.m",
+)
+
+# Used in Pods.WORKSPACE to test PodToBUILD integration.
+http_archive(
+    name = "rules_pods",
+    urls = ["https://github.com/luispadron/PodToBUILD/releases/download/5.0.0-47d7be9/master-040122-2.zip"],
 )

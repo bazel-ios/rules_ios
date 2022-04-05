@@ -26,6 +26,7 @@ jobs:
         with:
           name: bazel-testlogs
           path: bazel-testlogs
+
   build_virtual_frameworks:
     # Build the entire tree with this feature enabled. Longer term, we'll likely
     # consider merging this feature into the default behavior and can re-align
@@ -93,6 +94,7 @@ jobs:
         run: find $PWD -type f \( -name 'WORKSPACE' -o -name '*.bzl' -o -name '*.bazel' \) | xargs bazel run buildifier -- -lint=fix && git diff --exit-code
       - name: Check docs
         run: bazelisk run docs && git diff --exit-code docs
+
   xcodeproj_tests_xcode_12_5_1:
     name: .xcodeproj Tests on Xcode 12.5.1
     runs-on: macos-latest
@@ -122,6 +124,7 @@ jobs:
         with:
           name: bazel-testlogs
           path: bazel-testlogs
+
   multi_arch_support:
     name: Build iOS App for Multiple Architecture
     runs-on: macos-latest
@@ -131,3 +134,15 @@ jobs:
         run: .github/workflows/xcode_select.sh
       - name: Build App
         run: bazelisk build -s tests/ios/app/App --apple_platform_type=ios --ios_minimum_os=10.2  --ios_multi_cpus=i386,x86_64
+
+  pod_2_build_support:
+    name: Build iOS App with PodToBUILD Dependencies
+    runs-on: macos-latest
+    steps:
+      - uses: action/checkout@v2
+      - name: Select Xcode
+        run: .github/workflows/xcode_select.sh
+      - name: Fetch Pods
+        run: bazel run @rules_pods//:update_pods -- --src_root $PWD
+      - name: Build App
+        run: bazelisk build -s --apple_platform_type=ios --ios_minimum_os=10.2 //tests/ios/pod2build:Pod2Build
