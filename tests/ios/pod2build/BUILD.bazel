@@ -7,6 +7,7 @@ apple_framework(
     swift_version = "5.0",
     visibility = ["//visibility:public"],
     deps = [
+        "//Vendor/AppsFlyerFramework",
         "//Vendor/Protobuf",
     ],
 )

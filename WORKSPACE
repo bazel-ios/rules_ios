@@ -110,7 +110,8 @@ xcode_configure(
     xcode_locator_label = "//tools/toolchains/xcode_configure:xcode_locator.m",
 )
 
+# Used to test PodToBUILD integration with rules_ios
 http_archive(
     name = "rules_pods",
-    urls = ["https://github.com/luispadron/PodToBUILD/releases/download/5.0.0-390cc32d/PodToBUILD.zip"],
+    urls = ["https://github.com/pinterest/PodToBUILD/releases/download/4.0.0-5787125/PodToBUILD.zip"],
 )

@@ -1,3 +1,4 @@
+import AppsFlyerLib
 import Protobuf
 
 func main() -> Int {
