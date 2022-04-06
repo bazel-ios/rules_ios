@@ -2,8 +2,7 @@
 
 # Source Pod
 new_pod_repository(
-    name = "RxSwift",
-    url = "https://github.com/ReactiveX/RxSwift/archive/6.5.0.zip",
+    name = "Protobuf",
+    generate_header_map = True,
+    url = "https://github.com/protocolbuffers/protobuf/archive/v3.6.0.zip",
 )
-
-# TODO: Add a binary / XCFramework pod

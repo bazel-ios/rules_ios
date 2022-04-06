@@ -1,3 +1,6 @@
-import RxSwift
+import Protobuf
 
-let x = "Hello, world!"
+func main() -> Int {
+    _ = "Testing that we can import some CocoaPods using PodToBUILD"
+    return 0
+}
