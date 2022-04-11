@@ -159,19 +159,19 @@ def _deduplicate_test_deps(test_deps, deps):
     return filtered
 
 def _file_collector_rule_impl(ctx):
+    arch = ctx.fragments.apple.single_arch_cpu
+    platform = str(ctx.fragments.apple.single_arch_platform.platform_type)
+    is_sim_arm64 = platform == "ios" and arch == "arm64" and not ctx.fragments.apple.single_arch_platform.is_device
+    if not is_sim_arm64:
+        # No op if the configuration is not for sim_arm64.
+        return [DefaultInfo()]
+
     linker_deps = _merge_linked_inputs(ctx.attr.deps)
     test_linker_deps = _merge_linked_inputs(ctx.attr.test_deps)
     input_static_frameworks = _deduplicate_test_deps(test_linker_deps[0], linker_deps[0])
     input_imported_libraries = _deduplicate_test_deps(test_linker_deps[1], linker_deps[1])
     input_dynamic_frameworks = _deduplicate_test_deps(test_linker_deps[2], linker_deps[2])
     all_import_infos = linker_deps[3]
-
-    arch = ctx.fragments.apple.single_arch_cpu
-    platform = str(ctx.fragments.apple.single_arch_platform.platform_type)
-    is_sim_arm64 = platform == "ios" and arch == "arm64" and not ctx.fragments.apple.single_arch_platform.is_device
-    if not is_sim_arm64:
-        # This should be correctly configured upstream: see setup in rules_ios
-        fail("using import_middleman ({}) on wrong transition ({},{},is_device={})", ctx.attr.lablel, platform, arch, ctx.fragments.apple.single_arch_platform.is_device)
 
     virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
     merge_keys = [
@@ -183,12 +183,7 @@ def _file_collector_rule_impl(ctx):
         "link_inputs",
         "linkopt",
         "library",
-    ] + ([] if is_sim_arm64 else [
-        # Merge in the objc provider fields
-        "imported_library",
-        "dynamic_framework_file",
-        "static_framework_file",
-    ])
+    ]
 
     objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(
         providers = [dep[apple_common.Objc] for dep in ctx.attr.deps],

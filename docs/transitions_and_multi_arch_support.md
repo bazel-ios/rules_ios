@@ -58,3 +58,10 @@ We observe that each configured framework target only needs the configured targe
 Figure 4: Updated Dependency Graph of Configured Targets
 
 In the implementation of the apple_framework_packaging rule, we check the current configuration and only use its corresponding slice of ctx.split_attr in packaging the framework. Please take a look at framework.bzl for details. 
+
+## Outgoing Edge transition and select method
+
+select() is a helper method to make a rule attributable configurable. It might be confusing which configuration will be selected when an outgoing-edge transition is assigned to that attribute. It turns out that the target’s current configuration determines the selected configuration of its attributes. The outgoing-edge transition doesn’t affect the select method. Figure 5 shows an example on how transition works with the select method. 
+
+![Figure 5](images/transition_figure5.png)
+Figure 5: The outgoing-edge transition doesn’t affect the select method

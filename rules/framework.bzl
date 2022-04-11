@@ -527,7 +527,7 @@ def _attrs_for_split_slice(attrs_by_split_slices, split_slice_key):
     else:
         return attrs_by_split_slices[split_slice_key]
 
-def _bundle_dynamic_framework(ctx, avoid_deps):
+def _bundle_dynamic_framework(ctx, avoid_deps, deps, transitive_deps, data):
     """Packages this as dynamic framework
 
     Currently, this doesn't include headers or other interface files.
@@ -555,7 +555,7 @@ def _bundle_dynamic_framework(ctx, avoid_deps):
     predeclared_outputs = struct(archive = archive)
 
     provisioning_profile = None
-    resource_deps = ctx.attr.deps + ctx.attr.transitive_deps + ctx.attr.data
+    resource_deps = deps + transitive_deps + data
     rule_descriptor = rule_support.rule_descriptor(ctx)
     signed_frameworks = []
     if provisioning_profile:
@@ -792,6 +792,7 @@ def _apple_framework_packaging_impl(ctx):
     deps = _attrs_for_split_slice(ctx.split_attr.deps, split_slice_key)
     transitive_deps = _attrs_for_split_slice(ctx.split_attr.transitive_deps, split_slice_key)
     vfs = _attrs_for_split_slice(ctx.split_attr.vfs, split_slice_key)
+    data = _attrs_for_split_slice(ctx.split_attr.data, split_slice_key)
 
     framework_files = _get_framework_files(ctx, deps)
     outputs = framework_files.outputs
@@ -837,7 +838,7 @@ def _apple_framework_packaging_impl(ctx):
 
     # Propagate the avoid deps information upwards
     avoid_deps = []
-    for dep in ctx.attr.transitive_deps:
+    for dep in transitive_deps:
         if AvoidDepsInfo in dep:
             avoid_deps.extend(dep[AvoidDepsInfo].libraries)
             if dep[AvoidDepsInfo].link_dynamic:
@@ -845,7 +846,7 @@ def _apple_framework_packaging_impl(ctx):
 
     # If we link dynamic - then package it as dynamic
     if ctx.attr.link_dynamic:
-        bundle_outs = _bundle_dynamic_framework(ctx, avoid_deps = avoid_deps)
+        bundle_outs = _bundle_dynamic_framework(ctx, avoid_deps = avoid_deps, deps = deps, transitive_deps = transitive_deps, data = data)
         avoid_deps_info = AvoidDepsInfo(libraries = depset(avoid_deps + ctx.attr.deps).to_list(), link_dynamic = True)
     else:
         bundle_outs = _bundle_static_framework(ctx, outputs = outputs)

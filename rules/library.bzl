@@ -680,7 +680,6 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     for vendored_dynamic_library in kwargs.pop("vendored_dynamic_libraries", []):
         fail("no support for dynamic library: %s" % vendored_dynamic_library)
 
-    # TODO(jmarino)Perhaps it uses a import_middleman here
     if len(vendored_deps):
         import_middleman(name = name + ".import_middleman", deps = vendored_deps, tags = ["manual"])
         deps += select({
