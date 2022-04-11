@@ -870,6 +870,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
         # Configure this path in the Info tab of a scheme’s Run or Test action.
         # The path can contain a build settings macro such as ${SRCROOT}, so the file can be part of a project. (38677796) (FB5425738)
         scheme_action_details["customLLDBInit"] = lldbinit_file
+        scheme_action_details["disableMainThreadChecker"] = ctx.attr.disable_main_thread_checker
 
         # See https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md#scheme
         # on structure of xcodeproj_schemes_by_name[target_info.name]
@@ -894,6 +895,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
             xcodeproj_schemes_by_name[target_name]["test"] = {
                 "targets": [target_name],
                 "customLLDBInit": lldbinit_file,
+                "disableMainThreadChecker": ctx.attr.disable_main_thread_checker,
             }
 
         elif target_name in build_target_to_scheme_info:
@@ -1252,6 +1254,7 @@ Additional LLDB settings to be added in each target's .lldbinit configuration fi
         """),
         "bazel_execution_log_enabled": attr.bool(default = False, mandatory = False),
         "bazel_profile_enabled": attr.bool(default = False, mandatory = False),
+        "disable_main_thread_checker": attr.bool(default = False, mandatory = False),
     },
     executable = True,
 )
