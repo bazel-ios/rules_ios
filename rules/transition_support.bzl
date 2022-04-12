@@ -77,18 +77,25 @@ def _apple_rule_transition_impl(settings, attr):
             fail("ERROR: {}: attribute platforms set to {}, but platform inferred to be {}".format(attr.name, attr_platforms, platform_type))
         platform_type = attr_platforms.keys()[0]
 
+    cpu_string = _cpu_string(platform_type, settings)
+
+    # Transition ios_multi_cpus to to a single cpu when building for iOS.
+    # Rules using this transition (e.g., apple_framework_packaging, precompiled_apple_resource_bundle) don't need any artifacts from other archs.
+    ios_multi_cpus = cpu_string[4:] if platform_type == "ios" else settings["//command_line_option:ios_multi_cpus"]
+
     ret = {
         "//command_line_option:apple configuration distinguisher": "applebin_" + platform_type,
         "//command_line_option:apple_platform_type": platform_type,
         "//command_line_option:apple_split_cpu": settings["//command_line_option:apple_split_cpu"],
         "//command_line_option:compiler": settings["//command_line_option:apple_compiler"],
-        "//command_line_option:cpu": _cpu_string(platform_type, settings),
+        "//command_line_option:cpu": cpu_string,
         "//command_line_option:crosstool_top": (
             settings["//command_line_option:apple_crosstool_top"]
         ),
         "//command_line_option:fission": [],
         "//command_line_option:grte_top": settings["//command_line_option:apple_grte_top"],
         "//command_line_option:ios_minimum_os": _min_os_version_or_none(attr, "ios", platform_type),
+        "//command_line_option:ios_multi_cpus": ios_multi_cpus,
         "//command_line_option:macos_minimum_os": _min_os_version_or_none(attr, "macos", platform_type),
         "//command_line_option:tvos_minimum_os": _min_os_version_or_none(attr, "tvos", platform_type),
         "//command_line_option:watchos_minimum_os": _min_os_version_or_none(attr, "watchos", platform_type),
@@ -123,6 +130,7 @@ _apple_rule_transition = transition(
         "//command_line_option:fission",
         "//command_line_option:grte_top",
         "//command_line_option:ios_minimum_os",
+        "//command_line_option:ios_multi_cpus",
         "//command_line_option:macos_minimum_os",
         "//command_line_option:tvos_minimum_os",
         "//command_line_option:watchos_minimum_os",

@@ -789,9 +789,9 @@ def _apple_framework_packaging_impl(ctx):
         split_slice_varint = "sim_"
 
     split_slice_key = "{}_{}{}".format(platform, split_slice_varint, arch)
-    deps = _attrs_for_split_slice(ctx.split_attr.deps, split_slice_key)
-    transitive_deps = _attrs_for_split_slice(ctx.split_attr.transitive_deps, split_slice_key)
-    vfs = _attrs_for_split_slice(ctx.split_attr.vfs, split_slice_key)
+    deps = ctx.attr.deps
+    transitive_deps = ctx.attr.transitive_deps
+    vfs = ctx.attr.vfs
 
     framework_files = _get_framework_files(ctx, deps)
     outputs = framework_files.outputs
@@ -888,7 +888,6 @@ apple_framework_packaging = rule(
         ),
         "deps": attr.label_list(
             mandatory = True,
-            cfg = apple_common.multi_arch_split,
             aspects = [apple_resource_aspect],
             doc =
                 """Objc or Swift rules to be packed by the framework rule
@@ -896,7 +895,6 @@ apple_framework_packaging = rule(
         ),
         "data": attr.label_list(
             mandatory = False,
-            cfg = apple_common.multi_arch_split,
             allow_files = True,
             doc =
                 """Objc or Swift rules to be packed by the framework rule
@@ -913,14 +911,12 @@ The default behavior bakes this into the top level app. When false, it's statica
         ),
         "vfs": attr.label_list(
             mandatory = False,
-            cfg = apple_common.multi_arch_split,
             doc =
                 """Additional VFS for the framework to export
 """,
         ),
         "transitive_deps": attr.label_list(
             mandatory = True,
-            cfg = apple_common.multi_arch_split,
             doc =
                 """Deps of the deps
 """,
@@ -964,7 +960,6 @@ A list of framework targets (see
 [`ios_framework`](https://github.com/bazelbuild/rules_apple/blob/master/doc/rules-ios.md#ios_framework))
 that this target depends on.
 """,
-            cfg = apple_common.multi_arch_split,
         ),
         "_headermap_builder": attr.label(
             executable = True,
@@ -983,7 +978,6 @@ that this target depends on.
             """,
         ),
         "_child_configuration_dummy": attr.label(
-            cfg = apple_common.multi_arch_split,
             default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
         ),
         "bundle_id": attr.string(

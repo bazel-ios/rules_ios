@@ -99,7 +99,6 @@ framework_middleman = rule(
     implementation = _framework_middleman,
     attrs = {
         "framework_deps": attr.label_list(
-            cfg = apple_common.multi_arch_split,
             mandatory = True,
             doc =
                 """Deps that may contain frameworks
@@ -204,14 +203,12 @@ dep_middleman = rule(
     implementation = _dep_middleman,
     attrs = {
         "deps": attr.label_list(
-            cfg = apple_common.multi_arch_split,
             mandatory = True,
             doc =
                 """Deps that may contain frameworks
 """,
         ),
         "test_deps": attr.label_list(
-            cfg = apple_common.multi_arch_split,
             allow_empty = True,
         ),
         "platform_type": attr.string(
