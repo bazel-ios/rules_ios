@@ -16,8 +16,6 @@
     <string>????</string>
     <key>CFBundleVersion</key>
     <string>1.0.0</string>
-    <key>NSPrincipalClass</key>
-    <string></string>
     <key>CFBundleDevelopmentRegion</key>
     <string>en</string>
     <key>CFBundleExecutable</key>
