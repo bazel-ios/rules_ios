@@ -188,7 +188,6 @@ def _precompiled_apple_resource_bundle_impl(ctx):
                 target_path = paths.join(target_path, source.basename)
             output_files.append(target_path)
             control_files.append(struct(src = source.path, dest = target_path))
-    print(control_files)
 
     # Create a file for bundletool to know what files to copy
     # https://github.com/bazelbuild/rules_apple/blob/d29df97b9652e0442ebf21f1bc0e04921b584f76/tools/bundletool/bundletool_experimental.py#L29-L46

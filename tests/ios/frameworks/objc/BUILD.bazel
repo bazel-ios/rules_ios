@@ -9,13 +9,6 @@ apple_framework(
         "main.m",
     ],
     platforms = {"ios": "10.0"},
-    resource_bundles = {"FooResources": glob(
-        [
-            "Resources/**/*",
-            "Resources2/**/*",
-        ],
-        exclude_directories = 0,
-    )},
     visibility = ["//visibility:public"],
 )
 
