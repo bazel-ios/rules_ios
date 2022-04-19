@@ -139,7 +139,7 @@ jobs:
     name: Build iOS App with PodToBUILD Dependencies (via WORKSPACE)
     runs-on: macos-latest
     steps:
-      - uses: action/checkout@v2
+      - uses: actions/checkout@v2
       - name: Select Xcode
         run: .github/workflows/xcode_select.sh
       - name: Build App (swift)
