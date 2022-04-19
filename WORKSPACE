@@ -70,6 +70,7 @@ build_cocoapods_frameworks(
 
 load(
     "@bazel_tools//tools/build_defs/repo:http.bzl",
+    "http_archive",
     "http_file",
 )
 
@@ -107,4 +108,18 @@ load("//tools/toolchains/xcode_configure:xcode_configure.bzl", "xcode_configure"
 xcode_configure(
     remote_xcode_label = "",
     xcode_locator_label = "//tools/toolchains/xcode_configure:xcode_locator.m",
+)
+
+# Used to test PodToBUILD integration with rules_ios
+http_archive(
+    name = "rules_pods",
+    urls = ["https://github.com/pinterest/PodToBUILD/releases/download/4.0.0-5787125/PodToBUILD.zip"],
+)
+
+load("@rules_pods//BazelExtensions:workspace.bzl", "new_pod_repository")
+
+new_pod_repository(
+    name = "SlackTextViewController",
+    generate_module_map = True,
+    url = "https://github.com/slackhq/SlackTextViewController/archive/v1.9.6.zip",
 )
