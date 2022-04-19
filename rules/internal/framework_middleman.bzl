@@ -74,6 +74,7 @@ def _framework_middleman(ctx):
         AppleBundleInfo(
             archive = None,
             archive_root = None,
+            binary = None,
 
             # These arguments are unused - however, put them here incase that
             # somehow changes to make it easier to debug
