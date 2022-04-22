@@ -4,7 +4,7 @@ load(
     "@bazel_tools//tools/build_defs/repo:http.bzl",
     "http_archive",
 )
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "new_git_repository")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository", "new_git_repository")
 
 def _maybe(repo_rule, name, **kwargs):
     """Executes the given repository rule if it hasn't been executed already.
@@ -111,6 +111,20 @@ swift_binary(
 )
         """,
     )
+
+    if not native.existing_rule("xchammer"):
+        git_repository(
+            name = "xchammer",
+            remote = "https://github.com/bazel-ios/xchammer.git",
+            tag = "rules_ios-0.0.1",
+        )
+
+    if not native.existing_rule("xcbuildkit"):
+        git_repository(
+            name = "xcbuildkit",
+            commit = "b619d25f65cf7195c57e2dbc26d488e5606e763a",
+            remote = "https://github.com/jerrymarino/xcbuildkit.git",
+        )
 
 def _impl(ctx):
     ctx.symlink(str(ctx.path(ctx.attr.rules_ios).dirname) + "/" + ctx.attr.path, "")
