@@ -12,7 +12,7 @@ def xcodeproj(name, **kwargs):
       **kwargs: Arguments to propagate, the XCHammer specific ones are going to be removed before declaring the legacy rule
     """
 
-    # Pop XCHammer specific attributes so these dont' get propagated
+    # Pop XCHammer specific attributes so these don't get propagated
     use_xchammer = kwargs.pop("use_xchammer", False)
     generate_xcode_schemes = kwargs.pop("generate_xcode_schemes", False)
 

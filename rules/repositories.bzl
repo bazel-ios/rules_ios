@@ -115,8 +115,8 @@ swift_binary(
     if not native.existing_rule("xchammer"):
         git_repository(
             name = "xchammer",
-            commit = "54f9be0c5624b7c17ab2f128809188890697b4cf",
             remote = "https://github.com/bazel-ios/xchammer.git",
+            tag = "rules_ios-0.0.1",
         )
 
     if not native.existing_rule("xcbuildkit"):
