@@ -221,10 +221,33 @@ def _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix):
     # frameworks above.
     if swiftmodule_file == None or swiftmodule_file.is_source:
         return None
+
+    # This needs to have the llvm target triple here unfortunately for Xcode
+    # Works fine with the swift compiler
+    tripple_prefix = "arm64-apple-ios-simulator."
+    contents = [
+            {
+                "type": "file",
+                "name":  tripple_prefix + file.extension,
+                "external-contents": _get_external_contents(vfs_prefix, file.path),
+            }
+            for file in swiftmodules
+        ]
+
+    # Plug in a synthetic source info - we don't want to feed this into the action
+    source_info = swiftmodule_file.dirname + "arm64-apple-ios-simulator.swiftsourceinfo"
+    source_info_name = "arm64-apple-ios-simulator.swiftsourceinfo"
+    contents += [
+            {
+                "type": "file",
+                "name": source_info_name,
+                "external-contents": _get_external_contents(vfs_prefix, source_info),
+            }
+    ]
     return {
-        "type": "file",
+        "type": "directory",
         "name": swiftmodule_file.basename,
-        "external-contents": _get_external_contents(vfs_prefix, swiftmodule_file.path),
+        "contents":  contents
     }
 
 def _framework_vfs_overlay_impl(ctx):
