@@ -1045,6 +1045,13 @@ the framework as a dependency.""",
             default = Label("@bazel_tools//tools/objc:xcrunwrapper"),
             executable = True,
         ),
+        "_cc_toolchain": attr.label(
+            default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
+            doc = """\
+The C++ toolchain from which linking flags and other tools needed by the Swift
+toolchain (such as `clang`) will be retrieved.
+""",
+        ),
     },
     doc = "Packages compiled code into an Apple .framework package",
 )

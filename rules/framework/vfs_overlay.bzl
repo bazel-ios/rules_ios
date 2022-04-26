@@ -1,5 +1,6 @@
 load("//rules:providers.bzl", "FrameworkInfo")
 load("//rules:features.bzl", "feature_names")
+load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
 
 FRAMEWORK_SEARCH_PATH = "/build_bazel_rules_ios/frameworks"
 
@@ -95,7 +96,7 @@ def _get_public_framework_header(path):
 # Make roots for a given framework. For now this is done in starlark for speed
 # and incrementality. For imported frameworks, there is additional search paths
 # enabled
-def _make_root(vfs_parent, bin_dir_path, build_file_path, framework_name, swiftmodules, root_dir, extra_search_paths, module_map, hdrs, private_hdrs, has_swift):
+def _make_root(vfs_parent, bin_dir_path, build_file_path, target_triple, framework_name, swiftmodules, root_dir, extra_search_paths, module_map, hdrs, private_hdrs, has_swift):
     vfs_prefix = _make_relative_prefix(len(vfs_parent.split("/")) - 1)
     extra_roots = []
     private_headers_contents = []
@@ -207,12 +208,12 @@ def _make_root(vfs_parent, bin_dir_path, build_file_path, framework_name, swiftm
         })
 
     if len(swiftmodules) > 0:
-        contents = _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix)
+        contents = _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix, target_triple)
         if contents:
             roots.append(contents)
     return roots
 
-def _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix):
+def _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix, target_triple):
     swiftmodule_file = _find_top_swiftmodule_file(swiftmodules)
 
     # Note: here we need to import the "top" swiftmodule where the compiler can
@@ -222,32 +223,19 @@ def _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix):
     if swiftmodule_file == None or swiftmodule_file.is_source:
         return None
 
-    # This needs to have the llvm target triple here unfortunately for Xcode
-    # Works fine with the swift compiler
-    tripple_prefix = "arm64-apple-ios-simulator."
     contents = [
-            {
-                "type": "file",
-                "name":  tripple_prefix + file.extension,
-                "external-contents": _get_external_contents(vfs_prefix, file.path),
-            }
-            for file in swiftmodules
-        ]
-
-    # Plug in a synthetic source info - we don't want to feed this into the action
-    source_info = swiftmodule_file.dirname + "arm64-apple-ios-simulator.swiftsourceinfo"
-    source_info_name = "arm64-apple-ios-simulator.swiftsourceinfo"
-    contents += [
-            {
-                "type": "file",
-                "name": source_info_name,
-                "external-contents": _get_external_contents(vfs_prefix, source_info),
-            }
+        {
+            "type": "file",
+            "name": target_triple + "." + file.extension,
+            "external-contents": _get_external_contents(vfs_prefix, file.path),
+        }
+        for file in swiftmodules
     ]
+
     return {
         "type": "directory",
         "name": swiftmodule_file.basename,
-        "contents":  contents
+        "contents": contents,
     }
 
 def _framework_vfs_overlay_impl(ctx):
@@ -301,15 +289,49 @@ def _make_vfs_info(name, data):
     keys[name] = data
     return keys
 
+def _get_basic_llvm_tripple(ctx):
+    apple_fragment = ctx.fragments.apple
+    platform = apple_fragment.single_arch_platform
+    """Returns a target triple string for an Apple platform.
+
+    Args:
+        cpu: The CPU of the target.
+        platform: The `apple_platform` value describing the target platform.
+
+    Returns:
+        An IDE target triple string describing the platform.
+    """
+    platform_string = str(platform.platform_type)
+    if platform_string == "macos":
+        platform_string = "macosx"
+
+    cc_toolchain = find_cpp_toolchain(ctx)
+
+    if cc_toolchain.cpu.startswith("darwin_"):
+        cpu = cc_toolchain.cpu[len("darwin_"):]
+    else:
+        cpu = apple_fragment.single_arch_cpu
+
+    environment = ""
+    if not platform.is_device:
+        environment = "-simulator"
+
+    return "{cpu}-apple-{platform}{environment}".format(
+        cpu = cpu,
+        environment = environment,
+        platform = platform_string,
+    )
+
 # Roots must be computed _relative_ to the vfs_parent. It is no longer possible
 # to memoize VFS computations because of this.
-def _roots_from_datas(vfs_parent, datas):
+def _roots_from_datas(vfs_parent, target_triple, datas):
     roots = []
     for data in datas:
         roots.extend(_make_root(
             vfs_parent = vfs_parent,
             bin_dir_path = data.bin_dir_path,
             build_file_path = data.build_file_path,
+            target_triple = target_triple,
             framework_name = data.framework_name,
             root_dir = data.framework_path,
             extra_search_paths = data.extra_search_paths,
@@ -343,11 +365,13 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules
         private_hdrs = private_hdrs,
         has_swift = has_swift,
     )
+    target_triple = _get_basic_llvm_tripple(ctx)
 
     roots = _make_root(
         vfs_parent,
         bin_dir_path = ctx.bin_dir.path,
         build_file_path = ctx.build_file_path,
+        target_triple = target_triple,
         framework_name = framework_name,
         root_dir = framework_path,
         extra_search_paths = extra_search_paths,
@@ -361,7 +385,7 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules
     vfs_info = _make_vfs_info(framework_name, data)
     if len(merge_vfsoverlays) > 0:
         vfs_info = _merge_vfs_infos(vfs_info, merge_vfsoverlays)
-        roots = _roots_from_datas(vfs_parent, vfs_info.values() + [data])
+        roots = _roots_from_datas(vfs_parent, target_triple, vfs_info.values() + [data])
 
     if output == None:
         return struct(vfsoverlay_file = None, vfs_info = vfs_info)
@@ -396,7 +420,17 @@ framework_vfs_overlay = rule(
         "hdrs": attr.label_list(allow_files = True),
         "private_hdrs": attr.label_list(allow_files = True, default = []),
         "deps": attr.label_list(allow_files = True, default = []),
+        "_cc_toolchain": attr.label(
+            default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
+            doc = """\
+The C++ toolchain from which linking flags and other tools needed by the Swift
+toolchain (such as `clang`) will be retrieved.
+""",
+        ),
     },
+    fragments = [
+        "apple",
+    ],
     outputs = {
         "vfsoverlay_file": "%{name}.yaml",
     },
