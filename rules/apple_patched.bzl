@@ -145,10 +145,18 @@ def _apple_framework_import_modulemap_impl(ctx):
 
 _apple_framework_import_modulemap = rule(
     implementation = _apple_framework_import_modulemap_impl,
+    fragments = ["apple"],
     attrs = {
         "legacy_target": attr.label(
             mandatory = True,
             doc = "The legacy target to patch",
+        ),
+        "_cc_toolchain": attr.label(
+            default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
+            doc = """\
+The C++ toolchain from which linking flags and other tools needed by the Swift
+toolchain (such as `clang`) will be retrieved.
+""",
         ),
     },
     doc = "Patches the associated legacy_target",
