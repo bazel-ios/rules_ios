@@ -262,7 +262,11 @@ def xchammer_dependencies():
     namespaced_git_repository(
         name = "Tulsi",
         remote = "https://github.com/bazel-ios/tulsi.git",
-        tag = "rules_ios-0.0.1",
+        # These tags are based on the bazel-version - see XCHammer docs for
+        # convetion. It cherry-picks all changes to HEAD at a give bazel
+        # release, then adds changes to this tag for the Bazel release in
+        # question
+        tag = "rules_ios-5.0.0",
         patch_cmds = [
             """
          sed -i '' 's/\\:__subpackages__/visibility\\:public/g' src/TulsiGenerator/BUILD
