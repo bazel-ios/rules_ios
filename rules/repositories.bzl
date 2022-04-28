@@ -118,7 +118,8 @@ swift_binary(
         git_repository(
             name = "xchammer",
             remote = "https://github.com/bazel-ios/xchammer.git",
-            tag = "rules_ios-0.0.1",
+            # XCHammer dev branch: bazel-ios/rules-ios-xchammer
+            commit = "b233c4caba129d9a3a7cad57e8a65bf4c0dfd29f",
         )
     xchammer_dependencies()
 
