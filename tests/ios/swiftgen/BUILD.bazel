@@ -1,0 +1,27 @@
+load("//rules:framework.bzl", "apple_framework")
+load("@rules_apple_line//apple:swiftgen.bzl", "swiftgen")
+
+# Notice that we add the .swift extension to the name of the swiftgen action.
+# This is to inform the apple_library which language to build for.
+# The name of this action can then be included with an apple_framework or apple_library
+# using each rules srcs attribute.
+swiftgen(
+    name = "SwiftGenTest-BundleResources.swift",
+    srcs = [],
+    out = "Bundle+SwiftGenTest.swift",
+    template_file = "//tests/ios/swiftgen/Templates:SwiftGenTest.stencil",
+)
+
+apple_framework(
+    name = "SwiftGenTest",
+    srcs = glob(["Sources/**/*.swift"]) +
+    # Depend on the swiftgen action created above.
+    # By depending on the swiftgen action Bazel will ensure the generated
+    # sources are up-to-date before building this target.
+    # This also means it will skip generation if there are no changes.
+    [
+        ":SwiftGenTest-BundleResources.swift",
+    ],
+    platforms = {"ios": "10.0"},
+    visibility = ["//visibility:public"],
+)

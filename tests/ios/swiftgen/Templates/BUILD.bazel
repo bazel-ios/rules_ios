@@ -1,0 +1,4 @@
+exports_files([
+    "dummy.json",
+    "SwiftGenTest.stencil",
+])

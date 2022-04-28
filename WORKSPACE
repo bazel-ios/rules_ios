@@ -70,6 +70,7 @@ build_cocoapods_frameworks(
 
 load(
     "@bazel_tools//tools/build_defs/repo:http.bzl",
+    "http_archive",
     "http_file",
 )
 
@@ -116,3 +117,16 @@ xchammer_dependencies()
 load("@xcbuildkit//third_party:repositories.bzl", xcbuildkit_dependencies = "dependencies")
 
 xcbuildkit_dependencies()
+
+RULES_APPLE_LINE_COMMIT = "7c13007a912d84a1cd92e71cd805baf77be9622e"
+
+http_archive(
+    name = "rules_apple_line",
+    sha256 = "66eeb099ba0df4cf986111326df562fd7e5f834d7c390c6ffcf4e32a1f421b96",
+    strip_prefix = "rules_apple_line-%s" % RULES_APPLE_LINE_COMMIT,
+    url = "https://github.com/line/rules_apple_line/archive/%s.zip" % RULES_APPLE_LINE_COMMIT,
+)
+
+load("@rules_apple_line//apple:repositories.bzl", "rules_apple_line_dependencies")
+
+rules_apple_line_dependencies()

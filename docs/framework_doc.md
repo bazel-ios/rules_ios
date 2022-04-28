@@ -51,6 +51,16 @@ apple_framework(<a href="#apple_framework-name">name</a>, <a href="#apple_framew
 
 Builds and packages an Apple framework.
 
+The sources given to an apple_framework are required to have a file extension.
+Sources can be either labels or files but they must both end with an Apple framework supported extension such as:
+ - .swift
+ - .m
+ - .h
+To see all supported extensions, refer to: rules_ios/rules/library.bzl
+
+The extension is required to determine how to build the given sources as apple_framework can contain multiple languages.
+
+
 **PARAMETERS**
 
 

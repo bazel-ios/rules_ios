@@ -39,6 +39,15 @@ _APPLE_FRAMEWORK_PACKAGING_KWARGS = [
 def apple_framework(name, apple_library = apple_library, **kwargs):
     """Builds and packages an Apple framework.
 
+    The sources given to an apple_framework are required to have a file extension.
+    Sources can be either labels or files but they must both end with an Apple framework supported extension such as:
+     - .swift
+     - .m
+     - .h
+    To see all supported extensions, refer to: rules_ios/rules/library.bzl
+
+    The extension is required to determine how to build the given sources as apple_framework can contain multiple languages.
+
     Args:
         name: The name of the framework.
         apple_library: The macro used to package sources into a library.

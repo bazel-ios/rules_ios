@@ -1,0 +1,6 @@
+// Generated using SwiftGen — https://github.com/SwiftGen/SwiftGen
+// Do not edit directly!
+
+public enum GeneratedEnum {
+    case generatedCase
+}
