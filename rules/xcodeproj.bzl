@@ -15,14 +15,17 @@ def xcodeproj(name, **kwargs):
     # Pop XCHammer specific attributes so these don't get propagated
     use_xchammer = kwargs.pop("use_xchammer", False)
     generate_xcode_schemes = kwargs.pop("generate_xcode_schemes", False)
+    xcconfig_overrides = kwargs.pop("xcconfig_overrides", {})
 
     if use_xchammer:
         xchammer_xcodeproj(
             name = name,
+            testonly = kwargs.get("testonly", False),
             bazel = kwargs.get("bazel_path", "/usr/local/bin/bazel"),
             project_config = project_config(
                 generate_xcode_schemes = generate_xcode_schemes,
                 paths = ["**"],
+                xcconfig_overrides = xcconfig_overrides,
             ),
             targets = kwargs.get("deps", []),
         )
