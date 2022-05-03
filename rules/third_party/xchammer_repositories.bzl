@@ -262,7 +262,12 @@ def xchammer_dependencies():
     namespaced_git_repository(
         name = "Tulsi",
         remote = "https://github.com/bazel-ios/tulsi.git",
-        tag = "rules_ios-0.0.1",
+        # These tags are based on the bazel-version - see XCHammer docs for
+        # convention. It cherry-picks all changes to HEAD at a give bazel
+        # release, then adds changes to this tag for the Bazel release in
+        # question
+        # Persisted on github tag=rules_ios-5.0.0,
+        commit = "adf9cf592198c1291775b8e4eb6a38d5ddf2f523",
         patch_cmds = [
             """
          sed -i '' 's/\\:__subpackages__/visibility\\:public/g' src/TulsiGenerator/BUILD
@@ -274,6 +279,7 @@ def xchammer_dependencies():
     )
 
     # FIX-ME: Point to 'master' instead of 'thiago/rules-ios-xchammer-1' after resolving issues
+    # TODO(jmarino) remove this
     new_git_repository(
         name = "xchammer_tulsi_aspects",
         remote = "https://github.com/bazel-ios/tulsi.git",

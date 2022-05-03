@@ -406,6 +406,7 @@ env_script=$(mktemp /tmp/bazel-xcodeproj-intermediate.XXXXXX)
 trap "rm -rf $env_script" EXIT
 
 cat > $py_script << "EOF"
+#!/usr/bin/env python3 
 import json, sys, shlex
 build_settings = json.load(sys.stdin)[0]["buildSettings"]
 print("/bin/bash")
@@ -420,7 +421,9 @@ for bs in build_settings:
     else:
         print("export " + bs + "=" + cmds  + "")
 EOF
-""" + target_cmd + """ 2> /dev/null | python $py_script > $env_script
+
+chmod +x $py_script
+""" + target_cmd + """ 2> /dev/null | $py_script > $env_script
 source $env_script
 cat $env_script
 export BAZEL_LLDB_INIT_FILE=$PWD/""" + ctx.outputs.out.path + """
