@@ -193,6 +193,7 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
             propagated_interface_headers.append(framework_headers)
 
     outputs = framework_files.outputs
+    compile_with_xcode = feature_names.compile_with_xcode in ctx.features
     vfs = make_vfsoverlay(
         ctx,
         hdrs = outputs.headers,
@@ -202,7 +203,7 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
         swiftmodules = outputs.swiftmodule + outputs.swiftdoc,
         private_hdrs = outputs.private_headers,
         has_swift = len(outputs.swiftmodule) > 0,
-        merge_vfsoverlays = fw_dep_vfsoverlays + import_vfsoverlays,
+        merge_vfsoverlays = [] if compile_with_xcode else (fw_dep_vfsoverlays + import_vfsoverlays),
     )
 
     # Includes interface headers here ( handled in cc_info merge for no virtual )
