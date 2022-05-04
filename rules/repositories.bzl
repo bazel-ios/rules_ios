@@ -119,7 +119,7 @@ swift_binary(
             name = "xchammer",
             remote = "https://github.com/bazel-ios/xchammer.git",
             # XCHammer dev branch: bazel-ios/rules-ios-xchammer
-            commit = "4c20b4819aba2d4245707e3a7333da02c0f9ba71",
+            commit = "8bc41c28de6166ee0d9afbe02644cd803fd7f921",
         )
     xchammer_dependencies()
 
