@@ -278,16 +278,6 @@ def xchammer_dependencies():
         ],
     )
 
-    # FIX-ME: Point to 'master' instead of 'thiago/rules-ios-xchammer-1' after resolving issues
-    # TODO(jmarino) remove this
-    new_git_repository(
-        name = "xchammer_tulsi_aspects",
-        remote = "https://github.com/bazel-ios/tulsi.git",
-        tag = "rules_ios-0.0.1",
-        strip_prefix = "src/TulsiGenerator/Bazel",
-        build_file_content = "exports_files(['tulsi'])",
-    )
-
     namespaced_new_git_repository(
         name = "XcodeGen",
         remote = "https://github.com/yonaskolb/XcodeGen.git",
