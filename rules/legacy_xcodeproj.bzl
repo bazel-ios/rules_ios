@@ -1026,7 +1026,7 @@ def _xcodeproj_impl(ctx):
         "DONT_RUN_SWIFT_STDLIB_TOOL": True,
         "SWIFT_OBJC_INTERFACE_HEADER_NAME": "",
         "SWIFT_VERSION": 5,
-        "FORCE_X86_SIM": ctx.attr.force_x86_sim_on_apple_silicon,
+        "FORCE_X86_SIM": ctx.attr.force_x86_sim,
     })
 
     # For debugging config only:
@@ -1259,7 +1259,7 @@ Additional LLDB settings to be added in each target's .lldbinit configuration fi
         "bazel_execution_log_enabled": attr.bool(default = False, mandatory = False),
         "bazel_profile_enabled": attr.bool(default = False, mandatory = False),
         "disable_main_thread_checker": attr.bool(default = False, mandatory = False),
-        "force_x86_sim_on_apple_silicon": attr.bool(default = False, mandatory = False),
+        "force_x86_sim": attr.bool(default = False, mandatory = False),
     },
     executable = True,
 )

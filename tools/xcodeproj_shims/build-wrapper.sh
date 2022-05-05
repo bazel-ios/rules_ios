@@ -22,8 +22,8 @@ fi
 if [ -n "${TARGET_DEVICE_IDENTIFIER:-}" ] && [ "$PLATFORM_NAME" = "iphoneos" ]; then
     echo "Builds with --ios_multi_cpus=arm64 since the target is an iOS device."
     BAZEL_BUILD_OPTIONS+=("--ios_multi_cpus=arm64")
-elif [ $FORCE_X86_SIM -gt 0 ] && [ "$PLATFORM_NAME" = "iphonesimulator" ] && [[ $(sysctl -n machdep.cpu.brand_string) =~ "Apple" ]]; then
-    echo "Builds with --ios_multi_cpus=x86_64 since the target is sim, host architecture is apple silicon, and xcodeproj attribute force_x86_sim_on_apple_silicon is True"
+elif [ $FORCE_X86_SIM -gt 0 ] && [ "$PLATFORM_NAME" = "iphonesimulator" ]; then
+    echo "Builds with --ios_multi_cpus=x86_64 since the target is sim and xcodeproj attribute force_x86_sim is True"
     BAZEL_BUILD_OPTIONS+=("--ios_multi_cpus=x86_64")
 fi
 
