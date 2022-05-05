@@ -54,6 +54,7 @@ diff_result=$(diff -r ./tests/ios/xcodeproj/Test-LLDB-Logs-Project.xcodeproj ./t
 expected_diff_result=$(cat ./tests/ios/xcodeproj/fixtures/test_custom_output_path_expected_diff.txt)
 if [[ "$diff_result" != "$expected_diff_result" ]]; then
     echo "The project under custom_output_path differs from the expectation"
+    diff -r ./tests/ios/xcodeproj/Test-LLDB-Logs-Project.xcodeproj ./tests/ios/xcodeproj/custom_output_path/Test-LLDB-Logs-Project.xcodeproj
     exit 1
 fi
 
