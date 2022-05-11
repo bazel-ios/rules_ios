@@ -4,6 +4,7 @@ load("//rules:additional_scheme_info.bzl", "additional_scheme_info")
 xcodeproj(
     name = "Single-Static-Framework-Project",
     testonly = True,
+    additional_files = ["additional_files"],
     additional_scheme_infos = [
         ":ObjcFrameworkSchemeInfo",
     ],
@@ -23,6 +24,13 @@ xcodeproj(
     deps = [
         "//tests/ios/frameworks/objc:ObjcFramework",
         "//tests/ios/frameworks/objc:ObjcFrameworkTests",
+    ],
+)
+
+filegroup(
+    name = "additional_files",
+    srcs = [
+        "test-data/**/*",
     ],
 )
 
