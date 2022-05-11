@@ -1054,7 +1054,7 @@ def _xcodeproj_impl(ctx):
     (xcodeproj_targets_by_name, xcodeproj_schemes_by_name) = _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_transitive_targets)
 
     project_file_groups = [
-        {"path": paths.join(src_dot_dots, f.short_path), "optional": True}
+        paths.join(src_dot_dots, f.short_path)
         for f in ctx.files.additional_files
         if _is_current_project_file(f)
     ]
