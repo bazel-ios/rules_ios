@@ -41,8 +41,8 @@ ios_unit_test(
 
 filegroup(
     name = "additional_files",
-    srcs = [
-        "additional_files/foo.podspec",
-    ],
+    srcs = glob([
+        "additional_files/**/*",
+    ]),
     visibility = ["//visibility:public"],
 )
