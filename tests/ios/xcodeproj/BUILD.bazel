@@ -206,5 +206,6 @@ xcodeproj(
     use_xchammer = True,
     deps = [
         "//tests/ios/app:App",
+        "//tests/ios/frameworks/with-bundle-id:FrameworkWithBundleId",
     ],
 )

@@ -1,0 +1,12 @@
+load("//rules:framework.bzl", "apple_framework")
+
+apple_framework(
+    name = "FrameworkWithBundleId",
+    srcs = [
+        "FrameworkWithBundleId/Foo.h",
+        "FrameworkWithBundleId/Foo.m",
+    ],
+    bundle_id = "com.foo.FrameworkWithBundleId",
+    platforms = {"ios": "10.0"},
+    visibility = ["//visibility:public"],
+)

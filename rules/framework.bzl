@@ -64,7 +64,10 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
         "//conditions:default": None,
     }))
 
+    # We need to put back bundle_id in order to set that attr for 'precompiled_apple_resource_bundle' targets in 'apple_library'
+    kwargs["bundle_id"] = framework_packaging_kwargs.get("bundle_id", None)
     library = apple_library(name = name, **kwargs)
+
     framework_deps = []
     if framework_packaging_kwargs.get("link_dynamic") == True:
         # Setup force loading here - only for direct deps / direct libs
@@ -72,6 +75,7 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
         force_load_direct_deps(name = force_load_name, deps = kwargs.get("deps", []) + library.lib_names, tags = ["manual"])
         framework_deps.append(force_load_name)
     framework_deps += library.lib_names
+
     apple_framework_packaging(
         name = name,
         framework_name = library.namespace,
