@@ -1085,7 +1085,7 @@ def _xcodeproj_impl(ctx):
     ctx.actions.run(
         executable = ctx.executable._xcodegen,
         arguments = ["--quiet", "--no-env", "--spec", xcodegen_jsonfile.path, "--project", project.dirname],
-        inputs = [xcodegen_jsonfile],
+        inputs = [xcodegen_jsonfile] + ctx.files.additional_files,
         outputs = [project],
     )
     install_script = ctx.actions.declare_file(
