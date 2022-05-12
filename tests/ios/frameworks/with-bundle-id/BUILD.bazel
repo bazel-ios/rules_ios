@@ -8,5 +8,8 @@ apple_framework(
     ],
     bundle_id = "com.foo.FrameworkWithBundleId",
     platforms = {"ios": "10.0"},
+    resource_bundles = {
+        "TargetXIB": glob(["TargetXIB/**/*.xib"]),
+    },
     visibility = ["//visibility:public"],
 )
