@@ -24,6 +24,33 @@ _FAKE_BUNDLE_PRODUCT_TYPE_BY_PLATFORM_TYPE = {
     "watchos": apple_product_type.watch2_application,
 }
 
+# Remvoe resources whose parent folders are already in the list. E.g., when both "foo/" and "foo/bar"
+# are in the files list, we should only return "foo/". This de-duplication is needed after this
+# rules-apple PR: https://github.com/bazelbuild/rules_apple/pull/1311. Otherwise 'clonefile' will
+# raise exceptions when both "foo/" and "foo/bar" are copied.
+def _most_common_parent_dirs(bundle_files):
+    all_resources = []
+    for _, _, sources in bundle_files:
+        all_resources.extend(sources.to_list())
+
+    most_common_resources_set = {}
+    prev_file = None
+    for file in sorted(all_resources):
+        if prev_file and _is_child_file(prev_file, file):
+            # prev_file, i.e., some parent directories have already been added, skipped this file
+            continue
+        else:
+            most_common_resources_set[file] = True
+            prev_file = file
+
+    return most_common_resources_set
+
+# Check if 'parent_file' is a parent directory of 'child_file'
+def _is_child_file(parent_file, child_file):
+    # Append '/' to parent_file path, so 'foo' won't be recognized as parent of 'foo1'
+    parent_path = parent_file.path if parent_file.path.endswith("/") else parent_file.path + "/"
+    return child_file.path.startswith(parent_path)
+
 def _precompiled_apple_resource_bundle_impl(ctx):
     bundle_name = ctx.attr.bundle_name or ctx.label.name
 
@@ -125,6 +152,10 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     # TODO: add an attr to allow skipping when there are no resources entirely
     bundle_files = getattr(partial_output, "bundle_files", [])
 
+    # Unless rules-apple changes it behavior as described in PR: https://github.com/bazelbuild/rules_apple/pull/1311
+    # We should not include files whose parent directories are also in the bundle
+    most_common_parent_resources_set = _most_common_parent_dirs(bundle_files)
+
     # `target_location` is a special identifier that tells you in a generic way
     # where the resource should end up. This corresponds to:
     # https://github.com/bazelbuild/rules_apple/blob/d29df97b9652e0442ebf21f1bc0e04921b584f76/apple/internal/processor.bzl#L107-L119
@@ -148,8 +179,10 @@ def _precompiled_apple_resource_bundle_impl(ctx):
             # the need to end up
             fail("Got unexpected target location '{}' for '{}'"
                 .format(target_location, sources_list))
-        input_files.extend(sources_list)
         for source in sources_list:
+            if not most_common_parent_resources_set.get(source):
+                continue
+            input_files.append(source)
             target_path = parent_output_directory
             if not source.is_directory:
                 target_path = paths.join(target_path, source.basename)
