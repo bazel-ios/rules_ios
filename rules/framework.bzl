@@ -88,6 +88,7 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
             "@build_bazel_rules_ios//rules/apple_platform:watchos": "watchos",
             "//conditions:default": "",
         }),
+        testonly = kwargs.get("testonly", False),
         **framework_packaging_kwargs
     )
 

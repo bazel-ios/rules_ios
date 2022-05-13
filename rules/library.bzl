@@ -581,6 +581,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             swiftmodules = import_swiftmodules,
             hdrs = import_headers,
             tags = _MANUAL,
+            testonly = kwargs.get("testonly", False),
             extra_search_paths = vfs_root,
         )
         import_vfsoverlays.append(import_name + "_vfs")
@@ -623,6 +624,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             swiftmodules = import_swiftmodules,
             hdrs = import_headers,
             tags = _MANUAL,
+            testonly = kwargs.get("testonly", False),
             extra_search_paths = vfs_root,
         )
         import_vfsoverlays.append(import_name + "_vfs")
@@ -657,6 +659,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             swiftmodules = import_swiftmodules,
             hdrs = import_headers,
             tags = _MANUAL,
+            testonly = kwargs.get("testonly", False),
         )
         import_vfsoverlays.append(import_name + "_vfs")
 
@@ -741,6 +744,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         private_hdrs = objc_private_hdrs,
         hdrs = objc_hdrs,
         tags = _MANUAL,
+        testonly = kwargs.get("testonly", False),
         deps = deps + private_deps + lib_names + import_vfsoverlays,
     )
 
@@ -877,6 +881,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         private_hdrs = objc_private_hdrs,
         hdrs = objc_hdrs,
         tags = _MANUAL,
+        testonly = kwargs.get("testonly", False),
         deps = deps + private_deps + lib_names + import_vfsoverlays,
         #enable_framework_vfs = enable_framework_vfs
     )
@@ -918,6 +923,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             hdrs = [],
             direct_hdr_providers = [swift_libname],
             tags = _MANUAL,
+            testonly = kwargs.get("testonly", False),
         )
         private_deps.append(swift_doublequote_hmap_name)
         _append_headermap_copts(swift_doublequote_hmap_name, "-iquote", additional_objc_copts, additional_swift_copts, additional_cc_copts)
@@ -930,6 +936,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             hdrs = [],
             direct_hdr_providers = [swift_libname],
             tags = _MANUAL,
+            testonly = kwargs.get("testonly", False),
         )
         private_deps.append(swift_angle_bracket_hmap_name)
         _append_headermap_copts(swift_angle_bracket_hmap_name, "-I", additional_objc_copts, additional_swift_copts, additional_cc_copts)
@@ -944,6 +951,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             copts = copts_by_build_setting.cc_copts + cc_copts + additional_cc_copts,
             deps = deps,
             tags = tags_manual,
+            testonly = kwargs.get("testonly", False),
         )
         lib_names.append(cpp_libname)
 
