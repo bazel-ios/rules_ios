@@ -11,6 +11,7 @@ load("//rules/framework:vfs_overlay.bzl", "framework_vfs_overlay", VFS_OVERLAY_F
 load("//rules/library:resources.bzl", "wrap_resources_in_filegroup")
 load("//rules/library:xcconfig.bzl", "copts_by_build_setting_with_defaults")
 load("//rules:import_middleman.bzl", "import_middleman")
+load("//rules:utils.bzl", "bundle_identifier_for_bundle")
 
 PrivateHeadersInfo = provider(
     doc = "Propagates private headers, so they can be accessed if necessary",
@@ -175,14 +176,14 @@ FOUNDATION_EXPORT const unsigned char {module_name}VersionString[];
     )
     return destination
 
-def _generate_resource_bundles(name, library_tools, module_name, resource_bundles, platforms, bundle_id, **kwargs):
+def _generate_resource_bundles(name, library_tools, module_name, resource_bundles, platforms, **kwargs):
     bundle_target_names = []
     for bundle_name in resource_bundles:
         target_name = "%s-%s" % (name, bundle_name)
         precompiled_apple_resource_bundle(
             name = target_name,
             bundle_name = bundle_name,
-            bundle_id = "{}.{}".format(bundle_id, bundle_name) if bundle_id else None,
+            bundle_id = bundle_identifier_for_bundle(bundle_name),
             resources = [
                 library_tools["wrap_resources_in_filegroup"](name = target_name + "_resources", srcs = resource_bundles[bundle_name]),
             ],
@@ -698,7 +699,6 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         resource_bundles = kwargs.pop("resource_bundles", {}),
         module_name = module_name,
         platforms = platforms,
-        bundle_id = kwargs.pop("bundle_id", None),
         **kwargs
     )
     deps += resource_bundles
