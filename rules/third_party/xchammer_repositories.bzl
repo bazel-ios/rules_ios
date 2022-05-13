@@ -188,7 +188,7 @@ def xchammer_dependencies():
     namespaced_new_git_repository(
         name = "Quick",
         remote = "https://github.com/Quick/Quick.git",
-        commit = "cd6dfb86f496fcd96ce0bc6da962cd936bf41903",
+        commit = "20b340da40ccd2bf62ea1e803e6b8f7933f7515e",
         build_file_content = namespaced_build_file([
             namespaced_swift_library(
                 name = "Quick",
