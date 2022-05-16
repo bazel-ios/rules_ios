@@ -35,21 +35,33 @@ xcode_version = sys.argv[2]
 xcspec_bzl_path = sys.argv[3]
 eval_bzl_path = sys.argv[4]
 xcode = os.path.dirname(os.path.dirname(developer_dir))
-xcode3plusgins = os.path.join(
-    xcode, 'Contents/PlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer/Library/Xcode/Plug-ins')
 
-xcspecs = [
-    os.path.join(xcode3plusgins,
-                 "CoreBuildTasks.xcplugin/Contents/Resources/Ld.xcspec"),
-    os.path.join(
-        xcode3plusgins, "Clang LLVM 1.0.xcplugin/Contents/Resources/Clang LLVM 1.0.xcspec"),
-    os.path.join(xcode3plusgins,
-                 "Core Data.xcplugin/Contents/Resources/Core Data.xcspec"),
-    os.path.join(
-        xcode3plusgins, "IBCompilerPlugin.xcplugin/Contents/Resources/IBCompiler.xcspec"),
-    os.path.join(xcode3plusgins,
-                 "XCLanguageSupport.xcplugin/Contents/Resources/Swift.xcspec"),
-]
+if int(xcode_version.split('.')[0]) >= 13:
+    xcb_specifications = os.path.join(
+        xcode, 'Contents/PlugIns/XCBSpecifications.ideplugin/Contents/Resources')
+    xcspecs = [
+        os.path.join(xcb_specifications, 'Ld.xcspec'),
+        os.path.join(xcb_specifications, 'Clang LLVM 1.0.xcspec'),
+        os.path.join(xcb_specifications, 'Core Data.xcspec'),
+        os.path.join(xcb_specifications, 'IBCompiler.xcspec'),
+        os.path.join(xcb_specifications, 'Swift.xcspec'),
+    ]
+else:
+    xcode3plugins = os.path.join(
+        xcode, 'Contents/PlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer/Library/Xcode/Plug-ins')
+
+    xcspecs = [
+        os.path.join(xcode3plugins,
+                     "CoreBuildTasks.xcplugin/Contents/Resources/Ld.xcspec"),
+        os.path.join(
+            xcode3plugins, "Clang LLVM 1.0.xcplugin/Contents/Resources/Clang LLVM 1.0.xcspec"),
+        os.path.join(xcode3plugins,
+                     "Core Data.xcplugin/Contents/Resources/Core Data.xcspec"),
+        os.path.join(
+            xcode3plugins, "IBCompilerPlugin.xcplugin/Contents/Resources/IBCompiler.xcspec"),
+        os.path.join(xcode3plugins,
+                     "XCLanguageSupport.xcplugin/Contents/Resources/Swift.xcspec"),
+    ]
 
 a = []
 for path in xcspecs:
