@@ -262,13 +262,13 @@ def xchammer_dependencies():
     namespaced_git_repository(
         name = "Tulsi",
         remote = "https://github.com/bazel-ios/tulsi.git",
-        shallow_since = "1651700898 -0700",
         # These tags are based on the bazel-version - see XCHammer docs for
         # convention. It cherry-picks all changes to HEAD at a give bazel
         # release, then adds changes to this tag for the Bazel release in
         # question
         # Persisted on github tag=rules_ios-5.0.0,
         commit = "7ed9e55e64a690976d7f8b78b754d9a6c66a3956",
+        shallow_since = "1652719069 -0700",
         patch_cmds = [
             """
          sed -i '' 's/\\:__subpackages__/visibility\\:public/g' src/TulsiGenerator/BUILD
