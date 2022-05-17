@@ -10,3 +10,4 @@ user.bazelrc
 # XCHammer specific things to ignore for now
 external
 *-XCHammer*.xcodeproj
+xchammer-includes

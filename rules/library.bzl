@@ -11,6 +11,7 @@ load("//rules/framework:vfs_overlay.bzl", "framework_vfs_overlay", VFS_OVERLAY_F
 load("//rules/library:resources.bzl", "wrap_resources_in_filegroup")
 load("//rules/library:xcconfig.bzl", "copts_by_build_setting_with_defaults")
 load("//rules:import_middleman.bzl", "import_middleman")
+load("//rules:utils.bzl", "bundle_identifier_for_bundle")
 
 PrivateHeadersInfo = provider(
     doc = "Propagates private headers, so they can be accessed if necessary",
@@ -182,6 +183,7 @@ def _generate_resource_bundles(name, library_tools, module_name, resource_bundle
         precompiled_apple_resource_bundle(
             name = target_name,
             bundle_name = bundle_name,
+            bundle_id = bundle_identifier_for_bundle(bundle_name),
             resources = [
                 library_tools["wrap_resources_in_filegroup"](name = target_name + "_resources", srcs = resource_bundles[bundle_name]),
             ],

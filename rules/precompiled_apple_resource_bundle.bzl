@@ -17,6 +17,7 @@ load("@build_bazel_rules_apple//apple/internal:resource_actions.bzl", "resource_
 load("@build_bazel_rules_apple//apple/internal:rule_factory.bzl", "rule_factory")
 load("//rules:transition_support.bzl", "transition_support")
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleResourceBundleInfo", "AppleResourceInfo", "AppleSupportToolchainInfo")
+load("//rules:utils.bzl", "bundle_identifier_for_bundle")
 
 _FAKE_BUNDLE_PRODUCT_TYPE_BY_PLATFORM_TYPE = {
     "ios": apple_product_type.application,
@@ -103,7 +104,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     )
 
     resource_actions.merge_root_infoplists(
-        bundle_id = ctx.attr.bundle_id or "com.cocoapods." + bundle_name,
+        bundle_id = ctx.attr.bundle_id or bundle_identifier_for_bundle(bundle_name),
         input_plists = ctx.files.infoplists,
         output_pkginfo = None,
         output_plist = output_plist,
