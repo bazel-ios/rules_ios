@@ -897,19 +897,10 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             srcs = swift_sources,
             # Note: by default it used a vfs but not the entire virtual framwork
             # feature.
-            copts = copts_by_build_setting.swift_copts + swift_copts + select({
-                "@build_bazel_rules_ios//:virtualize_frameworks": framework_vfs_swift_copts,
-                "//conditions:default": framework_vfs_swift_copts if enable_framework_vfs else [],
-            }) + additional_swift_copts,
-            deps = deps + private_deps + lib_names + select({
-                "@build_bazel_rules_ios//:virtualize_frameworks": [framework_vfs_overlay_name_swift],
-                "//conditions:default": [framework_vfs_overlay_name_swift] if enable_framework_vfs else [],
-            }),
+            copts = copts_by_build_setting.swift_copts + swift_copts + framework_vfs_swift_copts + additional_swift_copts,
+            deps = deps + private_deps + lib_names + [framework_vfs_overlay_name_swift],
             swiftc_inputs = swiftc_inputs,
-            features = ["swift.no_generated_module_map"] + select({
-                "@build_bazel_rules_ios//:virtualize_frameworks": ["swift.vfsoverlay"],
-                "//conditions:default": [],
-            }),
+            features = ["swift.no_generated_module_map"] + ["swift.vfsoverlay"],
             data = [module_data],
             tags = tags_manual,
             defines = defines + swift_defines,

@@ -9,7 +9,6 @@ load("@build_bazel_rules_apple//apple:providers.bzl", "AppleFrameworkImportInfo"
 load("@build_bazel_rules_swift//swift/internal:providers.bzl", "SwiftUsageInfo")
 load("//rules/framework:vfs_overlay.bzl", "make_vfsoverlay")
 load("//rules:providers.bzl", "FrameworkInfo")
-load("//rules:features.bzl", "feature_names")
 
 def apple_dynamic_framework_import(name, **kwargs):
     """Patches an apple_dynamic_framework_import target based on the problems reported in https://github.com/bazel-ios/rules_ios/issues/55
@@ -67,10 +66,6 @@ def _find_imported_framework_name(outputs):
     return None
 
 def _get_framework_info_providers(ctx, old_cc_info, old_objc_provider):
-    virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
-    if not virtualize_frameworks:
-        return []
-
     hdrs_list = old_cc_info.compilation_context.headers.to_list()
     hdrs = [h.path for h in hdrs_list]
 
