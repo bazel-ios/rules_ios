@@ -6,7 +6,8 @@ class BazelOutputLine
   attr_reader :text
 
   def initialize(line)
-    @text = line
+    # Otherwise we might get `invalid byte sequence in US-ASCII (ArgumentError)` during matching with regex
+    @text = line.encode("UTF-8", invalid: :replace, undef: :replace)
   end
 
   # Try to create a processed line based on a match rule, or a pass-through
