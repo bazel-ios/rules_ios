@@ -7,35 +7,47 @@
 #import <Foundation/Foundation.h>
 #import <XCTest/XCTest.h>
 
+// returns the WorkspacePath for a test bundle by reading the corresponding info.plist
+// @testBundle a string with the path:
+// e.g. "/Users/some/Library/Developer/Xcode/DerivedData/bazel-project-*/Build/Products/Debug-iphonesimulator/Some.xctest";
+// Note: this code is effectively a noop on other test runners than Xcode's GUI
+static NSURL *getWorkspacePath(NSURL *testBundle)
+{
+    NSArray *components = testBundle.pathComponents;
+    if (components.count < 4) {
+        return nil;
+    }
+    // Get the plist for the .xctest bundle
+    NSArray *plistComponents = [[components subarrayWithRange:NSMakeRange(0, components.count - 4)] arrayByAddingObject:@"info.plist"];
+    NSURL *plistURL = [NSURL fileURLWithPathComponents:plistComponents];
+    NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfURL:plistURL];
+    NSString *workspacePath = dict[@"WorkspacePath"];
+    if (workspacePath == nil || workspacePath.pathComponents.count < 1) {
+        return nil;
+    }
+    NSArray *workspaceComponents = workspacePath.pathComponents;
+    return [NSURL fileURLWithPathComponents:[workspaceComponents subarrayWithRange:NSMakeRange(0, workspaceComponents.count - 1)]];
+}
+
 static NSURL *projectRelativeURLforURL(NSURL *fileURL)
 {
-    // Detect when running _outside_ Xcode e.g. in Bazel's runner. This way, it
-    // retains a execroot path when running outside of it.
     NSString *testBundlePath = [NSProcessInfo processInfo].environment[@"XCTestBundlePath"];
     if (testBundlePath != nil && [testBundlePath hasPrefix:@"/tmp/test_runner_work_dir"]) {
         return fileURL;
     }
-    NSArray *components = [fileURL pathComponents];
-    if (components.count < 7) {
+
+    NSURL *workspaceURL = getWorkspacePath(testBundlePath);
+    if (workspaceURL == nil) {
         return fileURL;
     }
-    // Get WORKSPACE from DO_NOT_BUILD_HERE
-    // https://github.com/bazelbuild/bazel/blob/0537837897ae70de3e13ab53827961bdae50f6dc/src/main/java/com/google/devtools/build/lib/runtime/BlazeWorkspace.java#L304
-    NSArray *doNotBuildHereComponents = [[components subarrayWithRange:NSMakeRange(0, 6)] arrayByAddingObject:@"DO_NOT_BUILD_HERE"];
-    NSURL *doNotBuildHereURL = [NSURL fileURLWithPathComponents:doNotBuildHereComponents];
-    NSError *error;
-    NSString *workspace = [NSString stringWithContentsOfURL:doNotBuildHereURL encoding:NSUTF8StringEncoding error:&error];
-    if (error != nil) {
-        return fileURL;
-    }
-    // Because bazel links the first level directories of the WORKSPACE under
-    // the execroot, just expanding the path will get it to the right
-    // directory.
+    // Inject the workspace path for the bundle if it doesn't already have the
+    // prefix
+    NSString *prefix = workspaceURL.path;
     NSURL *localDevURL = [fileURL URLByResolvingSymlinksInPath];
-    if ([localDevURL.relativePath hasPrefix:workspace]) {
+    if ([localDevURL.relativePath hasPrefix:prefix]) {
         return localDevURL;
     }
-    return fileURL;
+    return [NSURL fileURLWithPathComponents:@[prefix, fileURL.relativeString]];
 }
 
 @interface XCTestAbsoluteSourceLocationsSwizzlingLoader : NSObject
