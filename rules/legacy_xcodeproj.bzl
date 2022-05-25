@@ -455,7 +455,7 @@ source """ + ctx.executable.runscript.path
 xcodeproj_lldbinit = rule(
     implementation = _xcodeproj_lldbinit_impl,
     attrs = {
-        "runscript": attr.label(mandatory = False, executable = True, cfg = "exec", default = "@build_bazel_rules_ios//tools/xcodeproj_shims:lldb-settings"),
+        "runscript": attr.label(mandatory = False, executable = True, cfg = "host", default = "@build_bazel_rules_ios//tools/xcodeproj_shims:lldb-settings"),
         "project": attr.label(mandatory = True, providers = []),
         "out": attr.output(mandatory = True),
         "target_name": attr.string(),
