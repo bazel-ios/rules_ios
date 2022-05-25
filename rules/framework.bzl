@@ -72,6 +72,7 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
         force_load_direct_deps(name = force_load_name, deps = kwargs.get("deps", []) + library.lib_names, tags = ["manual"])
         framework_deps.append(force_load_name)
     framework_deps += library.lib_names
+    platforms = library.platforms if library.platforms else {}
     apple_framework_packaging(
         name = name,
         framework_name = library.namespace,
@@ -80,7 +81,16 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
         transitive_deps = library.transitive_deps,
         vfs = library.import_vfsoverlays,
         deps = framework_deps,
-        platforms = library.platforms,
+        platforms = platforms,
+        # At the time of writing this is still used in the output path
+        # computation
+        minimum_os_version = select({
+            "@build_bazel_rules_ios//rules/apple_platform:ios": platforms.get("ios", ""),
+            "@build_bazel_rules_ios//rules/apple_platform:macos": platforms.get("macos", ""),
+            "@build_bazel_rules_ios//rules/apple_platform:tvos": platforms.get("tvos", ""),
+            "@build_bazel_rules_ios//rules/apple_platform:watchos": platforms.get("watchos", ""),
+            "//conditions:default": "",
+        }),
         platform_type = select({
             "@build_bazel_rules_ios//rules/apple_platform:ios": "ios",
             "@build_bazel_rules_ios//rules/apple_platform:macos": "macos",
