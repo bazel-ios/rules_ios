@@ -193,6 +193,7 @@ def _xcodeproj_aspect_impl(target, ctx):
     deps = []
     deps += getattr(ctx.rule.attr, "deps", [])
     deps += getattr(ctx.rule.attr, "infoplists", [])
+    deps += getattr(ctx.rule.attr, "extensions", [])
     tags = getattr(ctx.rule.attr, "tags", [])
 
     entitlements = getattr(ctx.rule.attr, "entitlements", None)
@@ -250,6 +251,12 @@ def _xcodeproj_aspect_impl(target, ctx):
             if test_host_target:
                 test_host_appname = test_host_target[_TargetInfo].direct_targets[0].name
 
+        # Collect any extension names associated with this bundle. Schemes are then generated that build both.
+        application_extension_names = []
+        application_extensions = getattr(ctx.rule.attr, "extensions", [])
+        if application_extensions:
+            application_extension_names = [extension[AppleBundleInfo].bundle_name for extension in application_extensions]
+
         framework_includes = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "framework_includes"))
         info = struct(
             name = bundle_info.bundle_name,
@@ -269,6 +276,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             platform_type = bundle_info.platform_type,
             minimum_os_version = bundle_info.minimum_os_version,
             test_host_appname = test_host_appname,
+            extension_names = depset(application_extension_names),
             env_vars = env_vars,
             swift_objc_header_path = swift_objc_header_path,
             swift_module_paths = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "swift_module_paths")),
@@ -378,7 +386,7 @@ def _xcodeproj_aspect_impl(target, ctx):
 
 _xcodeproj_aspect = aspect(
     implementation = _xcodeproj_aspect_impl,
-    attr_aspects = ["deps", "actual", "tests", "infoplists", "entitlements", "resources", "test_host"],
+    attr_aspects = ["deps", "actual", "tests", "infoplists", "entitlements", "resources", "test_host", "extensions"],
 )
 
 def _xcodeproj_lldbinit_impl(ctx):
@@ -447,7 +455,7 @@ source """ + ctx.executable.runscript.path
 xcodeproj_lldbinit = rule(
     implementation = _xcodeproj_lldbinit_impl,
     attrs = {
-        "runscript": attr.label(mandatory = False, executable = True, cfg = "host", default = "@build_bazel_rules_ios//tools/xcodeproj_shims:lldb-settings"),
+        "runscript": attr.label(mandatory = False, executable = True, cfg = "exec", default = "@build_bazel_rules_ios//tools/xcodeproj_shims:lldb-settings"),
         "project": attr.label(mandatory = True, providers = []),
         "out": attr.output(mandatory = True),
         "target_name": attr.string(),
@@ -700,6 +708,22 @@ env -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC $BAZEL_BUILD_TARGET_LA
 $BAZEL_INSTALLER
 """
 
+# See https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md#scheme
+# on structure of xcodeproj_schemes_by_name[target_info.name]
+def _create_scheme_for_target(target_name, xcodeproj_schemes_by_name):
+    if target_name in xcodeproj_schemes_by_name:
+        return
+
+    xcodeproj_schemes_by_name[target_name] = {
+        "build": {
+            "parallelizeBuild": False,
+            "buildImplicitDependencies": False,
+            "targets": {
+                target_name: ["run", "test", "profile"],
+            },
+        },
+    }
+
 def _set_target_settings_by_config(ctx, target_settings):
     if len(ctx.attr.target_settings_by_config.keys()) == 0:
         return target_settings
@@ -807,7 +831,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
 
         target_settings["BAZEL_LLDB_INIT_FILE"] = lldbinit_file
 
-        if product_type == "application":
+        if product_type == "application" or product_type == "app-extension":
             target_settings["INFOPLIST_FILE"] = "$BAZEL_STUBS_DIR/Info-stub.plist"
             target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
 
@@ -875,19 +899,15 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
         scheme_action_details["customLLDBInit"] = lldbinit_file
         scheme_action_details["disableMainThreadChecker"] = ctx.attr.disable_main_thread_checker
 
-        # See https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md#scheme
-        # on structure of xcodeproj_schemes_by_name[target_info.name]
-        xcodeproj_schemes_by_name[target_name] = {
-            "build": {
-                "parallelizeBuild": False,
-                "buildImplicitDependencies": False,
-                "targets": {
-                    target_name: ["run", "test", "profile"],
-                },
-            },
-            # By putting under run action, test action will just use them automatically
-            "run": scheme_action_details,
-        }
+        _create_scheme_for_target(target_name, xcodeproj_schemes_by_name)
+
+        # By putting under run action, test action will just use them automatically
+        xcodeproj_schemes_by_name[target_name]["run"] = scheme_action_details
+
+        if target_info.extension_names:
+            for extension in target_info.extension_names.to_list():
+                _create_scheme_for_target(extension, xcodeproj_schemes_by_name)
+                xcodeproj_schemes_by_name[extension]["build"]["targets"][target_name] = ["run", "test", "profile"]
 
         scheme_infos = [target[AdditionalSchemeInfo] for target in ctx.attr.additional_scheme_infos]
         build_target_to_scheme_info = {scheme_info.build_target: scheme_info for scheme_info in scheme_infos}
@@ -1230,15 +1250,15 @@ https://www.rubydoc.info/github/CocoaPods/Xcodeproj/Xcodeproj/Constants
         "infoplist_stub": attr.label(executable = False, default = Label("//rules/test_host_app:Info.plist"), allow_single_file = ["plist"]),
         "_workspace_xcsettings": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:WorkspaceSettings.xcsettings"), allow_single_file = ["xcsettings"]),
         "_workspace_checks": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:IDEWorkspaceChecks.plist"), allow_single_file = ["plist"]),
-        "output_processor": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:output-processor.rb"), cfg = "host", allow_single_file = True),
-        "_xcodegen": attr.label(executable = True, default = Label("@com_github_yonaskolb_xcodegen//:xcodegen"), cfg = "host"),
-        "index_import": attr.label(executable = True, default = Label("@build_bazel_rules_swift_index_import//:index_import"), cfg = "host"),
-        "clang_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:clang-stub"), cfg = "host"),
-        "ld_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:ld-stub"), cfg = "host"),
-        "swiftc_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:swiftc-stub"), cfg = "host"),
-        "print_json_leaf_nodes": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:print_json_leaf_nodes"), cfg = "host"),
-        "installer": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:installer"), cfg = "host"),
-        "build_wrapper": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:build-wrapper"), cfg = "host"),
+        "output_processor": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:output-processor.rb"), cfg = "exec", allow_single_file = True),
+        "_xcodegen": attr.label(executable = True, default = Label("@com_github_yonaskolb_xcodegen//:xcodegen"), cfg = "exec"),
+        "index_import": attr.label(executable = True, default = Label("@build_bazel_rules_swift_index_import//:index_import"), cfg = "exec"),
+        "clang_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:clang-stub"), cfg = "exec"),
+        "ld_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:ld-stub"), cfg = "exec"),
+        "swiftc_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:swiftc-stub"), cfg = "exec"),
+        "print_json_leaf_nodes": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:print_json_leaf_nodes"), cfg = "exec"),
+        "installer": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:installer"), cfg = "exec"),
+        "build_wrapper": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:build-wrapper"), cfg = "exec"),
         "additional_files": attr.label_list(allow_files = True, allow_empty = True, default = [], mandatory = False),
         "additional_prebuild_script": attr.string(default = "", mandatory = False),  # Note this script will run BEFORE Bazel build script
         "additional_bazel_build_options": attr.string_list(default = [], mandatory = False),
