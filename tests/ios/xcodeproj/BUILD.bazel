@@ -75,6 +75,7 @@ xcodeproj(
         "//tests/ios/app:App",
         "//tests/ios/app:FW",
         "//tests/ios/app:FW2",
+        "//tests/ios/extensions:ExampleExtension",
     ],
 )
 
@@ -87,6 +88,7 @@ xcodeproj(
         "//tests/ios/app:App",
         "//tests/ios/app:FW",
         "//tests/ios/app:FW2",
+        "//tests/ios/extensions:ExampleExtension",
     ],
 )
 
@@ -157,6 +159,7 @@ xcodeproj(
         "//tests/ios/app:App",
         "//tests/ios/app:FW",
         "//tests/ios/app:FW2",
+        "//tests/ios/extensions:ExampleExtension",
     ],
 )
 
@@ -206,6 +209,7 @@ xcodeproj(
     use_xchammer = True,
     deps = [
         "//tests/ios/app:App",
+        "//tests/ios/extensions:ExampleExtension",
         "//tests/ios/frameworks/with-bundle-id:FrameworkWithBundleId",
     ],
 )
