@@ -19,7 +19,8 @@ load("@build_bazel_rules_apple//apple/internal:processor.bzl", "processor")
 load("@build_bazel_rules_apple//apple/internal:resource_actions.bzl", "resource_actions")
 load("@build_bazel_rules_apple//apple/internal:resources.bzl", "resources")
 load("@build_bazel_rules_apple//apple/internal:rule_support.bzl", "rule_support")
-load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo", "AppleSupportToolchainInfo", "IosFrameworkBundleInfo")
+load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo", "IosFrameworkBundleInfo")
+load("@build_bazel_rules_apple//apple/internal:apple_toolchains.bzl", "AppleMacToolsToolchainInfo")
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo", "swift_common")
 load(
     "@build_bazel_rules_apple//apple/internal/aspects:resource_aspect.bzl",
@@ -494,7 +495,7 @@ def _merge_root_infoplists(ctx):
     bundle_name = ctx.attr.framework_name
     current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
     platform_type = str(current_apple_platform.platform.platform_type)
-    apple_toolchain_info = ctx.attr._toolchain[AppleSupportToolchainInfo]
+    apple_toolchain_info = ctx.attr._toolchain[AppleMacToolsToolchainInfo]
     rule_descriptor = rule_support.rule_descriptor(ctx)
 
     resource_actions.merge_root_infoplists(
@@ -518,7 +519,6 @@ def _merge_root_infoplists(ctx):
             objc_fragment = None,
             platform_type_string = platform_type,
             uses_swift = False,
-            xcode_path_wrapper = None,
             xcode_version_config = ctx.attr._xcode_config[apple_common.XcodeVersionConfig],
             disabled_features = [],
             features = [],
@@ -545,7 +545,7 @@ def _bundle_dynamic_framework(ctx, avoid_deps):
     Currently, this doesn't include headers or other interface files.
     """
     actions = ctx.actions
-    apple_toolchain_info = ctx.attr._toolchain[AppleSupportToolchainInfo]
+    apple_toolchain_info = ctx.attr._toolchain[AppleMacToolsToolchainInfo]
     bin_root_path = ctx.bin_dir.path
     bundle_id = ctx.attr.bundle_id
     if not bundle_id:
@@ -695,7 +695,7 @@ def _bundle_dynamic_framework(ctx, avoid_deps):
         ),
         partials.resources_partial(
             actions = actions,
-            apple_toolchain_info = apple_toolchain_info,
+            apple_mac_toolchain_info = apple_toolchain_info,
             bundle_extension = bundle_extension,
             bundle_id = bundle_id,
             bundle_name = bundle_name,
@@ -1027,8 +1027,8 @@ the framework as a dependency.""",
             doc = "Needed to allow this rule to have an incoming edge configuration transition.",
         ),
         "_toolchain": attr.label(
-            default = Label("@build_bazel_rules_apple//apple/internal:toolchain_support"),
-            providers = [[AppleSupportToolchainInfo]],
+            default = Label("@build_bazel_rules_apple//apple/internal:mac_tools_toolchain"),
+            providers = [[AppleMacToolsToolchainInfo]],
         ),
         "platform_type": attr.string(
             mandatory = False,

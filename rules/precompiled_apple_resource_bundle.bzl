@@ -16,7 +16,8 @@ load("@build_bazel_rules_apple//apple/internal:resources.bzl", "resources")
 load("@build_bazel_rules_apple//apple/internal:resource_actions.bzl", "resource_actions")
 load("@build_bazel_rules_apple//apple/internal:rule_factory.bzl", "rule_factory")
 load("//rules:transition_support.bzl", "transition_support")
-load("@build_bazel_rules_apple//apple:providers.bzl", "AppleResourceBundleInfo", "AppleResourceInfo", "AppleSupportToolchainInfo")
+load("@build_bazel_rules_apple//apple:providers.bzl", "AppleResourceBundleInfo", "AppleResourceInfo")
+load("@build_bazel_rules_apple//apple/internal:apple_toolchains.bzl", "AppleMacToolsToolchainInfo")
 load("//rules:utils.bzl", "bundle_identifier_for_bundle")
 
 _FAKE_BUNDLE_PRODUCT_TYPE_BY_PLATFORM_TYPE = {
@@ -64,7 +65,6 @@ def _precompiled_apple_resource_bundle_impl(ctx):
             objc_fragment = None,
             platform_type_string = platform_type,
             uses_swift = False,
-            xcode_path_wrapper = None,
             xcode_version_config = ctx.attr._xcode_config[apple_common.XcodeVersionConfig],
             disabled_features = [],
             features = [],
@@ -79,10 +79,10 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         version = None,
     )
 
-    apple_toolchain_info = ctx.attr._toolchain[AppleSupportToolchainInfo]
+    apple_toolchain_info = ctx.attr._toolchain[AppleMacToolsToolchainInfo]
     partial_output = partial.call(
         partials.resources_partial(
-            apple_toolchain_info = apple_toolchain_info,
+            apple_mac_toolchain_info = apple_toolchain_info,
             resource_deps = ctx.attr.resources,
             top_level_infoplists = resources.collect(
                 attr = ctx.attr,
@@ -271,8 +271,8 @@ the bundle as a dependency.""",
             doc = "Needed to allow this rule to have an incoming edge configuration transition.",
         ),
         _toolchain = attr.label(
-            default = Label("@build_bazel_rules_apple//apple/internal:toolchain_support"),
-            providers = [[AppleSupportToolchainInfo]],
+            default = Label("@build_bazel_rules_apple//apple/internal:mac_tools_toolchain"),
+            providers = [[AppleMacToolsToolchainInfo]],
         ),
     ),
 )
