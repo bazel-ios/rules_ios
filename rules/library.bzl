@@ -242,7 +242,7 @@ def _canonicalize_swift_version(swift_version):
 def _xcframework_build_type(*, linkage, packaging):
     return (linkage, packaging)
 
-def _xcframework_slice(*, xcframework_name, identifier, platform, platform_variant, supported_archs, build_type, path):
+def _xcframework_slice(*, xcframework_name, identifier, platform, platform_variant, supported_archs, build_type, path, dsym_imports = []):
     linkage, packaging = _xcframework_build_type(**build_type)
     resolved_target_name = "{}-{}".format(xcframework_name, identifier)
     resolved_target_name_vfs_overlay = resolved_target_name + "_vfs"
@@ -254,6 +254,7 @@ def _xcframework_slice(*, xcframework_name, identifier, platform, platform_varia
                 exclude = ["**/.DS_Store"],
             ),
             deps = [],
+            dsym_imports = dsym_imports,
             tags = _MANUAL,
         )
     elif (linkage, packaging) == ("static", "framework"):
