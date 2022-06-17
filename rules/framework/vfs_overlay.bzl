@@ -69,15 +69,17 @@ def _build_subtrees(paths, vfs_prefix):
                 break
 
             # Lookup a value for the current subdirs, otherwise append
-            next_subdirs = curr_subdirs.dict.get(part, None)
+            if curr_subdirs:
+                next_subdirs = curr_subdirs.dict.get(part, None)
+            else:
+                next_subdirs = None
             if not next_subdirs:
                 next_subdirs_json = {"contents": [], "type": "directory", "name": part}
                 next_subdirs = struct(dict = {}, json = next_subdirs_json)
 
                 curr_subdirs.dict[part] = next_subdirs
                 curr_subdirs.json["contents"].append(next_subdirs_json)
-
-            curr_subdirs = next_subdirs
+                curr_subdirs = next_subdirs
             idx += 1
     return subdirs_json
 
