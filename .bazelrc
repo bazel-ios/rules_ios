@@ -19,6 +19,7 @@ build --compilation_mode=dbg
 
 # Use 'worker' strategy for swift compilation
 build --strategy=SwiftCompile=worker
+build --experimental_worker_allow_json_protocol
 
 # This flips enable_global_index_store - see docs/index_while_building.md for a
 # detailed summary
@@ -35,12 +36,12 @@ build --test_env=PATH=/usr/bin:/bin:/usr/sbin:/sbin
 # auto-configured on an ARM64 host but is a flag for the moment. Example usage:
 
 # Setup this config to build x86_64 as arm64 builds with ( --ios_multi_cpus=x86_64 )
-common:bazel4_arm64_simulator_arm64_host --features apple.arm64_simulator_use_device_deps 
+common:bazel4_arm64_simulator_arm64_host --features apple.arm64_simulator_use_device_deps
 common:bazel4_arm64_simulator_arm64_host --features bazel4.override_host_cpu_arm64
 common:bazel4_arm64_simulator_arm64_host --features bazel4.override_simulator_cpu_arm64
 
-# Similar to above but doesn't override the host CPU 
-common:bazel4_arm64_simulator_x86_64_host --features apple.arm64_simulator_use_device_deps 
+# Similar to above but doesn't override the host CPU
+common:bazel4_arm64_simulator_x86_64_host --features apple.arm64_simulator_use_device_deps
 common:bazel4_arm64_simulator_x86_64_host --features bazel4.override_simulator_cpu_arm64
 
 # Broken on Intel + Bazel 5 so turnoff
