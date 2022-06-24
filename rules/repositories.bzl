@@ -102,7 +102,7 @@ native_binary(
         name = "arm64-to-sim",
         remote = "https://github.com/bogo/arm64-to-sim.git",
         commit = "25599a28689fa42679f23eb0ff031ebe57d3bb9b",
-        shallow_since = "1636567136 -0500",
+        shallow_since = "1627075944 -0700",
         build_file_content = """
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
 
@@ -120,7 +120,7 @@ swift_binary(
             remote = "https://github.com/bazel-ios/xchammer.git",
             # XCHammer dev branch: bazel-ios/rules-ios-xchammer
             commit = "ec34d214586cb81c7a494aa8232c0382b00c8de3",
-            shallow_since = "1652822709 -0700",
+            shallow_since = "1653678531 -0700",
         )
     xchammer_dependencies()
 
