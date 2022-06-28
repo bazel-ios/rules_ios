@@ -1,0 +1,571 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.6 (swiftlang-5.6.0.323.62 clang-1316.0.20.8)
+// swift-module-flags: -target arm64-apple-ios11.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Osize -module-name LinkKit
+import AuthenticationServices
+import Foundation
+@_exported import LinkKit
+import SafariServices
+import Swift
+import UIKit
+import WebKit
+import _Concurrency
+import os
+extension Foundation.UUID {
+  public var linkuuidString: Swift.String {
+    get
+  }
+}
+public struct Plaid {
+  public enum CreateError : Swift.Error {
+    case configurationError(LinkKit.ConfigurationError)
+  }
+  public static func create(_ linkPublicKeyConfiguration: LinkKit.LinkPublicKeyConfiguration) -> Swift.Result<LinkKit.Handler, LinkKit.Plaid.CreateError>
+  public static func create(_ linkTokenConfiguration: LinkKit.LinkTokenConfiguration) -> Swift.Result<LinkKit.Handler, LinkKit.Plaid.CreateError>
+  public static let version: Swift.String
+}
+@available(*, deprecated, message: "HandlerContinueError is deprecated, use Handler.continue(from:) instead of Handler.continueFrom(redirectUri:)")
+public enum HandlerContinueError : Swift.Error {
+  case invalidRedirect(Swift.String)
+  case `internal`
+}
+public protocol Handler {
+  func open(presentUsing method: LinkKit.PresentationMethod)
+  @available(*, deprecated, message: "open with options is deprecated")
+  func open(presentUsing method: LinkKit.PresentationMethod, _ options: LinkKit.OpenOptions)
+  @available(*, deprecated, message: "`continueFrom(redirectUri:) -> HandlerContinueError?` is deprecated. Use `continue(from:) -> Void`")
+  func continueFrom(redirectUri: Foundation.URL) -> LinkKit.HandlerContinueError?
+  func `continue`(from redirectUri: Foundation.URL)
+}
+public struct LinkTokenConfiguration {
+  public let token: Swift.String
+  public var onSuccess: LinkKit.OnSuccessHandler
+  public var onExit: (LinkKit.LinkExit) -> Swift.Void
+  public var onEvent: (LinkKit.LinkEvent) -> Swift.Void
+  public var noLoadingState: Swift.Bool
+  public init(token: Swift.String, onSuccess: @escaping LinkKit.OnSuccessHandler)
+}
+public struct OAuthNonceConfiguration {
+  public let nonce: LinkKit.OAuthNonce
+  public let redirectUri: Foundation.URL
+  public init(nonce: Swift.String, redirectUri: Foundation.URL)
+}
+public struct LinkPublicKeyConfiguration {
+  public enum Token {
+    @available(*, deprecated, message: "publicKey is deprecated in favor of link-token, for details see https://plaid.com/docs/link-token-migration-guide/")
+    case payment(LinkKit.PaymentToken, LinkKit.PublicKey)
+    @available(*, deprecated, message: "publicToken is deprecated in favor of link-token, for details see https://plaid.com/docs/link-token-migration-guide/")
+    case depositSwitchToken(LinkKit.DepositSwitchToken, LinkKit.PublicKey)
+    @available(*, deprecated, message: "publicKey is deprecated in favor of link-token, for details see https://plaid.com/docs/link-token-migration-guide/")
+    case publicKey(LinkKit.PublicKey)
+    @available(*, deprecated, message: "publicToken is deprecated in favor of link-token, for details see https://plaid.com/docs/link-token-migration-guide/")
+    case publicToken(LinkKit.PublicToken, LinkKit.PublicKey)
+  }
+  public var clientName: Swift.String
+  public var environment: LinkKit.Environment
+  public var products: Swift.Set<LinkKit.Product>
+  public var language: LinkKit.Language
+  public var countryCodes: [LinkKit.CountryCode]
+  public var token: LinkKit.LinkPublicKeyConfiguration.Token
+  public var onSuccess: LinkKit.OnSuccessHandler
+  public var onExit: (LinkKit.LinkExit) -> Swift.Void
+  public var onEvent: (LinkKit.LinkEvent) -> Swift.Void
+  public var webhook: Foundation.URL?
+  public var userLegalName: Swift.String?
+  public var userEmailAddress: Swift.String?
+  public var userPhoneNumber: Swift.String?
+  public var linkCustomizationName: Swift.String?
+  public var accountSubtypes: [LinkKit.AccountSubtype]
+  public var oauthConfiguration: LinkKit.OAuthNonceConfiguration?
+  public init(clientName: Swift.String, environment: LinkKit.Environment, products: Swift.Set<LinkKit.Product>, language: LinkKit.Language, token: LinkKit.LinkPublicKeyConfiguration.Token, countryCodes: [LinkKit.CountryCode], onSuccess: @escaping LinkKit.OnSuccessHandler)
+}
+public typealias PublicKey = Swift.String
+public typealias PublicToken = Swift.String
+public typealias PaymentToken = Swift.String
+public typealias DepositSwitchToken = Swift.String
+public typealias Language = Swift.String
+public typealias CountryCode = Swift.String
+public typealias OAuthNonce = Swift.String
+public typealias PresentationHandler = (UIKit.UIViewController) -> Swift.Void
+public typealias DismissalHandler = (UIKit.UIViewController) -> Swift.Void
+public typealias OnSuccessHandler = (LinkKit.LinkSuccess) -> Swift.Void
+public typealias OnExitHandler = (LinkKit.LinkExit) -> Swift.Void
+public typealias OnEventHandler = (LinkKit.LinkEvent) -> Swift.Void
+public typealias OpenOptions = [Swift.String : Swift.String]
+public typealias RawJSONMetadata = Swift.String
+public typealias InstitutionID = Swift.String
+public typealias AccountID = Swift.String
+public typealias AccountMask = Swift.String
+public enum AccountSubtype {
+  case unknown(type: Swift.String, subtype: Swift.String)
+  case other(LinkKit.AccountSubtype.Other)
+  public enum Other {
+    case all
+    case other
+    case unknown(Swift.String)
+  }
+  case credit(LinkKit.AccountSubtype.Credit)
+  public enum Credit {
+    case all
+    case creditCard
+    case paypal
+    case unknown(Swift.String)
+  }
+  case loan(LinkKit.AccountSubtype.Loan)
+  public enum Loan {
+    case all
+    case auto
+    case business
+    case commercial
+    case construction
+    case consumer
+    case homeEquity
+    case lineOfCredit
+    case loan
+    case mortgage
+    case overdraft
+    case student
+    case unknown(Swift.String)
+  }
+  case depository(LinkKit.AccountSubtype.Depository)
+  public enum Depository {
+    case all
+    case cashManagement
+    case cd
+    case checking
+    case ebt
+    case hsa
+    case moneyMarket
+    case paypal
+    case prepaid
+    case savings
+    case unknown(Swift.String)
+  }
+  case investment(LinkKit.AccountSubtype.Investment)
+  public enum Investment {
+    case all
+    case brokerage
+    case cashIsa
+    case educationSavingsAccount
+    case fixedAnnuity
+    case gic
+    case healthReimbursementArrangement
+    case hsa
+    case investment401a
+    case investment401k
+    case investment403B
+    case investment457b
+    case investment529
+    case ira
+    case isa
+    case keogh
+    case lif
+    case lira
+    case lrif
+    case lrsp
+    case mutualFund
+    case nonTaxableBrokerageAccount
+    case pension
+    case plan
+    case prif
+    case profitSharingPlan
+    case rdsp
+    case resp
+    case retirement
+    case rlif
+    case roth
+    case roth401k
+    case rrif
+    case rrsp
+    case sarsep
+    case sepIra
+    case simpleIra
+    case sipp
+    case stockPlan
+    case tfsa
+    case thriftSavingsPlan
+    case trust
+    case ugma
+    case unknown(Swift.String)
+    case utma
+    case variableAnnuity
+  }
+}
+public struct LinkSuccess {
+  public var publicToken: Swift.String
+  public var metadata: LinkKit.SuccessMetadata
+}
+public struct LinkExit {
+  public var error: LinkKit.ExitError?
+  public var metadata: LinkKit.ExitMetadata
+}
+public struct LinkEvent {
+  public var eventName: LinkKit.EventName
+  public var metadata: LinkKit.EventMetadata
+}
+public enum ConfigurationError : Swift.Error {
+  case malformedClientID(message: Swift.String)
+  case missingAuthorization(message: Swift.String)
+  case noProduct(message: Swift.String)
+  case invalidOptionValue(message: Swift.String)
+  case invalidOptionCombination(message: Swift.String)
+  case invalidToken(message: Swift.String)
+}
+public enum Environment : Swift.CustomStringConvertible {
+  case production
+  case development
+  case sandbox
+  public var description: Swift.String {
+    get
+  }
+  public static func == (a: LinkKit.Environment, b: LinkKit.Environment) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum Product : Swift.CustomStringConvertible, Swift.CaseIterable {
+  case assets
+  case auth
+  case depositSwitch
+  case identity
+  case income
+  case investments
+  case liabilities
+  case liabilitiesReport
+  case paymentInitiation
+  case transactions
+  public var description: Swift.String {
+    get
+  }
+  public static func == (a: LinkKit.Product, b: LinkKit.Product) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public typealias AllCases = [LinkKit.Product]
+  public static var allCases: [LinkKit.Product] {
+    get
+  }
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum VerificationStatus : Swift.CustomStringConvertible {
+  case pendingAutomaticVerification
+  case pendingManualVerification
+  case manuallyVerified
+  case unknown(Swift.String)
+  public var description: Swift.String {
+    get
+  }
+}
+public struct Account {
+  public let id: LinkKit.AccountID
+  public let name: Swift.String
+  public let mask: LinkKit.AccountMask?
+  public let subtype: LinkKit.AccountSubtype
+  public let verificationStatus: LinkKit.VerificationStatus?
+}
+public struct SuccessMetadata {
+  public var institution: LinkKit.Institution
+  public var accounts: [LinkKit.Account]
+  public var linkSessionID: Swift.String
+  public var metadataJSON: LinkKit.RawJSONMetadata?
+}
+public enum ExitStatus : Swift.CustomStringConvertible {
+  case requiresQuestions
+  case requiresSelections
+  case requiresCode
+  case chooseDevice
+  case requiresCredentials
+  case institutionNotFound
+  case requiresAccountSelection
+  case unknown(Swift.String)
+  public var description: Swift.String {
+    get
+  }
+}
+public struct ExitError : Swift.Error {
+  public var errorCode: LinkKit.ExitErrorCode
+  public var errorMessage: Swift.String
+  public var displayMessage: Swift.String?
+  public var errorJSON: LinkKit.RawJSONMetadata?
+}
+public struct Institution {
+  public var id: LinkKit.InstitutionID
+  public var name: Swift.String
+}
+public struct ExitMetadata {
+  public var status: LinkKit.ExitStatus?
+  public var institution: LinkKit.Institution?
+  public var linkSessionID: Swift.String?
+  public var requestID: Swift.String?
+  public var metadataJSON: LinkKit.RawJSONMetadata?
+}
+public enum EventName : Swift.CustomStringConvertible {
+  case bankIncomeInsightsCompleted
+  case closeOAuth
+  case error
+  case exit
+  case failOAuth
+  case handoff
+  case identityVerificationStartStep
+  case identityVerificationPassStep
+  case identityVerificationFailStep
+  case identityVerificationPendingReviewStep
+  case identityVerificationCreateSession
+  case identityVerificationResumeSession
+  case identityVerificationPassSession
+  case identityVerificationFailSession
+  case identityVerificationOpenUI
+  case identityVerificationResumeUI
+  case identityVerificationCloseUI
+  case matchedSelectInstitution
+  case matchedSelectVerifyMethod
+  case open
+  case openMyPlaid
+  case openOAuth
+  case searchInstitution
+  case selectDegradedInstitution
+  case selectDownInstitution
+  case selectInstitution
+  case submitCredentials
+  case submitMFA
+  case transitionView
+  case unknown(Swift.String)
+  public var description: Swift.String {
+    get
+  }
+}
+public enum ViewName : Swift.CustomStringConvertible {
+  case acceptTOS
+  case connected
+  case consent
+  case credential
+  case documentaryVerification
+  case error
+  case exit
+  case kycCheck
+  case loading
+  case matchedConsent
+  case matchedCredential
+  case matchedMFA
+  case mfa
+  case numbers
+  case oauth
+  case recaptcha
+  case riskCheck
+  case screening
+  case selectAccount
+  case selectInstitution
+  case selfieCheck
+  case submitDocuments
+  case submitDocumentsSuccess
+  case submitDocumentsError
+  case uploadDocuments
+  case verifySMS
+  case unknown(Swift.String)
+  public var description: Swift.String {
+    get
+  }
+}
+public struct EventMetadata {
+  public var errorCode: LinkKit.ExitErrorCode?
+  public var errorMessage: Swift.String?
+  public var exitStatus: LinkKit.ExitStatus?
+  public var institutionID: LinkKit.InstitutionID?
+  public var institutionName: Swift.String?
+  public var institutionSearchQuery: Swift.String?
+  public var linkSessionID: Swift.String
+  public var mfaType: LinkKit.MFAType?
+  public var requestID: Swift.String?
+  public var timestamp: Foundation.Date
+  public var viewName: LinkKit.ViewName?
+  public var metadataJSON: LinkKit.RawJSONMetadata?
+}
+public enum MFAType : Swift.CustomStringConvertible {
+  case code
+  case device
+  case questions
+  case selections
+  public var description: Swift.String {
+    get
+  }
+  public static func == (a: LinkKit.MFAType, b: LinkKit.MFAType) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum PresentationMethod {
+  case viewController(UIKit.UIViewController)
+  case custom(LinkKit.PresentationHandler, _: LinkKit.DismissalHandler = { $0.presentingViewController?.dismiss(animated: true, completion: nil) })
+}
+public enum ExitErrorCode {
+  case apiError(LinkKit.ApiErrorCode)
+  case authError(LinkKit.AuthErrorCode)
+  case assetReportError(LinkKit.AssetReportErrorCode)
+  case `internal`(Swift.String)
+  case institutionError(LinkKit.InstitutionErrorCode)
+  case itemError(LinkKit.ItemErrorCode)
+  case invalidInput(LinkKit.InvalidInputErrorCode)
+  case invalidRequest(LinkKit.InvalidRequestErrorCode)
+  case rateLimitExceeded(LinkKit.RateLimitErrorCode)
+  case unknown(type: Swift.String, code: Swift.String)
+  public var description: Swift.String {
+    get
+  }
+}
+public enum InvalidRequestErrorCode : Swift.Error, Swift.CustomStringConvertible {
+  case missingFields
+  case unknownFields
+  case invalidField
+  case invalidBody
+  case invalidAddress
+  case notFound
+  case sandboxOnly
+  case unknown(Swift.String)
+  public var description: Swift.String {
+    get
+  }
+}
+public enum InvalidInputErrorCode : Swift.Error, Swift.CustomStringConvertible {
+  case invalidApiKeys
+  case unauthorizedEnvironment
+  case invalidAccessToken
+  case invalidPublicToken
+  case invalidProduct
+  case invalidAccountId
+  case invalidInstitution
+  case tooManyVerificationAttempts
+  case unknown(Swift.String)
+  public var description: Swift.String {
+    get
+  }
+}
+public enum RateLimitErrorCode : Swift.Error, Swift.CustomStringConvertible {
+  case accountsLimit
+  case additionLimit
+  case authLimit
+  case identityLimit
+  case incomeLimit
+  case itemGetLimit
+  case rateLimit
+  case transactionsLimit
+  case unknown(Swift.String)
+  public var description: Swift.String {
+    get
+  }
+}
+public enum ApiErrorCode : Swift.Error, Swift.CustomStringConvertible {
+  case internalServerError
+  case plannedMaintenance
+  case unknown(Swift.String)
+  public var description: Swift.String {
+    get
+  }
+}
+public enum ItemErrorCode : Swift.Error, Swift.CustomStringConvertible {
+  case insufficientCredentials
+  case invalidCredentials
+  case invalidMfa
+  case invalidSendMethod
+  case invalidUpdatedUsername
+  case itemLocked
+  case itemLoginRequired
+  case itemNoError
+  case itemNotSupported
+  case incorrectDepositAmounts
+  case userSetupRequired
+  case mfaNotSupported
+  case noAccounts
+  case noAuthAccounts
+  case noInvestmentAccounts
+  case noLiabilityAccounts
+  case productNotReady
+  case productsNotSupported
+  case instantMatchFailed
+  case unknown(Swift.String)
+  public var description: Swift.String {
+    get
+  }
+}
+public enum AuthErrorCode : Swift.Error, Swift.CustomStringConvertible {
+  case productNotReady
+  case verificationExpired
+  case unknown(Swift.String)
+  public var description: Swift.String {
+    get
+  }
+}
+public enum AssetReportErrorCode : Swift.Error, Swift.CustomStringConvertible {
+  case productNotEnabled
+  case dataUnavailable
+  case productNotReady
+  case assetReportGenerationFailed
+  case invalidParent
+  case insightsNotEnabled
+  case insightsPreviouslyNotEnabled
+  case unknown(Swift.String)
+  public var description: Swift.String {
+    get
+  }
+}
+public enum InstitutionErrorCode : Swift.Error, Swift.CustomStringConvertible {
+  case institutionDown
+  case institutionNotResponding
+  case institutionNotAvailable
+  case institutionNoLongerSupported
+  case unknown(Swift.String)
+  public var description: Swift.String {
+    get
+  }
+}
+@_inheritsConvenienceInitializers @objc public class PLKPlaid : ObjectiveC.NSObject {
+  @objc public static func createWithLinkTokenConfiguration(_ linkTokenConfiguration: LinkKit.PLKLinkTokenConfiguration, error: Foundation.NSErrorPointer) -> LinkKit.PLKHandler?
+  @objc public static func createWithLinkPublicKeyConfiguration(_ linkPublicKeyConfiguration: LinkKit.PLKLinkPublicKeyConfiguration, error: Foundation.NSErrorPointer) -> LinkKit.PLKHandler?
+  @objc public static var sdkVersion: Swift.String {
+    @objc get
+  }
+  @objc override dynamic public init()
+  @objc deinit
+}
+extension LinkKit.AccountSubtype {
+  public var description: Swift.String {
+    get
+  }
+}
+extension LinkKit.AccountSubtype.Other {
+  public var description: Swift.String {
+    get
+  }
+}
+extension LinkKit.AccountSubtype.Credit {
+  public var description: Swift.String {
+    get
+  }
+}
+extension LinkKit.AccountSubtype.Loan {
+  public var description: Swift.String {
+    get
+  }
+}
+extension LinkKit.AccountSubtype.Depository {
+  public var description: Swift.String {
+    get
+  }
+}
+extension LinkKit.AccountSubtype.Investment {
+  public var description: Swift.String {
+    get
+  }
+}
+extension LinkKit.Environment : Swift.Equatable {}
+extension LinkKit.Environment : Swift.Hashable {}
+extension LinkKit.AccountSubtype : Swift.CustomStringConvertible {}
+extension LinkKit.AccountSubtype.Other : Swift.CustomStringConvertible {}
+extension LinkKit.AccountSubtype.Credit : Swift.CustomStringConvertible {}
+extension LinkKit.AccountSubtype.Loan : Swift.CustomStringConvertible {}
+extension LinkKit.AccountSubtype.Depository : Swift.CustomStringConvertible {}
+extension LinkKit.AccountSubtype.Investment : Swift.CustomStringConvertible {}
+extension LinkKit.Product : Swift.Equatable {}
+extension LinkKit.Product : Swift.Hashable {}
+extension LinkKit.MFAType : Swift.Equatable {}
+extension LinkKit.MFAType : Swift.Hashable {}

@@ -1,0 +1,11 @@
+framework module LinkKit {
+  umbrella header "LinkKit.h"
+
+  export *
+  module * { export * }
+}
+
+module LinkKit.Swift {
+    header "LinkKit-Swift.h"
+    requires objc
+}

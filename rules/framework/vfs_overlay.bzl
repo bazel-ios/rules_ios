@@ -220,7 +220,7 @@ def _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix, target_triple)
     # find it. Followup if it's possible and gainful to present this inside of
     # a framework. User provided directory swiftmodules are presented under
     # frameworks above.
-    if swiftmodule_file == None or swiftmodule_file.is_source:
+    if swiftmodule_file == None:
         return None
 
     contents = [
@@ -232,9 +232,10 @@ def _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix, target_triple)
         for file in swiftmodules
     ]
 
+    parent_dir_basename = swiftmodule_file.dirname.split("/").pop()
     return {
         "type": "directory",
-        "name": swiftmodule_file.basename,
+        "name": parent_dir_basename,
         "contents": contents,
     }
 
