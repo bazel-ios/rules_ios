@@ -4,7 +4,9 @@ load(
     "@bazel_tools//tools/build_defs/repo:http.bzl",
     "http_archive",
 )
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "new_git_repository")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository", "new_git_repository")
+load("//rules/third_party:xchammer_repositories.bzl", "xchammer_dependencies")
+load("//rules/third_party:xcbuildkit_repositories.bzl", xcbuildkit_dependencies = "dependencies")
 
 def _maybe(repo_rule, name, **kwargs):
     """Executes the given repository rule if it hasn't been executed already.
@@ -51,18 +53,18 @@ def rules_ios_dependencies():
         github_repo,
         name = "build_bazel_rules_swift",
         project = "bazel-ios",
-        ref = "22192877498705ff1adbecd820fdc2724414b0b2",
+        ref = "8d4b096b90e47095755e47c27e749ae9b9f83e81",
         repo = "rules_swift",
-        sha256 = "e091dc5b0c727873cec5ffa9622b563e9301d8136f4eed72ebb0ef575956cd3c",
+        sha256 = "83eb780db78f6c99cd97d3ff8c0e9bed1a6a3a4cba57476c6e1d2d989c52e17a",
     )
 
     _maybe(
         github_repo,
         name = "build_bazel_rules_apple",
-        ref = "5eda9e21e788c840158c9d39ba3d1662cc3bf313",
+        ref = "029eab0a6bbb4147d227d623721b205eb62aca9c",
         project = "bazelbuild",
         repo = "rules_apple",
-        sha256 = "9fcb1ece8a420a9ba34c20408157d08fbc99415e943c444693839f33d1782240",
+        sha256 = "b12455dbcaa31c4a42194aed59987d6abce6f04b4891389cd8fe5e817ae6b0ee",
     )
 
     _maybe(
@@ -100,7 +102,7 @@ native_binary(
         name = "arm64-to-sim",
         remote = "https://github.com/bogo/arm64-to-sim.git",
         commit = "25599a28689fa42679f23eb0ff031ebe57d3bb9b",
-        shallow_since = "1636567136 -0500",
+        shallow_since = "1627075944 -0700",
         build_file_content = """
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
 
@@ -111,6 +113,25 @@ swift_binary(
 )
         """,
     )
+
+    if not native.existing_rule("xchammer"):
+        git_repository(
+            name = "xchammer",
+            remote = "https://github.com/bazel-ios/xchammer.git",
+            # XCHammer dev branch: bazel-ios/rules-ios-xchammer
+            commit = "ec34d214586cb81c7a494aa8232c0382b00c8de3",
+            shallow_since = "1653678531 -0700",
+        )
+    xchammer_dependencies()
+
+    if not native.existing_rule("xcbuildkit"):
+        git_repository(
+            name = "xcbuildkit",
+            commit = "b619d25f65cf7195c57e2dbc26d488e5606e763a",
+            remote = "https://github.com/jerrymarino/xcbuildkit.git",
+        )
+
+    xcbuildkit_dependencies()
 
 def _impl(ctx):
     ctx.symlink(str(ctx.path(ctx.attr.rules_ios).dirname) + "/" + ctx.attr.path, "")

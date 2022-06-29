@@ -38,3 +38,11 @@ ios_unit_test(
     visibility = ["//visibility:public"],
     deps = [":ObjcFrameworkTestLib"],
 )
+
+filegroup(
+    name = "additional_files",
+    srcs = glob([
+        "additional_files/**/*",
+    ]),
+    visibility = ["//visibility:public"],
+)

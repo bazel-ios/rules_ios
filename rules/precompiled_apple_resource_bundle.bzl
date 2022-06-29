@@ -15,8 +15,10 @@ load("@build_bazel_rules_apple//apple/internal:platform_support.bzl", "platform_
 load("@build_bazel_rules_apple//apple/internal:resources.bzl", "resources")
 load("@build_bazel_rules_apple//apple/internal:resource_actions.bzl", "resource_actions")
 load("@build_bazel_rules_apple//apple/internal:rule_factory.bzl", "rule_factory")
+load("@build_bazel_rules_apple//apple/internal:apple_toolchains.bzl", "AppleMacToolsToolchainInfo")
+load("@build_bazel_rules_apple//apple:providers.bzl", "AppleResourceBundleInfo", "AppleResourceInfo")
 load("//rules:transition_support.bzl", "transition_support")
-load("@build_bazel_rules_apple//apple:providers.bzl", "AppleResourceBundleInfo", "AppleResourceInfo", "AppleSupportToolchainInfo")
+load("//rules:utils.bzl", "bundle_identifier_for_bundle")
 
 _FAKE_BUNDLE_PRODUCT_TYPE_BY_PLATFORM_TYPE = {
     "ios": apple_product_type.application,
@@ -63,7 +65,6 @@ def _precompiled_apple_resource_bundle_impl(ctx):
             objc_fragment = None,
             platform_type_string = platform_type,
             uses_swift = False,
-            xcode_path_wrapper = None,
             xcode_version_config = ctx.attr._xcode_config[apple_common.XcodeVersionConfig],
             disabled_features = [],
             features = [],
@@ -78,10 +79,10 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         version = None,
     )
 
-    apple_toolchain_info = ctx.attr._toolchain[AppleSupportToolchainInfo]
+    apple_mac_toolchain_info = ctx.attr._toolchain[AppleMacToolsToolchainInfo]
     partial_output = partial.call(
         partials.resources_partial(
-            apple_toolchain_info = apple_toolchain_info,
+            apple_mac_toolchain_info = apple_mac_toolchain_info,
             resource_deps = ctx.attr.resources,
             top_level_infoplists = resources.collect(
                 attr = ctx.attr,
@@ -103,12 +104,12 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     )
 
     resource_actions.merge_root_infoplists(
-        bundle_id = ctx.attr.bundle_id or "com.cocoapods." + bundle_name,
+        bundle_id = ctx.attr.bundle_id or bundle_identifier_for_bundle(bundle_name),
         input_plists = ctx.files.infoplists,
         output_pkginfo = None,
         output_plist = output_plist,
         output_discriminator = None,
-        resolved_plisttool = apple_toolchain_info.resolved_plisttool,
+        resolved_plisttool = apple_mac_toolchain_info.resolved_plisttool,
         **partials_args
     )
 
@@ -176,10 +177,10 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         content = bundletool_instructions.to_json(),
     )
     ctx.actions.run(
-        executable = apple_toolchain_info.resolved_bundletool_experimental.executable,
+        executable = apple_mac_toolchain_info.resolved_bundletool_experimental.executable,
         mnemonic = "BundleResources",
         progress_message = "Bundling Precompiled Resource Bundle " + bundle_name,
-        inputs = input_files + [bundletool_instructions_file] + apple_toolchain_info.resolved_bundletool_experimental.inputs.to_list(),
+        inputs = input_files + [bundletool_instructions_file] + apple_mac_toolchain_info.resolved_bundletool_experimental.inputs.to_list(),
         outputs = [output_bundle_dir],
         arguments = [bundletool_instructions_file.path],
     )
@@ -270,8 +271,8 @@ the bundle as a dependency.""",
             doc = "Needed to allow this rule to have an incoming edge configuration transition.",
         ),
         _toolchain = attr.label(
-            default = Label("@build_bazel_rules_apple//apple/internal:toolchain_support"),
-            providers = [[AppleSupportToolchainInfo]],
+            default = Label("@build_bazel_rules_apple//apple/internal:mac_tools_toolchain"),
+            providers = [[AppleMacToolsToolchainInfo]],
         ),
     ),
 )

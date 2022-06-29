@@ -1,0 +1,14 @@
+load("//rules:framework.bzl", "apple_framework")
+
+apple_framework(
+    name = "FrameworkWithBundleId",
+    srcs = [
+        "FrameworkWithBundleId/Foo.h",
+        "FrameworkWithBundleId/Foo.m",
+    ],
+    platforms = {"ios": "10.0"},
+    resource_bundles = {
+        "TargetXIB": glob(["TargetXIB/**/*.xib"]),
+    },
+    visibility = ["//visibility:public"],
+)

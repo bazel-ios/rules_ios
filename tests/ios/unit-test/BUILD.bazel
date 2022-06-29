@@ -43,3 +43,14 @@ ios_unit_test(
     minimum_os_version = "11.0",
     resources = ["resource-file.txt"],
 )
+
+ios_unit_test(
+    name = "NSPrincipalClassDefinedInPlist",
+    srcs = [
+        "TestSuiteObserver.swift",
+        "empty.m",
+        "empty.swift",
+    ],
+    infoplists = [{"NSPrincipalClass": "TestSuiteObserver"}],
+    minimum_os_version = "11.0",
+)

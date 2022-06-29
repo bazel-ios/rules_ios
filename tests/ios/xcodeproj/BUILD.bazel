@@ -4,6 +4,7 @@ load("//rules:additional_scheme_info.bzl", "additional_scheme_info")
 xcodeproj(
     name = "Single-Static-Framework-Project",
     testonly = True,
+    additional_files = ["//tests/ios/frameworks/objc:additional_files"],
     additional_scheme_infos = [
         ":ObjcFrameworkSchemeInfo",
     ],
@@ -74,6 +75,7 @@ xcodeproj(
         "//tests/ios/app:App",
         "//tests/ios/app:FW",
         "//tests/ios/app:FW2",
+        "//tests/ios/extensions:ExampleExtension",
     ],
 )
 
@@ -86,6 +88,7 @@ xcodeproj(
         "//tests/ios/app:App",
         "//tests/ios/app:FW",
         "//tests/ios/app:FW2",
+        "//tests/ios/extensions:ExampleExtension",
     ],
 )
 
@@ -156,6 +159,7 @@ xcodeproj(
         "//tests/ios/app:App",
         "//tests/ios/app:FW",
         "//tests/ios/app:FW2",
+        "//tests/ios/extensions:ExampleExtension",
     ],
 )
 
@@ -197,5 +201,15 @@ xcodeproj(
     project_name = "Test-LLDB-Logs-Project",
     deps = [
         "//tests/ios/app:FW",
+    ],
+)
+
+xcodeproj(
+    name = "App-XCHammer",
+    use_xchammer = True,
+    deps = [
+        "//tests/ios/app:App",
+        "//tests/ios/extensions:ExampleExtension",
+        "//tests/ios/frameworks/with-bundle-id:FrameworkWithBundleId",
     ],
 )

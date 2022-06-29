@@ -1,7 +1,7 @@
 load("//rules/test/lldb:lldb_test.bzl", "ios_lldb_breakpoint_command_test", "ios_lldb_breakpoint_po_test")
 load("//rules:xcodeproj.bzl", "xcodeproj")
 load("//rules:app.bzl", "ios_application")
-load("@build_bazel_rules_ios//rules:xcodeproj.bzl", "xcodeproj_lldbinit")
+load("@build_bazel_rules_ios//rules:legacy_xcodeproj.bzl", "xcodeproj_lldbinit")
 
 ios_application(
     name = "ObjcApp",

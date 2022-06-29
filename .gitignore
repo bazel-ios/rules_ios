@@ -9,3 +9,6 @@ tests/ios/xcodeproj/**/xcuserdata
 user.bazelrc
 # PodToBUILD
 Vendor/
+external
+*-XCHammer*.xcodeproj
+xchammer-includes
