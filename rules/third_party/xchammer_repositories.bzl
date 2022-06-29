@@ -268,6 +268,7 @@ def xchammer_dependencies():
         # question
         # Persisted on github tag=rules_ios-5.0.0,
         commit = "0dd73ce2950b81934c2bb67bbad09332dbabdee9",
+        shallow_since = "1656108309 -0500",
     )
 
     namespaced_new_git_repository(
