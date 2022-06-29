@@ -79,7 +79,7 @@ def _build_subtrees(paths, vfs_prefix):
 
                 curr_subdirs.dict[part] = next_subdirs
                 curr_subdirs.json["contents"].append(next_subdirs_json)
-                curr_subdirs = next_subdirs
+            curr_subdirs = next_subdirs
             idx += 1
     return subdirs_json
 
