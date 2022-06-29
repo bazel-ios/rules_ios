@@ -267,16 +267,8 @@ def xchammer_dependencies():
         # release, then adds changes to this tag for the Bazel release in
         # question
         # Persisted on github tag=rules_ios-5.0.0,
-        commit = "8e107a2b1d9c1f946692a26f51cdaa3959f63e10",
-        shallow_since = "1652719069 -0700",
-        patch_cmds = [
-            """
-         sed -i '' 's/\\:__subpackages__/visibility\\:public/g' src/TulsiGenerator/BUILD
-         """,
-            """
-         sed -i '' 's/RunLoopMode\\.defaultRunLoopMode/RunLoop\\.Mode\\.`default`/g' src/TulsiGenerator/ProcessRunner.swift
-         """,
-        ],
+        commit = "0dd73ce2950b81934c2bb67bbad09332dbabdee9",
+        shallow_since = "1656108309 -0500",
     )
 
     namespaced_new_git_repository(
