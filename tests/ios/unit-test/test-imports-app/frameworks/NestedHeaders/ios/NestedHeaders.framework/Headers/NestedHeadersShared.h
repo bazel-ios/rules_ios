@@ -1,0 +1,9 @@
+#import <NestedHeaders/com/foo/protos/common/A.h>
+#import <NestedHeaders/com/foo/protos/common/B.h>
+#import <NestedHeaders/com/foo/protos/common/C.h>
+#import <NestedHeaders/com/google/protobuf/D.h>
+#import <NestedHeaders/src/main/java/com/foo/shared/i18n/E.h>
+#import <NestedHeaders/src/main/java/com/foo/shared/i18n/F.h>
+#import <NestedHeaders/src/main/java/com/foo/shared/i18n/G.h>
+#import <NestedHeaders/src/main/java/com/foo/shared/i18n/H.h>
+#import <NestedHeaders/src/main/java/com/foo/shared/i18n/I.h>
