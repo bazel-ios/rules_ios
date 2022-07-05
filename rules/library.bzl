@@ -254,7 +254,6 @@ def _xcframework_slice(*, xcframework_name, identifier, platform, platform_varia
                 exclude = ["**/.DS_Store"],
             ),
             deps = [],
-            dsym_imports = dsym_imports,
             tags = _MANUAL,
         )
     elif (linkage, packaging) == ("static", "framework"):
