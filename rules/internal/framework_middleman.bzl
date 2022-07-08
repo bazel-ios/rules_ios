@@ -1,8 +1,13 @@
+load("@bazel_skylib//lib:partial.bzl", "partial")
 load(
     "@build_bazel_rules_apple//apple:providers.bzl",
     "AppleBundleInfo",
     "AppleResourceInfo",
     "IosFrameworkBundleInfo",
+)
+load(
+    "@build_bazel_rules_apple//apple/internal:partials.bzl",
+    "partials",
 )
 load(
     "@build_bazel_rules_apple//apple/internal:resources.bzl",
@@ -94,7 +99,18 @@ def _framework_middleman(ctx):
         )
         providers.append(resource_provider)
 
-    return providers
+    # Just to populate the extension safety provider from `rules_apple`.
+    partial_output = partial.call(
+        partials.extension_safe_validation_partial(
+            is_extension_safe = ctx.attr.extension_safe,
+            rule_label = ctx.label,
+            # Pass 'ctx.attr.framework_deps' once 'partials.extension_safe_validation_partial'
+            # is populated on from 'apple_framework_packaging' implementation.
+            targets_to_validate = [],
+        ),
+    )
+
+    return providers + partial_output.providers
 
 framework_middleman = rule(
     implementation = _framework_middleman,
@@ -104,6 +120,11 @@ framework_middleman = rule(
             mandatory = True,
             doc =
                 """Deps that may contain frameworks
+""",
+        ),
+        "extension_safe": attr.bool(
+            default = False,
+            doc = """Internal - allow rules_apple to populate extension safe provider
 """,
         ),
         "platform_type": attr.string(

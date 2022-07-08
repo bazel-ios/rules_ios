@@ -1,4 +1,4 @@
-load("@build_bazel_rules_apple//apple:ios.bzl", "ios_extension")
+load("//rules:extension.bzl", "ios_extension")
 
 ios_extension(
     name = "ExampleExtension",
