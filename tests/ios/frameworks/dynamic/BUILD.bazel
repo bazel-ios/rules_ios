@@ -15,6 +15,22 @@ ios_application(
     ],
 )
 
+ios_application(
+    name = "AppWithExtension",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    executable_name = "App",
+    extensions = [
+        "//tests/ios/extensions:ExampleExtensionWithDylibs",
+    ],
+    minimum_os_version = "10.0",
+    visibility = ["//visibility:public"],
+    # This should automatically bake in a,b
+    deps = [
+        "//tests/ios/frameworks/dynamic/a",
+    ],
+)
+
 apple_xcframework(
     name = "iOSSwiftXCFramework",
     bundle_id = "com.google.example",
@@ -63,27 +79,43 @@ ios_unit_test(
     ],
 )
 
+SHARED_APP_EXPECTATIONS = [
+    "LaunchScreen.storyboardc",
+    "Info.plist",
+    "App",
+    "Frameworks/a.framework/a",
+    "Frameworks/a.framework/Info.plist",
+
+    # Assertions for B - see that transitive data is packed here
+    "Frameworks/b.framework/b",
+    "Frameworks/b.framework/b_data.txt",
+    "Frameworks/b.framework/c_data.txt",
+    "Frameworks/b.framework/Info.plist",
+]
+
 output_test(
     name = "App_output_test",
-    expect = [
-        "LaunchScreen.storyboardc",
-        "Info.plist",
-        "App",
-        "Frameworks/a.framework/a",
-        "Frameworks/a.framework/Info.plist",
-
-        # Assertions for B - see that transitive data is packed here
-        "Frameworks/b.framework/b",
-        "Frameworks/b.framework/b_data.txt",
-        "Frameworks/b.framework/c_data.txt",
-        "Frameworks/b.framework/Info.plist",
-    ],
+    expected = SHARED_APP_EXPECTATIONS,
     target = ":App",
 )
 
 output_test(
+    name = "AppWithExtension_output_test",
+    expected = SHARED_APP_EXPECTATIONS + [
+        # Assertions for extension
+        "PlugIns/ExampleExtensionWithDylibs.appex/ExampleExtensionWithDylibs",
+        "PlugIns/ExampleExtensionWithDylibs.appex/Info.plist",
+    ],
+    target = ":AppWithExtension",
+    unexpected = [
+        "PlugIns/ExampleExtensionWithDylibs.appex/Frameworks/a.framework/a",
+        "PlugIns/ExampleExtensionWithDylibs.appex/Frameworks/b.framework/b",
+    ],
+)
+
+output_test(
     name = "TestAppWithDylibs_output_test",
-    expect = [
+    expected = [
         "Frameworks/a.framework/a",
         "Frameworks/a.framework/Info.plist",
         # Assertions for B - see that transitive data is packed here

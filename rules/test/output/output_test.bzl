@@ -15,7 +15,8 @@ def _output_test_impl(ctx):
         is_executable = True,
         substitutions = {
             "%TARGET%": target_file.short_path,
-            "%EXPECT%": "( " + " ".join(ctx.attr.expect) + " )",
+            "%EXPECT%": "( " + " ".join(ctx.attr.expected) + " )",
+            "%UNEXPECT%": "( " + " ".join(ctx.attr.unexpected) + " )",
         },
     )
     return [DefaultInfo(runfiles = ctx.runfiles(files = ctx.attr.target[DefaultInfo].files.to_list()))]
@@ -26,10 +27,11 @@ output_test = rule(
     attrs = {
         "target": attr.label(),
         "output_checker": attr.label(default = "//rules/test/output:output_checker.sh", allow_single_file = True),
-        "expect": attr.string_list(mandatory = True),
+        "expected": attr.string_list(mandatory = True),
+        "unexpected": attr.string_list(mandatory = False, default = []),
     },
     doc = """
-    Basic test runner you can add expectations on output. feeds target and
-expect to the template
+    Basic test runner you can add expectations on output. feeds target,
+expected, and unexpected to the template
      """,
 )
