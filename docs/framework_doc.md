@@ -9,8 +9,9 @@ Framework rules
 <pre>
 apple_framework_packaging(<a href="#apple_framework_packaging-name">name</a>, <a href="#apple_framework_packaging-bundle_extension">bundle_extension</a>, <a href="#apple_framework_packaging-bundle_id">bundle_id</a>, <a href="#apple_framework_packaging-data">data</a>, <a href="#apple_framework_packaging-deps">deps</a>, <a href="#apple_framework_packaging-environment_plist">environment_plist</a>,
                           <a href="#apple_framework_packaging-exported_symbols_lists">exported_symbols_lists</a>, <a href="#apple_framework_packaging-framework_name">framework_name</a>, <a href="#apple_framework_packaging-frameworks">frameworks</a>, <a href="#apple_framework_packaging-infoplists">infoplists</a>,
-                          <a href="#apple_framework_packaging-link_dynamic">link_dynamic</a>, <a href="#apple_framework_packaging-minimum_deployment_os_version">minimum_deployment_os_version</a>, <a href="#apple_framework_packaging-minimum_os_version">minimum_os_version</a>,
-                          <a href="#apple_framework_packaging-platform_type">platform_type</a>, <a href="#apple_framework_packaging-platforms">platforms</a>, <a href="#apple_framework_packaging-skip_packaging">skip_packaging</a>, <a href="#apple_framework_packaging-stamp">stamp</a>, <a href="#apple_framework_packaging-transitive_deps">transitive_deps</a>, <a href="#apple_framework_packaging-vfs">vfs</a>)
+                          <a href="#apple_framework_packaging-library_linkopts">library_linkopts</a>, <a href="#apple_framework_packaging-link_dynamic">link_dynamic</a>, <a href="#apple_framework_packaging-minimum_deployment_os_version">minimum_deployment_os_version</a>,
+                          <a href="#apple_framework_packaging-minimum_os_version">minimum_os_version</a>, <a href="#apple_framework_packaging-platform_type">platform_type</a>, <a href="#apple_framework_packaging-platforms">platforms</a>, <a href="#apple_framework_packaging-skip_packaging">skip_packaging</a>, <a href="#apple_framework_packaging-stamp">stamp</a>,
+                          <a href="#apple_framework_packaging-transitive_deps">transitive_deps</a>, <a href="#apple_framework_packaging-vfs">vfs</a>)
 </pre>
 
 Packages compiled code into an Apple .framework package
@@ -30,6 +31,7 @@ Packages compiled code into an Apple .framework package
 | <a id="apple_framework_packaging-framework_name"></a>framework_name |  Name of the framework, usually the same as the module name   | String | required |  |
 | <a id="apple_framework_packaging-frameworks"></a>frameworks |  A list of framework targets (see [<code>ios_framework</code>](https://github.com/bazelbuild/rules_apple/blob/master/doc/rules-ios.md#ios_framework)) that this target depends on.   | <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a> | optional | [] |
 | <a id="apple_framework_packaging-infoplists"></a>infoplists |  The infoplists for the framework   | <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a> | optional | [] |
+| <a id="apple_framework_packaging-library_linkopts"></a>library_linkopts |  Internal - A list of strings representing extra flags that are passed to the linker for the underlying library.   | List of strings | optional | [] |
 | <a id="apple_framework_packaging-link_dynamic"></a>link_dynamic |  Weather or not if this framework is dynamic<br><br>The default behavior bakes this into the top level app. When false, it's statically linked.   | Boolean | optional | False |
 | <a id="apple_framework_packaging-minimum_deployment_os_version"></a>minimum_deployment_os_version |  The bundle identifier of the framework. Currently unused.   | String | optional | "" |
 | <a id="apple_framework_packaging-minimum_os_version"></a>minimum_os_version |  Internal - currently rules_ios the dict <code>platforms</code>   | String | optional | "" |

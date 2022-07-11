@@ -943,7 +943,7 @@ apple_framework_packaging = rule(
         ),
         "library_linkopts": attr.string_list(
             doc = """
-A list of strings representing extra flags that should be passed to the linker.
+Internal - A list of strings representing extra flags that are passed to the linker for the underlying library.
 """,
         ),
         "link_dynamic": attr.bool(
