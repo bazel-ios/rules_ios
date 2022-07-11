@@ -15,6 +15,7 @@ _IOS_APPLICATION_KWARGS = [
     "bundle_name",
     "infoplists",
     "env",
+    "executable_name",
     "minimum_os_version",
     "test_host",
     "families",
