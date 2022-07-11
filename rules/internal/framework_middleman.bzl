@@ -106,7 +106,7 @@ def _framework_middleman(ctx):
             rule_label = ctx.label,
             # Pass 'ctx.attr.framework_deps' once 'partials.extension_safe_validation_partial'
             # is populated on from 'apple_framework_packaging' implementation.
-            targets_to_validate = [],
+            targets_to_validate = ctx.attr.framework_deps,
         ),
     )
 
