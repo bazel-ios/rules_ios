@@ -1,0 +1,29 @@
+exports_files(["ios_vm_test_runner.template.sh"])
+sh_binary(
+    name = "vm_runner",
+    srcs = ["vm_run.sh"],
+    data = [
+        # Note: there are a plethora of problems from doing a trival build of this
+        # depenency with Bazel. For now, vendor the binary (56kb)
+        # 
+        # We could always make a certificate - this needs further auditing for
+        # production usage. 
+        "bin/sshpass",
+
+        # FIXME: don't vendor this one
+        "bin/tart"
+    ],
+    visibility = ["//visibility:public"]
+)
+
+sh_binary(
+    name = "ios_vm_test_runner",
+    srcs = ["ios_vm_test_runner.sh"],
+    data = [
+        ## We want to call the original runner under vm_run
+        "vm_runner",
+        "@xctestrunner//:ios_test_runner",
+    ],
+    visibility = ["//visibility:public"]
+)
+
