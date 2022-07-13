@@ -3,23 +3,25 @@ load("//rules:providers.bzl", "AvoidDepsInfo")
 def _impl(ctx):
     force_load = []
 
-    avoid_deps = []
-    for dep in ctx.attr.deps:
-        if AvoidDepsInfo in dep:
-            avoid_deps.extend(dep[AvoidDepsInfo].libraries)
+    if ctx.attr.should_force_load:
+        avoid_deps = []
+        for dep in ctx.attr.deps:
+            if AvoidDepsInfo in dep:
+                avoid_deps.extend(dep[AvoidDepsInfo].libraries)
 
-    avoid_libraries = {}
-    for dep in avoid_deps:
-        if apple_common.Objc in dep:
-            for lib in dep[apple_common.Objc].library.to_list():
-                avoid_libraries[lib] = True
+        avoid_libraries = {}
+        for dep in avoid_deps:
+            if apple_common.Objc in dep:
+                for lib in dep[apple_common.Objc].library.to_list():
+                    avoid_libraries[lib] = True
 
-    force_load = []
-    for dep in ctx.attr.deps:
-        if apple_common.Objc in dep:
-            for lib in dep[apple_common.Objc].library.to_list():
-                if not lib in avoid_libraries:
-                    force_load.append(lib)
+        force_load = []
+        for dep in ctx.attr.deps:
+            if apple_common.Objc in dep:
+                for lib in dep[apple_common.Objc].library.to_list():
+                    if not lib in avoid_libraries:
+                        force_load.append(lib)
+
     return apple_common.new_objc_provider(
         force_load_library = depset(force_load),
         link_inputs = depset(force_load),
@@ -27,7 +29,13 @@ def _impl(ctx):
 
 force_load_direct_deps = rule(
     implementation = _impl,
-    attrs = {"deps": attr.label_list()},
+    attrs = {
+        "deps": attr.label_list(),
+        "should_force_load": attr.bool(
+            default = True,
+            doc = "Allows parametrically enabling the functionality in this rule.",
+        ),
+    },
     doc = """
 A rule to link with `-force_load` for direct`deps`
 
