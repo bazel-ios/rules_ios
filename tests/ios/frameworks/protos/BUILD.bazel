@@ -1,0 +1,37 @@
+load("proto_library.bzl", "apple_proto_framework")
+load("//rules:framework.bzl", "apple_framework", "apple_framework_packaging")
+
+# Export protobuf into a framework module
+objc_library(
+    name = "Protobuf_hdrs",
+    hdrs = ["Protobuf/module.modulemap"],
+)
+
+apple_framework_packaging(
+    name = "Protobuf",
+    framework_name = "Protobuf",
+    transitive_deps = [],
+    deps = [
+        "Protobuf_hdrs",
+        "@com_github_protocolbuffers_protobuf//:objectivec",
+    ],
+)
+
+apple_proto_framework(
+    name = "Sample",
+    proto_srcs = ["sample.proto"],
+    deps = [":Dep"],
+)
+
+apple_proto_framework(
+    name = "Dep",
+    proto_srcs = ["dep.proto"],
+)
+
+apple_framework(
+    name = "Some",
+    srcs = ["Some.swift"],
+    objc_defines = ["GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS=1"],
+    swift_defines = ["GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS=1"],
+    deps = ["Sample"],
+)

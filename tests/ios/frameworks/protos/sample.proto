@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package example;
+
+// Note: Need to import these in a way protoc can deal with
+// e.g. this is root relative
+// import "dep.proto";
+
+import "tests/ios/frameworks/protos/dep.proto";
+
+message Sample {
+    string name = 1;
+    Dep dep = 2;
+}
