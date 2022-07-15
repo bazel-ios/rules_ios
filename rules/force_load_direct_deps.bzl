@@ -1,27 +1,28 @@
 load("//rules:providers.bzl", "AvoidDepsInfo")
 
 def _impl(ctx):
+    if not ctx.attr.should_force_load:
+        return apple_common.new_objc_provider()
+
     force_load = []
 
-    if ctx.attr.should_force_load:
-        avoid_deps = []
-        for dep in ctx.attr.deps:
-            if AvoidDepsInfo in dep:
-                avoid_deps.extend(dep[AvoidDepsInfo].libraries)
+    avoid_deps = []
+    for dep in ctx.attr.deps:
+        if AvoidDepsInfo in dep:
+            avoid_deps.extend(dep[AvoidDepsInfo].libraries)
 
-        avoid_libraries = {}
-        for dep in avoid_deps:
-            if apple_common.Objc in dep:
-                for lib in dep[apple_common.Objc].library.to_list():
-                    avoid_libraries[lib] = True
+    avoid_libraries = {}
+    for dep in avoid_deps:
+        if apple_common.Objc in dep:
+            for lib in dep[apple_common.Objc].library.to_list():
+                avoid_libraries[lib] = True
 
-        force_load = []
-        for dep in ctx.attr.deps:
-            if apple_common.Objc in dep:
-                for lib in dep[apple_common.Objc].library.to_list():
-                    if not lib in avoid_libraries:
-                        force_load.append(lib)
-
+    force_load = []
+    for dep in ctx.attr.deps:
+        if apple_common.Objc in dep:
+            for lib in dep[apple_common.Objc].library.to_list():
+                if not lib in avoid_libraries:
+                    force_load.append(lib)
     return apple_common.new_objc_provider(
         force_load_library = depset(force_load),
         link_inputs = depset(force_load),
