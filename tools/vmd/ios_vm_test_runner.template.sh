@@ -3,7 +3,8 @@
 #
 # This file patched to account for a VM base directory. Commonly in remote
 # execution we can require tests to execute against a synthetic environment, and
-# that is out of band to Bazel.
+# that is out of band to Bazel. This makes it easier to work with locally: how
+# the tests are ran an a VM or how that VM system is working end to end
 
 # Copyright 2018 The Bazel Authors. All rights reserved.
 #
@@ -20,7 +21,6 @@
 # limitations under the License.
 
 set -e
-
 basename_without_extension() {
   local full_path="$1"
   local filename
@@ -53,20 +53,15 @@ done
 # Enable verbose output in test runner.
 runner_flags=("-v")
 
-# TMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/test_runner_work_dir.XXXXXX")"
+# Possibly we should merge tools/vmd/ios_vm_test_runner.sh to close this file
+# in-time
+export TMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/test_runner_work_dir.XXXXXX")"
 
 # This file is structured in a way that we upload to a synthetic runfiles
 # directory
-export SYNTHETIC_RUNFILES_DIR=/Users/admin/runner.runfiles
+export VM_RUNFILES_DIR=/Users/admin/runner.runfiles
 
-# FIXME: This code needs a bit of refactoring. We need to disambiguate between
-# the "working directory" of this script and the host directory
-TMP_DIR=/tmp/TEST_TEMP_DIR
-rm -rf /tmp/TEST_TEMP_DIR
-mkdir /tmp/TEST_TEMP_DIR
-
-# trap 'rm -rf "${TMP_DIR}"' ERR EXIT
-runner_flags+=("--work_dir=${SYNTHETIC_RUNFILES_DIR}")
+runner_flags+=("--work_dir=${VM_RUNFILES_DIR}")
 
 export TEST_BUNDLE_PATH="%(test_bundle_path)s"
 ## This is a hack fo rthe VM
@@ -78,10 +73,9 @@ else
   TEST_BUNDLE_NAME=$(basename_without_extension "${TEST_BUNDLE_PATH}")
   export TEST_BUNDLE_TMP_DIR="${TMP_DIR}/${TEST_BUNDLE_NAME}"
 
-  # Disable the unzip here 
-  rm -rf "${TEST_BUNDLE_TMP_DIR}"
+  # Unpack the test bundle into the temp dir, point at synthetic
   unzip -qq -d "${TEST_BUNDLE_TMP_DIR}" "${TEST_BUNDLE_PATH}"
-  runner_flags+=("--test_bundle_path=${SYNTHETIC_RUNFILES_DIR}/${TEST_BUNDLE_TMP_DIR}/${TEST_BUNDLE_NAME}.xctest")
+  runner_flags+=("--test_bundle_path=${VM_RUNFILES_DIR}/${TEST_BUNDLE_NAME}/${TEST_BUNDLE_NAME}.xctest")
 fi
 
 TEST_HOST_PATH="%(test_host_path)s"
@@ -94,15 +88,13 @@ if [[ -n "$TEST_HOST_PATH" ]]; then
     cp -RL "$TEST_HOST_PATH" "$TMP_DIR"
     chmod -R 777 "${TMP_DIR}/$(basename "$TEST_HOST_PATH")"
     echo aPP
-    exit 1
-    runner_flags+=("--app_under_test_path=${SYNTHETIC_RUNFILES_DIR}/${TMP_DIR}/$(basename "$TEST_HOST_PATH")")
+    runner_flags+=("--app_under_test_path=${VM_RUNFILES_DIR}/$(basename "$TEST_HOST_PATH")")
   else
     TEST_HOST_NAME=$(basename_without_extension "${TEST_HOST_PATH}")
     export TEST_HOST_TMP_DIR="${TMP_DIR}/${TEST_HOST_NAME}"
     rm -rf "${TEST_HOST_TMP_DIR}"
-    set -ex
     unzip -d "${TEST_HOST_TMP_DIR}" "${TEST_HOST_PATH}"
-    runner_flags+=("--app_under_test_path=${SYNTHETIC_RUNFILES_DIR}/${TEST_HOST_TMP_DIR}/Payload/${TEST_HOST_NAME}.app")
+    runner_flags+=("--app_under_test_path=${VM_RUNFILES_DIR}/$(basename ${TEST_HOST_TMP_DIR})/Payload/${TEST_HOST_NAME}.app")
   fi
 fi
 
@@ -195,7 +187,7 @@ if [[ -n "${LAUNCH_OPTIONS_JSON_STR}" ]]; then
 
   # FIXME: we're not uploading this correctly so it has the workspace baked in
   echo "${LAUNCH_OPTIONS_JSON_STR}" > "${LAUNCH_OPTIONS_JSON_PATH}"
-  runner_flags+=("--launch_options_json_path=${SYNTHETIC_RUNFILES_DIR}/build_bazel_rules_ios/TEST_TEMP_DIR/launch_options.json")
+  runner_flags+=("--launch_options_json_path=${VM_RUNFILES_DIR}/launch_options.json")
 fi
 
 target_flags=()
@@ -240,5 +232,5 @@ cmd=("%(testrunner_binary)s"
   "${target_flags[@]}"
   "${custom_xctestrunner_args[@]}")
 
-"${cmd[@]}" 2>&1
+"${cmd[@]}"
 # We remove some of the test runner stuff

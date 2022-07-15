@@ -1,6 +1,9 @@
 exports_files(["ios_vm_test_runner.template.sh"])
+
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+
 sh_binary(
-    name = "vm_runner",
+    name = "vmd",
     srcs = ["vm_run.sh"],
     data = [
         # Note: there are a plethora of problems from doing a trival build of this
@@ -21,9 +24,18 @@ sh_binary(
     srcs = ["ios_vm_test_runner.sh"],
     data = [
         ## We want to call the original runner under vm_run
-        "vm_runner",
+        "vmd",
         "@xctestrunner//:ios_test_runner",
     ],
     visibility = ["//visibility:public"]
 )
 
+# Wrap everything into a CLI
+pkg_tar(
+    name = "vmd_tar",
+    srcs = [
+        ":vmd",
+        "bin/sshpass",
+        "bin/tart"
+    ],
+)

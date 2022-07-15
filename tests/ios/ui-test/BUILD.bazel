@@ -1,5 +1,4 @@
 load("//rules:test.bzl", "ios_ui_test")
-load("//tools/vmd:vm_test_runner.bzl", "ios_vm_test_runner")
 
 ios_ui_test(
     name = "EmptyTest",
@@ -18,28 +17,3 @@ ios_ui_test(
     minimum_os_version = "11.0",
     test_host = "//tests/ios/ui-test/test-app-host:TestAppHost",
 )
-
-ios_vm_test_runner(
-    name = "vm_test_runner",
-    testrunner = "//tools/vmd:ios_vm_test_runner",
-    visibility = ["//visibility:public"]
-
-    # You can imagine computing the VM tag based on the Xcode version or even
-    # setting a custom VM version here
-    # image_tag = "macos-monterey-xcode:13.3.1
-)
-
-# Hooks into the standard ios_ui_test rule or any test rule by giving it a
-# runner.
-ios_ui_test(
-    name = "SimpleTest_WithVM",
-    srcs = [
-        "simple.swift",
-    ],
-    minimum_os_version = "11.0",
-    test_host = "//tests/ios/ui-test/test-app-host:TestAppHost",
-
-    runner = ":vm_test_runner"
-)
-
-
