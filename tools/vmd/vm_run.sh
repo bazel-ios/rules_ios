@@ -12,7 +12,7 @@ set -e
 VM_IMG=macos-monterey-xcode:13.3.1
 
 # Push a few known paths on here
-PATH=$PWD/tools/vmd/bin:/opt/bazel-rbe-worker/bin:$PATH
+PATH=$PWD/tools/vmd/bin:/opt/bazel-rbe-worker/bin:/opt/homebrew/bin:$PATH
 
 run_vm() {
     tart clone $VM_IMG latest
@@ -26,8 +26,23 @@ run_vm() {
 
     # We need to ensure that tart has ran before calling tart ip. We need to
     # wait for the VM to boot so waiting 7 seconds here isn't a huge problem
-    sleep 7
+    sleep 3
+    set -x
     IP=$(tart ip latest --wait 30)
+
+    # We need to do port forwarding here from buildfarm server
+    killall -9 socat || true
+    socat -d -d  TCP-LISTEN:8981,fork,reuseaddr TCP:$IP:8981 &
+    # socat -d -d tcp-listen:8981,reuseaddr,fork tcp:$IP:8981 &
+
+echo -e "Will write ${IP}"
+#0 rdr pass inet proto tcp from any to self port 80 -> 127.0.0.1 port 9191
+
+#cat > /tmp/z.conf  <<EOL
+#no rdr inet proto tcp from ${IP} port 8981
+#rdr inet proto tcp from any to 127.0.0.1 port 8981 -> ${IP} port 8981
+#EOL
+#sudo pfctl -vnf /tmp/z.conf
 
     ## After this it's going to connect
     echo "connected $IP"
@@ -54,6 +69,43 @@ main() {
     # most of this program will be re-written overall
     echo -e "mkdir runner.runfiles && mkdir /tmp/TEST_OUTPUTS_DIR" > cmd.sh
     echo -e "pushd runner.runfiles" >> cmd.sh
+
+    POSITIONAL_ARGS=()
+    while [[ $# -gt 0 ]]; do
+      case $1 in
+	-e|--extension)
+	  EXTENSION="$2"
+	  shift # past argument
+	  shift # past value
+	  ;;
+	-s|--searchpath)
+	  SEARCHPATH="$2"
+	  shift # past argument
+	  shift # past value
+	  ;;
+	--default)
+	  DEFAULT=YES
+	  shift # past argument
+	  ;;
+	-*|--*)
+	  echo "Unknown option $1"
+	  exit 1
+	  ;;
+	*)
+	  POSITIONAL_ARGS+=("$1") # save positional arg
+	  shift # past argument
+	  ;;
+      esac
+    done
+    
+    # We need these search domains - some issues otherwise. This needs better factoring
+    echo -e 'sudo echo "search us-west-2.compute.internal\nnameserver 10.20.0.2" > /tmp/resolve.conf' >> cmd.sh
+    # Is this necessary
+    echo -e "sudo scutil --set HostName $(hostname)" >> cmd.sh
+
+    echo -e 'sudo mv /tmp/resolve.conf /etc/resolve.conf' >> cmd.sh
+
+    echo -e "sudo killall -QUIT -u _mdnsresponder" >> cmd.sh
     echo -e "tar -xvf ~/RUNNER_UPLOAD.tar" >> cmd.sh
     echo -e "$@" >> cmd.sh
     echo -e "running vm $VM_IMG"

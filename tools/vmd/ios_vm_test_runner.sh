@@ -27,4 +27,4 @@ export UPLOAD=RUNNER_UPLOAD.tar
 test -f $UPLOAD || (echo "MISS UPLOAD $UPLOAD" && exit 1)
 
 ## This runs on the host
-tools/vmd/vm_run.sh "TEST_UNDECLARED_OUTPUTS_DIR='' build_bazel_rules_ios/external/xctestrunner/ios_test_runner $@"
+tools/vmd/vmd "TEST_UNDECLARED_OUTPUTS_DIR='' build_bazel_rules_ios/external/xctestrunner/ios_test_runner $@"
