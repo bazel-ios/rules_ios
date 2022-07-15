@@ -1,6 +1,6 @@
-exports_files(["ios_vm_test_runner.template.sh"])
-
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+
+exports_files(["ios_vm_test_runner.template.sh"])
 
 sh_binary(
     name = "vmd",
@@ -8,15 +8,13 @@ sh_binary(
     data = [
         # Note: there are a plethora of problems from doing a trival build of this
         # depenency with Bazel. For now, vendor the binary (56kb)
-        # 
+        #
         # We could always make a certificate - this needs further auditing for
-        # production usage. 
+        # production usage.
         "bin/sshpass",
-
-        # FIXME: don't vendor this one
-        "bin/tart"
+        "@tart//file",
     ],
-    visibility = ["//visibility:public"]
+    visibility = ["//visibility:public"],
 )
 
 sh_binary(
@@ -27,15 +25,15 @@ sh_binary(
         "vmd",
         "@xctestrunner//:ios_test_runner",
     ],
-    visibility = ["//visibility:public"]
+    visibility = ["//visibility:public"],
 )
 
 # Wrap everything into a CLI
 pkg_tar(
     name = "vmd_tar",
     srcs = [
-        ":vmd",
         "bin/sshpass",
-        "bin/tart"
+        "bin/tart",
+        ":vmd",
     ],
 )

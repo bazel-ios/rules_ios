@@ -4,7 +4,7 @@ load("//tools/vmd:vm_test_runner.bzl", "ios_vm_test_runner")
 ios_vm_test_runner(
     name = "vm_test_runner",
     testrunner = "//tools/vmd:ios_vm_test_runner",
-    visibility = ["//visibility:public"]
+    visibility = ["//visibility:public"],
 
     # You can imagine computing the VM tag based on the Xcode version or even
     # setting a custom VM version here
@@ -20,7 +20,6 @@ ios_ui_test(
         "simple.swift",
     ],
     minimum_os_version = "11.0",
+    runner = ":vm_test_runner",
     test_host = "//tests/ios/ui-test/test-app-host:TestAppHost",
-
-    runner = ":vm_test_runner"
 )

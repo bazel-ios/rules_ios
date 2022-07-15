@@ -30,7 +30,7 @@ def _get_template_substitutions(*, device_type, os_version, simulator_creator, t
         "os_version": os_version,
         "simulator_creator": simulator_creator,
         "testrunner_binary": testrunner,
-        "testrunner_runfiles": " ".join([f.path for f in runfiles.files.to_list()])
+        "testrunner_runfiles": " ".join([f.path for f in runfiles.files.to_list()]),
     }
     return {"%(" + k + ")s": subs[k] for k in subs}
 
@@ -57,7 +57,7 @@ def _ios_test_runner_impl(ctx):
             os_version = os_version,
             simulator_creator = ctx.executable._simulator_creator.short_path,
             testrunner = ctx.executable.testrunner.short_path,
-            runfiles = ctx.attr.testrunner[DefaultInfo].default_runfiles
+            runfiles = ctx.attr.testrunner[DefaultInfo].default_runfiles,
         ),
     )
     return [
