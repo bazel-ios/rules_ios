@@ -17,6 +17,7 @@ This entrypoint supplements the arvg invocation if provided, you need to do all 
 -u|--upload - [Optional] Upload data to the runner 
 Examples of this are a .xctest bundle and xctestrunner python code
 
+-z|--no-ephemeral [Optional] By default the VMs are thrown away, turn that off
 
 Consider this an implementation of rules_ios for now. A segment of this program
 can be added to tart directly
@@ -32,18 +33,25 @@ run_vm() {
     # Run the entrypoint
     CMD_EXIT_STATUS=1
 
-    # Assign the VM name to the work_dir 
-    TMP_VM="${VM_NAME}-$(basename $VM_TMPDIR)"
+    if test $EPHEMERAL -eq 1; then
+        # By default we make these ephemeral
 
-    # This VM is required to be already pulled locally. The VMs are massive:
-    # 40gb or so. For now, they will likely need to externally pulled
-    # https://github.com/cirruslabs/tart/issues/150
-    # Use `tart pull` as a dep to this rule if you'd like to do it with
-    # Bazel or add an optional CLI argument
-    tart clone $VM_NAME $TMP_VM
+        # Assign the VM name to the work_dir 
+        TMP_VM="${VM_NAME}-$(basename $VM_TMPDIR)"
+
+        # This VM is required to be already pulled locally. The VMs are massive:
+        # 40gb or so. For now, they will likely need to externally pulled
+        # https://github.com/cirruslabs/tart/issues/150
+        # Use `tart pull` as a dep to this rule if you'd like to do it with
+        # Bazel or add an optional CLI argument
+        tart clone $VM_NAME $TMP_VM
+        local run_vm_name=$TMP_VM
+    else
+        local run_vm_name=$VM_NAME
+    fi
 
     # Spinup tart in the background
-    tart run $TMP_VM --no-graphics &2>> $VM_TMPDIR/tart.log  &
+    tart run $run_vm_name --no-graphics &2>> $VM_TMPDIR/tart.log  &
     # Save the PID of tart
     echo $(expr $! - 1) > $VM_TMPDIR/tart.pid
 
@@ -57,7 +65,7 @@ run_vm() {
     ps -p $PID  $(cat $VM_TMPDIR/tart.pid) > /dev/null || exit 1
 
     # Consider adding a timeout here
-    IP=$(tart ip $TMP_VM --wait 30)
+    IP=$(tart ip $run_vm_name --wait 30)
     if [[ -z "${IP}" ]]; then
         echo "Missing IP" && exit 1
     fi
@@ -74,7 +82,9 @@ run_vm() {
     echo "connected $IP" >>  $VM_TMPDIR/vm.log
 
     ## First we want to upload the entrypoint
+    # This is the path on the VM ( not the host )
     local VM_CMD=/tmp/cmd.sh
+
     sshpass -p admin scp -o StrictHostKeyChecking=no -o ConnectTimeout=30 $VM_TMPDIR/cmd.sh admin@${IP}:$VM_CMD
     
     ## Upload test inputs if they provide it
@@ -88,12 +98,14 @@ run_vm() {
 
 exit_handler() {
     # Remove the VMs and tmp dirs. Consider an opt to keep for debug
-    tart delete $TMP_VM || true
+    if test $EPHEMERAL -eq 1; then
+        tart delete $TMP_VM || true
+    fi
 
     # Terminate the pids
     find $VM_TMPDIR -name \*.pid \
         -exec /bin/bash -c "kill -9 \$(cat {}) 2> /dev/null || true" 2> /dev/null \;
-    # rm -rf $VM_TMPDIR
+    rm -rf $VM_TMPDIR
 
     # We want to dump out the log if it fails
     test $CMD_EXIT_STATUS -eq 0 || cat $VM_TMPDIR/tart.log 2> /dev/null
@@ -103,14 +115,20 @@ main() {
     VM_TMPDIR=$(mktemp -d)
     trap "exit_handler 2> /dev/null" EXIT
 
-    POSITIONAL_ARGS=()
+    ## Program defaults ( see arguments for details )
+    ENTRYPOINT=""
+    VM_NAME=""
+    PORT_FORWARD=""
+    EPHEMERAL=1
+
     # Note: we want to break-up the parsing to validate arguments and
     # distingush from the users CLI arguments
     BREAK_PARSE=0
+    POSITIONAL_ARGS=()
     while [[ $# -gt 0 ]]; do
       case $1 in
         -e|--entrypoint)
-          VM_CMD="$2"
+          ENTRYPOINT="$2"
           shift
           shift
           ;;
@@ -127,6 +145,10 @@ main() {
         -n|--name)
           VM_NAME="$2"
           shift
+          shift
+          ;;
+        -z|--no-ephemeral)
+          EPHEMERAL=0
           shift
           ;;
         --)
@@ -148,18 +170,22 @@ main() {
         echo "Missing --name" && usage && exit 1;
     fi
 
-    cat > $VM_TMPDIR/cmd.sh <<EOL
+    # Initialize the entrypoint to a defualt. The default is opinionated for
+    # "Bazel run"
+    if [[ -z "$ENTRYPOINT" ]]; then
+        ENTRYPOINT=$VM_TMPDIR/cmd.sh
+        cat > $VM_TMPDIR/cmd.sh <<EOL
 #!/bin/bash
 # By default in Bazel land unpack to the runfiles
 mkdir runner.runfiles && mkdir /tmp/TEST_OUTPUTS_DIR
 cd runner.runfiles
 
-# Fixing a number of problems with configuration and cloud providers
-# Note: unless we run at root we can't seem to access this..
-# sudo echo -e \"\$(cat /etc/resolve.conf)\" > /tmp/resolve.conf\"
-# sudo mv /tmp/resolve.conf /etc/resolve.conf
-sudo scutil --set HostName $(hostname)
-sudo killall -QUIT -u _mdnsresponder
+# Determine to setup DNS within a VPC at "common" cloud providers
+# For now, it kind of looks like the host
+# sudo echo -e "\$(cat /etc/resolv.conf)" > /tmp/resolv.conf
+# sudo mv /tmp/resolv.conf  /etc/resolv.conf
+# sudo scutil --set HostName $(hostname)
+# sudo killall -QUIT -u _mdnsresponder
 
 # If they give it a runner upload - then we untar it for them on laucnh
 if [[ ! -z "$RUNNER_UPLOAD" ]]; then
@@ -167,6 +193,9 @@ if [[ ! -z "$RUNNER_UPLOAD" ]]; then
 fi
 ${POSITIONAL_ARGS[@]}
 EOL
+    else
+        cp $ENTRYPOINT $VM_TMPDIR/cmd.sh
+    fi
 
     # tart is not hermetic ATM - we'll need to make chages for this
     touch $HOME/.tart/vms || (echo "Run with standalone - not hermetic ATM" || exit 1)
