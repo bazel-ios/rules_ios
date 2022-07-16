@@ -392,7 +392,7 @@ ios_application(
 
 output_test(
     name = "AppWithSelectableCopts_output_test",
-    expect = [
+    expected = [
         "LaunchScreen.storyboardc",
         "Info.plist",
         "AppWithSelectableCopts",

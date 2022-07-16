@@ -7,6 +7,7 @@ load("//rules:plists.bzl", "info_plists_by_setting")
 load("//rules:providers.bzl", "AvoidDepsInfo", "FrameworkInfo")
 load("//rules:transition_support.bzl", "transition_support")
 load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
+load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@build_bazel_rules_apple//apple/internal:apple_product_type.bzl", "apple_product_type")
 load("@build_bazel_rules_apple//apple/internal:bundling_support.bzl", "bundling_support")
@@ -91,6 +92,7 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
         vfs = library.import_vfsoverlays,
         deps = framework_deps,
         platforms = platforms,
+        library_linkopts = library.linkopts,
         # At the time of writing this is still used in the output path
         # computation
         minimum_os_version = select({
@@ -547,7 +549,7 @@ def _attrs_for_split_slice(attrs_by_split_slices, split_slice_key):
     else:
         return attrs_by_split_slices[split_slice_key]
 
-def _bundle_dynamic_framework(ctx, avoid_deps):
+def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
     """Packages this as dynamic framework
 
     Currently, this doesn't include headers or other interface files.
@@ -595,6 +597,8 @@ def _bundle_dynamic_framework(ctx, avoid_deps):
             name = bundle_name,
         ),
     ]
+    if is_extension_safe:
+        extra_linkopts.append("-fapplication-extension")
 
     top_level_infoplists = resources.collect(
         attr = ctx.attr,
@@ -692,6 +696,11 @@ def _bundle_dynamic_framework(ctx, avoid_deps):
             platform_prerequisites = platform_prerequisites,
             signed_frameworks = depset(signed_frameworks),
         ),
+        partials.extension_safe_validation_partial(
+            is_extension_safe = is_extension_safe,
+            rule_label = label,
+            targets_to_validate = dep_frameworks,
+        ),
 
         # Don't bake the headers here - for distro mode, this is done with
         # xcframework
@@ -774,11 +783,19 @@ def _bundle_dynamic_framework(ctx, avoid_deps):
         ] + processor_result.providers,
     )
 
-def _bundle_static_framework(ctx, outputs):
+def _bundle_static_framework(ctx, is_extension_safe, outputs):
     """Returns bundle info for a static framework commonly used intra-build"""
     infoplist = _merge_root_infoplists(ctx)
 
     current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
+
+    partial_output = partial.call(
+        partials.extension_safe_validation_partial(
+            is_extension_safe = is_extension_safe,
+            rule_label = ctx.label,
+            targets_to_validate = ctx.attr.frameworks,
+        ),
+    )
 
     # Static packaging - archives are passed from library deps
     return struct(files = depset([]), providers = [
@@ -796,7 +813,7 @@ def _bundle_static_framework(ctx, outputs):
             product_type = ctx.attr._product_type,
             uses_swift = outputs.swiftmodule != None,
         ),
-    ])
+    ] + partial_output.providers)
 
 def _apple_framework_packaging_impl(ctx):
     # The current build architecture
@@ -804,6 +821,11 @@ def _apple_framework_packaging_impl(ctx):
 
     # The current Apple platform type, such as iOS, macOS, tvOS, or watchOS
     platform = str(ctx.fragments.apple.single_arch_platform.platform_type)
+
+    # Use 'library_linkopts' to determine if resulting binary should be application extension safe.
+    # This allows manual `linkopts` OR `xcconfig` in the upstream `apple_library` implementation
+    # to pass in the right value to the packaging step in this rule.
+    is_extension_safe = "-fapplication-extension" in ctx.attr.library_linkopts
 
     # When building with multiple architectures (e.g.,
     # --ios_multi_cpus=x86_64,arm64), we should only pick the slice for the
@@ -869,10 +891,10 @@ def _apple_framework_packaging_impl(ctx):
 
     # If we link dynamic - then package it as dynamic
     if ctx.attr.link_dynamic:
-        bundle_outs = _bundle_dynamic_framework(ctx, avoid_deps = avoid_deps)
+        bundle_outs = _bundle_dynamic_framework(ctx, is_extension_safe = is_extension_safe, avoid_deps = avoid_deps)
         avoid_deps_info = AvoidDepsInfo(libraries = depset(avoid_deps + ctx.attr.deps).to_list(), link_dynamic = True)
     else:
-        bundle_outs = _bundle_static_framework(ctx, outputs = outputs)
+        bundle_outs = _bundle_static_framework(ctx, is_extension_safe = is_extension_safe, outputs = outputs)
         avoid_deps_info = AvoidDepsInfo(libraries = depset(avoid_deps).to_list(), link_dynamic = False)
     swift_info = _get_merged_swift_info(ctx, framework_files, transitive_deps)
 
@@ -924,6 +946,11 @@ apple_framework_packaging = rule(
             allow_files = True,
             doc =
                 """Objc or Swift rules to be packed by the framework rule
+""",
+        ),
+        "library_linkopts": attr.string_list(
+            doc = """
+Internal - A list of strings representing extra flags that are passed to the linker for the underlying library.
 """,
         ),
         "link_dynamic": attr.bool(

@@ -15,3 +15,19 @@ ios_extension(
         "//tests/ios/app:FW",
     ],
 )
+
+ios_extension(
+    name = "ExampleExtensionWithDylibs",
+    bundle_id = "com.example.app.example-extension",
+    families = [
+        "iphone",
+    ],
+    infoplists = [
+        "ExampleExtension/Info.plist",
+    ],
+    minimum_os_version = "10.0",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//tests/ios/frameworks/dynamic/a",
+    ],
+)

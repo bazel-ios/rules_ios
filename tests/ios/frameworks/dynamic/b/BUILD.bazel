@@ -9,5 +9,6 @@ apple_framework(
     link_dynamic = True,
     platforms = {"ios": "10.0"},
     visibility = ["//visibility:public"],
+    xcconfig = {"APPLICATION_EXTENSION_API_ONLY": "YES"},
     deps = ["//tests/ios/frameworks/dynamic/c"],
 )

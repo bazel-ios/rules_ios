@@ -15,17 +15,30 @@ fi
 
 STATUS=0
 
-expect_output() {
-   echo "TEST $1"
-   if [[ ! -e "$1" ]]; then 
-     echo "Missing output $1"
-     STATUS=1
+check_expected_output() {
+    echo "TEST EXPECTED $1"
+    if [[ ! -e "$1" ]]; then 
+        echo "Missing output $1"
+        STATUS=1
    fi
 }
 
 EXPECT=%EXPECT%
 for f in ${EXPECT[@]}; do
-    expect_output "$f"
+    check_expected_output "$f"
+done
+
+check_unxpected_output() {
+    echo "TEST UNEXPECTED $1"
+    if [[ -e "$1" ]]; then 
+        echo "Has unexpected output $1"
+        STATUS=1
+   fi
+}
+
+UNEXPECT=%UNEXPECT%
+for f in ${UNEXPECT[@]}; do
+    check_unxpected_output "$f"
 done
 
 # Dump the directory to better diagnose a failure
