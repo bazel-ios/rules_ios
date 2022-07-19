@@ -1,6 +1,6 @@
 ############################################################################
 #                   THIS IS GENERATED CODE                                 #
-# Extracted from Xcode 12.5.1.12E507                                     #
+# Extracted from Xcode 13.4.1.13F100                                     #
 # To update, in rules_ios run `bazel run data_generators:extract_xcspecs`  #
 ############################################################################
 
@@ -151,6 +151,8 @@ SETTINGS = {
                     "gnu++14",
                     "c++17",
                     "gnu++17",
+                    "c++20",
+                    "gnu++20",
                     "compiler-default",
                 ],
             },
@@ -158,17 +160,18 @@ SETTINGS = {
                 "AdditionalLinkerArgs": {
                     "<<otherwise>>": ["-stdlib=$(value)"],
                     "compiler-default": [],
+                    "libstdc++": [],
                 },
                 "AppearsAfter": "CLANG_CXX_LANGUAGE_STANDARD",
-                "Category": "LanguageCXX",
                 "CommandLineArgs": {
                     "<<otherwise>>": ["-stdlib=$(value)"],
                     "compiler-default": [],
+                    "libstdc++": [],
                 },
                 "DefaultValue": "com_apple_compilers_llvm_clang_1_0__CLANG_CXX_LIBRARY__DefaultValue",
                 "FileTypes": ["sourcecode.cpp.cpp", "sourcecode.cpp.objcpp"],
                 "Type": "Enumeration",
-                "Values": ["libstdc++", "libc++", "compiler-default"],
+                "Values": ["libc++", "compiler-default"],
             },
             "CLANG_ENABLE_OBJC_ARC": {
                 "AdditionalLinkerArgs": {"NO": [], "YES": ["-fobjc-arc"]},
@@ -340,6 +343,12 @@ SETTINGS = {
                 },
                 "Condition": "com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_MODULE_IMPLEMENTATION_OF__Condition",
                 "DefaultValue": "com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_MODULE_IMPLEMENTATION_OF__DefaultValue",
+                "Type": "Boolean",
+            },
+            "CLANG_ENABLE_BOUNDS_ATTRIBUTES": {
+                "CommandLineArgs": {"NO": [], "YES": ["-fbounds-attributes"]},
+                "DefaultValue": "com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_BOUNDS_ATTRIBUTES__DefaultValue",
+                "FileTypes": ["sourcecode.c.c"],
                 "Type": "Boolean",
             },
             "CLANG_ENABLE_APP_EXTENSION": {
@@ -852,6 +861,15 @@ SETTINGS = {
                 "DefaultValue": "com_apple_compilers_llvm_clang_1_0__GCC_WARN_CHECK_SWITCH_STATEMENTS__DefaultValue",
                 "Type": "Boolean",
             },
+            "CLANG_WARN_COMPLETION_HANDLER_MISUSE": {
+                "Category": "Warnings",
+                "CommandLineArgs": {
+                    "NO": [],
+                    "YES": ["-Wcompletion-handler"],
+                },
+                "DefaultValue": "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_COMPLETION_HANDLER_MISUSE__DefaultValue",
+                "Type": "Boolean",
+            },
             "GCC_WARN_UNUSED_FUNCTION": {
                 "Category": "Warnings",
                 "CommandLineArgs": {
@@ -1148,8 +1166,13 @@ SETTINGS = {
             },
             "CLANG_TRIVIAL_AUTO_VAR_INIT": {
                 "CommandLineArgs": {
+                    "default": [],
                     "pattern": ["-ftrivial-auto-var-init=pattern"],
-                    "uninitialized": [],
+                    "uninitialized": ["-ftrivial-auto-var-init=uninitialized"],
+                    "zero": [
+                        "-ftrivial-auto-var-init=zero",
+                        "-enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang",
+                    ],
                 },
                 "DefaultValue": "com_apple_compilers_llvm_clang_1_0__CLANG_TRIVIAL_AUTO_VAR_INIT__DefaultValue",
                 "FileTypes": [
@@ -1159,7 +1182,7 @@ SETTINGS = {
                     "sourcecode.cpp.objcpp",
                 ],
                 "Type": "Enumeration",
-                "Values": ["uninitialized", "pattern"],
+                "Values": ["default", "uninitialized", "zero", "pattern"],
             },
             "WARNING_CFLAGS": {
                 "Category": "CustomFlags",
@@ -1290,6 +1313,17 @@ SETTINGS = {
                 },
                 "DefaultValue": "com_apple_compilers_llvm_clang_1_0__GCC_WARN_UNUSED_VALUE__DefaultValue",
                 "Type": "Boolean",
+            },
+            "CLANG_WARN_XNU_TYPED_ALLOCATORS": {
+                "CommandLineArgs": {
+                    "DEFAULT": [],
+                    "NO": ["-Wno-xnu-typed-allocators"],
+                    "YES": ["-Wxnu-typed-allocators"],
+                    "YES_ERROR": ["-Werror=xnu-typed-allocators"],
+                },
+                "DefaultValue": "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_XNU_TYPED_ALLOCATORS__DefaultValue",
+                "Type": "Enumeration",
+                "Values": ["DEFAULT", "YES", "YES_ERROR", "NO"],
             },
             "GCC_ENABLE_EXCEPTIONS": {
                 "CommandLineFlag": "-fexceptions",
@@ -1805,6 +1839,43 @@ SETTINGS = {
                 "DefaultValue": "com_apple_compilers_llvm_clang_1_0__CLANG_ADDRESS_SANITIZER_ALLOW_ERROR_RECOVERY__DefaultValue",
                 "Type": "Boolean",
             },
+            "CLANG_LIBFUZZER": {
+                "AdditionalLinkerArgs": {
+                    "NO": [],
+                    "YES": [
+                        "-fsanitize=fuzzer",
+                        "-fno-sanitize-coverage=pc-table",
+                    ],
+                },
+                "CommandLineArgs": {
+                    "NO": [],
+                    "YES": [
+                        "-fsanitize=fuzzer",
+                        "-fno-sanitize-coverage=pc-table",
+                    ],
+                },
+                "DefaultValue": "com_apple_compilers_llvm_clang_1_0__CLANG_LIBFUZZER__DefaultValue",
+                "Type": "Boolean",
+            },
+            "CLANG_SANITIZER_COVERAGE": {
+                "AdditionalLinkerArgs": {
+                    "NO": [],
+                    "YES": [
+                        "-fsanitize=fuzzer-no-link",
+                        "-fno-sanitize-coverage=pc-table",
+                    ],
+                },
+                "CommandLineArgs": {
+                    "NO": [],
+                    "YES": [
+                        "-fsanitize=fuzzer-no-link",
+                        "-fno-sanitize-coverage=pc-table",
+                    ],
+                },
+                "Condition": "com_apple_compilers_llvm_clang_1_0__CLANG_SANITIZER_COVERAGE__Condition",
+                "DefaultValue": "com_apple_compilers_llvm_clang_1_0__CLANG_SANITIZER_COVERAGE__DefaultValue",
+                "Type": "Boolean",
+            },
             "CLANG_UNDEFINED_BEHAVIOR_SANITIZER": {
                 "AdditionalLinkerArgs": {
                     "NO": [],
@@ -2266,7 +2337,6 @@ SETTINGS = {
                 "CommandLineArgs": {"NO": [], "YES": ["-Xlinker", "-no_deduplicate"]},
                 "Condition": "com_apple_pbx_linkers_ld__LD_DONT_RUN_DEDUPLICATION__Condition",
                 "DefaultValue": "com_apple_pbx_linkers_ld__LD_DONT_RUN_DEDUPLICATION__DefaultValue",
-                "SupportedVersionRanges": ["262.1"],
                 "Type": "Boolean",
             },
             "LD_OBJC_ABI_VERSION": {
@@ -2337,7 +2407,6 @@ SETTINGS = {
                 "CommandLineArgs": {"NO": [], "YES": ["-Xlinker", "-debug_variant"]},
                 "Condition": "com_apple_pbx_linkers_ld__LD_DEBUG_VARIANT__Condition",
                 "DefaultValue": "com_apple_pbx_linkers_ld__LD_DEBUG_VARIANT__DefaultValue",
-                "SupportedVersionRanges": ["407"],
                 "Type": "Boolean",
             },
             "LD_FINAL_OUTPUT_FILE": {
@@ -2501,16 +2570,13 @@ SETTINGS = {
                 "DefaultValue": "com_apple_xcode_tools_ibtool_compiler__IBC_COMPILER_AUTO_ACTIVATE_CUSTOM_FONTS__DefaultValue",
                 "Type": "Boolean",
             },
-            "IBC_COMPILER_USE_NIBARCHIVES_FOR_MACOS": {
+            "IBC_COMPILER_USE_NIBKEYEDARCHIVER_FOR_MACOS": {
                 "CommandLineArgs": {
-                    "": [],
-                    "<<otherwise>>": [
-                        "--use-nibarchives-for-macos",
-                        "$(value)",
-                    ],
+                    "NO": [],
+                    "YES": ["--use-nibkeyedarchiver-for-macos"],
                 },
-                "DefaultValue": "com_apple_xcode_tools_ibtool_compiler__IBC_COMPILER_USE_NIBARCHIVES_FOR_MACOS__DefaultValue",
-                "Type": "String",
+                "DefaultValue": "com_apple_xcode_tools_ibtool_compiler__IBC_COMPILER_USE_NIBKEYEDARCHIVER_FOR_MACOS__DefaultValue",
+                "Type": "Boolean",
             },
         },
         "Outputs": [
@@ -2711,6 +2777,21 @@ SETTINGS = {
                 "DefaultValue": "com_apple_xcode_tools_swift_compiler____SWIFT_ENFORCE_EXCLUSIVE_ACCESS_DEBUG_ENFORCEMENT_DEBUG__DefaultValue",
                 "Type": "Boolean",
             },
+            "SWIFT_OPTIMIZE_OBJECT_LIFETIME": {
+                "Category": "Code Generation",
+                "CommandLineArgs": {
+                    "NO": [],
+                    "YES": [
+                        "-Xfrontend",
+                        "-enable-copy-propagation",
+                    ],
+                },
+                "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_OPTIMIZE_OBJECT_LIFETIME__DefaultValue",
+                "Description": "Enables aggressive ARC optimization that " +
+                               "shortens object lifetimes",
+                "DisplayName": "Optimize Object Lifetimes",
+                "Type": "Boolean",
+            },
             "SWIFT_STDLIB": {
                 "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_STDLIB__DefaultValue",
                 "Type": "String",
@@ -2733,6 +2814,7 @@ SETTINGS = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS": {
                 "Category": "Custom Flags",
                 "CommandLineArgs": ["-D$(value)"],
+                "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_ACTIVE_COMPILATION_CONDITIONS__DefaultValue",
                 "Description": "A list of compilation conditions to " +
                                "enable for conditional compilation " +
                                "expressions.",
@@ -2778,7 +2860,10 @@ SETTINGS = {
             "CLANG_MODULE_CACHE_PATH": {"CommandLineFlag": "-module-cache-path", "Type": "Path"},
             "SWIFT_SERIALIZE_DEBUGGING_OPTIONS": {
                 "CommandLineArgs": {
-                    "NO": [],
+                    "NO": [
+                        "-Xfrontend",
+                        "-no-serialize-debugging-options",
+                    ],
                     "YES": [
                         "-Xfrontend",
                         "-serialize-debugging-options",

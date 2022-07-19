@@ -1,6 +1,6 @@
 ############################################################################
 #                   THIS IS GENERATED CODE                                 #
-# Extracted from Xcode 12.5.1.12E507                                     #
+# Extracted from Xcode 13.4.1.13F100                                     #
 # To update, in rules_ios run `bazel run data_generators:extract_xcspecs`  #
 ############################################################################
 
@@ -515,6 +515,10 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_MODULE_IMPLEMENTATION_OF__
     # YES
     return (False, "YES")
 
+def _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_BOUNDS_ATTRIBUTES__DefaultValue(xcconfigs, id_configs):
+    # NO
+    return (False, "NO")
+
 def _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_APP_EXTENSION__DefaultValue(xcconfigs, id_configs):
     # $(APPLICATION_EXTENSION_API_ONLY)
 
@@ -786,6 +790,10 @@ def _com_apple_compilers_llvm_clang_1_0__GCC_WARN_CHECK_SWITCH_STATEMENTS__Defau
     # YES
     return (False, "YES")
 
+def _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_COMPLETION_HANDLER_MISUSE__DefaultValue(xcconfigs, id_configs):
+    # NO
+    return (False, "NO")
+
 def _com_apple_compilers_llvm_clang_1_0__GCC_WARN_UNUSED_FUNCTION__DefaultValue(xcconfigs, id_configs):
     # NO
     return (False, "NO")
@@ -1005,8 +1013,8 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_ATOMIC_IMPLICIT_SEQ_CST__Def
     return (False, "NO")
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_TRIVIAL_AUTO_VAR_INIT__DefaultValue(xcconfigs, id_configs):
-    # uninitialized
-    return (False, "uninitialized")
+    # default
+    return (False, "default")
 
 def _com_apple_compilers_llvm_clang_1_0__WARNING_CFLAGS__DefaultValue(xcconfigs, id_configs):
     #
@@ -1288,6 +1296,10 @@ def _com_apple_compilers_llvm_clang_1_0__GCC_WARN_UNUSED_VARIABLE__DefaultValue(
 def _com_apple_compilers_llvm_clang_1_0__GCC_WARN_UNUSED_VALUE__DefaultValue(xcconfigs, id_configs):
     # YES
     return (False, "YES")
+
+def _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_XNU_TYPED_ALLOCATORS__DefaultValue(xcconfigs, id_configs):
+    # DEFAULT
+    return (False, "DEFAULT")
 
 def _com_apple_compilers_llvm_clang_1_0__GCC_ENABLE_EXCEPTIONS__DefaultValue(xcconfigs, id_configs):
     # NO
@@ -1923,6 +1935,60 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_ADDRESS_SANITIZER_ALLOW_ERROR_REC
 
     eval_val_0 = ""
     eval_key_0 = "ENABLE_ADDRESS_SANITIZER_ALLOW_ERROR_RECOVERY"
+    if eval_key_0 in xcconfigs:
+        eval_val_0 = xcconfigs[eval_key_0]
+        used_user_content = True
+    elif eval_key_0 in id_configs:
+        opt = id_configs[eval_key_0]
+        if "DefaultValue" in opt:
+            (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
+            used_user_content = used_user_content or eval_val_0_used_user_content
+
+    return (used_user_content, eval_val_0)
+
+def _com_apple_compilers_llvm_clang_1_0__CLANG_LIBFUZZER__DefaultValue(xcconfigs, id_configs):
+    # $(ENABLE_LIBFUZZER)
+
+    used_user_content = False
+
+    eval_val_0 = ""
+    eval_key_0 = "ENABLE_LIBFUZZER"
+    if eval_key_0 in xcconfigs:
+        eval_val_0 = xcconfigs[eval_key_0]
+        used_user_content = True
+    elif eval_key_0 in id_configs:
+        opt = id_configs[eval_key_0]
+        if "DefaultValue" in opt:
+            (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
+            used_user_content = used_user_content or eval_val_0_used_user_content
+
+    return (used_user_content, eval_val_0)
+
+def _com_apple_compilers_llvm_clang_1_0__CLANG_SANITIZER_COVERAGE__Condition(xcconfigs, id_configs):
+    # $(CLANG_LIBFUZZER) != YES
+
+    used_user_content = False
+
+    eval_val_0 = ""
+    eval_key_0 = "CLANG_LIBFUZZER"
+    if eval_key_0 in xcconfigs:
+        eval_val_0 = xcconfigs[eval_key_0]
+        used_user_content = True
+    elif eval_key_0 in id_configs:
+        opt = id_configs[eval_key_0]
+        if "DefaultValue" in opt:
+            (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
+            used_user_content = used_user_content or eval_val_0_used_user_content
+
+    return (used_user_content, (eval_val_0 != "YES"))
+
+def _com_apple_compilers_llvm_clang_1_0__CLANG_SANITIZER_COVERAGE__DefaultValue(xcconfigs, id_configs):
+    # $(ENABLE_SANITIZER_COVERAGE)
+
+    used_user_content = False
+
+    eval_val_0 = ""
+    eval_key_0 = "ENABLE_SANITIZER_COVERAGE"
     if eval_key_0 in xcconfigs:
         eval_val_0 = xcconfigs[eval_key_0]
         used_user_content = True
@@ -2915,7 +2981,7 @@ def _com_apple_pbx_linkers_ld__LD_THREAD_SANITIZER__DefaultValue(xcconfigs, id_c
     return (used_user_content, eval_val_0)
 
 def _com_apple_pbx_linkers_ld__LD_DEBUG_VARIANT__Condition(xcconfigs, id_configs):
-    # $(ENABLE_ADDRESS_SANITIZER) == YES || $(ENABLE_THREAD_SANITIZER) == YES || $(ENABLE_UNDEFINED_BEHAVIOR_SANITIZER) == YES
+    # $(ENABLE_ADDRESS_SANITIZER) == YES || $(ENABLE_THREAD_SANITIZER) == YES || $(ENABLE_SANITIZER_COVERAGE) == YES || $(ENABLE_UNDEFINED_BEHAVIOR_SANITIZER) == YES || $(CLANG_COVERAGE_MAPPING) == YES
 
     used_user_content = False
 
@@ -2942,7 +3008,7 @@ def _com_apple_pbx_linkers_ld__LD_DEBUG_VARIANT__Condition(xcconfigs, id_configs
             used_user_content = used_user_content or eval_val_1_used_user_content
 
     eval_val_2 = ""
-    eval_key_2 = "ENABLE_UNDEFINED_BEHAVIOR_SANITIZER"
+    eval_key_2 = "ENABLE_SANITIZER_COVERAGE"
     if eval_key_2 in xcconfigs:
         eval_val_2 = xcconfigs[eval_key_2]
         used_user_content = True
@@ -2952,7 +3018,29 @@ def _com_apple_pbx_linkers_ld__LD_DEBUG_VARIANT__Condition(xcconfigs, id_configs
             (eval_val_2_used_user_content, eval_val_2) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_2_used_user_content
 
-    return (used_user_content, (eval_val_0 == "YES" or eval_val_1 == "YES" or eval_val_2 == "YES"))
+    eval_val_3 = ""
+    eval_key_3 = "ENABLE_UNDEFINED_BEHAVIOR_SANITIZER"
+    if eval_key_3 in xcconfigs:
+        eval_val_3 = xcconfigs[eval_key_3]
+        used_user_content = True
+    elif eval_key_3 in id_configs:
+        opt = id_configs[eval_key_3]
+        if "DefaultValue" in opt:
+            (eval_val_3_used_user_content, eval_val_3) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
+            used_user_content = used_user_content or eval_val_3_used_user_content
+
+    eval_val_4 = ""
+    eval_key_4 = "CLANG_COVERAGE_MAPPING"
+    if eval_key_4 in xcconfigs:
+        eval_val_4 = xcconfigs[eval_key_4]
+        used_user_content = True
+    elif eval_key_4 in id_configs:
+        opt = id_configs[eval_key_4]
+        if "DefaultValue" in opt:
+            (eval_val_4_used_user_content, eval_val_4) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
+            used_user_content = used_user_content or eval_val_4_used_user_content
+
+    return (used_user_content, (eval_val_0 == "YES" or eval_val_1 == "YES" or eval_val_2 == "YES" or eval_val_3 == "YES" or eval_val_4 == "YES"))
 
 def _com_apple_pbx_linkers_ld__LD_DEBUG_VARIANT__DefaultValue(xcconfigs, id_configs):
     # YES
@@ -3344,9 +3432,9 @@ def _com_apple_xcode_tools_ibtool_compiler__IBC_COMPILER_AUTO_ACTIVATE_CUSTOM_FO
     # YES
     return (False, "YES")
 
-def _com_apple_xcode_tools_ibtool_compiler__IBC_COMPILER_USE_NIBARCHIVES_FOR_MACOS__DefaultValue(xcconfigs, id_configs):
-    #
-    return (False, "")
+def _com_apple_xcode_tools_ibtool_compiler__IBC_COMPILER_USE_NIBKEYEDARCHIVER_FOR_MACOS__DefaultValue(xcconfigs, id_configs):
+    # NO
+    return (False, "NO")
 
 def _com_apple_xcode_tools_swift_compiler__SWIFT_EXEC__DefaultValue(xcconfigs, id_configs):
     # swiftc
@@ -3583,6 +3671,10 @@ def _com_apple_xcode_tools_swift_compiler____SWIFT_ENFORCE_EXCLUSIVE_ACCESS_DEBU
     # YES
     return (False, "YES")
 
+def _com_apple_xcode_tools_swift_compiler__SWIFT_OPTIMIZE_OBJECT_LIFETIME__DefaultValue(xcconfigs, id_configs):
+    # NO
+    return (False, "NO")
+
 def _com_apple_xcode_tools_swift_compiler__SWIFT_STDLIB__DefaultValue(xcconfigs, id_configs):
     # swiftCore
     return (False, "swiftCore")
@@ -3626,6 +3718,10 @@ def _com_apple_xcode_tools_swift_compiler__SWIFT_RESPONSE_FILE_PATH__DefaultValu
             used_user_content = used_user_content or eval_val_2_used_user_content
 
     return (used_user_content, eval_val_2)
+
+def _com_apple_xcode_tools_swift_compiler__SWIFT_ACTIVE_COMPILATION_CONDITIONS__DefaultValue(xcconfigs, id_configs):
+    #
+    return (False, "")
 
 def _com_apple_xcode_tools_swift_compiler__SWIFT_DEPLOYMENT_TARGET__DefaultValue(xcconfigs, id_configs):
     # $($(DEPLOYMENT_TARGET_SETTING_NAME))
@@ -4023,6 +4119,7 @@ XCSPEC_EVALS = {
     "com_apple_compilers_llvm_clang_1_0__CLANG_DEBUG_MODULES__Condition": _com_apple_compilers_llvm_clang_1_0__CLANG_DEBUG_MODULES__Condition,
     "com_apple_compilers_llvm_clang_1_0__CLANG_DEBUG_MODULES__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_DEBUG_MODULES__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_APP_EXTENSION__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_APP_EXTENSION__DefaultValue,
+    "com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_BOUNDS_ATTRIBUTES__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_BOUNDS_ATTRIBUTES__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_CODE_COVERAGE__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_CODE_COVERAGE__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_CPP_STATIC_DESTRUCTORS__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_CPP_STATIC_DESTRUCTORS__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_MODULES__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_MODULES__DefaultValue,
@@ -4035,6 +4132,7 @@ XCSPEC_EVALS = {
     "com_apple_compilers_llvm_clang_1_0__CLANG_INDEX_STORE_ENABLE__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_INDEX_STORE_ENABLE__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_INDEX_STORE_PATH__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_INDEX_STORE_PATH__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_INSTRUMENT_FOR_OPTIMIZATION_PROFILING__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_INSTRUMENT_FOR_OPTIMIZATION_PROFILING__DefaultValue,
+    "com_apple_compilers_llvm_clang_1_0__CLANG_LIBFUZZER__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_LIBFUZZER__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_LINK_OBJC_RUNTIME__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_LINK_OBJC_RUNTIME__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_MACRO_BACKTRACE_LIMIT__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_MACRO_BACKTRACE_LIMIT__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_MODULES_AUTOLINK__Condition": _com_apple_compilers_llvm_clang_1_0__CLANG_MODULES_AUTOLINK__Condition,
@@ -4057,6 +4155,8 @@ XCSPEC_EVALS = {
     "com_apple_compilers_llvm_clang_1_0__CLANG_MODULE_LSV__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_MODULE_LSV__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_OPTIMIZATION_PROFILE_FILE__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_OPTIMIZATION_PROFILE_FILE__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_RETAIN_COMMENTS_FROM_SYSTEM_HEADERS__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_RETAIN_COMMENTS_FROM_SYSTEM_HEADERS__DefaultValue,
+    "com_apple_compilers_llvm_clang_1_0__CLANG_SANITIZER_COVERAGE__Condition": _com_apple_compilers_llvm_clang_1_0__CLANG_SANITIZER_COVERAGE__Condition,
+    "com_apple_compilers_llvm_clang_1_0__CLANG_SANITIZER_COVERAGE__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_SANITIZER_COVERAGE__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_ARCHS__Condition": _com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_ARCHS__Condition,
     "com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_ARCHS__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_ARCHS__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_VARIANTS__Condition": _com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_VARIANTS__Condition,
@@ -4074,6 +4174,7 @@ XCSPEC_EVALS = {
     "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_BOOL_CONVERSION__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_BOOL_CONVERSION__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_COMMA__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_COMMA__DefaultValue,
+    "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_COMPLETION_HANDLER_MISUSE__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_COMPLETION_HANDLER_MISUSE__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_CONSTANT_CONVERSION__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_CONSTANT_CONVERSION__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_CXX0X_EXTENSIONS__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_CXX0X_EXTENSIONS__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_DELETE_NON_VIRTUAL_DTOR__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_DELETE_NON_VIRTUAL_DTOR__DefaultValue,
@@ -4109,6 +4210,7 @@ XCSPEC_EVALS = {
     "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_UNGUARDED_AVAILABILITY__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_UNGUARDED_AVAILABILITY__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_UNREACHABLE_CODE__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_UNREACHABLE_CODE__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_VEXING_PARSE__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_VEXING_PARSE__DefaultValue,
+    "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_XNU_TYPED_ALLOCATORS__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_WARN_XNU_TYPED_ALLOCATORS__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_WARN__ARC_BRIDGE_CAST_NONARC__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_WARN__ARC_BRIDGE_CAST_NONARC__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_WARN__DUPLICATE_METHOD_MATCH__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_WARN__DUPLICATE_METHOD_MATCH__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_WARN__EXIT_TIME_DESTRUCTORS__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_WARN__EXIT_TIME_DESTRUCTORS__DefaultValue,
@@ -4298,7 +4400,7 @@ XCSPEC_EVALS = {
     "com_apple_pbx_linkers_ld____INPUT_FILE_LIST_PATH____DefaultValue": _com_apple_pbx_linkers_ld____INPUT_FILE_LIST_PATH____DefaultValue,
     "com_apple_pbx_linkers_ld__arch__Condition": _com_apple_pbx_linkers_ld__arch__Condition,
     "com_apple_xcode_tools_ibtool_compiler__IBC_COMPILER_AUTO_ACTIVATE_CUSTOM_FONTS__DefaultValue": _com_apple_xcode_tools_ibtool_compiler__IBC_COMPILER_AUTO_ACTIVATE_CUSTOM_FONTS__DefaultValue,
-    "com_apple_xcode_tools_ibtool_compiler__IBC_COMPILER_USE_NIBARCHIVES_FOR_MACOS__DefaultValue": _com_apple_xcode_tools_ibtool_compiler__IBC_COMPILER_USE_NIBARCHIVES_FOR_MACOS__DefaultValue,
+    "com_apple_xcode_tools_ibtool_compiler__IBC_COMPILER_USE_NIBKEYEDARCHIVER_FOR_MACOS__DefaultValue": _com_apple_xcode_tools_ibtool_compiler__IBC_COMPILER_USE_NIBKEYEDARCHIVER_FOR_MACOS__DefaultValue,
     "com_apple_xcode_tools_ibtool_compiler__IBC_ERRORS__DefaultValue": _com_apple_xcode_tools_ibtool_compiler__IBC_ERRORS__DefaultValue,
     "com_apple_xcode_tools_ibtool_compiler__IBC_FLATTEN_NIBS__DefaultValue": _com_apple_xcode_tools_ibtool_compiler__IBC_FLATTEN_NIBS__DefaultValue,
     "com_apple_xcode_tools_ibtool_compiler__IBC_MODULE__DefaultValue": _com_apple_xcode_tools_ibtool_compiler__IBC_MODULE__DefaultValue,
@@ -4312,6 +4414,7 @@ XCSPEC_EVALS = {
     "com_apple_xcode_tools_ibtool_compiler__build_file_compiler_flags__DefaultValue": _com_apple_xcode_tools_ibtool_compiler__build_file_compiler_flags__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__CLANG_COVERAGE_MAPPING_LINKER_ARGS__DefaultValue": _com_apple_xcode_tools_swift_compiler__CLANG_COVERAGE_MAPPING_LINKER_ARGS__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__CLANG_COVERAGE_MAPPING__DefaultValue": _com_apple_xcode_tools_swift_compiler__CLANG_COVERAGE_MAPPING__DefaultValue,
+    "com_apple_xcode_tools_swift_compiler__SWIFT_ACTIVE_COMPILATION_CONDITIONS__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_ACTIVE_COMPILATION_CONDITIONS__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__SWIFT_ADDRESS_SANITIZER_ALLOW_ERROR_RECOVERY__Condition": _com_apple_xcode_tools_swift_compiler__SWIFT_ADDRESS_SANITIZER_ALLOW_ERROR_RECOVERY__Condition,
     "com_apple_xcode_tools_swift_compiler__SWIFT_ADDRESS_SANITIZER_ALLOW_ERROR_RECOVERY__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_ADDRESS_SANITIZER_ALLOW_ERROR_RECOVERY__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__SWIFT_ADDRESS_SANITIZER__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_ADDRESS_SANITIZER__DefaultValue,
@@ -4342,6 +4445,7 @@ XCSPEC_EVALS = {
     "com_apple_xcode_tools_swift_compiler__SWIFT_OBJC_BRIDGING_HEADER__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_OBJC_BRIDGING_HEADER__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__SWIFT_OBJC_INTERFACE_HEADER_NAME__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_OBJC_INTERFACE_HEADER_NAME__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__SWIFT_OPTIMIZATION_LEVEL__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_OPTIMIZATION_LEVEL__DefaultValue,
+    "com_apple_xcode_tools_swift_compiler__SWIFT_OPTIMIZE_OBJECT_LIFETIME__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_OPTIMIZE_OBJECT_LIFETIME__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__SWIFT_PRECOMPILE_BRIDGING_HEADER__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_PRECOMPILE_BRIDGING_HEADER__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__SWIFT_REFLECTION_METADATA_LEVEL__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_REFLECTION_METADATA_LEVEL__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__SWIFT_RESPONSE_FILE_PATH__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_RESPONSE_FILE_PATH__DefaultValue,
