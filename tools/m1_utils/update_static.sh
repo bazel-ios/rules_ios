@@ -10,29 +10,24 @@ unarchive() {
 
     rm -rf *.o 
     ar -x "$FILE" 
-    ar t "$FILE" | grep \.o$ | sort > objs.txt
+    ar t "$FILE" | grep \.o$ | sort --ignore-case > objs.txt
 
     # Assume default extraction strategy is OK if no dupes
-    if [[ -z "$(uniq -d objs.txt)" ]]; then
+    if [[ -z "$(uniq -di objs.txt)" ]]; then
        return 0
     fi
 
+    echo "hiasdhiashdoiqwhe"
+    echo "asdoiqwhe oihqweoi hqwoieh oiqwhe "
+    uniq -D -i objs.txt > duplicate_objs.txt
     i=0
-    LAST_OBJ=""
     while IFS=\\\n read -r var; do
         OBJ="$var"
-        if [[ ! "$LAST_OBJ" == "$OBJ" ]]; then
-            LAST_OBJ="$OBJ"
-            continue
-        fi
-        LAST_OBJ="$OBJ"
-
         (( i+=1 ))
         ar -p "$FILE" "$OBJ"  > "$i-$OBJ"
-
         # Note that this operation is slow, consider moving duplicates
         ar -d "$FILE" "$OBJ"
-    done < objs.txt
+    done < duplicate_objs.txt
 }
 
 
