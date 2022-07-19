@@ -93,12 +93,12 @@ jobs:
         run: find $PWD -type f \( -name 'WORKSPACE' -o -name '*.bzl' -o -name '*.bazel' \) | xargs bazel run buildifier -- -lint=fix && git diff --exit-code
       - name: Check docs
         run: bazelisk run docs && git diff --exit-code docs
-  xcodeproj_tests_xcode_12_5_1:
-    name: .xcodeproj Tests on Xcode 12.5.1
+  xcodeproj_tests_xcode_13_4_1:
+    name: .xcodeproj Tests on Xcode 13.4.1
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Select Xcode 12.5.1
+      - name: Select Xcode 13.4.1
         run: .github/workflows/xcode_select.sh
       - name: Run tests
         run: ./tests/xcodeproj-tests.sh --clean
@@ -108,12 +108,12 @@ jobs:
           name: bazel-testlogs
           path: bazel-testlogs
 
-  lldb_ios_tests_xcode_12_5_1:
-    name: LLDB tests on Xcode 12.5.1
+  lldb_ios_tests_xcode_13_4_1:
+    name: LLDB tests on Xcode 13.4.1
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Select Xcode 12.5.1
+      - name: Select Xcode 13.4.1
         run: .github/workflows/xcode_select.sh
       - name: Run tests
         run: bazelisk test tests/ios/lldb/app:objc_app_po_test  tests/ios/lldb/app:objc_app_variable_test --config lldb_ios_test
