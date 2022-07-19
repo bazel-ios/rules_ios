@@ -17,8 +17,6 @@ unarchive() {
        return 0
     fi
 
-    echo "hiasdhiashdoiqwhe"
-    echo "asdoiqwhe oihqweoi hqwoieh oiqwhe "
     uniq -D -i objs.txt > duplicate_objs.txt
     i=0
     while IFS=\\\n read -r var; do
