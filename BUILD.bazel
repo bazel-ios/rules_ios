@@ -42,17 +42,18 @@ selects.config_setting_group(
     ],
 )
 
+# The 2 below settings are implementation details
 config_setting(
-    name = "feature_arm64_simulator_use_device_deps",
+    name = "internal_feature_arm64_simulator_use_device_deps",
     values = {
         "features": feature_names.arm64_simulator_use_device_deps,
     },
 )
 
 config_setting(
-    name = "feature_bazel4_override_simulator_cpu_arm64",
+    name = "internal_feature_override_simulator_cpu_arm64",
     values = {
-        "features": feature_names.bazel4_override_simulator_cpu_arm64,
+        "features": "apple._disabled_arm64_configuration_for_exclusiviity",
     },
 )
 
@@ -82,8 +83,8 @@ selects.config_setting_group(
     name = "arm64_simulator_use_device_deps_default",
     match_all = [
         ":cpu_default",
-        ":feature_arm64_simulator_use_device_deps",
-        ":feature_bazel4_override_simulator_cpu_arm64",
+        ":internal_feature_arm64_simulator_use_device_deps",
+        ":internal_feature_override_simulator_cpu_arm64",
     ],
 )
 
@@ -91,8 +92,8 @@ selects.config_setting_group(
     name = "arm64_simulator_use_device_deps_intel",
     match_all = [
         ":cpu_ios_x86_64",
-        ":feature_arm64_simulator_use_device_deps",
-        ":feature_bazel4_override_simulator_cpu_arm64",
+        ":internal_feature_arm64_simulator_use_device_deps",
+        ":internal_feature_override_simulator_cpu_arm64",
     ],
 )
 
@@ -101,31 +102,31 @@ selects.config_setting_group(
     name = "arm64_simulator_use_device_deps_sim_arm64",
     match_all = [
         ":cpu_ios_sim_arm64",
-        ":feature_arm64_simulator_use_device_deps",
+        ":internal_feature_arm64_simulator_use_device_deps",
     ],
 )
 
 selects.config_setting_group(
-    name = "bazel4_override_simulator_cpu_arm64_default",
+    name = "internal_override_simulator_cpu_arm64_default",
     match_all = [
         ":cpu_default",
-        ":feature_bazel4_override_simulator_cpu_arm64",
+        ":internal_feature_override_simulator_cpu_arm64",
     ],
 )
 
 selects.config_setting_group(
-    name = "bazel4_override_simulator_cpu_arm64_default_intel",
+    name = "internal_override_simulator_cpu_arm64_default_intel",
     match_all = [
         ":cpu_ios_x86_64",
-        ":feature_bazel4_override_simulator_cpu_arm64",
+        ":internal_feature_override_simulator_cpu_arm64",
     ],
 )
 
 selects.config_setting_group(
-    name = "bazel4_override_simulator_cpu_arm64",
+    name = "internal_override_simulator_cpu_arm64",
     match_any = [
-        ":bazel4_override_simulator_cpu_arm64_default",
-        ":bazel4_override_simulator_cpu_arm64_default_intel",
+        ":internal_override_simulator_cpu_arm64_default",
+        ":internal_override_simulator_cpu_arm64_default_intel",
     ],
 )
 
