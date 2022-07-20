@@ -24,16 +24,16 @@ ios_unit_test(
 )
 
 default_ios_test_runner(
-    name = "iPhone-X__13.2",
-    device_type = "iPhone X",
-    os_version = "13.2",
+    name = "iPhone-13-Pro__15.2",
+    device_type = "iPhone 13 Pro",
+    os_version = "15.2",
     visibility = ["//visibility:public"],
 )
 
 default_ios_test_runner(
-    name = "iPad-Air-2__12.4",
+    name = "iPad-Air-2__15.2",
     device_type = "iPad Air 2",
-    os_version = "12.4",
+    os_version = "15.2",
     visibility = ["//visibility:public"],
 )
 
@@ -52,8 +52,8 @@ ios_unit_test(
     minimum_os_version = "11.0",
     module_name = "Single_Application_RunnableTestSuite",
     runners = [
-        "iPhone-X__13.2",
-        "iPad-Air-2__12.4",
+        "iPhone-13-Pro__15.2",
+        "iPad-Air-2__15.2",
     ],
     sdk_frameworks = ["XCTest"],
 )
