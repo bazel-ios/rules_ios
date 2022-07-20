@@ -34,7 +34,7 @@ pkg_tar(
     name = "vmd_tar",
     srcs = [
         "bin/sshpass",
-        "@tart//file",
         ":vmd",
+        "@tart//file",
     ],
 )
