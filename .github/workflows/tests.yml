@@ -9,7 +9,7 @@ on:
 jobs:
   integration_tests:
     name: Build and Test
-    runs-on: macos-latest
+    runs-on: macos-12
     steps:
       - uses: actions/checkout@v2
       - name: Select Xcode
@@ -31,7 +31,7 @@ jobs:
     # consider merging this feature into the default behavior and can re-align
     # the CI job
     name: Build and Test ( Virtual Frameworks )
-    runs-on: macos-latest
+    runs-on: macos-12
     steps:
       - uses: actions/checkout@v2
       - name: Select Xcode
@@ -56,7 +56,7 @@ jobs:
 
   build_arm64_simulator:
     name: Build arm64 Simulator
-    runs-on: macos-latest
+    runs-on: macos-12
     steps:
       - uses: actions/checkout@v2
       - name: Select Xcode
@@ -83,7 +83,7 @@ jobs:
 
   buildifier:
     name: Check Starlark and Docs
-    runs-on: macos-latest
+    runs-on: macos-12
     steps:
       - uses: actions/checkout@v2
       - name: Select Xcode
@@ -95,7 +95,7 @@ jobs:
         run: bazelisk run docs && git diff --exit-code docs
   xcodeproj_tests_xcode_13_4_1:
     name: .xcodeproj Tests on Xcode 13.4.1
-    runs-on: macos-latest
+    runs-on: macos-12
     steps:
       - uses: actions/checkout@v2
       - name: Select Xcode 13.4.1
@@ -110,7 +110,7 @@ jobs:
 
   lldb_ios_tests_xcode_13_4_1:
     name: LLDB tests on Xcode 13.4.1
-    runs-on: macos-latest
+    runs-on: macos-12
     steps:
       - uses: actions/checkout@v2
       - name: Select Xcode 13.4.1
@@ -124,7 +124,7 @@ jobs:
           path: bazel-testlogs
   multi_arch_support:
     name: Build iOS App for Multiple Architecture
-    runs-on: macos-latest
+    runs-on: macos-12
     steps:
       - uses: actions/checkout@v2
       - name: Select Xcode
