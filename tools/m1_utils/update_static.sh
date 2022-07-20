@@ -10,15 +10,17 @@ unarchive() {
 
     rm -rf *.o 
     ar -x "$FILE" 
-    ar t "$FILE" | grep \.o$ | sort --ignore-case > objs.txt
+    ar t "$FILE" | grep \.o$ | sort --ignore-case | uniq -D -i > duplicate_objs.txt
 
     # Assume default extraction strategy is OK if no dupes
-    if [[ -z "$(uniq -di objs.txt)" ]]; then
+    if [[ -z duplicate_objs.txt ]]; then
        return 0
     fi
 
     uniq -D -i objs.txt > duplicate_objs.txt
     i=0
+
+    # Unarchive the dupes only because we have already extracted the non dupes with ar
     while IFS=\\\n read -r var; do
         OBJ="$var"
         (( i+=1 ))
