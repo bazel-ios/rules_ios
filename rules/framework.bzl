@@ -797,6 +797,8 @@ def _bundle_static_framework(ctx, is_extension_safe, outputs):
         ),
     )
 
+    executable_name = bundling_support.executable_name(ctx)
+
     # Static packaging - archives are passed from library deps
     return struct(files = depset([]), providers = [
         AppleBundleInfo(
@@ -807,6 +809,7 @@ def _bundle_static_framework(ctx, is_extension_safe, outputs):
             bundle_name = ctx.attr.framework_name,
             bundle_extension = ctx.attr.bundle_extension,
             entitlements = None,
+            executable_name = executable_name,
             infoplist = infoplist,
             minimum_os_version = str(current_apple_platform.target_os_version),
             minimum_deployment_os_version = ctx.attr.minimum_deployment_os_version,
