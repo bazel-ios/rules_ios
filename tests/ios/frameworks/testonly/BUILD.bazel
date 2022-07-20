@@ -5,11 +5,11 @@ apple_framework(
     name = "SwiftLibrary",
     testonly = True,
     srcs = glob(["SwiftLibrary/**/*.swift"]),
-    module_name = "SwiftLibrary",
-    visibility = ["//visibility:public"],
     data = [
         ":TestOnlyFixture",
     ],
+    module_name = "SwiftLibrary",
+    visibility = ["//visibility:public"],
 )
 
 apple_framework(
@@ -52,7 +52,7 @@ ios_unit_test(
 
 genrule(
     name = "TestOnlyFixture",
+    testonly = True,
     outs = ["fixture.txt"],
     cmd = "touch $@",
-    testonly = True,
 )
