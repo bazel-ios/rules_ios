@@ -809,6 +809,7 @@ def _bundle_static_framework(ctx, is_extension_safe, outputs):
             entitlements = None,
             infoplist = infoplist,
             minimum_os_version = str(current_apple_platform.target_os_version),
+            minimum_deployment_os_version = ctx.attr.minimum_deployment_os_version,
             platform_type = str(current_apple_platform.platform.platform_type),
             product_type = ctx.attr._product_type,
             uses_swift = outputs.swiftmodule != None,
