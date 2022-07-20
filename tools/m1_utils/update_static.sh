@@ -17,9 +17,7 @@ unarchive() {
        return 0
     fi
 
-    uniq -D -i objs.txt > duplicate_objs.txt
     i=0
-
     # Unarchive the dupes only because we have already extracted the non dupes with ar
     while IFS=\\\n read -r var; do
         OBJ="$var"
