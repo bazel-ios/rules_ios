@@ -286,9 +286,11 @@ def _xcframework_slice(*, xcframework_name, identifier, platform, platform_varia
     )
     import_module_maps = native.glob(
         ["%s/**/*.modulemap" % path],
+        allow_empty = True,
     )
     import_swiftmodules = native.glob(
         ["%s/**/*.swiftmodule/*.*" % path],
+        allow_empty = True,
     )
     if len(import_module_maps) > 0:
         import_module_map = import_module_maps[0]
@@ -565,9 +567,11 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         )
         import_module_maps = native.glob(
             ["%s/**/*.modulemap" % vendored_static_framework],
+            allow_empty = True,
         )
         import_swiftmodules = native.glob(
             ["%s/**/*.swiftmodule/*.*" % vendored_static_framework],
+            allow_empty = True,
         )
         vfs_root = vendored_static_framework
         if len(import_module_maps) > 0:
@@ -607,9 +611,11 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         )
         import_module_maps = native.glob(
             ["%s/**/*.modulemap" % vendored_dynamic_framework],
+            allow_empty = True,
         )
         import_swiftmodules = native.glob(
             ["%s/**/*.swiftmodule/*.*" % vendored_dynamic_framework],
+            allow_empty = True,
         )
         if len(import_module_maps) > 0:
             import_module_map = import_module_maps[0]
@@ -645,9 +651,11 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         )
         import_module_maps = native.glob(
             ["**/*.modulemap"],
+            allow_empty = True,
         )
         import_swiftmodules = native.glob(
             ["**/*.swiftmodule/*.*"],
+            allow_empty = True,
         )
         if len(import_module_maps) > 0:
             import_module_map = import_module_maps[0]
