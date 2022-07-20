@@ -7,6 +7,9 @@ apple_framework(
     srcs = glob(["SwiftLibrary/**/*.swift"]),
     module_name = "SwiftLibrary",
     visibility = ["//visibility:public"],
+    data = [
+        ":TestOnlyFixture",
+    ],
 )
 
 apple_framework(
@@ -45,4 +48,11 @@ ios_unit_test(
     name = "MixedSourceTest",
     minimum_os_version = "12.0",
     deps = [":MixedSourceTestLib"],
+)
+
+genrule(
+    name = "TestOnlyFixture",
+    outs = ["fixture.txt"],
+    cmd = "touch $@",
+    testonly = True,
 )
