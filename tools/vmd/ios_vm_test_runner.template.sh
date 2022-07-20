@@ -64,8 +64,6 @@ export VM_RUNFILES_DIR=/Users/admin/runner.runfiles
 runner_flags+=("--work_dir=${VM_RUNFILES_DIR}")
 
 export TEST_BUNDLE_PATH="%(test_bundle_path)s"
-## This is a hack fo rthe VM
-# export TMP_DIR=/tmp/
 
 if [[ "$TEST_BUNDLE_PATH" == *.xctest ]]; then
     echo "error: requires non-tree test bundle" && exit 1
@@ -100,7 +98,8 @@ fi
 
 if [[ -n "${TEST_UNDECLARED_OUTPUTS_DIR}" ]]; then
   OUTPUT_DIR="${TEST_UNDECLARED_OUTPUTS_DIR}"
-  ## FIXME
+  # TODO: We need to upload key test outputs, which requires downloading them
+  # from the VM or other proxying mechanism.
   runner_flags+=("--output_dir=/tmp/TEST_OUTPUTS_DIR")
   mkdir -p "$OUTPUT_DIR"
 fi
@@ -184,8 +183,6 @@ fi
 if [[ -n "${LAUNCH_OPTIONS_JSON_STR}" ]]; then
   LAUNCH_OPTIONS_JSON_STR="{${LAUNCH_OPTIONS_JSON_STR}}"
   LAUNCH_OPTIONS_JSON_PATH="${TMP_DIR}/launch_options.json"
-
-  # FIXME: we're not uploading this correctly so it has the workspace baked in
   echo "${LAUNCH_OPTIONS_JSON_STR}" > "${LAUNCH_OPTIONS_JSON_PATH}"
   runner_flags+=("--launch_options_json_path=${VM_RUNFILES_DIR}/launch_options.json")
 fi

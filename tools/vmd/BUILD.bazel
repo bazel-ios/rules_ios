@@ -2,9 +2,10 @@ load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 
 exports_files(["ios_vm_test_runner.template.sh"])
 
+# See vmd.sh for useage and info
 sh_binary(
     name = "vmd",
-    srcs = ["vm_run.sh"],
+    srcs = ["vmd.sh"],
     data = [
         # Note: there are a plethora of problems from doing a trival build of this
         # depenency with Bazel. For now, vendor the binary (56kb)
@@ -22,7 +23,7 @@ sh_binary(
     srcs = ["ios_vm_test_runner.sh"],
     data = [
         ## We want to call the original runner under vm_run
-        "vmd",
+        ":vmd",
         "@xctestrunner//:ios_test_runner",
     ],
     visibility = ["//visibility:public"],
@@ -33,7 +34,7 @@ pkg_tar(
     name = "vmd_tar",
     srcs = [
         "bin/sshpass",
-        "bin/tart",
+        "@tart//file",
         ":vmd",
     ],
 )
