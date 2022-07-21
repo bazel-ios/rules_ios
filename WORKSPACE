@@ -108,3 +108,8 @@ xcode_configure(
     remote_xcode_label = "",
     xcode_locator_label = "//tools/toolchains/xcode_configure:xcode_locator.m",
 )
+
+# This is necessary for cutting tarballs - e.g. for a release
+load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
+
+rules_pkg_dependencies()

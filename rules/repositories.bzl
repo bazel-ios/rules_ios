@@ -3,6 +3,7 @@
 load(
     "@bazel_tools//tools/build_defs/repo:http.bzl",
     "http_archive",
+    "http_file",
 )
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository", "new_git_repository")
 load("//rules/third_party:xchammer_repositories.bzl", "xchammer_dependencies")
@@ -112,6 +113,22 @@ swift_binary(
     visibility = ["//visibility:public"],
 )
         """,
+    )
+    _maybe(
+        http_archive,
+        name = "rules_pkg",
+        urls = [
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/releases/download/0.7.0/rules_pkg-0.7.0.tar.gz",
+            "https://github.com/bazelbuild/rules_pkg/releases/download/0.7.0/rules_pkg-0.7.0.tar.gz",
+        ],
+        sha256 = "8a298e832762eda1830597d64fe7db58178aa84cd5926d76d5b744d6558941c2",
+    )
+
+    _maybe(
+        http_file,
+        name = "tart",
+        urls = ["https://github.com/cirruslabs/tart/releases/download/0.14.0/tart"],
+        sha256 = "2c61526aa07ade30ab6534b0fdc0a0edeb56ec2084dadee587e53c46e3a8edc3",
     )
 
     if not native.existing_rule("xchammer"):
