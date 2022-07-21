@@ -115,7 +115,7 @@ def xcconfig_unit_test_suite():
             assert_xcconfig(
                 name = "enum_key_empty_value",
                 xcconfig = {"CLANG_TRIVIAL_AUTO_VAR_INIT": "uninitialized"},
-                expected = {"objc_copts": []},
+                expected = {"objc_copts": ["-ftrivial-auto-var-init=uninitialized"]},
             ),
             assert_xcconfig(
                 name = "enum_key",
@@ -125,7 +125,7 @@ def xcconfig_unit_test_suite():
             assert_xcconfig(
                 name = "enum_key_unknown_value",
                 xcconfig = {"CLANG_TRIVIAL_AUTO_VAR_INIT": "unknown"},
-                error = 'CLANG_TRIVIAL_AUTO_VAR_INIT: "unknown" not a valid value, must be one of ["uninitialized", "pattern"]',
+                error = 'CLANG_TRIVIAL_AUTO_VAR_INIT: "unknown" not a valid value, must be one of ["default", "uninitialized", "zero", "pattern"]',
             ),
             assert_xcconfig(
                 name = "additional_linker_flags",
