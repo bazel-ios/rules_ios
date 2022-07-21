@@ -1,9 +1,11 @@
+source "https://cdn.cocoapods.org/"
+
 install! 'cocoapods',
   :integrate_targets => false,
   :generate_multiple_pod_projects => true # More perfomant, see http://blog.cocoapods.org/CocoaPods-1.7.0-beta/#multiple-xcodeproj-generation
 
 use_frameworks!
-platform :ios, '11.0'
+platform :ios, '15.5'
 workspace 'All'
 
 #################
