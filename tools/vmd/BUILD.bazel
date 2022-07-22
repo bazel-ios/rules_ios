@@ -1,6 +1,9 @@
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 
-exports_files(["ios_vm_test_runner.template.sh", "vmd.sh"])
+exports_files([
+    "ios_vm_test_runner.template.sh",
+    "vmd.sh",
+])
 
 # See vmd.sh for useage and info
 sh_binary(
