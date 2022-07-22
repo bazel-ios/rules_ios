@@ -1,6 +1,6 @@
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 
-exports_files(["ios_vm_test_runner.template.sh"])
+exports_files(["ios_vm_test_runner.template.sh", "vmd.sh"])
 
 # See vmd.sh for useage and info
 sh_binary(
@@ -22,19 +22,19 @@ sh_binary(
     name = "ios_vm_test_runner",
     srcs = ["ios_vm_test_runner.sh"],
     data = [
-        ## We want to call the original runner under vm_run
+        ## We want to call the original runner under vmd
         ":vmd",
         "@xctestrunner//:ios_test_runner",
     ],
     visibility = ["//visibility:public"],
 )
 
-# Wrap everything into a CLI
+# Wrap everything into a CLI: this has to unfortunately replicate deps
 pkg_tar(
     name = "vmd_tar",
-    srcs = [
-        "bin/sshpass",
-        ":vmd",
-        "@tart//file",
-    ],
+    files = {
+        "@tart//file": "tart",
+        ":vmd.sh": "vmd",
+        ":bin/sshpass": "sshpass",
+    },
 )
