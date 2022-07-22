@@ -10,7 +10,21 @@ unarchive() {
 
     rm -rf *.o 
     ar -x "$FILE" 
-    ar t "$FILE" | grep \.o$ | sort --ignore-case | uniq -D -i > duplicate_objs.txt
+    ar t "$FILE" | grep \.o$ | sort --ignore-case > objs.txt
+
+    # What this awk command does:
+    # ------------------------
+    # count = {} # define empty dictionary count
+    # if NR == FNR: #if first time iterating through objs.txt
+    #     for line in the objs.txt: 
+    #         count[lowercase(line)] += 1  # count the number of times each line showed up in the file (case insensitive)
+    #         continue 
+    # else: 
+    #     for line in the objs.txt: 
+    #         if count[lowercase(line)] > 1: 
+    #             print(line, dest=duplicate_objs.txt) # print only when this has appear more than once in objs.txt (case insensitive)
+    # ------------------------
+    awk 'NR==FNR {count[tolower($0)]++; next} count[tolower($0)]>1' objs.txt objs.txt > duplicate_objs.txt
 
     # Assume default extraction strategy is OK if no dupes
     if [[ -z duplicate_objs.txt ]]; then
