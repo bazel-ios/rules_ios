@@ -1,0 +1,46 @@
+load("@build_bazel_rules_ios//rules:framework.bzl", "apple_framework")
+
+apple_framework(
+    name = "BasicXCFramework",
+    module_name = "BasicXCFramework",
+    platforms = {"ios": "11.0"},
+    sdk_frameworks = [
+        "Foundation",
+        "SafariServices",
+        "UIKit",
+        "WebKit",
+    ],
+    vendored_xcframeworks = [
+        {
+            "name": "BasicXCFramework",
+            "slices": [
+                {
+                    "identifier": "ios-arm64",
+                    "platform": "ios",
+                    "platform_variant": "",
+                    "supported_archs": ["arm64"],
+                    "path": "BasicXCFramework.xcframework/ios-arm64/BasicXCFramework.framework",
+                    "build_type": {
+                        "linkage": "dynamic",
+                        "packaging": "framework",
+                    },
+                },
+                {
+                    "identifier": "ios-arm64_x86_64-simulator",
+                    "platform": "ios",
+                    "platform_variant": "simulator",
+                    "supported_archs": [
+                        "arm64",
+                        "x86_64",
+                    ],
+                    "path": "BasicXCFramework.xcframework/ios-arm64_x86_64-simulator/BasicXCFramework.framework",
+                    "build_type": {
+                        "linkage": "dynamic",
+                        "packaging": "framework",
+                    },
+                },
+            ],
+        },
+    ],
+    visibility = ["//visibility:public"],
+)
