@@ -138,8 +138,7 @@ def _make_root(vfs_parent, bin_dir_path, build_file_path, target_triple, framewo
         if any_swiftmodule_file.is_source:
             # Handle a glob of files inside of a .swiftmodule e.g. for xcframework
             parent_dir_base_name = any_swiftmodule_file.dirname.split("/").pop()
-            swiftmodule_file = _find_top_swiftmodule_file(swiftmodules)
-            if not swiftmodule_file and parent_dir_base_name.endswith(".swiftmodule"):
+            if parent_dir_base_name.endswith(".swiftmodule"):
                 modules_contents.append({
                     "type": "directory",
                     "name": parent_dir_base_name,
