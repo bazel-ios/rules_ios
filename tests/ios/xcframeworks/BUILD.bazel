@@ -1,0 +1,32 @@
+load("@build_bazel_rules_ios//rules:framework.bzl", "apple_framework")
+load("@build_bazel_rules_ios//rules:app.bzl", "ios_application")
+load("@build_bazel_rules_ios//rules:xcodeproj.bzl", "xcodeproj")
+
+apple_framework(
+    name = "xcframeworks",
+    srcs = glob(["Sources/**/*.swift"]),
+    swift_version = "5.5",
+    deps = [
+        "//tests/ios/xcframeworks/BasicXCFramework",
+    ],
+)
+
+ios_application(
+    name = "XCFrameworksApp",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    minimum_os_version = "10.0",
+    provisioning_profile = "@build_bazel_rules_ios//tests/ios:integration-test.mobileprovision",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":xcframeworks",
+    ],
+)
+
+xcodeproj(
+    name = "XCFrameworksApp-Project",
+    bazel_path = "/opt/homebrew/bin/bazelisk",
+    deps = [
+        ":XCFrameworksApp",
+    ],
+)

@@ -1,0 +1,11 @@
+framework module BasicXCFramework {
+  umbrella header "BasicXCFramework.h"
+
+  export *
+  module * { export * }
+}
+
+module BasicXCFramework.Swift {
+    header "BasicXCFramework-Swift.h"
+    requires objc
+}
