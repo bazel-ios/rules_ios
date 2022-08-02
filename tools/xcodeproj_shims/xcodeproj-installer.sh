@@ -2,7 +2,8 @@
 
 # Copies the xcodeproject from the bazel output directory to the BAZEL_WORKSPACE directory when ran
 set -euo pipefail
-readonly project_path="${PWD}/$(project_short_path)"
+# project_path is a symlink and must have the trailing slash for coreutils cp.
+readonly project_path="${PWD}/$(project_short_path)/"
 readonly dest="${BUILD_WORKSPACE_DIRECTORY}/$(project_short_path)/"
 readonly tmp_dest=$(mktemp -d)/$(project_full_path)/
 
