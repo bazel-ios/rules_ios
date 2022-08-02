@@ -39,7 +39,7 @@ build_wrapper_runfile_short_paths="$(build_wrapper_runfile_short_paths)"
 for BUILD_WRAPPER_PATH in $build_wrapper_runfile_short_paths
 do
   # coreutils cp must have -L to follow symlinks (mac's cp will do it with -r).
-  cp -Lr "$BUILD_WRAPPER_PATH" "${stubs_dir}/"
+  cp -LR "$BUILD_WRAPPER_PATH" "${stubs_dir}/"
 done
 
 cp "$(clang_stub_short_path)" "${stubs_dir}/clang-stub"
