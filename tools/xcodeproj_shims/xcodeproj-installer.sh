@@ -2,7 +2,8 @@
 
 # Copies the xcodeproject from the bazel output directory to the BAZEL_WORKSPACE directory when ran
 set -euo pipefail
-readonly project_path="${PWD}/$(project_short_path)"
+# project_path is a symlink and must have the trailing slash for coreutils cp.
+readonly project_path="${PWD}/$(project_short_path)/"
 readonly dest="${BUILD_WORKSPACE_DIRECTORY}/$(project_short_path)/"
 readonly tmp_dest=$(mktemp -d)/$(project_full_path)/
 
@@ -37,7 +38,8 @@ cp "$(installer_short_path)" "${installers_dir}/"
 build_wrapper_runfile_short_paths="$(build_wrapper_runfile_short_paths)"
 for BUILD_WRAPPER_PATH in $build_wrapper_runfile_short_paths
 do
-  cp -r "$BUILD_WRAPPER_PATH" "${stubs_dir}/"
+  # coreutils cp must have -L to follow symlinks (mac's cp will do it with -r).
+  cp -LR "$BUILD_WRAPPER_PATH" "${stubs_dir}/"
 done
 
 cp "$(clang_stub_short_path)" "${stubs_dir}/clang-stub"
