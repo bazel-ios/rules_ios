@@ -38,7 +38,8 @@ cp "$(installer_short_path)" "${installers_dir}/"
 build_wrapper_runfile_short_paths="$(build_wrapper_runfile_short_paths)"
 for BUILD_WRAPPER_PATH in $build_wrapper_runfile_short_paths
 do
-  cp -r "$BUILD_WRAPPER_PATH" "${stubs_dir}/"
+  # coreutils cp must have -L to follow symlinks (mac's cp will do it with -r).
+  cp -Lr "$BUILD_WRAPPER_PATH" "${stubs_dir}/"
 done
 
 cp "$(clang_stub_short_path)" "${stubs_dir}/clang-stub"
