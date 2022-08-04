@@ -13,7 +13,7 @@ amazing work we've done with the world!
 
 This is an _open_ call for talks - _especially for contributors 😊_. Please send
 @jerrymarino a quick description of your proposed talk by September 1st - e.g.
-directly or email to jmarino@squaruep.com. If you're not doing a talk - we
+directly or email to jmarino@squareup.com. If you're not doing a talk - we
 invite you to come and enjoy the show. Please send an RVSP to @jerrymarino in
 some capacity for you _and your teams_. We'll post a general invitation for
 guests soon.
