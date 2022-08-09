@@ -7,7 +7,7 @@ class BazelOutputLine
 
   def initialize(line)
     # Otherwise we might get `invalid byte sequence in US-ASCII (ArgumentError)` during matching with regex
-    @text = line.encode("UTF-8", invalid: :replace, undef: :replace)
+    @text = line.encode("US-ASCII", invalid: :replace, undef: :replace, replace: '')
   end
 
   # Try to create a processed line based on a match rule, or a pass-through
@@ -41,7 +41,7 @@ class StarlarkLine < RegexMatchLine
 
     super(line)
 
-    return unless (@match_data = line.match(@regex))
+    return unless (@match_data = @text.match(@regex))
 
     message_type, starlark_file, file_ext, file_line, message = @match_data.captures
 
@@ -62,7 +62,7 @@ class CompilerMessageLine < RegexMatchLine
 
     super(line)
 
-    return unless (@match_data = line.match(@regex))
+    return unless (@match_data = @text.match(@regex))
 
     _, file_path, error_level, message = match_data.captures
     expanded_file_path = File.expand_path(file_path, BAZEL_WORKSPACE)
