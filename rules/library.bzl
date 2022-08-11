@@ -888,10 +888,6 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         deps = deps + private_deps + lib_names + import_vfsoverlays,
         #enable_framework_vfs = enable_framework_vfs
     )
-    if export_private_headers or True:
-        private_headers_name = "%s_private_headers" % name
-        lib_names.append(private_headers_name)
-        _private_headers(name = private_headers_name, headers = objc_private_hdrs, tags = _MANUAL)
 
     if swift_sources:
         swift_library(
@@ -910,7 +906,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                 "@build_bazel_rules_ios//:virtualize_frameworks": [framework_vfs_overlay_name_swift],
                 "//conditions:default": [framework_vfs_overlay_name_swift] if enable_framework_vfs else [],
             }),
-            swiftc_inputs = swiftc_inputs,
+            swiftc_inputs = swiftc_inputs + objc_private_hdrs,
             features = ["swift.no_generated_module_map"] + select({
                 "@build_bazel_rules_ios//:virtualize_frameworks": ["swift.vfsoverlay"],
                 "//conditions:default": [],
@@ -1020,6 +1016,10 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     )
     lib_names.append(objc_libname)
 
+    if export_private_headers:
+        private_headers_name = "%s_private_headers" % name
+        lib_names.append(private_headers_name)
+        _private_headers(name = private_headers_name, headers = objc_private_hdrs, tags = _MANUAL)
 
     return struct(
         lib_names = lib_names,
