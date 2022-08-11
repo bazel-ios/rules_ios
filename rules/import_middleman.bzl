@@ -31,7 +31,6 @@ def _update_framework(ctx, framework):
         outputs = [out_dir, out_file],
         inputs = depset([framework] + ctx.attr.update_in_place[DefaultInfo].default_runfiles.files.to_list()),
         command = cmd,
-        execution_requirements = {"no-remote": "1"},
     )
     return out_file
 
@@ -258,6 +257,13 @@ def _file_collector_rule_impl(ctx):
     if not virtualize_frameworks:
         dep_cc_infos = [dep[CcInfo] for dep in ctx.attr.deps if CcInfo in dep]
         cc_info = cc_common.merge_cc_infos(direct_cc_infos = [], cc_infos = dep_cc_infos)
+        additional_providers.append(cc_info)
+    else:
+        cc_info = objc_provider_utils.merge_cc_info_providers(
+            ctx=ctx,
+            cc_info_providers = [dep[CcInfo] for dep in ctx.attr.deps],
+            # merge_keys = ,
+        )
         additional_providers.append(cc_info)
 
     return [
