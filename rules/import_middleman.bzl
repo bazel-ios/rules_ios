@@ -31,7 +31,6 @@ def _update_framework(ctx, framework):
         outputs = [out_dir, out_file],
         inputs = depset([framework] + ctx.attr.update_in_place[DefaultInfo].default_runfiles.files.to_list()),
         command = cmd,
-        execution_requirements = {"no-remote": "1"},
     )
     return out_file
 
@@ -171,7 +170,7 @@ def _file_collector_rule_impl(ctx):
     is_sim_arm64 = platform == "ios" and arch == "arm64" and not ctx.fragments.apple.single_arch_platform.is_device
     if not is_sim_arm64:
         # This should be correctly configured upstream: see setup in rules_ios
-        fail("using import_middleman ({}) on wrong transition ({},{},is_device={})", ctx.attr.lablel, platform, arch, ctx.fragments.apple.single_arch_platform.is_device)
+        fail("using import_middleman ({}) on wrong transition ({},{},is_device={})", ctx.attr.name, platform, arch, ctx.fragments.apple.single_arch_platform.is_device)
 
     virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
     merge_keys = [
@@ -258,6 +257,13 @@ def _file_collector_rule_impl(ctx):
     if not virtualize_frameworks:
         dep_cc_infos = [dep[CcInfo] for dep in ctx.attr.deps if CcInfo in dep]
         cc_info = cc_common.merge_cc_infos(direct_cc_infos = [], cc_infos = dep_cc_infos)
+        additional_providers.append(cc_info)
+    else:
+        cc_info = objc_provider_utils.merge_cc_info_providers(
+            ctx=ctx,
+            cc_info_providers = [dep[CcInfo] for dep in ctx.attr.deps],
+            # merge_keys = ,
+        )
         additional_providers.append(cc_info)
 
     return [
