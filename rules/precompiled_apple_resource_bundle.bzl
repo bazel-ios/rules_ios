@@ -8,6 +8,7 @@ if this is ever fixed in bazel it should be removed
 
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@build_bazel_apple_support//lib:apple_support.bzl", "apple_support")
 load("@build_bazel_rules_apple//apple/internal:apple_product_type.bzl", "apple_product_type")
 load("@build_bazel_rules_apple//apple/internal:intermediates.bzl", "intermediates")
 load("@build_bazel_rules_apple//apple/internal:partials.bzl", "partials")
@@ -49,6 +50,19 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     # passing a swift_module attr
     fake_rule_label = Label("//fake_package:" + (ctx.attr.swift_module or bundle_name))
 
+    platform_prerequisites = platform_support.platform_prerequisites(
+        apple_fragment = ctx.fragments.apple,
+        config_vars = ctx.var,
+        device_families = ["iphone", "ipad"],
+        explicit_minimum_os = None,
+        explicit_minimum_deployment_os = None,
+        objc_fragment = None,
+        platform_type_string = platform_type,
+        uses_swift = False,
+        xcode_version_config = ctx.attr._xcode_config[apple_common.XcodeVersionConfig],
+        disabled_features = [],
+        features = [],
+    )
     partials_args = dict(
         actions = ctx.actions,
         bundle_extension = ctx.attr.bundle_extension,
@@ -56,19 +70,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         environment_plist = ctx.file.environment_plist,
         executable_name = None,
         launch_storyboard = None,
-        platform_prerequisites = platform_support.platform_prerequisites(
-            apple_fragment = ctx.fragments.apple,
-            config_vars = ctx.var,
-            device_families = ["iphone", "ipad"],
-            explicit_minimum_os = None,
-            explicit_minimum_deployment_os = None,
-            objc_fragment = None,
-            platform_type_string = platform_type,
-            uses_swift = False,
-            xcode_version_config = ctx.attr._xcode_config[apple_common.XcodeVersionConfig],
-            disabled_features = [],
-            features = [],
-        ),
+        platform_prerequisites = platform_prerequisites,
         rule_descriptor = struct(
             additional_infoplist_values = None,
             bundle_package_type = "BNDL",
@@ -176,14 +178,27 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         output = bundletool_instructions_file,
         content = bundletool_instructions.to_json(),
     )
-    ctx.actions.run(
-        executable = apple_mac_toolchain_info.resolved_bundletool_experimental.executable,
+    resolved_bundletool_experimental = apple_mac_toolchain_info.resolved_bundletool_experimental
+    executable = resolved_bundletool_experimental.executable
+
+    xcode_path_wrapper = ctx.executable._xcode_path_wrapper
+    apple_support.run(
+        actions = ctx.actions,
+        apple_fragment = platform_prerequisites.apple_fragment,
+        executable = resolved_bundletool_experimental.executable,
+        execution_requirements = {},
+        inputs = depset(resolved_bundletool_experimental.inputs.to_list() + input_files + [bundletool_instructions_file], transitive = [
+            resolved_bundletool_experimental.inputs,
+        ]),
+        input_manifests = resolved_bundletool_experimental.input_manifests,
         mnemonic = "BundleResources",
-        progress_message = "Bundling Precompiled Resource Bundle " + bundle_name,
-        inputs = input_files + [bundletool_instructions_file] + apple_mac_toolchain_info.resolved_bundletool_experimental.inputs.to_list(),
-        outputs = [output_bundle_dir],
+        tools = [apple_mac_toolchain_info.resolved_bundletool_experimental.executable],
+        xcode_config = platform_prerequisites.xcode_version_config,
+        xcode_path_wrapper = xcode_path_wrapper,
         arguments = [bundletool_instructions_file.path],
+        outputs = [output_bundle_dir],
     )
+
     return [
         AppleResourceInfo(
             unowned_resources = depset(),
