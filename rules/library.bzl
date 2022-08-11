@@ -447,9 +447,9 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     cpp_sources = []
     public_headers = kwargs.pop("public_headers", [])
     private_headers = kwargs.pop("private_headers", [])
-    objc_hdrs = [f for f in public_headers if f.endswith((".h", ".hh", ".hpp"))]
+    objc_hdrs = [f for f in public_headers if f.endswith((".inc", ".h", ".hh", ".hpp"))]
     objc_non_exported_hdrs = []
-    objc_private_hdrs = [f for f in private_headers if f.endswith((".h", ".hh", ".hpp"))]
+    objc_private_hdrs = [f for f in private_headers if f.endswith((".inc", ".h", ".hh", ".hpp"))]
     if public_headers:
         public_headers = sets.make(public_headers)
     if private_headers:
@@ -470,7 +470,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                 objc_private_hdrs.append(f)
             else:
                 objc_hdrs.append(f)
-        elif f.endswith((".m", ".mm", ".c", ".s", ".S")):
+        elif f.endswith((".inc", ".m", ".mm", ".c", ".s", ".S")):
             objc_sources.append(f)
         elif f.endswith((".swift")):
             swift_sources.append(f)
