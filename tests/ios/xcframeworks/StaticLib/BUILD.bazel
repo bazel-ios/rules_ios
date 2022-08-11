@@ -9,5 +9,6 @@ ios_application(
     visibility = ["//visibility:public"],
     deps = [
         "//tests/ios/xcframeworks/StaticLib/ObjcLib",
+        "//tests/ios/xcframeworks/StaticLib/SwiftLib",
     ],
 )
