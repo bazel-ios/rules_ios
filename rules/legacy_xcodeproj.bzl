@@ -7,7 +7,6 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//rules:hmap.bzl", "HeaderMapInfo")
 load("//rules/framework:vfs_overlay.bzl", "VFSOverlayInfo", VFS_OVERLAY_FRAMEWORK_SEARCH_PATH = "FRAMEWORK_SEARCH_PATH")
 load("//rules:additional_scheme_info.bzl", "AdditionalSchemeInfo")
-load("//rules:features.bzl", "feature_names")
 
 def _get_attr_values_for_name(deps, provider, field):
     return [
@@ -200,17 +199,11 @@ def _xcodeproj_aspect_impl(target, ctx):
     if entitlements:
         deps.append(entitlements)
 
-    virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
-    if virtualize_frameworks:
-        # Effectivly for virtual frameworks we don't need to copy the files
-        # because they are read directly from the VFS
-        objc_copts = _xcodeproj_aspect_collect_objc_copts(deps, target, ctx)
-        swift_copts = _xcodeproj_aspect_collect_swift_copts(deps, target, ctx)
-        hmap_paths = []
-    else:
-        objc_copts = []
-        swift_copts = []
-        hmap_paths = _xcodeproj_aspect_collect_hmap_paths(deps, target, ctx)
+    # Effectivly for virtual frameworks we don't need to copy the files
+    # because they are read directly from the VFS
+    objc_copts = _xcodeproj_aspect_collect_objc_copts(deps, target, ctx)
+    swift_copts = _xcodeproj_aspect_collect_swift_copts(deps, target, ctx)
+    hmap_paths = []
 
     # TODO: handle apple_resource_bundle targets
     env_vars = ()
@@ -414,7 +407,7 @@ env_script=$(mktemp /tmp/bazel-xcodeproj-intermediate.XXXXXX)
 trap "rm -rf $env_script" EXIT
 
 cat > $py_script << "EOF"
-#!/usr/bin/env python3 
+#!/usr/bin/env python3
 import json, sys, shlex
 build_settings = json.load(sys.stdin)[0]["buildSettings"]
 print("/bin/bash")
@@ -796,13 +789,8 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
             "BAZEL_BUILD_TARGET_WORKSPACE": target_info.bazel_build_target_workspace,
         }
 
-        virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
-        if virtualize_frameworks:
-            target_settings["OTHER_SWIFT_FLAGS"] = _swift_copts_for_target(target_name, all_transitive_targets)
-            target_settings["OTHER_CFLAGS"] = _objc_copts_for_target(target_name, all_transitive_targets)
-        else:
-            target_settings["BAZEL_SWIFTMODULEFILES_TO_COPY"] = _swiftmodulepaths_for_target(target_name, all_transitive_targets)
-            target_settings["HEADER_SEARCH_PATHS"] = _header_search_paths_for_target(target_name, all_transitive_targets)
+        target_settings["OTHER_SWIFT_FLAGS"] = _swift_copts_for_target(target_name, all_transitive_targets)
+        target_settings["OTHER_CFLAGS"] = _objc_copts_for_target(target_name, all_transitive_targets)
 
         framework_search_paths = _framework_search_paths_for_target(target_name, all_transitive_targets)
         target_settings["FRAMEWORK_SEARCH_PATHS"] = " ".join(framework_search_paths)
@@ -824,8 +812,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
         )
         extra_clang_flags = ["-D\'%s\'" % d for d in target_info.cc_defines.to_list()]
 
-        if virtualize_frameworks:
-            extra_clang_flags += ["-Xcc %s" % d for d in _objc_copts_for_target(target_name, all_transitive_targets)]
+        extra_clang_flags += ["-Xcc %s" % d for d in _objc_copts_for_target(target_name, all_transitive_targets)]
 
         target_settings["BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS"] = " ".join(extra_clang_flags)
 

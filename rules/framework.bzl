@@ -149,35 +149,7 @@ def _framework_packaging(ctx, action, inputs, outputs, manifest = None):
     if inputs == [None]:
         return []
 
-    virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
-    if virtualize_frameworks:
-        return inputs
-
-    if action in ctx.attr.skip_packaging:
-        return []
-    action_inputs = [manifest] + inputs if manifest else inputs
-    outputs = [ctx.actions.declare_file(f) for f in outputs]
-    framework_name = ctx.attr.framework_name
-    framework_dir = _find_framework_dir(outputs)
-    args = ctx.actions.args().use_param_file("@%s").set_param_file_format("multiline")
-    args.add("--framework_name", framework_name)
-    args.add("--framework_root", framework_dir)
-    args.add("--action", action)
-    args.add_all("--inputs", inputs)
-    args.add_all("--outputs", outputs)
-
-    if action in ["header", "private_header"]:
-        _framework_packaging_symlink_headers(ctx, inputs, outputs)
-    else:
-        ctx.actions.run(
-            executable = ctx.executable._framework_packaging,
-            arguments = [args],
-            inputs = action_inputs,
-            outputs = outputs,
-            mnemonic = "PackagingFramework%s" % action.title().replace("_", ""),
-        )
-
-    return outputs
+    return inputs
 
 def _add_to_dict_if_present(dict, key, value):
     if value:
@@ -358,11 +330,7 @@ def _get_framework_files(ctx, deps):
             paths.join(framework_dir, "Modules", "module.modulemap"),
         ]
 
-    virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
-    if not virtualize_frameworks:
-        framework_manifest = ctx.actions.declare_file(framework_dir + ".manifest")
-    else:
-        framework_manifest = None
+    framework_manifest = None
 
     # Package each part of the framework separately,
     # so inputs that do not depend on compilation
@@ -411,49 +379,6 @@ def _get_direct_public_headers(provider, dep):
         return dep[provider].direct_headers
     else:
         fail("Unknown provider " + provider + " only CcInfo and Objc supported")
-
-def _get_symlinked_framework_clean_action(ctx, framework_files, compilation_context_fields):
-    framework_name = ctx.attr.framework_name
-
-    outputs = framework_files.outputs
-    framework_manifest = outputs.manifest
-    framework_contents = _concat(
-        outputs.binary,
-        outputs.modulemap,
-        outputs.headers,
-        outputs.private_headers,
-        outputs.swiftmodule,
-        outputs.swiftdoc,
-    )
-
-    framework_root = _find_framework_dir(framework_contents)
-    if framework_root:
-        ctx.actions.run(
-            executable = ctx.executable._framework_packaging,
-            arguments = [
-                "--action",
-                "clean",
-                "--framework_name",
-                framework_name,
-                "--framework_root",
-                framework_root,
-                "--inputs",
-                ctx.actions.args().use_param_file("%s", use_always = True).set_param_file_format("multiline")
-                    .add_all(framework_contents),
-                "--outputs",
-                framework_manifest.path,
-            ],
-            outputs = [framework_manifest],
-            mnemonic = "CleaningFramework",
-            execution_requirements = {
-                "local": "True",
-            },
-        )
-        compilation_context_fields["framework_includes"] = depset(
-            direct = [paths.dirname(framework_root)],
-        )
-    else:
-        ctx.actions.write(framework_manifest, "# Empty framework\n")
 
 def _copy_swiftmodule(ctx, framework_files):
     inputs = framework_files.inputs
@@ -855,20 +780,7 @@ def _apple_framework_packaging_impl(ctx):
     ))
 
     # Compute cc_info and swift_info
-    virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
-    if virtualize_frameworks:
-        framework_info = _get_virtual_framework_info(ctx, framework_files, compilation_context_fields, deps, transitive_deps, vfs)
-    else:
-        framework_info = FrameworkInfo(
-            headers = outputs.headers,
-            private_headers = outputs.private_headers,
-            modulemap = outputs.modulemap,
-            swiftmodule = outputs.swiftmodule,
-            swiftdoc = outputs.swiftdoc,
-        )
-
-        # If not virtualizing the framework - then it runs a "clean"
-        _get_symlinked_framework_clean_action(ctx, framework_files, compilation_context_fields)
+    framework_info = _get_virtual_framework_info(ctx, framework_files, compilation_context_fields, deps, transitive_deps, vfs)
 
     cc_info_provider = CcInfo(
         compilation_context = cc_common.create_compilation_context(
@@ -876,11 +788,7 @@ def _apple_framework_packaging_impl(ctx):
         ),
     )
 
-    if virtualize_frameworks:
-        cc_info = cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider])
-    else:
-        dep_cc_infos = [dep[CcInfo] for dep in transitive_deps if CcInfo in dep]
-        cc_info = cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider], cc_infos = dep_cc_infos)
+    cc_info = cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider])
 
     # Propagate the avoid deps information upwards
     avoid_deps = []
