@@ -81,7 +81,11 @@ def _clean(framework_root, manifest_file, output_manifest_file):
         for d in dirs:
             path = os.path.join(root, d)
             if path not in dirs_to_keep:
-                shutil.rmtree(path)
+                if os.path.islink(path):
+                     os.unlink(path)
+                else:
+                    shutil.rmtree(path)
+
         for f in files:
             path = os.path.join(root, f)
             if path not in files_to_keep:
