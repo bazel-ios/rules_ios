@@ -31,6 +31,7 @@ def _update_framework(ctx, framework):
         outputs = [out_dir, out_file],
         inputs = depset([framework] + ctx.attr.update_in_place[DefaultInfo].default_runfiles.files.to_list()),
         command = cmd,
+        execution_requirements = {"no-remote": "1"},
     )
     return out_file
 
