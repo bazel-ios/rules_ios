@@ -261,9 +261,7 @@ def _file_collector_rule_impl(ctx):
         additional_providers.append(cc_info)
     else:
         cc_info = objc_provider_utils.merge_cc_info_providers(
-            ctx=ctx,
-            cc_info_providers = [dep[CcInfo] for dep in ctx.attr.deps],
-            # merge_keys = ,
+            cc_info_providers = [dep[CcInfo] for dep in ctx.attr.deps if CcInfo in dep],
         )
         additional_providers.append(cc_info)
 

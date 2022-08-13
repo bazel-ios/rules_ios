@@ -55,12 +55,10 @@ def _merge_dynamic_framework_providers(ctx, dynamic_framework_providers):
 
     return apple_common.new_dynamic_framework_provider(**fields)
 
-def _merge_cc_info_providers(ctx, cc_info_providers):
+def _merge_cc_info_providers(cc_info_providers, merge_keys = [
+    "headers",
+]):
     fields = {}
-    merge_keys = [
-        "headers",
-        #"framework_files",
-    ]
     for key in merge_keys:
         set = depset(
             direct = [],
@@ -72,8 +70,7 @@ def _merge_cc_info_providers(ctx, cc_info_providers):
     # We don't use this on Bazel 4-5 for now
     linking_context = cc_common.create_linking_context(linker_inputs = depset())
     compilation_context = cc_common.create_compilation_context(**fields)
-    return CcInfo(compilation_context = compilation_context, linking_context = linking_context) 
-
+    return CcInfo(compilation_context = compilation_context, linking_context = linking_context)
 
 objc_provider_utils = struct(
     merge_objc_providers_dict = _merge_objc_providers_dict,
