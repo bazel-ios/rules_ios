@@ -259,6 +259,11 @@ def _file_collector_rule_impl(ctx):
         dep_cc_infos = [dep[CcInfo] for dep in ctx.attr.deps if CcInfo in dep]
         cc_info = cc_common.merge_cc_infos(direct_cc_infos = [], cc_infos = dep_cc_infos)
         additional_providers.append(cc_info)
+    else:
+        cc_info = objc_provider_utils.merge_cc_info_providers(
+            cc_info_providers = [dep[CcInfo] for dep in ctx.attr.deps if CcInfo in dep],
+        )
+        additional_providers.append(cc_info)
 
     return [
         DefaultInfo(files = depset(dynamic_framework_dirs + replaced_frameworks)),
