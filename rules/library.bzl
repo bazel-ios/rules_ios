@@ -576,24 +576,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                 testonly = testonly,
             )
 
-            native.filegroup(
-                name = intent_headers,
-                srcs = [intent_name],
-                output_group = "hdrs",
-                tags = _MANUAL,
-                testonly = testonly,
-            )
-
-            native.filegroup(
-                name = intent_sources,
-                srcs = [intent_name],
-                output_group = "srcs",
-                tags = _MANUAL,
-                testonly = testonly,
-            )
-
-            objc_hdrs.append(intent_headers)
-            objc_sources.append(intent_sources)
+            objc_hdrs.append(intent_name)
+            objc_sources.append(intent_name)
             data.append(intent)
 
     if linkopts:
