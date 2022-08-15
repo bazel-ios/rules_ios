@@ -181,7 +181,6 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     resolved_bundletool_experimental = apple_mac_toolchain_info.resolved_bundletool_experimental
     executable = resolved_bundletool_experimental.executable
 
-    xcode_path_wrapper = ctx.executable._xcode_path_wrapper
     apple_support.run(
         actions = ctx.actions,
         apple_fragment = platform_prerequisites.apple_fragment,
@@ -194,7 +193,6 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         mnemonic = "BundleResources",
         tools = [apple_mac_toolchain_info.resolved_bundletool_experimental.executable],
         xcode_config = platform_prerequisites.xcode_version_config,
-        xcode_path_wrapper = xcode_path_wrapper,
         arguments = [bundletool_instructions_file.path],
         outputs = [output_bundle_dir],
     )
