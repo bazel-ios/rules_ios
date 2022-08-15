@@ -54,28 +54,28 @@ def rules_ios_dependencies():
         github_repo,
         name = "build_bazel_rules_swift",
         project = "bazel-ios",
-        ref = "8d4b096b90e47095755e47c27e749ae9b9f83e81",
+        ref = "e0272df7d98a563c07aa2e78722cd8ce62549864",
         repo = "rules_swift",
-        sha256 = "83eb780db78f6c99cd97d3ff8c0e9bed1a6a3a4cba57476c6e1d2d989c52e17a",
+        sha256 = "006743d481c477928796ad985ba32b591f5926cd590d32b207e018049b569594",
     )
 
     _maybe(
         github_repo,
         name = "build_bazel_rules_apple",
-        ref = "029eab0a6bbb4147d227d623721b205eb62aca9c",
+        ref = "942c24380a6cb001d3521c510fdb9b61ee164585",
         project = "bazelbuild",
         repo = "rules_apple",
-        sha256 = "b12455dbcaa31c4a42194aed59987d6abce6f04b4891389cd8fe5e817ae6b0ee",
+        sha256 = "2556021318e6250e00039175e07196d9ae479993712f69047fd239f168f811ee",
     )
 
     _maybe(
         http_archive,
         name = "bazel_skylib",
         urls = [
-            "https://github.com/bazelbuild/bazel-skylib/releases/download/1.0.3/bazel-skylib-1.0.3.tar.gz",
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.0.3/bazel-skylib-1.0.3.tar.gz",
+            "https://github.com/bazelbuild/bazel-skylib/releases/download/1.1.1/bazel-skylib-1.1.1.tar.gz",
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.1.1/bazel-skylib-1.1.1.tar.gz",
         ],
-        sha256 = "1c531376ac7e5a180e0237938a2536de0c54d93f5c278634818e0efc952dd56c",
+        sha256 = "c6966ec828da198c5d9adbaa94c05e3a1c7f21bd012a0b29ba8ddbccb2c93b0d",
     )
 
     _maybe(
