@@ -3,6 +3,7 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@bazel_skylib//lib:selects.bzl", "selects")
+load("@bazel_skylib//lib:collections.bzl", "collections")
 load("@build_bazel_rules_apple//apple:apple.bzl", "apple_dynamic_framework_import", "apple_static_framework_import")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 load("//rules:precompiled_apple_resource_bundle.bzl", "precompiled_apple_resource_bundle")
@@ -639,36 +640,29 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         import_vfsoverlays.append(import_name + "_vfs")
 
     for vendored_static_library in kwargs.pop("vendored_static_libraries", []):
+        # Collect the include paths which are the top-level directories for where the headers are.
+        # Example: "Headers/ObjcLib/Foo.h" -> includes = ["Headers"]
+        includes = collections.uniq([hdr.split("/")[0] for hdr in objc_hdrs])
         import_name = "%s-%s-library-import" % (name, paths.basename(vendored_static_library))
         native.objc_import(
             name = import_name,
             archives = [vendored_static_library],
+            hdrs = objc_hdrs,
+            includes = includes,
             tags = _MANUAL,
         )
         vendored_deps.append(import_name)
-        import_headers = native.glob(
-            ["**/*.h"],
-        )
-        import_module_maps = native.glob(
-            ["**/*.modulemap"],
-            allow_empty = True,
-        )
-        import_swiftmodules = native.glob(
-            ["**/*.swiftmodule/*.*"],
-            allow_empty = True,
-        )
-        if len(import_module_maps) > 0:
-            import_module_map = import_module_maps[0]
-        else:
-            import_module_map = None
-        vfs_imported_framework = _find_imported_framework_name(import_headers)
+        import_module_maps = native.glob(["**/*.modulemap"], allow_empty = True)
+        import_swiftmodules = native.glob(["**/*.swiftmodule/*.*"], allow_empty = True)
+        import_module_map = import_module_maps[0] if import_module_maps else None
+        vfs_imported_framework = _find_imported_framework_name(objc_hdrs)
         vfs_framework_name = vfs_imported_framework if vfs_imported_framework else namespace
         framework_vfs_overlay(
             name = import_name + "_vfs",
             framework_name = vfs_framework_name,
             modulemap = import_module_map,
             swiftmodules = import_swiftmodules,
-            hdrs = import_headers,
+            hdrs = objc_hdrs,
             tags = _MANUAL,
             testonly = kwargs.get("testonly", False),
         )
