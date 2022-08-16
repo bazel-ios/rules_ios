@@ -1,0 +1,9 @@
+load("@build_bazel_rules_ios//rules:framework.bzl", "apple_framework")
+
+apple_framework(
+    name = "ObjcLib",
+    platforms = {"ios": "9.0"},
+    public_headers = glob(["Headers/**/*.h"]),
+    vendored_static_libraries = ["libObjcLib.a"],
+    visibility = ["//visibility:public"],
+)
