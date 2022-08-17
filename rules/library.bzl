@@ -860,7 +860,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             additional_swift_copts.append(
                 "-import-underlying-module",
             )
-        swiftc_inputs = other_inputs + objc_hdrs
+        swiftc_inputs = other_inputs + objc_hdrs + objc_private_hdrs
         if module_map:
             swiftc_inputs.append(module_map)
         if swift_objc_bridging_header:
