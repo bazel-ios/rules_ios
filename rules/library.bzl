@@ -4,6 +4,7 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@bazel_skylib//lib:selects.bzl", "selects")
 load("@build_bazel_rules_apple//apple:apple.bzl", "apple_dynamic_framework_import", "apple_static_framework_import")
+load("@build_bazel_rules_apple//apple/internal/resource_rules:apple_intent_library.bzl", "apple_intent_library")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 load("//rules:precompiled_apple_resource_bundle.bzl", "precompiled_apple_resource_bundle")
 load("//rules:hmap.bzl", "headermap")
@@ -445,6 +446,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     objc_sources = []
     objc_non_arc_sources = []
     cpp_sources = []
+    intent_sources = []
     public_headers = kwargs.pop("public_headers", [])
     private_headers = kwargs.pop("private_headers", [])
     objc_hdrs = [f for f in public_headers if f.endswith((".inc", ".h", ".hh", ".hpp"))]
@@ -476,6 +478,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             swift_sources.append(f)
         elif f.endswith((".cc", ".cpp")):
             cpp_sources.append(f)
+        elif f.endswith((".intentdefinition")):
+            intent_sources.append(f)
         else:
             fail("Unable to compile %s in apple_framework %s" % (f, name))
 
@@ -535,6 +539,46 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                 name = name,
                 opts = repr(v),
             ))
+
+    # Generate code for `.intentdefinition` source files and forward the original plist as data
+    for intent in intent_sources:
+        intent_name = "%s_%s_gen" % (name, intent)
+        testonly = kwargs.get("testonly", False)
+
+        # Avoid swift_intent_library and objc_intent_library because they wrap the generated code in a new module
+        #
+        # If other Swift sources are present, generate Swift intent code, otherwise use Obj-C.
+        # This mimics the behavior for INTENTS_CODEGEN_LANGUAGE="automatic" in Xcode.
+        if len(swift_sources) > 0:
+            apple_intent_library(
+                name = intent_name,
+                src = intent,
+                language = "Swift",
+                tags = _MANUAL,
+                testonly = testonly,
+            )
+
+            swift_sources.append(intent_name)
+            data.append(intent)
+
+        else:
+            intent_headers = "%s_hdrs" % intent_name
+            intent_sources = "%s_srcs" % intent_name
+
+            intent_public_header = paths.split_extension(intent)[0]
+
+            apple_intent_library(
+                name = intent_name,
+                src = intent,
+                header_name = intent_public_header,
+                language = "Objective-C",
+                tags = _MANUAL,
+                testonly = testonly,
+            )
+
+            objc_hdrs.append(intent_name)
+            objc_sources.append(intent_name)
+            data.append(intent)
 
     if linkopts:
         linkopts_name = "%s_linkopts" % (name)
