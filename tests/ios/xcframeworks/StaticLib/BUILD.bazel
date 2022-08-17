@@ -1,0 +1,13 @@
+load("@build_bazel_rules_ios//rules:app.bzl", "ios_application")
+
+ios_application(
+    name = "StaticLibApp",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    minimum_os_version = "10.0",
+    provisioning_profile = "@build_bazel_rules_ios//tests/ios:integration-test.mobileprovision",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//tests/ios/xcframeworks/StaticLib/ObjcLib",
+    ],
+)

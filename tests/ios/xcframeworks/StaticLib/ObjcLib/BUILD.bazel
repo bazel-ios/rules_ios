@@ -1,0 +1,42 @@
+load("@build_bazel_rules_ios//rules:framework.bzl", "apple_framework")
+
+apple_framework(
+    name = "ObjcLib",
+    module_name = "ObjcLib",
+    platforms = {"ios": "9.0"},
+    vendored_xcframeworks = [
+        {
+            "name": "ObjcLib",
+            "slices": [
+                {
+                    "identifier": "ios-arm64",
+                    "platform": "ios",
+                    "platform_variant": "",
+                    "supported_archs": [
+                        "arm64",
+                    ],
+                    "path": "ObjcLib.xcframework/ios-arm64/libObjcLib.a",
+                    "build_type": {
+                        "linkage": "static",
+                        "packaging": "library",
+                    },
+                },
+                {
+                    "identifier": "ios-arm64_x86_64-simulator",
+                    "platform": "ios",
+                    "platform_variant": "simulator",
+                    "supported_archs": [
+                        "arm64",
+                        "x86_64",
+                    ],
+                    "path": "ObjcLib.xcframework/ios-arm64_x86_64-simulator/libObjcLib.a",
+                    "build_type": {
+                        "linkage": "static",
+                        "packaging": "library",
+                    },
+                },
+            ],
+        },
+    ],
+    visibility = ["//visibility:public"],
+)

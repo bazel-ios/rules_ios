@@ -247,6 +247,36 @@ def _xcframework_slice(*, xcframework_name, identifier, platform, platform_varia
     linkage, packaging = _xcframework_build_type(**build_type)
     resolved_target_name = "{}-{}".format(xcframework_name, identifier)
     resolved_target_name_vfs_overlay = resolved_target_name + "_vfs"
+
+    def _xcframework_slice_imports(path):
+        """
+        Returns a tuple of the headers, module map and swiftmodules for the given path in a .xcframework.
+        """
+        hdrs = native.glob(["%s/**/*.h" % path], allow_empty = True)
+        modulemaps = native.glob(["%s/**/*.modulemap" % path], allow_empty = True)
+        swiftmodules = native.glob(["%s/**/*.swiftmodule/*.*" % path], allow_empty = True)
+        modulemap = modulemaps[0] if modulemaps else None
+        return hdrs, modulemap, swiftmodules
+
+    def _make_xcframework_vfs(hdrs, modulemap, swiftmodules, static = False):
+        """
+        Creates a framework_vfs_overlay with the provided arguments.
+
+        If static is True, the framework_vfs_overlay will be created within the context
+        of a static library within a .xcframework.
+        """
+        imported_framework_name = _find_imported_xcframework_name(hdrs) if static else _find_imported_framework_name(hdrs)
+        vfs_framework_name = imported_framework_name if imported_framework_name else xcframework_name
+        framework_vfs_overlay(
+            name = resolved_target_name_vfs_overlay,
+            framework_name = vfs_framework_name,
+            modulemap = modulemap,
+            swiftmodules = swiftmodules,
+            hdrs = hdrs,
+            tags = _MANUAL,
+            extra_search_paths = None if static else xcframework_name,
+        )
+
     if (linkage, packaging) == ("dynamic", "framework"):
         apple_dynamic_framework_import(
             name = resolved_target_name,
@@ -258,6 +288,8 @@ def _xcframework_slice(*, xcframework_name, identifier, platform, platform_varia
             dsym_imports = dsym_imports,
             tags = _MANUAL,
         )
+        import_headers, import_module_map, import_swiftmodules = _xcframework_slice_imports(path)
+        _make_xcframework_vfs(import_headers, import_module_map, import_swiftmodules)
     elif (linkage, packaging) == ("static", "framework"):
         apple_static_framework_import(
             name = resolved_target_name,
@@ -268,12 +300,21 @@ def _xcframework_slice(*, xcframework_name, identifier, platform, platform_varia
             deps = [],
             tags = _MANUAL,
         )
+        import_headers, import_module_map, import_swiftmodules = _xcframework_slice_imports(path)
+        _make_xcframework_vfs(import_headers, import_module_map, import_swiftmodules)
     elif (linkage, packaging) == ("static", "library"):
+        # For a static library the `path` is the path to the library (`.a`) itself.
+        # We need the path to the top-level slice directory so we can find headers, modulemaps and swiftmodules.
+        slice_dir = paths.dirname(path)
+        import_headers, import_module_map, import_swiftmodules = _xcframework_slice_imports(slice_dir)
         native.objc_import(
             name = resolved_target_name,
             archives = [path],
+            hdrs = import_headers,
+            includes = ["%s/Headers" % slice_dir],
             tags = _MANUAL,
         )
+        _make_xcframework_vfs(import_headers, import_module_map, import_swiftmodules, static = True)
     else:
         fail("Unsupported xcframework slice type {} ({}) in {}".format(
             build_type,
@@ -281,34 +322,6 @@ def _xcframework_slice(*, xcframework_name, identifier, platform, platform_varia
             xcframework_name,
         ))
 
-    # Collecting interface files for VFS
-    import_headers = native.glob(
-        ["%s/**/*.h" % path],
-    )
-    import_module_maps = native.glob(
-        ["%s/**/*.modulemap" % path],
-        allow_empty = True,
-    )
-    import_swiftmodules = native.glob(
-        ["%s/**/*.swiftmodule/*.*" % path],
-        allow_empty = True,
-    )
-    if len(import_module_maps) > 0:
-        import_module_map = import_module_maps[0]
-    else:
-        import_module_map = None
-
-    imported_framework_name = _find_imported_framework_name(import_headers)
-    vfs_framework_name = imported_framework_name if imported_framework_name else xcframework_name
-    framework_vfs_overlay(
-        name = resolved_target_name_vfs_overlay,
-        framework_name = vfs_framework_name,
-        modulemap = import_module_map,
-        swiftmodules = import_swiftmodules,
-        hdrs = import_headers,
-        tags = _MANUAL,
-        extra_search_paths = xcframework_name,
-    )
     return (platform, platform_variant, supported_archs, resolved_target_name, resolved_target_name_vfs_overlay)
 
 def _xcframework(*, library_name, name, slices):
@@ -318,10 +331,13 @@ def _xcframework(*, library_name, name, slices):
     conditions_vfs = {}
     arm64_ios_device_slice = None
     arm64_simulator_slice = None
+
+    if not slices:
+        fail("No slices found for XCFramework {}".format(xcframework_name))
+
     for slice in slices:
         platform, platform_variant, archs, name, vfs_overlay_target_name = _xcframework_slice(xcframework_name = xcframework_name, **slice)
         platform_setting = "@build_bazel_rules_ios//rules/apple_platform:" + platform
-        # platform_variant_setting = "@build_bazel_rules_ios//rules/apple_platform:platform_variant_" + platform_variant if platform_variant else None
 
         for arch in archs:
             if platform == "ios":
@@ -402,15 +418,35 @@ def _xcframework(*, library_name, name, slices):
     )
     return xcframework_name, xcframework_name_vfs
 
-# Note: safely assume for an import the paths will be relative to the
-# .framework directory ( afterall, that is what a .framework means )
 def _find_imported_framework_name(outputs):
+    """
+    Returns the name of the .framework that includes the given outputs.
+
+    Note: safely assume for an import the paths will be relative to the .framework directory
+    (afterall, that is what a .framework means)
+    """
     for output in outputs:
         if not ".framework" in output:
             continue
         prefix = output.split(".framework/")[0]
         fw_name = prefix.split("/")[-1]
         return fw_name
+    return None
+
+def _find_imported_xcframework_name(outputs):
+    """
+    Returns the name of the .xcframework that includes the given outputs.
+
+    Note: for a static library there is no .framework.
+    Instead, the .xcframework is the name of the static library.
+    """
+    for output in outputs:
+        if not ".xcframework" in output:
+            continue
+        framework_parts = output.split(".xcframework/")
+        if len(framework_parts) > 2:
+            fail("Unexpected XCFramework for output {}. It seems there are multiple .xcframework, this is not supported.".format(output))
+        return framework_parts[0]
     return None
 
 def apple_library(name, library_tools = {}, export_private_headers = True, namespace_is_module_name = True, default_xcconfig_name = None, xcconfig = {}, xcconfig_by_build_setting = {}, objc_defines = [], swift_defines = [], **kwargs):
@@ -719,17 +755,6 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         import_vfsoverlays.append(import_name + "_vfs")
 
     for xcframework in kwargs.pop("vendored_xcframeworks", []):
-        import_headers = native.glob(
-            ["**/*.h"],
-        )
-        import_module_maps = native.glob(
-            ["**/*.modulemap"],
-        )
-        if len(import_module_maps) > 0:
-            import_module_map = import_module_maps[0]
-        else:
-            import_module_map = None
-        vfs_imported_framework = _find_imported_framework_name(import_headers)
         xcframework_name, xcframework_name_vfs = _xcframework(library_name = name, **xcframework)
         vendored_deps.append(xcframework_name)
         import_vfsoverlays.append(xcframework_name_vfs)
