@@ -1029,6 +1029,7 @@ def _xcodeproj_impl(ctx):
         "CLANG_ANALYZER_EXEC": "$CC",
         "LD": "$BAZEL_STUBS_DIR/ld-stub",
         "LIBTOOL": "/usr/bin/true",
+        "SWIFT_USE_INTEGRATED_DRIVER": "NO",
         "SWIFT_EXEC": "$BAZEL_STUBS_DIR/swiftc-stub",
         # LD isn't used for all use cases - direct it to use this LD
         "OTHER_LDFLAGS": "-fuse-ld=$BAZEL_STUBS_DIR/ld-stub",

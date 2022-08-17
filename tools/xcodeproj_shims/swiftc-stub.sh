@@ -8,7 +8,7 @@ if [[ $# -eq 1 && $1 == "-v" ]]; then
 fi
 
 write_output_files() {
-    cat $1 | python $(dirname "$0")/print_json_leaf_nodes | xargs touch
+    cat $1 | python3 $(dirname "$0")/print_json_leaf_nodes | xargs touch
 }
 
 while :; do
@@ -22,6 +22,7 @@ while :; do
             shift
             touch $1
             touch ${1%.swiftmodule}.swiftdoc
+            touch ${1%.swiftmodule}.swiftsourceinfo
             ;;
         *)
             ;;
