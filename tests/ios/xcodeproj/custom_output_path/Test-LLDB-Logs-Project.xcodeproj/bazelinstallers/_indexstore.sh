@@ -57,7 +57,7 @@ fi
 
 echo "Running index-import for arch $ARCH and parallel-stride set to $PARALLEL_STRIDE"
 
-$BAZEL_INSTALLERS_DIR/index-import \
+nice -n 20 $BAZEL_INSTALLERS_DIR/index-import \
     -parallel-stride $PARALLEL_STRIDE \
     -incremental \
     -remap "$remote_developer_dir=$local_developer_dir" \
