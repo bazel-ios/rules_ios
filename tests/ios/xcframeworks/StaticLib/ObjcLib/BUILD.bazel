@@ -15,7 +15,7 @@ apple_framework(
                     "supported_archs": [
                         "arm64",
                     ],
-                    "path": "ObjcLib.xcframework/ios-arm64/libObjcLib.a",
+                    "path": "fixtures/ObjcLib.xcframework/ios-arm64/libObjcLib.a",
                     "build_type": {
                         "linkage": "static",
                         "packaging": "library",
@@ -29,7 +29,7 @@ apple_framework(
                         "arm64",
                         "x86_64",
                     ],
-                    "path": "ObjcLib.xcframework/ios-arm64_x86_64-simulator/libObjcLib.a",
+                    "path": "fixtures/ObjcLib.xcframework/ios-arm64_x86_64-simulator/libObjcLib.a",
                     "build_type": {
                         "linkage": "static",
                         "packaging": "library",
