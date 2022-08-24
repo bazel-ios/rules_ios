@@ -443,10 +443,9 @@ def _find_imported_xcframework_name(outputs):
     for output in outputs:
         if not ".xcframework" in output:
             continue
-        framework_parts = output.split(".xcframework/")
-        if len(framework_parts) > 2:
-            fail("Unexpected XCFramework for output {}. It seems there are multiple .xcframework, this is not supported.".format(output))
-        return framework_parts[0]
+        prefix = output.split(".xcframework/")[0]
+        fw_name = prefix.split("/")[-1]
+        return fw_name
     return None
 
 def apple_library(name, library_tools = {}, export_private_headers = True, namespace_is_module_name = True, default_xcconfig_name = None, xcconfig = {}, xcconfig_by_build_setting = {}, objc_defines = [], swift_defines = [], **kwargs):
