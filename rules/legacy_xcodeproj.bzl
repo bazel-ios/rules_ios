@@ -486,7 +486,7 @@ xcodeproj_project_options = rule(
         "indent_width": attr.int(mandatory = False),
         "tab_width": attr.int(mandatory = False),
     },
-    doc = "Rule to change project options",
+    doc = "Rule to change project options, values will fallback to Xcode default if not provided",
 )
 
 def _collect_swift_defines(modules):
