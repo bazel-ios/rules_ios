@@ -26,7 +26,7 @@ if [[ CLEAN = 1 ]]; then
     bazelisk clean
 fi
 
-bazelisk query 'kind(xcodeproj, tests/macos/xcodeproj/...)' | xargs -n 1 bazelisk run
+bazelisk query 'kind("xcodeproj rule", tests/macos/xcodeproj/...)' | xargs -n 1 bazelisk run
 bazelisk query 'attr(executable, 1, kind(genrule, tests/macos/xcodeproj/...))' | xargs -n 1 bazelisk run
 
 ./tests/macos/xcodeproj/build.sh
@@ -40,7 +40,7 @@ if [[ CLEAN = 1 ]]; then
     bazelisk clean
 fi
 
-bazelisk query 'kind(xcodeproj, tests/ios/xcodeproj/...)' | xargs -n 1 bazelisk run
+bazelisk query 'kind("xcodeproj rule", tests/ios/xcodeproj/...)' | xargs -n 1 bazelisk run
 bazelisk query 'attr(executable, 1, kind(genrule, tests/ios/xcodeproj/...))' | xargs -n 1 bazelisk run
 
 ./tests/ios/xcodeproj/pre_build_check.sh

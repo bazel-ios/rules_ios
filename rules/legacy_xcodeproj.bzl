@@ -16,6 +16,7 @@ def _get_attr_values_for_name(deps, provider, field):
         if dep and provider in dep
     ]
 
+_ProjectOptionsInfo = provider()
 _TargetInfo = provider()
 _SrcsInfo = provider()
 
@@ -461,6 +462,32 @@ xcodeproj_lldbinit = rule(
         "target_name": attr.string(),
     },
     doc = "Internal testing rule relying on assumptions about the xcodeproj rule above",
+)
+
+def _xcodeproj_project_options_impl(ctx):
+    # Map of the attr name to the options value expected by XcodeGen.
+    options_map = {
+        "uses_tabs": "usesTabs",
+        "indent_width": "indentWidth",
+        "tab_width": "tabWidth",
+    }
+
+    # Accumulate all provided options into a Starlark dict.
+    options = {}
+    for attr, option in options_map.items():
+        attr_value = getattr(ctx.attr, attr, None)
+        if attr_value:
+            options[option] = getattr(ctx.attr, attr)
+    return [_ProjectOptionsInfo(options = options)]
+
+xcodeproj_project_options = rule(
+    implementation = _xcodeproj_project_options_impl,
+    attrs = {
+        "uses_tabs": attr.bool(mandatory = False),
+        "indent_width": attr.int(mandatory = False),
+        "tab_width": attr.int(mandatory = False),
+    },
+    doc = "Rule to change project options, values will fallback to Xcode default if not provided",
 )
 
 def _collect_swift_defines(modules):
@@ -1004,6 +1031,9 @@ def _xcodeproj_impl(ctx):
         "groupSortPosition": "none",
         "settingPresets": "none",
     }
+    if ctx.attr.project_options_overrides:
+        proj_options.update(ctx.attr.project_options_overrides[_ProjectOptionsInfo].options)
+
     proj_settings_base = {}
 
     # User defined macro for Bazel only
@@ -1237,6 +1267,7 @@ Tags for configuration:
         "bazel_path": attr.string(mandatory = False, default = "bazel"),
         "scheme_existing_envvar_overrides": attr.string_dict(allow_empty = True, default = {}, mandatory = False),
         "project_attributes_overrides": attr.string_dict(allow_empty = True, mandatory = False, default = {}, doc = "Overrides for attributes that can be set at the project base level."),
+        "project_options_overrides": attr.label(mandatory = False, providers = [_ProjectOptionsInfo], doc = "Overrides for options that can be set at the project base level. Use 'xcodeproj_project_options'."),
         "additional_scheme_infos": attr.label_list(mandatory = False, allow_empty = True, providers = [], aspects = [], doc = """
         List of additional_scheme_info labels that append scheme information to the generated scheme for a build target.
         Currently supports test actions, and test environment variables.

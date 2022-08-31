@@ -1,4 +1,5 @@
 load("//rules:xcodeproj.bzl", "xcodeproj")
+load("//rules:legacy_xcodeproj.bzl", "xcodeproj_project_options")
 load("//rules:additional_scheme_info.bzl", "additional_scheme_info")
 
 xcodeproj(
@@ -21,6 +22,7 @@ xcodeproj(
     ],
     include_transitive_targets = True,
     project_attributes_overrides = {"ORGANIZATIONNAME": "rules_ios"},
+    project_options_overrides = ":ProjectOptions",
     deps = [
         "//tests/ios/frameworks/objc:ObjcFramework",
         "//tests/ios/frameworks/objc:ObjcFrameworkTests",
@@ -38,6 +40,10 @@ additional_scheme_info(
         "ENV1": "/tmp/dir",
         "ENV2": "🍌",
     },
+)
+
+xcodeproj_project_options(
+    name = "ProjectOptions",
 )
 
 xcodeproj(
