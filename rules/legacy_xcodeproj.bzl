@@ -475,7 +475,8 @@ def _xcodeproj_project_options_impl(ctx):
     # Accumulate all provided options into a Starlark dict.
     options = {}
     for attr, option in options_map.items():
-        if hasattr(ctx.attr, attr):
+        attr_value = getattr(ctx.attr, attr, None)
+        if attr_value:
             options[option] = getattr(ctx.attr, attr)
     return [_ProjectOptionsInfo(options = options)]
 
