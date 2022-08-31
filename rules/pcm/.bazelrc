@@ -1,0 +1,4 @@
+build --features swift.use_c_modules
+build --features swift.emit_c_module
+build --features swift.use_global_module_cache
+build --override_repository=build_bazel_rules_swift=/Users/jdierksen/Development/rules_swift

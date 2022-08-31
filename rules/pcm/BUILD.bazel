@@ -1,0 +1,8 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+
+swift_binary(
+    name = "stuff",
+    srcs = ["stuff.swift"],
+    data = ["@here_be_xcodes//:toolchains"],
+    deps = ["@here_be_xcodes//version13_3_1_13E500a/MacOSX/MacOSX:SwiftUI_swift"],
+)
