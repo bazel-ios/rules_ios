@@ -5,14 +5,14 @@ load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@bazel_skylib//lib:selects.bzl", "selects")
 load("@build_bazel_rules_apple//apple:apple.bzl", "apple_dynamic_framework_import", "apple_static_framework_import")
 load("@build_bazel_rules_apple//apple/internal/resource_rules:apple_intent_library.bzl", "apple_intent_library")
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("//rules:apple_library.bzl", "apple_library")
 load("//rules:precompiled_apple_resource_bundle.bzl", "precompiled_apple_resource_bundle")
 load("//rules:hmap.bzl", "headermap")
-load("//rules/framework:vfs_overlay.bzl", "framework_vfs_overlay", VFS_OVERLAY_FRAMEWORK_SEARCH_PATH = "FRAMEWORK_SEARCH_PATH")
 load("//rules/library:resources.bzl", "wrap_resources_in_filegroup")
 load("//rules/library:xcconfig.bzl", "copts_by_build_setting_with_defaults")
 load("//rules:import_middleman.bzl", "import_middleman")
 load("//rules:utils.bzl", "bundle_identifier_for_bundle")
+load("//rules/framework:vfs_overlay.bzl", "framework_vfs_overlay", VFS_OVERLAY_FRAMEWORK_SEARCH_PATH = "FRAMEWORK_SEARCH_PATH")
 
 PrivateHeadersInfo = provider(
     doc = "Propagates private headers, so they can be accessed if necessary",
@@ -208,12 +208,6 @@ _DEFAULT_LIBRARY_TOOLS = {
     "fetch_default_xcconfig": _error_on_default_xcconfig,
 }
 
-def _append_headermap_copts(hmap, flag, objc_copts, swift_copts, cc_copts):
-    copt = flag + "$(execpath :{hmap})".format(hmap = hmap)
-
-    objc_copts.append(copt)
-    cc_copts.append(copt)
-    swift_copts.extend(("-Xcc", copt))
 
 def _uppercase_string(s):
     return s.upper()
@@ -449,7 +443,7 @@ def _find_imported_xcframework_name(outputs):
         return framework_parts[0]
     return None
 
-def apple_library(name, library_tools = {}, export_private_headers = True, namespace_is_module_name = True, default_xcconfig_name = None, xcconfig = {}, xcconfig_by_build_setting = {}, objc_defines = [], swift_defines = [], **kwargs):
+def apple_library(name, library_tools = {}, export_private_headers = False, namespace_is_module_name = True, default_xcconfig_name = None, xcconfig = {}, xcconfig_by_build_setting = {}, objc_defines = [], swift_defines = [], **kwargs):
     """Create libraries for native source code on Apple platforms.
 
     Automatically handles mixed-source libraries and comes with
@@ -498,7 +492,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         else:
             kwargs["srcs"] = kwargs.pop("srcs", []) + [f]
     for f in sorted(kwargs.pop("srcs", []), key = _uppercase_string):
-        if f.endswith((".h", ".hh", ".hpp")):
+        if f.endswith((".inc", ".h", ".hh", ".hpp")):
             if (private_headers and sets.contains(private_headers, f)) or \
                (public_headers and sets.contains(public_headers, f)):
                 pass
@@ -781,12 +775,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     )
     deps += resource_bundles
 
-    objc_libname = "%s_objc" % name
-    swift_libname = "%s_swift" % name
+    swift_libname = "%s_swiftx" % name
     cpp_libname = "%s_cpp" % name
-
-    framework_vfs_overlay_name = name + "_vfs"
-    framework_vfs_overlay_name_swift = swift_libname + "_vfs"
 
     # TODO: remove under certian circumstances when framework if set
     # Needs to happen before headermaps are made, so the generated umbrella header gets added to those headermaps
@@ -816,92 +806,6 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                 **kwargs
             )
 
-    framework_vfs_overlay(
-        name = framework_vfs_overlay_name_swift,
-        framework_name = module_name,
-        modulemap = module_map,
-        has_swift = len(swift_sources) > 0,
-        private_hdrs = objc_private_hdrs,
-        hdrs = objc_hdrs,
-        tags = _MANUAL,
-        testonly = kwargs.get("testonly", False),
-        deps = deps + private_deps + lib_names + import_vfsoverlays,
-    )
-
-    framework_vfs_objc_copts = [
-        "-ivfsoverlay$(execpath :{})".format(framework_vfs_overlay_name),
-        "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
-    ]
-    framework_vfs_swift_copts = [
-        "-Xfrontend",
-        "-vfsoverlay$(execpath :{})".format(framework_vfs_overlay_name_swift),
-        "-Xfrontend",
-        "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
-        "-I{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
-        "-Xcc",
-        "-ivfsoverlay$(execpath :{})".format(framework_vfs_overlay_name_swift),
-        "-Xcc",
-        "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
-    ]
-
-    ## BEGIN HMAP
-
-    public_hmap_name = name + "_public_hmap"
-    public_hdrs_filegroup = name + "_public_hdrs"
-    native.filegroup(
-        name = public_hdrs_filegroup,
-        srcs = objc_hdrs,
-        tags = _MANUAL,
-    )
-
-    # Public hmaps are for vendored static libs to export their header only.
-    # Other dependencies' headermaps will be generated by li_ios_framework
-    # rules.
-    headermap(
-        name = public_hmap_name,
-        namespace = namespace,
-        hdrs = [public_hdrs_filegroup],
-        tags = _MANUAL,
-    )
-    private_deps.append(public_hmap_name)
-
-    private_hmap_name = name + "_private_hmap"
-    private_angled_hmap_name = name + "_private_angled_hmap"
-    private_hdrs_filegroup = name + "_private_hdrs"
-    private_angled_hdrs_filegroup = name + "_private_angled_hdrs"
-
-    native.filegroup(
-        name = private_hdrs_filegroup,
-        srcs = objc_non_exported_hdrs + objc_private_hdrs + objc_hdrs,
-        tags = _MANUAL,
-    )
-    native.filegroup(
-        name = private_angled_hdrs_filegroup,
-        srcs = objc_non_exported_hdrs + objc_private_hdrs,
-        tags = _MANUAL,
-    )
-
-    headermap(
-        name = private_hmap_name,
-        hdrs = [private_hdrs_filegroup],
-        tags = _MANUAL,
-    )
-    private_deps.append(private_hmap_name)
-    headermap(
-        name = private_angled_hmap_name,
-        namespace = namespace,
-        hdrs = [private_angled_hdrs_filegroup],
-        tags = _MANUAL,
-    )
-    private_deps.append(private_angled_hmap_name)
-
-    ## END HMAP
-
-    _append_headermap_copts(private_hmap_name, "-I", additional_objc_copts, additional_swift_copts, additional_cc_copts)
-    _append_headermap_copts(public_hmap_name, "-I", additional_objc_copts, additional_swift_copts, additional_cc_copts)
-    _append_headermap_copts(private_angled_hmap_name, "-I", additional_objc_copts, additional_swift_copts, additional_cc_copts)
-    _append_headermap_copts(private_hmap_name, "-iquote", additional_objc_copts, additional_swift_copts, additional_cc_copts)
-
     additional_objc_copts += [
         "-fmodules",
         "-fmodule-name=%s" % module_name,
@@ -920,6 +824,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
 
     module_data = library_tools["wrap_resources_in_filegroup"](name = module_name + "_data", srcs = data, testonly = kwargs.get("testonly", False))
 
+    generated_swift_header_name = None
+    swiftc_inputs = None
     if swift_sources:
         additional_swift_copts.extend(("-Xcc", "-I."))
         if module_map:
@@ -941,149 +847,34 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             ]
         generated_swift_header_name = module_name + "-Swift.h"
 
-        if module_map:
-            extend_modulemap(
-                name = module_map + ".extended." + name,
-                destination = "%s.extended.modulemap" % name,
-                source = module_map,
-                swift_header = generated_swift_header_name,
-                module_name = module_name,
-                tags = _MANUAL,
-            )
-            module_map = "%s.extended.modulemap" % name
-
+    #print("Lib", module_name, objc_hdrs)
     # Note: this needs to go here, in order to virtualize the extended module
-    framework_vfs_overlay(
-        name = framework_vfs_overlay_name,
-        framework_name = module_name,
-        has_swift = len(swift_sources) > 0,
-        modulemap = module_map,
-        private_hdrs = objc_private_hdrs,
-        hdrs = objc_hdrs,
-        tags = _MANUAL,
-        testonly = kwargs.get("testonly", False),
-        deps = deps + private_deps + lib_names + import_vfsoverlays,
-        #enable_framework_vfs = enable_framework_vfs
-    )
-
-    if swift_sources:
-        swift_library(
-            name = swift_libname,
-            module_name = module_name,
-            generated_header_name = generated_swift_header_name,
-            generates_header = True,
-            srcs = swift_sources,
-            # Note: by default it used a vfs but not the entire virtual framwork
-            # feature.
-            copts = copts_by_build_setting.swift_copts + swift_copts + select({
-                "@build_bazel_rules_ios//:virtualize_frameworks": framework_vfs_swift_copts,
-                "//conditions:default": framework_vfs_swift_copts if enable_framework_vfs else [],
-            }) + additional_swift_copts,
-            deps = deps + private_deps + lib_names + select({
-                "@build_bazel_rules_ios//:virtualize_frameworks": [framework_vfs_overlay_name_swift],
-                "//conditions:default": [framework_vfs_overlay_name_swift] if enable_framework_vfs else [],
-            }),
-            swiftc_inputs = swiftc_inputs,
-            features = ["swift.no_generated_module_map"] + select({
-                "@build_bazel_rules_ios//:virtualize_frameworks": ["swift.vfsoverlay"],
-                "//conditions:default": [],
-            }),
-            data = [module_data],
-            tags = tags_manual,
-            defines = defines + swift_defines,
-            **kwargs
-        )
-        lib_names.append(swift_libname)
-
-        # Add generated swift header to header maps for angle bracket imports
-        swift_doublequote_hmap_name = name + "_swift_doublequote_hmap"
-        headermap(
-            name = swift_doublequote_hmap_name,
-            namespace = namespace,
-            hdrs = [],
-            direct_hdr_providers = [swift_libname],
-            tags = _MANUAL,
-            testonly = kwargs.get("testonly", False),
-        )
-        private_deps.append(swift_doublequote_hmap_name)
-        _append_headermap_copts(swift_doublequote_hmap_name, "-iquote", additional_objc_copts, additional_swift_copts, additional_cc_copts)
-
-        # Add generated swift header to header maps for double quote imports
-        swift_angle_bracket_hmap_name = name + "_swift_angle_bracket_hmap"
-        headermap(
-            name = swift_angle_bracket_hmap_name,
-            namespace = namespace,
-            hdrs = [],
-            direct_hdr_providers = [swift_libname],
-            tags = _MANUAL,
-            testonly = kwargs.get("testonly", False),
-        )
-        private_deps.append(swift_angle_bracket_hmap_name)
-        _append_headermap_copts(swift_angle_bracket_hmap_name, "-I", additional_objc_copts, additional_swift_copts, additional_cc_copts)
-
-    # Note: this line is intentionally disabled
-    if cpp_sources and False:
-        additional_cc_copts.append("-I.")
-        native.cc_library(
-            name = cpp_libname,
-            srcs = cpp_sources + objc_private_hdrs,
-            hdrs = objc_hdrs,
-            copts = copts_by_build_setting.cc_copts + cc_copts + additional_cc_copts,
-            deps = deps,
-            tags = tags_manual,
-            testonly = kwargs.get("testonly", False),
-        )
-        lib_names.append(cpp_libname)
-
-    additional_objc_copts.append("-I.")
-    index_while_building_objc_copts = select({
-        "@build_bazel_rules_ios//:use_global_index_store": [
-            # Note: this won't work work for remote caching yet. It uses a
-            # _different_ global index for objc than so that the BEP grep in
-            # rules_ios picks this up.
-            # Checkout the task roadmap for future improvements:
-            # Docs/index_while_building.md
-            "-index-store-path",
-            "bazel-out/rules_ios_global_index_store.indexstore",
-        ],
-        "//conditions:default": [
-            "-index-store-path",
-            "$(GENDIR)/{package}/rules_ios_objc_library_{libname}.indexstore".format(
-                package = native.package_name(),
-                libname = objc_libname,
-            ),
-        ],
-    })
-
-    additional_objc_vfs_deps = select({
-        "@build_bazel_rules_ios//:virtualize_frameworks": [framework_vfs_overlay_name_swift] + [framework_vfs_overlay_name],
-        "//conditions:default": [framework_vfs_overlay_name_swift] + [framework_vfs_overlay_name] if enable_framework_vfs else [],
-    })
-    additional_objc_vfs_copts = select({
-        "@build_bazel_rules_ios//:virtualize_frameworks": framework_vfs_objc_copts,
-        "//conditions:default": framework_vfs_objc_copts if enable_framework_vfs else [],
-    })
-    if module_map:
-        objc_hdrs.append(module_map)
-
-    native.objc_library(
-        name = objc_libname,
-        srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,
-        non_arc_srcs = objc_non_arc_sources,
-        hdrs = objc_hdrs,
-        copts = copts_by_build_setting.objc_copts + objc_copts + additional_objc_vfs_copts + additional_objc_copts + index_while_building_objc_copts,
-        deps = deps + private_deps + lib_names + additional_objc_vfs_deps,
+    apple_library(
+        hdrs = objc_private_hdrs + objc_hdrs + objc_non_exported_hdrs,
+        private_hdrs = objc_private_hdrs + objc_non_exported_hdrs,
+        name = swift_libname,
+        module_name = module_name,
         module_map = module_map,
-        sdk_dylibs = sdk_dylibs,
-        sdk_frameworks = sdk_frameworks,
-        weak_sdk_frameworks = weak_sdk_frameworks,
-        sdk_includes = sdk_includes,
-        pch = pch,
-        data = [] if swift_sources else [module_data],
+        generated_header_name = generated_swift_header_name,
+        generates_header = True,
+        swift_srcs = swift_sources,
+        swift_copts = copts_by_build_setting.swift_copts + swift_copts + additional_swift_copts,
+        objc_copts = copts_by_build_setting.objc_copts + objc_copts + additional_objc_copts,
+        objc_srcs = objc_sources,
+        non_arc_srcs = objc_non_arc_sources,
+        deps = deps + private_deps + lib_names + import_vfsoverlays,
+        swiftc_inputs = swiftc_inputs,
+        features = ["swift.no_generated_module_map"] + select({
+            "@build_bazel_rules_ios//:virtualize_frameworks": ["swift.vfsoverlay"],
+            "//conditions:default": [],
+        }),
+        data = [module_data],
         tags = tags_manual,
-        defines = defines + objc_defines,
+        defines = defines + swift_defines,
         **kwargs
     )
+    lib_names.append(swift_libname)
+
     launch_screen_storyboard_name = name + "_launch_screen_storyboard"
     native.filegroup(
         name = launch_screen_storyboard_name,
@@ -1091,9 +882,9 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         output_group = "launch_screen_storyboard",
         tags = _MANUAL,
     )
-    lib_names.append(objc_libname)
 
-    if export_private_headers:
+    # This should go away: ( note inc is crashing )
+    if False and export_private_headers:
         private_headers_name = "%s_private_headers" % name
         lib_names.append(private_headers_name)
         _private_headers(name = private_headers_name, headers = objc_private_hdrs, tags = _MANUAL)

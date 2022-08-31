@@ -18,13 +18,14 @@ build --deleted_packages tests/ios/frameworks/sources-with-prebuilt-binaries
 build --compilation_mode=dbg
 
 # Use 'worker' strategy for swift compilation
-build --strategy=SwiftCompile=worker
+#build --strategy=SwiftCompile=worker
 build --experimental_worker_allow_json_protocol
 
 # This flips enable_global_index_store - see docs/index_while_building.md for a
 # detailed summary
-build --features swift.use_global_index_store
-build --features swift.index_while_building
+# Note this now has runfiles
+# build --features swift.use_global_index_store
+# build --features swift.index_while_building
 
 # Prevents leaking unexpected binaries via PATH to tests
 build --test_env=PATH=/usr/bin:/bin:/usr/sbin:/sbin
