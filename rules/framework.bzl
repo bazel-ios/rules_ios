@@ -37,6 +37,7 @@ _APPLE_FRAMEWORK_PACKAGING_KWARGS = [
     "bundle_id",
     "skip_packaging",
     "link_dynamic",
+    "exported_symbols_lists",
 ]
 
 def apple_framework(name, apple_library = apple_library, **kwargs):
