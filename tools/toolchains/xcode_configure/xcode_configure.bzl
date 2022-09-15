@@ -17,6 +17,8 @@
    installed on the local host.
 """
 
+load(":xcode_sdk_frameworks.bzl", "create_xcode_framework_targets")
+
 _EXECUTE_TIMEOUT = 120
 
 def _search_string(fullstring, prefix, suffix):
@@ -73,6 +75,12 @@ def _xcode_version_output(repository_ctx, name, version, aliases, developer_dir)
     tvos_sdk_version = _search_sdk_output(xcodebuild_result.stdout, "appletvos")
     macos_sdk_version = _search_sdk_output(xcodebuild_result.stdout, "macosx")
     watchos_sdk_version = _search_sdk_output(xcodebuild_result.stdout, "watchos")
+    versions_dict = {
+        "ios": ios_sdk_version,
+        "tvos": tvos_sdk_version,
+        "macos": macos_sdk_version,
+        "watchos": watchos_sdk_version,
+    }
     build_contents += "xcode_version(\n  name = '%s'," % name
     build_contents += "\n  version = '%s'," % version
     if aliases:
@@ -86,7 +94,7 @@ def _xcode_version_output(repository_ctx, name, version, aliases, developer_dir)
     if watchos_sdk_version:
         build_contents += "\n  default_watchos_sdk_version = '%s'," % watchos_sdk_version
     build_contents += "\n)\n"
-    return build_contents
+    return build_contents, versions_dict
 
 VERSION_CONFIG_STUB = "xcode_config(name = 'host_xcodes')"
 
@@ -213,18 +221,21 @@ def _darwin_build_file(repository_ctx):
         aliases = toolchain.aliases
         developer_dir = toolchain.developer_dir
         target_name = "version%s" % version.replace(".", "_")
-        buildcontents += _xcode_version_output(
+        version_output, versions_dict = _xcode_version_output(
             repository_ctx,
             target_name,
             version,
             aliases,
             developer_dir,
         )
+        buildcontents += version_output
         target_label = "':%s'" % target_name
         target_names.append(target_label)
         if (version.startswith(default_xcode_version) and
             version.endswith(default_xcode_build_version)):
             default_xcode_target = target_label
+        if repository_ctx.attr.explicit_modules:
+            create_xcode_framework_targets(xcode_version_name = target_name, developer_dir = developer_dir, versions = versions_dict, repository_ctx = repository_ctx)
     buildcontents += "xcode_config(name = 'host_xcodes',"
     if target_names:
         buildcontents += "\n  versions = [%s]," % ", ".join(target_names)
@@ -275,6 +286,7 @@ xcode_autoconf = repository_rule(
     attrs = {
         "xcode_locator": attr.string(),
         "remote_xcode": attr.string(),
+        "explicit_modules": attr.bool(),
     },
 )
 
@@ -284,4 +296,5 @@ def xcode_configure(xcode_locator_label, remote_xcode_label = None):
         name = "local_config_xcode",
         xcode_locator = xcode_locator_label,
         remote_xcode = remote_xcode_label,
+        explicit_modules = True,
     )
