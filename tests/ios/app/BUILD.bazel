@@ -112,6 +112,14 @@ ios_application(
     ],
 )
 
+ios_unit_test(
+    name = "TestAppWithProvisioningProfile",
+    srcs = ["empty_tests.m"],
+    minimum_os_version = "10.0",
+    provisioning_profile = "@build_bazel_rules_ios//tests/ios:integration-test.mobileprovision",
+    test_host = ":AppWithProvisioningProfile",
+)
+
 ios_application(
     name = "AppWithExtension",
     srcs = ["App/main.m"],

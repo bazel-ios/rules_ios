@@ -19,6 +19,7 @@ _IOS_TEST_KWARGS = [
     "shard_count",
     "flaky",
     "frameworks",
+    "provisioning_profile",
 ]
 
 def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_build_setting = {}, **kwargs):
