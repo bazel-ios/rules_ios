@@ -905,6 +905,9 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
 
         scheme_action_details = {"targets": [target_name]}
         env_vars_dict = {}
+        if product_type == "application":
+            env_vars_dict = ctx.attr.application_env_vars
+
         for (k, v) in getattr(target_info, "env_vars", ()):
             # Specific scheme can override the ones defined under env_vars here:
             if ctx.attr.scheme_existing_envvar_overrides.get(k, None):
@@ -1312,6 +1315,7 @@ Additional LLDB settings to be added in each target's .lldbinit configuration fi
         "bazel_profile_enabled": attr.bool(default = False, mandatory = False),
         "disable_main_thread_checker": attr.bool(default = False, mandatory = False),
         "force_x86_sim": attr.bool(default = False, mandatory = False),
+        "application_env_vars": attr.string_dict(mandatory = False, default = {}, doc = "Add env vars to launch actions for app schemes")
     },
     executable = True,
 )
