@@ -8,8 +8,7 @@ end to end.
 It seamlessly bazel builds iOS applications originally written under Xcode with
 minimal-to-no code changes. It often re-uses ideas and code from `rules_swift`
 and `rules_apple` buit it isn't tied to untested or unused features. It
-generates Xcode projects that _just work_ and makes using Apple Silicion a
-with Bazel breeze.
+generates Xcode projects that _just work_ and makes using Apple Silicion with Bazel a breeze.
 
 ## iOS Applications
 
