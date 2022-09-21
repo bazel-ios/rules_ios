@@ -2,13 +2,14 @@
 
 ![master](https://github.com/bazel-ios/rules_ios/workflows/CI-master/badge.svg)
 
-`rules_ios` is community developed Bazel rules to do iOS development with Bazel
-end to end.
+`rules_ios` is community developed Bazel rules that enable you to do iOS
+development with Bazel end to end.
 
-It seamlessly bazel builds iOS applications originally written under Xcode with
+It seamlessly Bazel builds iOS applications originally written under Xcode with
 minimal-to-no code changes. It often re-uses ideas and code from `rules_swift`
-and `rules_apple` and it isn't tied to untested or unused features. It
-generates Xcode projects that _just work_ and makes using Apple Silicion with Bazel a breeze.
+and `rules_apple` and it isn't tied to untested or unused features. It generates
+Xcode projects that _just work_ and makes using Apple Silicon with Bazel a
+breeze.
 
 ### iOS Applications
 
@@ -19,7 +20,7 @@ load("@build_bazel_rules_ios//rules:app.bzl", "ios_application")
 
 ios_application(
     name = "iOS-App",
-    srcs = glob(["*.m", "*.swift"]),
+    srcs = glob(["*.swift"]),
     bundle_id = "com.example.ios-app",
     minimum_os_version = "12.0",
     visibility = ["//visibility:public"],
@@ -28,19 +29,20 @@ ios_application(
 
 ### Xcode project generation
 
-_xcode project generaation that's tested and works end to end with open source
-remote execution and caching._
+_Bazel optimized Xcode project generation that's tested and works end to end with open source remote execution and caching_
 
 ```python
 load("@build_bazel_rules_ios//rules:xcodeproj.bzl", "xcodeproj")
 
 xcodeproj(
     name = "MyXcode",
-    srcs = glob(["*.m", "*.swift"]),
     bazel_path = "bazelisk",
     deps = [ ":iOS-App"] 
 )
 ```
+
+_projects are optimized to build with Bazel and optionally fallback to building with Xcode_
+
 
 ### Frameworks
 
@@ -55,7 +57,7 @@ apple_framework(
     data = ["Static.txt"],
     infoplists = ["Info.plist"],
     link_dynamic = True,
-    platforms = {"ios": "10.0"},
+    platforms = {"ios": "12.0"},
     deps = ["//tests/ios/frameworks/dynamic/c"],
 )
 ```
@@ -72,7 +74,7 @@ apple_framework(
     bundle_id = "com.example.a",
     infoplists = ["Info.plist"],
     link_dynamic = True,
-    platforms = {"ios": "10.0"},
+    platforms = {"ios": "12.0"},
     deps = [":Static"],
 )
 ```
@@ -105,6 +107,7 @@ releases](https://github.com/bazelbuild/rules_swift/pull/335), the versions are
 hardcoded to commit sha's that are known to work. You can see the particular
 commit sha's in
 [`repositories.bzl`](https://github.com/bazel-ios/rules_ios/tree/master/rules/repositories.bzl).
+_It pulls a vetted sha of `rules_apple` and `rules_swift`._
 
 ```python
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
@@ -168,5 +171,4 @@ Bazel version required by current rules is [here](https://github.com/bazel-ios/r
 
 [Click here](https://github.com/bazel-ios/rules_ios/tree/master/docs)
 for the documentation.
-
 
