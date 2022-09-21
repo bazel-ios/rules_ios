@@ -7,12 +7,12 @@ end to end.
 
 It seamlessly bazel builds iOS applications originally written under Xcode with
 minimal-to-no code changes. It often re-uses ideas and code from `rules_swift`
-and `rules_apple` buit it isn't tied to untested or unused features. It
+and `rules_apple` and it isn't tied to untested or unused features. It
 generates Xcode projects that _just work_ and makes using Apple Silicion with Bazel a breeze.
 
-## iOS Applications
+### iOS Applications
 
-Minimal example:
+_it supports all the primitives like apps, extensions, and widgets_
 
 ```python
 load("@build_bazel_rules_ios//rules:app.bzl", "ios_application")
@@ -26,7 +26,7 @@ ios_application(
 )
 ```
 
-## Xcode project generation
+### Xcode project generation
 
 _xcode project generaation that's tested and works end to end with open source
 remote execution and caching._
@@ -37,16 +37,12 @@ load("@build_bazel_rules_ios//rules:xcodeproj.bzl", "xcodeproj")
 xcodeproj(
     name = "MyXcode",
     srcs = glob(["*.m", "*.swift"]),
-    additional_files = ["//tests/ios/frameworks/objc:additional_files"],
-    additional_scheme_infos = [
-        ":ObjcFrameworkSchemeInfo",
-    ],
     bazel_path = "bazelisk",
     deps = [ ":iOS-App"] 
 )
 ```
 
-## Frameworks
+### Frameworks
 
 _static frameworks with Xcode semantics - easily port existing apps to Bazel_
 
@@ -81,7 +77,7 @@ apple_framework(
 )
 ```
 
-## Testing - UI / Unit
+### Testing - UI / Unit
 
 _easily test iOS applications with Bazel - ui and unit testing rules_
 
@@ -96,7 +92,7 @@ ios_unit_test(
 )
 ```
 
-## Apple Silicon ready
+### Apple Silicon ready
 
 - Automatically run legacy deps on Apple Silicon - it _just works_ by running [arm64-to-sim](https://github.com/bogo/arm64-to-sim) and more.
 - Testing mechanisms to easily test in ephemeral VMs
