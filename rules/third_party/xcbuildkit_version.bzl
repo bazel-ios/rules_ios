@@ -23,6 +23,8 @@ _repo_info = repository_rule(
 def _get_ref(rule):
     if not rule:
         return None
+    if rule["kind"] != "git_repository":
+        return None
     if rule["commit"]:
         return rule["commit"]
     if rule["tag"]:
