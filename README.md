@@ -2,14 +2,16 @@
 
 ![master](https://github.com/bazel-ios/rules_ios/workflows/CI-master/badge.svg)
 
-`rules_ios` is community developed Bazel rules that enable you to do iOS
-development with Bazel end to end.
+`rules_ios` is [community developed Bazel rules](https://bazel-ios.github.io/)
+that enable you to do iOS development with Bazel end to end.
 
 It seamlessly Bazel builds iOS applications originally written under Xcode with
 minimal-to-no code changes. It often re-uses ideas and code from `rules_swift`
 and `rules_apple` and it isn't tied to untested or unused features. It generates
 Xcode projects that _just work_ and makes using Apple Silicon with Bazel a
 breeze.
+
+_Learn more at [bazel-ios.github.io](https://bazel-ios.github.io/)_
 
 ### iOS Applications
 
@@ -56,7 +58,6 @@ apple_framework(
     bundle_id = "com.example.b",
     data = ["Static.txt"],
     infoplists = ["Info.plist"],
-    link_dynamic = True,
     platforms = {"ios": "12.0"},
     deps = ["//tests/ios/frameworks/dynamic/c"],
 )
@@ -101,13 +102,11 @@ ios_unit_test(
 
 ## WORKSPACE setup
 
-Add the following lines to your `WORKSPACE` file. Note that since `rules_swift`
-and `rules_apple` [no longer create
-releases](https://github.com/bazelbuild/rules_swift/pull/335), the versions are
-hardcoded to commit sha's that are known to work. You can see the particular
-commit sha's in
-[`repositories.bzl`](https://github.com/bazel-ios/rules_ios/tree/master/rules/repositories.bzl).
-_It pulls a vetted sha of `rules_apple` and `rules_swift`._
+Add the following lines to your `WORKSPACE` file.
+
+_It pulls a vetted sha of `rules_apple` and `rules_swift` - you can find the
+versions in
+[`repositories.bzl`](https://github.com/bazel-ios/rules_ios/tree/master/rules/repositories.bzl)._
 
 ```python
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
