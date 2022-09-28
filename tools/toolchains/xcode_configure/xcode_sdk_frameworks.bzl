@@ -1,3 +1,5 @@
+load(":xcode_locator.bzl", "run_xcode_locator", "xcode_version_dict")
+
 PLATFORM_TUPLES = [
     ("AppleTVOS", "tvos"),
     ("AppleTVSimulator", "tvos"),
@@ -73,7 +75,7 @@ SWIFT_MODULE_TMPL = """swift_module_alias(
     name = "{name}_swift",
     deps = [
 {deps}
-    ]
+    ],
 )
 
 """
@@ -126,10 +128,11 @@ def _platform_target_triple(platform, target_name, version):
         suffix = "-simulator" if platform.endswith("Simulator") else "",
     )
 
-def create_xcode_framework_targets(repository_ctx, xcode_version_name, developer_dir, versions):
+def _create_xcode_framework_targets(repository_ctx, xcode_version_name, developer_dir):
     """Creates a BUILD file for all the SDK frameworks contained in a given Xcode version."""
     developer_dir_path = repository_ctx.path(developer_dir)
     platforms_dir = developer_dir_path.get_child("Platforms")
+    versions = xcode_version_dict(repository_ctx, developer_dir)
     for platform_name, target_name in PLATFORM_TUPLES:
         platform_dir = platforms_dir.get_child(platform_name + ".platform")
         platform_version = versions[target_name]
@@ -139,3 +142,30 @@ def create_xcode_framework_targets(repository_ctx, xcode_version_name, developer
 
         output_folder = repository_ctx.path(xcode_version_name).get_child(platform_name)
         _create_build_file_for_sdk(repository_ctx, developer_dir_path, sdk_dir, output_folder, target_triple)
+
+def _impl(repository_ctx):
+    os_name = repository_ctx.os.name.lower()
+    repository_ctx.file("BUILD.bazel")
+
+    if not os_name.startswith("mac os"):
+        return
+
+    toolchains = run_xcode_locator(
+        repository_ctx,
+        Label(repository_ctx.attr.xcode_locator),
+    )
+
+    for toolchain in toolchains:
+        target_name = "version{}".format(toolchain.version.replace(".", "_"))
+        _create_xcode_framework_targets(
+            repository_ctx = repository_ctx,
+            xcode_version_name = target_name,
+            developer_dir = toolchain.developer_dir,
+        )
+
+xcode_sdk_frameworks = repository_rule(
+    implementation = _impl,
+    attrs = {
+        "xcode_locator": attr.string(),
+    },
+)
