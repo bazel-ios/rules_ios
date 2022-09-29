@@ -43,4 +43,9 @@ apple_framework(
         },
     ],
     visibility = ["//visibility:public"],
+    deps = [
+        "@xcode_sdk_frameworks//version13_4_1_13F100/iPhoneSimulator:Foundation_swift",
+        "@xcode_sdk_frameworks//version13_4_1_13F100/iPhoneSimulator:UIKit_swift",
+        "@xcode_sdk_frameworks//version13_4_1_13F100/iPhoneSimulator:WebKit_swift",
+    ],
 )

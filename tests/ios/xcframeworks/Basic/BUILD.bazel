@@ -8,6 +8,7 @@ apple_framework(
     swift_version = "5.5",
     deps = [
         "//tests/ios/xcframeworks/Basic/BasicXCFramework",
+        "@xcode_sdk_frameworks//version13_4_1_13F100/iPhoneSimulator:Foundation_swift",
     ],
 )
 
