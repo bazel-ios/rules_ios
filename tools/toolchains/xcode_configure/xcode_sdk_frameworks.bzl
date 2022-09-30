@@ -87,7 +87,7 @@ def _sub_bazel_path_vars(path, sdk_path, developer_dir):
 
 def _rule_for_pkg(developer_dir, sdk_path, pkg):
     module_path = pkg.get("modulePath", "")
-    if not module_path or IMPORTS_FILE in module_path:
+    if not module_path:
         return ""
     module_name = module_path.replace(".pcm", "").replace(".swiftmodule", "")
 
