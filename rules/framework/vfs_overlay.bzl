@@ -327,17 +327,13 @@ def _roots_from_datas(vfs_parent, target_triple, datas):
     for data in datas:
         roots.extend(_make_root(
             vfs_parent = vfs_parent,
-            bin_dir_path = data.bin_dir_path,
-            build_file_path = data.build_file_path,
             target_triple = target_triple,
-            framework_name = data.framework_name,
             root_dir = data.framework_path,
             extra_search_paths = data.extra_search_paths,
             module_map = data.module_map,
             swiftmodules = data.swiftmodules,
             hdrs = data.hdrs,
             private_hdrs = data.private_hdrs,
-            has_swift = data.has_swift,
         ))
     return roots
 
@@ -367,17 +363,13 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules
 
     roots = _make_root(
         vfs_parent,
-        bin_dir_path = ctx.bin_dir.path,
-        build_file_path = ctx.build_file_path,
         target_triple = target_triple,
-        framework_name = framework_name,
         root_dir = framework_path,
         extra_search_paths = extra_search_paths,
         module_map = module_map,
         swiftmodules = swiftmodules,
         hdrs = hdrs,
         private_hdrs = private_hdrs,
-        has_swift = has_swift,
     )
 
     vfs_info = _make_vfs_info(framework_name, data)

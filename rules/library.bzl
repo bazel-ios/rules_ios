@@ -97,7 +97,7 @@ extend_modulemap = rule(
     doc = "Extends a modulemap with a Swift submodule",
 )
 
-def _write_modulemap(name, umbrella_header = None, module_name = None, framework = False, **kwargs):
+def _write_modulemap(name, umbrella_header = None, module_name = None, framework = False, **_kwargs):
     basename = "{}.modulemap".format(name)
     destination = paths.join(name + "-modulemap", basename)
     if not module_name:
@@ -129,7 +129,7 @@ def _write_umbrella_header(
         generate_default_umbrella_header,
         public_headers = [],
         module_name = None,
-        **kwargs):
+        **_kwargs):
     basename = "{name}-umbrella.h".format(name = name)
     destination = paths.join(name + "-modulemap", basename)
     if not module_name:
@@ -175,7 +175,7 @@ FOUNDATION_EXPORT const unsigned char {module_name}VersionString[];
     )
     return destination
 
-def _generate_resource_bundles(name, library_tools, resource_bundles, platforms, **kwargs):
+def _generate_resource_bundles(name, library_tools, resource_bundles, platforms, **_kwargs):
     bundle_target_names = []
     for bundle_name in resource_bundles:
         target_name = "%s-%s" % (name, bundle_name)
@@ -192,7 +192,7 @@ def _generate_resource_bundles(name, library_tools, resource_bundles, platforms,
         bundle_target_names.append(target_name)
     return bundle_target_names
 
-def _error_on_default_xcconfig(name, default_xcconfig_name, **kwargs):
+def _error_on_default_xcconfig(name, default_xcconfig_name, **_kwargs):
     fail("{name} specifies a default xcconfig ({default_xcconfig_name}). You must override fetch_default_xcconfig to use this feature.".format(
         name = name,
         default_xcconfig_name = default_xcconfig_name,
