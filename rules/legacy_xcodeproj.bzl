@@ -163,10 +163,10 @@ def _make_objc_copts(deps):
     return copts
 
 # Similar to above but for objc
-def _xcodeproj_aspect_collect_objc_copts(deps, target, ctx):
+def _xcodeproj_aspect_collect_objc_copts(deps, ctx):
     copts = None
     if ctx.rule.kind == "objc_library":
-        copts = _make_objc_copts(target, deps, ctx)
+        copts = _make_objc_copts(deps)
     else:
         for dep in deps:
             if _SrcsInfo in dep:
@@ -205,7 +205,7 @@ def _xcodeproj_aspect_impl(target, ctx):
     if virtualize_frameworks:
         # Effectivly for virtual frameworks we don't need to copy the files
         # because they are read directly from the VFS
-        objc_copts = _xcodeproj_aspect_collect_objc_copts(deps, target, ctx)
+        objc_copts = _xcodeproj_aspect_collect_objc_copts(deps, ctx)
         swift_copts = _xcodeproj_aspect_collect_swift_copts(deps, ctx)
         hmap_paths = []
     else:
