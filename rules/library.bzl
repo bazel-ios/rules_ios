@@ -97,7 +97,7 @@ extend_modulemap = rule(
     doc = "Extends a modulemap with a Swift submodule",
 )
 
-def _write_modulemap(name, umbrella_header = None, module_name = None, framework = False, **_kwargs):
+def _write_modulemap(name, umbrella_header = None, module_name = None, framework = False):
     basename = "{}.modulemap".format(name)
     destination = paths.join(name + "-modulemap", basename)
     if not module_name:
@@ -128,8 +128,7 @@ def _write_umbrella_header(
         name,
         generate_default_umbrella_header,
         public_headers = [],
-        module_name = None,
-        **_kwargs):
+        module_name = None):
     basename = "{name}-umbrella.h".format(name = name)
     destination = paths.join(name + "-modulemap", basename)
     if not module_name:
@@ -175,7 +174,7 @@ FOUNDATION_EXPORT const unsigned char {module_name}VersionString[];
     )
     return destination
 
-def _generate_resource_bundles(name, library_tools, resource_bundles, platforms, **_kwargs):
+def _generate_resource_bundles(name, library_tools, resource_bundles, platforms):
     bundle_target_names = []
     for bundle_name in resource_bundles:
         target_name = "%s-%s" % (name, bundle_name)
@@ -192,7 +191,7 @@ def _generate_resource_bundles(name, library_tools, resource_bundles, platforms,
         bundle_target_names.append(target_name)
     return bundle_target_names
 
-def _error_on_default_xcconfig(name, default_xcconfig_name, **_kwargs):
+def _error_on_default_xcconfig(name, default_xcconfig_name):
     fail("{name} specifies a default xcconfig ({default_xcconfig_name}). You must override fetch_default_xcconfig to use this feature.".format(
         name = name,
         default_xcconfig_name = default_xcconfig_name,
@@ -560,7 +559,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     platforms = kwargs.pop("platforms", None)
     private_deps = [] + kwargs.pop("private_deps", [])
     lib_names = []
-    fetch_default_xcconfig = library_tools["fetch_default_xcconfig"](name, library_tools, default_xcconfig_name, **kwargs) if default_xcconfig_name else {}
+    fetch_default_xcconfig = library_tools["fetch_default_xcconfig"](name, default_xcconfig_name) if default_xcconfig_name else {}
     copts_by_build_setting = copts_by_build_setting_with_defaults(xcconfig, fetch_default_xcconfig, xcconfig_by_build_setting)
     enable_framework_vfs = kwargs.pop("enable_framework_vfs", False) or namespace_is_module_name
     defines = kwargs.pop("defines", [])
@@ -771,9 +770,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         name = name,
         library_tools = library_tools,
         resource_bundles = kwargs.pop("resource_bundles", {}),
-        module_name = module_name,
         platforms = platforms,
-        **kwargs
     )
     deps += resource_bundles
 
@@ -792,24 +789,17 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         if not module_map:
             umbrella_header = library_tools["umbrella_header_generator"](
                 name = name,
-                library_tools = library_tools,
                 generate_default_umbrella_header = generate_default_umbrella_header,
                 public_headers = objc_hdrs,
-                private_headers = objc_private_hdrs,
                 module_name = module_name,
-                **kwargs
             )
             if umbrella_header:
                 objc_hdrs.append(umbrella_header)
             module_map = library_tools["modulemap_generator"](
                 name = name,
-                library_tools = library_tools,
                 umbrella_header = paths.basename(umbrella_header),
-                public_headers = objc_hdrs,
-                private_headers = objc_private_hdrs,
                 module_name = module_name,
                 framework = True,
-                **kwargs
             )
 
     framework_vfs_overlay(
