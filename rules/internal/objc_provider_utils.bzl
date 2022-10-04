@@ -30,14 +30,14 @@ def _merge_objc_providers_dict(providers, transitive = [], merge_keys = objc_mer
         _add_to_dict_if_present(fields, key, set)
     return fields
 
-def _merge_objc_providers(providers, transitive = [], merge_keys = objc_merge_keys):
+def _merge_objc_providers(providers, transitive = []):
     objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(
         providers = providers,
         transitive = transitive,
     )
     return apple_common.new_objc_provider(**objc_provider_fields)
 
-def _merge_dynamic_framework_providers(ctx, dynamic_framework_providers):
+def _merge_dynamic_framework_providers(dynamic_framework_providers):
     fields = {}
     merge_keys = [
         "framework_dirs",

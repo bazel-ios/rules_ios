@@ -110,7 +110,7 @@ headermap = rule(
         ),
         "_headermap_builder": attr.label(
             executable = True,
-            cfg = "host",
+            cfg = "exec",
             default = Label(
                 "//rules/hmap:hmaptool",
             ),

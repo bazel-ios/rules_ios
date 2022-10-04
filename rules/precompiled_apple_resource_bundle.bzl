@@ -179,7 +179,6 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         content = bundletool_instructions.to_json(),
     )
     resolved_bundletool_experimental = apple_mac_toolchain_info.resolved_bundletool_experimental
-    executable = resolved_bundletool_experimental.executable
 
     apple_support.run(
         actions = ctx.actions,

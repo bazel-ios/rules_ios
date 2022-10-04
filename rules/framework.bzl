@@ -180,10 +180,6 @@ def _framework_packaging(ctx, action, inputs, outputs, manifest = None):
 
     return outputs
 
-def _add_to_dict_if_present(dict, key, value):
-    if value:
-        dict[key] = value
-
 def _concat(*args):
     arr = []
     for x in args:
@@ -843,7 +839,6 @@ def _apple_framework_packaging_impl(ctx):
 
     framework_files = _get_framework_files(ctx, deps)
     outputs = framework_files.outputs
-    inputs = framework_files.inputs
 
     # Perform a basic merging of compilation context fields
     compilation_context_fields = {}
@@ -1004,7 +999,7 @@ Valid values are:
             """,
         ),
         "_framework_packaging": attr.label(
-            cfg = "host",
+            cfg = "exec",
             default = Label(
                 "//rules/framework:framework_packaging",
             ),
@@ -1021,7 +1016,7 @@ that this target depends on.
         ),
         "_headermap_builder": attr.label(
             executable = True,
-            cfg = "host",
+            cfg = "exec",
             default = Label(
                 "//rules/hmap:hmaptool",
             ),

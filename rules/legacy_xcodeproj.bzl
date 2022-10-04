@@ -49,7 +49,7 @@ def _srcs_info_build_files(ctx):
 
     return [path]
 
-def _xcodeproj_aspect_collect_hmap_paths(deps, target, ctx):
+def _xcodeproj_aspect_collect_hmap_paths(deps):
     """Helper method collecting hmap paths from HeaderMapInfo
 
     Args:
@@ -85,7 +85,7 @@ def _make_swift_vfs_args(vfs_path):
         "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
     ]
 
-def _make_swift_copts(target, deps, ctx):
+def _make_swift_copts(deps):
     hmap_files = []
     vfs_files = []
     collected_vfs = False
@@ -118,10 +118,10 @@ def _join_copts(copts):
 
 # Get the swift_libaries' copts propagate the deps copts. This is needed to
 # push the copts upwards from the libraries to top level bundles.
-def _xcodeproj_aspect_collect_swift_copts(deps, target, ctx):
+def _xcodeproj_aspect_collect_swift_copts(deps, ctx):
     copts = None
     if ctx.rule.kind == "swift_library":
-        copts = _make_swift_copts(target, deps, ctx)
+        copts = _make_swift_copts(deps)
     else:
         for dep in deps:
             if _SrcsInfo in dep:
@@ -139,7 +139,7 @@ def _make_objc_vfs_args(vfs_path):
 # Derives hmap copts and vfs copts from the inputs as rules_ios handles them.
 # This is similar to what it does for HEADER_SEARCH_PATHS. Longer term, perhaps
 # code can be removed in-favor for XCHammer.
-def _make_objc_copts(target, deps, ctx):
+def _make_objc_copts(deps):
     hmap_files = []
     vfs_files = []
     collected_vfs = False
@@ -206,12 +206,12 @@ def _xcodeproj_aspect_impl(target, ctx):
         # Effectivly for virtual frameworks we don't need to copy the files
         # because they are read directly from the VFS
         objc_copts = _xcodeproj_aspect_collect_objc_copts(deps, target, ctx)
-        swift_copts = _xcodeproj_aspect_collect_swift_copts(deps, target, ctx)
+        swift_copts = _xcodeproj_aspect_collect_swift_copts(deps, ctx)
         hmap_paths = []
     else:
         objc_copts = []
         swift_copts = []
-        hmap_paths = _xcodeproj_aspect_collect_hmap_paths(deps, target, ctx)
+        hmap_paths = _xcodeproj_aspect_collect_hmap_paths(deps)
 
     # TODO: handle apple_resource_bundle targets
     env_vars = ()
@@ -391,8 +391,6 @@ _xcodeproj_aspect = aspect(
 )
 
 def _xcodeproj_lldbinit_impl(ctx):
-    rs = ctx.executable.runscript
-
     # Improve this
     proj_files = ctx.attr.project[DefaultInfo].files.to_list()
     proj = proj_files[1].path
@@ -456,7 +454,7 @@ source """ + ctx.executable.runscript.path
 xcodeproj_lldbinit = rule(
     implementation = _xcodeproj_lldbinit_impl,
     attrs = {
-        "runscript": attr.label(mandatory = False, executable = True, cfg = "host", default = "@build_bazel_rules_ios//tools/xcodeproj_shims:lldb-settings"),
+        "runscript": attr.label(mandatory = False, executable = True, cfg = "exec", default = "@build_bazel_rules_ios//tools/xcodeproj_shims:lldb-settings"),
         "project": attr.label(mandatory = True, providers = []),
         "out": attr.output(mandatory = True),
         "target_name": attr.string(),
@@ -1282,15 +1280,15 @@ https://www.rubydoc.info/github/CocoaPods/Xcodeproj/Xcodeproj/Constants
         "infoplist_stub": attr.label(executable = False, default = Label("//rules/test_host_app:Info.plist"), allow_single_file = ["plist"]),
         "_workspace_xcsettings": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:WorkspaceSettings.xcsettings"), allow_single_file = ["xcsettings"]),
         "_workspace_checks": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:IDEWorkspaceChecks.plist"), allow_single_file = ["plist"]),
-        "output_processor": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:output-processor.rb"), cfg = "host", allow_single_file = True),
-        "_xcodegen": attr.label(executable = True, default = Label("@com_github_yonaskolb_xcodegen//:xcodegen"), cfg = "host"),
-        "index_import": attr.label(executable = True, default = Label("@build_bazel_rules_swift_index_import//:index_import"), cfg = "host"),
-        "clang_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:clang-stub"), cfg = "host"),
-        "ld_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:ld-stub"), cfg = "host"),
-        "swiftc_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:swiftc-stub"), cfg = "host"),
-        "print_json_leaf_nodes": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:print_json_leaf_nodes"), cfg = "host"),
-        "installer": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:installer"), cfg = "host"),
-        "build_wrapper": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:build-wrapper"), cfg = "host"),
+        "output_processor": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:output-processor.rb"), cfg = "exec", allow_single_file = True),
+        "_xcodegen": attr.label(executable = True, default = Label("@com_github_yonaskolb_xcodegen//:xcodegen"), cfg = "exec"),
+        "index_import": attr.label(executable = True, default = Label("@build_bazel_rules_swift_index_import//:index_import"), cfg = "exec"),
+        "clang_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:clang-stub"), cfg = "exec"),
+        "ld_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:ld-stub"), cfg = "exec"),
+        "swiftc_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:swiftc-stub"), cfg = "exec"),
+        "print_json_leaf_nodes": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:print_json_leaf_nodes"), cfg = "exec"),
+        "installer": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:installer"), cfg = "exec"),
+        "build_wrapper": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:build-wrapper"), cfg = "exec"),
         "additional_files": attr.label_list(allow_files = True, allow_empty = True, default = [], mandatory = False),
         "additional_prebuild_script": attr.string(default = "", mandatory = False),  # Note this script will run BEFORE Bazel build script
         "additional_bazel_build_options": attr.string_list(default = [], mandatory = False),

@@ -14,7 +14,6 @@ filegroup(
     srcs = glob(["**"] + ["**/*"]),
 )
 
-
 exports_files([
     "xcode_locator.m",
     "xcode_configure.bzl",

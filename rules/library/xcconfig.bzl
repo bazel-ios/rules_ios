@@ -99,7 +99,6 @@ def _add_copts_from_option(xcspec, name, option, value, value_escaper, xcconfigs
     elif _type == "Enumeration":
         if value not in option["Values"]:
             _unknown_enum_value(name, option, value)
-        expected_value_type = types
     elif _type in ("StringList", "PathList") and not types.is_list(value):
         if value == "":
             value = []
