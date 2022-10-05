@@ -16,7 +16,7 @@ VFSOverlayInfo = provider(
 def _make_relative_prefix(length):
     dots = "../"
     prefix = ""
-    for i in range(0, length):
+    for _ in range(0, length):
         prefix += dots
     return prefix
 
@@ -96,9 +96,8 @@ def _get_public_framework_header(path):
 # Make roots for a given framework. For now this is done in starlark for speed
 # and incrementality. For imported frameworks, there is additional search paths
 # enabled
-def _make_root(vfs_parent, bin_dir_path, build_file_path, target_triple, framework_name, swiftmodules, root_dir, extra_search_paths, module_map, hdrs, private_hdrs, has_swift):
+def _make_root(vfs_parent, target_triple, swiftmodules, root_dir, extra_search_paths, module_map, hdrs, private_hdrs):
     vfs_prefix = _make_relative_prefix(len(vfs_parent.split("/")) - 1)
-    extra_roots = []
     private_headers_contents = []
     headers_contents = []
     vfs_prefix = _make_relative_prefix(len(vfs_parent.split("/")) - 1)
@@ -289,8 +288,6 @@ def _make_vfs_info(name, data):
     return keys
 
 def _get_basic_llvm_tripple(ctx):
-    apple_fragment = ctx.fragments.apple
-    platform = apple_fragment.single_arch_platform
     """Returns a target triple string for an Apple platform.
 
     Args:
@@ -300,6 +297,8 @@ def _get_basic_llvm_tripple(ctx):
     Returns:
         An IDE target triple string describing the platform.
     """
+    apple_fragment = ctx.fragments.apple
+    platform = apple_fragment.single_arch_platform
     platform_string = str(platform.platform_type)
     if platform_string == "macos":
         platform_string = "macosx"
@@ -328,17 +327,13 @@ def _roots_from_datas(vfs_parent, target_triple, datas):
     for data in datas:
         roots.extend(_make_root(
             vfs_parent = vfs_parent,
-            bin_dir_path = data.bin_dir_path,
-            build_file_path = data.build_file_path,
             target_triple = target_triple,
-            framework_name = data.framework_name,
             root_dir = data.framework_path,
             extra_search_paths = data.extra_search_paths,
             module_map = data.module_map,
             swiftmodules = data.swiftmodules,
             hdrs = data.hdrs,
             private_hdrs = data.private_hdrs,
-            has_swift = data.has_swift,
         ))
     return roots
 
@@ -368,17 +363,13 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules
 
     roots = _make_root(
         vfs_parent,
-        bin_dir_path = ctx.bin_dir.path,
-        build_file_path = ctx.build_file_path,
         target_triple = target_triple,
-        framework_name = framework_name,
         root_dir = framework_path,
         extra_search_paths = extra_search_paths,
         module_map = module_map,
         swiftmodules = swiftmodules,
         hdrs = hdrs,
         private_hdrs = private_hdrs,
-        has_swift = has_swift,
     )
 
     vfs_info = _make_vfs_info(framework_name, data)

@@ -99,7 +99,6 @@ def _add_copts_from_option(xcspec, name, option, value, value_escaper, xcconfigs
     elif _type == "Enumeration":
         if value not in option["Values"]:
             _unknown_enum_value(name, option, value)
-        expected_value_type = types
     elif _type in ("StringList", "PathList") and not types.is_list(value):
         if value == "":
             value = []
@@ -125,11 +124,11 @@ def _add_copts_from_option(xcspec, name, option, value, value_escaper, xcconfigs
         else:
             _unknown_enum_value(name, option, value, fatal = True)
 
-    linkopts += [
+    linkopts.extend([
         arg.replace("$(value)", v)
         for v in (value if types.is_list(value) else [value])
         for arg in _linkopt_xlinker_substitution(new_linkopts)
-    ]
+    ])
 
     new = None
 
@@ -171,11 +170,11 @@ def _add_copts_from_option(xcspec, name, option, value, value_escaper, xcconfigs
     if xcspec == _LD:
         new = _linkopt_xlinker_substitution(new)
 
-    copts += [
+    copts.extend([
         arg.replace("$(value)", value_escaper(v))
         for v in (value if types.is_list(value) else [value])
         for arg in new
-    ]
+    ])
 
 def copts_from_xcconfig(xcconfig):
     objc_copts = []
