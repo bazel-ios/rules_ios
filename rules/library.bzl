@@ -563,6 +563,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     copts_by_build_setting = copts_by_build_setting_with_defaults(xcconfig, fetch_default_xcconfig, xcconfig_by_build_setting)
     enable_framework_vfs = kwargs.pop("enable_framework_vfs", False) or namespace_is_module_name
     defines = kwargs.pop("defines", [])
+    testonly = kwargs.pop("testonly", False)
 
     for (k, v) in {"momc_copts": momc_copts, "mapc_copts": mapc_copts, "ibtool_copts": ibtool_copts}.items():
         if v:
@@ -575,7 +576,6 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     # Generate code for `.intentdefinition` source files and forward the original plist as data
     for intent in intent_sources:
         intent_name = "%s_%s_gen" % (name, intent)
-        testonly = kwargs.get("testonly", False)
 
         # Avoid swift_intent_library and objc_intent_library because they wrap the generated code in a new module
         #
@@ -663,7 +663,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             swiftmodules = import_swiftmodules,
             hdrs = import_headers,
             tags = _MANUAL,
-            testonly = kwargs.get("testonly", False),
+            testonly = testonly,
             extra_search_paths = vfs_root,
         )
         import_vfsoverlays.append(import_name + "_vfs")
@@ -708,7 +708,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             swiftmodules = import_swiftmodules,
             hdrs = import_headers,
             tags = _MANUAL,
-            testonly = kwargs.get("testonly", False),
+            testonly = testonly,
             extra_search_paths = vfs_root,
         )
         import_vfsoverlays.append(import_name + "_vfs")
@@ -745,7 +745,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             swiftmodules = import_swiftmodules,
             hdrs = import_headers,
             tags = _MANUAL,
-            testonly = kwargs.get("testonly", False),
+            testonly = testonly,
         )
         import_vfsoverlays.append(import_name + "_vfs")
 
@@ -810,7 +810,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         private_hdrs = objc_private_hdrs,
         hdrs = objc_hdrs,
         tags = _MANUAL,
-        testonly = kwargs.get("testonly", False),
+        testonly = testonly,
         deps = deps + private_deps + lib_names + import_vfsoverlays,
     )
 
@@ -904,7 +904,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     if swift_version:
         additional_swift_copts += ["-swift-version", swift_version]
 
-    module_data = library_tools["wrap_resources_in_filegroup"](name = module_name + "_data", srcs = data, testonly = kwargs.get("testonly", False))
+    module_data = library_tools["wrap_resources_in_filegroup"](name = module_name + "_data", srcs = data, testonly = testonly)
 
     if swift_sources:
         additional_swift_copts.extend(("-Xcc", "-I."))
@@ -947,7 +947,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         private_hdrs = objc_private_hdrs,
         hdrs = objc_hdrs,
         tags = _MANUAL,
-        testonly = kwargs.get("testonly", False),
+        testonly = testonly,
         deps = deps + private_deps + lib_names + import_vfsoverlays,
         #enable_framework_vfs = enable_framework_vfs
     )
@@ -977,6 +977,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             data = [module_data],
             tags = tags_manual,
             defines = defines + swift_defines,
+            testonly = testonly,
             **kwargs
         )
         lib_names.append(swift_libname)
@@ -989,7 +990,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             hdrs = [],
             direct_hdr_providers = [swift_libname],
             tags = _MANUAL,
-            testonly = kwargs.get("testonly", False),
+            testonly = testonly,
         )
         private_deps.append(swift_doublequote_hmap_name)
         _append_headermap_copts(swift_doublequote_hmap_name, "-iquote", additional_objc_copts, additional_swift_copts, additional_cc_copts)
@@ -1002,7 +1003,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             hdrs = [],
             direct_hdr_providers = [swift_libname],
             tags = _MANUAL,
-            testonly = kwargs.get("testonly", False),
+            testonly = testonly,
         )
         private_deps.append(swift_angle_bracket_hmap_name)
         _append_headermap_copts(swift_angle_bracket_hmap_name, "-I", additional_objc_copts, additional_swift_copts, additional_cc_copts)
@@ -1018,7 +1019,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             deps = deps + private_deps,
             defines = defines,
             tags = tags_manual,
-            testonly = kwargs.get("testonly", False),
+            testonly = testonly,
         )
         lib_names.append(cpp_libname)
 
@@ -1069,6 +1070,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         data = [] if swift_sources else [module_data],
         tags = tags_manual,
         defines = defines + objc_defines,
+        testonly = testonly,
         **kwargs
     )
     launch_screen_storyboard_name = name + "_launch_screen_storyboard"
@@ -1077,6 +1079,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         srcs = [module_data],
         output_group = "launch_screen_storyboard",
         tags = _MANUAL,
+        testonly = testonly,
     )
     lib_names.append(objc_libname)
 

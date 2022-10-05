@@ -55,23 +55,45 @@ def ios_application(name, apple_library = apple_library, infoplists_by_build_set
         **kwargs: Arguments passed to the apple_library and ios_application rules as appropriate.
     """
 
+    testonly = kwargs.pop("testonly", False)
     application_kwargs = {arg: kwargs.pop(arg) for arg in _IOS_APPLICATION_KWARGS if arg in kwargs}
-    library = apple_library(name = name, namespace_is_module_name = False, platforms = {"ios": application_kwargs.get("minimum_os_version")}, **kwargs)
+    library = apple_library(
+        name = name,
+        namespace_is_module_name = False,
+        platforms = {"ios": application_kwargs.get("minimum_os_version")},
+        testonly = testonly,
+        **kwargs
+    )
 
     application_kwargs["launch_storyboard"] = application_kwargs.pop("launch_storyboard", library.launch_screen_storyboard_name)
     application_kwargs["families"] = application_kwargs.pop("families", ["iphone", "ipad"])
 
     # Setup force loading here - need to process deps and libs
     force_load_name = name + ".force_load_direct_deps"
-    force_load_direct_deps(name = force_load_name, deps = kwargs.get("deps", []) + library.lib_names, tags = ["manual"])
+    force_load_direct_deps(
+        name = force_load_name,
+        deps = kwargs.get("deps", []) + library.lib_names,
+        tags = ["manual"],
+        testonly = testonly,
+    )
 
     # Setup framework middlemen - need to process deps and libs
     fw_name = name + ".framework_middleman"
-    framework_middleman(name = fw_name, framework_deps = kwargs.get("deps", []) + library.lib_names, tags = ["manual"])
+    framework_middleman(
+        name = fw_name,
+        framework_deps = kwargs.get("deps", []) + library.lib_names,
+        tags = ["manual"],
+        testonly = testonly,
+    )
     frameworks = [fw_name] + kwargs.pop("frameworks", [])
 
     dep_name = name + ".dep_middleman"
-    dep_middleman(name = dep_name, deps = kwargs.get("deps", []) + library.lib_names, tags = ["manual"])
+    dep_middleman(
+        name = dep_name,
+        deps = kwargs.get("deps", []) + library.lib_names,
+        tags = ["manual"],
+        testonly = testonly,
+    )
     deps = [dep_name] + [force_load_name]
 
     rules_apple_ios_application(
@@ -80,5 +102,6 @@ def ios_application(name, apple_library = apple_library, infoplists_by_build_set
         frameworks = frameworks,
         output_discriminator = None,
         infoplists = info_plists_by_setting(name = name, infoplists_by_build_setting = infoplists_by_build_setting, default_infoplists = application_kwargs.pop("infoplists", [])),
+        testonly = testonly,
         **application_kwargs
     )
