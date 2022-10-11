@@ -68,7 +68,9 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
         "//conditions:default": None,
     }))
 
-    library = apple_library(name = name, **kwargs)
+    testonly = kwargs.pop("testonly", False)
+
+    library = apple_library(name = name, testonly = testonly, **kwargs)
     framework_deps = []
 
     # Setup force loading here - only for direct deps / direct libs and when `link_dynamic` is set.
@@ -77,7 +79,7 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
         name = force_load_name,
         deps = kwargs.get("deps", []) + library.lib_names,
         should_force_load = framework_packaging_kwargs.get("link_dynamic", False),
-        testonly = kwargs.get("testonly", False),
+        testonly = testonly,
         tags = ["manual"],
     )
     framework_deps.append(force_load_name)
@@ -110,7 +112,7 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
             "@build_bazel_rules_ios//rules/apple_platform:watchos": "watchos",
             "//conditions:default": "",
         }),
-        testonly = kwargs.get("testonly", False),
+        testonly = testonly,
         **framework_packaging_kwargs
     )
 
@@ -179,10 +181,6 @@ def _framework_packaging(ctx, action, inputs, outputs, manifest = None):
         )
 
     return outputs
-
-def _add_to_dict_if_present(dict, key, value):
-    if value:
-        dict[key] = value
 
 def _concat(*args):
     arr = []
@@ -843,7 +841,6 @@ def _apple_framework_packaging_impl(ctx):
 
     framework_files = _get_framework_files(ctx, deps)
     outputs = framework_files.outputs
-    inputs = framework_files.inputs
 
     # Perform a basic merging of compilation context fields
     compilation_context_fields = {}
@@ -1004,7 +1001,7 @@ Valid values are:
             """,
         ),
         "_framework_packaging": attr.label(
-            cfg = "host",
+            cfg = "exec",
             default = Label(
                 "//rules/framework:framework_packaging",
             ),
@@ -1021,7 +1018,7 @@ that this target depends on.
         ),
         "_headermap_builder": attr.label(
             executable = True,
-            cfg = "host",
+            cfg = "exec",
             default = Label(
                 "//rules/hmap:hmaptool",
             ),

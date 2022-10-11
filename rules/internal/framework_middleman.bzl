@@ -65,7 +65,7 @@ def _framework_middleman(ctx):
     ])
 
     # Add the frameworks to the linker command
-    dynamic_framework_provider = objc_provider_utils.merge_dynamic_framework_providers(ctx, dynamic_framework_providers)
+    dynamic_framework_provider = objc_provider_utils.merge_dynamic_framework_providers(dynamic_framework_providers)
     objc_provider_fields["dynamic_framework_file"] = depset(
         transitive = [dynamic_framework_provider.framework_files, objc_provider_fields.get("dynamic_framework_file", depset([]))],
     )
