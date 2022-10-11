@@ -68,7 +68,9 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
         "//conditions:default": None,
     }))
 
-    library = apple_library(name = name, **kwargs)
+    testonly = kwargs.pop("testonly", False)
+
+    library = apple_library(name = name, testonly = testonly, **kwargs)
     framework_deps = []
 
     # Setup force loading here - only for direct deps / direct libs and when `link_dynamic` is set.
@@ -77,7 +79,7 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
         name = force_load_name,
         deps = kwargs.get("deps", []) + library.lib_names,
         should_force_load = framework_packaging_kwargs.get("link_dynamic", False),
-        testonly = kwargs.get("testonly", False),
+        testonly = testonly,
         tags = ["manual"],
     )
     framework_deps.append(force_load_name)
@@ -110,7 +112,7 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
             "@build_bazel_rules_ios//rules/apple_platform:watchos": "watchos",
             "//conditions:default": "",
         }),
-        testonly = kwargs.get("testonly", False),
+        testonly = testonly,
         **framework_packaging_kwargs
     )
 

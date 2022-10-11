@@ -26,12 +26,18 @@ def ios_extension(name, infoplists_by_build_setting = {}, **kwargs):
 
     deps = kwargs.pop("deps", [])
     frameworks = kwargs.pop("frameworks", [])
+    testonly = kwargs.pop("testonly", False)
 
     kwargs["families"] = kwargs.pop("families", ["iphone", "ipad"])
 
     # Setup force loading here - need to process deps and libs
     force_load_name = name + ".force_load_direct_deps"
-    force_load_direct_deps(name = force_load_name, deps = deps, tags = ["manual"])
+    force_load_direct_deps(
+        name = force_load_name,
+        deps = deps,
+        tags = ["manual"],
+        testonly = testonly,
+    )
 
     # Setup framework middlemen - need to process deps and libs
     fw_name = name + ".framework_middleman"
@@ -40,11 +46,17 @@ def ios_extension(name, infoplists_by_build_setting = {}, **kwargs):
         extension_safe = True,
         framework_deps = deps,
         tags = ["manual"],
+        testonly = testonly,
     )
     frameworks = [fw_name] + frameworks
 
     dep_name = name + ".dep_middleman"
-    dep_middleman(name = dep_name, deps = deps, tags = ["manual"])
+    dep_middleman(
+        name = dep_name,
+        deps = deps,
+        tags = ["manual"],
+        testonly = testonly,
+    )
     deps = [dep_name] + [force_load_name]
 
     rules_apple_ios_extension(
@@ -57,5 +69,6 @@ def ios_extension(name, infoplists_by_build_setting = {}, **kwargs):
             infoplists_by_build_setting = infoplists_by_build_setting,
             default_infoplists = kwargs.pop("infoplists", []),
         ),
+        testonly = testonly,
         **kwargs
     )
