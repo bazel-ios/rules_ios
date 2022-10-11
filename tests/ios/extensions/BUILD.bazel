@@ -31,3 +31,20 @@ ios_extension(
         "//tests/ios/frameworks/dynamic/a",
     ],
 )
+
+ios_extension(
+    name = "ExampleExtensionWithTestOnly",
+    testonly = True,
+    bundle_id = "com.example.app.example-extension",
+    families = [
+        "iphone",
+    ],
+    infoplists = [
+        "ExampleExtension/Info.plist",
+    ],
+    minimum_os_version = "10.0",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//tests/ios/frameworks/testonly:SwiftLibrary",
+    ],
+)

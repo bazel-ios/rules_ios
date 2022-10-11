@@ -16,11 +16,12 @@ def xcodeproj(name, **kwargs):
     use_xchammer = kwargs.pop("use_xchammer", False)
     generate_xcode_schemes = kwargs.pop("generate_xcode_schemes", False)
     xcconfig_overrides = kwargs.pop("xcconfig_overrides", {})
+    testonly = kwargs.pop("testonly", False)
 
     if use_xchammer:
         xchammer_xcodeproj(
             name = name,
-            testonly = kwargs.get("testonly", False),
+            testonly = testonly,
             bazel = kwargs.get("bazel_path", "/usr/local/bin/bazel"),
             project_config = project_config(
                 generate_xcode_schemes = generate_xcode_schemes,
@@ -30,4 +31,4 @@ def xcodeproj(name, **kwargs):
             targets = kwargs.get("deps", []),
         )
     else:
-        legacy_xcodeproj(name = name, **kwargs)
+        legacy_xcodeproj(name = name, testonly = testonly, **kwargs)

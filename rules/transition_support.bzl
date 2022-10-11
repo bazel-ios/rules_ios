@@ -2,7 +2,6 @@
 
 def _current_apple_platform(apple_fragment, xcode_config):
     """Returns a struct containing the platform and target os version"""
-    cpu = apple_fragment.single_arch_cpu
     platform = apple_fragment.single_arch_platform
     xcode_config = xcode_config[apple_common.XcodeVersionConfig]
     target_os_version = xcode_config.minimum_os_for_platform_type(
