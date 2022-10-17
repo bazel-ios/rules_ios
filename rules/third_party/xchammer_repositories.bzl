@@ -267,8 +267,8 @@ def xchammer_dependencies():
         # release, then adds changes to this tag for the Bazel release in
         # question
         # Persisted on github tag=rules_ios-5.0.0,
-        commit = "0dd73ce2950b81934c2bb67bbad09332dbabdee9",
-        shallow_since = "1656108309 -0500",
+        commit = "a90a2925d24cc02174188a9365bc84f9c2cb37f4",
+        shallow_since = "1667236334 -0400",
     )
 
     namespaced_new_git_repository(

@@ -1,6 +1,8 @@
 load("//rules:xcodeproj.bzl", "xcodeproj")
 load("//rules:legacy_xcodeproj.bzl", "xcodeproj_project_options")
+load("//rules:library.bzl", "GLOBAL_INDEX_STORE_PATH")
 load("//rules:additional_scheme_info.bzl", "additional_scheme_info")
+load("@xchammer//:BazelExtensions/xchammerconfig.bzl", "bazel_build_service_config")
 
 xcodeproj(
     name = "Single-Static-Framework-Project",
@@ -212,6 +214,23 @@ xcodeproj(
 
 xcodeproj(
     name = "App-XCHammer",
+    use_xchammer = True,
+    deps = [
+        "//tests/ios/app:App",
+        "//tests/ios/extensions:ExampleExtension",
+        "//tests/ios/frameworks/with-bundle-id:FrameworkWithBundleId",
+    ],
+)
+
+xcodeproj(
+    name = "App-XCHammerWithXCBuildKit",
+    bazel_build_service_config = bazel_build_service_config(
+        bep_path = "/tmp/bep.bep",
+        index_store_path = "$SRCROOT/%s" % GLOBAL_INDEX_STORE_PATH,
+        indexing_data_dir = "$SRCROOT/xcbuildkit-data/indexing",
+        indexing_enabled = True,
+        progress_bar_enabled = True,
+    ),
     use_xchammer = True,
     deps = [
         "//tests/ios/app:App",
