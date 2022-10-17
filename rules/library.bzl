@@ -552,13 +552,13 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     weak_sdk_frameworks = kwargs.pop("weak_sdk_frameworks", [])
     sdk_includes = kwargs.pop("sdk_includes", [])
     pch = kwargs.pop("pch", "@build_bazel_rules_ios//rules/library:common.pch")
-    deps = ["@xcode_sdk_frameworks//version13_4_1_13F100/iPhoneSimulator:bazel_xcode_imports_swift"] + kwargs.pop("deps", [])
+    deps = kwargs.pop("deps", [])
     data = kwargs.pop("data", [])
     tags = kwargs.pop("tags", [])
     tags_manual = tags if "manual" in tags else tags + _MANUAL
     platforms = kwargs.pop("platforms", None)
     private_deps = [] + kwargs.pop("private_deps", [])
-    lib_names = []
+    lib_names = ["@xcode_sdk_frameworks//:xcode_sdk_frameworks"]
     fetch_default_xcconfig = library_tools["fetch_default_xcconfig"](name, default_xcconfig_name) if default_xcconfig_name else {}
     copts_by_build_setting = copts_by_build_setting_with_defaults(xcconfig, fetch_default_xcconfig, xcconfig_by_build_setting)
     enable_framework_vfs = kwargs.pop("enable_framework_vfs", False) or namespace_is_module_name
@@ -912,9 +912,6 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             # Frameworks find the modulemap file via the framework vfs overlay
             if not namespace_is_module_name:
                 additional_swift_copts += ["-Xcc", "-fmodule-map-file=" + "$(execpath " + module_map + ")"]
-            additional_swift_copts.append(
-                "-import-underlying-module",
-            )
         swiftc_inputs = other_inputs + objc_hdrs + objc_private_hdrs
         if module_map:
             swiftc_inputs.append(module_map)

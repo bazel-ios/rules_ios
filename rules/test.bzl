@@ -63,7 +63,13 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
         host_args = [ios_test_kwargs["test_host"]]
     else:
         host_args = []
-    library = apple_library(name = name, namespace_is_module_name = False, platforms = {"ios": ios_test_kwargs.get("minimum_os_version")}, testonly = True, **kwargs)
+    library = apple_library(
+        name = name,
+        namespace_is_module_name = False,
+        platforms = {"ios": ios_test_kwargs.get("minimum_os_version")},
+        testonly = True,
+        **kwargs
+    )
 
     # Setup framework middlemen - need to process deps and libs
     fw_name = name + ".framework_middleman"
@@ -77,7 +83,11 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
         name = name,
         deps = [dep_name],
         frameworks = frameworks,
-        infoplists = info_plists_by_setting(name = name, infoplists_by_build_setting = infoplists_by_build_setting, default_infoplists = ios_test_kwargs.pop("infoplists", [])),
+        infoplists = info_plists_by_setting(
+            name = name,
+            infoplists_by_build_setting = infoplists_by_build_setting,
+            default_infoplists = ios_test_kwargs.pop("infoplists", []),
+        ),
         **ios_test_kwargs
     )
 
