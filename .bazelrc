@@ -39,5 +39,9 @@ build:lldb_ios_test --spawn_strategy=standalone --apple_platform_type=ios --defi
 # Delete the VM test suite for github
 build --deleted_packages tests/ios/vmd
 
+# TODO: revert these before landing
+build --features swift.use_c_modules
+build --features swift.emit_c_module
+
 # Load a user.bazelrc
 try-import %workspace%/user.bazelrc
