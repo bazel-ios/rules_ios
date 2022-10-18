@@ -38,7 +38,6 @@
 		0052687FF99FFC1CF0644A94 /* iOS-10.0-AppHost.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "iOS-10.0-AppHost.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		018DA4ABD245EA72FEA9BA46 /* empty.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = empty.m; sourceTree = "<group>"; };
 		0A3BB7488A9B93655A5A80A7 /* TestModelMapping.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = TestModelMapping.xcmappingmodel; sourceTree = "<group>"; };
-		0DEBE921687BED0630F2E803 /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.pch; sourceTree = "<group>"; };
 		1AC28A58E3C7738C108353BE /* DefaultHosted.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = DefaultHosted.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		211B0D62D65A5D8BEFE42153 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3CCFF4E96CDD4C2949F0F71A /* Header2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header2.h; sourceTree = "<group>"; };
@@ -50,7 +49,6 @@
 		61CE3CBBAD0BFAFC0953377B /* TestImports-App.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "TestImports-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B5478D8BA2BE2A548270A80 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
 		6B9EC009A2921D74329BE9EA /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
-		6E1E57A5D2E549D270B1B1A7 /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = resource_bundle.plist; sourceTree = "<group>"; };
 		6F61436FF5DC80B583273E47 /* TestImports-Unit-Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestImports-Unit-Tests-Bridging-Header.h"; sourceTree = "<group>"; };
 		8BBBE8333A9A3A09CEFFD917 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9683E3E05D116FBB2D85DC23 /* TestImports-App-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestImports-App-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -152,7 +150,6 @@
 		B0B40062B117F993E7D160D6 /* rules */ = {
 			isa = PBXGroup;
 			children = (
-				E58B9C8B7E68050BE38EEF27 /* library */,
 				086FBDD761E762B1598CC05E /* test_host_app */,
 			);
 			path = rules;
@@ -169,15 +166,6 @@
 				D229E599DDBCC713FF997122 /* TestStickers.xcstickers */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		E58B9C8B7E68050BE38EEF27 /* library */ = {
-			isa = PBXGroup;
-			children = (
-				0DEBE921687BED0630F2E803 /* common.pch */,
-				6E1E57A5D2E549D270B1B1A7 /* resource_bundle.plist */,
-			);
-			path = library;
 			sourceTree = "<group>";
 		};
 		EEFB98134D768549E03E39A5 /* build_bazel_rules_ios */ = {
@@ -426,10 +414,10 @@
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/TestImports-Unit-Tests.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-84e06abcb3f0/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-84e06abcb3f0/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-84e06abcb3f0/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftsourceinfo";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-472f25f187d9/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftmodule bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-472f25f187d9/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftdoc bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-472f25f187d9/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-439f60166d3f/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\" \"$BAZEL_WORKSPACE_ROOT/external/TensorFlowLiteC/Frameworks\" \"$BAZEL_WORKSPACE_ROOT/external/GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-439f60166d3f/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\" \"$BAZEL_WORKSPACE_ROOT/external/TensorFlowLiteC/Frameworks\" \"$BAZEL_WORKSPACE_ROOT/external/GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-11eb215810c7/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\" \"$BAZEL_WORKSPACE_ROOT/external/TensorFlowLiteC/Frameworks\" \"$BAZEL_WORKSPACE_ROOT/external/GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-11eb215810c7/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\" \"$BAZEL_WORKSPACE_ROOT/external/TensorFlowLiteC/Frameworks\" \"$BAZEL_WORKSPACE_ROOT/external/GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -450,10 +438,10 @@
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/TestImports-App.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-84e06abcb3f0/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-84e06abcb3f0/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-84e06abcb3f0/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftsourceinfo";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-472f25f187d9/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftmodule bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-472f25f187d9/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftdoc bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-472f25f187d9/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/external/GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\" \"$BAZEL_WORKSPACE_ROOT/external/TensorFlowLiteC/Frameworks\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-439f60166d3f/bin/tests/ios/unit-test/test-imports-app/SomeFramework\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Basic/ios\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/NestedHeaders/ios\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/external/GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\" \"$BAZEL_WORKSPACE_ROOT/external/TensorFlowLiteC/Frameworks\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-11eb215810c7/bin/tests/ios/unit-test/test-imports-app/SomeFramework\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Basic/ios\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/NestedHeaders/ios\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
@@ -475,10 +463,10 @@
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/TestImports-Unit-Tests.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-84e06abcb3f0/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-84e06abcb3f0/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-84e06abcb3f0/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftsourceinfo";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-472f25f187d9/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftmodule bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-472f25f187d9/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftdoc bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-472f25f187d9/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-439f60166d3f/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\" \"$BAZEL_WORKSPACE_ROOT/external/TensorFlowLiteC/Frameworks\" \"$BAZEL_WORKSPACE_ROOT/external/GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-439f60166d3f/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\" \"$BAZEL_WORKSPACE_ROOT/external/TensorFlowLiteC/Frameworks\" \"$BAZEL_WORKSPACE_ROOT/external/GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-11eb215810c7/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\" \"$BAZEL_WORKSPACE_ROOT/external/TensorFlowLiteC/Frameworks\" \"$BAZEL_WORKSPACE_ROOT/external/GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-11eb215810c7/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\" \"$BAZEL_WORKSPACE_ROOT/external/TensorFlowLiteC/Frameworks\" \"$BAZEL_WORKSPACE_ROOT/external/GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -499,7 +487,7 @@
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/DefaultHosted.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-0f1b0425081f/bin/tests/ios/unit-test/DefaultHosted.swiftmodule bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-0f1b0425081f/bin/tests/ios/unit-test/DefaultHosted.swiftdoc bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-0f1b0425081f/bin/tests/ios/unit-test/DefaultHosted.swiftsourceinfo";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-sim_arm64-min10.0-applebin_ios-ios_sim_arm64-dbg-ST-2dd91a95bcfe/bin/tests/ios/unit-test/DefaultHosted.swiftmodule bazel-out/ios-sim_arm64-min10.0-applebin_ios-ios_sim_arm64-dbg-ST-2dd91a95bcfe/bin/tests/ios/unit-test/DefaultHosted.swiftdoc bazel-out/ios-sim_arm64-min10.0-applebin_ios-ios_sim_arm64-dbg-ST-2dd91a95bcfe/bin/tests/ios/unit-test/DefaultHosted.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -523,10 +511,10 @@
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/TestImports-App.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-84e06abcb3f0/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-84e06abcb3f0/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-84e06abcb3f0/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftsourceinfo";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-472f25f187d9/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftmodule bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-472f25f187d9/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftdoc bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-472f25f187d9/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/external/GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\" \"$BAZEL_WORKSPACE_ROOT/external/TensorFlowLiteC/Frameworks\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-439f60166d3f/bin/tests/ios/unit-test/test-imports-app/SomeFramework\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Basic/ios\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/NestedHeaders/ios\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/external/GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\" \"$BAZEL_WORKSPACE_ROOT/external/TensorFlowLiteC/Frameworks\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-11eb215810c7/bin/tests/ios/unit-test/test-imports-app/SomeFramework\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Basic/ios\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/NestedHeaders/ios\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "$BAZEL_STUBS_DIR/Info-stub.plist";
@@ -670,7 +658,7 @@
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/DefaultHosted.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-0f1b0425081f/bin/tests/ios/unit-test/DefaultHosted.swiftmodule bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-0f1b0425081f/bin/tests/ios/unit-test/DefaultHosted.swiftdoc bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-0f1b0425081f/bin/tests/ios/unit-test/DefaultHosted.swiftsourceinfo";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-sim_arm64-min10.0-applebin_ios-ios_sim_arm64-dbg-ST-2dd91a95bcfe/bin/tests/ios/unit-test/DefaultHosted.swiftmodule bazel-out/ios-sim_arm64-min10.0-applebin_ios-ios_sim_arm64-dbg-ST-2dd91a95bcfe/bin/tests/ios/unit-test/DefaultHosted.swiftdoc bazel-out/ios-sim_arm64-min10.0-applebin_ios-ios_sim_arm64-dbg-ST-2dd91a95bcfe/bin/tests/ios/unit-test/DefaultHosted.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
