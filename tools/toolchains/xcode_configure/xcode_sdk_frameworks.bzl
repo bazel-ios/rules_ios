@@ -18,6 +18,7 @@ PLATFORM_TUPLES = [
 ]
 
 BUILD_FILE_HEADER = """load("@build_bazel_rules_swift//swift:swift.bzl", "swift_module_alias", "swift_c_module")
+load("@build_bazel_rules_apple//apple:apple.bzl", "apple_dynamic_framework_import")
 
 package(default_visibility = ["//visibility:public"])
         
@@ -25,7 +26,8 @@ package(default_visibility = ["//visibility:public"])
 
 IMPORTS_FILE = "bazel_xcode_imports.swift"
 
-C_MODULE_TMPL = """swift_c_module(
+C_MODULE_TMPL = """
+swift_c_module(
     name = "{name}_c",
     module_name = "{name}",
     system_module_map = "{module_map_file}",
@@ -33,24 +35,27 @@ C_MODULE_TMPL = """swift_c_module(
 {deps}
     ],
 )
-
 """
 
-SWIFT_MODULE_TMPL = """swift_module_alias(
+SWIFT_MODULE_TMPL = """
+swift_module_alias(
     name = "{name}_swift",
     deps = [
 {deps}
     ],
 )
-
 """
 
-XCTEST_LIB = """swift_c_module(
+XCTEST_LIB = """
+apple_dynamic_framework_import(
     name = "XCTest",
-    module_name = "XCTest",
-    system_module_map = "__BAZEL_XCODE_DEVELOPER_DIR__/Platforms/{platform}.platform/Developer/Library/Frameworks/XCTest.framework/Modules/module.modulemap",
+    framework_imports = glob(["XCTest.framework/**"]),
+    deps = [
+        ":CoreGraphics_c",
+        ":Foundation_c",
+        ":UIKit_c",
+    ]
 )
-
 """
 
 ROOT_BUILD_FILE = """load("@bazel_skylib//lib:selects.bzl", "selects")
@@ -254,6 +259,13 @@ def _create_build_file_for_sdk(
             overrides = overrides,
         )
 
+    repository_ctx.symlink(
+        "{developer_dir}/Platforms/{platform}.platform/Developer/Library/Frameworks/XCTest.framework".format(
+            developer_dir = developer_dir,
+            platform = platform_name,
+        ),
+        output_folder.get_child("XCTest.framework"),
+    )
     build_file += XCTEST_LIB.format(platform = platform_name)
 
     build_file_path = output_folder.get_child("BUILD.bazel")

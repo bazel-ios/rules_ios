@@ -965,7 +965,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             deps = deps + private_deps + lib_names + select({
                 "@build_bazel_rules_ios//:virtualize_frameworks": [framework_vfs_overlay_name_swift],
                 "//conditions:default": [framework_vfs_overlay_name_swift] if enable_framework_vfs else [],
-            }),
+            }) + (["@xcode_sdk_frameworks//:XCTest"] if testonly else []),
             swiftc_inputs = swiftc_inputs,
             features = ["swift.no_generated_module_map"] + select({
                 "@build_bazel_rules_ios//:virtualize_frameworks": ["swift.vfsoverlay"],
