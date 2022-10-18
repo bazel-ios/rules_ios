@@ -15,7 +15,6 @@
 		BE665CBAFE5B39D3B04E9C76 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		C569390AA953A4E267CF36C1 /* FW.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FW.m; sourceTree = "<group>"; };
 		E0809AF505E946A7A1EFBE99 /* FW.framework */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; path = FW.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E7826DDB43994B30433D3C88 /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.pch; sourceTree = "<group>"; };
 		E81DBB49FCA1471D81CF273E /* FW.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FW.h; sourceTree = "<group>"; };
 		E97E3C7F05C32DBA9D3D674F /* FW_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FW_Private.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -40,19 +39,10 @@
 		73631A22899AB4E780633DA5 /* build_bazel_rules_ios */ = {
 			isa = PBXGroup;
 			children = (
-				8861D2FEA56EAEE18B45E367 /* rules */,
 				243DDE4E350369A04E8024CA /* tests */,
 			);
 			name = build_bazel_rules_ios;
 			path = ../../../..;
-			sourceTree = "<group>";
-		};
-		8861D2FEA56EAEE18B45E367 /* rules */ = {
-			isa = PBXGroup;
-			children = (
-				95678F69437A2589FD782867 /* library */,
-			);
-			path = rules;
 			sourceTree = "<group>";
 		};
 		8885CF427B2795D19EB1E2DC /* app */ = {
@@ -62,14 +52,6 @@
 				F063DEA070740ECE976F4106 /* FW */,
 			);
 			path = app;
-			sourceTree = "<group>";
-		};
-		95678F69437A2589FD782867 /* library */ = {
-			isa = PBXGroup;
-			children = (
-				E7826DDB43994B30433D3C88 /* common.pch */,
-			);
-			path = library;
 			sourceTree = "<group>";
 		};
 		A6C7C2700086C29F454F4DB2 = {
@@ -202,7 +184,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-4b1594d0781e/bin/tests/ios/app/FW_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-4b1594d0781e/bin/tests/ios/app/FW_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-4b1594d0781e/bin/tests/ios/app/FW_private_angled_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min10.0-applebin_ios-ios_sim_arm64-dbg-ST-4f5b9e04aa3f/bin/tests/ios/app/FW_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min10.0-applebin_ios-ios_sim_arm64-dbg-ST-4f5b9e04aa3f/bin/tests/ios/app/FW_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min10.0-applebin_ios-ios_sim_arm64-dbg-ST-4f5b9e04aa3f/bin/tests/ios/app/FW_private_angled_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACH_O_TYPE = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
@@ -259,7 +241,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-4b1594d0781e/bin/tests/ios/app/FW_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-4b1594d0781e/bin/tests/ios/app/FW_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-4b1594d0781e/bin/tests/ios/app/FW_private_angled_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min10.0-applebin_ios-ios_sim_arm64-dbg-ST-4f5b9e04aa3f/bin/tests/ios/app/FW_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min10.0-applebin_ios-ios_sim_arm64-dbg-ST-4f5b9e04aa3f/bin/tests/ios/app/FW_private_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min10.0-applebin_ios-ios_sim_arm64-dbg-ST-4f5b9e04aa3f/bin/tests/ios/app/FW_private_angled_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACH_O_TYPE = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
