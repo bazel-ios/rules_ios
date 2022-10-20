@@ -171,7 +171,7 @@ def _file_collector_rule_impl(ctx):
     is_sim_arm64 = platform == "ios" and arch == "arm64" and not ctx.fragments.apple.single_arch_platform.is_device
     if not is_sim_arm64:
         # This should be correctly configured upstream: see setup in rules_ios
-        fail("using import_middleman ({}) on wrong transition ({},{},is_device={})", ctx.attr.name, platform, arch, ctx.fragments.apple.single_arch_platform.is_device)
+        fail("using import_middleman ({}) on wrong transition ({},{},is_device={})".format(ctx.attr.name, platform, arch, ctx.fragments.apple.single_arch_platform.is_device))
 
     virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
     merge_keys = [
@@ -282,23 +282,23 @@ import_middleman = rule(
 This rule adds the ability to update the Mach-o header on imported
 libraries and frameworks to get arm64 binaires running on Apple silicon
 simulator. For rules_ios, it's added in `app.bzl` and `test.bzl`
-    
+
 Why bother doing this? Well some apps have many dependencies which could take
 along time on vendors or other parties to update. Because the M1 chip has the
 same ISA as ARM64, most binaries will run transparently. Most iOS developers
 code is high level enough and isn't specifc to a device or simulator. There are
 many caveats and eceptions but getting it running is better than nothing. ( e.g.
 `TARGET_OS_SIMULATOR` )
-    
+
 This solves the problem at the build system level with the power of bazel. The
 idea is pretty straight forward:
 1. collect all imported paths
 2. update the macho headers with Apples vtool and arm64-to-sim
 3. update the linker invocation to use the new libs
-    
+
 Now it updates all of the inputs automatically - the action can be taught to do
 all of this conditionally if necessary.
-    
+
 Note: The action happens in a rule for a few reasons.  This has an interesting
 propery: you get a single path for framework lookups at linktime. Perhaps this
 can be updated to work without the other behavior
