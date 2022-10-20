@@ -164,7 +164,7 @@ Debugging does not work in sandbox mode, due to issue [#108](https://github.com/
 
 Bazel version required by current rules is [here](https://github.com/bazel-ios/rules_ios/blob/master/.bazelversion)
 
-**Xcode 12** and above supported, to find the last `SHA` with support for older versions see the list of git tags.
+**Xcode 13** and above supported, to find the last `SHA` with support for older versions see the list of git tags.
 
 ## Reference documentation
 
