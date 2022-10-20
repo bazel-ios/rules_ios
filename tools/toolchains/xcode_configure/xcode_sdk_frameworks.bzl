@@ -1,7 +1,7 @@
 """Repository rule for adding explicit module dependencies via rules_swift.
 
 Locates all local Xcode versions, scans through the frameworks in all SDKs, and makes them
-accessible via `@xcode_sdk_frameworks//:xcode_sdk_frameworks` or similar. All swift targets will
+accessible via `@xcode_sdk_frameworks` or similar. All swift targets will
 need to depend directly on this module in order to build with explicit modules.
 """
 
@@ -53,8 +53,10 @@ apple_dynamic_framework_import(
     deps = [
         ":CoreGraphics_c",
         ":Foundation_c",
-        ":UIKit_c",
-    ]
+    ] + select({
+        "//:MacOSX": [":AppKit_c"],
+        "//conditions:default": ["UIKit_c"],
+    })
 )
 """
 
@@ -248,7 +250,7 @@ def _create_build_file_for_sdk(
         sdk_path = sdk_path,
         target_triple = target_triple,
     )
-    repository_ctx.file(output_folder.get_child("scan.json"), json.encode(scan_deps))
+
     build_file = BUILD_FILE_HEADER
 
     for pkg in scan_deps.get("modules", []):
@@ -266,7 +268,7 @@ def _create_build_file_for_sdk(
         ),
         output_folder.get_child("XCTest.framework"),
     )
-    build_file += XCTEST_LIB.format(platform = platform_name)
+    build_file += XCTEST_LIB
 
     build_file_path = output_folder.get_child("BUILD.bazel")
     repository_ctx.file(build_file_path, build_file)

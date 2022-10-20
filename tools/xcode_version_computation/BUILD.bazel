@@ -4,4 +4,5 @@ swift_binary(
     name = "xcode_version_computation",
     srcs = ["main.swift"],
     visibility = ["//visibility:public"],
+    deps = ["@xcode_sdk_frameworks"],
 )

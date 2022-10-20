@@ -558,7 +558,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     tags_manual = tags if "manual" in tags else tags + _MANUAL
     platforms = kwargs.pop("platforms", None)
     private_deps = [] + kwargs.pop("private_deps", [])
-    lib_names = ["@xcode_sdk_frameworks//:xcode_sdk_frameworks"]
+    lib_names = ["@xcode_sdk_frameworks"]
     fetch_default_xcconfig = library_tools["fetch_default_xcconfig"](name, default_xcconfig_name) if default_xcconfig_name else {}
     copts_by_build_setting = copts_by_build_setting_with_defaults(xcconfig, fetch_default_xcconfig, xcconfig_by_build_setting)
     enable_framework_vfs = kwargs.pop("enable_framework_vfs", False) or namespace_is_module_name
