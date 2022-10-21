@@ -11,7 +11,7 @@ jobs:
     name: Build and Test
     runs-on: macos-12
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Select Xcode
         run: .github/workflows/xcode_select.sh
       - name: Build and Test
@@ -33,7 +33,7 @@ jobs:
     name: Build and Test ( Virtual Frameworks )
     runs-on: macos-12
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Select Xcode
         run: .github/workflows/xcode_select.sh
       - name: Build and Test
@@ -58,7 +58,7 @@ jobs:
     name: Build arm64 Simulator
     runs-on: macos-12
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Select Xcode
         run: .github/workflows/xcode_select.sh
       - name: Build and Test
@@ -85,7 +85,7 @@ jobs:
     name: Check Starlark and Docs
     runs-on: macos-12
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Select Xcode
         run: .github/workflows/xcode_select.sh
         # Note: we need to pass the absolute to the Bazel run
@@ -97,7 +97,7 @@ jobs:
     name: .xcodeproj Tests on Xcode 13.4.1
     runs-on: macos-12
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Select Xcode 13.4.1
         run: .github/workflows/xcode_select.sh
       - name: Run tests
@@ -112,7 +112,7 @@ jobs:
     name: LLDB tests on Xcode 13.4.1
     runs-on: macos-12
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Select Xcode 13.4.1
         run: .github/workflows/xcode_select.sh
       - name: Run tests
@@ -126,7 +126,7 @@ jobs:
     name: Build iOS App for Multiple Architecture
     runs-on: macos-12
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Select Xcode
         run: .github/workflows/xcode_select.sh
       - name: Build App
