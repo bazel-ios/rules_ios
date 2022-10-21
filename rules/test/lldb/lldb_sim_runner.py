@@ -23,7 +23,6 @@ def find_pid(app_name, udid):
     system_processes = subprocess.Popen(
         ["ps", "-aU", "0"], stdout=subprocess.PIPE
     ).communicate()[0]
-    out_pid = None
     needle = app_name + ".app"
     for misc_p in system_processes.decode("utf8").split("\n"):
         if needle in misc_p and udid in misc_p:
