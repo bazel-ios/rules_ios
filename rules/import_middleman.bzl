@@ -198,9 +198,9 @@ def _file_collector_rule_impl(ctx):
     replaced_imported_libraries = _replace_inputs(ctx, exisiting_imported_libraries, input_imported_libraries, _update_lib).inputs
     objc_provider_fields["imported_library"] = depset(_deduplicate_test_deps(test_linker_deps[1], replaced_imported_libraries))
 
-    exisiting_static_framework = objc_provider_fields.get("static_framework_file", depset([]))
+    existing_static_framework = objc_provider_fields.get("static_framework_file", depset([]))
 
-    deduped_static_framework = depset(_deduplicate_test_deps(test_linker_deps[0], exisiting_static_framework.to_list()))
+    deduped_static_framework = depset(_deduplicate_test_deps(test_linker_deps[0], existing_static_framework.to_list()))
     replaced_static_framework = _replace_inputs(ctx, deduped_static_framework, input_static_frameworks, _update_framework)
     objc_provider_fields["static_framework_file"] = depset(replaced_static_framework.inputs)
 
