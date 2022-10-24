@@ -304,7 +304,7 @@ def _xcframework_slice(*, xcframework_name, identifier, platform, platform_varia
         # We need the path to the top-level slice directory so we can find headers, modulemaps and swiftmodules.
         slice_dir = paths.dirname(path)
         import_headers, import_module_map, import_swiftmodules = _xcframework_slice_imports(slice_dir)
-        includes = [paths.dirname(f) for f in import_headers]
+        includes = [paths.dirname(f) for f in import_headers] + ["%s/Headers" % slice_dir]
         native.objc_import(
             name = resolved_target_name,
             archives = [path],
