@@ -119,6 +119,26 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
         **framework_packaging_kwargs
     )
 
+def _validate_deps_minimum_os_version(framework_name, minimum_os_version, deps):
+    """Validates that deps' minimum_os_versions are not higher than that of this target.
+    Note that Swift has already enforced that at compile time, while objective-c doesn't.
+
+    framework_name: the framework name
+    minimum_os_version: the minimum os version of this framework
+    deps: the deps of this framework
+    """
+
+    for dep in deps:
+        if AppleBundleInfo in dep:
+            dep_bundle_info = dep[AppleBundleInfo]
+            dep_min_os_version = apple_common.dotted_version(dep_bundle_info.minimum_os_version)
+            if minimum_os_version.compare_to(dep_min_os_version) < 0:
+                fail(
+                    """A framework target's minimum_os_version must NOT be lower than those of its deps,
+                    but framework {} with minimum_os_version {} depends on framework {} with minimum_os_version {}.
+                    """.format(framework_name, minimum_os_version, dep_bundle_info.bundle_name, dep_min_os_version),
+                )
+
 def _find_framework_dir(outputs):
     for output in outputs:
         prefix = output.path.rsplit(".framework/", 1)[0]
@@ -789,10 +809,8 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         ] + processor_result.providers,
     )
 
-def _bundle_static_framework(ctx, is_extension_safe, outputs):
+def _bundle_static_framework(ctx, is_extension_safe, current_apple_platform, outputs):
     """Returns bundle info for a static framework commonly used intra-build"""
-    current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
-
     partial_output = partial.call(
         partials.extension_safe_validation_partial(
             is_extension_safe = is_extension_safe,
@@ -843,6 +861,11 @@ def _apple_framework_packaging_impl(ctx):
     deps = _attrs_for_split_slice(ctx.split_attr.deps, split_slice_key)
     transitive_deps = _attrs_for_split_slice(ctx.split_attr.transitive_deps, split_slice_key)
     vfs = _attrs_for_split_slice(ctx.split_attr.vfs, split_slice_key)
+
+    current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
+
+    # Validates that the minimum_os_version is not lower than those of the deps.
+    _validate_deps_minimum_os_version(ctx.attr.framework_name, current_apple_platform.target_os_version, deps + transitive_deps)
 
     framework_files = _get_framework_files(ctx, deps)
     outputs = framework_files.outputs
@@ -902,7 +925,7 @@ def _apple_framework_packaging_impl(ctx):
         bundle_outs = _bundle_dynamic_framework(ctx, is_extension_safe = is_extension_safe, avoid_deps = avoid_deps)
         avoid_deps_info = AvoidDepsInfo(libraries = depset(avoid_deps + ctx.attr.deps).to_list(), link_dynamic = True)
     else:
-        bundle_outs = _bundle_static_framework(ctx, is_extension_safe = is_extension_safe, outputs = outputs)
+        bundle_outs = _bundle_static_framework(ctx, is_extension_safe = is_extension_safe, current_apple_platform = current_apple_platform, outputs = outputs)
         avoid_deps_info = AvoidDepsInfo(libraries = depset(avoid_deps).to_list(), link_dynamic = False)
     swift_info = _get_merged_swift_info(ctx, framework_files, transitive_deps)
 
