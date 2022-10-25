@@ -39,6 +39,9 @@ def _dir(o):
 def _is_current_project_file(f):
     return f.is_source and _is_current_project_path(f.path)
 
+def _is_current_package_file(f, current_package):
+    return _is_current_project_file(f) and f.owner.package == current_package
+
 def _is_current_project_path(path):
     return not path.startswith("external/")
 
@@ -332,7 +335,7 @@ def _xcodeproj_aspect_impl(target, ctx):
                 asset_srcs += getattr(ctx.rule.files, attr, [])
         srcs = [f for f in srcs if _is_current_project_file(f)]
         non_arc_srcs = [f for f in non_arc_srcs if _is_current_project_file(f)]
-        asset_srcs = [f for f in asset_srcs if _is_current_project_file(f)]
+        asset_srcs = [f for f in asset_srcs if _is_current_package_file(f, target.label.package)]
         framework_includes = _get_attr_values_for_name(deps, _SrcsInfo, "framework_includes")
         cc_defines = _get_attr_values_for_name(deps, _SrcsInfo, "cc_defines")
         swift_defines = _get_attr_values_for_name(deps, _SrcsInfo, "swift_defines")

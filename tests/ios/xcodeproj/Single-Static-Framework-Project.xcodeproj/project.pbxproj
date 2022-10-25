@@ -23,7 +23,6 @@
 		4C38752828BD4A02D1CA50F6 /* README */ = {isa = PBXFileReference; path = README; sourceTree = "<group>"; };
 		AD7402651F16555F753997F4 /* HeaderA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HeaderA.h; sourceTree = "<group>"; };
 		B0F23CA5658C110F84D43E6D /* foo.podspec */ = {isa = PBXFileReference; path = foo.podspec; sourceTree = "<group>"; };
-		BD4894AC90711E6A55CB1657 /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.pch; sourceTree = "<group>"; };
 		CF7A2F537C999952921627A8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D6DF3200A22C76322C4A8B04 /* DummyAssembly.S */ = {isa = PBXFileReference; path = DummyAssembly.S; sourceTree = "<group>"; };
 		D7D26FCF8D7CCD3C802C6987 /* FooFrameworkTesting.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FooFrameworkTesting.m; sourceTree = "<group>"; };
@@ -77,14 +76,6 @@
 			path = ios;
 			sourceTree = "<group>";
 		};
-		A2A2DE2B0CF19BE872E1DD76 /* library */ = {
-			isa = PBXGroup;
-			children = (
-				BD4894AC90711E6A55CB1657 /* common.pch */,
-			);
-			path = library;
-			sourceTree = "<group>";
-		};
 		B700EA6CBD2B48611E1290FE /* additional_files */ = {
 			isa = PBXGroup;
 			children = (
@@ -100,14 +91,6 @@
 				0A2CB2A75E2EAAB1095F1214 /* objc */,
 			);
 			path = frameworks;
-			sourceTree = "<group>";
-		};
-		D7905EC44A468549D712685E /* rules */ = {
-			isa = PBXGroup;
-			children = (
-				A2A2DE2B0CF19BE872E1DD76 /* library */,
-			);
-			path = rules;
 			sourceTree = "<group>";
 		};
 		D86E9FCCC4BB853B2A451672 /* Products */ = {
@@ -131,7 +114,6 @@
 		EB104984AF478D5D5F2B07DE /* build_bazel_rules_ios */ = {
 			isa = PBXGroup;
 			children = (
-				D7905EC44A468549D712685E /* rules */,
 				1E3DFBAC8DCF4B75D9A8F878 /* tests */,
 			);
 			name = build_bazel_rules_ios;
