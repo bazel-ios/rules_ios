@@ -30,14 +30,12 @@
 		52FB08B7C929A64386CDFE06 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
 		6AA79D51459F5745C6597549 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		A7A135B2F45AA4AE95B5C366 /* ExplicitHosted.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ExplicitHosted.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E7221F8588A5E2BBC1C40983 /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.pch; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		3F0ED6F34AF3A58C237AF38E /* rules */ = {
 			isa = PBXGroup;
 			children = (
-				E07FD4C0CC80805A04C80894 /* library */,
 				48EC573E873376EF2328B54F /* test_host_app */,
 			);
 			path = rules;
@@ -93,14 +91,6 @@
 				A00021A91B77EC95CF688BAA /* ios */,
 			);
 			path = tests;
-			sourceTree = "<group>";
-		};
-		E07FD4C0CC80805A04C80894 /* library */ = {
-			isa = PBXGroup;
-			children = (
-				E7221F8588A5E2BBC1C40983 /* common.pch */,
-			);
-			path = library;
 			sourceTree = "<group>";
 		};
 		E0A6B3D7DB2877F8279F72D1 /* build_bazel_rules_ios */ = {

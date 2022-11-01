@@ -38,7 +38,6 @@
 		0052687FF99FFC1CF0644A94 /* iOS-10.0-AppHost.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "iOS-10.0-AppHost.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		018DA4ABD245EA72FEA9BA46 /* empty.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = empty.m; sourceTree = "<group>"; };
 		0A3BB7488A9B93655A5A80A7 /* TestModelMapping.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = TestModelMapping.xcmappingmodel; sourceTree = "<group>"; };
-		0DEBE921687BED0630F2E803 /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.pch; sourceTree = "<group>"; };
 		1AC28A58E3C7738C108353BE /* DefaultHosted.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = DefaultHosted.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		211B0D62D65A5D8BEFE42153 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3CCFF4E96CDD4C2949F0F71A /* Header2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header2.h; sourceTree = "<group>"; };
@@ -50,7 +49,6 @@
 		61CE3CBBAD0BFAFC0953377B /* TestImports-App.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "TestImports-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B5478D8BA2BE2A548270A80 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
 		6B9EC009A2921D74329BE9EA /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
-		6E1E57A5D2E549D270B1B1A7 /* resource_bundle.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = resource_bundle.plist; sourceTree = "<group>"; };
 		6F61436FF5DC80B583273E47 /* TestImports-Unit-Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestImports-Unit-Tests-Bridging-Header.h"; sourceTree = "<group>"; };
 		8BBBE8333A9A3A09CEFFD917 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9683E3E05D116FBB2D85DC23 /* TestImports-App-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestImports-App-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -152,7 +150,6 @@
 		B0B40062B117F993E7D160D6 /* rules */ = {
 			isa = PBXGroup;
 			children = (
-				E58B9C8B7E68050BE38EEF27 /* library */,
 				086FBDD761E762B1598CC05E /* test_host_app */,
 			);
 			path = rules;
@@ -169,15 +166,6 @@
 				D229E599DDBCC713FF997122 /* TestStickers.xcstickers */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		E58B9C8B7E68050BE38EEF27 /* library */ = {
-			isa = PBXGroup;
-			children = (
-				0DEBE921687BED0630F2E803 /* common.pch */,
-				6E1E57A5D2E549D270B1B1A7 /* resource_bundle.plist */,
-			);
-			path = library;
 			sourceTree = "<group>";
 		};
 		EEFB98134D768549E03E39A5 /* build_bazel_rules_ios */ = {

@@ -16,7 +16,6 @@
 
 /* Begin PBXFileReference section */
 		04D8C347E5F20AB550C507AE /* FW.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FW.m; sourceTree = "<group>"; };
-		04E88991827262C51A711BEC /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.pch; sourceTree = "<group>"; };
 		07774DB019275D39308A1548 /* FW2.framework */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; path = FW2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1463668723465C798E673230 /* FW.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FW.h; sourceTree = "<group>"; };
 		206990066655BFAE5C81A4EA /* FW2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FW2.h; sourceTree = "<group>"; };
@@ -43,14 +42,6 @@
 				FDFA25BC92149ED0819B1D1C /* OnlySources.framework */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		2DF7D0D0E95B3893248C7261 /* rules */ = {
-			isa = PBXGroup;
-			children = (
-				FB729A68E8C9E0AA5EC5B3CF /* library */,
-			);
-			path = rules;
 			sourceTree = "<group>";
 		};
 		37056929C3E5B1D45B7ADB22 = {
@@ -124,14 +115,6 @@
 			path = FW;
 			sourceTree = "<group>";
 		};
-		FB729A68E8C9E0AA5EC5B3CF /* library */ = {
-			isa = PBXGroup;
-			children = (
-				04E88991827262C51A711BEC /* common.pch */,
-			);
-			path = library;
-			sourceTree = "<group>";
-		};
 		FCAD8185F6E9497488EC0EA8 /* FW2 */ = {
 			isa = PBXGroup;
 			children = (
@@ -144,7 +127,6 @@
 		FF6E776994AA685DB884266A /* build_bazel_rules_ios */ = {
 			isa = PBXGroup;
 			children = (
-				2DF7D0D0E95B3893248C7261 /* rules */,
 				45BEFF852D6FC48F9F0FAE63 /* tests */,
 			);
 			name = build_bazel_rules_ios;

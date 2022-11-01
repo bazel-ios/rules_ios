@@ -20,9 +20,10 @@ _IOS_TEST_KWARGS = [
     "flaky",
     "frameworks",
     "provisioning_profile",
+    "test_filter",
 ]
 
-def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_build_setting = {}, **kwargs):
+def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_build_setting = {}, split_name_to_kwargs = {}, **kwargs):
     """
     Builds and packages iOS Unit/UI Tests.
 
@@ -38,6 +39,7 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
 
                                      If '//conditions:default' is not set the value in 'infoplists'
                                      is set as default.
+        split_name_to_kwargs: A dictionary of suffixes to kwargs that will be passed into the "split" test bundle. The suffix will be appended to the name of the suite.
         **kwargs: Arguments passed to the apple_library and test_rule rules as appropriate.
     """
 
@@ -50,13 +52,6 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
         fail("cannot specify both runner and runners for %s" % name)
 
     runner = kwargs.pop("runner", kwargs.pop("runners", None))
-    rule = test_rule
-    if runner:
-        if types.is_list(runner):
-            ios_test_kwargs["runners"] = runner
-            rule = test_suite_rule
-        else:
-            ios_test_kwargs["runner"] = runner
 
     # Deduplicate against the test deps
     if ios_test_kwargs.get("test_host", None):
@@ -73,13 +68,57 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
     dep_name = name + ".dep_middleman"
     dep_middleman(name = dep_name, deps = kwargs.get("deps", []) + library.lib_names, testonly = True, tags = ["manual"], test_deps = host_args)
 
-    rule(
-        name = name,
-        deps = [dep_name],
-        frameworks = frameworks,
-        infoplists = info_plists_by_setting(name = name, infoplists_by_build_setting = infoplists_by_build_setting, default_infoplists = ios_test_kwargs.pop("infoplists", [])),
-        **ios_test_kwargs
-    )
+    if split_name_to_kwargs and len(split_name_to_kwargs) > 0:
+        tests = []
+        for suffix, split_kwargs in split_name_to_kwargs.items():
+            test_name = "{}_{}".format(name, suffix)
+
+            all_kwargs = {}
+            all_kwargs.update(ios_test_kwargs)
+            all_kwargs.update(split_kwargs)
+
+            if runner and ("runner" in all_kwargs or "runners" in all_kwargs):
+                fail("cannot use runner/s attribute in both split and top level kwargs for %s" % test_name)
+
+            if not runner:
+                split_runner = all_kwargs.pop("runner", all_kwargs.pop("runners", None))
+            else:
+                split_runner = runner
+
+            split_rule = test_rule
+            if split_runner:
+                if types.is_list(runner):
+                    all_kwargs["runners"] = split_runner
+                    split_rule = test_suite_rule
+                else:
+                    all_kwargs["runner"] = split_runner
+
+            tests.append(test_name)
+            split_rule(
+                name = test_name,
+                deps = [dep_name],
+                frameworks = frameworks,
+                infoplists = info_plists_by_setting(name = name, infoplists_by_build_setting = infoplists_by_build_setting, default_infoplists = all_kwargs.pop("infoplists", [])),
+                **all_kwargs
+            )
+        native.test_suite(name = name, tests = tests)
+
+    else:
+        rule = test_rule
+        if runner:
+            if types.is_list(runner):
+                ios_test_kwargs["runners"] = runner
+                rule = test_suite_rule
+            else:
+                ios_test_kwargs["runner"] = runner
+
+        rule(
+            name = name,
+            deps = [dep_name],
+            frameworks = frameworks,
+            infoplists = info_plists_by_setting(name = name, infoplists_by_build_setting = infoplists_by_build_setting, default_infoplists = ios_test_kwargs.pop("infoplists", [])),
+            **ios_test_kwargs
+        )
 
 def ios_unit_test(name, apple_library = apple_library, **kwargs):
     """

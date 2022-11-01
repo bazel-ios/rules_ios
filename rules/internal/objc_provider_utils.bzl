@@ -57,6 +57,8 @@ def _merge_dynamic_framework_providers(dynamic_framework_providers):
 
 def _merge_cc_info_providers(cc_info_providers, merge_keys = [
     "headers",
+    "includes",
+    "defines",
 ]):
     fields = {}
     for key in merge_keys:
