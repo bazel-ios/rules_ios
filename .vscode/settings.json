@@ -3,7 +3,4 @@
         "bazel-*": true
     },
     "editor.formatOnSave": true,
-    "python.analysis.extraPaths": [
-        "./bazel-bin"
-    ],
 }
