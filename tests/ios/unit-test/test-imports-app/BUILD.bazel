@@ -84,7 +84,6 @@ ios_unit_test(
     module_name = "TestImports_Unit_Tests",
     sdk_frameworks = ["XCTest"],
     swift_objc_bridging_header = "TestImports-Unit-Tests-Bridging-Header.h",
-    tags = ["manual"],
     test_host = ":TestImports-App",
     # Adding visibility so the xcodeproject tests can depend on this target
     visibility = ["//visibility:public"],
