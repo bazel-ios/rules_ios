@@ -21,7 +21,7 @@ done
 
 echo ".xcodeproj Tests for Mac OS platform"
 
-if [[ CLEAN = 1 ]]; then
+if [[ $CLEAN = 1 ]]; then
     rm -rf tests/macos/xcodeproj/*.xcodeproj tests/macos/xcodeproj/build
     bazelisk clean
 fi
@@ -34,7 +34,7 @@ bazelisk query 'attr(executable, 1, kind(genrule, tests/macos/xcodeproj/...))' |
 
 echo ".xcodeproj Tests for iOS platform (simulator)"
 
-if [[ CLEAN = 1 ]]; then
+if [[ $CLEAN = 1 ]]; then
     rm -rf tests/ios/xcodeproj/*.xcodeproj tests/ios/xcodeproj/build
     rm -rf tests/ios/xcodeproj/custom_output_path/*.xcodeproj tests/ios/xcodeproj/custom_output_path/build
     bazelisk clean
@@ -60,7 +60,7 @@ fi
 
 echo ".xcodeproj Tests for iOS platform (device)"
 
-if [[ CLEAN = 1 ]]; then
+if [[ $CLEAN = 1 ]]; then
     rm -rf tests/ios/xcodeproj/*.xcodeproj tests/ios/xcodeproj/build
     bazelisk clean
 fi
