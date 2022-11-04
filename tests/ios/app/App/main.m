@@ -2,6 +2,6 @@
 @import OnlySources;
 
 int main(int argc, char **argv) {
-    [[FW alloc] foo];
+    [[[FW alloc] init] foo];
     return UIApplicationMain(argc, argv, nil, nil);
 }
