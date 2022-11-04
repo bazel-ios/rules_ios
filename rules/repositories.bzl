@@ -136,15 +136,15 @@ swift_binary(
             name = "xchammer",
             remote = "https://github.com/bazel-ios/xchammer.git",
             # XCHammer dev branch: bazel-ios/rules-ios-xchammer
-            commit = "4caec7bae6f5cb99c5cf29cefd0b345967bdd61b",
-            shallow_since = "1656517476 -0500",
+            commit = "7ef4e81dbd37926b5c30fc20636d080b3dfabfd6",
+            shallow_since = "1667594979 -0400",
         )
     xchammer_dependencies()
 
     if not native.existing_rule("xcbuildkit"):
         git_repository(
             name = "xcbuildkit",
-            commit = "1e1155dc4aa9d7dc4260fb5c287acc0b299bbd76",
+            commit = "4c366afb48cb78caed268d483e3cdb308dfc1794",
             remote = "https://github.com/jerrymarino/xcbuildkit.git",
         )
 
