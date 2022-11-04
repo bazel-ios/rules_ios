@@ -14,11 +14,11 @@ def _patch_bazel_build_service_config(kwargs_bazel_build_service_config):
     """
     if kwargs_bazel_build_service_config:
         return bazel_build_service_config(
-            bep_path = kwargs_bazel_build_service_config.bepPath,
+            bep_path = kwargs_bazel_build_service_config.bepPath if kwargs_bazel_build_service_config.bepPath else "/tmp/bep.bep",
             index_store_path = "$SRCROOT/%s" % GLOBAL_INDEX_STORE_PATH,
-            indexing_data_dir = "$SRCROOT/xcbuildkit-data/indexing",
-            indexing_enabled = kwargs_bazel_build_service_config.indexingEnabled,
-            progress_bar_enabled = kwargs_bazel_build_service_config.progressBarEnabled,
+            indexing_data_dir = kwargs_bazel_build_service_config.indexingDataDir if kwargs_bazel_build_service_config.indexingDataDir else "/tmp/xcbuildkit-data/indexing",
+            indexing_enabled = kwargs_bazel_build_service_config.indexingEnabled if kwargs_bazel_build_service_config.indexingEnabled else False,
+            progress_bar_enabled = kwargs_bazel_build_service_config.progressBarEnabled if kwargs_bazel_build_service_config.progressBarEnabled else False,
         )
     return None
 
