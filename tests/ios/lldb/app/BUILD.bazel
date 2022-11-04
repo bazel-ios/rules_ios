@@ -35,7 +35,7 @@ xcodeproj_lldbinit(
 ios_lldb_breakpoint_po_test(
     name = "objc_app_variable_test",
     application = "ObjcApp",
-    device = "iPhone X",
+    device = "iPhone 13 Pro",
     expected_value = "some",
     lldbinit = ":Objc-proj_xc_lldbinit",
     sdk = "15.5",
@@ -48,7 +48,7 @@ ios_lldb_breakpoint_command_test(
     name = "objc_app_po_test",
     application = "ObjcApp",
     cmds = ["po x"],
-    device = "iPhone X",
+    device = "iPhone 13 Pro",
     lldbinit = ":Objc-proj_xc_lldbinit",
     match_substrs = [
         "execute: po x",
