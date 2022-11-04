@@ -1,0 +1,93 @@
+load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
+load("//rules:framework.bzl", "apple_framework")
+load("//rules:app.bzl", "ios_application")
+
+string_flag(
+    name = "flavor",
+    build_setting_default = "blue",
+)
+
+[
+    config_setting(
+        name = build_setting,
+        flag_values = {
+            ":flavor": build_setting,
+        },
+    )
+    for build_setting in [
+        "red",
+        "blue",
+    ]
+]
+
+_XCCONFIG = {
+    "GCC_PREPROCESSOR_DEFINITIONS": [
+        "MACRO_B=1",
+        "MACRO_C=0",
+        "MACRO_D=1",
+        "MACRO_E=1",
+        "MACRO_F=0",
+        "MACRO_G=1",
+    ],
+    "OTHER_SWIFT_FLAGS": [
+        "-DMACRO_I",
+        "-DNMACRO_J",
+        "-DMACRO_K",
+        "-DMACRO_L",
+        "-DNMACRO_M",
+    ],
+    "CUSTOM_PLIST_VAR": "CUSTOM_PLIST_VALUE",
+}
+
+_XCCONFIG_BY_BUILD_SETTING = {
+    "//tests/ios/xcconfig:blue": {
+        "GCC_PREPROCESSOR_DEFINITIONS": [
+            "MACRO_A=1",
+        ],
+        "OTHER_SWIFT_FLAGS": [
+            "-DMACRO_H",
+        ],
+    },
+    "//tests/ios/xcconfig:red": {
+        "GCC_PREPROCESSOR_DEFINITIONS": [
+            "MACRO_A=0",
+        ],
+        "OTHER_SWIFT_FLAGS": [
+            "-DNMACRO_H",
+        ],
+    },
+}
+
+apple_framework(
+    name = "WithDefinesObjc",
+    srcs = glob(["WithDefinesObjc/*.m"]),
+    platforms = {"ios": "10.0"},
+    visibility = ["//visibility:public"],
+    xcconfig = _XCCONFIG,
+    xcconfig_by_build_setting = _XCCONFIG_BY_BUILD_SETTING,
+)
+
+apple_framework(
+    name = "WithDefinesSwift",
+    srcs = glob(["WithDefinesSwift/*.swift"]),
+    platforms = {"ios": "10.0"},
+    swift_version = "5.1",
+    visibility = ["//visibility:public"],
+    xcconfig = _XCCONFIG,
+    xcconfig_by_build_setting = _XCCONFIG_BY_BUILD_SETTING,
+)
+
+ios_application(
+    name = "App",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    infoplists = ["Info.plist"],
+    minimum_os_version = "10.0",
+    visibility = ["//visibility:public"],
+    xcconfig = _XCCONFIG,
+    xcconfig_by_build_setting = _XCCONFIG_BY_BUILD_SETTING,
+    deps = [
+        ":WithDefinesObjc",
+        ":WithDefinesSwift",
+    ],
+)
