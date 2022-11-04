@@ -4,7 +4,6 @@
 @implementation FW
 
 - (void)foo {
-    NSLog(@"foo");
 }
 
 @end
