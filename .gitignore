@@ -11,4 +11,3 @@ user.bazelrc
 external
 *-XCHammer*.xcodeproj
 xchammer-includes
-xcbuildkit-data
