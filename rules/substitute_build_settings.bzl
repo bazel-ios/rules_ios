@@ -7,6 +7,15 @@ def _substitute_build_settings_impl(ctx):
         substitutions["${" + key + "}"] = value
         substitutions["$(" + key + ")"] = value
 
+    # Resolve any substitutions in the substitutions.
+    # i.e. key1 = "foo", key2 = "$(key1)bar" -> key2 = "foobar"
+    # This needs to be done before expanding the template otherwise they
+    # get substituted as is without resolving the inner substitutions.
+    for (key, value) in substitutions.items():
+        for (sub_key, sub_value) in substitutions.items():
+            if key in sub_value:
+                substitutions[sub_key] = sub_value.replace(key, value)
+
     basename, extension = paths.split_extension(ctx.file.source.basename)
     output = ctx.actions.declare_file("%s.substituted-%s.%s" % (basename, ctx.label.name, extension))
     ctx.actions.expand_template(
