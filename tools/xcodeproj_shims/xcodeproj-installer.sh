@@ -56,7 +56,6 @@ cp "$(clang_stub_ld_path)" "${stubs_dir}/ld-stub"
 cp "$(clang_stub_swiftc_path)" "${stubs_dir}/swiftc-stub"
 cp "$(index_import_short_path)" "${installers_dir}/index-import"
 cp "$(print_json_leaf_nodes_path)" "${stubs_dir}/print_json_leaf_nodes"
-cp "$(infoplist_stub)" "${stubs_dir}/Info-stub.plist"
 cp "$(build_wrapper_path)" "${stubs_dir}/build-wrapper"
 cp "$(output_processor_path)" "${stubs_dir}/output-processor.rb"
 
