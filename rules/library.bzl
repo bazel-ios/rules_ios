@@ -21,6 +21,8 @@ PrivateHeadersInfo = provider(
     },
 )
 
+GLOBAL_INDEX_STORE_PATH = "bazel-out/rules_ios_global_index_store.indexstore"
+
 _MANUAL = ["manual"]
 
 def _private_headers_impl(ctx):
@@ -909,7 +911,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     if swift_version:
         additional_swift_copts += ["-swift-version", swift_version]
 
-    module_data = library_tools["wrap_resources_in_filegroup"](name = module_name + "_data", srcs = data, testonly = testonly)
+    module_data = library_tools["wrap_resources_in_filegroup"](name = name + "_wrapped_resources_filegroup", srcs = data, testonly = testonly)
 
     if swift_sources:
         additional_swift_copts.extend(("-Xcc", "-I."))
@@ -1034,7 +1036,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             # Checkout the task roadmap for future improvements:
             # Docs/index_while_building.md
             "-index-store-path",
-            "bazel-out/rules_ios_global_index_store.indexstore",
+            GLOBAL_INDEX_STORE_PATH,
         ],
         "//conditions:default": [
             "-index-store-path",

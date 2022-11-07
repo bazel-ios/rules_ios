@@ -3,4 +3,8 @@
 
 @implementation FW
 
+/// Foo
+- (void)foo {
+}
+
 @end
