@@ -62,10 +62,10 @@ def rules_ios_dependencies():
     _maybe(
         github_repo,
         name = "build_bazel_rules_apple",
-        ref = "c17af58765d4903a8878d3d6c8004679de4fe8ab",
+        ref = "f8b14ce7516f9055861f91a9e5ff9d299c9d609f",
         project = "bazelbuild",
         repo = "rules_apple",
-        sha256 = "45846e9da2f055065b99e066fd3e6e438085c81909e6203aedc8c2773819fe90",
+        sha256 = "aa0bbee490c153ae0b16bde3be517b8330ba989692b13b10d5036337ac903934",
     )
 
     _maybe(
@@ -136,15 +136,15 @@ swift_binary(
             name = "xchammer",
             remote = "https://github.com/bazel-ios/xchammer.git",
             # XCHammer dev branch: bazel-ios/rules-ios-xchammer
-            commit = "4caec7bae6f5cb99c5cf29cefd0b345967bdd61b",
-            shallow_since = "1656517476 -0500",
+            commit = "7ef4e81dbd37926b5c30fc20636d080b3dfabfd6",
+            shallow_since = "1667594979 -0400",
         )
     xchammer_dependencies()
 
     if not native.existing_rule("xcbuildkit"):
         git_repository(
             name = "xcbuildkit",
-            commit = "1e1155dc4aa9d7dc4260fb5c287acc0b299bbd76",
+            commit = "4c366afb48cb78caed268d483e3cdb308dfc1794",
             remote = "https://github.com/jerrymarino/xcbuildkit.git",
         )
 

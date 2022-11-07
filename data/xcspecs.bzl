@@ -2815,6 +2815,21 @@ SETTINGS = {
                 "DefaultValue": "com_apple_xcode_tools_swift_compiler____SWIFT_ENFORCE_EXCLUSIVE_ACCESS_DEBUG_ENFORCEMENT_DEBUG__DefaultValue",
                 "Type": "Boolean",
             },
+            "SWIFT_OPTIMIZE_OBJECT_LIFETIME": {
+                "Category": "Code Generation",
+                "CommandLineArgs": {
+                    "NO": [],
+                    "YES": [
+                        "-Xfrontend",
+                        "-enable-copy-propagation",
+                    ],
+                },
+                "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_OPTIMIZE_OBJECT_LIFETIME__DefaultValue",
+                "Description": "Enables aggressive ARC optimization that " +
+                               "shortens object lifetimes",
+                "DisplayName": "Optimize Object Lifetimes",
+                "Type": "Boolean",
+            },
             "SWIFT_STDLIB": {
                 "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_STDLIB__DefaultValue",
                 "Type": "String",
