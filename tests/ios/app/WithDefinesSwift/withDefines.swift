@@ -1,22 +1,22 @@
 enum WithDefinesSwift {
   func foo() {
 #if !MACRO_H
- thisShouldNotBeCompiled
+ #error("MACRO_H is not defined")
 #endif
 #if !MACRO_I
- thisShouldNotBeCompiled
+ #error("MACRO_I is not defined")
 #endif
 #if MACRO_J
- thisShouldNotBeCompiled
+ #error("MACRO_J is defined")
 #endif
 #if !MACRO_K
- thisShouldNotBeCompiled
+ #error("MACRO_K is not defined")
 #endif
 #if !MACRO_L
- thisShouldNotBeCompiled
+ #error("MACRO_L is not defined")
 #endif
 #if MACRO_M
- thisShouldNotBeCompiled
+ #error("MACRO_M is defined")
 #endif
   }
 }

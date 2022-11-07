@@ -6,25 +6,25 @@
 @implementation WithDefinesObjc
 
 #if !MACRO_A
- thisShouldNotBeCompiled
+ #error "MACRO_A is not defined"
 #endif
 #if !MACRO_B
- thisShouldNotBeCompiled
+ #error "MACRO_B is not defined"
 #endif
 #if MACRO_C
- thisShouldNotBeCompiled
+ #error "MACRO_C is defined"
 #endif
 #if !MACRO_D
- thisShouldNotBeCompiled
+ #error "MACRO_D is not defined"
 #endif
 #if !MACRO_E
- thisShouldNotBeCompiled
+ #error "MACRO_E is not defined"
 #endif
 #if MACRO_F
- thisShouldNotBeCompiled
+ #error "MACRO_F is defined"
 #endif
 #ifndef MACRO_G
- thisShouldNotBeCompiled
+ #error "MACRO_G is not defined"
 #endif
 
 @end
