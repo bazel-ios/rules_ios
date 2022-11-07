@@ -25,5 +25,11 @@
         <key>NSAllowsArbitraryLoads</key>
         <true/>
     </dict>
+    <key>CustonXCConfig1</key>
+    <string>${CUSTOM_XCCONFIG_1}</string>
+    <key>CustonXCConfig2</key>
+    <string>$(CUSTOM_XCCONFIG_2)</string>
+    <key>CustonXCConfig3</key>
+    <string>$(CUSTOM_XCCONFIG_3)</string>
 </dict>
 </plist>
