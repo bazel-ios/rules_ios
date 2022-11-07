@@ -59,7 +59,7 @@ load("@build_bazel_rules_ios//repository_rules:framework_builder.bzl", "build_ca
 
 build_carthage_frameworks(
     name = "carthage",
-    carthage_version = "0.36.0",
+    carthage_version = "0.38.0",
     directory = "tests/ios/frameworks/sources-with-prebuilt-binaries",
 )
 

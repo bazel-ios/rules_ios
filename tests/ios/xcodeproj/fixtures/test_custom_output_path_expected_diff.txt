@@ -11,3 +11,4 @@ diff -r ./tests/ios/xcodeproj/Test-LLDB-Logs-Project.xcodeproj/project.pbxproj .
 < 				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../..;
 ---
 > 				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../../..;
+Only in ./tests/ios/xcodeproj/Test-LLDB-Logs-Project.xcodeproj/project.xcworkspace/xcshareddata: swiftpm

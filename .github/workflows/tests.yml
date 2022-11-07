@@ -9,9 +9,9 @@ on:
 jobs:
   integration_tests:
     name: Build and Test
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Select Xcode
         run: .github/workflows/xcode_select.sh
       - name: Build and Test
@@ -31,9 +31,9 @@ jobs:
     # consider merging this feature into the default behavior and can re-align
     # the CI job
     name: Build and Test ( Virtual Frameworks )
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Select Xcode
         run: .github/workflows/xcode_select.sh
       - name: Build and Test
@@ -56,9 +56,9 @@ jobs:
 
   build_arm64_simulator:
     name: Build arm64 Simulator
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Select Xcode
         run: .github/workflows/xcode_select.sh
       - name: Build and Test
@@ -83,9 +83,9 @@ jobs:
 
   buildifier:
     name: Check Starlark and Docs
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Select Xcode
         run: .github/workflows/xcode_select.sh
         # Note: we need to pass the absolute to the Bazel run
@@ -93,12 +93,12 @@ jobs:
         run: find $PWD -type f \( -name 'WORKSPACE' -o -name '*.bzl' -o -name '*.bazel' \) | xargs bazel run buildifier -- -lint=fix && git diff --exit-code
       - name: Check docs
         run: bazelisk run docs && git diff --exit-code docs
-  xcodeproj_tests_xcode_12_5_1:
-    name: .xcodeproj Tests on Xcode 12.5.1
-    runs-on: macos-11
+  xcodeproj_tests_xcode_13_4_1:
+    name: .xcodeproj Tests on Xcode 13.4.1
+    runs-on: macos-12
     steps:
-      - uses: actions/checkout@v2
-      - name: Select Xcode 12.5.1
+      - uses: actions/checkout@v3
+      - name: Select Xcode 13.4.1
         run: .github/workflows/xcode_select.sh
       - name: Run tests
         run: ./tests/xcodeproj-tests.sh --clean && ./tests/test-tests.sh
@@ -108,12 +108,12 @@ jobs:
           name: bazel-testlogs
           path: bazel-testlogs
 
-  lldb_ios_tests_xcode_12_5_1:
-    name: LLDB tests on Xcode 12.5.1
-    runs-on: macos-11
+  lldb_ios_tests_xcode_13_4_1:
+    name: LLDB tests on Xcode 13.4.1
+    runs-on: macos-12
     steps:
-      - uses: actions/checkout@v2
-      - name: Select Xcode 12.5.1
+      - uses: actions/checkout@v3
+      - name: Select Xcode 13.4.1
         run: .github/workflows/xcode_select.sh
       - name: Run tests
         run: bazelisk test tests/ios/lldb/app:objc_app_po_test  tests/ios/lldb/app:objc_app_variable_test --config lldb_ios_test
@@ -124,9 +124,9 @@ jobs:
           path: bazel-testlogs
   multi_arch_support:
     name: Build iOS App for Multiple Architecture
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Select Xcode
         run: .github/workflows/xcode_select.sh
       - name: Build App

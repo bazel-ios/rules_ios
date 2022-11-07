@@ -15,11 +15,6 @@ import os
 import re
 import sys
 
-try:
-    from StringIO import BytesIO  # for Python 2
-except ImportError:
-    from io import BytesIO  # for Python 3
-
 
 def xcspec_from_file(path):
     xml = subprocess.check_output(
@@ -35,20 +30,19 @@ xcode_version = sys.argv[2]
 xcspec_bzl_path = sys.argv[3]
 eval_bzl_path = sys.argv[4]
 xcode = os.path.dirname(os.path.dirname(developer_dir))
-xcode3plusgins = os.path.join(
-    xcode, 'Contents/PlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer/Library/Xcode/Plug-ins')
+xcode_plugins = os.path.join(
+    xcode, "Contents/PlugIns/XCBSpecifications.ideplugin/Contents/Resources"
+)
 
 xcspecs = [
-    os.path.join(xcode3plusgins,
-                 "CoreBuildTasks.xcplugin/Contents/Resources/Ld.xcspec"),
-    os.path.join(
-        xcode3plusgins, "Clang LLVM 1.0.xcplugin/Contents/Resources/Clang LLVM 1.0.xcspec"),
-    os.path.join(xcode3plusgins,
-                 "Core Data.xcplugin/Contents/Resources/Core Data.xcspec"),
-    os.path.join(
-        xcode3plusgins, "IBCompilerPlugin.xcplugin/Contents/Resources/IBCompiler.xcspec"),
-    os.path.join(xcode3plusgins,
-                 "XCLanguageSupport.xcplugin/Contents/Resources/Swift.xcspec"),
+    os.path.join(xcode_plugins, plugin)
+    for plugin in [
+        "Ld.xcspec",
+        "Clang LLVM 1.0.xcspec",
+        "Core Data.xcspec",
+        "IBCompiler.xcspec",
+        "Swift.xcspec",
+    ]
 ]
 
 a = []
@@ -65,18 +59,23 @@ ids = (
     "com.apple.xcode.tools.swift.compiler",
 )
 
-header = """
+header = """\"""
 ############################################################################
 #                   THIS IS GENERATED CODE                                 #
 # Extracted from Xcode {xcode_version}                                     #
 # To update, in rules_ios run `bazel run data_generators:extract_xcspecs`  #
 ############################################################################
-""".format(xcode_version=xcode_version)
+\"""
+""".format(
+    xcode_version=xcode_version
+)
 
 xcpec_evals_bzl_contents = """
 {header}
 
-""".format(header=header)
+""".format(
+    header=header
+)
 
 xcspecs_bzl_contents = """
 {header}
