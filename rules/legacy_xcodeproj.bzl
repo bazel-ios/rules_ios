@@ -39,6 +39,9 @@ def _dir(o):
 def _is_current_project_file(f):
     return f.is_source and _is_current_project_path(f.path)
 
+def _is_current_package_file(f, current_package):
+    return _is_current_project_file(f) and f.owner.package == current_package
+
 def _is_current_project_path(path):
     return not path.startswith("external/")
 
@@ -332,7 +335,7 @@ def _xcodeproj_aspect_impl(target, ctx):
                 asset_srcs += getattr(ctx.rule.files, attr, [])
         srcs = [f for f in srcs if _is_current_project_file(f)]
         non_arc_srcs = [f for f in non_arc_srcs if _is_current_project_file(f)]
-        asset_srcs = [f for f in asset_srcs if _is_current_project_file(f)]
+        asset_srcs = [f for f in asset_srcs if _is_current_package_file(f, target.label.package)]
         framework_includes = _get_attr_values_for_name(deps, _SrcsInfo, "framework_includes")
         cc_defines = _get_attr_values_for_name(deps, _SrcsInfo, "cc_defines")
         swift_defines = _get_attr_values_for_name(deps, _SrcsInfo, "swift_defines")
@@ -1142,6 +1145,7 @@ def _xcodeproj_impl(ctx):
     )
     installer_runfile_paths = [i.short_path for i in ctx.attr.installer[DefaultInfo].default_runfiles.files.to_list()]
     build_wrapper_runfile_paths = [i.short_path for i in ctx.attr.build_wrapper[DefaultInfo].default_runfiles.files.to_list()]
+    index_import_runfiles_paths = [i.short_path for i in ctx.attr.index_import[DefaultInfo].default_runfiles.files.to_list()]
 
     # In order to be runnable, the print_json_leaf_nodes script needs to live
     # next to a print_json_leaf_nodes.runfiles directory that contains its runfiles.
@@ -1166,6 +1170,7 @@ def _xcodeproj_impl(ctx):
             "$(installer_short_path)": ctx.executable.installer.short_path,
             "$(clang_stub_short_path)": ctx.executable.clang_stub.short_path,
             "$(index_import_short_path)": ctx.executable.index_import.short_path,
+            "$(index_import_runfiles_paths)": " ".join(index_import_runfiles_paths),
             "$(clang_stub_ld_path)": ctx.executable.ld_stub.short_path,
             "$(clang_stub_swiftc_path)": ctx.executable.swiftc_stub.short_path,
             "$(print_json_leaf_nodes_path)": ctx.executable.print_json_leaf_nodes.short_path,
@@ -1198,6 +1203,7 @@ def _xcodeproj_impl(ctx):
                          ctx.files.output_processor,
                 transitive = [
                     ctx.attr.build_wrapper[DefaultInfo].default_runfiles.files,
+                    ctx.attr.index_import[DefaultInfo].default_runfiles.files,
                     ctx.attr.installer[DefaultInfo].default_runfiles.files,
                     ctx.attr.print_json_leaf_nodes[DefaultInfo].default_runfiles.files,
                 ],

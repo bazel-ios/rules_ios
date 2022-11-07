@@ -97,7 +97,7 @@ extend_modulemap = rule(
     doc = "Extends a modulemap with a Swift submodule",
 )
 
-def _write_modulemap(name, umbrella_header = None, module_name = None, framework = False):
+def _write_modulemap(name, library_tools, umbrella_header = None, public_headers = [], private_headers = [], module_name = None, framework = False, **kwargs):
     basename = "{}.modulemap".format(name)
     destination = paths.join(name + "-modulemap", basename)
     if not module_name:
@@ -304,11 +304,12 @@ def _xcframework_slice(*, xcframework_name, identifier, platform, platform_varia
         # We need the path to the top-level slice directory so we can find headers, modulemaps and swiftmodules.
         slice_dir = paths.dirname(path)
         import_headers, import_module_map, import_swiftmodules = _xcframework_slice_imports(slice_dir)
+        includes = [paths.dirname(f) for f in import_headers] + ["%s/Headers" % slice_dir]
         native.objc_import(
             name = resolved_target_name,
             archives = [path],
             hdrs = import_headers,
-            includes = ["%s/Headers" % slice_dir],
+            includes = includes,
             tags = _MANUAL,
         )
         _make_xcframework_vfs(import_headers, import_module_map, import_swiftmodules, static = True)
@@ -559,7 +560,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     platforms = kwargs.pop("platforms", None)
     private_deps = [] + kwargs.pop("private_deps", [])
     lib_names = ["@xcode_sdk_frameworks"]
-    fetch_default_xcconfig = library_tools["fetch_default_xcconfig"](name, default_xcconfig_name) if default_xcconfig_name else {}
+    fetch_default_xcconfig = library_tools["fetch_default_xcconfig"](name, default_xcconfig_name, **kwargs) if default_xcconfig_name else {}
     copts_by_build_setting = copts_by_build_setting_with_defaults(xcconfig, fetch_default_xcconfig, xcconfig_by_build_setting)
     enable_framework_vfs = kwargs.pop("enable_framework_vfs", False) or namespace_is_module_name
     defines = kwargs.pop("defines", [])
@@ -797,9 +798,13 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                 objc_hdrs.append(umbrella_header)
             module_map = library_tools["modulemap_generator"](
                 name = name,
+                library_tools = library_tools,
                 umbrella_header = paths.basename(umbrella_header),
+                public_headers = objc_hdrs,
+                private_headers = objc_private_hdrs,
                 module_name = module_name,
                 framework = True,
+                **kwargs
             )
 
     framework_vfs_overlay(
@@ -967,7 +972,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                 "//conditions:default": [framework_vfs_overlay_name_swift] if enable_framework_vfs else [],
             }) + (["@xcode_sdk_frameworks//:XCTest"] if testonly else []),
             swiftc_inputs = swiftc_inputs,
-            features = ["swift.no_generated_module_map"] + select({
+            features = ["swift.no_generated_module_map", "swift.use_pch_output_dir"] + select({
                 "@build_bazel_rules_ios//:virtualize_frameworks": ["swift.vfsoverlay"],
                 "//conditions:default": [],
             }),

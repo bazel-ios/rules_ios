@@ -42,6 +42,15 @@ do
   cp -LR "$BUILD_WRAPPER_PATH" "${stubs_dir}/"
 done
 
+index_import_runfiles_paths="$(index_import_runfiles_paths)"
+index_import_runfiles_dest="${installers_dir}/index-import.runfiles"
+mkdir -p "${installers_dir}/index-import.runfiles"
+for RUNFILE_PATH in $index_import_runfiles_paths
+do
+  # coreutils cp must have -L to follow symlinks (mac's cp will do it with -r).
+  cp -LR "$RUNFILE_PATH" "${index_import_runfiles_dest}"
+done
+
 cp "$(clang_stub_short_path)" "${stubs_dir}/clang-stub"
 cp "$(clang_stub_ld_path)" "${stubs_dir}/ld-stub"
 cp "$(clang_stub_swiftc_path)" "${stubs_dir}/swiftc-stub"

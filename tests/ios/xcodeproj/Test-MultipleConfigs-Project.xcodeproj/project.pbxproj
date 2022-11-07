@@ -15,7 +15,6 @@
 
 /* Begin PBXFileReference section */
 		177820436C75B787C7628EAD /* FW.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FW.m; sourceTree = "<group>"; };
-		42D83EE9C52F58A91F9FD2A0 /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.pch; sourceTree = "<group>"; };
 		542BDACECDA884DD561CAABB /* FW.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FW.h; sourceTree = "<group>"; };
 		6BC8AD74E45B713E8590F796 /* ExampleExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ExampleExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E10AF3580A0BD84B1DCECA6 /* FW.framework */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; path = FW.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -33,7 +32,6 @@
 		187F618567D4A569BC6DA3CF /* build_bazel_rules_ios */ = {
 			isa = PBXGroup;
 			children = (
-				7A4A4B64D72C3297B112337A /* rules */,
 				F85D6FD9172FB44E6B9CA175 /* tests */,
 			);
 			name = build_bazel_rules_ios;
@@ -82,22 +80,6 @@
 				DA019D105253803AB2E8D598 /* extensions */,
 			);
 			path = ios;
-			sourceTree = "<group>";
-		};
-		7A4A4B64D72C3297B112337A /* rules */ = {
-			isa = PBXGroup;
-			children = (
-				874ED8C9666A47A767B145E1 /* library */,
-			);
-			path = rules;
-			sourceTree = "<group>";
-		};
-		874ED8C9666A47A767B145E1 /* library */ = {
-			isa = PBXGroup;
-			children = (
-				42D83EE9C52F58A91F9FD2A0 /* common.pch */,
-			);
-			path = library;
 			sourceTree = "<group>";
 		};
 		8A5EC0D49E51C276C0CE1CC0 /* Products */ = {

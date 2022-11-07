@@ -16,7 +16,6 @@
 
 /* Begin PBXFileReference section */
 		081353F8B1986324B75BA9E3 /* FW_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FW_Private.h; sourceTree = "<group>"; };
-		0B1E62B3BCB33618F53EF0AD /* common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.pch; sourceTree = "<group>"; };
 		10ABFF5496EDC073C4801896 /* FW.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FW.m; sourceTree = "<group>"; };
 		2000451E31D003108D17B281 /* OnlySources.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OnlySources.m; sourceTree = "<group>"; };
 		3E6A54D30A94DCFE4D030794 /* OnlySources.framework */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; path = OnlySources.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -88,14 +87,6 @@
 			path = ios;
 			sourceTree = "<group>";
 		};
-		8932BF20C244CEFC88B2010E /* library */ = {
-			isa = PBXGroup;
-			children = (
-				0B1E62B3BCB33618F53EF0AD /* common.pch */,
-			);
-			path = library;
-			sourceTree = "<group>";
-		};
 		99E81B6CB2001109EEE65846 /* FW2 */ = {
 			isa = PBXGroup;
 			children = (
@@ -113,14 +104,6 @@
 			path = extensions;
 			sourceTree = "<group>";
 		};
-		DC9C0ADC8425454B02CB810A /* rules */ = {
-			isa = PBXGroup;
-			children = (
-				8932BF20C244CEFC88B2010E /* library */,
-			);
-			path = rules;
-			sourceTree = "<group>";
-		};
 		F1DAEAA89A2626DEA58A934F /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -132,7 +115,6 @@
 		F9AA175944258CC391B480FF /* build_bazel_rules_ios */ = {
 			isa = PBXGroup;
 			children = (
-				DC9C0ADC8425454B02CB810A /* rules */,
 				5258E2AC962559777C56E87E /* tests */,
 			);
 			name = build_bazel_rules_ios;
