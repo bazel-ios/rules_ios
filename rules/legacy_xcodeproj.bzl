@@ -244,7 +244,7 @@ def _xcodeproj_aspect_impl(target, ctx):
         bundle_info = target[AppleBundleInfo]
         test_host_appname = None
         test_host_target = None
-        if ctx.rule.kind == "ios_unit_test":
+        if ctx.rule.kind in ("ios_unit_test", "ios_ui_test"):
             # The following converts {"env_k1": "env_v1", "env_k2": "env_v2"}
             # to (("env_k1", "env_v1"), ("env_k2", "env_v2"))
             # for both "env vars" and "command line args"
@@ -875,8 +875,9 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
         test_host_appname = getattr(target_info, "test_host_appname", None)
         if test_host_appname:
             target_dependencies.append({"target": test_host_appname})
-            target_settings["TEST_HOST"] = "$(BUILT_PRODUCTS_DIR)/{test_host_appname}.app/{test_host_appname}".format(test_host_appname = test_host_appname)
-
+            if product_type != "bundle.ui-testing":
+                # TEST_HOST setting for UI tests cannot be set because TEST_HOST conflicts with USES_XCTRUNNER
+                target_settings["TEST_HOST"] = "$(BUILT_PRODUCTS_DIR)/{test_host_appname}.app/{test_host_appname}".format(test_host_appname = test_host_appname)
         if target_info.targeted_device_family:
             target_settings["TARGETED_DEVICE_FAMILY"] = target_info.targeted_device_family
 
@@ -894,8 +895,10 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
 
         target_settings = _set_target_settings_by_config(ctx, target_settings)
 
+        # For UI tests, passing sources add Compile Sources Build Phase and having this build phase makes 'Check Dependencies' step fail with the error message "Target has its own product"
+        sources_for_target_name = compiled_sources + compiled_non_arc_sources + asset_sources if product_type != "bundle.ui-testing" else []
         xcodeproj_targets_by_name[target_name] = {
-            "sources": compiled_sources + compiled_non_arc_sources + asset_sources,
+            "sources": sources_for_target_name,
             "type": product_type,
             "platform": _PLATFORM_MAPPING[target_info.platform_type],
             "deploymentTarget": target_info.minimum_os_version,
@@ -948,12 +951,14 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
         build_target_to_scheme_info = {scheme_info.build_target: scheme_info for scheme_info in scheme_infos}
 
         # They will show as `TestableReference` under the scheme
-        if target_info.product_type == "bundle.unit-test":
+        if target_info.product_type in ("bundle.unit-test", "bundle.ui-testing"):
             # All test targets will by default have a test action for themselves.
             xcodeproj_schemes_by_name[target_name]["test"] = {
                 "targets": [target_name],
                 "customLLDBInit": lldbinit_file,
                 "disableMainThreadChecker": ctx.attr.disable_main_thread_checker,
+                # TODO : Attaching debugger for UI tests is failing mysteriously, so disable for now
+                "debugEnabled": False if target_info.product_type == "bundle.ui-testing" else True,
             }
 
         elif target_name in build_target_to_scheme_info:
