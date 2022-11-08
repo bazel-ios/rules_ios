@@ -223,6 +223,16 @@ xcodeproj(
 )
 
 xcodeproj(
+    name = "Test-UI-Test-Target",
+    testonly = True,
+    bazel_path = "bazelisk",
+    include_transitive_targets = True,
+    deps = [
+        "//tests/ios/ui-test:SimpleTest",
+    ],
+)
+
+xcodeproj(
     name = "App-XCHammerWithXCBuildKit",
     bazel_build_service_config = bazel_build_service_config(
         bep_path = "/tmp/bep.bep",
