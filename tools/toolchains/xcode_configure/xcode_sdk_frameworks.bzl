@@ -251,6 +251,8 @@ def _create_build_file_for_sdk(
         target_triple = target_triple,
     )
 
+    repository_ctx.file(output_folder.get_child("deps.json"), json.encode(scan_deps))
+
     build_file = BUILD_FILE_HEADER
 
     for pkg in scan_deps.get("modules", []):
@@ -274,11 +276,15 @@ def _create_build_file_for_sdk(
     repository_ctx.file(build_file_path, build_file)
 
 def _platform_target_triple(platform, target_name, version):
+    cpu = "arm64"
+    is_simulator = platform.endswith("Simulator")
+    if target_name == "watchos" and not is_simulator:
+        cpu = "arm64_32"
     return "{cpu}-apple-{platform}{version}{suffix}".format(
-        cpu = "arm64_32" if target_name == "watchos" else "arm64",
+        cpu = cpu,
         platform = target_name,
         version = version,
-        suffix = "-simulator" if platform.endswith("Simulator") else "",
+        suffix = "-simulator" if is_simulator else "",
     )
 
 def _get_overrides(platform, xcode_version):

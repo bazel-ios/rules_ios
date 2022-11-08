@@ -555,7 +555,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     weak_sdk_frameworks = kwargs.pop("weak_sdk_frameworks", [])
     sdk_includes = kwargs.pop("sdk_includes", [])
     pch = kwargs.pop("pch", "@build_bazel_rules_ios//rules/library:common.pch")
-    deps = kwargs.pop("deps", [])
+    deps = [] + kwargs.pop("deps", [])
     data = kwargs.pop("data", [])
     tags = kwargs.pop("tags", [])
     tags_manual = tags if "manual" in tags else tags + _MANUAL
