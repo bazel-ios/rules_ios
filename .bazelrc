@@ -39,5 +39,8 @@ build:lldb_ios_test --spawn_strategy=standalone --apple_platform_type=ios --defi
 # Delete the VM test suite for github
 build --deleted_packages tests/ios/vmd
 
+# Allow for server to start (GitHub actions can timeout)
+build --local_startup_timeout_secs=240
+
 # Load a user.bazelrc
 try-import %workspace%/user.bazelrc
