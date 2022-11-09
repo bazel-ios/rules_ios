@@ -287,12 +287,7 @@ def copts_by_build_setting_with_defaults(xcconfig = {}, fetch_default_xcconfig =
     Returns:
         Struct with different copts behind 'select()' statements
     """
-    xcconfig_with_defaults = dict(xcconfig)
-
-    # Adding default values if necessary
-    for (xc_build_setting, value) in fetch_default_xcconfig.items():
-        if not xc_build_setting in xcconfig:
-            xcconfig_with_defaults[xc_build_setting] = value
+    xcconfig_with_defaults = merge_xcconfigs(fetch_default_xcconfig, xcconfig)
 
     # Default copts to be used in case no bazel build setting gets resolved
     copts_with_defaults = copts_from_xcconfig(xcconfig_with_defaults)
@@ -306,17 +301,9 @@ def copts_by_build_setting_with_defaults(xcconfig = {}, fetch_default_xcconfig =
     linkopts_by_build_setting = {"//conditions:default": copts_with_defaults.linkopts}
 
     for (build_setting, build_setting_xcconfig) in xcconfig_by_build_setting.items():
-        merged_xcconfig = dict(xcconfig)
-
-        # The values for this bazel build setting should override the values in
-        # 'xcconfig'
-        for (xc_build_setting, value) in build_setting_xcconfig.items():
-            merged_xcconfig[xc_build_setting] = value
-
+        # The values for this bazel build setting should override the values in 'xcconfig'
         # Adding default values if necessary
-        for (xc_build_setting, value) in fetch_default_xcconfig.items():
-            if not xc_build_setting in merged_xcconfig:
-                merged_xcconfig[xc_build_setting] = value
+        merged_xcconfig = merge_xcconfigs(xcconfig_with_defaults, build_setting_xcconfig)
 
         # The copts to be used in case this bazel build setting gets resolved
         copts = copts_from_xcconfig(merged_xcconfig)
@@ -338,3 +325,27 @@ def copts_by_build_setting_with_defaults(xcconfig = {}, fetch_default_xcconfig =
         ibtool_copts = select(ibtool_copts_by_build_setting),
         linkopts = select(linkopts_by_build_setting),
     )
+
+def merge_xcconfigs(*xcconfigs):
+    """Merges a list of xcconfigs into a single dictionary
+
+    Uses some heuristics to merge xcconfigs in a way that is compatible with Xcode's behavior:
+
+    - If a key is present in multiple xcconfigs
+        - If the value is a list, the values are concatenated
+        - If the value is a string, the last xcconfig value is used
+
+    Args:
+        *xcconfigs: A list of dictionaries of Xcode build settings
+    Returns:
+        A dictionary of Xcode build settings
+    """
+    merged_xcconfig = {}
+    for xcconfig in xcconfigs:
+        for (key, value) in dict(xcconfig).items():
+            if types.is_list(merged_xcconfig.get(key, None)) and types.is_list(value):
+                merged_xcconfig[key] = merged_xcconfig[key] + value
+            else:
+                merged_xcconfig[key] = value
+
+    return merged_xcconfig
