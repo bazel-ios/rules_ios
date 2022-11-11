@@ -46,8 +46,8 @@ def xcodeproj(name, **kwargs):
                 generate_xcode_schemes = generate_xcode_schemes,
                 paths = ["**"],
                 xcconfig_overrides = xcconfig_overrides,
+                bazel_build_service_config = bazel_build_service_config,
             ),
-            bazel_build_service_config = bazel_build_service_config,
             targets = kwargs.get("deps", []),
         )
     else:
