@@ -2,7 +2,7 @@
 
 Starlark transition support for Apple rules.
 
-<a id="#transition_support.current_apple_platform"></a>
+<a id="transition_support.current_apple_platform"></a>
 
 ## transition_support.current_apple_platform
 

@@ -8,7 +8,7 @@ https://github.com/bazelbuild/rules_apple/issues/319
 if this is ever fixed in bazel it should be removed
 
 
-<a id="#precompiled_apple_resource_bundle"></a>
+<a id="precompiled_apple_resource_bundle"></a>
 
 ## precompiled_apple_resource_bundle
 

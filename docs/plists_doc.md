@@ -2,7 +2,7 @@
 
 
 
-<a id="#info_plists_by_setting"></a>
+<a id="info_plists_by_setting"></a>
 
 ## info_plists_by_setting
 
@@ -22,7 +22,7 @@ info_plists_by_setting(<a href="#info_plists_by_setting-name">name</a>, <a href=
 | <a id="info_plists_by_setting-default_infoplists"></a>default_infoplists |  <p align="center"> - </p>   |  none |
 
 
-<a id="#write_info_plists_if_needed"></a>
+<a id="write_info_plists_if_needed"></a>
 
 ## write_info_plists_if_needed
 
