@@ -144,7 +144,7 @@ swift_binary(
     if not native.existing_rule("xcbuildkit"):
         git_repository(
             name = "xcbuildkit",
-            commit = "d471b11ddd9872467e4850ba7d3ec432c5151445",
+            commit = "2de1d41bdd4b9eea60764800af1ed7fcd62eeed3",
             remote = "https://github.com/jerrymarino/xcbuildkit.git",
         )
 

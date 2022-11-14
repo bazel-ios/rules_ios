@@ -5,18 +5,20 @@ load("@xchammer//:BazelExtensions/xcodeproject.bzl", xchammer_xcodeproj = "xcode
 load("@xchammer//:BazelExtensions/xchammerconfig.bzl", "bazel_build_service_config", "project_config")
 load("//rules:library.bzl", "GLOBAL_INDEX_STORE_PATH")
 
-def _patch_bazel_build_service_config(kwargs_bazel_build_service_config):
-    """Overriding to set some default values for now.
+def _patch_bazel_build_service_config(name, kwargs_bazel_build_service_config):
+    """Adds sensible defaults
 
-    We need to better expose the option to
-    customize `GLOBAL_INDEX_STORE_PATH` and expecting to iterate a bit on `indexing_data_dir`
-    and run some tests, once it's battle tested will revert this and allow customers to fully configure
+    If users don't specify these values adding defaults that make sense in rules_ios, XCHammer adds
+    its own default values if not specified otherwise (very similar to these atm).
+
+    It's really important to align the index stores with `xcbuildkit` so 'GLOBAL_INDEX_STORE_PATH' is always set
+    for now since this is how `rules_ios` is setup. Later on we can make this more configurable.
     """
     if kwargs_bazel_build_service_config:
         return bazel_build_service_config(
-            bep_path = kwargs_bazel_build_service_config.bepPath if kwargs_bazel_build_service_config.bepPath else "/tmp/bep.bep",
+            bep_path = kwargs_bazel_build_service_config.bepPath if kwargs_bazel_build_service_config.bepPath else "/tmp/{}.bep".format(name),
             index_store_path = "$SRCROOT/%s" % GLOBAL_INDEX_STORE_PATH,
-            indexing_data_dir = kwargs_bazel_build_service_config.indexingDataDir if kwargs_bazel_build_service_config.indexingDataDir else "/tmp/xcbuildkit-data/indexing",
+            indexing_data_dir = kwargs_bazel_build_service_config.indexingDataDir if kwargs_bazel_build_service_config.indexingDataDir else "/tmp/xcbuildkit-data/{}/indexing".format(name),
             indexing_enabled = kwargs_bazel_build_service_config.indexingEnabled if kwargs_bazel_build_service_config.indexingEnabled else False,
             progress_bar_enabled = kwargs_bazel_build_service_config.progressBarEnabled if kwargs_bazel_build_service_config.progressBarEnabled else False,
         )
@@ -35,7 +37,7 @@ def xcodeproj(name, **kwargs):
     generate_xcode_schemes = kwargs.pop("generate_xcode_schemes", False)
     xcconfig_overrides = kwargs.pop("xcconfig_overrides", {})
     testonly = kwargs.pop("testonly", False)
-    bazel_build_service_config = _patch_bazel_build_service_config(kwargs.pop("bazel_build_service_config", None))
+    bazel_build_service_config = _patch_bazel_build_service_config(name, kwargs.pop("bazel_build_service_config", None))
 
     if use_xchammer:
         xchammer_xcodeproj(
