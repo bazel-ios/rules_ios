@@ -43,5 +43,8 @@ build --deleted_packages tests/ios/vmd
 build --features swift.use_c_modules
 build --features swift.emit_c_module
 
+# Allow for server to start (GitHub actions can timeout)
+startup --local_startup_timeout_secs=240
+
 # Load a user.bazelrc
 try-import %workspace%/user.bazelrc
