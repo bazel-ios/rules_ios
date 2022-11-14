@@ -53,18 +53,19 @@ def rules_ios_dependencies():
     _maybe(
         github_repo,
         name = "build_bazel_rules_swift",
-        project = "dierksen",
-        ref = "15c63cc647d0849c98ce12915cc7476554d9a262",
+        project = "bazel-ios",
+        ref = "e0272df7d98a563c07aa2e78722cd8ce62549864",
         repo = "rules_swift",
-        sha256 = "b7ba6abc832cf83e8f2e3c3bdb483407a3596936c68ff9758b180364fe316509",
+        sha256 = "006743d481c477928796ad985ba32b591f5926cd590d32b207e018049b569594",
     )
 
     _maybe(
         github_repo,
         name = "build_bazel_rules_apple",
-        ref = "acbfbf084586ae6c44be8459edc7958ec437f763",
-        project = "dierksen",
+        ref = "f8b14ce7516f9055861f91a9e5ff9d299c9d609f",
+        project = "bazelbuild",
         repo = "rules_apple",
+        sha256 = "aa0bbee490c153ae0b16bde3be517b8330ba989692b13b10d5036337ac903934",
     )
 
     _maybe(
@@ -110,9 +111,6 @@ swift_binary(
     name = "arm64-to-sim",
     srcs = glob(["Sources/arm64-to-sim/*.swift"]),
     visibility = ["//visibility:public"],
-    deps = [
-        "@xcode_sdk_frameworks",
-    ],
 )
         """,
     )
