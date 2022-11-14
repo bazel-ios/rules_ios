@@ -332,10 +332,32 @@ def _create_xcode_framework_targets(
         XCODE_VERSION_BUILD_FILE_TMPL.format(xcode_version = xcode_version_name),
     )
 
+def _stub_frameworks(repository_ctx):
+    repository_ctx.file(
+        "BUILD.bazel",
+        content = """load("@build_bazel_rules_swift//swift:swift.bzl", "swift_module_alias")
+
+package(default_visibility = ["//visibility:public"])
+
+swift_module_alias(
+    name = "xcode_sdk_frameworks",
+)
+
+swift_module_alias(
+    name = "XCTest",
+)
+""",
+    )
+
 def _impl(repository_ctx):
     os_name = repository_ctx.os.name.lower()
 
     if not os_name.startswith("mac os"):
+        return
+
+    use_explicit_modules = repository_ctx.os.environ.get("EXPLICIT_MODULES", False)
+    if not use_explicit_modules:
+        _stub_frameworks(repository_ctx)
         return
 
     toolchains = run_xcode_locator(
@@ -379,6 +401,7 @@ def _impl(repository_ctx):
 
 xcode_sdk_frameworks = repository_rule(
     implementation = _impl,
+    environ = ["EXPLICIT_MODULES"],
     attrs = {
         "xcode_locator": attr.string(),
     },

@@ -125,15 +125,14 @@ xcode_autoconf = repository_rule(
     },
 )
 
-def xcode_configure(xcode_locator_label, remote_xcode_label = None, explicit_modules = False):
+def xcode_configure(xcode_locator_label, remote_xcode_label = None):
     """Generates a repository containing host xcode version information."""
     xcode_autoconf(
         name = "local_config_xcode",
         xcode_locator = xcode_locator_label,
         remote_xcode = remote_xcode_label,
     )
-    if explicit_modules:
-        xcode_sdk_frameworks(
-            name = "xcode_sdk_frameworks",
-            xcode_locator = xcode_locator_label,
-        )
+    xcode_sdk_frameworks(
+        name = "xcode_sdk_frameworks",
+        xcode_locator = xcode_locator_label,
+    )
