@@ -1,6 +1,5 @@
 load("//rules:xcodeproj.bzl", "xcodeproj")
 load("//rules:legacy_xcodeproj.bzl", "xcodeproj_project_options")
-load("//rules:library.bzl", "GLOBAL_INDEX_STORE_PATH")
 load("//rules:additional_scheme_info.bzl", "additional_scheme_info")
 load("@xchammer//:BazelExtensions/xchammerconfig.bzl", "bazel_build_service_config")
 
@@ -225,9 +224,6 @@ xcodeproj(
 xcodeproj(
     name = "App-XCHammerWithXCBuildKit",
     bazel_build_service_config = bazel_build_service_config(
-        bep_path = "/tmp/bep.bep",
-        index_store_path = "$SRCROOT/%s" % GLOBAL_INDEX_STORE_PATH,
-        indexing_data_dir = "/tmp/xcbuildkit-data/indexing",
         indexing_enabled = True,
         progress_bar_enabled = True,
     ),
