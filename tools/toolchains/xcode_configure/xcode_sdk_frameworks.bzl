@@ -344,7 +344,12 @@ swift_module_alias(
 )
 
 swift_module_alias(
+    name = "XCTestDummy",
+)
+
+alias(
     name = "XCTest",
+    actual = ":XCTestDummy",
 )
 """,
     )
