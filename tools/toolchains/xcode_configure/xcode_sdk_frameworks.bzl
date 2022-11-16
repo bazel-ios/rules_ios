@@ -339,18 +339,14 @@ def _stub_frameworks(repository_ctx):
 
 package(default_visibility = ["//visibility:public"])
 
-swift_module_alias(
+objc_library(
     name = "xcode_sdk_frameworks",
 )
 
-swift_module_alias(
-    name = "XCTestDummy",
+objc_library(
+    name = "XCTest",
 )
 
-alias(
-    name = "XCTest",
-    actual = ":XCTestDummy",
-)
 """,
     )
 
