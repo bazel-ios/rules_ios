@@ -329,11 +329,7 @@ def copts_by_build_setting_with_defaults(xcconfig = {}, fetch_default_xcconfig =
 def merge_xcconfigs(*xcconfigs):
     """Merges a list of xcconfigs into a single dictionary
 
-    Uses some heuristics to merge xcconfigs in a way that is compatible with Xcode's behavior:
-
-    - If a key is present in multiple xcconfigs
-        - If the value is a list, the values are concatenated
-        - If the value is a string, the last xcconfig value is used
+    Overrides keys from the first xcconfig with the values from the latest one if they match.
 
     Args:
         *xcconfigs: A list of dictionaries of Xcode build settings
@@ -343,9 +339,6 @@ def merge_xcconfigs(*xcconfigs):
     merged_xcconfig = {}
     for xcconfig in xcconfigs:
         for (key, value) in dict(xcconfig).items():
-            if types.is_list(merged_xcconfig.get(key, None)) and types.is_list(value):
-                merged_xcconfig[key] = merged_xcconfig[key] + value
-            else:
-                merged_xcconfig[key] = value
+            merged_xcconfig[key] = value
 
     return merged_xcconfig
