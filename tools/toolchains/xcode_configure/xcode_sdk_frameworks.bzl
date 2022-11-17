@@ -132,6 +132,7 @@ alias(
         "//:AppleTVSimulator": "//{xcode_version}/AppleTVSimulator:bazel_xcode_imports_swift",
         "//:WatchOS": "//{xcode_version}/WatchOS:bazel_xcode_imports_swift",
         "//:WatchSimulator": "//{xcode_version}/WatchSimulator:bazel_xcode_imports_swift",
+        "//conditions:default": "//{xcode_version}/MacOSX:bazel_xcode_imports_swift",
     }})
 )
 
@@ -145,6 +146,7 @@ alias(
         "//:AppleTVSimulator": "//{xcode_version}/AppleTVSimulator:XCTest",
         "//:WatchOS": "//{xcode_version}/WatchOS:XCTest",
         "//:WatchSimulator": "//{xcode_version}/WatchSimulator:XCTest",
+        "//conditions:default": "//{xcode_version}/MacOSX:XCTest",
     }})
 )
 
@@ -279,10 +281,10 @@ def _platform_target_triple(host_cpu, platform, target_name, version):
     is_simulator = platform.endswith("Simulator")
     if host_cpu != "aarch64" and (is_simulator or platform == "MacOSX"):
         cpu = "x86_64"
+    elif target_name == "watchos" and not is_simulator:
+        cpu = "arm64_32"
     else:
         cpu = "arm64"
-    if target_name == "watchos" and not is_simulator:
-        cpu = "arm64_32"
     return "{cpu}-apple-{platform}{version}{suffix}".format(
         cpu = cpu,
         platform = target_name,
