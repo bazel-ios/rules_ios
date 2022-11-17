@@ -969,7 +969,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                 "@build_bazel_rules_ios//:virtualize_frameworks": framework_vfs_swift_copts,
                 "//conditions:default": framework_vfs_swift_copts if enable_framework_vfs else [],
             }) + select({
-                "//:explicit_modules": [],
+                "@build_bazel_rules_ios//:explicit_modules": [],
                 "//conditions:default": ["-import-underlying-module"] if module_map else [],
             }) + additional_swift_copts,
             deps = deps + private_deps + lib_names + select({

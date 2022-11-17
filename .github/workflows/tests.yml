@@ -156,7 +156,8 @@ jobs:
           -//tests/ios/frameworks/testonly:MixedSourceTest                 \
           -//tests/ios/frameworks/dynamic/... \
           -//tests/ios/frameworks/sources-with-prebuilt-binaries/... \
-          -//tests/ios/frameworks/mixed-source/...
+          -//tests/ios/frameworks/mixed-source/... \
+          -//tests/ios/xcodeproj/...
 
       - uses: actions/upload-artifact@v2
         if: failure()
