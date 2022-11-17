@@ -1,6 +1,6 @@
 # Pull buildifer.mac as an http_file, then depend on the file group to make an
 # executable
-load("@build_bazel_rules_swift//swift/internal:feature_names.bzl", "SWIFT_FEATURE_USE_GLOBAL_INDEX_STORE")
+load("@build_bazel_rules_swift//swift/internal:feature_names.bzl", "SWIFT_FEATURE_USE_C_MODULES", "SWIFT_FEATURE_USE_GLOBAL_INDEX_STORE")
 load("//rules:features.bzl", "feature_names")
 load("@bazel_skylib//lib:selects.bzl", "selects")
 
@@ -16,6 +16,13 @@ config_setting(
     name = "use_global_index_store",
     values = {
         "features": SWIFT_FEATURE_USE_GLOBAL_INDEX_STORE,
+    },
+)
+
+config_setting(
+    name = "explicit_modules",
+    values = {
+        "features": SWIFT_FEATURE_USE_C_MODULES,
     },
 )
 

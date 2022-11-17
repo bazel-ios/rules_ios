@@ -915,13 +915,10 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
 
     if swift_sources:
         additional_swift_copts.extend(("-Xcc", "-I."))
-        if module_map:
-            # Frameworks find the modulemap file via the framework vfs overlay
-            if not namespace_is_module_name:
-                additional_swift_copts += ["-Xcc", "-fmodule-map-file=" + "$(execpath " + module_map + ")"]
-            additional_swift_copts.append(
-                "-import-underlying-module",
-            )
+
+        # Frameworks find the modulemap file via the framework vfs overlay
+        if module_map and not namespace_is_module_name:
+            additional_swift_copts += ["-Xcc", "-fmodule-map-file=" + "$(execpath " + module_map + ")"]
         swiftc_inputs = other_inputs + objc_hdrs + objc_private_hdrs
         if module_map:
             swiftc_inputs.append(module_map)
@@ -971,6 +968,9 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             copts = copts_by_build_setting.swift_copts + swift_copts + select({
                 "@build_bazel_rules_ios//:virtualize_frameworks": framework_vfs_swift_copts,
                 "//conditions:default": framework_vfs_swift_copts if enable_framework_vfs else [],
+            }) + select({
+                "//:explicit_modules": [],
+                "//conditions:default": ["-import-underlying-module"] if module_map else [],
             }) + additional_swift_copts,
             deps = deps + private_deps + lib_names + select({
                 "@build_bazel_rules_ios//:virtualize_frameworks": [framework_vfs_overlay_name_swift],
