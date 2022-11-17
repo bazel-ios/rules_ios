@@ -92,6 +92,7 @@ for input in "${input_options[@]}"; do
     else
         rsync \
             --recursive --chmod=u+w --delete --copy-links \
+            --exclude 'Frameworks/libXCTestBundleInject.dylib' \
             "$input" "$output" >"$BAZEL_DIAGNOSTICS_DIR"/rsync-stdout-"$DATE_SUFFIX".log 2>"$BAZEL_DIAGNOSTICS_DIR"/rsync-stderr-"$DATE_SUFFIX".log
     fi
 
