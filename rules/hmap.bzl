@@ -77,7 +77,6 @@ def _make_headermap_impl(ctx):
         ),
     )
 
-    
     providers = [
         apple_common.new_objc_provider(),
         cc_info_provider,
