@@ -54,8 +54,14 @@ apple_dynamic_framework_import(
         ":CoreGraphics_c",
         ":Foundation_c",
     ] + select({
-        "//:MacOSX": [":AppKit_c"],
-        "//conditions:default": ["UIKit_c"],
+        "//:iPhoneOS": ["UIKit_c"],
+        "//:iPhoneSimulator": ["UIKit_c"],
+        "//:MacOSX": ["AppKit_c"],
+        "//:AppleTVOS": ["UIKit_c"],
+        "//:AppleTVSimulator": ["UIKit_c"],
+        "//:WatchOS": ["UIKit_c"],
+        "//:WatchSimulator": ["UIKit_c"],
+        "//conditions:default": ["AppKit_c"],
     })
 )
 """
