@@ -6,6 +6,11 @@ on:
     branches:
       - master
 
+# One active job per PR, cancel older ones on push
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   integration_tests:
     name: Build and Test
