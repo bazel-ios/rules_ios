@@ -275,9 +275,12 @@ def _create_build_file_for_sdk(
     build_file_path = output_folder.get_child("BUILD.bazel")
     repository_ctx.file(build_file_path, build_file)
 
-def _platform_target_triple(platform, target_name, version):
-    cpu = "arm64"
+def _platform_target_triple(host_cpu, platform, target_name, version):
     is_simulator = platform.endswith("Simulator")
+    if host_cpu != "aarch64" and (is_simulator or platform == "MacOSX"):
+        cpu = "x86_64"
+    else:
+        cpu = "arm64"
     if target_name == "watchos" and not is_simulator:
         cpu = "arm64_32"
     return "{cpu}-apple-{platform}{version}{suffix}".format(
@@ -307,12 +310,13 @@ def _create_xcode_framework_targets(
     platforms_dir = developer_dir_path.get_child("Platforms")
     versions = xcode_version_dict(repository_ctx, developer_dir)
     xcode_version_folder = repository_ctx.path(xcode_version_name)
+    host_cpu = repository_ctx.os.arch
     for platform_name, target_name in PLATFORM_TUPLES:
         platform_dir = platforms_dir.get_child(platform_name + ".platform")
         platform_version = versions[target_name]
 
         sdk_path = platform_dir.get_child("Developer").get_child("SDKs").get_child("{}.sdk".format(platform_name))
-        target_triple = _platform_target_triple(platform_name, target_name, platform_version)
+        target_triple = _platform_target_triple(host_cpu, platform_name, target_name, platform_version)
 
         output_folder = xcode_version_folder.get_child(platform_name)
         overrides = _get_overrides(platform_name, xcode_version)
