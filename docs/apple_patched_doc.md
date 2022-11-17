@@ -2,7 +2,7 @@
 
 This file contains drop-in replacements for rules in the rules_apple repository
 
-<a id="#apple_dynamic_framework_import"></a>
+<a id="apple_dynamic_framework_import"></a>
 
 ## apple_dynamic_framework_import
 
@@ -23,7 +23,7 @@ Args: same as the ones of apple_dynamic_framework_import
 | <a id="apple_dynamic_framework_import-kwargs"></a>kwargs |  <p align="center"> - </p>   |  none |
 
 
-<a id="#apple_static_framework_import"></a>
+<a id="apple_static_framework_import"></a>
 
 ## apple_static_framework_import
 

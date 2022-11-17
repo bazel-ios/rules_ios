@@ -2,7 +2,7 @@
 
 This file contains rules to build framework binaries from your podfile or cartfile
 
-<a id="#build_carthage_frameworks"></a>
+<a id="build_carthage_frameworks"></a>
 
 ## build_carthage_frameworks
 
@@ -28,7 +28,7 @@ build_carthage_frameworks(<a href="#build_carthage_frameworks-name">name</a>, <a
 | <a id="build_carthage_frameworks-verbose"></a>verbose |  if true, it will show the output of running carthage in the command line   |  <code>False</code> |
 
 
-<a id="#build_cocoapods_frameworks"></a>
+<a id="build_cocoapods_frameworks"></a>
 
 ## build_cocoapods_frameworks
 

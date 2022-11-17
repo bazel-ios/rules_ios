@@ -2,7 +2,7 @@
 
 Library rules
 
-<a id="#extend_modulemap"></a>
+<a id="extend_modulemap"></a>
 
 ## extend_modulemap
 
@@ -17,14 +17,14 @@ Extends a modulemap with a Swift submodule
 
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
-| <a id="extend_modulemap-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/docs/build-ref.html#name">Name</a> | required |  |
-| <a id="extend_modulemap-destination"></a>destination |  -   | <a href="https://bazel.build/docs/build-ref.html#labels">Label</a> | optional |  |
+| <a id="extend_modulemap-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
+| <a id="extend_modulemap-destination"></a>destination |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  |
 | <a id="extend_modulemap-module_name"></a>module_name |  -   | String | required |  |
-| <a id="extend_modulemap-source"></a>source |  -   | <a href="https://bazel.build/docs/build-ref.html#labels">Label</a> | optional | None |
-| <a id="extend_modulemap-swift_header"></a>swift_header |  -   | String | optional | "" |
+| <a id="extend_modulemap-source"></a>source |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | optional | <code>None</code> |
+| <a id="extend_modulemap-swift_header"></a>swift_header |  -   | String | optional | <code>""</code> |
 
 
-<a id="#write_file"></a>
+<a id="write_file"></a>
 
 ## write_file
 
@@ -39,12 +39,12 @@ Writes out a file verbatim
 
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
-| <a id="write_file-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/docs/build-ref.html#name">Name</a> | required |  |
+| <a id="write_file-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
 | <a id="write_file-content"></a>content |  -   | String | required |  |
-| <a id="write_file-destination"></a>destination |  -   | <a href="https://bazel.build/docs/build-ref.html#labels">Label</a> | required |  |
+| <a id="write_file-destination"></a>destination |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | required |  |
 
 
-<a id="#PrivateHeadersInfo"></a>
+<a id="PrivateHeadersInfo"></a>
 
 ## PrivateHeadersInfo
 
@@ -62,7 +62,7 @@ Propagates private headers, so they can be accessed if necessary
 | <a id="PrivateHeadersInfo-headers"></a>headers |  Private headers    |
 
 
-<a id="#apple_library"></a>
+<a id="apple_library"></a>
 
 ## apple_library
 
