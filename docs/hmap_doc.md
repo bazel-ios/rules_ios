@@ -2,7 +2,7 @@
 
 Header Map rules
 
-<a id="#headermap"></a>
+<a id="headermap"></a>
 
 ## headermap
 
@@ -22,13 +22,13 @@ regardless of the package structure being used.
 
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
-| <a id="headermap-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/docs/build-ref.html#name">Name</a> | required |  |
-| <a id="headermap-direct_hdr_providers"></a>direct_hdr_providers |  Targets whose direct headers should be added to the list of hdrs   | <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a> | optional | [] |
-| <a id="headermap-hdrs"></a>hdrs |  The list of headers included in the headermap   | <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a> | required |  |
-| <a id="headermap-namespace"></a>namespace |  The prefix to be used for header imports   | String | optional | "" |
+| <a id="headermap-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
+| <a id="headermap-direct_hdr_providers"></a>direct_hdr_providers |  Targets whose direct headers should be added to the list of hdrs   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional | <code>[]</code> |
+| <a id="headermap-hdrs"></a>hdrs |  The list of headers included in the headermap   | <a href="https://bazel.build/concepts/labels">List of labels</a> | required |  |
+| <a id="headermap-namespace"></a>namespace |  The prefix to be used for header imports   | String | optional | <code>""</code> |
 
 
-<a id="#HeaderMapInfo"></a>
+<a id="HeaderMapInfo"></a>
 
 ## HeaderMapInfo
 
@@ -46,7 +46,7 @@ Propagates header maps
 | <a id="HeaderMapInfo-files"></a>files |  depset with headermaps    |
 
 
-<a id="#hmap.make_hmap"></a>
+<a id="hmap.make_hmap"></a>
 
 ## hmap.make_hmap
 

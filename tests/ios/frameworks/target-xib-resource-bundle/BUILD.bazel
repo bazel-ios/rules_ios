@@ -13,6 +13,7 @@ apple_framework(
 
 apple_framework(
     name = "TargetXIBTestsLib",
+    testonly = True,
     srcs = glob(["TargetXIBTests/**/*.swift"]),
     platforms = {"ios": "11.0"},
     visibility = ["//visibility:public"],

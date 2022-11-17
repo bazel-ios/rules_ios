@@ -43,6 +43,7 @@ apple_framework(
 
 apple_framework(
     name = "MixedSourceFrameworkTestLib",
+    testonly = True,
     srcs = glob(["MixedSourceFrameworkTests/**/*.swift"]),
     visibility = ["//visibility:public"],
     deps = [
