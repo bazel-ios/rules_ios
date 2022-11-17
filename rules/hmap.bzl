@@ -1,5 +1,7 @@
 """Header Map rules"""
 
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_common")
+
 HeaderMapInfo = provider(
     doc = "Propagates header maps",
     fields = {
@@ -78,6 +80,7 @@ def _make_headermap_impl(ctx):
     providers = [
         apple_common.new_objc_provider(),
         cc_info_provider,
+        swift_common.create_swift_info(),
     ]
 
     hdrs_lists = [l for l in hdrs_lists if l]
