@@ -111,6 +111,7 @@ swift_binary(
     name = "arm64-to-sim",
     srcs = glob(["Sources/arm64-to-sim/*.swift"]),
     visibility = ["//visibility:public"],
+    deps = ["@xcode_sdk_frameworks"],
 )
         """,
     )
