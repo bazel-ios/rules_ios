@@ -28,13 +28,12 @@ def _test_merge_xcconfigs_impl(ctx):
     # When we merge them
     merged = merge_xcconfigs(xcconfig_a, xcconfig_b)
 
-    # Then expect that the string values are overriden in later xcconfigs
-    # and that list values are concatenated
+    # Then expect that the string & list values are overriden in later xcconfigs
     asserts.equals(env, merged["VALUE_1"], "overriden")
     asserts.equals(env, merged["VALUE_2"], "b")
     asserts.equals(env, merged["VALUE_3"], ["c"])
     asserts.equals(env, merged["VALUE_4"], "d")
-    asserts.equals(env, merged["LIST_VALUE_1"], ["a", "b", "added"])
+    asserts.equals(env, merged["LIST_VALUE_1"], ["added"])
     asserts.equals(env, merged["LIST_VALUE_2"], ["d"])
 
     return unittest.end(env)
