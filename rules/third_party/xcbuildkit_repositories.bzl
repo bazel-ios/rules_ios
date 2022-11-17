@@ -83,7 +83,7 @@ swift_library(
         name = name,
         srcs = ",\n".join(['"%s"' % x for x in srcs]),
         defines = ",\n".join(['"%s"' % x for x in defines]),
-        deps = ",\n".join(['"%s"' % namespaced_dep_name(x) for x in deps]),
+        deps = ",\n".join(['"%s"' % namespaced_dep_name(x) for x in deps] + ['"@xcode_sdk_frameworks"']),
         copts = ",\n".join(['"%s"' % x for x in copts]),
     ))
 

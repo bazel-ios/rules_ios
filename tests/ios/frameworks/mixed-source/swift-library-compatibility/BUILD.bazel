@@ -6,6 +6,7 @@ swift_library(
     srcs = ["empty.swift"],
     deps = [
         "//tests/ios/frameworks/objc:ObjcFramework",
+        "@xcode_sdk_frameworks",
     ],
 )
 
