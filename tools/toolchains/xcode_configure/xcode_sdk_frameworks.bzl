@@ -170,19 +170,22 @@ def _find_all_frameworks(sdk_path):
         if f.basename.endswith(".framework") and not f.basename.startswith("_")
     ]
 
+def _find_all_swift_libs(sdk_path):
+    swift_lib_dir = sdk_path.get_child("usr").get_child("lib").get_child("swift")
+    swift_libs = swift_lib_dir.readdir()
+    return [
+        s.basename.replace(".swiftmodule", "")
+        for s in swift_libs
+        if s.basename.endswith(".swiftmodule") and not s.basename.startswith("_")
+    ]
+
 def _get_dependency_graph(repository_ctx, developer_dir, sdk_path, target_triple):
     """Scans the dependencies for a library that imports every framework in a given SDK.
 
     Returns the JSON obtained from swiftc.
     """
     frameworks = _find_all_frameworks(sdk_path)
-    swift_lib_dir = sdk_path.get_child("usr").get_child("lib").get_child("swift")
-    swift_libs = swift_lib_dir.readdir()
-    frameworks.extend([
-        s.basename.replace(".swiftmodule", "")
-        for s in swift_libs
-        if s.basename.endswith(".swiftmodule") and not s.basename.startswith("_")
-    ])
+    frameworks.extend(_find_all_swift_libs(sdk_path))
 
     import_file_content = "".join(["import {}\n".format(f) for f in frameworks])
     repository_ctx.file(IMPORTS_FILE, content = import_file_content)
