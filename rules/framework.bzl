@@ -152,12 +152,13 @@ def _framework_packaging(ctx, action, inputs, outputs, manifest = None):
     if inputs == [None]:
         return []
 
+    if action in ctx.attr.skip_packaging:
+        return []
+
     virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
     if virtualize_frameworks:
         return inputs
 
-    if action in ctx.attr.skip_packaging:
-        return []
     action_inputs = [manifest] + inputs if manifest else inputs
     outputs = [ctx.actions.declare_file(f) for f in outputs]
     framework_name = ctx.attr.framework_name
