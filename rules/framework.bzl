@@ -786,6 +786,14 @@ def _bundle_static_framework(ctx, is_extension_safe, outputs):
     """Returns bundle info for a static framework commonly used intra-build"""
     infoplist = _merge_root_infoplists(ctx)
 
+    plist_out = None
+    framework_dir = "%s/%s.%s" % (ctx.attr.name, ctx.attr.framework_name, ctx.attr.bundle_extension)
+    plist_out = [paths.join(
+        framework_dir,
+        "Info.plist"
+    )]
+    plist_out = _framework_packaging(ctx, "plist", [infoplist], plist_out, None)
+
     current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
 
     partial_output = partial.call(
@@ -806,7 +814,7 @@ def _bundle_static_framework(ctx, is_extension_safe, outputs):
             bundle_name = ctx.attr.framework_name,
             bundle_extension = ctx.attr.bundle_extension,
             entitlements = None,
-            infoplist = infoplist,
+            infoplist = plist_out,
             minimum_os_version = str(current_apple_platform.target_os_version),
             minimum_deployment_os_version = ctx.attr.minimum_deployment_os_version,
             platform_type = str(current_apple_platform.platform.platform_type),
@@ -892,6 +900,7 @@ def _apple_framework_packaging_impl(ctx):
             if dep[AvoidDepsInfo].link_dynamic:
                 avoid_deps.append(dep)
 
+    plist_out = None
     # If we link dynamic - then package it as dynamic
     if ctx.attr.link_dynamic:
         bundle_outs = _bundle_dynamic_framework(ctx, is_extension_safe = is_extension_safe, avoid_deps = avoid_deps)
@@ -899,6 +908,7 @@ def _apple_framework_packaging_impl(ctx):
     else:
         bundle_outs = _bundle_static_framework(ctx, is_extension_safe = is_extension_safe, outputs = outputs)
         avoid_deps_info = AvoidDepsInfo(libraries = depset(avoid_deps).to_list(), link_dynamic = False)
+        plist_out = bundle_outs.providers[0].infoplist 
     swift_info = _get_merged_swift_info(ctx, framework_files, transitive_deps)
 
     # Build out the default info provider
@@ -908,6 +918,8 @@ def _apple_framework_packaging_impl(ctx):
     out_files.extend(outputs.headers)
     out_files.extend(outputs.private_headers)
     out_files.extend(outputs.modulemap)
+    if plist_out != None:
+        out_files.extend(plist_out)
     default_info = DefaultInfo(files = depset(out_files + bundle_outs.files.to_list()))
 
     objc_provider = objc_provider_utils.merge_objc_providers(
