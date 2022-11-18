@@ -43,6 +43,7 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
         **kwargs: Arguments passed to the apple_library and test_rule rules as appropriate.
     """
 
+    testonly = kwargs.pop("testonly", True)
     ios_test_kwargs = {arg: kwargs.pop(arg) for arg in _IOS_TEST_KWARGS if arg in kwargs}
     ios_test_kwargs["data"] = kwargs.pop("test_data", [])
     if ios_test_kwargs.get("test_host", None) == True:
@@ -58,15 +59,15 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
         host_args = [ios_test_kwargs["test_host"]]
     else:
         host_args = []
-    library = apple_library(name = name, namespace_is_module_name = False, platforms = {"ios": ios_test_kwargs.get("minimum_os_version")}, testonly = True, **kwargs)
+    library = apple_library(name = name, namespace_is_module_name = False, platforms = {"ios": ios_test_kwargs.get("minimum_os_version")}, testonly = testonly, **kwargs)
 
     # Setup framework middlemen - need to process deps and libs
     fw_name = name + ".framework_middleman"
-    framework_middleman(name = fw_name, framework_deps = kwargs.get("deps", []) + library.lib_names, testonly = True, tags = ["manual"])
+    framework_middleman(name = fw_name, framework_deps = kwargs.get("deps", []) + library.lib_names, testonly = testonly, tags = ["manual"])
     frameworks = [fw_name] + ios_test_kwargs.pop("frameworks", [])
 
     dep_name = name + ".dep_middleman"
-    dep_middleman(name = dep_name, deps = kwargs.get("deps", []) + library.lib_names, testonly = True, tags = ["manual"], test_deps = host_args)
+    dep_middleman(name = dep_name, deps = kwargs.get("deps", []) + library.lib_names, testonly = testonly, tags = ["manual"], test_deps = host_args)
 
     if split_name_to_kwargs and len(split_name_to_kwargs) > 0:
         tests = []
@@ -99,6 +100,7 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
                 deps = [dep_name],
                 frameworks = frameworks,
                 infoplists = info_plists_by_setting(name = name, infoplists_by_build_setting = infoplists_by_build_setting, default_infoplists = all_kwargs.pop("infoplists", [])),
+                testonly = testonly,
                 **all_kwargs
             )
         native.test_suite(name = name, tests = tests)
