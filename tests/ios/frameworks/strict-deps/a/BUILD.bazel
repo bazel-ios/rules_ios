@@ -1,4 +1,5 @@
 load("//rules:framework.bzl", "apple_framework")
+load("//rules:substitute_build_settings.bzl", "substitute_build_settings")
 
 apple_framework(
     name = "a",
@@ -8,4 +9,21 @@ apple_framework(
     skip_packaging = ["plist"],
     visibility = ["//visibility:public"],
     deps = ["//tests/ios/frameworks/strict-deps/b"],
+)
+
+apple_framework(
+    name = "a_with_plist",
+    srcs = glob(["*.swift"]),
+    infoplists = [":testHostPlist"],
+    platforms = {"ios": "10.0"},
+    visibility = ["//visibility:public"],
+    deps = ["//tests/ios/frameworks/strict-deps/b"],
+)
+
+substitute_build_settings(
+    name = "testHostPlist",
+    source = "//rules/test_host_app:Info.plist",
+    variables = {
+        "PRODUCT_BUNDLE_IDENTIFIER": "test",
+    },
 )
