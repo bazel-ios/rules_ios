@@ -561,7 +561,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     tags_manual = tags if "manual" in tags else tags + _MANUAL
     platforms = kwargs.pop("platforms", None)
     private_deps = [] + kwargs.pop("private_deps", [])
-    lib_names = []
+    lib_names = ["@xcode_sdk_frameworks"]
     fetch_default_xcconfig = library_tools["fetch_default_xcconfig"](name, default_xcconfig_name, **kwargs) if default_xcconfig_name else {}
     copts_by_build_setting = copts_by_build_setting_with_defaults(xcconfig, fetch_default_xcconfig, xcconfig_by_build_setting)
     enable_framework_vfs = kwargs.pop("enable_framework_vfs", False) or namespace_is_module_name
@@ -915,13 +915,10 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
 
     if swift_sources:
         additional_swift_copts.extend(("-Xcc", "-I."))
-        if module_map:
-            # Frameworks find the modulemap file via the framework vfs overlay
-            if not namespace_is_module_name:
-                additional_swift_copts += ["-Xcc", "-fmodule-map-file=" + "$(execpath " + module_map + ")"]
-            additional_swift_copts.append(
-                "-import-underlying-module",
-            )
+
+        # Frameworks find the modulemap file via the framework vfs overlay
+        if module_map and not namespace_is_module_name:
+            additional_swift_copts += ["-Xcc", "-fmodule-map-file=" + "$(execpath " + module_map + ")"]
         swiftc_inputs = other_inputs + objc_hdrs + objc_private_hdrs
         if module_map:
             swiftc_inputs.append(module_map)
@@ -971,11 +968,14 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             copts = copts_by_build_setting.swift_copts + swift_copts + select({
                 "@build_bazel_rules_ios//:virtualize_frameworks": framework_vfs_swift_copts,
                 "//conditions:default": framework_vfs_swift_copts if enable_framework_vfs else [],
+            }) + select({
+                "@build_bazel_rules_ios//:explicit_modules": [],
+                "//conditions:default": ["-import-underlying-module"] if module_map else [],
             }) + additional_swift_copts,
             deps = deps + private_deps + lib_names + select({
                 "@build_bazel_rules_ios//:virtualize_frameworks": [framework_vfs_overlay_name_swift],
                 "//conditions:default": [framework_vfs_overlay_name_swift] if enable_framework_vfs else [],
-            }),
+            }) + (["@xcode_sdk_frameworks//:XCTest"] if testonly else []),
             swiftc_inputs = swiftc_inputs,
             features = ["swift.no_generated_module_map", "swift.use_pch_output_dir"] + select({
                 "@build_bazel_rules_ios//:virtualize_frameworks": ["swift.vfsoverlay"],

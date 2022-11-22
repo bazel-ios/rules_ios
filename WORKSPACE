@@ -105,7 +105,6 @@ load_framework_dependencies()
 load("//tools/toolchains/xcode_configure:xcode_configure.bzl", "xcode_configure")
 
 xcode_configure(
-    remote_xcode_label = "",
     xcode_locator_label = "//tools/toolchains/xcode_configure:xcode_locator.m",
 )
 

@@ -348,7 +348,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             swift_info = target[SwiftInfo]
             swift_defines.append(depset(_collect_swift_defines(swift_info.direct_modules)))
             swift_defines.append(depset(_collect_swift_defines(swift_info.transitive_modules.to_list())))
-            swift_module_paths = [m.swift.swiftmodule.path for m in target[SwiftInfo].direct_modules]
+            swift_module_paths = [m.swift.swiftmodule.path for m in target[SwiftInfo].direct_modules if m.swift]
         providers.append(
             _SrcsInfo(
                 srcs = depset(srcs, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),

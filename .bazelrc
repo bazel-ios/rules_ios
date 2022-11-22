@@ -36,6 +36,12 @@ build --features apple.arm64_simulator_use_device_deps
 # Note - tree artifacts needs to be on
 build:lldb_ios_test --spawn_strategy=standalone --apple_platform_type=ios --define=apple.experimental.tree_artifact_outputs=1
 
+# Configure for explicit module compilation
+# also requires setting EXPLICIT_MODULE env variable to generate the frameworks repo.
+build:explicit_modules --features=swift.use_c_modules
+build:explicit_modules --features=swift.emit_c_module
+build:explicit_modules --action_env=EXPLICIT_MODULES=1
+
 # Delete the VM test suite for github
 build --deleted_packages tests/ios/vmd
 
