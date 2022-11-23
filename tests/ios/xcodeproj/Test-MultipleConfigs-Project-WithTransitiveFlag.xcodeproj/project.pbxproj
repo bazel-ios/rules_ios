@@ -511,7 +511,7 @@
 				FORCE_X86_SIM = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				LD = "$BAZEL_STUBS_DIR/ld-stub";
-				LIBTOOL = /usr/bin/true;
+				LIBTOOL = "$BAZEL_STUBS_DIR/ld-stub";
 				OTHER_LDFLAGS = "-fuse-ld=$BAZEL_STUBS_DIR/ld-stub";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -688,7 +688,7 @@
 				DONT_RUN_SWIFT_STDLIB_TOOL = 1;
 				FORCE_X86_SIM = 0;
 				LD = "$BAZEL_STUBS_DIR/ld-stub";
-				LIBTOOL = /usr/bin/true;
+				LIBTOOL = "$BAZEL_STUBS_DIR/ld-stub";
 				OTHER_LDFLAGS = "-fuse-ld=$BAZEL_STUBS_DIR/ld-stub";
 				SDKROOT = iphoneos;
 				SWIFT_EXEC = "$BAZEL_STUBS_DIR/swiftc-stub";
