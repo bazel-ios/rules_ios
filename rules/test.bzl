@@ -1,7 +1,7 @@
 load("@build_bazel_rules_apple//apple:ios.bzl", rules_apple_ios_ui_test = "ios_ui_test", rules_apple_ios_ui_test_suite = "ios_ui_test_suite", rules_apple_ios_unit_test = "ios_unit_test", rules_apple_ios_unit_test_suite = "ios_unit_test_suite")
 load("@bazel_skylib//lib:types.bzl", "types")
 load("//rules:library.bzl", "apple_library")
-load("//rules:plists.bzl", "info_plists_by_setting")
+load("//rules:plists.bzl", "process_infoplists")
 load("//rules/internal:framework_middleman.bzl", "dep_middleman", "framework_middleman")
 
 _IOS_TEST_KWARGS = [
@@ -69,6 +69,14 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
     dep_name = name + ".dep_middleman"
     dep_middleman(name = dep_name, deps = kwargs.get("deps", []) + library.lib_names, testonly = testonly, tags = ["manual"], test_deps = host_args)
 
+    infoplists = process_infoplists(
+        name = name,
+        infoplists = ios_test_kwargs.pop("infoplists", []),
+        infoplists_by_build_setting = infoplists_by_build_setting,
+        xcconfig = kwargs.get("xcconfig", {}),
+        xcconfig_by_build_setting = kwargs.get("xcconfig_by_build_setting", {}),
+    )
+
     if split_name_to_kwargs and len(split_name_to_kwargs) > 0:
         tests = []
         for suffix, split_kwargs in split_name_to_kwargs.items():
@@ -99,8 +107,8 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
                 name = test_name,
                 deps = [dep_name],
                 frameworks = frameworks,
-                infoplists = info_plists_by_setting(name = name, infoplists_by_build_setting = infoplists_by_build_setting, default_infoplists = all_kwargs.pop("infoplists", [])),
                 testonly = testonly,
+                infoplists = select(infoplists),
                 **all_kwargs
             )
         native.test_suite(name = name, tests = tests)
@@ -118,7 +126,7 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
             name = name,
             deps = [dep_name],
             frameworks = frameworks,
-            infoplists = info_plists_by_setting(name = name, infoplists_by_build_setting = infoplists_by_build_setting, default_infoplists = ios_test_kwargs.pop("infoplists", [])),
+            infoplists = select(infoplists),
             **ios_test_kwargs
         )
 

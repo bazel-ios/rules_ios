@@ -27,7 +27,8 @@ _XCCONFIG = {
     "OTHER_SWIFT_FLAGS": [
         "-DNMACRO_H",
     ],
-    "CUSTOM_PLIST_VAR": "CUSTOM_PLIST_VALUE",
+    "CUSTOM_XCCONFIG_1": "VALUE_1",
+    "CUSTOM_XCCONFIG_2": "VALUE_2",
 }
 
 _XCCONFIG_BY_BUILD_SETTING = {
@@ -49,6 +50,7 @@ _XCCONFIG_BY_BUILD_SETTING = {
             "-DMACRO_L",
             "-DNMACRO_M",
         ],
+        "CUSTOM_XCCONFIG_3": "VALUE_3+$(CUSTOM_XCCONFIG_1)",
     },
     "//tests/ios/xcconfig:red": {
         "GCC_PREPROCESSOR_DEFINITIONS": [
@@ -84,6 +86,23 @@ ios_application(
     srcs = ["App/main.m"],
     bundle_id = "com.example.app",
     infoplists = ["Info.plist"],
+    minimum_os_version = "10.0",
+    visibility = ["//visibility:public"],
+    xcconfig = _XCCONFIG,
+    xcconfig_by_build_setting = _XCCONFIG_BY_BUILD_SETTING,
+    deps = [
+        ":WithDefinesObjc",
+        ":WithDefinesSwift",
+    ],
+)
+
+ios_application(
+    name = "AppWithInfoPlistsByBuildSetting",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    infoplists_by_build_setting = {
+        "//tests/ios/xcconfig:blue": ["Info.plist"],
+    },
     minimum_os_version = "10.0",
     visibility = ["//visibility:public"],
     xcconfig = _XCCONFIG,
