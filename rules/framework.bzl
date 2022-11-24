@@ -97,6 +97,7 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
         vfs = library.import_vfsoverlays,
         deps = framework_deps,
         platforms = platforms,
+        private_deps = kwargs.get("private_deps", []),
         library_linkopts = library.linkopts,
         # At the time of writing this is still used in the output path
         # computation
@@ -943,6 +944,14 @@ apple_framework_packaging = rule(
             aspects = [apple_resource_aspect],
             doc =
                 """Objc or Swift rules to be packed by the framework rule
+""",
+        ),
+        "private_deps": attr.label_list(
+            mandatory = False,
+            cfg = apple_common.multi_arch_split,
+            aspects = [apple_resource_aspect],
+            doc =
+                """Objc or Swift private rules to be packed by the framework rule
 """,
         ),
         "data": attr.label_list(
