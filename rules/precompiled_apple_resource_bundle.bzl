@@ -217,6 +217,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         ),
         AppleResourceBundleInfo(),
         apple_common.new_objc_provider(),
+        CcInfo(),
     ]
 
 _precompiled_apple_resource_bundle = rule(
