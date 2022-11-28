@@ -37,7 +37,7 @@ def process_infoplists(name, infoplists, infoplists_by_build_setting, xcconfig, 
     # Substitute the default infoplists
     substituted_infoplists_by_build_setting["//conditions:default"] = [
         substituted_plist(
-            name = "%s.%s.infoplist_substituted" % (name, idx),
+            name = "_%s.%s.info" % (name, idx),
             plist = plist,
             xcconfig = default_xcconfig,
         )
@@ -57,7 +57,7 @@ def process_infoplists(name, infoplists, infoplists_by_build_setting, xcconfig, 
         # Substitute the build settings into the plists for this config_setting
         substituted_infoplists_by_build_setting[config_setting_name] = [
             substituted_plist(
-                name = "%s.%s.%s.infoplist_substituted" % (name, name_suffix, idx),
+                name = "_%s.%s.%s.info" % (name, name_suffix, idx),
                 plist = plist,
                 xcconfig = xcconfig_for_plist,
             )
