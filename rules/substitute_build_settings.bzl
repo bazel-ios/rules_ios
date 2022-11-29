@@ -1,4 +1,3 @@
-
 def _substitute_build_settings_impl(ctx):
     substitutions = {}
     for key in ctx.attr.variables:
