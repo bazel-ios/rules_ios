@@ -561,6 +561,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     tags_manual = tags if "manual" in tags else tags + _MANUAL
     platforms = kwargs.pop("platforms", None)
     private_deps = [] + kwargs.pop("private_deps", [])
+    private_dep_names = []
     lib_names = []
     fetch_default_xcconfig = library_tools["fetch_default_xcconfig"](name, default_xcconfig_name, **kwargs) if default_xcconfig_name else {}
     copts_by_build_setting = copts_by_build_setting_with_defaults(xcconfig, fetch_default_xcconfig, xcconfig_by_build_setting)
@@ -622,7 +623,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             name = linkopts_name,
             linkopts = copts_by_build_setting.linkopts + linkopts,
         )
-        private_deps.append(linkopts_name)
+        private_dep_names.append(linkopts_name)
 
     vendored_deps = []
     import_vfsoverlays = []
@@ -818,7 +819,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         hdrs = objc_hdrs,
         tags = _MANUAL,
         testonly = testonly,
-        deps = deps + private_deps + lib_names + import_vfsoverlays,
+        deps = deps + private_deps + private_dep_names + lib_names + import_vfsoverlays,
     )
 
     framework_vfs_objc_copts = [
@@ -856,7 +857,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         hdrs = [public_hdrs_filegroup],
         tags = _MANUAL,
     )
-    private_deps.append(public_hmap_name)
+    private_dep_names.append(public_hmap_name)
 
     private_hmap_name = name + "_private_hmap"
     private_angled_hmap_name = name + "_private_angled_hmap"
@@ -879,14 +880,14 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         hdrs = [private_hdrs_filegroup],
         tags = _MANUAL,
     )
-    private_deps.append(private_hmap_name)
+    private_dep_names.append(private_hmap_name)
     headermap(
         name = private_angled_hmap_name,
         namespace = namespace,
         hdrs = [private_angled_hdrs_filegroup],
         tags = _MANUAL,
     )
-    private_deps.append(private_angled_hmap_name)
+    private_dep_names.append(private_angled_hmap_name)
 
     ## END HMAP
 
@@ -955,7 +956,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         hdrs = objc_hdrs,
         tags = _MANUAL,
         testonly = testonly,
-        deps = deps + private_deps + lib_names + import_vfsoverlays,
+        deps = deps + private_deps + private_dep_names + lib_names + import_vfsoverlays,
         #enable_framework_vfs = enable_framework_vfs
     )
 
@@ -972,7 +973,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                 "@build_bazel_rules_ios//:virtualize_frameworks": framework_vfs_swift_copts,
                 "//conditions:default": framework_vfs_swift_copts if enable_framework_vfs else [],
             }) + additional_swift_copts,
-            deps = deps + private_deps + lib_names + select({
+            deps = deps + private_deps + private_dep_names + lib_names + select({
                 "@build_bazel_rules_ios//:virtualize_frameworks": [framework_vfs_overlay_name_swift],
                 "//conditions:default": [framework_vfs_overlay_name_swift] if enable_framework_vfs else [],
             }),
@@ -999,7 +1000,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             tags = _MANUAL,
             testonly = testonly,
         )
-        private_deps.append(swift_doublequote_hmap_name)
+        private_dep_names.append(swift_doublequote_hmap_name)
         _append_headermap_copts(swift_doublequote_hmap_name, "-iquote", additional_objc_copts, additional_swift_copts, additional_cc_copts)
 
         # Add generated swift header to header maps for double quote imports
@@ -1012,7 +1013,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             tags = _MANUAL,
             testonly = testonly,
         )
-        private_deps.append(swift_angle_bracket_hmap_name)
+        private_dep_names.append(swift_angle_bracket_hmap_name)
         _append_headermap_copts(swift_angle_bracket_hmap_name, "-I", additional_objc_copts, additional_swift_copts, additional_cc_copts)
 
     # Note: this line is intentionally disabled
@@ -1023,7 +1024,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             srcs = cpp_sources + objc_private_hdrs + objc_non_exported_hdrs,
             hdrs = objc_hdrs,
             copts = copts_by_build_setting.cc_copts + cc_copts + additional_cc_copts,
-            deps = deps + private_deps,
+            deps = deps + private_deps + private_dep_names,
             defines = defines,
             tags = tags_manual,
             testonly = testonly,
@@ -1067,7 +1068,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         non_arc_srcs = objc_non_arc_sources,
         hdrs = objc_hdrs,
         copts = copts_by_build_setting.objc_copts + objc_copts + additional_objc_vfs_copts + additional_objc_copts + index_while_building_objc_copts,
-        deps = deps + private_deps + lib_names + additional_objc_vfs_deps,
+        deps = deps + private_deps + private_dep_names + lib_names + additional_objc_vfs_deps,
         module_map = module_map,
         sdk_dylibs = sdk_dylibs,
         sdk_frameworks = sdk_frameworks,

@@ -1,5 +1,5 @@
 load("@build_bazel_rules_apple//apple:ios.bzl", rules_apple_ios_extension = "ios_extension")
-load("//rules:plists.bzl", "info_plists_by_setting")
+load("//rules:plists.bzl", "process_infoplists")
 load("//rules:force_load_direct_deps.bzl", "force_load_direct_deps")
 load("//rules/internal:framework_middleman.bzl", "dep_middleman", "framework_middleman")
 
@@ -59,16 +59,20 @@ def ios_extension(name, infoplists_by_build_setting = {}, **kwargs):
     )
     deps = [dep_name] + [force_load_name]
 
+    processed_infoplists = process_infoplists(
+        name = name,
+        infoplists = kwargs.pop("infoplists", []),
+        infoplists_by_build_setting = infoplists_by_build_setting,
+        xcconfig = kwargs.get("xcconfig", {}),
+        xcconfig_by_build_setting = kwargs.get("xcconfig_by_build_setting", {}),
+    )
+
     rules_apple_ios_extension(
         name = name,
         deps = deps,
         frameworks = frameworks,
         output_discriminator = None,
-        infoplists = info_plists_by_setting(
-            name = name,
-            infoplists_by_build_setting = infoplists_by_build_setting,
-            default_infoplists = kwargs.pop("infoplists", []),
-        ),
+        infoplists = select(processed_infoplists),
         testonly = testonly,
         **kwargs
     )

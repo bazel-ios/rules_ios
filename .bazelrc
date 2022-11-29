@@ -19,7 +19,6 @@ build --compilation_mode=dbg
 
 # Use 'worker' strategy for swift compilation
 build --strategy=SwiftCompile=worker
-build --experimental_worker_allow_json_protocol
 
 # This flips enable_global_index_store - see docs/index_while_building.md for a
 # detailed summary

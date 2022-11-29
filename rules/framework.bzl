@@ -3,7 +3,7 @@
 load("//rules/framework:vfs_overlay.bzl", "VFSOverlayInfo", "make_vfsoverlay")
 load("//rules:features.bzl", "feature_names")
 load("//rules:library.bzl", "PrivateHeadersInfo", "apple_library")
-load("//rules:plists.bzl", "info_plists_by_setting")
+load("//rules:plists.bzl", "process_infoplists")
 load("//rules:providers.bzl", "AvoidDepsInfo", "FrameworkInfo")
 load("//rules:transition_support.bzl", "transition_support")
 load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
@@ -55,11 +55,13 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
     default_infoplists = kwargs.pop("infoplists", [])
     infoplists = None
     if len(infoplists_by_build_setting.values()) > 0 or len(default_infoplists) > 0:
-        infoplists = info_plists_by_setting(
+        infoplists = select(process_infoplists(
             name = name,
+            infoplists = default_infoplists,
             infoplists_by_build_setting = infoplists_by_build_setting,
-            default_infoplists = default_infoplists,
-        )
+            xcconfig = kwargs.get("xcconfig", {}),
+            xcconfig_by_build_setting = kwargs.get("xcconfig_by_build_setting", {}),
+        ))
     environment_plist = kwargs.pop("environment_plist", select({
         "@build_bazel_rules_ios//rules/apple_platform:ios": "@build_bazel_rules_apple//apple/internal:environment_plist_ios",
         "@build_bazel_rules_ios//rules/apple_platform:macos": "@build_bazel_rules_apple//apple/internal:environment_plist_macos",
@@ -95,6 +97,7 @@ def apple_framework(name, apple_library = apple_library, **kwargs):
         vfs = library.import_vfsoverlays,
         deps = framework_deps,
         platforms = platforms,
+        private_deps = kwargs.get("private_deps", []),
         library_linkopts = library.linkopts,
         # At the time of writing this is still used in the output path
         # computation
@@ -953,6 +956,14 @@ apple_framework_packaging = rule(
             aspects = [apple_resource_aspect],
             doc =
                 """Objc or Swift rules to be packed by the framework rule
+""",
+        ),
+        "private_deps": attr.label_list(
+            mandatory = False,
+            cfg = apple_common.multi_arch_split,
+            aspects = [apple_resource_aspect],
+            doc =
+                """Objc or Swift private rules to be packed by the framework rule
 """,
         ),
         "data": attr.label_list(
