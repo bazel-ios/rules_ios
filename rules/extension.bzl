@@ -63,8 +63,8 @@ def ios_extension(name, infoplists_by_build_setting = {}, **kwargs):
         name = name,
         infoplists = kwargs.pop("infoplists", []),
         infoplists_by_build_setting = infoplists_by_build_setting,
-        xcconfig = kwargs.get("xcconfig", {}),
-        xcconfig_by_build_setting = kwargs.get("xcconfig_by_build_setting", {}),
+        xcconfig = kwargs.pop("xcconfig", {}),
+        xcconfig_by_build_setting = kwargs.pop("xcconfig_by_build_setting", {}),
     )
 
     rules_apple_ios_extension(
