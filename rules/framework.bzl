@@ -410,7 +410,7 @@ def _get_direct_public_headers(provider, dep):
             return []
         return dep[provider].compilation_context.direct_public_headers
     elif provider == apple_common.Objc:
-        return dep[provider].direct_headers
+        return getattr(dep[provider], "direct_headers", [])
     else:
         fail("Unknown provider " + provider + " only CcInfo and Objc supported")
 

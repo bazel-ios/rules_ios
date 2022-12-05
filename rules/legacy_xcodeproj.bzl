@@ -235,7 +235,7 @@ def _xcodeproj_aspect_impl(target, ctx):
     if AppleBundleInfo in target:
         swift_objc_header_path = None
         if SwiftInfo in target:
-            for h in target[apple_common.Objc].direct_headers:
+            for h in getattr(target[apple_common.Objc], "direct_headers", []):
                 if h.path.endswith("-Swift.h"):
                     swift_objc_header_path = h.path
 
