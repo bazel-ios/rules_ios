@@ -162,15 +162,7 @@ def _framework_packaging(ctx, action, inputs, outputs, manifest = None):
     if action in ctx.attr.skip_packaging:
         return []
     action_inputs = [manifest] + inputs if manifest else inputs
-
-    # Use the input to determine whether to use `declare_directory` or `declare_file`
-    # since it'll need to match in the downstream symlink action.
-    outputs_by_index = {index: outputs[index] for index in range(len(outputs))}
-    outputs = [
-        ctx.actions.declare_directory(output) if inputs[index].is_directory else ctx.actions.declare_file(output)
-        for (index, output) in outputs_by_index.items()
-    ]
-
+    outputs = [ctx.actions.declare_file(f) for f in outputs]
     framework_name = ctx.attr.framework_name
     framework_dir = _find_framework_dir(outputs)
     args = ctx.actions.args().use_param_file("@%s").set_param_file_format("multiline")
