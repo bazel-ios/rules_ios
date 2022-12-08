@@ -155,12 +155,12 @@ def _framework_packaging(ctx, action, inputs, outputs, manifest = None):
     if inputs == [None]:
         return []
 
-    if action in ctx.attr.skip_packaging:
-        return []
-
     virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
     if virtualize_frameworks:
         return inputs
+
+    if action in ctx.attr.skip_packaging:
+        return []
 
     action_inputs = [manifest] + inputs if manifest else inputs
     outputs = [ctx.actions.declare_file(f) for f in outputs]
@@ -276,6 +276,8 @@ def _get_framework_files(ctx, deps):
     swiftinterface_in = None
     swiftdoc_in = None
     swiftdoc_out = None
+    infoplist_in = None
+    infoplist_out = None
 
     # collect files
     for dep in deps:
@@ -367,6 +369,14 @@ def _get_framework_files(ctx, deps):
     else:
         framework_manifest = None
 
+    if ctx.attr.link_dynamic != True:
+        infoplist_in = _merge_root_infoplists(ctx)
+        infoplist_out = infoplist_in
+        infoplist_out = [paths.join(
+            framework_dir,
+            "Info.plist",
+        )]
+
     # Package each part of the framework separately,
     # so inputs that do not depend on compilation
     # are available before those that do,
@@ -382,10 +392,12 @@ def _get_framework_files(ctx, deps):
     swiftmodule_out = _framework_packaging(ctx, "swiftmodule", [swiftmodule_in], swiftmodule_out, framework_manifest)
     swiftinterface_out = _framework_packaging(ctx, "swiftinterface", [swiftinterface_in], swiftinterface_out, framework_manifest)
     swiftdoc_out = _framework_packaging(ctx, "swiftdoc", [swiftdoc_in], swiftdoc_out, framework_manifest)
+    infoplist_out = _framework_packaging(ctx, "plist", [infoplist_in], infoplist_out, framework_manifest)
 
     outputs = struct(
         binary = binary_out,
         headers = header_out,
+        infoplist = infoplist_out,
         private_headers = private_header_out,
         modulemap = modulemap_out,
         swiftmodule = swiftmodule_out,
@@ -788,15 +800,6 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
 
 def _bundle_static_framework(ctx, is_extension_safe, outputs):
     """Returns bundle info for a static framework commonly used intra-build"""
-    infoplist = _merge_root_infoplists(ctx)
-    plist_out = infoplist
-    framework_dir = "%s/%s.%s" % (ctx.attr.name, ctx.attr.framework_name, ctx.attr.bundle_extension)
-    plist_out = [paths.join(
-        framework_dir,
-        "Info.plist",
-    )]
-    plist_out = _framework_packaging(ctx, "plist", [infoplist], plist_out, None)
-
     current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
 
     partial_output = partial.call(
@@ -817,7 +820,7 @@ def _bundle_static_framework(ctx, is_extension_safe, outputs):
             bundle_name = ctx.attr.framework_name,
             bundle_extension = ctx.attr.bundle_extension,
             entitlements = None,
-            infoplist = plist_out,
+            infoplist = outputs.infoplist,
             minimum_os_version = str(current_apple_platform.target_os_version),
             minimum_deployment_os_version = ctx.attr.minimum_deployment_os_version,
             platform_type = str(current_apple_platform.platform.platform_type),
@@ -911,7 +914,6 @@ def _apple_framework_packaging_impl(ctx):
     else:
         bundle_outs = _bundle_static_framework(ctx, is_extension_safe = is_extension_safe, outputs = outputs)
         avoid_deps_info = AvoidDepsInfo(libraries = depset(avoid_deps).to_list(), link_dynamic = False)
-        plist_out = bundle_outs.providers[0].infoplist
     swift_info = _get_merged_swift_info(ctx, framework_files, transitive_deps)
 
     # Build out the default info provider
@@ -921,8 +923,7 @@ def _apple_framework_packaging_impl(ctx):
     out_files.extend(outputs.headers)
     out_files.extend(outputs.private_headers)
     out_files.extend(outputs.modulemap)
-    if plist_out != None:
-        out_files.extend(plist_out)
+    out_files.extend(outputs.infoplist)
     default_info = DefaultInfo(files = depset(out_files + bundle_outs.files.to_list()))
 
     objc_provider = objc_provider_utils.merge_objc_providers(
