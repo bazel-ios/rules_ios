@@ -366,16 +366,15 @@ def _get_framework_files(ctx, deps):
     virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
     if not virtualize_frameworks:
         framework_manifest = ctx.actions.declare_file(framework_dir + ".manifest")
+        if ctx.attr.link_dynamic != True:
+            infoplist_in = _merge_root_infoplists(ctx)
+            infoplist_out = infoplist_in
+            infoplist_out = [paths.join(
+                framework_dir,
+                "Info.plist",
+            )]
     else:
         framework_manifest = None
-
-    if ctx.attr.link_dynamic != True:
-        infoplist_in = _merge_root_infoplists(ctx)
-        infoplist_out = infoplist_in
-        infoplist_out = [paths.join(
-            framework_dir,
-            "Info.plist",
-        )]
 
     # Package each part of the framework separately,
     # so inputs that do not depend on compilation
