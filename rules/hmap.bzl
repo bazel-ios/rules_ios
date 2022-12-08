@@ -55,7 +55,7 @@ def _make_headermap_impl(ctx):
 
     for provider in ctx.attr.direct_hdr_providers:
         if apple_common.Objc in provider:
-            hdrs_lists.append(provider[apple_common.Objc].direct_headers)
+            hdrs_lists.append(getattr(provider[apple_common.Objc], "direct_headers", []))
         if CcInfo in provider:
             hdrs_lists.append(provider[CcInfo].compilation_context.direct_headers)
 

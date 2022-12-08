@@ -109,38 +109,25 @@ def _get_framework_info_providers(ctx, old_cc_info, old_objc_provider):
 
 def _apple_framework_import_modulemap_impl(ctx):
     legacy_target = ctx.attr.legacy_target
-    old_objc_provider = legacy_target[apple_common.Objc]
+    objc_provider = legacy_target[apple_common.Objc]
     old_cc_info = legacy_target[CcInfo]
 
     # Merge providers
-    objc_provider_fields = {
-        "providers": [old_objc_provider],
-        # Adding the module_map to the headers.
-        # This "hack" is just a way to propagate the module map. swift_rules has a field in its provider
-        # called swiftc_inputs where you can pass extra dependencies to the compiler. Unfortunately
-        # the objc provider has no such field. The "hack" is to pass the module map as a header so that
-        # it makes it to the list of dependencies. Since it doesn't end in .h it gets ignored but it's
-        # still propagated as a dependency. This "hack" is based on:
-        # a) https://github.com/bazelbuild/rules_apple/blob/313eeb838497e230f01a7367ae4555aaf0cac62e/apple/internal/apple_framework_import.bzl#L98
-        # b) https://github.com/bazel-ios/rules_ios/blob/1755c694f8d5cc1ed256bba7ccf122a3fbc4addf/rules/framework.bzl#L247
-        "header": old_objc_provider.module_map,
-    }
-    new_objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
     new_cc_info = cc_common.merge_cc_infos(
         cc_infos = [
             old_cc_info,
-            CcInfo(compilation_context = cc_common.create_compilation_context(headers = old_objc_provider.module_map)),
+            CcInfo(compilation_context = cc_common.create_compilation_context(headers = objc_provider.module_map)),
         ],
     )
 
-    additional_providers = _get_framework_info_providers(ctx, old_cc_info, old_objc_provider)
+    additional_providers = _get_framework_info_providers(ctx, old_cc_info, objc_provider)
 
     # Seems that there is no way to iterate on the existing providers, so what is possible instead
     # is to list here the keys to all of them (you can see the keys for the existing providers of a
     # target by just printing the target)
     # For more information refer to https://groups.google.com/forum/#!topic/bazel-discuss/4KkflTjmUyk
     other_provider_keys = [AppleFrameworkImportInfo, SwiftUsageInfo, apple_common.AppleDynamicFramework, OutputGroupInfo, DefaultInfo]
-    return additional_providers + [new_objc_provider, new_cc_info] + \
+    return additional_providers + [objc_provider, new_cc_info] + \
            [legacy_target[provider_key] for provider_key in other_provider_keys if provider_key in legacy_target]
 
 _apple_framework_import_modulemap = rule(

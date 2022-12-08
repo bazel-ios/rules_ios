@@ -1,5 +1,3 @@
-load("@bazel_skylib//lib:paths.bzl", "paths")
-
 def _substitute_build_settings_impl(ctx):
     substitutions = {}
     for key in ctx.attr.variables:
@@ -16,8 +14,8 @@ def _substitute_build_settings_impl(ctx):
             if key in sub_value:
                 substitutions[sub_key] = sub_value.replace(key, value)
 
-    basename, extension = paths.split_extension(ctx.file.source.basename)
-    output = ctx.actions.declare_file("%s.substituted-%s.%s" % (basename, ctx.label.name, extension))
+    extension = ctx.file.source.extension
+    output = ctx.actions.declare_file("%s.%s" % (ctx.label.name, extension))
     ctx.actions.expand_template(
         template = ctx.file.source,
         output = output,

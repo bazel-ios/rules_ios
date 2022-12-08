@@ -326,7 +326,7 @@ def _get_framework_files(ctx, deps):
         for provider in [CcInfo, apple_common.Objc]:
             if provider in dep:
                 for hdr in _get_direct_public_headers(provider, dep):
-                    if hdr.path.endswith((".h", ".hh", ".hpp")):
+                    if not hdr.is_directory and hdr.path.endswith((".h", ".hh", ".hpp")):
                         has_header = True
                         header_in.append(hdr)
                         destination = paths.join(framework_dir, "Headers", hdr.basename)
@@ -423,7 +423,7 @@ def _get_direct_public_headers(provider, dep):
             return []
         return dep[provider].compilation_context.direct_public_headers
     elif provider == apple_common.Objc:
-        return dep[provider].direct_headers
+        return getattr(dep[provider], "direct_headers", [])
     else:
         fail("Unknown provider " + provider + " only CcInfo and Objc supported")
 

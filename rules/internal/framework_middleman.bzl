@@ -14,6 +14,10 @@ load(
     "resources",
 )
 load(
+    "@build_bazel_rules_apple//apple/internal:apple_product_type.bzl",
+    "apple_product_type",
+)
+load(
     "//rules:providers.bzl",
     "AvoidDepsInfo",
 )
@@ -80,7 +84,7 @@ def _framework_middleman(ctx):
             archive = None,
             archive_root = None,
             binary = None,
-
+            product_type = ctx.attr.product_type,
             # These arguments are unused - however, put them here incase that
             # somehow changes to make it easier to debug
             bundle_id = "com.bazel_build_rules_ios.unused",
@@ -137,6 +141,13 @@ framework_middleman = rule(
             mandatory = False,
             doc =
                 """Internal - currently rules_ios the dict `platforms`
+""",
+        ),
+        "product_type": attr.string(
+            mandatory = False,
+            default = apple_product_type.framework,
+            doc =
+                """Internal - The product type of the framework
 """,
         ),
     },
