@@ -906,7 +906,6 @@ def _apple_framework_packaging_impl(ctx):
                 avoid_deps.append(dep)
 
     # If we link dynamic - then package it as dynamic
-    plist_out = None
     if ctx.attr.link_dynamic:
         bundle_outs = _bundle_dynamic_framework(ctx, is_extension_safe = is_extension_safe, avoid_deps = avoid_deps)
         avoid_deps_info = AvoidDepsInfo(libraries = depset(avoid_deps + ctx.attr.deps).to_list(), link_dynamic = True)
