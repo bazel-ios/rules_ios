@@ -108,7 +108,7 @@ def main():
             lambda args: _merge_binaries(args.framework_root, args.framework_name, args.inputs),
         "modulemap":
             lambda args: _copy_modulemap(args.framework_root, args.input()),
-        "plist":
+        "infoplist":
             lambda args: _cp(args.input(), args.output()),
         "swiftmodule":
             lambda args: _cp(args.input(), args.output()),

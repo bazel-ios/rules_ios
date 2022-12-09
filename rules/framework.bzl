@@ -391,7 +391,7 @@ def _get_framework_files(ctx, deps):
     swiftmodule_out = _framework_packaging(ctx, "swiftmodule", [swiftmodule_in], swiftmodule_out, framework_manifest)
     swiftinterface_out = _framework_packaging(ctx, "swiftinterface", [swiftinterface_in], swiftinterface_out, framework_manifest)
     swiftdoc_out = _framework_packaging(ctx, "swiftdoc", [swiftdoc_in], swiftdoc_out, framework_manifest)
-    infoplist_out = _framework_packaging(ctx, "plist", [infoplist_in], infoplist_out, framework_manifest)
+    infoplist_out = _framework_packaging(ctx, "infoplist", [infoplist_in], infoplist_out, framework_manifest)
 
     outputs = struct(
         binary = binary_out,
@@ -1022,7 +1022,7 @@ Valid values are:
 - "binary"
 - "modulemap"
 - "header"
-- "plist"
+- "infoplist"
 - "private_header"
 - "swiftmodule"
 - "swiftdoc"

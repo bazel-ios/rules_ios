@@ -6,7 +6,7 @@ apple_framework(
     srcs = glob(["*.swift"]),
     infoplists = ["//rules/test_host_app:Info.plist"],
     platforms = {"ios": "10.0"},
-    skip_packaging = ["plist"],
+    skip_packaging = ["infoplist"],
     visibility = ["//visibility:public"],
     deps = ["//tests/ios/frameworks/strict-deps/b"],
 )
