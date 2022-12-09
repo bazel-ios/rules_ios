@@ -77,6 +77,10 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
         xcconfig_by_build_setting = kwargs.get("xcconfig_by_build_setting", {}),
     )
 
+    ## We can't just put this in _IOS_TEST_KWARGS as this is also used in the kwargs
+    ## of apple_library.
+    module_name = kwargs.get("module_name")
+
     if split_name_to_kwargs and len(split_name_to_kwargs) > 0:
         tests = []
         for suffix, split_kwargs in split_name_to_kwargs.items():
@@ -105,6 +109,7 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
             tests.append(test_name)
             split_rule(
                 name = test_name,
+                module_name = module_name,
                 deps = [dep_name],
                 frameworks = frameworks,
                 testonly = testonly,
@@ -124,6 +129,7 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
 
         rule(
             name = name,
+            module_name = module_name,
             deps = [dep_name],
             frameworks = frameworks,
             infoplists = select(infoplists),

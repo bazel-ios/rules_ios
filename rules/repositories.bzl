@@ -65,6 +65,8 @@ def rules_ios_dependencies():
         ref = "f99c3cb7e472ecd68b81ea8dab97609a4b75db06",
         project = "bazelbuild",
         repo = "rules_apple",
+        patch_args = ["-p1"],
+        patches = ["@build_bazel_rules_ios//patches:rules_apple_module_name.patch"],
         sha256 = "5e82a98a591efda772a5ee96ed17bcad38338aafeba6055daab04a5d6c13ea50",
     )
 
@@ -149,3 +151,15 @@ swift_binary(
         )
 
     xcbuildkit_dependencies()
+
+    ## We want to explcitily override this dependency to add our own patches to it. This will be updated when rules_apple is updated.
+    http_archive(
+        name = "xctestrunner",
+        urls = [
+            "https://github.com/google/xctestrunner/archive/e0bc4b29976cf000794e9e796cb8a584b0c443bc.tar.gz",
+        ],
+        patch_args = ["-p1"],
+        patches = ["@build_bazel_rules_ios//patches:xctestrunner_module_name.patch"],
+        strip_prefix = "xctestrunner-e0bc4b29976cf000794e9e796cb8a584b0c443bc",
+        sha256 = "6cd157ae7523d024eeb7ec05811979e9c191597f061a80244041374e10ebca13",
+    )

@@ -1,0 +1,147 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Derek Ostrander <derko@squareup.com>
+Date: Fri, 9 Dec 2022 13:34:25 -0500
+Subject: =?UTF-8?q?Add=20optional=20parameter=20of=20product=5Fmodule=5Fna?=
+ =?UTF-8?q?me=0AThis=20will=20be=20forwarded=20into=20the=20xctestrun=20fi?=
+ =?UTF-8?q?le=20in=20the=20test=20name=20doesn't=20accurately=20reflect=20?=
+ =?UTF-8?q?the=20module=20underneath?=
+
+
+diff --git a/test_runner/ios_test_runner.py b/test_runner/ios_test_runner.py
+index c85800d..b4b67a3 100644
+--- a/test_runner/ios_test_runner.py
++++ b/test_runner/ios_test_runner.py
+@@ -117,7 +117,8 @@ def _AddPrepareSubParser(subparsers):
+           test_bundle=args.test_bundle_path,
+           xctestrun_file_path=args.xctestrun,
+           test_type=args.test_type,
+-          signing_options=_GetJson(args.signing_options_json_path))
++          signing_options=_GetJson(args.signing_options_json_path),
++          product_module_name=args.product_module_name)
+       session.SetLaunchOptions(_GetJson(args.launch_options_json_path))
+ 
+   test_parser = subparsers.add_parser(
+@@ -153,7 +154,8 @@ def _AddTestSubParser(subparsers):
+           test_bundle=args.test_bundle_path,
+           xctestrun_file_path=args.xctestrun,
+           test_type=args.test_type,
+-          signing_options=_GetJson(args.signing_options_json_path))
++          signing_options=_GetJson(args.signing_options_json_path),
++          product_module_name=args.product_module_name)
+       session.SetLaunchOptions(_GetJson(args.launch_options_json_path))
+       return session.RunTest(args.id)
+ 
+@@ -172,6 +174,11 @@ def _AddTestSubParser(subparsers):
+       help='The platform of the device. The value can be ios_device or '
+            'ios_simulator.'
+   )
++  optional_arguments.add_argument(
++      '--product_module_name',
++      help='The product module name that will be set in the xctestrun file.'
++  )
++
+   test_parser.set_defaults(func=_Test)
+ 
+ 
+@@ -197,7 +204,8 @@ def _AddSimulatorTestSubParser(subparsers):
+             test_bundle=args.test_bundle_path,
+             xctestrun_file_path=args.xctestrun,
+             test_type=args.test_type,
+-            signing_options=_GetJson(args.signing_options_json_path))
++            signing_options=_GetJson(args.signing_options_json_path),
++          product_module_name=args.product_module_name)
+         session.SetLaunchOptions(_GetJson(args.launch_options_json_path))
+         if not hostless:
+           try:
+diff --git a/test_runner/xctest_session.py b/test_runner/xctest_session.py
+index 1e879db..1e08e70 100644
+--- a/test_runner/xctest_session.py
++++ b/test_runner/xctest_session.py
+@@ -78,7 +78,8 @@ class XctestSession(object):
+   # TODO(albertdai): Support bundle id as the value of app_under_test and
+   # test_bundle.
+   def Prepare(self, app_under_test=None, test_bundle=None,
+-              xctestrun_file_path=None, test_type=None, signing_options=None):
++              xctestrun_file_path=None, test_type=None, 
++              signing_options=None, product_module_name=None):
+     """Prepares the test session.
+ 
+     If xctestrun_file is not provided, will use app under test and test bundle
+@@ -94,6 +95,8 @@ class XctestSession(object):
+       test_type: ios_constants.TestType. The type of test bundle.
+       signing_options: dict, the signing app options. See
+           ios_constants.SIGNING_OPTIONS_JSON_HELP for details.
++      product_module_name: string, the name of the module that is being tested.
++          This will be forwarded into the xctestrun file.
+ 
+     Raises:
+       ios_errors.IllegalArgumentError:
+@@ -141,7 +144,7 @@ class XctestSession(object):
+       if test_type != ios_constants.TestType.LOGIC_TEST:
+         xctestrun_factory = xctestrun.XctestRunFactory(
+             app_under_test_dir, test_bundle_dir, self._sdk, self._device_arch,
+-            test_type, signing_options, self._work_dir)
++            test_type, signing_options, self._work_dir, product_module_name)
+         self._xctestrun_obj = xctestrun_factory.GenerateXctestrun()
+       else:
+         self._logic_test_bundle = test_bundle_dir
+diff --git a/test_runner/xctestrun.py b/test_runner/xctestrun.py
+index 4390489..f1c2fe1 100644
+--- a/test_runner/xctestrun.py
++++ b/test_runner/xctestrun.py
+@@ -275,7 +275,8 @@ class XctestRunFactory(object):
+                sdk=ios_constants.SDK.IPHONESIMULATOR,
+                device_arch=ios_constants.ARCH.X86_64,
+                test_type=ios_constants.TestType.XCUITEST,
+-               signing_options=None, work_dir=None):
++               signing_options=None, work_dir=None,
++               product_module_name=None):
+     """Initializes the XctestRun object.
+ 
+     If arg work_dir is provided, the original app under test file and test
+@@ -292,6 +293,7 @@ class XctestRunFactory(object):
+       signing_options: dict, the signing app options. See
+           ios_constants.SIGNING_OPTIONS_JSON_HELP for details.
+       work_dir: string, work directory which contains run files.
++      product_module_name: string, forwarded into the xctestrun.
+ 
+     Raises:
+       IllegalArgumentError: when the sdk or test type is not supported.
+@@ -302,6 +304,7 @@ class XctestRunFactory(object):
+     self._sdk = sdk
+     self._device_arch = device_arch
+     self._test_type = test_type
++    self._product_module_name = product_module_name
+     if self._sdk == ios_constants.SDK.IPHONEOS:
+       self._on_device = True
+       self._signing_options = signing_options
+@@ -499,7 +502,7 @@ class XctestRunFactory(object):
+         'DYLD_LIBRARY_PATH': '__TESTROOT__:%s/usr/lib' % developer_path
+     }
+     self._xctestrun_dict = {
+-        'ProductModuleName': self._test_name.replace("-", "_"),
++        'ProductModuleName': self._product_module_name or self._test_name.replace("-", "_"),
+         'IsUITestBundle': True,
+         'SystemAttachmentLifetime': 'keepNever',
+         'TestBundlePath': self._test_bundle_dir,
+@@ -666,7 +669,7 @@ class XctestRunFactory(object):
+         'DYLD_LIBRARY_PATH': '__TESTROOT__:%s/usr/lib:' % developer_path
+     }
+     self._xctestrun_dict = {
+-        'ProductModuleName': self._test_name.replace("-", "_"),
++        'ProductModuleName': self._product_module_name or self._test_name.replace("-", "_"),
+         'TestHostPath': self._app_under_test_dir,
+         'TestBundlePath': self._test_bundle_dir,
+         'IsAppHostedTestBundle': True,
+@@ -687,7 +690,7 @@ class XctestRunFactory(object):
+         'DYLD_LIBRARY_PATH': dyld_framework_path
+     }
+     self._xctestrun_dict = {
+-        'ProductModuleName': self._test_name.replace("-", "_"),
++        'ProductModuleName': self._product_module_name or self._test_name.replace("-", "_"),
+         'TestBundlePath': self._test_bundle_dir,
+         'TestHostPath': xcode_info_util.GetXctestToolPath(self._sdk),
+         'TestingEnvironmentVariables': test_envs,
+-- 
+2.36.1
+

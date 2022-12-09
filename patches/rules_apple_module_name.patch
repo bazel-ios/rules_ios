@@ -1,0 +1,84 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Derek Ostrander <derko@squareup.com>
+Date: Fri, 9 Dec 2022 13:55:16 -0500
+Subject: Add product module name as an optional arg for the test rule
+
+If there are modules under the tests that are named differently then the target itself it will cause issues with the xctestrun file. Specifically using Swift the test_filters do not work unless the module names line up with the test target name. Guessing because Swift's full class names are `MODULE.CLASS` so they do the magic under the hood.
+
+diff --git a/apple/internal/rule_factory.bzl b/apple/internal/rule_factory.bzl
+index 33d4312f..b196a577 100644
+--- a/apple/internal/rule_factory.bzl
++++ b/apple/internal/rule_factory.bzl
+@@ -205,6 +205,12 @@ AppleTestRunnerInfo provider.
+     "test_filter": attr.string(
+         doc = """
+ Test filter string that will be passed into the test runner to select which tests will run.
++""",
++        default = "",
++    ),
++    "module_name": attr.string(
++        doc = """
++Module name of the underlying test to be run. 
+ """,
+         default = "",
+     ),
+diff --git a/apple/internal/testing/apple_test_rule_support.bzl b/apple/internal/testing/apple_test_rule_support.bzl
+index 8392862a..49ff1f65 100644
+--- a/apple/internal/testing/apple_test_rule_support.bzl
++++ b/apple/internal/testing/apple_test_rule_support.bzl
+@@ -102,7 +102,7 @@ This aspect propagates a `CoverageFilesInfo` provider.
+     implementation = _coverage_files_aspect_impl,
+ )
+ 
+-def _get_template_substitutions(test_type, test_bundle, test_environment, test_host = None, test_filter = None):
++def _get_template_substitutions(test_type, test_bundle, test_environment, test_host = None, test_filter = None, product_module_name = None):
+     """Dictionary with the substitutions to be applied to the template script."""
+     subs = {}
+ 
+@@ -114,6 +114,7 @@ def _get_template_substitutions(test_type, test_bundle, test_environment, test_h
+     subs["test_type"] = test_type.upper()
+     subs["test_env"] = ",".join([k + "=" + v for (k, v) in test_environment.items()])
+     subs["test_filter"] = test_filter or ""
++    subs["product_module_name"] = product_module_name or ""
+ 
+     return {"%(" + k + ")s": subs[k] for k in subs}
+ 
+@@ -176,6 +177,7 @@ def _apple_test_rule_impl(ctx, test_type):
+             test_environment,
+             test_host = test_host_archive,
+             test_filter = ctx.attr.test_filter,
++            product_module_name = ctx.attr.module_name,
+         ),
+         is_executable = True,
+     )
+diff --git a/apple/testing/default_runner/ios_test_runner.template.sh b/apple/testing/default_runner/ios_test_runner.template.sh
+index 0804007c..0fbf190f 100644
+--- a/apple/testing/default_runner/ios_test_runner.template.sh
++++ b/apple/testing/default_runner/ios_test_runner.template.sh
+@@ -52,6 +52,11 @@ TMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/test_runner_work_dir.XXXXXX")"
+ trap 'rm -rf "${TMP_DIR}"' ERR EXIT
+ runner_flags+=("--work_dir=${TMP_DIR}")
+ 
++PRODUCT_MODULE_NAME="%(product_module_name)s"
++if [[ -n "$PRODUCT_MODULE_NAME" ]]; then
++  runner_flags+=("--product_module_name=${PRODUCT_MODULE_NAME}")
++fi
++
+ TEST_BUNDLE_PATH="%(test_bundle_path)s"
+ 
+ if [[ "$TEST_BUNDLE_PATH" == *.xctest ]]; then
+diff --git a/test/ios_test_runner_unit_test.sh b/test/ios_test_runner_unit_test.sh
+index 64002d38..55fb26ee 100755
+--- a/test/ios_test_runner_unit_test.sh
++++ b/test/ios_test_runner_unit_test.sh
+@@ -201,6 +201,7 @@ objc_library(
+ 
+ ios_unit_test(
+     name = "PassingUnitTest",
++    module_name = "pass_unit_test_lib",
+     infoplists = ["PassUnitTest-Info.plist"],
+     deps = [":pass_unit_test_lib"],
+     minimum_os_version = "9.0",
+-- 
+2.36.1
+
