@@ -21,7 +21,7 @@ PrivateHeadersInfo = provider(
     },
 )
 
-GLOBAL_INDEX_STORE_PATH = "bazel-out/rules_ios_global_index_store.indexstore"
+GLOBAL_INDEX_STORE_PATH = "bazel-out/_global_index_store"
 
 _MANUAL = ["manual"]
 
