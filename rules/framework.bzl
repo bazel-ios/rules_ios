@@ -161,7 +161,6 @@ def _framework_packaging(ctx, action, inputs, outputs, manifest = None):
 
     if action in ctx.attr.skip_packaging:
         return []
-
     action_inputs = [manifest] + inputs if manifest else inputs
     outputs = [ctx.actions.declare_file(f) for f in outputs]
     framework_name = ctx.attr.framework_name
@@ -366,9 +365,8 @@ def _get_framework_files(ctx, deps):
     virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
     if not virtualize_frameworks:
         framework_manifest = ctx.actions.declare_file(framework_dir + ".manifest")
-        if ctx.attr.link_dynamic != True:
+        if not ctx.attr.link_dynamic:
             infoplist_in = _merge_root_infoplists(ctx)
-            infoplist_out = infoplist_in
             infoplist_out = [paths.join(
                 framework_dir,
                 "Info.plist",
