@@ -20,6 +20,8 @@ def _maybe(repo_rule, name, **kwargs):
     """
     if not native.existing_rule(name):
         repo_rule(name = name, **kwargs)
+        return True
+    return False
 
 def github_repo(name, project, repo, ref, sha256 = None, **kwargs):
     """Downloads a repository from GitHub as a tarball.
@@ -47,10 +49,36 @@ def github_repo(name, project, repo, ref, sha256 = None, **kwargs):
         **kwargs
     )
 
+
+def _rules_ios_cfg_impl(ctx):
+    root_build_file = """
+       optimized_rules_apple={optimized_rules_apple}
+       optimized_rules_swift={optimized_rules_swift}
+    """.format(
+       optimized_rules_apple=ctx.attr.optimized_rules_apple,
+       optimized_rules_swift=ctx.attr.optimized_rules_swift,
+    )
+    ctx.file("BUILD.bazel", root_build_file, False)
+    ctx.file("WORKSPACE", "workspace(name = \"%s\")" % ctx.name, False)
+
+
+# In the loading phase we want to switch on things you wouldn't easily detect
+# This provides a mechanism you can call
+# load(@rules_ios_cfg, optimized_rules_swift)
+# And then do various stuff in the loading phase
+rules_ios_cfg = repository_rule(
+    implementation = _rules_ios_cfg_impl,
+    local = True,
+    attrs = {
+        "optimized_rules_apple": attr.bool(mandatory = True),
+        "optimized_rules_swift": attr.bool(mandatory = True),
+    },
+)
+
 def rules_ios_dependencies():
     """Fetches repositories that are dependencies of the `rules_apple` workspace.
     """
-    _maybe(
+    optimized_rules_swift = _maybe(
         github_repo,
         name = "build_bazel_rules_swift",
         project = "bazel-ios",
@@ -59,13 +87,19 @@ def rules_ios_dependencies():
         sha256 = "9f13f4be00dfd6a37d9338e49ebbc337445361134a4bcc668658b96fdbdeaae4",
     )
 
-    _maybe(
+    optimized_rules_apple = _maybe(
         github_repo,
         name = "build_bazel_rules_apple",
         ref = "f99c3cb7e472ecd68b81ea8dab97609a4b75db06",
         project = "bazelbuild",
         repo = "rules_apple",
         sha256 = "5e82a98a591efda772a5ee96ed17bcad38338aafeba6055daab04a5d6c13ea50",
+    )
+
+    rules_ios_cfg(
+        name = "rules_ios_cfg",
+        optimized_rules_apple=optimized_rules_apple,
+        optimized_rules_swift=optimized_rules_swift
     )
 
     _maybe(
