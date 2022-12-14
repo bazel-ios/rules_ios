@@ -51,14 +51,15 @@ def github_repo(name, project, repo, ref, sha256 = None, **kwargs):
 
 
 def _rules_ios_cfg_impl(ctx):
-    root_build_file = """
+    root_cfg_file = """
        optimized_rules_apple={optimized_rules_apple}
        optimized_rules_swift={optimized_rules_swift}
     """.format(
        optimized_rules_apple=ctx.attr.optimized_rules_apple,
        optimized_rules_swift=ctx.attr.optimized_rules_swift,
     )
-    ctx.file("BUILD.bazel", root_build_file, False)
+    ctx.file("config.bzl", root_cfg_file, False)
+    ctx.file("BUILD.bazel", "", False)
     ctx.file("WORKSPACE", "workspace(name = \"%s\")" % ctx.name, False)
 
 
