@@ -568,6 +568,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     enable_framework_vfs = kwargs.pop("enable_framework_vfs", False) or namespace_is_module_name
     defines = kwargs.pop("defines", [])
     testonly = kwargs.pop("testonly", False)
+    features = kwargs.pop("features", [])
 
     for (k, v) in {"momc_copts": momc_copts, "mapc_copts": mapc_copts, "ibtool_copts": ibtool_copts}.items():
         if v:
@@ -978,7 +979,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                 "//conditions:default": [framework_vfs_overlay_name_swift] if enable_framework_vfs else [],
             }),
             swiftc_inputs = swiftc_inputs,
-            features = ["swift.no_generated_module_map", "swift.use_pch_output_dir"] + select({
+            features = features + ["swift.no_generated_module_map", "swift.use_pch_output_dir"] + select({
                 "@build_bazel_rules_ios//:virtualize_frameworks": ["swift.vfsoverlay"],
                 "//conditions:default": [],
             }),
@@ -1028,6 +1029,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             defines = defines,
             tags = tags_manual,
             testonly = testonly,
+            features = features,
         )
         lib_names.append(cpp_libname)
 
@@ -1079,6 +1081,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         tags = tags_manual,
         defines = defines + objc_defines,
         testonly = testonly,
+        features = features,
         **kwargs
     )
     launch_screen_storyboard_name = name + "_launch_screen_storyboard"
