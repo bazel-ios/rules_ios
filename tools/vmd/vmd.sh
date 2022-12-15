@@ -11,17 +11,19 @@ This program runs a command in a VM with tart for iOS testing
 
 -p|--port - [Optional] - a port to forward
 
--e|--entrypoint - [Optional] The entrypoint to run.
-This entrypoint supplements the arvg invocation if provided, you need to do all the work handled here ( like running from .runfiles, untarring --upload, etc 
+-d|--disk - [Optional] - attach a disk to tart ( passthrough )
 
--u|--upload - [Optional] Upload data to the runner 
+-e|--entrypoint - [Optional] The entrypoint to run.
+This entrypoint supplements the arvg invocation if provided, you need to do all the work handled here ( like running from .runfiles, untarring --upload, etc
+
+-u|--upload - [Optional] Upload data to the runner
 Examples of this are a .xctest bundle and xctestrunner python code
 
 -z|--no-ephemeral [Optional] By default the VMs are thrown away, turn that off
 
 Consider this an implementation of rules_ios for now. A segment of this program
 can be added to tart directly
-e.g https://github.com/cirruslabs/tart/issues/150 
+e.g https://github.com/cirruslabs/tart/issues/150
 EOL
 }
 
@@ -36,7 +38,7 @@ run_vm() {
     if test $EPHEMERAL -eq 1; then
         # By default we make these ephemeral
 
-        # Assign the VM name to the work_dir 
+        # Assign the VM name to the work_dir
         TMP_VM="${VM_NAME}-$(basename $VM_TMPDIR)"
 
         # This VM is required to be already pulled locally. The VMs are massive:
@@ -51,7 +53,8 @@ run_vm() {
     fi
 
     # Spinup tart in the background
-    tart run $run_vm_name --no-graphics &2>> $VM_TMPDIR/tart.log  &
+    tart run ${TART_RUN_ARGS[@]} \
+        $run_vm_name --no-graphics &2>> $VM_TMPDIR/tart.log  &
     # Save the PID of tart
     echo $(expr $! - 1) > $VM_TMPDIR/tart.pid
 
@@ -86,7 +89,7 @@ run_vm() {
     local VM_CMD=/tmp/cmd.sh
 
     sshpass -p admin scp -o StrictHostKeyChecking=no -o ConnectTimeout=30 $VM_TMPDIR/cmd.sh admin@${IP}:$VM_CMD
-    
+
     ## Upload test inputs if they provide it
     if [[ ! -z "$RUNNER_UPLOAD" ]]; then
         sshpass -p admin scp -o StrictHostKeyChecking=no -o ConnectTimeout=30 $RUNNER_UPLOAD admin@${IP}:RUNNER_UPLOAD.tar
@@ -125,6 +128,7 @@ main() {
     # distingush from the users CLI arguments
     BREAK_PARSE=0
     POSITIONAL_ARGS=()
+    TART_RUN_ARGS=()
     while [[ $# -gt 0 ]]; do
       case $1 in
         -e|--entrypoint)
@@ -149,6 +153,11 @@ main() {
           ;;
         -z|--no-ephemeral)
           EPHEMERAL=0
+          shift
+          ;;
+        -d|--disk)
+          TART_RUN_ARGS+=("--disk=$2")
+          shift
           shift
           ;;
         --)
