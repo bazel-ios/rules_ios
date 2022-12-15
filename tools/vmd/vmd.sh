@@ -11,6 +11,8 @@ This program runs a command in a VM with tart for iOS testing
 
 -p|--port - [Optional] - a port to forward
 
+-d|--disk - [Optional] - attach a disk to tart ( passthrough )
+
 -e|--entrypoint - [Optional] The entrypoint to run.
 This entrypoint supplements the arvg invocation if provided, you need to do all the work handled here ( like running from .runfiles, untarring --upload, etc 
 
@@ -51,7 +53,8 @@ run_vm() {
     fi
 
     # Spinup tart in the background
-    tart run $run_vm_name --no-graphics &2>> $VM_TMPDIR/tart.log  &
+    tart run ${TART_RUN_ARGS[@]} \
+        $run_vm_name --no-graphics &2>> $VM_TMPDIR/tart.log  &
     # Save the PID of tart
     echo $(expr $! - 1) > $VM_TMPDIR/tart.pid
 
@@ -125,6 +128,7 @@ main() {
     # distingush from the users CLI arguments
     BREAK_PARSE=0
     POSITIONAL_ARGS=()
+    TART_RUN_ARGS=()
     while [[ $# -gt 0 ]]; do
       case $1 in
         -e|--entrypoint)
@@ -149,6 +153,11 @@ main() {
           ;;
         -z|--no-ephemeral)
           EPHEMERAL=0
+          shift
+          ;;
+        -d|--disk)
+          TART_RUN_ARGS+=("--disk=$2")
+          shift
           shift
           ;;
         --)
