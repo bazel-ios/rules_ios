@@ -127,8 +127,8 @@ swift_binary(
     _maybe(
         http_file,
         name = "tart",
-        urls = ["https://github.com/cirruslabs/tart/releases/download/0.14.0/tart"],
-        sha256 = "2c61526aa07ade30ab6534b0fdc0a0edeb56ec2084dadee587e53c46e3a8edc3",
+        urls = ["https://github.com/cirruslabs/tart/releases/download/0.35.2/tart"],
+        sha256 = "7b9f4f37054483e565c760525b7e9e9097053c361dc16306583bb2981a29a6ec",
     )
 
     if not native.existing_rule("xchammer"):
