@@ -70,3 +70,13 @@ ios_unit_test(
     infoplists = [{"NSPrincipalClass": "TestSuiteObserver"}],
     minimum_os_version = "11.0",
 )
+
+ios_unit_test(
+    name = "ExplicitFeatures",
+    srcs = [
+        "empty.m",
+        "empty.swift",
+    ],
+    features = ["apple.skip_codesign_simulator_bundles"],
+    minimum_os_version = "11.0",
+)
