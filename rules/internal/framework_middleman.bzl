@@ -34,11 +34,12 @@ load(
 def _framework_middleman(ctx):
     resource_providers = []
     objc_providers = []
+    dynamic_frameworks = []
     dynamic_framework_providers = []
     apple_embeddable_infos = []
     cc_providers = []
 
-    def _collect_providers(lib_dep):
+    def _process_dep(lib_dep):
         if AppleEmbeddableInfo in lib_dep:
             apple_embeddable_infos.append(lib_dep[AppleEmbeddableInfo])
 
@@ -53,15 +54,16 @@ def _framework_middleman(ctx):
         if apple_common.Objc in lib_dep:
             objc_providers.append(lib_dep[apple_common.Objc])
         if apple_common.AppleDynamicFramework in lib_dep:
+            dynamic_frameworks.append(lib_dep)
             dynamic_framework_providers.append(lib_dep[apple_common.AppleDynamicFramework])
 
     for dep in ctx.attr.framework_deps:
-        _collect_providers(dep)
+        _process_dep(dep)
 
         # Loop AvoidDepsInfo here as well
         if AvoidDepsInfo in dep:
             for lib_dep in dep[AvoidDepsInfo].libraries:
-                _collect_providers(lib_dep)
+                _process_dep(lib_dep)
 
     # Here we only need to loop a subset of the keys
     objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(providers = objc_providers, merge_keys = [
@@ -108,9 +110,7 @@ def _framework_middleman(ctx):
         partials.extension_safe_validation_partial(
             is_extension_safe = ctx.attr.extension_safe,
             rule_label = ctx.label,
-            # Pass 'ctx.attr.framework_deps' once 'partials.extension_safe_validation_partial'
-            # is populated on from 'apple_framework_packaging' implementation.
-            targets_to_validate = ctx.attr.framework_deps,
+            targets_to_validate = dynamic_frameworks,
         ),
     )
 
