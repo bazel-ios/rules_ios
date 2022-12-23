@@ -35,7 +35,6 @@ apple_xcframework(
     name = "iOSSwiftXCFramework",
     bundle_id = "com.google.example",
     bundle_name = "c",
-    framework_type = ["dynamic"],
     infoplists = [
         "Info.plist",
     ],

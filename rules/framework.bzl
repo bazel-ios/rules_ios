@@ -691,7 +691,6 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         ),
         partials.debug_symbols_partial(
             actions = actions,
-            bin_root_path = bin_root_path,
             bundle_extension = bundle_extension,
             bundle_name = bundle_name,
             debug_dependencies = dep_frameworks,
@@ -700,7 +699,6 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
             dsym_info_plist_template = apple_mac_toolchain_info.dsym_info_plist_template,
             executable_name = executable_name,
             platform_prerequisites = platform_prerequisites,
-            rule_label = label,
         ),
         partials.embedded_bundles_partial(
             frameworks = [archive_for_embedding],
@@ -722,6 +720,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
             binary_artifact = binary_artifact,
             bundle_name = bundle_name,
             bundle_only = False,
+            cc_info = link_result.cc_info,
             objc_provider = link_result.objc,
             rule_label = label,
         ),
