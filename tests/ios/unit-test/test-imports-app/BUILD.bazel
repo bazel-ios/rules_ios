@@ -12,7 +12,7 @@ apple_framework(
     visibility = ["//visibility:public"],
     deps = [
         "//tests/ios/unit-test/test-imports-app/frameworks/Basic",
-        "//tests/ios/unit-test/test-imports-app/frameworks/NestedHeaders",
+        "//tests/ios/unit-test/test-imports-app/frameworks/Nested",
     ],
 )
 
