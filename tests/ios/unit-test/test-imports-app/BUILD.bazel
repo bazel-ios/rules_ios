@@ -61,9 +61,10 @@ apple_framework_packaging(
         "xcodeproj-ignore-as-target",
     ],
     transitive_deps = [
-        "@TensorFlowLiteC//:TensorFlowLiteC",
-        "@TensorFlowLiteC//:TensorFlowLiteCCoreML",
+        ":SomeFramework",
         "@GoogleMobileAdsSDK//:GoogleMobileAds",
+        "@TensorFlowLiteC",
+        "@TensorFlowLiteC//:TensorFlowLiteCCoreML",
     ],
     visibility = ["//visibility:public"],
     deps = [
