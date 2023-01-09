@@ -90,14 +90,7 @@ ios_unit_test(
     visibility = ["//visibility:public"],
     deps = [
         ":TestImports-App_framework_unlinked",
-    ] + select({
-        # It isn't seeing the `deps` attribute when using
-        # apple_framework_packaging directly
-        "@build_bazel_rules_ios//:virtualize_frameworks": [
-            ":SomeFramework",
-        ],
-        "//conditions:default": [],
-    }),
+    ],
 )
 
 make_tests()
