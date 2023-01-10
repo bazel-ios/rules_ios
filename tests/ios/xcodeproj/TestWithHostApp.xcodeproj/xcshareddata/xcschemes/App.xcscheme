@@ -14,9 +14,9 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9541626BF2F6C0EE11CA1AD7"
-               BuildableName = "iOS-9.3-AppHost.app"
-               BlueprintName = "iOS-9.3-AppHost"
+               BlueprintIdentifier = "2B7DA68C47D629972D1134C8"
+               BuildableName = "App.app"
+               BlueprintName = "App"
                ReferencedContainer = "container:TestWithHostApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,9 +33,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9541626BF2F6C0EE11CA1AD7"
-            BuildableName = "iOS-9.3-AppHost.app"
-            BlueprintName = "iOS-9.3-AppHost"
+            BlueprintIdentifier = "2B7DA68C47D629972D1134C8"
+            BuildableName = "App.app"
+            BlueprintName = "App"
             ReferencedContainer = "container:TestWithHostApp.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -50,14 +50,14 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES"
-      customLLDBInitFile = "$CONFIGURATION_TEMP_DIR/iOS-9.3-AppHost.lldbinit">
+      customLLDBInitFile = "$CONFIGURATION_TEMP_DIR/App.lldbinit">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9541626BF2F6C0EE11CA1AD7"
-            BuildableName = "iOS-9.3-AppHost.app"
-            BlueprintName = "iOS-9.3-AppHost"
+            BlueprintIdentifier = "2B7DA68C47D629972D1134C8"
+            BuildableName = "App.app"
+            BlueprintName = "App"
             ReferencedContainer = "container:TestWithHostApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -74,9 +74,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9541626BF2F6C0EE11CA1AD7"
-            BuildableName = "iOS-9.3-AppHost.app"
-            BlueprintName = "iOS-9.3-AppHost"
+            BlueprintIdentifier = "2B7DA68C47D629972D1134C8"
+            BuildableName = "App.app"
+            BlueprintName = "App"
             ReferencedContainer = "container:TestWithHostApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
