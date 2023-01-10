@@ -817,7 +817,7 @@ def _bundle_static_framework(ctx, is_extension_safe, outputs):
             bundle_name = ctx.attr.framework_name,
             bundle_extension = ctx.attr.bundle_extension,
             entitlements = None,
-            infoplist = outputs.infoplist,
+            infoplist = outputs.infoplist[0] if outputs.infoplist else None,
             minimum_os_version = str(current_apple_platform.target_os_version),
             minimum_deployment_os_version = ctx.attr.minimum_deployment_os_version,
             platform_type = str(current_apple_platform.platform.platform_type),
