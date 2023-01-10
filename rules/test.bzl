@@ -111,8 +111,9 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
                 infoplists = select(infoplists),
                 **all_kwargs
             )
-        native.test_suite(name = name, tests = tests)
-
+        test_suite_visibility = ios_test_kwargs.get("visibility", None)
+        test_suite_tags = ios_test_kwargs.get("tags", [])
+        native.test_suite(name = name, tests = tests, visibility = test_suite_visibility, tags = test_suite_tags)
     else:
         rule = test_rule
         if runner:
