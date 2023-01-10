@@ -5,6 +5,10 @@ load(
     apple_dynamic_framework_import_original = "apple_dynamic_framework_import",
     apple_static_framework_import_original = "apple_static_framework_import",
 )
+load(
+    "@build_bazel_rules_apple//apple/internal:framework_import_support.bzl",
+    "framework_import_support",
+)
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleFrameworkImportInfo")
 load("@build_bazel_rules_swift//swift/internal:providers.bzl", "SwiftUsageInfo")
 load("//rules/framework:vfs_overlay.bzl", "make_vfsoverlay")
@@ -30,6 +34,7 @@ def apple_dynamic_framework_import(name, **kwargs):
     _apple_framework_import_modulemap(
         name = name,
         legacy_target = legacy_target_label,
+        framework_imports = kwargs.get("framework_imports", []),
         visibility = visibility,
         tags = tags,
     )
@@ -53,6 +58,7 @@ def apple_static_framework_import(name, **kwargs):
     _apple_framework_import_modulemap(
         name = name,
         legacy_target = legacy_target_label,
+        framework_imports = kwargs.get("framework_imports", []),
         visibility = visibility,
         tags = tags,
     )
@@ -66,7 +72,7 @@ def _find_imported_framework_name(outputs):
         return fw_name
     return None
 
-def _get_framework_info_providers(ctx, old_cc_info, old_objc_provider):
+def _get_framework_info_providers(ctx, old_cc_info, modulemap_list):
     virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
     if not virtualize_frameworks:
         return []
@@ -81,7 +87,6 @@ def _get_framework_info_providers(ctx, old_cc_info, old_objc_provider):
     if not imported_framework_name:
         return []
 
-    modulemap_list = old_objc_provider.module_map.to_list()
     vfs = make_vfsoverlay(
         ctx,
         hdrs = hdrs_list,
@@ -112,15 +117,22 @@ def _apple_framework_import_modulemap_impl(ctx):
     objc_provider = legacy_target[apple_common.Objc]
     old_cc_info = legacy_target[CcInfo]
 
+    # Pull the `.modulemap` files out of the `framework_imports` since the
+    # propagation of this was removed from `ObjcProvider`.
+    framework_imports_by_category = framework_import_support.classify_file_imports(
+        ctx.var,
+        ctx.files.framework_imports,
+    )
+
     # Merge providers
     new_cc_info = cc_common.merge_cc_infos(
         cc_infos = [
             old_cc_info,
-            CcInfo(compilation_context = cc_common.create_compilation_context(headers = objc_provider.module_map)),
+            CcInfo(compilation_context = cc_common.create_compilation_context(headers = depset(framework_imports_by_category.module_map_imports))),
         ],
     )
 
-    additional_providers = _get_framework_info_providers(ctx, old_cc_info, objc_provider)
+    additional_providers = _get_framework_info_providers(ctx, old_cc_info, framework_imports_by_category.module_map_imports)
 
     # Seems that there is no way to iterate on the existing providers, so what is possible instead
     # is to list here the keys to all of them (you can see the keys for the existing providers of a
@@ -137,6 +149,10 @@ _apple_framework_import_modulemap = rule(
         "legacy_target": attr.label(
             mandatory = True,
             doc = "The legacy target to patch",
+        ),
+        "framework_imports": attr.label_list(
+            allow_files = True,
+            doc = "The list of files under a `.framework` directory for `legacy_target`.",
         ),
         "_cc_toolchain": attr.label(
             default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),

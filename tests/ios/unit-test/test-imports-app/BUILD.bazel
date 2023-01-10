@@ -12,7 +12,7 @@ apple_framework(
     visibility = ["//visibility:public"],
     deps = [
         "//tests/ios/unit-test/test-imports-app/frameworks/Basic",
-        "//tests/ios/unit-test/test-imports-app/frameworks/NestedHeaders",
+        "//tests/ios/unit-test/test-imports-app/frameworks/Nested",
     ],
 )
 
@@ -61,9 +61,10 @@ apple_framework_packaging(
         "xcodeproj-ignore-as-target",
     ],
     transitive_deps = [
-        "@TensorFlowLiteC//:TensorFlowLiteC",
-        "@TensorFlowLiteC//:TensorFlowLiteCCoreML",
+        ":SomeFramework",
         "@GoogleMobileAdsSDK//:GoogleMobileAds",
+        "@TensorFlowLiteC",
+        "@TensorFlowLiteC//:TensorFlowLiteCCoreML",
     ],
     visibility = ["//visibility:public"],
     deps = [
@@ -89,14 +90,7 @@ ios_unit_test(
     visibility = ["//visibility:public"],
     deps = [
         ":TestImports-App_framework_unlinked",
-    ] + select({
-        # It isn't seeing the `deps` attribute when using
-        # apple_framework_packaging directly
-        "@build_bazel_rules_ios//:virtualize_frameworks": [
-            ":SomeFramework",
-        ],
-        "//conditions:default": [],
-    }),
+    ],
 )
 
 make_tests()
