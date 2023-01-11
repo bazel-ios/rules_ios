@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class Foo {
+public final class FooDynamic {
     let num: Int
 
     public init(num: Int = 1) {

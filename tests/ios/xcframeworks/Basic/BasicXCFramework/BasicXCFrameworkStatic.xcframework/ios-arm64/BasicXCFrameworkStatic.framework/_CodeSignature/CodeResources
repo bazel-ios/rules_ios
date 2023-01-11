@@ -4,13 +4,13 @@
 <dict>
 	<key>files</key>
 	<dict>
-		<key>Headers/BasicXCFramework.h</key>
-		<data>
-		UTB4W/2rKrZg1Y3vmfQORhiUJTo=
-		</data>
 		<key>Headers/BasicXCFrameworkStatic-Swift.h</key>
 		<data>
 		rczl862K7Ia/qhVQmDVm6+O9txE=
+		</data>
+		<key>Headers/BasicXCFrameworkStatic.h</key>
+		<data>
+		UTB4W/2rKrZg1Y3vmfQORhiUJTo=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -18,11 +18,11 @@
 		</data>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/arm64-apple-ios.abi.json</key>
 		<data>
-		HKKGd7IFkgiINGf1p/NuNarTwJE=
+		LWSVVPL3oKxOM9aCCblzDQPJ+gw=
 		</data>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
 		<data>
-		0kjXN5sHNLUOrTISdnyrHlUeRLU=
+		sa/iHH4GFjcBxh0iKhRMbkE6smE=
 		</data>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<data>
@@ -30,30 +30,19 @@
 		</data>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<data>
-		0kjXN5sHNLUOrTISdnyrHlUeRLU=
+		sa/iHH4GFjcBxh0iKhRMbkE6smE=
 		</data>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		i3YMzZngvWWG8io1JgYh4Zl640Q=
+		CIB7npIKMSSuPRa/tx+HwYcyCBM=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
-		PPhk15EtfmuYys5QUU90OLPWoEA=
+		2JcYyDoHjy0vrzWBs2pEMPMMW50=
 		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
-		<key>Headers/BasicXCFramework.h</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			UTB4W/2rKrZg1Y3vmfQORhiUJTo=
-			</data>
-			<key>hash2</key>
-			<data>
-			wt0HRmlH8pm9M2X7/7csMSGiN6Im+d4km9tfEpl/qKQ=
-			</data>
-		</dict>
 		<key>Headers/BasicXCFrameworkStatic-Swift.h</key>
 		<dict>
 			<key>hash</key>
@@ -65,26 +54,37 @@
 			k/D1sdyAhpAdZQhBJ8oMAKvcrALAbhVsBnPvkKFDaeA=
 			</data>
 		</dict>
+		<key>Headers/BasicXCFrameworkStatic.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			UTB4W/2rKrZg1Y3vmfQORhiUJTo=
+			</data>
+			<key>hash2</key>
+			<data>
+			wt0HRmlH8pm9M2X7/7csMSGiN6Im+d4km9tfEpl/qKQ=
+			</data>
+		</dict>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/arm64-apple-ios.abi.json</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			HKKGd7IFkgiINGf1p/NuNarTwJE=
+			LWSVVPL3oKxOM9aCCblzDQPJ+gw=
 			</data>
 			<key>hash2</key>
 			<data>
-			EkW3XH9oPfEC1jQ0WIG2xI/XIjWNlXseQ9LlSG8f7OM=
+			My1xUoH+JQLWjoGQJyOB2I+sMTIoxqQBRtudWqKOG3Q=
 			</data>
 		</dict>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			0kjXN5sHNLUOrTISdnyrHlUeRLU=
+			sa/iHH4GFjcBxh0iKhRMbkE6smE=
 			</data>
 			<key>hash2</key>
 			<data>
-			xBdsdGl1g5ElQGRAIJ9tXfIcjw+QBjisgFAasec9KLE=
+			T+mb9kFzN3WPn9YR4y57tXmHVGnI4rg9h44DbgPjpbE=
 			</data>
 		</dict>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/arm64-apple-ios.swiftdoc</key>
@@ -102,33 +102,33 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			0kjXN5sHNLUOrTISdnyrHlUeRLU=
+			sa/iHH4GFjcBxh0iKhRMbkE6smE=
 			</data>
 			<key>hash2</key>
 			<data>
-			xBdsdGl1g5ElQGRAIJ9tXfIcjw+QBjisgFAasec9KLE=
+			T+mb9kFzN3WPn9YR4y57tXmHVGnI4rg9h44DbgPjpbE=
 			</data>
 		</dict>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			i3YMzZngvWWG8io1JgYh4Zl640Q=
+			CIB7npIKMSSuPRa/tx+HwYcyCBM=
 			</data>
 			<key>hash2</key>
 			<data>
-			rn5l4UNm7O9be/9Bo/o0Mj07nRgYBigljR6oHss/OSs=
+			5MgWC9Cj76xDMp5PlXEkCXxTdOnjqsw8G9NrJ/vNhZI=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			PPhk15EtfmuYys5QUU90OLPWoEA=
+			2JcYyDoHjy0vrzWBs2pEMPMMW50=
 			</data>
 			<key>hash2</key>
 			<data>
-			KPlz53t0EyRX0AEr/xf4MExTfpR522qAKoGJKQz7UPg=
+			jr6TMAd3zavWyfkId+s8/9xLqByJfSxocPReAM6UbJw=
 			</data>
 		</dict>
 	</dict>

@@ -16,8 +16,8 @@
       },
       {
         "kind": "TypeDecl",
-        "name": "Foo",
-        "printedName": "Foo",
+        "name": "FooDynamic",
+        "printedName": "FooDynamic",
         "children": [
           {
             "kind": "Constructor",
@@ -26,9 +26,9 @@
             "children": [
               {
                 "kind": "TypeNominal",
-                "name": "Foo",
-                "printedName": "BasicXCFrameworkDynamic.Foo",
-                "usr": "s:23BasicXCFrameworkDynamic3FooC"
+                "name": "FooDynamic",
+                "printedName": "BasicXCFrameworkDynamic.FooDynamic",
+                "usr": "s:23BasicXCFrameworkDynamic03FooC0C"
               },
               {
                 "kind": "TypeNominal",
@@ -39,8 +39,8 @@
               }
             ],
             "declKind": "Constructor",
-            "usr": "s:23BasicXCFrameworkDynamic3FooC3numACSi_tcfc",
-            "mangledName": "$s23BasicXCFrameworkDynamic3FooC3numACSi_tcfc",
+            "usr": "s:23BasicXCFrameworkDynamic03FooC0C3numACSi_tcfc",
+            "mangledName": "$s23BasicXCFrameworkDynamic03FooC0C3numACSi_tcfc",
             "moduleName": "BasicXCFrameworkDynamic",
             "declAttributes": [
               "AccessControl"
@@ -59,8 +59,8 @@
               }
             ],
             "declKind": "Func",
-            "usr": "s:23BasicXCFrameworkDynamic3FooC3baryyF",
-            "mangledName": "$s23BasicXCFrameworkDynamic3FooC3baryyF",
+            "usr": "s:23BasicXCFrameworkDynamic03FooC0C3baryyF",
+            "mangledName": "$s23BasicXCFrameworkDynamic03FooC0C3baryyF",
             "moduleName": "BasicXCFrameworkDynamic",
             "declAttributes": [
               "Final",
@@ -70,8 +70,8 @@
           }
         ],
         "declKind": "Class",
-        "usr": "s:23BasicXCFrameworkDynamic3FooC",
-        "mangledName": "$s23BasicXCFrameworkDynamic3FooC",
+        "usr": "s:23BasicXCFrameworkDynamic03FooC0C",
+        "mangledName": "$s23BasicXCFrameworkDynamic03FooC0C",
         "moduleName": "BasicXCFrameworkDynamic",
         "declAttributes": [
           "Final",
@@ -83,9 +83,9 @@
   },
   "ConstValues": [
     {
-      "filePath": "\/Users\/matt.robinson\/Developer\/rules_ios\/rules_ios\/tests\/ios\/xcframeworks\/Basic\/BasicXCFramework\/BasicXCFramework\/Foo.swift",
+      "filePath": "\/Users\/matt.robinson\/Developer\/rules_ios\/rules_ios\/tests\/ios\/xcframeworks\/Basic\/BasicXCFramework\/BasicXCFrameworkDynamic\/Foo.swift",
       "kind": "IntegerLiteral",
-      "offset": 180,
+      "offset": 187,
       "length": 1,
       "value": "1"
     }

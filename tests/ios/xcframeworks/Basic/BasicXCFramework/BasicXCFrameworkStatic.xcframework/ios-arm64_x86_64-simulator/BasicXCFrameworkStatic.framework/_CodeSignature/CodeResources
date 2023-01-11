@@ -4,13 +4,13 @@
 <dict>
 	<key>files</key>
 	<dict>
-		<key>Headers/BasicXCFramework.h</key>
-		<data>
-		UTB4W/2rKrZg1Y3vmfQORhiUJTo=
-		</data>
 		<key>Headers/BasicXCFrameworkStatic-Swift.h</key>
 		<data>
 		GTjTI5xZ7Pz/caplsOtHVK+0uRs=
+		</data>
+		<key>Headers/BasicXCFrameworkStatic.h</key>
+		<data>
+		UTB4W/2rKrZg1Y3vmfQORhiUJTo=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -18,11 +18,11 @@
 		</data>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		HKKGd7IFkgiINGf1p/NuNarTwJE=
+		LWSVVPL3oKxOM9aCCblzDQPJ+gw=
 		</data>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
-		XW+GxORAoneIgiCyMNvRxaQLUw4=
+		M9O92nn6RLiBwqOZBKlpQXqEltM=
 		</data>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<data>
@@ -30,19 +30,19 @@
 		</data>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		XW+GxORAoneIgiCyMNvRxaQLUw4=
+		M9O92nn6RLiBwqOZBKlpQXqEltM=
 		</data>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		MgsEASmCrl6tZqc7gtRO/BsAO/A=
+		XpmomckEzlReAj8t++8NocXsc7s=
 		</data>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		HKKGd7IFkgiINGf1p/NuNarTwJE=
+		LWSVVPL3oKxOM9aCCblzDQPJ+gw=
 		</data>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
-		8oRJSf0ZHNElYdMKvhxoAabdvdM=
+		z1Ia6VbW0rod9K/XOm3EbIZ4M+A=
 		</data>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
@@ -50,30 +50,19 @@
 		</data>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		8oRJSf0ZHNElYdMKvhxoAabdvdM=
+		z1Ia6VbW0rod9K/XOm3EbIZ4M+A=
 		</data>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		b+MRkorL0POhtH78ttVrTJwLBhg=
+		TxFYs10HhdfgS57oveNeOX2vlYE=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
-		PPhk15EtfmuYys5QUU90OLPWoEA=
+		2JcYyDoHjy0vrzWBs2pEMPMMW50=
 		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
-		<key>Headers/BasicXCFramework.h</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			UTB4W/2rKrZg1Y3vmfQORhiUJTo=
-			</data>
-			<key>hash2</key>
-			<data>
-			wt0HRmlH8pm9M2X7/7csMSGiN6Im+d4km9tfEpl/qKQ=
-			</data>
-		</dict>
 		<key>Headers/BasicXCFrameworkStatic-Swift.h</key>
 		<dict>
 			<key>hash</key>
@@ -85,26 +74,37 @@
 			G7nuhLhb1TTJv4cctb551SoWE7vllfkU/V4he6SB9tQ=
 			</data>
 		</dict>
+		<key>Headers/BasicXCFrameworkStatic.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			UTB4W/2rKrZg1Y3vmfQORhiUJTo=
+			</data>
+			<key>hash2</key>
+			<data>
+			wt0HRmlH8pm9M2X7/7csMSGiN6Im+d4km9tfEpl/qKQ=
+			</data>
+		</dict>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			HKKGd7IFkgiINGf1p/NuNarTwJE=
+			LWSVVPL3oKxOM9aCCblzDQPJ+gw=
 			</data>
 			<key>hash2</key>
 			<data>
-			EkW3XH9oPfEC1jQ0WIG2xI/XIjWNlXseQ9LlSG8f7OM=
+			My1xUoH+JQLWjoGQJyOB2I+sMTIoxqQBRtudWqKOG3Q=
 			</data>
 		</dict>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			XW+GxORAoneIgiCyMNvRxaQLUw4=
+			M9O92nn6RLiBwqOZBKlpQXqEltM=
 			</data>
 			<key>hash2</key>
 			<data>
-			zW7LMb73dLJmaxquDKtAK4zG85Zc6xHl+Xm6OXT5IQQ=
+			cgGUgVoHsF7S6CVO/TQaHKIXOGjCmiRAR4IEB8YX2pQ=
 			</data>
 		</dict>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
@@ -122,44 +122,44 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			XW+GxORAoneIgiCyMNvRxaQLUw4=
+			M9O92nn6RLiBwqOZBKlpQXqEltM=
 			</data>
 			<key>hash2</key>
 			<data>
-			zW7LMb73dLJmaxquDKtAK4zG85Zc6xHl+Xm6OXT5IQQ=
+			cgGUgVoHsF7S6CVO/TQaHKIXOGjCmiRAR4IEB8YX2pQ=
 			</data>
 		</dict>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			MgsEASmCrl6tZqc7gtRO/BsAO/A=
+			XpmomckEzlReAj8t++8NocXsc7s=
 			</data>
 			<key>hash2</key>
 			<data>
-			F1/mZHMnCUNedruDeDXSqYEcX+GJGe46yEm6OURpZXA=
+			hUUPcl3zSHXFG/uipWCqZUsIqrmR1Qkv12CoGRiGysw=
 			</data>
 		</dict>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			HKKGd7IFkgiINGf1p/NuNarTwJE=
+			LWSVVPL3oKxOM9aCCblzDQPJ+gw=
 			</data>
 			<key>hash2</key>
 			<data>
-			EkW3XH9oPfEC1jQ0WIG2xI/XIjWNlXseQ9LlSG8f7OM=
+			My1xUoH+JQLWjoGQJyOB2I+sMTIoxqQBRtudWqKOG3Q=
 			</data>
 		</dict>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			8oRJSf0ZHNElYdMKvhxoAabdvdM=
+			z1Ia6VbW0rod9K/XOm3EbIZ4M+A=
 			</data>
 			<key>hash2</key>
 			<data>
-			K0ZfLfmWwx8jae/wqVjEIp3p6xwfkk7hNEZuinXomVc=
+			fLH2an9ePkBTHffpvKmm7OMl2LbF9MvhujN/voDM9yA=
 			</data>
 		</dict>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
@@ -177,33 +177,33 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			8oRJSf0ZHNElYdMKvhxoAabdvdM=
+			z1Ia6VbW0rod9K/XOm3EbIZ4M+A=
 			</data>
 			<key>hash2</key>
 			<data>
-			K0ZfLfmWwx8jae/wqVjEIp3p6xwfkk7hNEZuinXomVc=
+			fLH2an9ePkBTHffpvKmm7OMl2LbF9MvhujN/voDM9yA=
 			</data>
 		</dict>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			b+MRkorL0POhtH78ttVrTJwLBhg=
+			TxFYs10HhdfgS57oveNeOX2vlYE=
 			</data>
 			<key>hash2</key>
 			<data>
-			vyvqI7Ff3C1PR/51Qom4X5PnY8uu6CgjXP0iTdv14+4=
+			XWsOFH6DqQ/uUjAerLLmTVrax5SY5MmfcpkZy4vCcl8=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			PPhk15EtfmuYys5QUU90OLPWoEA=
+			2JcYyDoHjy0vrzWBs2pEMPMMW50=
 			</data>
 			<key>hash2</key>
 			<data>
-			KPlz53t0EyRX0AEr/xf4MExTfpR522qAKoGJKQz7UPg=
+			jr6TMAd3zavWyfkId+s8/9xLqByJfSxocPReAM6UbJw=
 			</data>
 		</dict>
 	</dict>

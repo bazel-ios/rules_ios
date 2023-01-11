@@ -16,8 +16,8 @@
       },
       {
         "kind": "TypeDecl",
-        "name": "Foo",
-        "printedName": "Foo",
+        "name": "FooStatic",
+        "printedName": "FooStatic",
         "children": [
           {
             "kind": "Constructor",
@@ -26,9 +26,9 @@
             "children": [
               {
                 "kind": "TypeNominal",
-                "name": "Foo",
-                "printedName": "BasicXCFrameworkStatic.Foo",
-                "usr": "s:22BasicXCFrameworkStatic3FooC"
+                "name": "FooStatic",
+                "printedName": "BasicXCFrameworkStatic.FooStatic",
+                "usr": "s:22BasicXCFrameworkStatic03FooC0C"
               },
               {
                 "kind": "TypeNominal",
@@ -39,8 +39,8 @@
               }
             ],
             "declKind": "Constructor",
-            "usr": "s:22BasicXCFrameworkStatic3FooC3numACSi_tcfc",
-            "mangledName": "$s22BasicXCFrameworkStatic3FooC3numACSi_tcfc",
+            "usr": "s:22BasicXCFrameworkStatic03FooC0C3numACSi_tcfc",
+            "mangledName": "$s22BasicXCFrameworkStatic03FooC0C3numACSi_tcfc",
             "moduleName": "BasicXCFrameworkStatic",
             "declAttributes": [
               "AccessControl"
@@ -59,8 +59,8 @@
               }
             ],
             "declKind": "Func",
-            "usr": "s:22BasicXCFrameworkStatic3FooC3baryyF",
-            "mangledName": "$s22BasicXCFrameworkStatic3FooC3baryyF",
+            "usr": "s:22BasicXCFrameworkStatic03FooC0C3baryyF",
+            "mangledName": "$s22BasicXCFrameworkStatic03FooC0C3baryyF",
             "moduleName": "BasicXCFrameworkStatic",
             "declAttributes": [
               "Final",
@@ -70,8 +70,8 @@
           }
         ],
         "declKind": "Class",
-        "usr": "s:22BasicXCFrameworkStatic3FooC",
-        "mangledName": "$s22BasicXCFrameworkStatic3FooC",
+        "usr": "s:22BasicXCFrameworkStatic03FooC0C",
+        "mangledName": "$s22BasicXCFrameworkStatic03FooC0C",
         "moduleName": "BasicXCFrameworkStatic",
         "declAttributes": [
           "Final",
@@ -83,9 +83,9 @@
   },
   "ConstValues": [
     {
-      "filePath": "\/Users\/matt.robinson\/Developer\/rules_ios\/rules_ios\/tests\/ios\/xcframeworks\/Basic\/BasicXCFramework\/BasicXCFramework\/Foo.swift",
+      "filePath": "\/Users\/matt.robinson\/Developer\/rules_ios\/rules_ios\/tests\/ios\/xcframeworks\/Basic\/BasicXCFramework\/BasicXCFrameworkStatic\/Foo.swift",
       "kind": "IntegerLiteral",
-      "offset": 180,
+      "offset": 186,
       "length": 1,
       "value": "1"
     }
