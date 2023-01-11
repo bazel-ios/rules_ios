@@ -183,12 +183,10 @@ def _file_collector_rule_impl(ctx):
         "link_inputs",
         "linkopt",
         "library",
-    ] + ([] if is_sim_arm64 else [
-        # Merge in the objc provider fields
         "imported_library",
         "dynamic_framework_file",
         "static_framework_file",
-    ])
+    ]
 
     objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(
         providers = [dep[apple_common.Objc] for dep in ctx.attr.deps],

@@ -1,0 +1,4 @@
+framework module BasicXCFrameworkStatic {
+  header "BasicXCFrameworkStatic-Swift.h"
+  requires objc
+}

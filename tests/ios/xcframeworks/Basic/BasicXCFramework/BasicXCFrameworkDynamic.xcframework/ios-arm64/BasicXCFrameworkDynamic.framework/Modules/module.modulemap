@@ -1,0 +1,4 @@
+framework module BasicXCFrameworkDynamic {
+  header "BasicXCFrameworkDynamic-Swift.h"
+  requires objc
+}
