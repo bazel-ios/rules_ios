@@ -93,7 +93,9 @@ def _find_imports_impl(target, ctx):
     if ctx.rule.kind == "objc_import":
         imported_library_file.append(target[apple_common.Objc].imported_library)
     elif AppleFrameworkImportInfo in target:
-        static_framework_file.append(target[apple_common.Objc].static_framework_file)
+        # The provider field that contains the `static_framework_file` changed in
+        # https://github.com/bazelbuild/rules_apple/commit/8d841342c238457896cd7596cc29b2d06c9a75f0
+        static_framework_file.append(target[apple_common.Objc].imported_library)
 
         target_dynamic_framework_file = target[apple_common.Objc].dynamic_framework_file
         target_dynamic_framework_file_list = target_dynamic_framework_file.to_list()
@@ -183,10 +185,12 @@ def _file_collector_rule_impl(ctx):
         "link_inputs",
         "linkopt",
         "library",
+    ] + ([] if is_sim_arm64 else [
+        # Merge in the objc provider fields
         "imported_library",
         "dynamic_framework_file",
         "static_framework_file",
-    ]
+    ])
 
     objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(
         providers = [dep[apple_common.Objc] for dep in ctx.attr.deps],
