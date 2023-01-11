@@ -1,0 +1,93 @@
+{
+  "ABIRoot": {
+    "kind": "Root",
+    "name": "TopLevel",
+    "printedName": "TopLevel",
+    "children": [
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "BasicXCFrameworkDynamic",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "FooDynamic",
+        "printedName": "FooDynamic",
+        "children": [
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(num:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "FooDynamic",
+                "printedName": "BasicXCFrameworkDynamic.FooDynamic",
+                "usr": "s:23BasicXCFrameworkDynamic03FooC0C"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "hasDefaultArg": true,
+                "usr": "s:Si"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:23BasicXCFrameworkDynamic03FooC0C3numACSi_tcfc",
+            "mangledName": "$s23BasicXCFrameworkDynamic03FooC0C3numACSi_tcfc",
+            "moduleName": "BasicXCFrameworkDynamic",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Function",
+            "name": "bar",
+            "printedName": "bar()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:23BasicXCFrameworkDynamic03FooC0C3baryyF",
+            "mangledName": "$s23BasicXCFrameworkDynamic03FooC0C3baryyF",
+            "moduleName": "BasicXCFrameworkDynamic",
+            "declAttributes": [
+              "Final",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "s:23BasicXCFrameworkDynamic03FooC0C",
+        "mangledName": "$s23BasicXCFrameworkDynamic03FooC0C",
+        "moduleName": "BasicXCFrameworkDynamic",
+        "declAttributes": [
+          "Final",
+          "AccessControl"
+        ]
+      }
+    ],
+    "json_format_version": 8
+  },
+  "ConstValues": [
+    {
+      "filePath": "\/Users\/matt.robinson\/Developer\/rules_ios\/rules_ios\/tests\/ios\/xcframeworks\/Basic\/BasicXCFramework\/BasicXCFrameworkDynamic\/Foo.swift",
+      "kind": "IntegerLiteral",
+      "offset": 187,
+      "length": 1,
+      "value": "1"
+    }
+  ]
+}

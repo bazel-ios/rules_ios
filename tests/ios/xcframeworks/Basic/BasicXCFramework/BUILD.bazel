@@ -1,9 +1,9 @@
 load("@build_bazel_rules_ios//rules:framework.bzl", "apple_framework")
 
 apple_framework(
-    name = "BasicXCFramework",
-    module_name = "BasicXCFramework",
-    platforms = {"ios": "11.0"},
+    name = "BasicXCFrameworkDynamic",
+    module_name = "BasicXCFrameworkDynamic",
+    platforms = {"ios": "10.0"},
     sdk_frameworks = [
         "Foundation",
         "SafariServices",
@@ -12,14 +12,14 @@ apple_framework(
     ],
     vendored_xcframeworks = [
         {
-            "name": "BasicXCFramework",
+            "name": "BasicXCFrameworkDynamic",
             "slices": [
                 {
                     "identifier": "ios-arm64",
                     "platform": "ios",
                     "platform_variant": "",
                     "supported_archs": ["arm64"],
-                    "path": "BasicXCFramework.xcframework/ios-arm64/BasicXCFramework.framework",
+                    "path": "BasicXCFrameworkDynamic.xcframework/ios-arm64/BasicXCFrameworkDynamic.framework",
                     "build_type": {
                         "linkage": "dynamic",
                         "packaging": "framework",
@@ -33,9 +33,54 @@ apple_framework(
                         "arm64",
                         "x86_64",
                     ],
-                    "path": "BasicXCFramework.xcframework/ios-arm64_x86_64-simulator/BasicXCFramework.framework",
+                    "path": "BasicXCFrameworkDynamic.xcframework/ios-arm64_x86_64-simulator/BasicXCFrameworkDynamic.framework",
                     "build_type": {
                         "linkage": "dynamic",
+                        "packaging": "framework",
+                    },
+                },
+            ],
+        },
+    ],
+    visibility = ["//visibility:public"],
+)
+
+apple_framework(
+    name = "BasicXCFrameworkStatic",
+    module_name = "BasicXCFrameworkStatic",
+    platforms = {"ios": "10.0"},
+    sdk_frameworks = [
+        "Foundation",
+        "SafariServices",
+        "UIKit",
+        "WebKit",
+    ],
+    vendored_xcframeworks = [
+        {
+            "name": "BasicXCFrameworkStatic",
+            "slices": [
+                {
+                    "identifier": "ios-arm64",
+                    "platform": "ios",
+                    "platform_variant": "",
+                    "supported_archs": ["arm64"],
+                    "path": "BasicXCFrameworkStatic.xcframework/ios-arm64/BasicXCFrameworkStatic.framework",
+                    "build_type": {
+                        "linkage": "static",
+                        "packaging": "framework",
+                    },
+                },
+                {
+                    "identifier": "ios-arm64_x86_64-simulator",
+                    "platform": "ios",
+                    "platform_variant": "simulator",
+                    "supported_archs": [
+                        "arm64",
+                        "x86_64",
+                    ],
+                    "path": "BasicXCFrameworkStatic.xcframework/ios-arm64_x86_64-simulator/BasicXCFrameworkStatic.framework",
+                    "build_type": {
+                        "linkage": "static",
                         "packaging": "framework",
                     },
                 },

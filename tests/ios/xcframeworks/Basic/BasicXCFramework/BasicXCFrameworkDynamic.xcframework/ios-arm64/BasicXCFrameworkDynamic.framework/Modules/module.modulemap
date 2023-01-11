@@ -1,0 +1,11 @@
+framework module BasicXCFrameworkDynamic {
+  umbrella header "BasicXCFrameworkDynamic.h"
+
+  export *
+  module * { export * }
+}
+
+module BasicXCFrameworkDynamic.Swift {
+  header "BasicXCFrameworkDynamic-Swift.h"
+  requires objc
+}

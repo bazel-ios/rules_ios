@@ -1,7 +1,11 @@
 import Foundation
-import BasicXCFramework
+import BasicXCFrameworkDynamic
+import BasicXCFrameworkStatic
 
 public func foo() {
-    let foo = Foo(num: 9000)
-    foo.bar()
+    let foo1 = FooDynamic(num: 9000)
+    foo1.bar()
+
+    let foo2 = FooStatic(num: 9000)
+    foo2.bar()
 }
