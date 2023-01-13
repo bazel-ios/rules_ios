@@ -43,3 +43,5 @@ startup --local_startup_timeout_secs=240
 
 # Load a user.bazelrc
 try-import %workspace%/user.bazelrc
+
+build --define=apple.experimental.tree_artifact_outputs=1

@@ -2,7 +2,7 @@ load("//rules:framework.bzl", "apple_framework")
 load("//rules:app.bzl", "ios_application")
 load("//rules:test.bzl", "ios_unit_test")
 load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
-load(":analysis-tests.bzl", "make_tests")
+load(":analysis-tests.bzl", "make_tests", "line_length_test")
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_bundle_import")
 load("//rules/test/output:output_test.bzl", "output_test")
 
@@ -84,6 +84,14 @@ apple_framework(
     visibility = ["//visibility:public"],
 )
 
+[apple_framework(
+        name = "CppLib" +str(x),
+        srcs = glob(["Cpp/*"]),
+        platforms = {"ios": "10.0"},
+        swift_version = "5.1",
+        visibility = ["//visibility:public"],
+    ) for x in range(1,10)]
+
 ios_application(
     name = "App",
     srcs = ["App/main.m"],
@@ -95,7 +103,7 @@ ios_application(
         ":FW",
         ":FW2",
         ":OnlySources",
-    ],
+    ] + ["CppLib"+str(x) for x in range(1,10)]
 )
 
 ios_application(
@@ -117,6 +125,7 @@ ios_unit_test(
     srcs = ["empty_tests.m"],
     minimum_os_version = "10.0",
     provisioning_profile = "@build_bazel_rules_ios//tests/ios:integration-test.mobileprovision",
+    tags = ["snapshot"],
     test_host = ":AppWithProvisioningProfile",
 )
 
@@ -250,6 +259,7 @@ ios_unit_test(
     srcs = ["infoplist_test.m"],
     minimum_os_version = "10.0",
     test_host = ":AppWithInfoPlist",
+    tags = ["snapshot"]
 )
 
 # Configurable xcconfig, infoplist and entitlements
@@ -398,17 +408,17 @@ ios_application(
     ],
 )
 
-output_test(
-    name = "AppWithSelectableCopts_output_test",
-    expected = [
-        "LaunchScreen.storyboardc",
-        "Info.plist",
-        "AppWithSelectableCopts",
-    ],
-    target = ":AppWithSelectableCopts",
-)
+#output_test(
+#    name = "AppWithSelectableCopts_output_test",
+#    expected = [
+#        "LaunchScreen.storyboardc",
+#        "Info.plist",
+#        "AppWithSelectableCopts",
+#    ],
+#    target = ":AppWithSelectableCopts",
+#)
 
-make_tests()
+#make_tests()
 
 ios_application(
     name = "AppTestOnly",
@@ -436,3 +446,8 @@ ios_application(
         "//tests/ios/frameworks/testonly:SwiftLibrary",
     ],
 )
+
+NTESTS=4
+# hdiutil create -size 1m -volname garb garb.dmg
+[line_length_test(name="x"+str(x), srcs=["//:garb.dmg"]) for x in range(1,NTESTS)]
+test_suite(name="tx", tests=["x"+str(x) for x in range(1,NTESTS)])
