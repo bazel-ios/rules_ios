@@ -1,7 +1,7 @@
 """
 ############################################################################
 #                   THIS IS GENERATED CODE                                 #
-# Extracted from Xcode 13.4.1                                     #
+# Extracted from Xcode 14.2                                     #
 # To update, in rules_ios run `bazel run data_generators:extract_xcspecs`  #
 ############################################################################
 """
@@ -1166,6 +1166,17 @@ SETTINGS = {
                 ],
                 "Type": "Boolean",
             },
+            "CLANG_WARN_IMPLICIT_FALLTHROUGH": {
+                "Category": "Warnings",
+                "CommandLineArgs": {
+                    "NO": ["-Wno-implicit-fallthrough"],
+                    "YES": ["-Wimplicit-fallthrough"],
+                    "YES_ERROR": ["-Werror=implicit-fallthrough"],
+                },
+                "DefaultValue": "com_apple_compilers_llvm_clang_1_0__CLANG_WARN_IMPLICIT_FALLTHROUGH__DefaultValue",
+                "Type": "Enumeration",
+                "Values": ["YES", "NO", "YES_ERROR"],
+            },
             "CLANG_TRIVIAL_AUTO_VAR_INIT": {
                 "CommandLineArgs": {
                     "default": [],
@@ -1797,6 +1808,7 @@ SETTINGS = {
                     "armv7",
                     "armv7s",
                     "armv7k",
+                    "arm64_32",
                 ],
                 "CommandLineArgs": {
                     "bitcode": ["-fembed-bitcode"],
@@ -1930,7 +1942,7 @@ SETTINGS = {
                 "Type": "Boolean",
             },
             "CLANG_THREAD_SANITIZER": {
-                "Architectures": ["x86_64", "arm64", "arm64e"],
+                "Architectures": ["x86_64", "x86_64h", "arm64", "arm64e"],
                 "CommandLineArgs": {"NO": [], "YES": ["-fsanitize=thread"]},
                 "DefaultValue": "com_apple_compilers_llvm_clang_1_0__CLANG_THREAD_SANITIZER__DefaultValue",
                 "Type": "Boolean",
@@ -2123,7 +2135,6 @@ SETTINGS = {
         "CommandIdentifier": "create:$(OutputPath)",
         "CommandLine": "[exec-path] [options] [special-args] -o $(OutputPath)",
         "CommandOutputParser": "XCGccCommandOutputParser",
-        "DependencyInfoFile": "$(LD_DEPENDENCY_INFO_FILE)",
         "Description": "Link executable using Apple Mach-O Linker (ld)",
         "ExecDescription": "Link $(OutputFile:file)",
         "Identifier": "com.apple.pbx.linkers.ld",
@@ -2360,7 +2371,14 @@ SETTINGS = {
                 "Type": "Boolean",
             },
             "LD_BITCODE_GENERATION_MODE": {
-                "Architectures": ["arm64e", "arm64", "armv7", "armv7s", "armv7k"],
+                "Architectures": [
+                    "arm64e",
+                    "arm64",
+                    "arm64_32",
+                    "armv7",
+                    "armv7s",
+                    "armv7k",
+                ],
                 "CommandLineArgs": {
                     "bitcode": ["-fembed-bitcode"],
                     "marker": ["-fembed-bitcode-marker"],
@@ -2371,21 +2389,28 @@ SETTINGS = {
                 "Values": ["marker", "bitcode"],
             },
             "LD_VERIFY_BITCODE": {
-                "Architectures": ["arm64e", "arm64", "armv7", "armv7s", "armv7k"],
+                "Architectures": ["arm64e", "arm64", "arm64_32", "armv7", "armv7s", "armv7k"],
                 "CommandLineArgs": {"NO": [], "YES": ["-Xlinker", "-bitcode_verify"]},
                 "Condition": "com_apple_pbx_linkers_ld__LD_VERIFY_BITCODE__Condition",
                 "DefaultValue": "com_apple_pbx_linkers_ld__LD_VERIFY_BITCODE__DefaultValue",
                 "Type": "Boolean",
             },
             "LD_HIDE_BITCODE_SYMBOLS": {
-                "Architectures": ["arm64", "arm64e", "armv7", "armv7s", "armv7k"],
+                "Architectures": ["arm64", "arm64e", "arm64_32", "armv7", "armv7s", "armv7k"],
                 "CommandLineArgs": {"NO": [], "YES": ["-Xlinker", "-bitcode_hide_symbols"]},
                 "Condition": "com_apple_pbx_linkers_ld__LD_HIDE_BITCODE_SYMBOLS__Condition",
                 "DefaultValue": "com_apple_pbx_linkers_ld__LD_HIDE_BITCODE_SYMBOLS__DefaultValue",
                 "Type": "Boolean",
             },
             "LD_GENERATE_BITCODE_SYMBOL_MAP": {
-                "Architectures": ["arm64", "arm64e", "armv7", "armv7s", "armv7k"],
+                "Architectures": [
+                    "arm64",
+                    "arm64e",
+                    "arm64_32",
+                    "armv7",
+                    "armv7s",
+                    "armv7k",
+                ],
                 "CommandLineArgs": {
                     "NO": [],
                     "YES": [
@@ -2400,7 +2425,7 @@ SETTINGS = {
                 "Type": "Boolean",
             },
             "LD_THREAD_SANITIZER": {
-                "Architectures": ["x86_64", "arm64", "arm64e"],
+                "Architectures": ["x86_64", "x86_64h", "arm64", "arm64e"],
                 "CommandLineArgs": {"NO": [], "YES": ["-fsanitize=thread"]},
                 "DefaultValue": "com_apple_pbx_linkers_ld__LD_THREAD_SANITIZER__DefaultValue",
                 "Type": "Boolean",
@@ -2580,6 +2605,10 @@ SETTINGS = {
                 "DefaultValue": "com_apple_xcode_tools_ibtool_compiler__IBC_COMPILER_USE_NIBKEYEDARCHIVER_FOR_MACOS__DefaultValue",
                 "Type": "Boolean",
             },
+            "IBC_COMPILATION_MODE_FOR_IOS": {
+                "CommandLineFlag": "--compilation-mode-for-ios",
+                "Type": "String",
+            },
         },
         "Outputs": [
             "$(ProductResourcesDir)/$(InputFileBase).nib",
@@ -2621,7 +2650,6 @@ SETTINGS = {
                 "Type": "Boolean",
             },
             "SWIFT_ENABLE_INCREMENTAL_COMPILATION": {
-                "CommandLineArgs": {"NO": [], "YES": ["-incremental"]},
                 "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_INCREMENTAL_COMPILATION__DefaultValue",
                 "Type": "Boolean",
             },
@@ -2672,6 +2700,11 @@ SETTINGS = {
                 "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_MODULE_NAME__DefaultValue",
                 "Type": "String",
             },
+            "SWIFT_MODULE_ALIASES": {
+                "CommandLineFlag": "-module-alias",
+                "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_MODULE_ALIASES__DefaultValue",
+                "Type": "StringList",
+            },
             "SWIFT_OBJC_BRIDGING_HEADER": {
                 "Category": "General",
                 "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_OBJC_BRIDGING_HEADER__DefaultValue",
@@ -2701,6 +2734,14 @@ SETTINGS = {
                 "DisplayName": "Install Objective-C Compatibility Header",
                 "Type": "Boolean",
             },
+            "SWIFT_INSTALL_MODULE": {
+                "Category": "General",
+                "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_INSTALL_MODULE__DefaultValue",
+                "Description": "For frameworks, install the Swift module so it can be " +
+                               "accessed from Swift code using the framework.",
+                "DisplayName": "Install Swift Module",
+                "Type": "Boolean",
+            },
             "SWIFT_OPTIMIZATION_LEVEL": {
                 "Category": "Code Generation",
                 "CommandLineArgs": {
@@ -2728,11 +2769,6 @@ SETTINGS = {
                 "Values": ["singlefile", "wholemodule"],
             },
             "SWIFT_ENABLE_BATCH_MODE": {
-                "CommandLineArgs": {
-                    "NO": "-disable-batch-mode",
-                    "YES": "-enable-batch-mode",
-                },
-                "Condition": "com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_BATCH_MODE__Condition",
                 "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_BATCH_MODE__DefaultValue",
                 "Type": "Boolean",
             },
@@ -2777,21 +2813,6 @@ SETTINGS = {
                 },
                 "Condition": "com_apple_xcode_tools_swift_compiler____SWIFT_ENFORCE_EXCLUSIVE_ACCESS_DEBUG_ENFORCEMENT_DEBUG__Condition",
                 "DefaultValue": "com_apple_xcode_tools_swift_compiler____SWIFT_ENFORCE_EXCLUSIVE_ACCESS_DEBUG_ENFORCEMENT_DEBUG__DefaultValue",
-                "Type": "Boolean",
-            },
-            "SWIFT_OPTIMIZE_OBJECT_LIFETIME": {
-                "Category": "Code Generation",
-                "CommandLineArgs": {
-                    "NO": [],
-                    "YES": [
-                        "-Xfrontend",
-                        "-enable-copy-propagation",
-                    ],
-                },
-                "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_OPTIMIZE_OBJECT_LIFETIME__DefaultValue",
-                "Description": "Enables aggressive ARC optimization that " +
-                               "shortens object lifetimes",
-                "DisplayName": "Optimize Object Lifetimes",
                 "Type": "Boolean",
             },
             "SWIFT_STDLIB": {
@@ -2850,10 +2871,35 @@ SETTINGS = {
                 "Basic": "YES",
                 "Category": "Language",
                 "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_VERSION__DefaultValue",
-                "Description": "",
+                "Description": "The language version used to compile the target's Swift " +
+                               "code.",
                 "DisplayName": "Swift Language Version",
                 "Type": "String",
                 "UIType": "swiftversion",
+            },
+            "SWIFT_ENABLE_BARE_SLASH_REGEX": {
+                "Category": "Language",
+                "CommandLineArgs": {
+                    "NO": [],
+                    "YES": ["-enable-bare-slash-regex"],
+                },
+                "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_BARE_SLASH_REGEX__DefaultValue",
+                "Description": "Enable the use of forward slash " +
+                               "regular-expression literal syntax " +
+                               "(-enable-bare-slash-regex)",
+                "DisplayName": "Enable Bare Slash Regex Literals",
+                "Type": "Boolean",
+            },
+            "SWIFT_STRICT_CONCURRENCY": {
+                "Category": "Language",
+                "CommandLineArgs": {
+                    "<<otherwise>>": ["-strict-concurrency=$(value)"],
+                    "minimal": [],
+                },
+                "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_STRICT_CONCURRENCY__DefaultValue",
+                "DisplayName": "Strict Concurrency Checking",
+                "Type": "Enumeration",
+                "Values": ["minimal", "targeted", "complete"],
             },
             "GCC_GENERATE_DEBUGGING_SYMBOLS": {
                 "CommandLineArgs": {"NO": [], "YES": ["-g"]},
@@ -2964,7 +3010,7 @@ SETTINGS = {
                 "Type": "Boolean",
             },
             "SWIFT_THREAD_SANITIZER": {
-                "Architectures": ["x86_64", "arm64", "arm64e"],
+                "Architectures": ["x86_64", "x86_64h", "arm64", "arm64e"],
                 "CommandLineArgs": {"NO": [], "YES": ["-sanitize=thread"]},
                 "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_THREAD_SANITIZER__DefaultValue",
                 "Type": "Boolean",
