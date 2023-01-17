@@ -895,10 +895,8 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
 
         target_settings = _set_target_settings_by_config(ctx, target_settings)
 
-        # For UI tests, passing sources add Compile Sources Build Phase and having this build phase makes 'Check Dependencies' step fail with the error message "Target has its own product"
-        sources_for_target_name = compiled_sources + compiled_non_arc_sources + asset_sources if product_type != "bundle.ui-testing" else []
         xcodeproj_targets_by_name[target_name] = {
-            "sources": sources_for_target_name,
+            "sources": compiled_sources + compiled_non_arc_sources + asset_sources,
             "type": product_type,
             "platform": _PLATFORM_MAPPING[target_info.platform_type],
             "deploymentTarget": target_info.minimum_os_version,
