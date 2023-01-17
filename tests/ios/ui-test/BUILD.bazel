@@ -1,7 +1,7 @@
 load("//rules:test.bzl", "ios_ui_test")
 
 ios_ui_test(
-    name = "EmptyTest",
+    name = "EmptyUITest",
     srcs = [
         "empty.swift",
     ],
@@ -10,11 +10,12 @@ ios_ui_test(
 )
 
 ios_ui_test(
-    name = "SimpleTest",
+    name = "SimpleUITest",
     srcs = [
         "simple.swift",
     ],
     minimum_os_version = "11.0",
     test_host = "//tests/ios/ui-test/test-app-host:TestAppHost",
+    # Adding visibility so the xcodeproject tests can depend on this target
     visibility = ["//visibility:public"],
 )
