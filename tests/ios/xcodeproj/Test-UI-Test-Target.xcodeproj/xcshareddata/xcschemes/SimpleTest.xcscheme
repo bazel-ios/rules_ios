@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme
+   LastUpgradeVersion = "1200"
+   version = "1.3">
+   <BuildAction
+      parallelizeBuildables = "NO"
+      buildImplicitDependencies = "NO">
+      <BuildActionEntries>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "EDAF452E83B18486E3C74D44"
+               BuildableName = "SimpleTest.xctest"
+               BlueprintName = "SimpleTest"
+               ReferencedContainer = "container:Test-UI-Test-Target.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+      </BuildActionEntries>
+   </BuildAction>
+   <TestAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      onlyGenerateCoverageForSpecifiedTargets = "NO"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      customLLDBInitFile = "$CONFIGURATION_TEMP_DIR/SimpleTest.lldbinit">
+      <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "EDAF452E83B18486E3C74D44"
+               BuildableName = "SimpleTest.xctest"
+               BlueprintName = "SimpleTest"
+               ReferencedContainer = "container:Test-UI-Test-Target.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+      </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "EDAF452E83B18486E3C74D44"
+            BuildableName = "SimpleTest.xctest"
+            BlueprintName = "SimpleTest"
+            ReferencedContainer = "container:Test-UI-Test-Target.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+      <CommandLineArguments>
+      </CommandLineArguments>
+   </TestAction>
+   <LaunchAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      launchStyle = "0"
+      useCustomWorkingDirectory = "NO"
+      ignoresPersistentStateOnLaunch = "NO"
+      debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
+      allowLocationSimulation = "YES"
+      customLLDBInitFile = "$CONFIGURATION_TEMP_DIR/SimpleTest.lldbinit">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "EDAF452E83B18486E3C74D44"
+            BuildableName = "SimpleTest.xctest"
+            BlueprintName = "SimpleTest"
+            ReferencedContainer = "container:Test-UI-Test-Target.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+      <CommandLineArguments>
+      </CommandLineArguments>
+   </LaunchAction>
+   <ProfileAction
+      buildConfiguration = "Release"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      savedToolIdentifier = ""
+      useCustomWorkingDirectory = "NO"
+      debugDocumentVersioning = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "EDAF452E83B18486E3C74D44"
+            BuildableName = "SimpleTest.xctest"
+            BlueprintName = "SimpleTest"
+            ReferencedContainer = "container:Test-UI-Test-Target.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+   </ProfileAction>
+   <AnalyzeAction
+      buildConfiguration = "Debug">
+   </AnalyzeAction>
+   <ArchiveAction
+      buildConfiguration = "Release"
+      revealArchiveInOrganizer = "YES">
+   </ArchiveAction>
+</Scheme>
