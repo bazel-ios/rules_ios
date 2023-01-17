@@ -1,7 +1,7 @@
 load("//rules:test.bzl", "ios_ui_test")
 
 ios_ui_test(
-    name = "EmptyUITest",
+    name = "EmptyTest",
     srcs = [
         "empty.swift",
     ],
@@ -10,7 +10,7 @@ ios_ui_test(
 )
 
 ios_ui_test(
-    name = "SimpleUITest",
+    name = "SimpleTest",
     srcs = [
         "simple.swift",
     ],

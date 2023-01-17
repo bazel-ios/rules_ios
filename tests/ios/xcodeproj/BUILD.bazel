@@ -228,7 +228,7 @@ xcodeproj(
     bazel_path = "bazelisk",
     include_transitive_targets = True,
     deps = [
-        "//tests/ios/ui-test:SimpleUITest",
+        "//tests/ios/ui-test:SimpleTest",
     ],
 )
 
