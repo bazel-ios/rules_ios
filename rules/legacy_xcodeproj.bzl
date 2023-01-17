@@ -977,7 +977,6 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
                 "targets": [target_name],
                 "customLLDBInit": lldbinit_file,
                 "disableMainThreadChecker": ctx.attr.disable_main_thread_checker,
-                "debugEnabled": True,
             }
 
         elif target_name in build_target_to_scheme_info:
