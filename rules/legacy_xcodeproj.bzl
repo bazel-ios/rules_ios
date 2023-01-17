@@ -875,9 +875,31 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
         test_host_appname = getattr(target_info, "test_host_appname", None)
         if test_host_appname:
             target_dependencies.append({"target": test_host_appname})
+
+            # TEST_HOST setting for UI tests cannot be set because TEST_HOST conflicts with USES_XCTRUNNER
             if product_type != "bundle.ui-testing":
-                # TEST_HOST setting for UI tests cannot be set because TEST_HOST conflicts with USES_XCTRUNNER
                 target_settings["TEST_HOST"] = "$(BUILT_PRODUCTS_DIR)/{test_host_appname}.app/{test_host_appname}".format(test_host_appname = test_host_appname)
+            else:
+                target_settings["TEST_TARGET_NAME"] = test_host_appname
+
+        if product_type == "bundle.ui-testing":
+            # Cannot attach LLDB without a signed `*-Runner.app/*-Runner` binary. Xcode won't
+            # sign the UI test runner unless the UI test target itself is also signed. This
+            # intentionally overrides the project-level setting to enable LLDB for UI tests.
+            #
+            # Apple support forum: https://developer.apple.com/forums/thread/127544
+            #
+            # Before:
+            #   $ codesign -dvvvv SimpleTest-Runner.app | grep "CodeDirectory"
+            #   CodeDirectory v=20400 size=791 flags=0x0(none) hashes=19+2 location=embedded
+            # After:
+            #   $ codesign -dvvvv SimpleTest-Runner.app | grep "CodeDirectory"
+            #   CodeDirectory v=20400 size=803 flags=0x2(adhoc) hashes=19+3 location=embedded
+            target_settings["CODE_SIGNING_ALLOWED"] = True
+
+            # The UI test target can't be signed without an `Info.plist`.
+            target_settings["GENERATE_INFOPLIST_FILE"] = True
+
         if target_info.targeted_device_family:
             target_settings["TARGETED_DEVICE_FAMILY"] = target_info.targeted_device_family
 
@@ -955,8 +977,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
                 "targets": [target_name],
                 "customLLDBInit": lldbinit_file,
                 "disableMainThreadChecker": ctx.attr.disable_main_thread_checker,
-                # TODO : Attaching debugger for UI tests is failing mysteriously, so disable for now
-                "debugEnabled": False if target_info.product_type == "bundle.ui-testing" else True,
+                "debugEnabled": True,
             }
 
         elif target_name in build_target_to_scheme_info:
