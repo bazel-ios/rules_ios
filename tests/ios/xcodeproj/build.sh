@@ -18,6 +18,7 @@ if [ $DESTINATION_TYPE = "simulator" ]; then
     xcrun simctl list
 
     export SAMPLE_PROJECT_AND_SCHEME="-project Single-Static-Framework-Project.xcodeproj -scheme ObjcFrameworkTests"
+    export HOST_ARCH=$(uname -m)
     export SIM_DEVICE_ID=$(xcodebuild \
     $SAMPLE_PROJECT_AND_SCHEME \
     -showdestinations \
@@ -30,7 +31,7 @@ fi
 
 for i in $(find $XCODE_PROJ_GLOB.xcodeproj -maxdepth 0 -type d); do
     if [ $DESTINATION_TYPE = "simulator" ]; then
-        xcodebuild -project $i -alltargets -sdk iphonesimulator -destination "id=$SIM_DEVICE_ID" -quiet
+        xcodebuild -project $i -alltargets -sdk iphonesimulator -arch "$HOST_ARCH" -destination "platform=iOS Simulator,id=$SIM_DEVICE_ID" -quiet
     else
         xcodebuild -project $i -alltargets -sdk iphoneos -quiet
     fi
