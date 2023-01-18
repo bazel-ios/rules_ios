@@ -6,7 +6,14 @@ cd $(dirname $0)
 xcrun simctl list
 
 export PROJECT_AND_SCHEME="-project Single-Static-Framework-Project.xcodeproj -scheme ObjcFrameworkTests"
-export SIM_DEVICE_ID=$(xcodebuild $PROJECT_AND_SCHEME -showdestinations -destination "generic/platform=iOS Simulator" | grep "platform:iOS Sim" | head -1 | ruby -e "puts STDIN.read.split(',')[1].split(':').last")
+export SIM_DEVICE_ID=$(xcodebuild \
+$PROJECT_AND_SCHEME \
+-showdestinations \
+-destination "generic/platform=iOS Simulator" | \
+grep "platform:iOS Sim" | \
+grep "name:iPhone 14" | \
+head -1 | \
+ruby -e "puts STDIN.read.split(',')[1].split(':').last")
 
 xcodebuild $PROJECT_AND_SCHEME -destination "id=$SIM_DEVICE_ID" -quiet test
 
