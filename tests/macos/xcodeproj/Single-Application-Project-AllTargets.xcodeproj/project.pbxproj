@@ -413,7 +413,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
-				BAZEL_BUILD_TARGET_LABEL = "tests/macos/xcodeproj:Single-Application-RunnableTestSuite_iPad-Air-2__15.5";
+				BAZEL_BUILD_TARGET_LABEL = "tests/macos/xcodeproj:Single-Application-RunnableTestSuite_iPad-Air-2__16.2";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/Single-Application-RunnableTestSuite.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-D'REQUIRED_DEFINED_FLAG=1' -D'FLAG_WITH_VALUE_ZERO=0'";
@@ -436,7 +436,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
-				BAZEL_BUILD_TARGET_LABEL = "tests/macos/xcodeproj:Single-Application-RunnableTestSuite_iPad-Air-2__15.5";
+				BAZEL_BUILD_TARGET_LABEL = "tests/macos/xcodeproj:Single-Application-RunnableTestSuite_iPad-Air-2__16.2";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/Single-Application-RunnableTestSuite.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-D'REQUIRED_DEFINED_FLAG=1' -D'FLAG_WITH_VALUE_ZERO=0'";
