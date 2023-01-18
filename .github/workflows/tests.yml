@@ -98,7 +98,7 @@ jobs:
         run: find $PWD -type f \( -name 'WORKSPACE' -o -name '*.bzl' -o -name '*.bazel' \) | xargs bazel run buildifier -- -lint=fix && git diff --exit-code
       - name: Check docs
         run: bazelisk run docs && git diff --exit-code docs
-  xcodeproj_tests_xcode_14_2_0:
+  xcodeproj_tests:
     name: .xcodeproj Tests on Xcode 14.2.0
     runs-on: macos-12
     steps:
@@ -113,7 +113,7 @@ jobs:
           name: bazel-testlogs
           path: bazel-testlogs
 
-  lldb_ios_tests_xcode_14_2_0:
+  lldb_ios_tests_xcode:
     name: LLDB tests on Xcode 14.2.0
     runs-on: macos-12
     steps:
