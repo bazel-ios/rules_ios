@@ -50,6 +50,15 @@ def github_repo(name, project, repo, ref, sha256 = None, **kwargs):
 def rules_ios_dependencies():
     """Fetches repositories that are dependencies of the `rules_apple` workspace.
     """
+
+    # See if bumping the test startup timeout fixes `Build and Test`'s lldb tests.
+    http_archive(
+        name = "xctestrunner",
+        sha256 = "c75a3a8f1e77639bd7f2302b206e24d5401ac5ef062ab830fd79043eebb679aa",
+        urls = ["https://github.com/reddit/xctestrunner/archive/56091e25f3410beddc3daa490ae707a47270cd40.tar.gz"],
+        strip_prefix = "xctestrunner-56091e25f3410beddc3daa490ae707a47270cd40",
+    )
+
     _maybe(
         github_repo,
         name = "build_bazel_rules_swift",
