@@ -27,8 +27,21 @@ jobs:
           # Clean up after simctl (https://github.com/bazelbuild/rules_apple/issues/185)
           pgrep Simulator | xargs kill || true
 
+          # Create single ephemeral iOS sim
+          set +e
+          SIM_CREATION_OUTPUT=$(./tools/tests/prepare_sim.py)
+          SIM_CREATION_PARTS=(${SIM_CREATION_OUTPUT//,/ })
+          SIMULATOR_NAME=${PARTS[0]}
+          SIMULATOR_UDID=${PARTS[1]}
+          set -e
+
           # `deleted_packages` is needed below in order to override the value of the .bazelrc file
-          bazelisk test --local_test_jobs=1 --apple_platform_type=ios --deleted_packages='' -- //tests/ios/...
+          bazelisk test \
+            --local_test_jobs=1 \
+            --apple_platform_type=ios \
+            --deleted_packages='' \
+            --test_arg=--destination=platform=ios_simulator,id=$SIMULATOR_UDID \
+            -- //tests/ios/...
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
