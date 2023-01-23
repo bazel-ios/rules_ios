@@ -10,8 +10,8 @@ from pkg_resources import packaging
 
 _DEVICE_NAME = "BazeliOSPhone"
 _DEVICE_TYPE = os.getenv('TEST_DEVICE_MODEL') if os.getenv(
-    'TEST_DEVICE_MODEL') else "com.apple.CoreSimulator.SimDeviceType.iPhone-8-Plus"
-_BOOT_TIMEOUT = 120
+    'TEST_DEVICE_MODEL') else "com.apple.CoreSimulator.SimDeviceType.iPhone-14"
+_BOOT_TIMEOUT = 180
 
 _IMPLEMENTED_IN_BOTH_ERROR_STRING = "is implemented in both"
 _EXTENSION_POINT_ERROR_STRING = "did not find extension point"
@@ -123,7 +123,7 @@ def handle_bootstatus_timeout(e):
 def main():
     try:
         device_id = create_sim_device_and_boot()
-        print(f'{_DEVICE_NAME},{device_id},{_DEVICE_TYPE}')
+        print(f'{device_id}')
     except subprocess.TimeoutExpired as e:
         handle_bootstatus_timeout(e)
 

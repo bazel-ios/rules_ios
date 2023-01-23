@@ -28,12 +28,7 @@ jobs:
           pgrep Simulator | xargs kill || true
 
           # Create single ephemeral iOS sim
-          set +e
-          SIM_CREATION_OUTPUT=$(./tools/tests/prepare_sim.py)
-          SIM_CREATION_PARTS=(${SIM_CREATION_OUTPUT//,/ })
-          SIMULATOR_NAME=${PARTS[0]}
-          SIMULATOR_UDID=${PARTS[1]}
-          set -e
+          SIMULATOR_UDID=$(./tools/tests/prepare_sim.py)
 
           # `deleted_packages` is needed below in order to override the value of the .bazelrc file
           bazelisk test \
