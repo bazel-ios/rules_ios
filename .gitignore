@@ -3,6 +3,7 @@ bazel-*
 tests/macos/xcodeproj/**/xcuserdata
 tests/ios/xcodeproj/**/xcuserdata
 **/*.xcodeproj/bazelinstallers/index-import
+**/*.xcodeproj/bazelinstallers/index-import.runfiles
 /tests/ios/Index/
 /tests/macos/Index/
 /tests/index-import.pid
