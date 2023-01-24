@@ -14,10 +14,24 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DD3C6F34D799A8C223E7D252"
-               BuildableName = "ExplicitHostedWithAppExtensions.xctest"
-               BlueprintName = "ExplicitHostedWithAppExtensions"
-               ReferencedContainer = "container:TestWithHostAppWithExtensions.xcodeproj">
+               BlueprintIdentifier = "2B7DA68C47D629972D1134C8"
+               BuildableName = "App.app"
+               BlueprintName = "App"
+               ReferencedContainer = "container:TestWithHostApp.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2C3A627878C5E65865D4B494"
+               BuildableName = "ExampleExtension.appex"
+               BlueprintName = "ExampleExtension"
+               ReferencedContainer = "container:TestWithHostApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -27,31 +41,18 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       onlyGenerateCoverageForSpecifiedTargets = "NO"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      customLLDBInitFile = "$CONFIGURATION_TEMP_DIR/ExplicitHostedWithAppExtensions.lldbinit">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DD3C6F34D799A8C223E7D252"
-               BuildableName = "ExplicitHostedWithAppExtensions.xctest"
-               BlueprintName = "ExplicitHostedWithAppExtensions"
-               ReferencedContainer = "container:TestWithHostAppWithExtensions.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DD3C6F34D799A8C223E7D252"
-            BuildableName = "ExplicitHostedWithAppExtensions.xctest"
-            BlueprintName = "ExplicitHostedWithAppExtensions"
-            ReferencedContainer = "container:TestWithHostAppWithExtensions.xcodeproj">
+            BlueprintIdentifier = "2B7DA68C47D629972D1134C8"
+            BuildableName = "App.app"
+            BlueprintName = "App"
+            ReferencedContainer = "container:TestWithHostApp.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <CommandLineArguments>
-      </CommandLineArguments>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -62,19 +63,17 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
-      allowLocationSimulation = "YES"
-      customLLDBInitFile = "$CONFIGURATION_TEMP_DIR/ExplicitHostedWithAppExtensions.lldbinit">
-      <MacroExpansion>
+      allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DD3C6F34D799A8C223E7D252"
-            BuildableName = "ExplicitHostedWithAppExtensions.xctest"
-            BlueprintName = "ExplicitHostedWithAppExtensions"
-            ReferencedContainer = "container:TestWithHostAppWithExtensions.xcodeproj">
+            BlueprintIdentifier = "2B7DA68C47D629972D1134C8"
+            BuildableName = "App.app"
+            BlueprintName = "App"
+            ReferencedContainer = "container:TestWithHostApp.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
-      <CommandLineArguments>
-      </CommandLineArguments>
+      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -86,10 +85,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DD3C6F34D799A8C223E7D252"
-            BuildableName = "ExplicitHostedWithAppExtensions.xctest"
-            BlueprintName = "ExplicitHostedWithAppExtensions"
-            ReferencedContainer = "container:TestWithHostAppWithExtensions.xcodeproj">
+            BlueprintIdentifier = "2B7DA68C47D629972D1134C8"
+            BuildableName = "App.app"
+            BlueprintName = "App"
+            ReferencedContainer = "container:TestWithHostApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
