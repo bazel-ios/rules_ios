@@ -7,12 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F9C7A237281769B16354A44 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FB08B7C929A64386CDFE06 /* empty.swift */; };
 		31AA2C5800D29E42C589B56B /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FB08B7C929A64386CDFE06 /* empty.swift */; };
 		83CAB78009AF4F0196136FB6 /* empty.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F973C72CDD8C3C263F6A615 /* empty.m */; };
 		90364CB6CB510200E694DB55 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B78B78C06FA82FF60423814 /* main.m */; };
+		DBAF1B7C6B592F06CC4BA7A8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB410C7AEEA183BE996E1ED /* main.m */; };
+		F7A8C565DBE2C1D3FE326524 /* empty.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F973C72CDD8C3C263F6A615 /* empty.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		1D895677763B4065F359335E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2E45F5FFD4B2FD1997C70862 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2B7DA68C47D629972D1134C8;
+			remoteInfo = App;
+		};
 		F38C65FC54D7CD052E02657E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2E45F5FFD4B2FD1997C70862 /* Project object */;
@@ -25,11 +35,17 @@
 /* Begin PBXFileReference section */
 		087F3B42D7BE6F86AB8C54F0 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		1A670BBD3E8C25AB89221850 /* iOS-9.3-AppHost.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "iOS-9.3-AppHost.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		280A96A1BB45418328EE8F8C /* ExampleExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ExampleExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		3DB410C7AEEA183BE996E1ED /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3F973C72CDD8C3C263F6A615 /* empty.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = empty.m; sourceTree = "<group>"; };
 		4B78B78C06FA82FF60423814 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4C504B1FC1C79ADAEE541422 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		52FB08B7C929A64386CDFE06 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
 		6AA79D51459F5745C6597549 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
+		8B877778D4F1B40E730E3950 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		A7A135B2F45AA4AE95B5C366 /* ExplicitHosted.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ExplicitHosted.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C5009185C598753F8C31B6F6 /* ExplicitHostedWithAppExtensions.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ExplicitHostedWithAppExtensions.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6B0D6BD4AF86F9BE813EB4B /* App.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -49,6 +65,15 @@
 			);
 			sourceTree = "<group>";
 		};
+		45F58BD53C393F0DABB4D530 /* app */ = {
+			isa = PBXGroup;
+			children = (
+				EB779FFB9EA472BA6943847B /* App */,
+				4C504B1FC1C79ADAEE541422 /* BUILD.bazel */,
+			);
+			path = app;
+			sourceTree = "<group>";
+		};
 		48EC573E873376EF2328B54F /* test_host_app */ = {
 			isa = PBXGroup;
 			children = (
@@ -58,10 +83,21 @@
 			path = test_host_app;
 			sourceTree = "<group>";
 		};
+		512C182CEE334BD83EC15E18 /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				8B877778D4F1B40E730E3950 /* BUILD.bazel */,
+			);
+			path = extensions;
+			sourceTree = "<group>";
+		};
 		80B743DAD4870A59BE6681A5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				D6B0D6BD4AF86F9BE813EB4B /* App.app */,
+				280A96A1BB45418328EE8F8C /* ExampleExtension.appex */,
 				A7A135B2F45AA4AE95B5C366 /* ExplicitHosted.xctest */,
+				C5009185C598753F8C31B6F6 /* ExplicitHostedWithAppExtensions.xctest */,
 				1A670BBD3E8C25AB89221850 /* iOS-9.3-AppHost.app */,
 			);
 			name = Products;
@@ -80,6 +116,8 @@
 		A00021A91B77EC95CF688BAA /* ios */ = {
 			isa = PBXGroup;
 			children = (
+				45F58BD53C393F0DABB4D530 /* app */,
+				512C182CEE334BD83EC15E18 /* extensions */,
 				9A72A8B989632B31533CCF07 /* unit-test */,
 			);
 			path = ios;
@@ -103,9 +141,49 @@
 			path = ../../..;
 			sourceTree = "<group>";
 		};
+		EB779FFB9EA472BA6943847B /* App */ = {
+			isa = PBXGroup;
+			children = (
+				3DB410C7AEEA183BE996E1ED /* main.m */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		2B7DA68C47D629972D1134C8 /* App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 41A9251A97487D5CAF321CF7 /* Build configuration list for PBXNativeTarget "App" */;
+			buildPhases = (
+				E019CEE69A0872FD43E28FC4 /* Build with bazel */,
+				CC6C3F2B46FB4A187B87EA49 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = App;
+			productName = App;
+			productReference = D6B0D6BD4AF86F9BE813EB4B /* App.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2C3A627878C5E65865D4B494 /* ExampleExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FB0B1956FA6AF1F0FD6A8E54 /* Build configuration list for PBXNativeTarget "ExampleExtension" */;
+			buildPhases = (
+				E6D48AE7FB41DE61D85277FF /* Build with bazel */,
+				6C510F7426AE770D548F77CB /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ExampleExtension;
+			productName = ExampleExtension;
+			productReference = 280A96A1BB45418328EE8F8C /* ExampleExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		5AE0FC080FA6A17C35721D0C /* ExplicitHosted */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B36500A688AD337FE657A850 /* Build configuration list for PBXNativeTarget "ExplicitHosted" */;
@@ -139,6 +217,23 @@
 			productReference = 1A670BBD3E8C25AB89221850 /* iOS-9.3-AppHost.app */;
 			productType = "com.apple.product-type.application";
 		};
+		A66AE4DA1051F1DAB24B0FB2 /* ExplicitHostedWithAppExtensions */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 950ED89760E7C50BBDF68501 /* Build configuration list for PBXNativeTarget "ExplicitHostedWithAppExtensions" */;
+			buildPhases = (
+				77B3F00D2A9D11AFE1F7AC1B /* Build with bazel */,
+				33FCA56F48E8BB16DC986460 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D3229F57C9937AC425CB58C3 /* PBXTargetDependency */,
+			);
+			name = ExplicitHostedWithAppExtensions;
+			productName = ExplicitHostedWithAppExtensions;
+			productReference = C5009185C598753F8C31B6F6 /* ExplicitHostedWithAppExtensions.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -161,7 +256,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				2B7DA68C47D629972D1134C8 /* App */,
+				2C3A627878C5E65865D4B494 /* ExampleExtension */,
 				5AE0FC080FA6A17C35721D0C /* ExplicitHosted */,
+				A66AE4DA1051F1DAB24B0FB2 /* ExplicitHostedWithAppExtensions */,
 				9541626BF2F6C0EE11CA1AD7 /* iOS-9.3-AppHost */,
 			);
 		};
@@ -169,6 +267,24 @@
 
 /* Begin PBXShellScriptBuildPhase section */
 		14EF484B9911CED9E8CEB705 /* Build with bazel */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build with bazel";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\nexport BAZEL_DIAGNOSTICS_DIR=\"$BUILD_DIR/../../bazel-xcode-diagnostics/\"\nmkdir -p $BAZEL_DIAGNOSTICS_DIR\nexport DATE_SUFFIX=\"$(date +%Y%m%d.%H%M%S%L)\"\nexport BAZEL_BUILD_EVENT_TEXT_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-event-$DATE_SUFFIX.txt\"\nexport BAZEL_BUILD_EXECUTION_LOG_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-execution-log-$DATE_SUFFIX.log\"\nexport BAZEL_PROFILE_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-profile-$DATE_SUFFIX.log\"\nenv -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC $BAZEL_BUILD_TARGET_LABEL\n$BAZEL_INSTALLER\n";
+		};
+		77B3F00D2A9D11AFE1F7AC1B /* Build with bazel */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -204,14 +320,74 @@
 			shellPath = /bin/sh;
 			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\nexport BAZEL_DIAGNOSTICS_DIR=\"$BUILD_DIR/../../bazel-xcode-diagnostics/\"\nmkdir -p $BAZEL_DIAGNOSTICS_DIR\nexport DATE_SUFFIX=\"$(date +%Y%m%d.%H%M%S%L)\"\nexport BAZEL_BUILD_EVENT_TEXT_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-event-$DATE_SUFFIX.txt\"\nexport BAZEL_BUILD_EXECUTION_LOG_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-execution-log-$DATE_SUFFIX.log\"\nexport BAZEL_PROFILE_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-profile-$DATE_SUFFIX.log\"\nenv -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC $BAZEL_BUILD_TARGET_LABEL\n$BAZEL_INSTALLER\n";
 		};
+		E019CEE69A0872FD43E28FC4 /* Build with bazel */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build with bazel";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\nexport BAZEL_DIAGNOSTICS_DIR=\"$BUILD_DIR/../../bazel-xcode-diagnostics/\"\nmkdir -p $BAZEL_DIAGNOSTICS_DIR\nexport DATE_SUFFIX=\"$(date +%Y%m%d.%H%M%S%L)\"\nexport BAZEL_BUILD_EVENT_TEXT_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-event-$DATE_SUFFIX.txt\"\nexport BAZEL_BUILD_EXECUTION_LOG_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-execution-log-$DATE_SUFFIX.log\"\nexport BAZEL_PROFILE_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-profile-$DATE_SUFFIX.log\"\nenv -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC $BAZEL_BUILD_TARGET_LABEL\n$BAZEL_INSTALLER\n";
+		};
+		E6D48AE7FB41DE61D85277FF /* Build with bazel */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build with bazel";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\nexport BAZEL_DIAGNOSTICS_DIR=\"$BUILD_DIR/../../bazel-xcode-diagnostics/\"\nmkdir -p $BAZEL_DIAGNOSTICS_DIR\nexport DATE_SUFFIX=\"$(date +%Y%m%d.%H%M%S%L)\"\nexport BAZEL_BUILD_EVENT_TEXT_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-event-$DATE_SUFFIX.txt\"\nexport BAZEL_BUILD_EXECUTION_LOG_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-execution-log-$DATE_SUFFIX.log\"\nexport BAZEL_PROFILE_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-profile-$DATE_SUFFIX.log\"\nenv -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC $BAZEL_BUILD_TARGET_LABEL\n$BAZEL_INSTALLER\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		33FCA56F48E8BB16DC986460 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F7A8C565DBE2C1D3FE326524 /* empty.m in Sources */,
+				1F9C7A237281769B16354A44 /* empty.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		65484997632584E56344A3A2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				90364CB6CB510200E694DB55 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6C510F7426AE770D548F77CB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CC6C3F2B46FB4A187B87EA49 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DBAF1B7C6B592F06CC4BA7A8 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,9 +408,64 @@
 			target = 9541626BF2F6C0EE11CA1AD7 /* iOS-9.3-AppHost */;
 			targetProxy = F38C65FC54D7CD052E02657E /* PBXContainerItemProxy */;
 		};
+		D3229F57C9937AC425CB58C3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2B7DA68C47D629972D1134C8 /* App */;
+			targetProxy = 1D895677763B4065F359335E /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		0133580578F13E6149786A81 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BIN_SUBDIR = /tests/ios/extensions;
+				BAZEL_BUILD_TARGET_LABEL = "tests/ios/extensions:ExampleExtension";
+				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ExampleExtension.lldbinit;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
+				INFOPLIST_FILE = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.app.example-extension";
+				PRODUCT_NAME = ExampleExtension;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		134C2E63EA38C5C25745056F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BIN_SUBDIR = /tests/ios/app;
+				BAZEL_BUILD_TARGET_LABEL = "tests/ios/app:App";
+				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/App.lldbinit;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/app/FW\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/app/FW2\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/app/OnlySources\"";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
+				INFOPLIST_FILE = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.app;
+				PRODUCT_NAME = App;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		267CDF14370121BE5F884778 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -271,6 +502,55 @@
 				USE_HEADERMAP = 0;
 			};
 			name = Debug;
+		};
+		2895AAB529758C44D4562A36 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BIN_SUBDIR = /tests/ios/app;
+				BAZEL_BUILD_TARGET_LABEL = "tests/ios/app:App";
+				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/App.lldbinit;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/app/FW\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/app/FW2\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/app/OnlySources\"";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
+				INFOPLIST_FILE = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.app;
+				PRODUCT_NAME = App;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		51D8E2D0F8AD19F227D56320 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
+				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test:ExplicitHostedWithAppExtensions";
+				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ExplicitHostedWithAppExtensions.lldbinit;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-41567f1bc2e5/bin/tests/ios/unit-test/ExplicitHostedWithAppExtensions.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-41567f1bc2e5/bin/tests/ios/unit-test/ExplicitHostedWithAppExtensions.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-41567f1bc2e5/bin/tests/ios/unit-test/ExplicitHostedWithAppExtensions.swiftsourceinfo";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = ExplicitHostedWithAppExtensions;
+				SUPPORTS_MACCATALYST = 0;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/App.app/App";
+			};
+			name = Release;
 		};
 		5F1F0A8FCB049380CBA75C41 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -357,6 +637,55 @@
 			};
 			name = Release;
 		};
+		A2EBC68178D9C068393555A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
+				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test:ExplicitHostedWithAppExtensions";
+				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ExplicitHostedWithAppExtensions.lldbinit;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-41567f1bc2e5/bin/tests/ios/unit-test/ExplicitHostedWithAppExtensions.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-41567f1bc2e5/bin/tests/ios/unit-test/ExplicitHostedWithAppExtensions.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-41567f1bc2e5/bin/tests/ios/unit-test/ExplicitHostedWithAppExtensions.swiftsourceinfo";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = ExplicitHostedWithAppExtensions;
+				SUPPORTS_MACCATALYST = 0;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/App.app/App";
+			};
+			name = Debug;
+		};
+		E820AD8661CFA7F4D4F5D642 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BIN_SUBDIR = /tests/ios/extensions;
+				BAZEL_BUILD_TARGET_LABEL = "tests/ios/extensions:ExampleExtension";
+				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ExampleExtension.lldbinit;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
+				INFOPLIST_FILE = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.app.example-extension";
+				PRODUCT_NAME = ExampleExtension;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 		F3E3860302C8B303E0690262 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -408,6 +737,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		41A9251A97487D5CAF321CF7 /* Build configuration list for PBXNativeTarget "App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2895AAB529758C44D4562A36 /* Debug */,
+				134C2E63EA38C5C25745056F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		513AB10B3BA24602609F76A5 /* Build configuration list for PBXProject "TestWithHostApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -426,11 +764,29 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		950ED89760E7C50BBDF68501 /* Build configuration list for PBXNativeTarget "ExplicitHostedWithAppExtensions" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A2EBC68178D9C068393555A4 /* Debug */,
+				51D8E2D0F8AD19F227D56320 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		B36500A688AD337FE657A850 /* Build configuration list for PBXNativeTarget "ExplicitHosted" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F3E3860302C8B303E0690262 /* Debug */,
 				FC00DAA2FE113CF025F03701 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		FB0B1956FA6AF1F0FD6A8E54 /* Build configuration list for PBXNativeTarget "ExampleExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0133580578F13E6149786A81 /* Debug */,
+				E820AD8661CFA7F4D4F5D642 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

@@ -35,6 +35,19 @@ ios_unit_test(
 )
 
 ios_unit_test(
+    name = "ExplicitHostedWithAppExtensions",
+    srcs = [
+        "empty.m",
+        "empty.swift",
+    ],
+    minimum_os_version = "12.0",
+    # Intentionally dependent on app with extensions.
+    test_host = "//tests/ios/app:App",
+    # Adding visibility so the xcodeproject tests can depend on this target
+    visibility = ["//visibility:public"],
+)
+
+ios_unit_test(
     name = "ResourcesAddedToUnitTestBundle",
     srcs = [
         "empty.m",
