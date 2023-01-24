@@ -38,7 +38,7 @@ ios_lldb_breakpoint_po_test(
     device = "iPhone 13 Pro",
     expected_value = "some",
     lldbinit = ":Objc-proj_xc_lldbinit",
-    sdk = "15.5",
+    sdk = "16.2",
     set_cmd = "breakpoint set --file 'tests/ios/lldb/app/App/main.m' --line 6",
     tags = ["manual"],
     variable = "x",
@@ -54,7 +54,7 @@ ios_lldb_breakpoint_command_test(
         "execute: po x",
         "cmd_result: po x some",
     ],
-    sdk = "15.5",
+    sdk = "16.2",
     set_cmd = "breakpoint set --file 'tests/ios/lldb/app/App/main.m' --line 6",
     tags = ["manual"],
 )

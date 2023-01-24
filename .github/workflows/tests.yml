@@ -24,8 +24,19 @@ jobs:
           # Host config
           bazelisk test --local_test_jobs=1 -- //... -//tests/ios/...
 
+          # Clean up after simctl (https://github.com/bazelbuild/rules_apple/issues/185)
+          pgrep Simulator | xargs kill || true
+
+          # Create single ephemeral iOS sim
+          SIMULATOR_UDID=$(./tools/tests/prepare_sim.py)
+
           # `deleted_packages` is needed below in order to override the value of the .bazelrc file
-          bazelisk test --local_test_jobs=1 --apple_platform_type=ios --deleted_packages='' -- //tests/ios/...
+          bazelisk test \
+            --local_test_jobs=1 \
+            --apple_platform_type=ios \
+            --deleted_packages='' \
+            --test_arg=--destination=platform=ios_simulator,id=$SIMULATOR_UDID \
+            -- //tests/ios/...
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
@@ -98,12 +109,12 @@ jobs:
         run: find $PWD -type f \( -name 'WORKSPACE' -o -name '*.bzl' -o -name '*.bazel' \) | xargs bazel run buildifier -- -lint=fix && git diff --exit-code
       - name: Check docs
         run: bazelisk run docs && git diff --exit-code docs
-  xcodeproj_tests_xcode_13_4_1:
-    name: .xcodeproj Tests on Xcode 13.4.1
+  xcodeproj_tests:
+    name: .xcodeproj Tests on Xcode 14.2.0
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
-      - name: Select Xcode 13.4.1
+      - name: Select Xcode 14.2.0
         run: .github/workflows/xcode_select.sh
       - name: Run tests
         run: ./tests/xcodeproj-tests.sh --clean && ./tests/test-tests.sh
@@ -113,12 +124,12 @@ jobs:
           name: bazel-testlogs
           path: bazel-testlogs
 
-  lldb_ios_tests_xcode_13_4_1:
-    name: LLDB tests on Xcode 13.4.1
+  lldb_ios_tests_xcode:
+    name: LLDB tests on Xcode 14.2.0
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
-      - name: Select Xcode 13.4.1
+      - name: Select Xcode 14.2.0
         run: .github/workflows/xcode_select.sh
       - name: Run tests
         run: bazelisk test tests/ios/lldb/app:objc_app_po_test  tests/ios/lldb/app:objc_app_variable_test --config lldb_ios_test

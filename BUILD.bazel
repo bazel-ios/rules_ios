@@ -131,32 +131,34 @@ selects.config_setting_group(
 )
 
 xcode_version(
-    name = "version13_4_1_13F100",
+    name = "version14_2_0_14C18",
     aliases = [
-        "13.4",
-        "13.4.1",
-        "13.4.1.13F100",
+        "14.2.0.14C18",
+        "14.2.0",
+        "14C18",
+        "14.2",
+        "14",
     ],
-    default_ios_sdk_version = "15.5",
-    default_macos_sdk_version = "12.3",
-    default_tvos_sdk_version = "15.4",
-    default_watchos_sdk_version = "8.5",
-    version = "13.4.1.13F100",
+    default_ios_sdk_version = "16.2",
+    default_macos_sdk_version = "13.1",
+    default_tvos_sdk_version = "16.1",
+    default_watchos_sdk_version = "9.1",
+    version = "14.2.0.14C18",
 )
 
 xcode_config(
     name = "host_xcodes",
-    default = ":version13_4_1_13F100",
+    default = ":version14_2_0_14C18",
     versions = [
-        ":version13_4_1_13F100",
+        ":version14_2_0_14C18",
     ],
     visibility = ["//visibility:public"],
 )
 
 available_xcodes(
     name = "host_available_xcodes",
-    default = ":version13_4_1_13F100",
+    default = ":version14_2_0_14C18",
     versions = [
-        ":version13_4_1_13F100",
+        ":version14_2_0_14C18",
     ],
 )
