@@ -14,10 +14,24 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2B7DA68C47D629972D1134C8"
+               BlueprintIdentifier = "5CDDDFA9DEA9B330EA206FB4"
                BuildableName = "App.app"
                BlueprintName = "App"
-               ReferencedContainer = "container:TestWithHostApp.xcodeproj">
+               ReferencedContainer = "container:TestWithHostAppWithExtensions.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7EA4042B6FF87095991B572F"
+               BuildableName = "ExampleExtension.appex"
+               BlueprintName = "ExampleExtension"
+               ReferencedContainer = "container:TestWithHostAppWithExtensions.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,10 +47,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2B7DA68C47D629972D1134C8"
+            BlueprintIdentifier = "5CDDDFA9DEA9B330EA206FB4"
             BuildableName = "App.app"
             BlueprintName = "App"
-            ReferencedContainer = "container:TestWithHostApp.xcodeproj">
+            ReferencedContainer = "container:TestWithHostAppWithExtensions.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -49,20 +63,17 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
-      allowLocationSimulation = "YES"
-      customLLDBInitFile = "$CONFIGURATION_TEMP_DIR/App.lldbinit">
+      allowLocationSimulation = "YES">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2B7DA68C47D629972D1134C8"
+            BlueprintIdentifier = "5CDDDFA9DEA9B330EA206FB4"
             BuildableName = "App.app"
             BlueprintName = "App"
-            ReferencedContainer = "container:TestWithHostApp.xcodeproj">
+            ReferencedContainer = "container:TestWithHostAppWithExtensions.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <CommandLineArguments>
-      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -74,10 +85,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2B7DA68C47D629972D1134C8"
+            BlueprintIdentifier = "5CDDDFA9DEA9B330EA206FB4"
             BuildableName = "App.app"
             BlueprintName = "App"
-            ReferencedContainer = "container:TestWithHostApp.xcodeproj">
+            ReferencedContainer = "container:TestWithHostAppWithExtensions.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

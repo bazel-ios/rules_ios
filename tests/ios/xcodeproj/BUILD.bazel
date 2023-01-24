@@ -113,6 +113,22 @@ xcodeproj(
     project_name = "TestWithHostApp",  # Test that setting a custom project name works as expected
     deps = [
         "//tests/ios/unit-test:ExplicitHosted",
+    ],
+)
+
+# Test that the test_host is included when using "include_transitive_targets = True"
+xcodeproj(
+    name = "Test-With-Host-App-With-Extensions",
+    testonly = True,
+    bazel_path = "bazelisk",
+    generate_schemes_for_product_types = [
+        "application",
+        "bundle.unit-test",
+        "test_suite",
+    ],
+    include_transitive_targets = True,
+    project_name = "TestWithHostAppWithExtensions",  # Test that setting a custom project name works as expected
+    deps = [
         "//tests/ios/unit-test:ExplicitHostedWithAppExtensions",
     ],
 )
