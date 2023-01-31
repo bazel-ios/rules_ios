@@ -55,16 +55,19 @@ int main(int ac, char **av) {
     }
     debug("Writing hmap with %u entries", numEntries);
     HeaderMap *hmap = hmap_new(numEntries);
+    int rc = 0;
     for (m = entries; m != NULL; m = m->hh.next) {
         if (hmap_addEntry(hmap, m->key, m->value)) {
             fprintf(stderr, "failed to add '%s' to hmap\n", m->key);
+            rc = 1;
         }
     }
     if (hmap_save(hmap, cli_args.output_file)) {
         perror(cli_args.output_file);
+        rc = 1;
     }
     hmap_free(hmap);
-    return 0;
+    return rc;
 }
 
 static void usage() {
