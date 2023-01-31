@@ -945,6 +945,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                 module_name = module_name,
                 tags = _MANUAL,
             )
+            objc_hdrs.append(module_map)
             module_map = "%s.extended.modulemap" % name
 
     # Note: this needs to go here, in order to virtualize the extended module
