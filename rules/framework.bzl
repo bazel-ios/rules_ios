@@ -840,6 +840,7 @@ def _apple_framework_packaging_impl(ctx):
     split_slice_key = "{}_{}{}".format(platform, split_slice_varint, arch)
     deps = _attrs_for_split_slice(ctx.split_attr.deps, split_slice_key)
     transitive_deps = _attrs_for_split_slice(ctx.split_attr.transitive_deps, split_slice_key)
+    private_deps = _attrs_for_split_slice(ctx.split_attr.private_deps, split_slice_key)
     vfs = _attrs_for_split_slice(ctx.split_attr.vfs, split_slice_key)
 
     framework_files = _get_framework_files(ctx, deps)
@@ -913,9 +914,18 @@ def _apple_framework_packaging_impl(ctx):
     out_files.extend(outputs.modulemap)
     default_info = DefaultInfo(files = depset(out_files + bundle_outs.files.to_list()))
 
+    private_dep_objc_providers = [dep[apple_common.Objc] for dep in private_deps if apple_common.Objc in dep]
+    private_objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(providers = private_dep_objc_providers, merge_keys = [
+        "dynamic_framework_file",
+        "linkopt",
+        "library",
+        "link_inputs",
+    ])
+    private_objc_provider = apple_common.new_objc_provider(**private_objc_provider_fields)
+
     objc_provider = objc_provider_utils.merge_objc_providers(
         providers = [dep[apple_common.Objc] for dep in deps],
-        transitive = [dep[apple_common.Objc] for dep in transitive_deps],
+        transitive = [private_objc_provider] + [dep[apple_common.Objc] for dep in transitive_deps], 
     )
     return [
         avoid_deps_info,
