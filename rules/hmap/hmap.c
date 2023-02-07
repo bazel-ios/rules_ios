@@ -197,6 +197,11 @@ int hmap_save(HeaderMap* hmap, char* path) {
         perror(path);
         rc = 1;
     }
+
+    if (fsync(fd) < 0) {
+        rc = 1;
+    }
+
     close(fd);
     return rc;
 }

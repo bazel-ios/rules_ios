@@ -60,11 +60,12 @@ int main(int ac, char **av) {
             fprintf(stderr, "failed to add '%s' to hmap\n", m->key);
         }
     }
-    if (hmap_save(hmap, cli_args.output_file)) {
+    int rc = hmap_save(hmap, cli_args.output_file);
+    if (rc) {
         perror(cli_args.output_file);
     }
     hmap_free(hmap);
-    return 0;
+    return rc;
 }
 
 static void usage() {
