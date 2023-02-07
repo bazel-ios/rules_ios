@@ -191,22 +191,25 @@ int hmap_save(HeaderMap* hmap, char* path) {
         perror(path);
         return 1;
     }
+    int rc = 0;
     if (write(fd, hmap->data, hmap->stringsTableNextEntry) !=
         hmap->stringsTableNextEntry) {
         perror(path);
-        return 1;
+        rc = 1;
     }
 
-    if (fsync(fd)) {
+    // Don't fsync if it failed
+    if (rc != 1 && fsync(fd) < 0) {
         perror(path);
-        return  1;
+        rc = 1;
     }
 
+    // Close regardless of failure
     if (close(fd)) {
         perror(path);
-        return  1;
+        rc = 1;
     }
-    return 0;
+    return rc;
 }
 
 void hmap_dump(HeaderMap* hmap) {
