@@ -191,19 +191,22 @@ int hmap_save(HeaderMap* hmap, char* path) {
         perror(path);
         return 1;
     }
-    int rc = 0;
     if (write(fd, hmap->data, hmap->stringsTableNextEntry) !=
         hmap->stringsTableNextEntry) {
         perror(path);
-        rc = 1;
+        return 1;
     }
 
-    if (fsync(fd) < 0) {
-        rc = 1;
+    if (fsync(fd)) {
+        perror(path);
+        return  1;
     }
 
-    close(fd);
-    return rc;
+    if (close(fd)) {
+        perror(path);
+        return  1;
+    }
+    return 0;
 }
 
 void hmap_dump(HeaderMap* hmap) {
