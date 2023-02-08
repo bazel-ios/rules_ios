@@ -597,11 +597,11 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
 
     # Determine the interface version of rules_apple. We don't want to force
     # "hail mary" type rules and Bazel bumps on the community to run a given
-    # version of rules_ios and the API we depend on is relatively stable. If
+    # version of rules_ios and the API we depend on is relatively lts_5. If
     # this ceases to be the case than consider mainlining the few components we
     # use from it to remove this complexity.
     rules_apple_api_version = getattr(bundling_support, "rule_api_version", None)
-    use_stable_rules_apple = rules_apple_api_version == 1.0
+    use_lts_5_rules_apple_api = rules_apple_api_version == 1.0
 
     bundle_name, bundle_extension = bundling_support.bundle_full_name_from_rule_ctx(ctx)
     executable_name = bundling_support.executable_name(ctx)
@@ -728,7 +728,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         ),
     )
 
-    if use_stable_rules_apple:
+    if use_lts_5_rules_apple_api:
         processor_partials.append(
             partials.debug_symbols_partial(
                 actions = actions,
@@ -775,7 +775,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         ),
     )
 
-    if use_stable_rules_apple:
+    if use_lts_5_rules_apple_api:
         processor_partials.append(
             partials.framework_provider_partial(
                 actions = actions,
