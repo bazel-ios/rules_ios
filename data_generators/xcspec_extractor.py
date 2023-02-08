@@ -5,7 +5,8 @@ Extracts xcspec info from a given Xcode developer dir
 and prints out a bzl file that contains a single constant, `SETTINGS`,
 that can be used to access the xcspecs from starlark.
 
-Usage: xcspec_extractor.py /Application/Xcode.app/Contents/Developer 11.2.1 ../data/xcspecs.bzl  ../data/xcspec_evals.bzl
+Usage: bazel run //data_generators:extract_xcspecs
+Alternate: xcspec_extractor.py /Application/Xcode.app/Contents/Developer 11.2.1 ../data/xcspecs.bzl  ../data/xcspec_evals.bzl
 """
 
 import plistlib
