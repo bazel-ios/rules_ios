@@ -81,9 +81,7 @@ jobs:
         run: |
           export USE_BAZEL_VERSION=5.3.2
           bazelisk build --features apple.virtualize_frameworks \
-              --local_test_jobs=1 \
-              --apple_platform_type=ios \
-              --deleted_packages='' \
+              --config=ios \
               -- //tests/ios/... \
               -//tests/ios/frameworks/sources-with-prebuilt-binaries/...
       - uses: actions/upload-artifact@v2
