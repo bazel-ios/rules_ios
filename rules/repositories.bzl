@@ -47,6 +47,16 @@ def github_repo(name, project, repo, ref, sha256 = None, **kwargs):
         **kwargs
     )
 
+def _get_bazel_version():
+    bazel_version = getattr(native, "bazel_version", "")
+    if bazel_version:
+        parts = bazel_version.split(".")
+        if len(parts) > 2:
+            return struct(major = parts[0], minor = parts[1], patch = parts[2])
+
+    # Unknown, but don't crash
+    return struct(major = 0, minor = 0, patch = 0)
+
 def rules_ios_dependencies():
     """Fetches repositories that are dependencies of the `rules_apple` workspace.
     """
@@ -59,14 +69,29 @@ def rules_ios_dependencies():
         sha256 = "200a35c2c84096f155a5c6092bac2abf1b2149fbeb3eb730a2923997db079a83",
     )
 
-    _maybe(
-        github_repo,
-        name = "build_bazel_rules_apple",
-        ref = "b43c7f60b584d68d7d187c236d4328162ba2e806",
-        project = "bazelbuild",
-        repo = "rules_apple",
-        sha256 = "d3e8549c0c8966ba0e547a02f5601440be25a0b8143bd57ab5834b65b02c22be",
-    )
+    bazel_version = _get_bazel_version()
+    if bazel_version.major == "5":
+        # LTS support. Some of our third party deps from bazelbuild org don't
+        # support LTS but from time to time we'll evaluate supporting this to
+        # allow us to all run on HEAD
+        # For rules_apple, we maintain a tag rules_ios_1.0
+        _maybe(
+            github_repo,
+            name = "build_bazel_rules_apple",
+            ref = "78476e542160be2c32d467ef856ccc2e9152f187",
+            project = "bazelbuild",
+            repo = "rules_apple",
+            sha256 = "320e24459a03f6be2fa1986e6d973465e32e38e478e16cc2b1124a0d4a1bce42",
+        )
+    else:
+        _maybe(
+            github_repo,
+            name = "build_bazel_rules_apple",
+            ref = "b43c7f60b584d68d7d187c236d4328162ba2e806",
+            project = "bazelbuild",
+            repo = "rules_apple",
+            sha256 = "d3e8549c0c8966ba0e547a02f5601440be25a0b8143bd57ab5834b65b02c22be",
+        )
 
     _maybe(
         http_archive,

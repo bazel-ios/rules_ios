@@ -171,3 +171,15 @@ Bazel version required by current rules is [here](https://github.com/bazel-ios/r
 [Click here](https://github.com/bazel-ios/rules_ios/tree/master/docs)
 for the documentation.
 
+
+### 5.x.x LTS Support
+
+LTS is a concept in [Bazel for versions](https://blog.bazel.build/2020/11/10/long-term-support-release.html)
+
+Because `rules_ios` should be loosely coupled to a given Bazel versions, we
+often handle several Bazel versions concurrently. Our users have a large
+variance of appetite for breakage, custom rules, application complexity, and
+infrastructure.  Dictating a single Bazel version is not possible amongst
+`rules_ios` users.  Because we want to keep running on HEAD ( and have everyone
+do so ) LTS support capabilities will often come into play and the burden to be
+an outlier should fall on the outliers here.
