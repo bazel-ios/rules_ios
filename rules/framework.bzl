@@ -128,6 +128,10 @@ def _validate_deps_minimum_os_version(framework_name, minimum_os_version, deps):
     deps: the deps of this framework
     """
 
+    # TODO @cshi we need a number of fixes to enable this
+    if True:
+        return
+
     for dep in deps:
         if AppleBundleInfo in dep:
             dep_bundle_info = dep[AppleBundleInfo]
@@ -591,6 +595,14 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         # processed infoplit its possible, but validate for the common case
         fail("Missing bundle_id: Info.plist actions require one")
 
+    # Determine the interface version of rules_apple. We don't want to force
+    # "hail mary" type rules and Bazel bumps on the community to run a given
+    # version of rules_ios and the API we depend on is relatively lts_5. If
+    # this ceases to be the case than consider mainlining the few components we
+    # use from it to remove this complexity.
+    rules_apple_api_version = getattr(bundling_support, "rule_api_version", None)
+    use_lts_5_rules_apple_api = rules_apple_api_version == 1.0
+
     bundle_name, bundle_extension = bundling_support.bundle_full_name_from_rule_ctx(ctx)
     executable_name = bundling_support.executable_name(ctx)
     features = features_support.compute_enabled_features(
@@ -653,9 +665,11 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         predeclared_outputs = predeclared_outputs,
     )
 
-    # TODO(jmarino) - consider how to better handle frameworks of frameworks
     dep_frameworks = ctx.attr.frameworks
-    processor_partials = [
+
+    # TODO(jmarino) - consider how to better handle frameworks of frameworks
+    processor_partials = []
+    processor_partials.append(
         partials.apple_bundle_info_partial(
             actions = actions,
             bundle_extension = bundle_extension,
@@ -667,6 +681,8 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
             predeclared_outputs = predeclared_outputs,
             product_type = rule_descriptor.product_type,
         ),
+    )
+    processor_partials.append(
         partials.binary_partial(
             actions = actions,
             binary_artifact = binary_artifact,
@@ -674,6 +690,8 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
             executable_name = executable_name,
             label_name = label.name,
         ),
+    )
+    processor_partials.append(
         partials.bitcode_symbols_partial(
             actions = actions,
             binary_artifact = binary_artifact,
@@ -682,6 +700,8 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
             label_name = label.name,
             platform_prerequisites = platform_prerequisites,
         ),
+    )
+    processor_partials.append(
         partials.codesigning_dossier_partial(
             actions = actions,
             apple_mac_toolchain_info = apple_mac_toolchain_info,
@@ -695,6 +715,8 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
             provisioning_profile = provisioning_profile,
             rule_descriptor = rule_descriptor,
         ),
+    )
+    processor_partials.append(
         partials.clang_rt_dylibs_partial(
             actions = actions,
             apple_mac_toolchain_info = apple_mac_toolchain_info,
@@ -704,41 +726,82 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
             platform_prerequisites = platform_prerequisites,
             dylibs = clang_rt_dylibs.get_from_toolchain(ctx),
         ),
-        partials.debug_symbols_partial(
-            actions = actions,
-            bundle_extension = bundle_extension,
-            bundle_name = bundle_name,
-            debug_dependencies = dep_frameworks,
-            dsym_binaries = debug_outputs.dsym_binaries,
-            linkmaps = debug_outputs.linkmaps,
-            dsym_info_plist_template = apple_mac_toolchain_info.dsym_info_plist_template,
-            executable_name = executable_name,
-            platform_prerequisites = platform_prerequisites,
-        ),
+    )
+
+    if use_lts_5_rules_apple_api:
+        processor_partials.append(
+            partials.debug_symbols_partial(
+                actions = actions,
+                rule_label = label,
+                bundle_extension = bundle_extension,
+                bundle_name = bundle_name,
+                debug_dependencies = dep_frameworks,
+                dsym_binaries = debug_outputs.dsym_binaries,
+                linkmaps = debug_outputs.linkmaps,
+                dsym_info_plist_template = apple_mac_toolchain_info.dsym_info_plist_template,
+                executable_name = executable_name,
+                platform_prerequisites = platform_prerequisites,
+                bin_root_path = bin_root_path,
+            ),
+        )
+    else:
+        processor_partials.append(
+            partials.debug_symbols_partial(
+                actions = actions,
+                bundle_extension = bundle_extension,
+                bundle_name = bundle_name,
+                debug_dependencies = dep_frameworks,
+                dsym_binaries = debug_outputs.dsym_binaries,
+                linkmaps = debug_outputs.linkmaps,
+                dsym_info_plist_template = apple_mac_toolchain_info.dsym_info_plist_template,
+                executable_name = executable_name,
+                platform_prerequisites = platform_prerequisites,
+            ),
+        )
+
+    processor_partials.append(
         partials.embedded_bundles_partial(
             frameworks = [archive_for_embedding],
             embeddable_targets = dep_frameworks,
             platform_prerequisites = platform_prerequisites,
             signed_frameworks = depset(signed_frameworks),
         ),
+    )
+    processor_partials.append(
         partials.extension_safe_validation_partial(
             is_extension_safe = is_extension_safe,
             rule_label = label,
             targets_to_validate = dep_frameworks,
         ),
+    )
 
-        # Don't bake the headers here - for distro mode, this is done with
-        # xcframework
-        partials.framework_provider_partial(
-            actions = actions,
-            bin_root_path = bin_root_path,
-            binary_artifact = binary_artifact,
-            bundle_name = bundle_name,
-            bundle_only = False,
-            cc_info = link_result.cc_info,
-            objc_provider = link_result.objc,
-            rule_label = label,
-        ),
+    if use_lts_5_rules_apple_api:
+        processor_partials.append(
+            partials.framework_provider_partial(
+                actions = actions,
+                bin_root_path = bin_root_path,
+                binary_artifact = binary_artifact,
+                bundle_name = bundle_name,
+                bundle_only = False,
+                objc_provider = link_result.objc,
+                rule_label = label,
+            ),
+        )
+    else:
+        processor_partials.append(
+            partials.framework_provider_partial(
+                actions = actions,
+                bin_root_path = bin_root_path,
+                binary_artifact = binary_artifact,
+                bundle_name = bundle_name,
+                bundle_only = False,
+                cc_info = link_result.cc_info,
+                objc_provider = link_result.objc,
+                rule_label = label,
+            ),
+        )
+
+    processor_partials.append(
         partials.resources_partial(
             actions = actions,
             apple_mac_toolchain_info = apple_mac_toolchain_info,
@@ -758,6 +821,8 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
             version = None,
             version_keys_required = False,
         ),
+    )
+    processor_partials.append(
         partials.swift_dylibs_partial(
             actions = actions,
             apple_mac_toolchain_info = apple_mac_toolchain_info,
@@ -766,6 +831,8 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
             label_name = label.name,
             platform_prerequisites = platform_prerequisites,
         ),
+    )
+    processor_partials.append(
         partials.apple_symbols_file_partial(
             actions = actions,
             binary_artifact = binary_artifact,
@@ -775,7 +842,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
             include_symbols_in_bundle = False,
             platform_prerequisites = platform_prerequisites,
         ),
-    ]
+    )
 
     processor_result = processor.process(
         actions = actions,

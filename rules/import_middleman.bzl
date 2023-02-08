@@ -1,6 +1,7 @@
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleFrameworkImportInfo")
 load("//rules:features.bzl", "feature_names")
 load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
+load("@build_bazel_rules_apple//apple/internal:bundling_support.bzl", "bundling_support")
 
 _FindImportsAspectInfo = provider(fields = {
     "imported_library_file": "",
@@ -92,10 +93,16 @@ def _find_imports_impl(target, ctx):
 
     if ctx.rule.kind == "objc_import":
         imported_library_file.append(target[apple_common.Objc].imported_library)
+
     elif AppleFrameworkImportInfo in target:
-        # The provider field that contains the `static_framework_file` changed in
-        # https://github.com/bazelbuild/rules_apple/commit/8d841342c238457896cd7596cc29b2d06c9a75f0
-        static_framework_file.append(target[apple_common.Objc].imported_library)
+        rules_apple_api_version = getattr(bundling_support, "rule_api_version", None)
+        use_lts_5_rules_apple_api = rules_apple_api_version == 1.0
+        if use_lts_5_rules_apple_api:
+            static_framework_file.append(target[apple_common.Objc].static_framework_file)
+        else:
+            # The provider field that contains the `static_framework_file` changed in
+            # https://github.com/bazelbuild/rules_apple/commit/8d841342c238457896cd7596cc29b2d06c9a75f0
+            static_framework_file.append(target[apple_common.Objc].imported_library)
 
         target_dynamic_framework_file = target[apple_common.Objc].dynamic_framework_file
         target_dynamic_framework_file_list = target_dynamic_framework_file.to_list()

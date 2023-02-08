@@ -70,6 +70,26 @@ jobs:
           name: bazel-testlogs
           path: bazel-testlogs
 
+  lts_ios_integration_tests:
+    name: Build and Test ( Virtual Frameworks + LTS )
+    runs-on: macos-12
+    steps:
+      - uses: actions/checkout@v3
+      - name: Select Xcode
+        run: .github/workflows/xcode_select.sh
+      - name: Build and Test
+        run: |
+          export USE_BAZEL_VERSION=5.3.2
+          bazelisk build --features apple.virtualize_frameworks \
+              --config=ios \
+              -- //tests/ios/... \
+              -//tests/ios/frameworks/sources-with-prebuilt-binaries/...
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: bazel-testlogs
+          path: bazel-testlogs
+
   build_arm64_simulator:
     name: Build arm64 Simulator
     runs-on: macos-12
