@@ -499,7 +499,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRA
     return (False, "NO")
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_MODULE_IMPLEMENTATION_OF__Condition(xcconfigs, id_configs):
-    # $(CLANG_ENABLE_MODULES) && $(DEFINES_MODULE)
+    # $(CLANG_ENABLE_MODULES) == "YES" && $(DEFINES_MODULE) == "YES"
 
     used_user_content = False
 
@@ -525,7 +525,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_MODULE_IMPLEMENTATION_OF__
             (eval_val_1_used_user_content, eval_val_1) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_1_used_user_content
 
-    return (used_user_content, (eval_val_0 and eval_val_1))
+    return (used_user_content, (eval_val_0 == "YES" and eval_val_1 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_MODULE_IMPLEMENTATION_OF__DefaultValue(xcconfigs, id_configs):
     # YES

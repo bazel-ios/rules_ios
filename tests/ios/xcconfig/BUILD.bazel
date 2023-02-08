@@ -81,6 +81,16 @@ apple_framework(
     xcconfig_by_build_setting = _XCCONFIG_BY_BUILD_SETTING,
 )
 
+apple_framework(
+    name = "WithEdgeCaseConfigs",
+    srcs = glob(["WithEdgeCaseConfigs/*.m"]),
+    platforms = {"ios": "10.0"},
+    visibility = ["//visibility:public"],
+    xcconfig = {
+        "DEFINES_MODULE": "YES",  # Broken by Xcode 14.2 xcspec eval
+    },
+)
+
 ios_application(
     name = "App",
     srcs = ["App/main.m"],
@@ -93,6 +103,7 @@ ios_application(
     deps = [
         ":WithDefinesObjc",
         ":WithDefinesSwift",
+        ":WithEdgeCaseConfigs",
     ],
 )
 
