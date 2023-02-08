@@ -5,7 +5,7 @@ Extracts xcspec info from a given Xcode developer dir
 and prints out a bzl file that contains a single constant, `SETTINGS`,
 that can be used to access the xcspecs from starlark.
 
-Usage: xcspec_extractor.py /Application/Xcode.app/Contents/Developer 11.2.1
+Usage: xcspec_extractor.py /Application/Xcode.app/Contents/Developer 11.2.1 ../data/xcspecs.bzl  ../data/xcspec_evals.bzl
 """
 
 import plistlib
@@ -148,11 +148,13 @@ def generate_method_body_for_expression(string, key):
     elif key == 'Condition':
         string = CONDITION_EVAL_VAL_REFERENCE.sub(
             repl=lambda m: repr(m[1]), string=string)
+        string = re.sub(
+            # Find all implicit boolean conditionals and replace them with an explict `== "YES"`
+            '(eval_val_[0-9]+)(\s+([&|]{2})|\s*\)|\s*$)', '\\1 == "YES"\\2', string
+            ).replace('&&', 'and').replace('||', 'or'
+            ).replace('!=', '__NEQ__').replace('!', 'not ').replace('__NEQ__', '!=')
         return method_body + \
-            '\n\n    return (used_user_content, ({}))'.format(
-                string.replace('||', 'or').replace('!=', '__NEQ__').replace(
-                    '!', 'not ').replace('&&', 'and').replace('__NEQ__', '!=')
-            )
+            '\n\n    return (used_user_content, ({}))'.format(string)
 
     raise "Unknown key %s" % key
 
