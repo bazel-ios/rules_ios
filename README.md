@@ -179,7 +179,7 @@ and we currently support 5.x.x only for a brief time. _The rough ETA for
 removing Bazel 5.x.x LTS support is end of Q2 2023 and if it's an issue we can
 correct course sooner._
 
-Because `rules_ios` should be loosely coupled to a given Bazel versions, we can
+Because `rules_ios` should be loosely coupled to a given Bazel version, we can
 often handle several Bazel versions concurrently on `HEAD` without significant
 change and without having to have CI and review for LTS branches. Because we
 want to keep running on `HEAD`, LTS support is added with branches where
@@ -190,16 +190,16 @@ We have a Bazel 5.x.x CI job which is the source of truth for vetting this.
 
 ### rules_apple: What's up with rules_ios_1.0
 
-For `rules_apple` we attempt to achieve mutli versions and smoothing over
+For `rules_apple` we attempt to achieve multi versions and smoothing over
 maintainer velocity issues on a patched tag. For instance we may back-ported
 some features to our tag like [framework_import_support](https://github.com/bazel-ios/rules_apple/commit/78476e542160be2c32d467ef856ccc2e9152f187)
 
 ### Maintainer concerns and rules_apple compatability
 
 We may shim APIs, back port patches from `rules_apple` to add features and
-smooth over integration. The unstable tag `rules_ios_1.0`. If you're just
-bumping `rules_apple` for Bazel 6.0 you don't need to worry about the LTS
-support if it passes CI. The burden to be an outlier should fall on the outliers
-here.
+smooth over integration. The unstable tag `rules_ios_1.0` has it all. If you're
+just bumping `rules_apple` for Bazel 6.0 you shouldn't need to worry about the
+LTS support if it passes CI. The burden to be an outlier should fall on the
+outliers here - if you've got an issue we can look into it together.
 
 
