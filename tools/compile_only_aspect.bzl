@@ -20,10 +20,7 @@ def _compile_only_aspect_impl(target, ctx):
                 outs = action.outputs
                 break
     elif ctx.rule.kind == "objc_library":
-        for action in target.actions:
-            if action.mnemonic == "ObjcCompile":
-                outs = action.outputs
-                break
+        outs = depset([], transitive = [action.outputs for action in target.actions if action.mnemonic == "ObjcCompile"])
     deps = getattr(ctx.rule.attr, "deps", [])
     transitive = [dep[OutputGroupInfo].compiles for dep in deps if OutputGroupInfo in dep]
     compile_set = depset([], transitive = [outs] + transitive)
