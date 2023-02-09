@@ -22,7 +22,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_ARCHS__Condition(xc
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_ARCHS__DefaultValue(xcconfigs, id_configs):
     # $(CURRENT_ARCH)
@@ -58,7 +58,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_VARIANTS__Condition
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__arch__Condition(xcconfigs, id_configs):
     # !$(USE_LLVM_TARGET_TRIPLES_FOR_CLANG)
@@ -76,7 +76,7 @@ def _com_apple_compilers_llvm_clang_1_0__arch__Condition(xcconfigs, id_configs):
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (not eval_val_0))
+    return (used_user_content, (not eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__diagnostic_message_length__DefaultValue(xcconfigs, id_configs):
     # 0
@@ -230,7 +230,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_DEBUG_MODULES__Condition(xcconfig
             (eval_val_4_used_user_content, eval_val_4) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_4_used_user_content
 
-    return (used_user_content, (eval_val_0 and not eval_val_1 and (eval_val_2 or (eval_val_3 != "" and eval_val_4))))
+    return (used_user_content, (eval_val_0 == "YES" and not eval_val_1 == "YES" and (eval_val_2 == "YES" or (eval_val_3 != "" and eval_val_4 == "YES"))))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_DEBUG_MODULES__DefaultValue(xcconfigs, id_configs):
     # $(CLANG_ENABLE_MODULE_DEBUGGING)
@@ -266,7 +266,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_MODULE_CACHE_PATH__Condition(xcco
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_MODULE_CACHE_PATH__DefaultValue(xcconfigs, id_configs):
     # $(MODULE_CACHE_DIR)
@@ -302,7 +302,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_MODULE_LSV__Condition(xcconfigs, 
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_MODULE_LSV__DefaultValue(xcconfigs, id_configs):
     # NO
@@ -324,7 +324,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_MODULES_AUTOLINK__Condition(xccon
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_MODULES_AUTOLINK__DefaultValue(xcconfigs, id_configs):
     # YES
@@ -346,7 +346,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_MODULES_DISABLE_PRIVATE_WARNING__
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_MODULES_DISABLE_PRIVATE_WARNING__DefaultValue(xcconfigs, id_configs):
     # NO
@@ -368,7 +368,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_MODULES_PRUNE_INTERVAL__Condition
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_MODULES_PRUNE_INTERVAL__DefaultValue(xcconfigs, id_configs):
     # 86400
@@ -390,7 +390,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_MODULES_PRUNE_AFTER__Condition(xc
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_MODULES_PRUNE_AFTER__DefaultValue(xcconfigs, id_configs):
     # 345600
@@ -412,7 +412,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_MODULES_IGNORE_MACROS__Condition(
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_MODULES_IGNORE_MACROS__DefaultValue(xcconfigs, id_configs):
     # $(GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS)
@@ -448,7 +448,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_MODULES_VALIDATE_SYSTEM_HEADERS__
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_MODULES_VALIDATE_SYSTEM_HEADERS__DefaultValue(xcconfigs, id_configs):
     # NO
@@ -470,7 +470,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_MODULES_BUILD_SESSION_FILE__Condi
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_MODULES_BUILD_SESSION_FILE__DefaultValue(xcconfigs, id_configs):
     #
@@ -492,14 +492,14 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRA
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES__DefaultValue(xcconfigs, id_configs):
     # NO
     return (False, "NO")
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_MODULE_IMPLEMENTATION_OF__Condition(xcconfigs, id_configs):
-    # $(CLANG_ENABLE_MODULES) == "YES" && $(DEFINES_MODULE) == "YES"
+    # $(CLANG_ENABLE_MODULES) && $(DEFINES_MODULE)
 
     used_user_content = False
 
@@ -1353,7 +1353,7 @@ def _com_apple_compilers_llvm_clang_1_0__GCC_FAST_MATH__Condition(xcconfigs, id_
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (not eval_val_0))
+    return (used_user_content, (not eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__GCC_FAST_MATH__DefaultValue(xcconfigs, id_configs):
     # NO
@@ -1399,7 +1399,7 @@ def _com_apple_compilers_llvm_clang_1_0__GCC_MACOSX_VERSION_MIN__Condition(xccon
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (not eval_val_0))
+    return (used_user_content, (not eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__GCC_MACOSX_VERSION_MIN__DefaultValue(xcconfigs, id_configs):
     # $($(DEPLOYMENT_TARGET_SETTING_NAME))
@@ -1446,7 +1446,7 @@ def _com_apple_compilers_llvm_clang_1_0__GCC_DEBUG_INFORMATION_FORMAT__Condition
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__GCC_DEBUG_INFORMATION_FORMAT__DefaultValue(xcconfigs, id_configs):
     # $(DEBUG_INFORMATION_FORMAT)
@@ -1482,7 +1482,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_DEBUG_INFORMATION_LEVEL__Conditio
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_DEBUG_INFORMATION_LEVEL__DefaultValue(xcconfigs, id_configs):
     # default
@@ -1782,7 +1782,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_USE_OPTIMIZATION_PROFILE__Conditi
             (eval_val_1_used_user_content, eval_val_1) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_1_used_user_content
 
-    return (used_user_content, (not eval_val_0 and not eval_val_1))
+    return (used_user_content, (not eval_val_0 == "YES" and not eval_val_1 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_USE_OPTIMIZATION_PROFILE__DefaultValue(xcconfigs, id_configs):
     # NO
@@ -1808,7 +1808,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_COVERAGE_MAPPING__Condition(xccon
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_COVERAGE_MAPPING__DefaultValue(xcconfigs, id_configs):
     # NO
@@ -1848,7 +1848,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_BITCODE_GENERATION_MODE__Conditio
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_BITCODE_GENERATION_MODE__DefaultValue(xcconfigs, id_configs):
     # $(BITCODE_GENERATION_MODE)
@@ -1902,7 +1902,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_ADDRESS_SANITIZER_CONTAINER_OVERF
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_ADDRESS_SANITIZER_CONTAINER_OVERFLOW__DefaultValue(xcconfigs, id_configs):
     # NO
@@ -1924,7 +1924,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_ADDRESS_SANITIZER_USE_AFTER_SCOPE
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_ADDRESS_SANITIZER_USE_AFTER_SCOPE__DefaultValue(xcconfigs, id_configs):
     # NO
@@ -1946,7 +1946,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_ADDRESS_SANITIZER_ALLOW_ERROR_REC
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_ADDRESS_SANITIZER_ALLOW_ERROR_RECOVERY__DefaultValue(xcconfigs, id_configs):
     # $(ENABLE_ADDRESS_SANITIZER_ALLOW_ERROR_RECOVERY)
@@ -2000,7 +2000,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_SANITIZER_COVERAGE__Condition(xcc
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (not eval_val_0))
+    return (used_user_content, (not eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_SANITIZER_COVERAGE__DefaultValue(xcconfigs, id_configs):
     # $(ENABLE_SANITIZER_COVERAGE)
@@ -2054,7 +2054,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTE
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTEGER__DefaultValue(xcconfigs, id_configs):
     # NO
@@ -2076,7 +2076,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_UNDEFINED_BEHAVIOR_SANITIZER_NULL
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_UNDEFINED_BEHAVIOR_SANITIZER_NULLABILITY__DefaultValue(xcconfigs, id_configs):
     # NO
@@ -2127,7 +2127,7 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_INDEX_STORE_ENABLE__Condition(xcc
             (eval_val_1_used_user_content, eval_val_1) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_1_used_user_content
 
-    return (used_user_content, (eval_val_0 or (eval_val_0 == "Default" and eval_val_1 == "0")))
+    return (used_user_content, (eval_val_0 == "YES" or (eval_val_0 == "Default" and eval_val_1 == "0")))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_INDEX_STORE_ENABLE__DefaultValue(xcconfigs, id_configs):
     # $(INDEX_ENABLE_DATA_STORE)
@@ -2352,7 +2352,7 @@ def _com_apple_pbx_linkers_ld__LD_TARGET_TRIPLE_ARCHS__Condition(xcconfigs, id_c
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_pbx_linkers_ld__LD_TARGET_TRIPLE_ARCHS__DefaultValue(xcconfigs, id_configs):
     # $(CURRENT_ARCH)
@@ -2388,7 +2388,7 @@ def _com_apple_pbx_linkers_ld__LD_TARGET_TRIPLE_VARIANTS__Condition(xcconfigs, i
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_pbx_linkers_ld__arch__Condition(xcconfigs, id_configs):
     # !$(USE_LLVM_TARGET_TRIPLES_FOR_LD)
@@ -2406,7 +2406,7 @@ def _com_apple_pbx_linkers_ld__arch__Condition(xcconfigs, id_configs):
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (not eval_val_0))
+    return (used_user_content, (not eval_val_0 == "YES"))
 
 def _com_apple_pbx_linkers_ld____INPUT_FILE_LIST_PATH____DefaultValue(xcconfigs, id_configs):
     # $(LINK_FILE_LIST_$(variant)_$(arch))
@@ -2468,7 +2468,7 @@ def _com_apple_pbx_linkers_ld__EXPORTED_SYMBOLS_FILE__Condition(xcconfigs, id_co
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (not eval_val_0))
+    return (used_user_content, (not eval_val_0 == "YES"))
 
 def _com_apple_pbx_linkers_ld__UNEXPORTED_SYMBOLS_FILE__Condition(xcconfigs, id_configs):
     # !$(SEPARATE_SYMBOL_EDIT)
@@ -2486,7 +2486,7 @@ def _com_apple_pbx_linkers_ld__UNEXPORTED_SYMBOLS_FILE__Condition(xcconfigs, id_
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (not eval_val_0))
+    return (used_user_content, (not eval_val_0 == "YES"))
 
 def _com_apple_pbx_linkers_ld__GENERATE_PROFILING_CODE__Condition(xcconfigs, id_configs):
     # $(variant) == profile
@@ -2611,7 +2611,7 @@ def _com_apple_pbx_linkers_ld__LD_DEPLOYMENT_TARGET__Condition(xcconfigs, id_con
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (not eval_val_0))
+    return (used_user_content, (not eval_val_0 == "YES"))
 
 def _com_apple_pbx_linkers_ld__LD_DEPLOYMENT_TARGET__DefaultValue(xcconfigs, id_configs):
     # $($(DEPLOYMENT_TARGET_SETTING_NAME))
@@ -2696,7 +2696,7 @@ def _com_apple_pbx_linkers_ld__LD_LTO_OBJECT_FILE__Condition(xcconfigs, id_confi
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_pbx_linkers_ld__LD_LTO_OBJECT_FILE__DefaultValue(xcconfigs, id_configs):
     # $(OBJECT_FILE_DIR_$(CURRENT_VARIANT))/$(CURRENT_ARCH)/$(PRODUCT_NAME)_lto.o
@@ -2813,7 +2813,7 @@ def _com_apple_pbx_linkers_ld__LD_BITCODE_GENERATION_MODE__Condition(xcconfigs, 
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_pbx_linkers_ld__LD_BITCODE_GENERATION_MODE__DefaultValue(xcconfigs, id_configs):
     # $(BITCODE_GENERATION_MODE)
@@ -2860,7 +2860,7 @@ def _com_apple_pbx_linkers_ld__LD_VERIFY_BITCODE__Condition(xcconfigs, id_config
             (eval_val_1_used_user_content, eval_val_1) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_1_used_user_content
 
-    return (used_user_content, (eval_val_0 and eval_val_1 == "bitcode"))
+    return (used_user_content, (eval_val_0 == "YES" and eval_val_1 == "bitcode"))
 
 def _com_apple_pbx_linkers_ld__LD_VERIFY_BITCODE__DefaultValue(xcconfigs, id_configs):
     # YES
@@ -2904,7 +2904,7 @@ def _com_apple_pbx_linkers_ld__LD_HIDE_BITCODE_SYMBOLS__Condition(xcconfigs, id_
             (eval_val_2_used_user_content, eval_val_2) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_2_used_user_content
 
-    return (used_user_content, (eval_val_0 and eval_val_1 == "bitcode" and eval_val_2 != "mh_object"))
+    return (used_user_content, (eval_val_0 == "YES" and eval_val_1 == "bitcode" and eval_val_2 != "mh_object"))
 
 def _com_apple_pbx_linkers_ld__LD_HIDE_BITCODE_SYMBOLS__DefaultValue(xcconfigs, id_configs):
     # $(HIDE_BITCODE_SYMBOLS)
@@ -2962,7 +2962,7 @@ def _com_apple_pbx_linkers_ld__LD_GENERATE_BITCODE_SYMBOL_MAP__Condition(xcconfi
             (eval_val_2_used_user_content, eval_val_2) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_2_used_user_content
 
-    return (used_user_content, (eval_val_0 and eval_val_1 == "bitcode" and eval_val_2 != "mh_object"))
+    return (used_user_content, (eval_val_0 == "YES" and eval_val_1 == "bitcode" and eval_val_2 != "mh_object"))
 
 def _com_apple_pbx_linkers_ld__LD_GENERATE_BITCODE_SYMBOL_MAP__DefaultValue(xcconfigs, id_configs):
     # $(HIDE_BITCODE_SYMBOLS)
@@ -3060,7 +3060,7 @@ def _com_apple_pbx_linkers_ld__LD_DEBUG_VARIANT__Condition(xcconfigs, id_configs
             (eval_val_4_used_user_content, eval_val_4) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_4_used_user_content
 
-    return (used_user_content, (eval_val_0 or eval_val_1 or eval_val_2 or eval_val_3 or eval_val_4))
+    return (used_user_content, (eval_val_0 == "YES" or eval_val_1 == "YES" or eval_val_2 == "YES" or eval_val_3 == "YES" or eval_val_4 == "YES"))
 
 def _com_apple_pbx_linkers_ld__LD_DEBUG_VARIANT__DefaultValue(xcconfigs, id_configs):
     # YES
@@ -3104,7 +3104,7 @@ def _com_apple_pbx_linkers_ld__LD_FINAL_OUTPUT_FILE__Condition(xcconfigs, id_con
             (eval_val_2_used_user_content, eval_val_2) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_2_used_user_content
 
-    return (used_user_content, (eval_val_0 and not eval_val_1 and eval_val_2 != ""))
+    return (used_user_content, (eval_val_0 == "YES" and not eval_val_1 == "YES" and eval_val_2 != ""))
 
 def _com_apple_pbx_linkers_ld__LD_FINAL_OUTPUT_FILE__DefaultValue(xcconfigs, id_configs):
     # $(INSTALL_PATH)/$(EXECUTABLE_PATH)
@@ -3575,7 +3575,7 @@ def _com_apple_xcode_tools_swift_compiler__SWIFT_COMPILATION_MODE__Condition(xcc
             (eval_val_1_used_user_content, eval_val_1) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_1_used_user_content
 
-    return (used_user_content, (not eval_val_0 and eval_val_1 != "-Owholemodule"))
+    return (used_user_content, (not eval_val_0 == "YES" and eval_val_1 != "-Owholemodule"))
 
 def _com_apple_xcode_tools_swift_compiler__SWIFT_COMPILATION_MODE__DefaultValue(xcconfigs, id_configs):
     # singlefile
@@ -3881,7 +3881,7 @@ def _com_apple_xcode_tools_swift_compiler__SWIFT_BITCODE_GENERATION_MODE__Condit
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_xcode_tools_swift_compiler__SWIFT_BITCODE_GENERATION_MODE__DefaultValue(xcconfigs, id_configs):
     # $(BITCODE_GENERATION_MODE)
@@ -3935,7 +3935,7 @@ def _com_apple_xcode_tools_swift_compiler__SWIFT_ADDRESS_SANITIZER_ALLOW_ERROR_R
             (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_0_used_user_content
 
-    return (used_user_content, (eval_val_0))
+    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_xcode_tools_swift_compiler__SWIFT_ADDRESS_SANITIZER_ALLOW_ERROR_RECOVERY__DefaultValue(xcconfigs, id_configs):
     # $(ENABLE_ADDRESS_SANITIZER_ALLOW_ERROR_RECOVERY)
@@ -4044,7 +4044,7 @@ def _com_apple_xcode_tools_swift_compiler__SWIFT_INDEX_STORE_ENABLE__Condition(x
             (eval_val_1_used_user_content, eval_val_1) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
             used_user_content = used_user_content or eval_val_1_used_user_content
 
-    return (used_user_content, (eval_val_0 or (eval_val_0 == "Default" and eval_val_1 == "-Onone")))
+    return (used_user_content, (eval_val_0 == "YES" or (eval_val_0 == "Default" and eval_val_1 == "-Onone")))
 
 def _com_apple_xcode_tools_swift_compiler__SWIFT_INDEX_STORE_ENABLE__DefaultValue(xcconfigs, id_configs):
     # $(INDEX_ENABLE_DATA_STORE)
