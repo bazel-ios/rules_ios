@@ -213,6 +213,17 @@ xcodeproj(
 )
 
 xcodeproj(
+    name = "Test-Mixed-Dynamic-App-Project",
+    testonly = True,
+    bazel_path = "bazelisk",
+    include_transitive_targets = True,
+    project_attributes_overrides = {"ORGANIZATIONNAME": "rules_ios"},
+    deps = [
+        "//tests/ios/frameworks/dynamic:App",
+    ],
+)
+
+xcodeproj(
     name = "App-XCHammer",
     use_xchammer = True,
     deps = [
