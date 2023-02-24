@@ -46,6 +46,11 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
     testonly = kwargs.pop("testonly", True)
     ios_test_kwargs = {arg: kwargs.pop(arg) for arg in _IOS_TEST_KWARGS if arg in kwargs}
     ios_test_kwargs["data"] = kwargs.pop("test_data", [])
+
+    test_exec_properties = kwargs.pop("test_exec_properties", None)
+    if test_exec_properties:
+        ios_test_kwargs["exec_properties"] = test_exec_properties
+
     if ios_test_kwargs.get("test_host", None) == True:
         ios_test_kwargs["test_host"] = "@build_bazel_rules_ios//rules/test_host_app:iOS-%s-AppHost" % ios_test_kwargs.get("minimum_os_version")
 
