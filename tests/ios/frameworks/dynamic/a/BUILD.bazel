@@ -6,6 +6,7 @@ apple_framework(
     bundle_id = "com.example.a",
     infoplists = ["Info.plist"],
     link_dynamic = True,
+    objc_compatible = True,
     platforms = {"ios": "10.0"},
     visibility = ["//visibility:public"],
     xcconfig = {"APPLICATION_EXTENSION_API_ONLY": "YES"},

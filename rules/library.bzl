@@ -569,6 +569,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     defines = kwargs.pop("defines", [])
     testonly = kwargs.pop("testonly", False)
     features = kwargs.pop("features", [])
+    objc_compatible = kwargs.pop("objc_compatible", False)
 
     for (k, v) in {"momc_copts": momc_copts, "mapc_copts": mapc_copts, "ibtool_copts": ibtool_copts}.items():
         if v:
@@ -788,7 +789,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
 
     # TODO: remove under certian circumstances when framework if set
     # Needs to happen before headermaps are made, so the generated umbrella header gets added to those headermaps
-    has_compile_srcs = (objc_hdrs or objc_private_hdrs or swift_sources or objc_sources or cpp_sources)
+    has_compile_srcs = (objc_hdrs or objc_private_hdrs or objc_sources or cpp_sources or objc_compatible)
     generate_umbrella_module = (namespace_is_module_name and has_compile_srcs)
     if generate_umbrella_module:
         if not module_map:
@@ -1034,24 +1035,29 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         lib_names.append(cpp_libname)
 
     additional_objc_copts.append("-I.")
-    index_while_building_objc_copts = select({
-        "@build_bazel_rules_ios//:use_global_index_store": [
-            # Note: this won't work work for remote caching yet. It uses a
-            # _different_ global index for objc than so that the BEP grep in
-            # rules_ios picks this up.
-            # Checkout the task roadmap for future improvements:
-            # Docs/index_while_building.md
-            "-index-store-path",
-            GLOBAL_INDEX_STORE_PATH,
-        ],
-        "//conditions:default": [
-            "-index-store-path",
-            "$(GENDIR)/{package}/rules_ios_objc_library_{libname}.indexstore".format(
-                package = native.package_name(),
-                libname = objc_libname,
-            ),
-        ],
-    })
+
+    objc_srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs + objc_non_arc_sources + objc_hdrs
+
+    index_while_building_objc_copts = []
+    if len(objc_srcs):
+        index_while_building_objc_copts = select({
+            "@build_bazel_rules_ios//:use_global_index_store": [
+                # Note: this won't work work for remote caching yet. It uses a
+                # _different_ global index for objc than so that the BEP grep in
+                # rules_ios picks this up.
+                # Checkout the task roadmap for future improvements:
+                # Docs/index_while_building.md
+                "-index-store-path",
+                GLOBAL_INDEX_STORE_PATH,
+            ],
+            "//conditions:default": [
+                "-index-store-path",
+                "$(GENDIR)/{package}/rules_ios_objc_library_{libname}.indexstore".format(
+                    package = native.package_name(),
+                    libname = objc_libname,
+                ),
+            ],
+        })
 
     additional_objc_vfs_deps = select({
         "@build_bazel_rules_ios//:virtualize_frameworks": [framework_vfs_overlay_name_swift] + [framework_vfs_overlay_name],
@@ -1064,26 +1070,27 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     if module_map:
         objc_hdrs.append(module_map)
 
-    native.objc_library(
-        name = objc_libname,
-        srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,
-        non_arc_srcs = objc_non_arc_sources,
-        hdrs = objc_hdrs,
-        copts = copts_by_build_setting.objc_copts + objc_copts + additional_objc_vfs_copts + additional_objc_copts + index_while_building_objc_copts,
-        deps = deps + private_deps + private_dep_names + lib_names + additional_objc_vfs_deps,
-        module_map = module_map,
-        sdk_dylibs = sdk_dylibs,
-        sdk_frameworks = sdk_frameworks,
-        weak_sdk_frameworks = weak_sdk_frameworks,
-        sdk_includes = sdk_includes,
-        pch = pch,
-        data = [] if swift_sources else [module_data],
-        tags = tags_manual,
-        defines = defines + objc_defines,
-        testonly = testonly,
-        features = features,
-        **kwargs
-    )
+    if len(objc_srcs):
+        native.objc_library(
+            name = objc_libname,
+            srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,
+            non_arc_srcs = objc_non_arc_sources,
+            hdrs = objc_hdrs,
+            copts = copts_by_build_setting.objc_copts + objc_copts + additional_objc_vfs_copts + additional_objc_copts + index_while_building_objc_copts,
+            deps = deps + private_deps + private_dep_names + lib_names + additional_objc_vfs_deps,
+            module_map = module_map,
+            sdk_dylibs = sdk_dylibs,
+            sdk_frameworks = sdk_frameworks,
+            weak_sdk_frameworks = weak_sdk_frameworks,
+            sdk_includes = sdk_includes,
+            pch = pch,
+            data = [] if swift_sources else [module_data],
+            tags = tags_manual,
+            defines = defines + objc_defines,
+            testonly = testonly,
+            features = features,
+            **kwargs
+        )
     launch_screen_storyboard_name = name + "_launch_screen_storyboard"
     native.filegroup(
         name = launch_screen_storyboard_name,
@@ -1092,7 +1099,8 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         tags = _MANUAL,
         testonly = testonly,
     )
-    lib_names.append(objc_libname)
+    if len(objc_srcs):
+        lib_names.append(objc_libname)
 
     if export_private_headers:
         private_headers_name = "%s_private_headers" % name

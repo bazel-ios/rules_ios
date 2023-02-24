@@ -7,6 +7,7 @@ apple_framework(
     data = ["b_data.txt"],
     infoplists = ["Info.plist"],
     link_dynamic = True,
+    objc_compatible = True,
     platforms = {"ios": "10.0"},
     visibility = ["//visibility:public"],
     xcconfig = {"APPLICATION_EXTENSION_API_ONLY": "YES"},

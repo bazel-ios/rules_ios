@@ -4,6 +4,7 @@ apple_framework(
     name = "c",
     srcs = glob(["*.swift"]),
     data = glob(["*.txt"]),
+    objc_compatible = True,
     platforms = {"ios": "10.0"},
     visibility = ["//visibility:public"],
 )
