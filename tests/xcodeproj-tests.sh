@@ -65,10 +65,10 @@ clean_projects() {
     # The xcframeworks directory contains actual fixtures - have a better
     # convention longer term
     find \
-	tests/ios \
-	tests/macos \
-	-path "./tests/ios/xcframeworks/*/*" -prune \
-	-type d -name \*.xcodeproj -delete -exec rm -rf {} \; > /dev/null
+	tests/ios/xcodeproj \
+	tests/macos/xcodeproj \
+	-type d -name \*.xcodeproj  \
+	-exec rm -rf {} \; 2> /dev/null
 }
 
 update() {
