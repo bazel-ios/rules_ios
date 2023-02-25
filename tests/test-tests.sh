@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+# This is a helper program for the testing system  - not something you'd run directly
 set -euo pipefail
 
 ## split tests
