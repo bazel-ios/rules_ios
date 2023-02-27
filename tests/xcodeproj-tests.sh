@@ -56,8 +56,8 @@ verify() {
 test_main() {
     test_macos
     test_simulator
-    test_build_for_device
     test_custom_output
+    test_build_for_device
     verify
 }
 
