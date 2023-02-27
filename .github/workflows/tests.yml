@@ -137,7 +137,7 @@ jobs:
       - name: Select Xcode 14.2.0
         run: .github/workflows/xcode_select.sh
       - name: Run tests
-        run: ./tests/xcodeproj-tests.sh --clean && ./tests/test-tests.sh
+        run: ./tests/xcodeproj-tests.sh --run && ./tests/test-tests.sh
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
