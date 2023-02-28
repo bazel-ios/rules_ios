@@ -24,10 +24,14 @@ com.apple.product-type.framework.static)
     # We only care about the entry ending with TARGET_NAME" so that we can get the path to its directory
     QUERY=$(grep -A 2 important_output "$BAZEL_BUILD_EVENT_TEXT_FILENAME" | grep -w uri | grep ${TARGET_NAME}\" | sed "s/uri: \"file:\/\///")
     if [[ -z $QUERY ]]; then
-        # For virtual frameworks, this is disabled
-        exit 0
+        # For virtual frameworks, this is expected to be empty. Nothing to do.
+        #
+        # ps: `input_options` here receives an empty string to validations below don't run and the rest
+        # of the script is executed (e.g. index-import invocation)
+        input_options=("")
+    else
+        input_options=($(dirname "${QUERY}"))
     fi
-    input_options=($(dirname "${QUERY}"))
     ;;
 com.apple.product-type.bundle.unit-test)
     input_options=(
@@ -58,55 +62,58 @@ com.apple.product-type.app-extension)
     exit 1
     ;;
 esac
-output="$TARGET_BUILD_DIR/$FULL_PRODUCT_NAME"
 
-mkdir -p $OBJECT_FILE_DIR_normal/$CURRENT_ARCH/
-chmod -R +w $OBJECT_FILE_DIR_normal/$CURRENT_ARCH/
+if [ -n "$input_options" ]; then
+    output="$TARGET_BUILD_DIR/$FULL_PRODUCT_NAME"
 
-for swiftmodulefile in ${BAZEL_SWIFTMODULEFILES_TO_COPY:-}; do
-    if [[ -e $swiftmodulefile ]]; then
-        cp $swiftmodulefile $OBJECT_FILE_DIR_normal/$CURRENT_ARCH/
-    fi
-done
+    mkdir -p $OBJECT_FILE_DIR_normal/${ARCHS[0]}/
+    chmod -R +w $OBJECT_FILE_DIR_normal/${ARCHS[0]}/
 
-mkdir -p "$(dirname "$output")"
-copied=false
+    for swiftmodulefile in ${BAZEL_SWIFTMODULEFILES_TO_COPY:-}; do
+        if [[ -e $swiftmodulefile ]]; then
+            cp $swiftmodulefile $OBJECT_FILE_DIR_normal/${ARCHS[0]}/
+        fi
+    done
 
-for input in "${input_options[@]}"; do
-    if [[ -z $input ]] || [ $input = "." ] || [ $input = "/" ]; then
-        # rsync can be a dangerous operation when it tries to copy entire root dir into the $output
-        echo "Error: illegal input \"${input}\" for installing ${TARGET_NAME} of type ${PRODUCT_TYPE}" >&2
+    mkdir -p "$(dirname "$output")"
+    copied=false
+
+    for input in "${input_options[@]}"; do
+        if [[ -z $input ]] || [ $input = "." ] || [ $input = "/" ]; then
+            # rsync can be a dangerous operation when it tries to copy entire root dir into the $output
+            echo "Error: illegal input \"${input}\" for installing ${TARGET_NAME} of type ${PRODUCT_TYPE}" >&2
+            exit 1
+        fi
+        if [[ -d $input ]]; then
+            # Copy bundle contents, into the destination bundle.
+            # This avoids self-nesting, like: Foo.app/Foo.app
+            input+="/"
+        elif [[ ! -f $input ]] || [[ $input != *.zip ]]; then
+            continue
+        fi
+
+        if [[ $input == *.zip ]]; then
+            rm -rf "$output"
+            unzip -qq -d "$TARGET_BUILD_DIR" "$input"
+        else
+            rsync \
+                --recursive --chmod=u+w --delete --copy-links \
+                --exclude 'Frameworks/libXCTestBundleInject.dylib' \
+                "$input" "$output" >"$BAZEL_DIAGNOSTICS_DIR"/rsync-stdout-"$DATE_SUFFIX".log 2>"$BAZEL_DIAGNOSTICS_DIR"/rsync-stderr-"$DATE_SUFFIX".log
+        fi
+
+        if [[ -n "${SWIFT_OBJC_INTERFACE_HEADER_NAME:-}" ]]; then
+            cp -f "$input/Headers/$SWIFT_OBJC_INTERFACE_HEADER_NAME" "$OBJECT_FILE_DIR_normal/${ARCHS[0]}/"
+        fi
+
+        copied=true
+        break
+    done
+
+    if [[ ! -d "$output" ]] || [[ "$copied" = 'false' ]]; then
+        echo "error: failed to find $FULL_PRODUCT_NAME in expected locations: ${input_options[*]}"
         exit 1
     fi
-    if [[ -d $input ]]; then
-        # Copy bundle contents, into the destination bundle.
-        # This avoids self-nesting, like: Foo.app/Foo.app
-        input+="/"
-    elif [[ ! -f $input ]] || [[ $input != *.zip ]]; then
-        continue
-    fi
-
-    if [[ $input == *.zip ]]; then
-        rm -rf "$output"
-        unzip -qq -d "$TARGET_BUILD_DIR" "$input"
-    else
-        rsync \
-            --recursive --chmod=u+w --delete --copy-links \
-            --exclude 'Frameworks/libXCTestBundleInject.dylib' \
-            "$input" "$output" >"$BAZEL_DIAGNOSTICS_DIR"/rsync-stdout-"$DATE_SUFFIX".log 2>"$BAZEL_DIAGNOSTICS_DIR"/rsync-stderr-"$DATE_SUFFIX".log
-    fi
-
-    if [[ -n "${SWIFT_OBJC_INTERFACE_HEADER_NAME:-}" ]]; then
-        cp -f "$input/Headers/$SWIFT_OBJC_INTERFACE_HEADER_NAME" "$OBJECT_FILE_DIR_normal/$CURRENT_ARCH/"
-    fi
-
-    copied=true
-    break
-done
-
-if [[ ! -d "$output" ]] || [[ "$copied" = 'false' ]]; then
-    echo "error: failed to find $FULL_PRODUCT_NAME in expected locations: ${input_options[*]}"
-    exit 1
 fi
 
 "$BAZEL_INSTALLERS_DIR"/lldb-settings.sh >"$BAZEL_DIAGNOSTICS_DIR"/lldb-stdout-"$DATE_SUFFIX".log 2>"$BAZEL_DIAGNOSTICS_DIR"/lldb-stderr-"$DATE_SUFFIX".log

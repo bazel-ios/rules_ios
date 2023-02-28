@@ -6,7 +6,7 @@ set -euo pipefail
 
 echo "Start remapping index files at `date`"
 
-FOUND_INDEXSTORES=`grep -o 'command_line: "\(.*\.indexstore\)' $BAZEL_BUILD_EVENT_TEXT_FILENAME | sed 's/.*command_line: "//' | sort | uniq` || true
+FOUND_INDEXSTORES=`grep -o 'command_line: "\(.*\.indexstore\)\|command_line: "\(.*_global_index_store\)' $BAZEL_BUILD_EVENT_TEXT_FILENAME | sed 's/.*command_line: "//' | sed 's/-Xwrapped-swift=-global-index-store-import-path=//' | sort | uniq` || true
 
 declare -a EXISTING_INDEXSTORES=()
 for i in $FOUND_INDEXSTORES
@@ -34,4 +34,4 @@ fi
 
 echo "Finish remapping index files at `date`"
 
-ls -ltR $BUILD_DIR/../../Index/DataStore/ > $BAZEL_DIAGNOSTICS_DIR/indexstores-contents-$DATE_SUFFIX.log
+ls -ltR $INDEX_DATA_STORE_DIR/ > $BAZEL_DIAGNOSTICS_DIR/indexstores-contents-$DATE_SUFFIX.log
