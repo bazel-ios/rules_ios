@@ -595,8 +595,14 @@ def _header_search_paths_for_target(target_name, all_transitive_targets):
     header_search_paths.append("\"$BAZEL_WORKSPACE_ROOT\"")
     return " ".join(header_search_paths)
 
-def _swift_copts_for_target(target_name, all_transitive_targets):
+def _swift_copts_for_target(target_name, all_transitive_targets, mixed = False):
     copts = []
+    if mixed:
+        copts = [
+            "-import-underlying-module",
+            "-Xcc",
+            "-Wno-error=non-modular-include-in-framework-module",
+        ]
     for at in all_transitive_targets:
         # Returns the first matching targets - consider finding this in another
         # routine
@@ -777,6 +783,14 @@ def _set_target_settings_by_config(ctx, target_settings):
 
     return updated_target_settings
 
+def _xcodeproj_is_mixed(targets):
+    all_srcs = []
+    for t in targets:
+        all_srcs.extend(t.srcs.to_list() + t.non_arc_srcs.to_list())
+    has_swift = len([s for s in all_srcs if s.path.endswith(".swift")]) > 0
+    has_objc = len([s for s in all_srcs if s.path.endswith(".m") or s.path.endswith(".h")]) > 0
+    return has_swift and has_objc
+
 def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_transitive_targets):
     """Helper method to generate dicts for targets and schemes inside Xcode context
 
@@ -794,6 +808,8 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
     """
     xcodeproj_targets_by_name = {}
     xcodeproj_schemes_by_name = {}
+    mixed = _xcodeproj_is_mixed(targets)
+
     for target_info in targets:
         target_name = target_info.name
         product_type = target_info.product_type
@@ -830,7 +846,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
 
         virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
         if virtualize_frameworks:
-            target_settings["OTHER_SWIFT_FLAGS"] = _swift_copts_for_target(target_name, all_transitive_targets)
+            target_settings["OTHER_SWIFT_FLAGS"] = _swift_copts_for_target(target_name, all_transitive_targets, mixed)
             target_settings["OTHER_CFLAGS"] = _objc_copts_for_target(target_name, all_transitive_targets)
         else:
             target_settings["BAZEL_SWIFTMODULEFILES_TO_COPY"] = _swiftmodulepaths_for_target(target_name, all_transitive_targets)
@@ -881,6 +897,18 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
             target_settings["TARGETED_DEVICE_FAMILY"] = target_info.targeted_device_family
 
         pre_build_scripts = []
+
+        if virtualize_frameworks:
+            pre_build_scripts.append({
+                "name": "Xcode 14 indexing workaround",
+                "script": """
+# Xcode 14 workaround to make the indexing invocations pass
+if [ -n "$INDEX_DATA_STORE_DIR" ]; then
+    rm -fr $INDEX_DATA_STORE_DIR/../Build/Products/**/*.framework || true
+fi
+            """,
+            })
+
         if len(ctx.attr.additional_prebuild_script) > 0:
             pre_build_scripts.append({
                 "name": "Additional prebuild script",
@@ -992,6 +1020,7 @@ def _add_pre_post_actions(target_name, scheme, key, actions, provide_build_setti
     supported_keys = ["preActions", "postActions"]
     if key not in supported_keys:
         fail("Key must be one of %s" % supported_keys)
+
     for action_type in actions:
         if action_type not in scheme:
             break
@@ -1058,6 +1087,7 @@ def _xcodeproj_impl(ctx):
         "BAZEL_CONFIGS": ctx.attr.configs.keys(),
         "BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS": " ".join(["{} ".format(opt) for opt in ctx.attr.additional_bazel_build_options]),
         "BAZEL_ADDITIONAL_LLDB_SETTINGS": "\n".join(ctx.attr.additional_lldb_settings),
+        "INDEX_DATA_STORE_DIR": "$(INDEX_DATA_STORE_DIR)",
     })
 
     # Stubbing compiler, linker executables used by xcode so no actual building happening on Xcode side

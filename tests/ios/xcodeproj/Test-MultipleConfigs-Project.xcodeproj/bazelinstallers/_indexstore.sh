@@ -58,6 +58,7 @@ fi
 echo "Running index-import for arch $ARCH and parallel-stride set to $PARALLEL_STRIDE"
 
 nice -n 20 $BAZEL_INSTALLERS_DIR/index-import \
+    -undo-rules_swift-renames \
     -parallel-stride $PARALLEL_STRIDE \
     -incremental \
     -remap "$remote_developer_dir=$local_developer_dir" \
@@ -68,6 +69,6 @@ nice -n 20 $BAZEL_INSTALLERS_DIR/index-import \
     -remap "$bazel_root=$BAZEL_WORKSPACE_ROOT" \
     -remap "^([^//])=$BAZEL_WORKSPACE_ROOT/\$1" \
     "$@" \
-    "$BUILD_DIR"/../../Index/DataStore &
+    $INDEX_DATA_STORE_DIR &
 
 echo $! > $DERIVED_DATA/index-import.pid

@@ -64,9 +64,9 @@ def rules_ios_dependencies():
         github_repo,
         name = "build_bazel_rules_swift",
         project = "bazelbuild",
-        ref = "cb64a41e3a4c93f67abdfcc0d5f18aa04f02f5b0",
+        ref = "17e20f7edf27e647f1b45f11ed75d51c17820c3b",
         repo = "rules_swift",
-        sha256 = "200a35c2c84096f155a5c6092bac2abf1b2149fbeb3eb730a2923997db079a83",
+        sha256 = "d50c2cb6f1c2c30cf44a8ea60469cd399f7458061169bde76a177b63d6b74330",
     )
 
     bazel_version = _get_bazel_version()
