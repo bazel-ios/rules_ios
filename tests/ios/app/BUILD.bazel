@@ -5,6 +5,7 @@ load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
 load(":analysis-tests.bzl", "make_tests")
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_bundle_import")
 load("//rules/test/output:output_test.bzl", "output_test")
+load("@com_github_buildbuddy_io_rules_xcodeproj//xcodeproj:defs.bzl", "top_level_target", rules_xcodeproj = "xcodeproj")
 
 apple_framework(
     name = "CppLib",
@@ -242,6 +243,19 @@ ios_application(
         ":Empty",
         ":FW",
         ":OnlySources",
+    ],
+)
+
+rules_xcodeproj(
+    name = "AppWithInfoPlist_rules_xcodeproj",
+    install_directory = "",
+    project_name = "AppWithInfoPlist-rules-xcodeproj",
+    tags = ["manual"],
+    top_level_targets = [
+        top_level_target(
+            ":AppWithInfoPlist",
+            target_environments = ["simulator"],
+        ),
     ],
 )
 

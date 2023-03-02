@@ -122,12 +122,14 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
         native.test_suite(name = name, tests = tests, visibility = test_suite_visibility, tags = test_suite_tags)
     else:
         rule = test_rule
-        if runner:
-            if types.is_list(runner):
-                ios_test_kwargs["runners"] = runner
-                rule = test_suite_rule
-            else:
-                ios_test_kwargs["runner"] = runner
+        # rules_xcodeproj doesn't accept "test suite" targets as "top level targets" at this time
+        #
+        # if runner:
+        #     if types.is_list(runner):
+        #         ios_test_kwargs["runners"] = runner
+        #         rule = test_suite_rule
+        #     else:
+        #         ios_test_kwargs["runner"] = runner
 
         rule(
             name = name,
