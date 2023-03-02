@@ -8,6 +8,27 @@ load(
 rules_ios_dependencies()
 
 load(
+    "@bazel_tools//tools/build_defs/repo:git.bzl",
+    "git_repository",
+)
+
+# rules_xcodeproj
+# https://github.com/buildbuddy-io/rules_xcodeproj/releases/tag/1.2.0
+git_repository(
+    name = "com_github_buildbuddy_io_rules_xcodeproj",
+    commit = "8bdea84ded9444384415358bb297f0ca2b77c465",
+    remote = "https://github.com/buildbuddy-io/rules_xcodeproj.git",
+)
+
+load(
+    "@com_github_buildbuddy_io_rules_xcodeproj//xcodeproj:repositories.bzl",
+    "xcodeproj_rules_dependencies",
+)
+
+xcodeproj_rules_dependencies()
+# rules_xcodeproj
+
+load(
     "@build_bazel_rules_apple//apple:repositories.bzl",
     "apple_rules_dependencies",
 )
@@ -38,11 +59,6 @@ apple_support_dependencies()
 load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 
 bazel_skylib_workspace()
-
-load(
-    "@bazel_tools//tools/build_defs/repo:git.bzl",
-    "git_repository",
-)
 
 git_repository(
     name = "io_bazel_stardoc",
