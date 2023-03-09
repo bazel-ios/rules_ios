@@ -20,6 +20,7 @@ _IOS_TEST_KWARGS = [
     "flaky",
     "frameworks",
     "provisioning_profile",
+    "test_coverage_manifest",
     "test_filter",
 ]
 
