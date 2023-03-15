@@ -21,6 +21,7 @@ DEFAULT_MINIMUM_OS_VERSION_LIST = [
     "14.1",
     "14.2",
     "14.3",
+    "15.0",
 ]
 
 def generate_test_host_apps(versions = None, **kwargs):
