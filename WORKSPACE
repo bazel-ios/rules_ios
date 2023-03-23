@@ -15,13 +15,13 @@ load(
 # rules_xcodeproj
 # https://github.com/buildbuddy-io/rules_xcodeproj/releases/tag/1.2.0
 git_repository(
-    name = "com_github_buildbuddy_io_rules_xcodeproj",
+    name = "rules_xcodeproj",
     commit = "8bdea84ded9444384415358bb297f0ca2b77c465",
     remote = "https://github.com/buildbuddy-io/rules_xcodeproj.git",
 )
 
 load(
-    "@com_github_buildbuddy_io_rules_xcodeproj//xcodeproj:repositories.bzl",
+    "@rules_xcodeproj//xcodeproj:repositories.bzl",
     "xcodeproj_rules_dependencies",
 )
 
