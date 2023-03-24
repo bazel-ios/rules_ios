@@ -439,6 +439,19 @@ ios_application(
     ],
 )
 
+rules_xcodeproj(
+    name = "AppTestOnly_rules_xcodeproj",
+    install_directory = "",
+    project_name = "AppTestOnly-rules-xcodeproj",
+    tags = ["manual"],
+    top_level_targets = [
+        top_level_target(
+            ":AppTestOnly",
+            target_environments = ["simulator"],
+        ),
+    ],
+)
+
 ios_application(
     name = "AppTestOnlyWithExtension",
     testonly = True,
