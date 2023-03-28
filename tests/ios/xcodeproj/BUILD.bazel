@@ -225,7 +225,7 @@ xcodeproj(
 
 xcodeproj(
     name = "App-XCHammer",
-    use_xchammer = True,
+    generator = "xchammer",
     deps = [
         "//tests/ios/app:App",
         "//tests/ios/extensions:ExampleExtension",
@@ -239,7 +239,7 @@ xcodeproj(
         indexing_enabled = True,
         progress_bar_enabled = True,
     ),
-    use_xchammer = True,
+    generator = "xchammer",
     deps = [
         "//tests/ios/app:App",
         "//tests/ios/extensions:ExampleExtension",

@@ -174,3 +174,10 @@ swift_binary(
         )
 
     xcbuildkit_dependencies()
+
+    _maybe(
+        http_archive,
+        name = "rules_xcodeproj",
+        urls = ["https://github.com/MobileNativeFoundation/rules_xcodeproj/releases/download/1.3.3/release.tar.gz"],
+        sha256 = "7967b372bd1777214ce65c87a82ac0630150b7504b443de0315ea52e45758e0c",
+    )

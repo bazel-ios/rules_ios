@@ -2,55 +2,63 @@
 
 load("//rules:legacy_xcodeproj.bzl", legacy_xcodeproj = "xcodeproj")
 load("@xchammer//:BazelExtensions/xcodeproject.bzl", xchammer_xcodeproj = "xcode_project")
-load("@xchammer//:BazelExtensions/xchammerconfig.bzl", "bazel_build_service_config", "project_config")
-load("//rules:library.bzl", "GLOBAL_INDEX_STORE_PATH")
+load("@xchammer//:BazelExtensions/xchammerconfig.bzl", "project_config")
+load("//rules/third_party:xchammer_helpers.bzl", "patch_bazel_build_service_config")
+load("@rules_xcodeproj//xcodeproj:defs.bzl", rules_xcodeproj = "xcodeproj")
 
-def _patch_bazel_build_service_config(name, kwargs_bazel_build_service_config):
-    """Adds sensible defaults
+_GENERATORS = [
+    "legacy",
+    "xchammer",
+    "rules_xcodeproj",
+]
 
-    If users don't specify these values adding defaults that make sense in rules_ios, XCHammer adds
-    its own default values if not specified otherwise (very similar to these atm).
+def xcodeproj(
+        name,
+        generator = "legacy",
+        **kwargs):
+    """Macro that allows one to use different Xcode generators via the `generator` attribute.
 
-    It's really important to align the index stores with `xcbuildkit` so 'GLOBAL_INDEX_STORE_PATH' is always set
-    for now since this is how `rules_ios` is setup. Later on we can make this more configurable.
-    """
-    if kwargs_bazel_build_service_config:
-        return bazel_build_service_config(
-            bep_path = kwargs_bazel_build_service_config.bepPath if kwargs_bazel_build_service_config.bepPath else "/tmp/{}.bep".format(name),
-            index_store_path = "$SRCROOT/%s" % GLOBAL_INDEX_STORE_PATH,
-            indexing_data_dir = kwargs_bazel_build_service_config.indexingDataDir if kwargs_bazel_build_service_config.indexingDataDir else "/tmp/xcbuildkit-data/{}/indexing".format(name),
-            indexing_enabled = kwargs_bazel_build_service_config.indexingEnabled if kwargs_bazel_build_service_config.indexingEnabled else False,
-            progress_bar_enabled = kwargs_bazel_build_service_config.progressBarEnabled if kwargs_bazel_build_service_config.progressBarEnabled else False,
-        )
-    return None
+    - Accepted values defined in `_GENERATORS = ["legacy", "xchammer", "rules_xcodeproj"]`
+    - kwargs are propagated to the respective generator
 
-def xcodeproj(name, **kwargs):
-    """Macro that allows one to declare one of 'legacy_xcodeproj', 'xchammer_xcodeproj' depending on value of 'use_xchammer' flag
+    Note: XCHammer is not receiving all kwargs due to the initial intent being to handle that for rules_ios users,
+    this should probably change and instead we should just propagate the kwargs like we're doing for the other ones
 
     Args:
-      name: Name of the rule to be declared
-      **kwargs: Arguments to propagate, the XCHammer specific ones are going to be removed before declaring the legacy rule
+      name: A unique name for this target
+      generator: One of ["legacy", "xchammer", "rules_xcodeproj"], defaults to "legacy"
+      **kwargs: Arguments to propagate to the respective generator
     """
+    generator = kwargs.pop("generator", "legacy")
+    if generator not in _GENERATORS:
+        fail("[ERROR] Unsupported generator: {}. Acceptable values: {}".format(generator, _GENERATORS))
 
-    # Pop XCHammer specific attributes so these don't get propagated to `legacy_xcodeproj`
-    use_xchammer = kwargs.pop("use_xchammer", False)
-    generate_xcode_schemes = kwargs.pop("generate_xcode_schemes", False)
-    xcconfig_overrides = kwargs.pop("xcconfig_overrides", {})
+    # Making sure this attribute is set to address rules_swift requirement
+    # See: https://github.com/bazel-ios/rules_ios/pull/573
     testonly = kwargs.pop("testonly", False)
-    bazel_build_service_config = _patch_bazel_build_service_config(name, kwargs.pop("bazel_build_service_config", None))
 
-    if use_xchammer:
+    if generator == "legacy":
+        legacy_xcodeproj(
+            name = name,
+            testonly = testonly,
+            **kwargs
+        )
+    elif generator == "rules_xcodeproj":
+        rules_xcodeproj(
+            name = name,
+            testonly = testonly,
+            **kwargs
+        )
+    elif generator == "xchammer":
         xchammer_xcodeproj(
             name = name,
             testonly = testonly,
             bazel = kwargs.get("bazel_path", "/usr/local/bin/bazel"),
             project_config = project_config(
-                generate_xcode_schemes = generate_xcode_schemes,
+                generate_xcode_schemes = kwargs.pop("generate_xcode_schemes", False),
                 paths = ["**"],
-                xcconfig_overrides = xcconfig_overrides,
+                xcconfig_overrides = kwargs.pop("xcconfig_overrides", {}),
             ),
-            bazel_build_service_config = bazel_build_service_config,
-            targets = kwargs.get("deps", []),
+            bazel_build_service_config = patch_bazel_build_service_config(name, kwargs.pop("bazel_build_service_config", None)),
+            targets = kwargs.pop("deps", []),
         )
-    else:
-        legacy_xcodeproj(name = name, testonly = testonly, **kwargs)
