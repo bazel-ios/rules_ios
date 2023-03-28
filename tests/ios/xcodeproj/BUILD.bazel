@@ -3,6 +3,7 @@ load("//rules:legacy_xcodeproj.bzl", "xcodeproj_project_options")
 load("//rules:additional_scheme_info.bzl", "additional_scheme_info")
 load("@xchammer//:BazelExtensions/xchammerconfig.bzl", "bazel_build_service_config", "project_config")
 load("//rules:library.bzl", "GLOBAL_INDEX_STORE_PATH")
+load("@rules_xcodeproj//xcodeproj:defs.bzl", "top_level_target")
 
 xcodeproj(
     name = "Single-Static-Framework-Project",
@@ -224,6 +225,7 @@ xcodeproj(
     ],
 )
 
+# XCHammer example targets, mostly used for tests during development for now
 xcodeproj(
     name = "App-XCHammer",
     generator = "xchammer",
@@ -251,6 +253,22 @@ xcodeproj(
     ),
     targets = [
         "//tests/ios/app:App",
+        "//tests/ios/extensions:ExampleExtension",
+        "//tests/ios/frameworks/with-bundle-id:FrameworkWithBundleId",
+    ],
+)
+
+# rules_xcodeproj example targets, mostly used for tests during development for now
+xcodeproj(
+    name = "App-rules_xcodeproj",
+    generator = "rules_xcodeproj",
+    install_directory = "",
+    tags = ["manual"],
+    top_level_targets = [
+        top_level_target(
+            "//tests/ios/app:App",
+            target_environments = ["simulator"],
+        ),
         "//tests/ios/extensions:ExampleExtension",
         "//tests/ios/frameworks/with-bundle-id:FrameworkWithBundleId",
     ],

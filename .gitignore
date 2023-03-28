@@ -12,3 +12,5 @@ external
 *-XCHammer*.xcodeproj
 xchammer-includes
 index-import.runfiles
+# rules_xcodeproj specific things to ignore for now
+*-rules_xcodeproj*.xcodeproj
