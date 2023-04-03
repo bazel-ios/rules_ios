@@ -9,6 +9,7 @@ load("//rules:transition_support.bzl", "transition_support")
 load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
 load("@build_bazel_rules_apple//apple/internal:apple_product_type.bzl", "apple_product_type")
 load("@build_bazel_rules_apple//apple/internal:bundling_support.bzl", "bundling_support")
 load("@build_bazel_rules_apple//apple/internal:features_support.bzl", "features_support")
@@ -788,6 +789,14 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
             ),
         )
     else:
+        cc_toolchain = find_cpp_toolchain(ctx)
+        cc_features = cc_common.configure_features(
+            ctx = ctx,
+            cc_toolchain = cc_toolchain,
+            language = "objc",
+            requested_features = ctx.features,
+            unsupported_features = ctx.disabled_features,
+        )
         processor_partials.append(
             partials.framework_provider_partial(
                 actions = actions,
@@ -795,7 +804,9 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
                 binary_artifact = binary_artifact,
                 bundle_name = bundle_name,
                 bundle_only = False,
+                cc_features = cc_features,
                 cc_info = link_result.cc_info,
+                cc_toolchain = cc_toolchain,
                 objc_provider = link_result.objc,
                 rule_label = label,
             ),
