@@ -49,7 +49,8 @@ Packages compiled code into an Apple .framework package
 ## apple_framework
 
 <pre>
-apple_framework(<a href="#apple_framework-name">name</a>, <a href="#apple_framework-apple_library">apple_library</a>, <a href="#apple_framework-kwargs">kwargs</a>)
+apple_framework(<a href="#apple_framework-name">name</a>, <a href="#apple_framework-apple_library">apple_library</a>, <a href="#apple_framework-infoplists">infoplists</a>, <a href="#apple_framework-infoplists_by_build_setting">infoplists_by_build_setting</a>, <a href="#apple_framework-xcconfig">xcconfig</a>,
+                <a href="#apple_framework-xcconfig_by_build_setting">xcconfig_by_build_setting</a>, <a href="#apple_framework-kwargs">kwargs</a>)
 </pre>
 
 Builds and packages an Apple framework.
@@ -61,6 +62,10 @@ Builds and packages an Apple framework.
 | :------------- | :------------- | :------------- |
 | <a id="apple_framework-name"></a>name |  The name of the framework.   |  none |
 | <a id="apple_framework-apple_library"></a>apple_library |  The macro used to package sources into a library.   |  <code>&lt;function apple_library&gt;</code> |
+| <a id="apple_framework-infoplists"></a>infoplists |  A list of Info.plist files to be merged into the framework.   |  <code>[]</code> |
+| <a id="apple_framework-infoplists_by_build_setting"></a>infoplists_by_build_setting |  A dictionary of infoplists grouped by bazel build setting.<br><br>Each value is applied if the respective bazel build setting is resolved during the analysis phase.<br><br>If '//conditions:default' is not set the value in 'infoplists' is set as default.   |  <code>{}</code> |
+| <a id="apple_framework-xcconfig"></a>xcconfig |  A dictionary of xcconfigs to be applied to the framework by default.   |  <code>{}</code> |
+| <a id="apple_framework-xcconfig_by_build_setting"></a>xcconfig_by_build_setting |  A dictionary of xcconfigs grouped by bazel build setting.<br><br>Each value is applied if the respective bazel build setting is resolved during the analysis phase.<br><br>If '//conditions:default' is not set the value in 'xcconfig' is set as default.   |  <code>{}</code> |
 | <a id="apple_framework-kwargs"></a>kwargs |  Arguments passed to the apple_library and apple_framework_packaging rules as appropriate.   |  none |
 
 
