@@ -1,0 +1,52 @@
+load("//rules:framework.bzl", "apple_framework")
+load("//rules:app_clip.bzl", "ios_app_clip")
+load("//rules:app.bzl", "ios_application")
+
+apple_framework(
+    name = "AppClipFramework",
+    srcs = glob(["AppClipFramework/**/*.swift"]),
+    platforms = {"ios": "13.0"},
+    sdk_frameworks = [
+        "UIKit",
+        "SwiftUI",
+    ],
+    visibility = ["//visibility:public"],
+    xcconfig = {
+        "OTHER_SWIFT_FLAGS": ["-DAPPCLIP"],
+    },
+)
+
+ios_app_clip(
+    name = "AppClip",
+    bundle_id = "com.example.app.clip",
+    entitlements = "AppClip.entitlements",
+    families = [
+        "iphone",
+    ],
+    infoplists = [
+        "AppClip-Info.plist",
+    ],
+    minimum_os_version = "13.0",
+    visibility = ["//visibility:public"],
+    xcconfig = {
+        "OTHER_SWIFT_FLAGS": ["-DAPPCLIP"],
+    },
+    deps = [
+        ":AppClipFramework",
+    ],
+)
+
+ios_application(
+    name = "App",
+    srcs = ["App/main.m"],
+    app_clips = [
+        ":AppClip",
+    ],
+    bundle_id = "com.example.app",
+    minimum_os_version = "13.0",
+    visibility = ["//visibility:public"],
+    xcconfig = {
+        "OTHER_SWIFT_FLAGS": ["-DAPPCLIP"],
+    },
+    deps = [],
+)

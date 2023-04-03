@@ -36,6 +36,7 @@ _IOS_APPLICATION_KWARGS = [
     "include_symbols_in_bundle",
     "frameworks",
     "version",
+    "app_clips",
 ]
 
 def ios_application(name, apple_library = apple_library, infoplists_by_build_setting = {}, **kwargs):
