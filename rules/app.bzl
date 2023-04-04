@@ -18,7 +18,6 @@ _IOS_APPLICATION_KWARGS = [
     "executable_name",
     "minimum_os_version",
     "test_host",
-    "families",
     "entitlements",
     "entitlements_validation",
     "extensions",
@@ -39,13 +38,23 @@ _IOS_APPLICATION_KWARGS = [
     "app_clips",
 ]
 
-def ios_application(name, apple_library = apple_library, infoplists_by_build_setting = {}, **kwargs):
+def ios_application(
+        name,
+        families = ["iphone", "ipad"],
+        apple_library = apple_library,
+        infoplists = [],
+        infoplists_by_build_setting = {},
+        xcconfig = {},
+        xcconfig_by_build_setting = {},
+        **kwargs):
     """
     Builds and packages an iOS application.
 
     Args:
         name: The name of the iOS application.
+        families: A list of iOS device families the target supports.
         apple_library: The macro used to package sources into a library.
+        infoplists: A list of Info.plist files to be merged into the iOS app.
         infoplists_by_build_setting: A dictionary of infoplists grouped by bazel build setting.
 
                                      Each value is applied if the respective bazel build setting
@@ -53,6 +62,14 @@ def ios_application(name, apple_library = apple_library, infoplists_by_build_set
 
                                      If '//conditions:default' is not set the value in 'infoplists'
                                      is set as default.
+        xcconfig: A dictionary of xcconfigs to be applied to the iOS app by default.
+        xcconfig_by_build_setting: A dictionary of xcconfigs grouped by bazel build setting.
+
+                                   Each value is applied if the respective bazel build setting
+                                   is resolved during the analysis phase.
+
+                                   If '//conditions:default' is not set the value in 'xcconfig'
+                                   is set as default.
         **kwargs: Arguments passed to the apple_library and ios_application rules as appropriate.
     """
 
@@ -67,7 +84,6 @@ def ios_application(name, apple_library = apple_library, infoplists_by_build_set
     )
 
     application_kwargs["launch_storyboard"] = application_kwargs.pop("launch_storyboard", library.launch_screen_storyboard_name)
-    application_kwargs["families"] = application_kwargs.pop("families", ["iphone", "ipad"])
 
     # Setup force loading here - need to process deps and libs
     force_load_name = name + ".force_load_direct_deps"
@@ -99,16 +115,17 @@ def ios_application(name, apple_library = apple_library, infoplists_by_build_set
 
     processed_infoplists = process_infoplists(
         name = name,
-        infoplists = application_kwargs.pop("infoplists", []),
+        infoplists = infoplists,
         infoplists_by_build_setting = infoplists_by_build_setting,
-        xcconfig = kwargs.get("xcconfig", {}),
-        xcconfig_by_build_setting = kwargs.get("xcconfig_by_build_setting", {}),
+        xcconfig = xcconfig,
+        xcconfig_by_build_setting = xcconfig_by_build_setting,
     )
 
     rules_apple_ios_application(
         name = name,
         deps = deps,
         frameworks = frameworks,
+        families = families,
         output_discriminator = None,
         infoplists = select(processed_infoplists),
         testonly = testonly,

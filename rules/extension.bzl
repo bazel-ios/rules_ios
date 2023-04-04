@@ -3,7 +3,14 @@ load("//rules:plists.bzl", "process_infoplists")
 load("//rules:force_load_direct_deps.bzl", "force_load_direct_deps")
 load("//rules/internal:framework_middleman.bzl", "dep_middleman", "framework_middleman")
 
-def ios_extension(name, infoplists_by_build_setting = {}, **kwargs):
+def ios_extension(
+        name,
+        families = ["iphone", "ipad"],
+        infoplists = [],
+        infoplists_by_build_setting = {},
+        xcconfig = {},
+        xcconfig_by_build_setting = {},
+        **kwargs):
     """
     Builds and packages an iOS extension.
 
@@ -14,6 +21,8 @@ def ios_extension(name, infoplists_by_build_setting = {}, **kwargs):
 
     Args:
         name: The name of the iOS extension.
+        families: A list of iOS device families the target supports.
+        infoplists: A list of Info.plist files to be merged into the extension.
         infoplists_by_build_setting: A dictionary of infoplists grouped by bazel build setting.
 
                                      Each value is applied if the respective bazel build setting
@@ -21,14 +30,20 @@ def ios_extension(name, infoplists_by_build_setting = {}, **kwargs):
 
                                      If '//conditions:default' is not set the value in 'infoplists'
                                      is set as default.
+        xcconfig: A dictionary of xcconfigs to be applied to the extension by default.
+        xcconfig_by_build_setting: A dictionary of xcconfigs grouped by bazel build setting.
+
+                                   Each value is applied if the respective bazel build setting
+                                   is resolved during the analysis phase.
+
+                                   If '//conditions:default' is not set the value in 'xcconfig'
+                                   is set as default.
         **kwargs: Arguments passed to the ios_extension rule as appropriate.
     """
 
     deps = kwargs.pop("deps", [])
     frameworks = kwargs.pop("frameworks", [])
     testonly = kwargs.pop("testonly", False)
-
-    kwargs["families"] = kwargs.pop("families", ["iphone", "ipad"])
 
     # Setup force loading here - need to process deps and libs
     force_load_name = name + ".force_load_direct_deps"
@@ -61,15 +76,16 @@ def ios_extension(name, infoplists_by_build_setting = {}, **kwargs):
 
     processed_infoplists = process_infoplists(
         name = name,
-        infoplists = kwargs.pop("infoplists", []),
+        infoplists = infoplists,
         infoplists_by_build_setting = infoplists_by_build_setting,
-        xcconfig = kwargs.pop("xcconfig", {}),
-        xcconfig_by_build_setting = kwargs.pop("xcconfig_by_build_setting", {}),
+        xcconfig = xcconfig,
+        xcconfig_by_build_setting = xcconfig_by_build_setting,
     )
 
     rules_apple_ios_extension(
         name = name,
         deps = deps,
+        families = families,
         frameworks = frameworks,
         output_discriminator = None,
         infoplists = select(processed_infoplists),

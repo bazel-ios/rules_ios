@@ -5,6 +5,7 @@ load("//rules/internal:framework_middleman.bzl", "dep_middleman", "framework_mid
 
 def ios_app_clip(
         name,
+        families = ["iphone", "ipad"],
         infoplists = [],
         infoplists_by_build_setting = {},
         xcconfig = {},
@@ -18,6 +19,7 @@ def ios_app_clip(
 
     Args:
         name: The name of the iOS app clip.
+        families: A list of iOS device families the target supports.
         infoplists: A list of Info.plist files to be merged into the app clip.
         infoplists_by_build_setting: A dictionary of infoplists grouped by bazel build setting.
 
@@ -81,6 +83,7 @@ def ios_app_clip(
         name = name,
         deps = deps,
         frameworks = frameworks,
+        families = families,
         output_discriminator = None,
         infoplists = select(processed_infoplists),
         testonly = testonly,

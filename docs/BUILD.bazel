@@ -4,8 +4,10 @@ load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 package(default_visibility = ["//visibility:private"])
 
 _RULES = [
+    "app_clip",
     "app",
     "apple_patched",
+    "extension",
     "framework",
     "hmap",
     "library",
