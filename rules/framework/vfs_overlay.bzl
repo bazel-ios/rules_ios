@@ -91,10 +91,11 @@ def _get_public_framework_header(path):
 # and incrementality. For imported frameworks, there is additional search paths
 # enabled
 def _make_root(vfs_parent, target_triple, swiftmodules, root_dir, extra_search_paths, module_map, hdrs, private_hdrs):
-    vfs_prefix = _make_relative_prefix(len(vfs_parent.split("/")) - 1)
+    vfs_parent_len = len(vfs_parent.split("/")) - 1
+    vfs_prefix = _make_relative_prefix(vfs_parent_len)
     private_headers_contents = []
     headers_contents = []
-    vfs_prefix = _make_relative_prefix(len(vfs_parent.split("/")) - 1)
+    vfs_prefix = _make_relative_prefix(vfs_parent_len)
 
     if extra_search_paths:
         paths = []
@@ -119,14 +120,14 @@ def _make_root(vfs_parent, target_triple, swiftmodules, root_dir, extra_search_p
 
     # Swiftmodules: should we factor this  upwards
     modules_contents = []
-    if len(module_map):
+    if module_map:
         modules_contents.append({
             "type": "file",
             "name": "module.modulemap",
             "external-contents": vfs_prefix + module_map[0].path,
         })
 
-    if len(swiftmodules):
+    if swiftmodules:
         any_swiftmodule_file = swiftmodules[0]
         if any_swiftmodule_file.is_source:
             # Handle a glob of files inside of a .swiftmodule e.g. for xcframework
@@ -146,7 +147,7 @@ def _make_root(vfs_parent, target_triple, swiftmodules, root_dir, extra_search_p
                 })
 
     modules = []
-    if len(modules_contents):
+    if modules_contents:
         modules = [{
             "name": "Modules",
             "type": "directory",
@@ -166,7 +167,7 @@ def _make_root(vfs_parent, target_triple, swiftmodules, root_dir, extra_search_p
         ])
 
     headers = []
-    if len(headers_contents):
+    if headers_contents:
         headers = [{
             "name": "Headers",
             "type": "directory",
@@ -184,7 +185,7 @@ def _make_root(vfs_parent, target_triple, swiftmodules, root_dir, extra_search_p
         ])
 
     private_headers = []
-    if len(private_headers_contents):
+    if private_headers_contents:
         private_headers = [{
             "name": "PrivateHeaders",
             "type": "directory",
@@ -192,14 +193,14 @@ def _make_root(vfs_parent, target_triple, swiftmodules, root_dir, extra_search_p
         }]
 
     roots = []
-    if len(headers) or len(private_headers) or len(modules):
+    if headers or private_headers or modules:
         roots.append({
             "name": root_dir,
             "type": "directory",
             "contents": headers + private_headers + modules,
         })
 
-    if len(swiftmodules) > 0:
+    if swiftmodules:
         contents = _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix, target_triple)
         if contents:
             roots.append(contents)
@@ -368,7 +369,7 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules
     )
 
     vfs_info = _make_vfs_info(framework_name, data)
-    if len(merge_vfsoverlays) > 0:
+    if merge_vfsoverlays:
         vfs_info = _merge_vfs_infos(vfs_info, merge_vfsoverlays)
         roots = _roots_from_datas(vfs_parent, target_triple, vfs_info.values() + [data])
 
