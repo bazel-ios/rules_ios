@@ -69,7 +69,9 @@ ios_unit_test(
         "empty.swift",
     ],
     minimum_os_version = "10.0",
-    runner = "//tests/ios:standard_runner",
+    # TODO: Figure out why the `split_name_to_kwargs` args break `ios_xctestrun_runner`
+    #       for the ObjC test in the `test_filter` param.
+    # runner = "//tests/ios:standard_runner",
     split_name_to_kwargs = {
         "shard_1": {"test_filter": "EmptySwiftTests"},
         "shard_2": {"test_filter": "EmptyTests"},
