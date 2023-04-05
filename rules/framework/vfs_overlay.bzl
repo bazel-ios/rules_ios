@@ -1,3 +1,14 @@
+"""framework_vfs_overlay impl
+
+Note on `external-contents` key set many times in this file:
+
+Internal to swift and clang - LLVM `VirtualFileSystem` object can
+serialize paths relative to the absolute path of the overlay. This
+requires the paths are relative to the overlay. While deriving the
+in-memory tree roots, it pre-pends the prefix of the `vfsoverlay` path
+to each of the entries.
+"""
+
 load("//rules:providers.bzl", "FrameworkInfo")
 load("//rules:features.bzl", "feature_names")
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
