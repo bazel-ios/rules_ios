@@ -62,15 +62,17 @@ def _build_subtrees(paths, vfs_prefix):
         # Loop the _framework_ path and add each dir to the current tree.
         # Assume the last bit is a file then add it as a file
         idx = 0
+
+        parts_len = len(parts)
+        ext_c = _get_external_contents(vfs_prefix, path_info.path)
         for part in parts:
-            if idx == len(parts) - 1:
-                ext_c = _get_external_contents(vfs_prefix, path_info.path)
+            if idx == parts_len - 1:
                 curr_subdirs.dict[part] = -1
                 curr_subdirs.json["contents"].append({"name": part, "type": "file", "external-contents": ext_c})
                 break
 
             # Lookup a value for the current subdirs, otherwise append
-            next_subdirs = curr_subdirs.dict.get(part, None)
+            next_subdirs = curr_subdirs.dict[part] if part in curr_subdirs.dict else None
             if not next_subdirs:
                 next_subdirs_json = {"contents": [], "type": "directory", "name": part}
                 next_subdirs = struct(dict = {}, json = next_subdirs_json)
