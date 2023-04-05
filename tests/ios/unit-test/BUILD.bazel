@@ -8,6 +8,7 @@ ios_unit_test(
     ],
     infoplists = [{"UNHOSTED_KEY_1": True}],
     minimum_os_version = "11.0",
+    runner = "//tests/ios:standard_runner",
 )
 
 ios_unit_test(
@@ -17,6 +18,7 @@ ios_unit_test(
         "empty.swift",
     ],
     minimum_os_version = "10.0",
+    runner = "//tests/ios:standard_runner",
     test_host = True,
     # Adding visibility so the xcodeproject tests can depend on this target
     visibility = ["//visibility:public"],
@@ -29,6 +31,7 @@ ios_unit_test(
         "empty.swift",
     ],
     minimum_os_version = "12.0",
+    runner = "//tests/ios:standard_runner",
     test_host = "//rules/test_host_app:iOS-9.3-AppHost",
     # Adding visibility so the xcodeproject tests can depend on this target
     visibility = ["//visibility:public"],
@@ -41,6 +44,7 @@ ios_unit_test(
         "empty.swift",
     ],
     minimum_os_version = "12.0",
+    runner = "//tests/ios:standard_runner",
     # Intentionally dependent on app with extensions.
     test_host = "//tests/ios/app:App",
     # Adding visibility so the xcodeproject tests can depend on this target
@@ -55,6 +59,7 @@ ios_unit_test(
     ],
     minimum_os_version = "11.0",
     resources = ["resource-file.txt"],
+    runner = "//tests/ios:standard_runner",
 )
 
 ios_unit_test(
@@ -64,6 +69,7 @@ ios_unit_test(
         "empty.swift",
     ],
     minimum_os_version = "10.0",
+    runner = "//tests/ios:standard_runner",
     split_name_to_kwargs = {
         "shard_1": {"test_filter": "EmptySwiftTests"},
         "shard_2": {"test_filter": "EmptyTests"},
@@ -82,6 +88,7 @@ ios_unit_test(
     ],
     infoplists = [{"NSPrincipalClass": "TestSuiteObserver"}],
     minimum_os_version = "11.0",
+    runner = "//tests/ios:standard_runner",
 )
 
 ios_unit_test(
@@ -92,4 +99,5 @@ ios_unit_test(
     ],
     features = ["apple.skip_codesign_simulator_bundles"],
     minimum_os_version = "11.0",
+    runner = "//tests/ios:standard_runner",
 )
