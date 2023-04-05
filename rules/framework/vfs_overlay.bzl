@@ -21,14 +21,6 @@ def _make_relative_prefix(length):
         prefix += dots
     return prefix
 
-# Internal to swift and clang - LLVM `VirtualFileSystem` object can
-# serialize paths relative to the absolute path of the overlay. This
-# requires the paths are relative to the overlay. While deriving the
-# in-memory tree roots, it pre-pends the prefix of the `vfsoverlay` path
-# to each of the entries.
-def _get_external_contents(prefix, path_str):
-    return prefix + path_str
-
 def _get_vfs_parent(ctx):
     root_path = ctx.bin_dir.path + "/"
 
@@ -64,11 +56,10 @@ def _build_subtrees(paths, vfs_prefix):
         idx = 0
 
         parts_len = len(parts)
-        ext_c = _get_external_contents(vfs_prefix, path_info.path)
         for part in parts:
             if idx == parts_len - 1:
                 curr_subdirs.dict[part] = -1
-                curr_subdirs.json["contents"].append({"name": part, "type": "file", "external-contents": ext_c})
+                curr_subdirs.json["contents"].append({"name": part, "type": "file", "external-contents": vfs_prefix + path_info.path})
                 break
 
             # Lookup a value for the current subdirs, otherwise append
@@ -132,7 +123,7 @@ def _make_root(vfs_parent, target_triple, swiftmodules, root_dir, extra_search_p
         modules_contents.append({
             "type": "file",
             "name": "module.modulemap",
-            "external-contents": _get_external_contents(vfs_prefix, module_map[0].path),
+            "external-contents": vfs_prefix + module_map[0].path,
         })
 
     if len(swiftmodules):
@@ -148,7 +139,7 @@ def _make_root(vfs_parent, target_triple, swiftmodules, root_dir, extra_search_p
                         {
                             "type": "file",
                             "name": file.basename,
-                            "external-contents": _get_external_contents(vfs_prefix, file.path),
+                            "external-contents": vfs_prefix + file.path,
                         }
                         for file in swiftmodules
                     ],
@@ -169,7 +160,7 @@ def _make_root(vfs_parent, target_triple, swiftmodules, root_dir, extra_search_p
             {
                 "type": "file",
                 "name": file.basename,
-                "external-contents": _get_external_contents(vfs_prefix, file.path),
+                "external-contents": vfs_prefix + file.path,
             }
             for file in hdrs
         ])
@@ -187,7 +178,7 @@ def _make_root(vfs_parent, target_triple, swiftmodules, root_dir, extra_search_p
             {
                 "type": "file",
                 "name": file.basename,
-                "external-contents": _get_external_contents(vfs_prefix, file.path),
+                "external-contents": vfs_prefix + file.path,
             }
             for file in private_hdrs
         ])
@@ -228,7 +219,7 @@ def _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix, target_triple)
         {
             "type": "file",
             "name": target_triple + "." + file.extension,
-            "external-contents": _get_external_contents(vfs_prefix, file.path),
+            "external-contents": vfs_prefix + file.path,
         }
         for file in swiftmodules
     ]
