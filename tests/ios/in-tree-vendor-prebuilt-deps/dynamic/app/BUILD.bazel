@@ -157,6 +157,7 @@ ios_unit_test(
     name = "TestAppWithInfoPlist",
     srcs = ["infoplist_test.m"],
     minimum_os_version = "10.0",
+    runner = "//tests/ios:standard_runner",
     test_host = ":AppWithInfoPlist",
 )
 

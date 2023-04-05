@@ -70,6 +70,7 @@ ios_unit_test(
         "//tests/ios/frameworks/dynamic/a",
     ],
     minimum_os_version = "10.0",
+    runner = "//tests/ios:standard_runner",
     test_host = ":App",
     deps = [
         "//tests/ios/frameworks/dynamic/a",

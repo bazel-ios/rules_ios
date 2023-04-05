@@ -6,6 +6,7 @@ ios_ui_test(
         "empty.swift",
     ],
     minimum_os_version = "11.0",
+    runner = "//tests/ios:standard_runner",
     test_host = True,
 )
 
@@ -15,5 +16,6 @@ ios_ui_test(
         "simple.swift",
     ],
     minimum_os_version = "11.0",
+    runner = "//tests/ios:standard_runner",
     test_host = "//tests/ios/ui-test/test-app-host:TestAppHost",
 )

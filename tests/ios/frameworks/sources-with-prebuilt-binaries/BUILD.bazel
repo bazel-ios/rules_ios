@@ -54,5 +54,6 @@ apple_framework(
 ios_unit_test(
     name = "MixedSourceFrameworkTests",
     minimum_os_version = "11.0",
+    runner = "//tests/ios:standard_runner",
     deps = [":MixedSourceFrameworkTestLib"],
 )

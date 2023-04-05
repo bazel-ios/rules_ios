@@ -8,5 +8,6 @@ ios_unit_test(
         "Tests/Test.swift",
     ],
     minimum_os_version = "13.0",
+    runner = "//tests/ios:standard_runner",
     swift_objc_bridging_header = "Tests/Test-Bridging-Header.h",
 )

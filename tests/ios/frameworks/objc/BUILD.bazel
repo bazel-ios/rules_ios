@@ -35,6 +35,7 @@ ios_unit_test(
         ],
     ),
     minimum_os_version = "10.0",
+    runner = "//tests/ios:standard_runner",
     visibility = ["//visibility:public"],
     deps = [":ObjcFrameworkTestLib"],
 )

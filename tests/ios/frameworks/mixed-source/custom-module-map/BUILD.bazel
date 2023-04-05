@@ -29,6 +29,7 @@ ios_unit_test(
     ),
     minimum_os_version = "13.0",
     objc_copts = ["-fcxx-modules"],
+    runner = "//tests/ios:standard_runner",
     deps = [
         ":CustomModuleMap",
     ],

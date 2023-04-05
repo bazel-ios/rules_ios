@@ -26,5 +26,6 @@ apple_framework(
 ios_unit_test(
     name = "CoreDataExampleTests",
     minimum_os_version = "11.0",
+    runner = "//tests/ios:standard_runner",
     deps = [":CoreDataExampleTestsLib"],
 )
