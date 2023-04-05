@@ -19,3 +19,8 @@ echo "build --xcode_version_config=//:host_xcodes" >> user.bazelrc
 
 # `deleted_packages` is needed below in order to override the value of the .bazelrc file
 echo "build:ios --apple_platform_type=ios --deleted_packages=''" >> user.bazelrc
+
+# Remote cache
+echo "build --remote_cache=grpcs://remote.buildbuddy.io" >> user.bazelrc
+echo "build --remote_timeout=3600" >> user.bazelrc
+echo "build --modify_execution_info=^(BitcodeSymbolsCopy|BundleApp|BundleTreeApp|DsymDwarf|DsymLipo|GenerateAppleSymbolsFile|ObjcBinarySymbolStrip|CppLink|ObjcLink|ProcessAndSign|SignBinary|SwiftArchive|SwiftStdlibCopy)$=+no-remote,^(BundleResources|ImportedDynamicFrameworkProcessor)$=+no-remote-exec" >> user.bazelrc
