@@ -47,18 +47,17 @@ def _cpu_string(platform_type, settings):
 
     fail("ERROR: Unknown platform type: {}".format(platform_type))
 
-def _min_os_version_or_none(attr, platform, attr_platform_type):
+def _min_os_version_or_none(attr, attr_platforms, platform, attr_platform_type):
     if attr_platform_type != platform:
         return None
 
-    if hasattr(attr, "platforms"):
-        platforms = attr.platforms
-        value = platforms.get(platform)
-        return value
-    elif hasattr(attr, "minimum_os_version"):
+    if attr_platforms:
+        return attr_platforms[platform]
+
+    if hasattr(attr, "minimum_os_version"):
         return attr.minimum_os_version
-    else:
-        fail("ERROR: must either specify a single platform/minimum_os_version, or specify a dict via platforms")
+
+    fail("ERROR: must either specify a single platform/minimum_os_version, or specify a dict via platforms")
 
 def _apple_rule_transition_impl(settings, attr):
     """Rule transition for Apple rules."""
@@ -93,11 +92,11 @@ def _apple_rule_transition_impl(settings, attr):
         ),
         "//command_line_option:fission": [],
         "//command_line_option:grte_top": settings["//command_line_option:apple_grte_top"],
-        "//command_line_option:ios_minimum_os": _min_os_version_or_none(attr, "ios", platform_type),
+        "//command_line_option:ios_minimum_os": _min_os_version_or_none(attr, attr_platforms, "ios", platform_type),
         "//command_line_option:ios_multi_cpus": ios_multi_cpus,
-        "//command_line_option:macos_minimum_os": _min_os_version_or_none(attr, "macos", platform_type),
-        "//command_line_option:tvos_minimum_os": _min_os_version_or_none(attr, "tvos", platform_type),
-        "//command_line_option:watchos_minimum_os": _min_os_version_or_none(attr, "watchos", platform_type),
+        "//command_line_option:macos_minimum_os": _min_os_version_or_none(attr, attr_platforms, "macos", platform_type),
+        "//command_line_option:tvos_minimum_os": _min_os_version_or_none(attr, attr_platforms, "tvos", platform_type),
+        "//command_line_option:watchos_minimum_os": _min_os_version_or_none(attr, attr_platforms, "watchos", platform_type),
     }
     return ret
 
