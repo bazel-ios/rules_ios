@@ -51,8 +51,8 @@ def _min_os_version_or_none(attr, attr_platforms, platform, attr_platform_type):
     if attr_platform_type != platform:
         return None
 
-    if attr_platforms:
-        return attr_platforms[platform]
+    if attr_platforms != None:
+        return attr_platforms[platform] if platform in attr_platforms else None
 
     if hasattr(attr, "minimum_os_version"):
         return attr.minimum_os_version
