@@ -1,6 +1,7 @@
 import CustomModuleMap
 import CustomModuleMap.A_CustomModuleMapAdditions
 import CustomModuleMap.SuperSecret
+import XCTest
 
 class S: SuperSecret {
     let a: A
@@ -12,5 +13,11 @@ class S: SuperSecret {
         a = A()
         c = C()
         super.init()
+    }
+}
+
+final class SwiftTests: XCTestCase {
+    func testTrue() {
+        XCTAssertTrue(true)
     }
 }
