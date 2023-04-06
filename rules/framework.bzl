@@ -246,11 +246,11 @@ def _compact(args):
     return [item for item in args if item]
 
 def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields, deps, transitive_deps, vfs):
-    import_vfsoverlays = []
-    for dep in vfs:
-        if not VFSOverlayInfo in dep:
-            continue
-        import_vfsoverlays.append(dep[VFSOverlayInfo].vfs_info)
+    import_vfsoverlays = [
+        dep[VFSOverlayInfo].vfs_info
+        for dep in vfs
+        if VFSOverlayInfo in dep
+    ]
 
     # Propagated interface headers - this must encompass all of them
     propagated_interface_headers = []
