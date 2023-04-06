@@ -1,3 +1,14 @@
+"""framework_vfs_overlay impl
+
+Note on `external-contents` key set many times in this file:
+
+Internal to swift and clang - LLVM `VirtualFileSystem` object can
+serialize paths relative to the absolute path of the overlay. This
+requires the paths are relative to the overlay. While deriving the
+in-memory tree roots, it pre-pends the prefix of the `vfsoverlay` path
+to each of the entries.
+"""
+
 load("//rules:providers.bzl", "FrameworkInfo")
 load("//rules:features.bzl", "feature_names")
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
@@ -20,14 +31,6 @@ def _make_relative_prefix(length):
     for _ in range(0, length):
         prefix += dots
     return prefix
-
-# Internal to swift and clang - LLVM `VirtualFileSystem` object can
-# serialize paths relative to the absolute path of the overlay. This
-# requires the paths are relative to the overlay. While deriving the
-# in-memory tree roots, it pre-pends the prefix of the `vfsoverlay` path
-# to each of the entries.
-def _get_external_contents(prefix, path_str):
-    return prefix + path_str
 
 def _get_vfs_parent(ctx):
     root_path = ctx.bin_dir.path + "/"
@@ -62,15 +65,16 @@ def _build_subtrees(paths, vfs_prefix):
         # Loop the _framework_ path and add each dir to the current tree.
         # Assume the last bit is a file then add it as a file
         idx = 0
+
+        parts_len = len(parts)
         for part in parts:
-            if idx == len(parts) - 1:
-                ext_c = _get_external_contents(vfs_prefix, path_info.path)
+            if idx == parts_len - 1:
                 curr_subdirs.dict[part] = -1
-                curr_subdirs.json["contents"].append({"name": part, "type": "file", "external-contents": ext_c})
+                curr_subdirs.json["contents"].append({"name": part, "type": "file", "external-contents": vfs_prefix + path_info.path})
                 break
 
             # Lookup a value for the current subdirs, otherwise append
-            next_subdirs = curr_subdirs.dict.get(part, None)
+            next_subdirs = curr_subdirs.dict[part] if part in curr_subdirs.dict else None
             if not next_subdirs:
                 next_subdirs_json = {"contents": [], "type": "directory", "name": part}
                 next_subdirs = struct(dict = {}, json = next_subdirs_json)
@@ -98,10 +102,11 @@ def _get_public_framework_header(path):
 # and incrementality. For imported frameworks, there is additional search paths
 # enabled
 def _make_root(vfs_parent, target_triple, swiftmodules, root_dir, extra_search_paths, module_map, hdrs, private_hdrs):
-    vfs_prefix = _make_relative_prefix(len(vfs_parent.split("/")) - 1)
+    vfs_parent_len = len(vfs_parent.split("/")) - 1
+    vfs_prefix = _make_relative_prefix(vfs_parent_len)
     private_headers_contents = []
     headers_contents = []
-    vfs_prefix = _make_relative_prefix(len(vfs_parent.split("/")) - 1)
+    vfs_prefix = _make_relative_prefix(vfs_parent_len)
 
     if extra_search_paths:
         paths = []
@@ -126,14 +131,14 @@ def _make_root(vfs_parent, target_triple, swiftmodules, root_dir, extra_search_p
 
     # Swiftmodules: should we factor this  upwards
     modules_contents = []
-    if len(module_map):
+    if module_map:
         modules_contents.append({
             "type": "file",
             "name": "module.modulemap",
-            "external-contents": _get_external_contents(vfs_prefix, module_map[0].path),
+            "external-contents": vfs_prefix + module_map[0].path,
         })
 
-    if len(swiftmodules):
+    if swiftmodules:
         any_swiftmodule_file = swiftmodules[0]
         if any_swiftmodule_file.is_source:
             # Handle a glob of files inside of a .swiftmodule e.g. for xcframework
@@ -146,14 +151,14 @@ def _make_root(vfs_parent, target_triple, swiftmodules, root_dir, extra_search_p
                         {
                             "type": "file",
                             "name": file.basename,
-                            "external-contents": _get_external_contents(vfs_prefix, file.path),
+                            "external-contents": vfs_prefix + file.path,
                         }
                         for file in swiftmodules
                     ],
                 })
 
     modules = []
-    if len(modules_contents):
+    if modules_contents:
         modules = [{
             "name": "Modules",
             "type": "directory",
@@ -167,13 +172,13 @@ def _make_root(vfs_parent, target_triple, swiftmodules, root_dir, extra_search_p
             {
                 "type": "file",
                 "name": file.basename,
-                "external-contents": _get_external_contents(vfs_prefix, file.path),
+                "external-contents": vfs_prefix + file.path,
             }
             for file in hdrs
         ])
 
     headers = []
-    if len(headers_contents):
+    if headers_contents:
         headers = [{
             "name": "Headers",
             "type": "directory",
@@ -185,13 +190,13 @@ def _make_root(vfs_parent, target_triple, swiftmodules, root_dir, extra_search_p
             {
                 "type": "file",
                 "name": file.basename,
-                "external-contents": _get_external_contents(vfs_prefix, file.path),
+                "external-contents": vfs_prefix + file.path,
             }
             for file in private_hdrs
         ])
 
     private_headers = []
-    if len(private_headers_contents):
+    if private_headers_contents:
         private_headers = [{
             "name": "PrivateHeaders",
             "type": "directory",
@@ -199,14 +204,14 @@ def _make_root(vfs_parent, target_triple, swiftmodules, root_dir, extra_search_p
         }]
 
     roots = []
-    if len(headers) or len(private_headers) or len(modules):
+    if headers or private_headers or modules:
         roots.append({
             "name": root_dir,
             "type": "directory",
             "contents": headers + private_headers + modules,
         })
 
-    if len(swiftmodules) > 0:
+    if swiftmodules:
         contents = _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix, target_triple)
         if contents:
             roots.append(contents)
@@ -226,7 +231,7 @@ def _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix, target_triple)
         {
             "type": "file",
             "name": target_triple + "." + file.extension,
-            "external-contents": _get_external_contents(vfs_prefix, file.path),
+            "external-contents": vfs_prefix + file.path,
         }
         for file in swiftmodules
     ]
@@ -375,7 +380,7 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules
     )
 
     vfs_info = _make_vfs_info(framework_name, data)
-    if len(merge_vfsoverlays) > 0:
+    if merge_vfsoverlays:
         vfs_info = _merge_vfs_infos(vfs_info, merge_vfsoverlays)
         roots = _roots_from_datas(vfs_parent, target_triple, vfs_info.values() + [data])
 
