@@ -18,13 +18,13 @@ def _cpu_string(platform_type, settings):
     # If the cpu value has already been transformed to the correct value, we must not change it anymore.
     # Otherwise, we may build for the wrong arch.
     cpu_value = settings["//command_line_option:cpu"]
-    if (platform_type == "macos" and cpu_value.startswith("{}_".format(platform_type))) or cpu_value.startswith("{}_".format(platform_type)):
+    if (platform_type == "macos" and cpu_value.startswith("%s_" % platform_type)) or cpu_value.startswith("%s_" % platform_type):
         return cpu_value
 
     if platform_type == "ios":
         ios_cpus = settings["//command_line_option:ios_multi_cpus"]
         if ios_cpus:
-            return "ios_{}".format(ios_cpus[0])
+            return "ios_%s" % ios_cpus[0]
         if settings["//command_line_option:cpu"] == "darwin_arm64":
             return "ios_sim_arm64"
         else:
@@ -32,33 +32,32 @@ def _cpu_string(platform_type, settings):
     if platform_type == "macos":
         macos_cpus = settings["//command_line_option:macos_cpus"]
         if macos_cpus:
-            return "darwin_{}".format(macos_cpus[0])
+            return "darwin_%s" % macos_cpus[0]
         return "darwin_x86_64"
     if platform_type == "tvos":
         tvos_cpus = settings["//command_line_option:tvos_cpus"]
         if tvos_cpus:
-            return "tvos_{}".format(tvos_cpus[0])
+            return "tvos_%s" % tvos_cpus[0]
         return "tvos_x86_64"
     if platform_type == "watchos":
         watchos_cpus = settings["//command_line_option:watchos_cpus"]
         if watchos_cpus:
-            return "watchos_{}".format(watchos_cpus[0])
+            return "watchos_%s" % watchos_cpus[0]
         return "watchos_i386"
 
-    fail("ERROR: Unknown platform type: {}".format(platform_type))
+    fail("ERROR: Unknown platform type: %s" % platform_type)
 
-def _min_os_version_or_none(attr, platform, attr_platform_type):
+def _min_os_version_or_none(attr, attr_platforms, platform, attr_platform_type):
     if attr_platform_type != platform:
         return None
 
-    if hasattr(attr, "platforms"):
-        platforms = attr.platforms
-        value = platforms.get(platform)
-        return value
-    elif hasattr(attr, "minimum_os_version"):
+    if attr_platforms != None:
+        return attr_platforms[platform] if platform in attr_platforms else None
+
+    if hasattr(attr, "minimum_os_version"):
         return attr.minimum_os_version
-    else:
-        fail("ERROR: must either specify a single platform/minimum_os_version, or specify a dict via platforms")
+
+    fail("ERROR: must either specify a single platform/minimum_os_version, or specify a dict via platforms")
 
 def _apple_rule_transition_impl(settings, attr):
     """Rule transition for Apple rules."""
@@ -93,11 +92,11 @@ def _apple_rule_transition_impl(settings, attr):
         ),
         "//command_line_option:fission": [],
         "//command_line_option:grte_top": settings["//command_line_option:apple_grte_top"],
-        "//command_line_option:ios_minimum_os": _min_os_version_or_none(attr, "ios", platform_type),
+        "//command_line_option:ios_minimum_os": _min_os_version_or_none(attr, attr_platforms, "ios", platform_type),
         "//command_line_option:ios_multi_cpus": ios_multi_cpus,
-        "//command_line_option:macos_minimum_os": _min_os_version_or_none(attr, "macos", platform_type),
-        "//command_line_option:tvos_minimum_os": _min_os_version_or_none(attr, "tvos", platform_type),
-        "//command_line_option:watchos_minimum_os": _min_os_version_or_none(attr, "watchos", platform_type),
+        "//command_line_option:macos_minimum_os": _min_os_version_or_none(attr, attr_platforms, "macos", platform_type),
+        "//command_line_option:tvos_minimum_os": _min_os_version_or_none(attr, attr_platforms, "tvos", platform_type),
+        "//command_line_option:watchos_minimum_os": _min_os_version_or_none(attr, attr_platforms, "watchos", platform_type),
     }
     return ret
 
