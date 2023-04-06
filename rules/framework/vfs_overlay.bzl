@@ -368,21 +368,21 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules
     )
     target_triple = _get_basic_llvm_tripple(ctx)
 
-    roots = _make_root(
-        vfs_prefix = vfs_prefix,
-        target_triple = target_triple,
-        root_dir = framework_path,
-        extra_search_paths = extra_search_paths,
-        module_map = module_map,
-        swiftmodules = swiftmodules,
-        hdrs = hdrs,
-        private_hdrs = private_hdrs,
-    )
-
     vfs_info = _make_vfs_info(framework_name, data)
     if merge_vfsoverlays:
         vfs_info = _merge_vfs_infos(vfs_info, merge_vfsoverlays)
         roots = _roots_from_datas(vfs_prefix, target_triple, vfs_info.values() + [data])
+    else:
+        roots = _make_root(
+            vfs_prefix = vfs_prefix,
+            target_triple = target_triple,
+            root_dir = framework_path,
+            extra_search_paths = extra_search_paths,
+            module_map = module_map,
+            swiftmodules = swiftmodules,
+            hdrs = hdrs,
+            private_hdrs = private_hdrs,
+        )
 
     if output == None:
         return struct(vfsoverlay_file = None, vfs_info = vfs_info)
