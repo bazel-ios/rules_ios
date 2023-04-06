@@ -101,12 +101,9 @@ def _get_public_framework_header(path):
 # Make roots for a given framework. For now this is done in starlark for speed
 # and incrementality. For imported frameworks, there is additional search paths
 # enabled
-def _make_root(vfs_parent, target_triple, swiftmodules, root_dir, extra_search_paths, module_map, hdrs, private_hdrs):
-    vfs_parent_len = len(vfs_parent.split("/")) - 1
-    vfs_prefix = _make_relative_prefix(vfs_parent_len)
+def _make_root(vfs_prefix, target_triple, swiftmodules, root_dir, extra_search_paths, module_map, hdrs, private_hdrs):
     private_headers_contents = []
     headers_contents = []
-    vfs_prefix = _make_relative_prefix(vfs_parent_len)
 
     if extra_search_paths:
         paths = []
@@ -329,11 +326,12 @@ def _get_basic_llvm_tripple(ctx):
 
 # Roots must be computed _relative_ to the vfs_parent. It is no longer possible
 # to memoize VFS computations because of this.
-def _roots_from_datas(vfs_parent, target_triple, datas):
-    roots = []
-    for data in datas:
-        roots.extend(_make_root(
-            vfs_parent = vfs_parent,
+def _roots_from_datas(vfs_prefix, target_triple, datas):
+    return [
+        root
+        for data in datas
+        for root in _make_root(
+            vfs_prefix = vfs_prefix,
             target_triple = target_triple,
             root_dir = data.framework_path,
             extra_search_paths = data.extra_search_paths,
@@ -341,8 +339,8 @@ def _roots_from_datas(vfs_parent, target_triple, datas):
             swiftmodules = data.swiftmodules,
             hdrs = data.hdrs,
             private_hdrs = data.private_hdrs,
-        ))
-    return roots
+        )
+    ]
 
 def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules = [], merge_vfsoverlays = [], extra_search_paths = None, output = None, framework_name = None):
     if framework_name == None:
@@ -353,6 +351,8 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules
     )
 
     vfs_parent = _get_vfs_parent(ctx)
+    vfs_parent_len = len(vfs_parent.split("/")) - 1
+    vfs_prefix = _make_relative_prefix(vfs_parent_len)
 
     data = struct(
         bin_dir_path = ctx.bin_dir.path,
@@ -368,21 +368,21 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules
     )
     target_triple = _get_basic_llvm_tripple(ctx)
 
-    roots = _make_root(
-        vfs_parent,
-        target_triple = target_triple,
-        root_dir = framework_path,
-        extra_search_paths = extra_search_paths,
-        module_map = module_map,
-        swiftmodules = swiftmodules,
-        hdrs = hdrs,
-        private_hdrs = private_hdrs,
-    )
-
     vfs_info = _make_vfs_info(framework_name, data)
     if merge_vfsoverlays:
         vfs_info = _merge_vfs_infos(vfs_info, merge_vfsoverlays)
-        roots = _roots_from_datas(vfs_parent, target_triple, vfs_info.values() + [data])
+        roots = _roots_from_datas(vfs_prefix, target_triple, vfs_info.values() + [data])
+    else:
+        roots = _make_root(
+            vfs_prefix = vfs_prefix,
+            target_triple = target_triple,
+            root_dir = framework_path,
+            extra_search_paths = extra_search_paths,
+            module_map = module_map,
+            swiftmodules = swiftmodules,
+            hdrs = hdrs,
+            private_hdrs = private_hdrs,
+        )
 
     if output == None:
         return struct(vfsoverlay_file = None, vfs_info = vfs_info)
