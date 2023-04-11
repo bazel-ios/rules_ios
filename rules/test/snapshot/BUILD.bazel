@@ -1,0 +1,15 @@
+load("//rules:framework.bzl", "apple_framework")
+
+objc_library(
+    name = "Impl",
+    srcs = ["BundleBridge.mm"],
+    hdrs = ["BundleBridge.h"],
+    deps = ["@bazel_tools//tools/cpp/runfiles"],
+)
+
+apple_framework(
+    name = "BundleBridge",
+    public_headers = ["BundleBridge.h"],
+    visibility = ["//visibility:public"],
+    deps = [":Impl"],
+)
