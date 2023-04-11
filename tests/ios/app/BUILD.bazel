@@ -253,6 +253,15 @@ ios_unit_test(
     test_host = ":AppWithInfoPlist",
 )
 
+ios_unit_test(
+    name = "TestSnapshots",
+    srcs = ["snapshot_test.m"],
+    minimum_os_version = "10.0",
+    test_exec_properties = {},
+    test_host = ":AppWithInfoPlist",
+    deps = ["//rules/test/snapshot:BazelRunfileBundleBridge"],
+)
+
 # Configurable xcconfig, infoplist and entitlements
 #
 string_flag(
