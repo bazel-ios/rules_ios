@@ -57,6 +57,28 @@ def _get_bazel_version():
     # Unknown, but don't crash
     return struct(major = 0, minor = 0, patch = 0)
 
+def xchammer_dependencies():
+"""Dependencies that can optionally be loaded into a WORKSPACE file if the intent is to use XCHammer
+"""
+    if not native.existing_rule("xchammer"):
+        git_repository(
+            name = "xchammer",
+            remote = "https://github.com/bazel-ios/xchammer.git",
+            # XCHammer dev branch: bazel-ios/rules-ios-xchammer
+            commit = "fffd8033bed79e61a908ca1a72acff867a5b5825",
+            shallow_since = "1670600984 -0500",
+        )
+    xchammer_dependencies()
+
+    if not native.existing_rule("xcbuildkit"):
+        git_repository(
+            name = "xcbuildkit",
+            commit = "18a2b0e73d2e0cba759d5b4da24e47af106922d7",
+            remote = "https://github.com/jerrymarino/xcbuildkit.git",
+        )
+
+    xcbuildkit_dependencies()
+
 def rules_ios_dependencies():
     """Fetches repositories that are dependencies of the `rules_apple` workspace.
     """
@@ -155,22 +177,3 @@ swift_binary(
         urls = ["https://github.com/cirruslabs/tart/releases/download/0.14.0/tart"],
         sha256 = "2c61526aa07ade30ab6534b0fdc0a0edeb56ec2084dadee587e53c46e3a8edc3",
     )
-
-    if not native.existing_rule("xchammer"):
-        git_repository(
-            name = "xchammer",
-            remote = "https://github.com/bazel-ios/xchammer.git",
-            # XCHammer dev branch: bazel-ios/rules-ios-xchammer
-            commit = "fffd8033bed79e61a908ca1a72acff867a5b5825",
-            shallow_since = "1670600984 -0500",
-        )
-    xchammer_dependencies()
-
-    if not native.existing_rule("xcbuildkit"):
-        git_repository(
-            name = "xcbuildkit",
-            commit = "18a2b0e73d2e0cba759d5b4da24e47af106922d7",
-            remote = "https://github.com/jerrymarino/xcbuildkit.git",
-        )
-
-    xcbuildkit_dependencies()
