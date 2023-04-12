@@ -1,15 +1,30 @@
 #import "BazelRunfileBundleBridge.h"
+#include "tools/cpp/runfiles/runfiles.h"
+#include <string>
+
+using namespace bazel::tools::cpp::runfiles;
 
 @implementation NSBundle (BazelRunfileBundleBridge)
 
 - (NSString *)bazelRunfilePathForResource:(NSString *)resource
 {
-    // TODO: confirm if Bazel runfile support will work E2E 👍
-    // https://github.com/bazelbuild/bazel/blob/master/tools/cpp/runfiles/runfiles_src.h#L28
-    // e.g.
-    // Does the existing C++ code load it correctly, otherwise what should we
-    // do?
-    return nil;
+    NSLog(@"here it gets called");
+    std::string error;
+
+    auto runfiles = Runfiles::CreateForTest(&error);
+
+    if (!runfiles) {
+        NSLog(@"Error creating runfiles: %s", error.c_str());
+        return nil;
+    }
+
+    std::string resource_path = runfiles->Rlocation(resource.UTF8String);
+    if (resource_path.empty()) {
+        NSLog(@"Resource not found: %@", resource);
+        return nil;
+    }
+
+    return [NSString stringWithUTF8String:resource_path.c_str()];
 }
 
 @end
