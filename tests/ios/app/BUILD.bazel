@@ -254,15 +254,12 @@ ios_unit_test(
 )
 
 ios_unit_test(
-    name = "Snapshots",
+    name = "TestSnapshots",
     srcs = ["snapshot_test.m"],
     minimum_os_version = "10.0",
     test_exec_properties = {},
     test_host = ":AppWithInfoPlist",
-    # Note: this is not idiomatic, but demonstrates to stakeholders how to
-    # perform an inclusion of it in their program. We may rewrite this upon
-    # landing
-    deps = ["@build_bazel_rules_ios//rules/test/snapshot:BundleBridge"],
+    deps = ["//rules/test/snapshot:BazelRunfileBundleBridge"],
 )
 
 # Configurable xcconfig, infoplist and entitlements

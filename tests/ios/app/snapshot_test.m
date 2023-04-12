@@ -1,5 +1,5 @@
 @import XCTest;
-#import <BundleBridge/BundleBridge.h>
+#import <BazelRunfileBundleBridge/BazelRunfileBundleBridge.h>
 
 @interface EmptyTests : XCTestCase
 
@@ -9,7 +9,7 @@
 
 - (void)testFailureEndToEnd
 {
-    XCTAssertNotNil([[NSBundle mainBundle] bazelRunfilePathForResource:@"ReferenceImages"]);
+    XCTAssertNil([[NSBundle mainBundle] bazelRunfilePathForResource:@"ReferenceImages"]);
 }
 
 @end
