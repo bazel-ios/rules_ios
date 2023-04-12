@@ -5,6 +5,7 @@ load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
 load(":analysis-tests.bzl", "make_tests")
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_bundle_import")
 load("//rules/test/output:output_test.bzl", "output_test")
+load("@rules_xcodeproj//xcodeproj:defs.bzl", rules_xcodeproj = "xcodeproj")
 
 apple_framework(
     name = "CppLib",
@@ -435,5 +436,16 @@ ios_application(
     deps = [
         "//tests/ios/frameworks/testonly:MixedSourceTestLib",
         "//tests/ios/frameworks/testonly:SwiftLibrary",
+    ],
+)
+
+rules_xcodeproj(
+    name = "foo",
+    install_directory = "",
+    top_level_targets = [
+        ":AppTestOnly",
+    ],
+    focused_targets = [
+        ":AppTestOnly"
     ],
 )
