@@ -57,7 +57,7 @@ def _get_bazel_version():
     # Unknown, but don't crash
     return struct(major = 0, minor = 0, patch = 0)
 
-def xchammer_dependencies():
+def rules_ios_xchammer_dependencies():
     """Dependencies that can optionally be loaded into a WORKSPACE file if the intent is to use XCHammer
     """
     if not native.existing_rule("xchammer"):
