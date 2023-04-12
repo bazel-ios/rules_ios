@@ -7,8 +7,7 @@ using namespace bazel::tools::cpp::runfiles;
 @implementation NSBundle (BazelRunfileBundleBridge)
 
 - (NSString *)bazelRunfilePathForResource:(NSString *)resource
-{
-    NSLog(@"here it gets called");
+{    
     std::string error;
 
     auto runfiles = Runfiles::CreateForTest(&error);
