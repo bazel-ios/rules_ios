@@ -1,7 +1,7 @@
 """This file contains rules to build framework binaries from your podfile or cartfile"""
 
 verbose_default = False  # The default verbose level when running this rules
-timeout_default = 600  # Execution timeout for prebuilding frameworks (in seconds)
+timeout_default = 600 * 2  # Execution timeout for prebuilding frameworks (in seconds)
 
 def _make_framework_filegroup(ctx, framework_path):
     """Generate the filegroup information of the framework"""

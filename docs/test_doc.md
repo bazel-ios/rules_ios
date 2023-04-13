@@ -39,7 +39,7 @@ ios_unit_snapshot_test(<a href="#ios_unit_snapshot_test-name">name</a>, <a href=
 | :------------- | :------------- | :------------- |
 | <a id="ios_unit_snapshot_test-name"></a>name |  The name of the UI test.   |  none |
 | <a id="ios_unit_snapshot_test-apple_library"></a>apple_library |  The macro used to package sources into a library.   |  <code>&lt;function apple_library&gt;</code> |
-| <a id="ios_unit_snapshot_test-kwargs"></a>kwargs |  Arguments passed to the apple_library and ios_ui_test rules as appropriate.   |  none |
+| <a id="ios_unit_snapshot_test-kwargs"></a>kwargs |  Arguments passed to the apple_library and ios_unit_test rules as appropriate.   |  none |
 
 
 <a id="ios_unit_test"></a>
