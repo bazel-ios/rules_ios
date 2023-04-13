@@ -65,6 +65,18 @@ def create_device(device_name, device_type, runtime_version):
     return device_id_matches.group()
 
 
+def print_sims():
+    print("[INFO] loading sims..", file=sys.stderr)
+    result = subprocess.run(
+        ['xcrun', 'simctl', 'list'],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        encoding='utf-8'
+    )
+    if result.returncode != 0:
+        raise Exception("[ERROR] Cannot list sims {}".format(result.stderr))
+
+
 def boot_device(device_id):
     boot_command = ['xcrun', 'simctl', 'boot', device_id]
     result = subprocess.run(
@@ -112,20 +124,25 @@ def create_sim_device_and_boot():
     return device_id
 
 
-def handle_bootstatus_timeout(e):
+def handle_bootstatus_timeout(e, should_raise):
     print(
         "[warning] Sim failed to boot because 'subprocess.TimeoutExpired', likely should restart the machine",
         file=sys.stderr
     )
-    raise e
+    if should_raise:
+        raise e
 
 
 def main():
-    try:
-        device_id = create_sim_device_and_boot()
-        print(f'{device_id}')
-    except subprocess.TimeoutExpired as e:
-        handle_bootstatus_timeout(e)
-
+    attempts = 5
+    for attempt in range(1, attempts + 1):
+        try:
+            print_sims()
+            device_id = create_sim_device_and_boot()
+            print(f'{device_id}')
+            return
+        except subprocess.TimeoutExpired as e:
+            # On the last attempt raise an exception
+            handle_bootstatus_timeout(e, attempt == attempts)
 
 main()
