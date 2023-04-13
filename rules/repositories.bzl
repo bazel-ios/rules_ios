@@ -57,8 +57,12 @@ def _get_bazel_version():
     # Unknown, but don't crash
     return struct(major = 0, minor = 0, patch = 0)
 
-def rules_ios_dependencies():
-    """Fetches repositories that are dependencies of the `rules_apple` workspace.
+def rules_ios_dependencies(
+        load_xchammer_dependencies = False):
+    """Fetches repositories that are dependencies of `rules_ios`.
+
+    Args:
+        load_xchammer_dependencies: if `True` loads XCHammer and xcbuildkit dependencies (this is considered "alpha" software at the moment, see `README`)
     """
     _maybe(
         github_repo,
@@ -156,21 +160,22 @@ swift_binary(
         sha256 = "2c61526aa07ade30ab6534b0fdc0a0edeb56ec2084dadee587e53c46e3a8edc3",
     )
 
-    if not native.existing_rule("xchammer"):
-        git_repository(
-            name = "xchammer",
-            remote = "https://github.com/bazel-ios/xchammer.git",
-            # XCHammer dev branch: bazel-ios/rules-ios-xchammer
-            commit = "fffd8033bed79e61a908ca1a72acff867a5b5825",
-            shallow_since = "1670600984 -0500",
-        )
-    xchammer_dependencies()
+    if load_xchammer_dependencies:
+        if not native.existing_rule("xchammer"):
+            git_repository(
+                name = "xchammer",
+                remote = "https://github.com/bazel-ios/xchammer.git",
+                # XCHammer dev branch: bazel-ios/rules-ios-xchammer
+                commit = "fffd8033bed79e61a908ca1a72acff867a5b5825",
+                shallow_since = "1670600984 -0500",
+            )
+        xchammer_dependencies()
 
-    if not native.existing_rule("xcbuildkit"):
-        git_repository(
-            name = "xcbuildkit",
-            commit = "18a2b0e73d2e0cba759d5b4da24e47af106922d7",
-            remote = "https://github.com/jerrymarino/xcbuildkit.git",
-        )
+        if not native.existing_rule("xcbuildkit"):
+            git_repository(
+                name = "xcbuildkit",
+                commit = "18a2b0e73d2e0cba759d5b4da24e47af106922d7",
+                remote = "https://github.com/jerrymarino/xcbuildkit.git",
+            )
 
-    xcbuildkit_dependencies()
+        xcbuildkit_dependencies()
