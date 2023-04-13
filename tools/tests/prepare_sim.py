@@ -16,10 +16,39 @@ _BOOT_TIMEOUT = 180
 _IMPLEMENTED_IN_BOTH_ERROR_STRING = "is implemented in both"
 _EXTENSION_POINT_ERROR_STRING = "did not find extension point"
 
+def run_flaky_simctl_process(args, **process_args):
+    attempts = 5
+    result = None
+    scaled_timeout = process_args.get("timeout", None)
+
+    for attempt in range(1, attempts + 1):
+        try:
+            result = subprocess.run(args, **process_args)
+            # Assume we're giving it valid simctl commands here: the command is
+            # flaky if it returns 1 but will succeed in the future. Less than
+            # ideal in an error case: we should inspect logs to figure out what
+            # is wrong here
+            if result.returncode == 0:
+                return result
+            print("[WARN] flaky simctl process retuned non-zero exit status\n{}".format(result.stderr), file=sys.stderr)
+        except subprocess.TimeoutExpired as e:
+            if attempt == attempts:
+                raise e
+            print("[WARN] flaky simctl process raised {}".format(e), file=sys.stderr)
+
+        # Scale subprocess timeouts
+        if scaled_timeout:
+            scaled_timeout = scaled_timeout * attempt
+            process_args["timeout"] = scaled_timeout
+
+        # Adding some linear backoff
+        time.sleep(2 * attempt)
+    return result
+
 
 def get_current_runtime_version():
     runtimes_command = ['xcrun', 'simctl', 'list', 'runtimes', '-j']
-    result = subprocess.run(
+    result = run_flaky_simctl_process(
         runtimes_command,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -49,7 +78,7 @@ def get_current_runtime_version():
 def create_device(device_name, device_type, runtime_version):
     create_command = ['xcrun', 'simctl', 'create',
                       device_name, device_type, runtime_version]
-    result = subprocess.run(
+    result = run_flaky_simctl_process(
         create_command,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -66,20 +95,20 @@ def create_device(device_name, device_type, runtime_version):
 
 
 def print_sims():
-    print("[INFO] loading sims..", file=sys.stderr)
-    result = subprocess.run(
+    print("[INFO] print sims..", file=sys.stderr)
+    result = run_flaky_simctl_process(
         ['xcrun', 'simctl', 'list'],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         encoding='utf-8'
     )
     if result.returncode != 0:
-        raise Exception("[ERROR] Cannot list sims {}".format(result.stderr))
+        raise Exception("[ERROR] Cannot print sims {}".format(result.stderr))
 
 
 def boot_device(device_id):
     boot_command = ['xcrun', 'simctl', 'boot', device_id]
-    result = subprocess.run(
+    result = run_flaky_simctl_process(
         boot_command,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -91,7 +120,7 @@ def boot_device(device_id):
 
 def wait_for_device_to_boot(device_id, timeout):
     wait_command = ['xcrun', 'simctl', 'bootstatus', device_id]
-    result = subprocess.run(
+    result = run_flaky_simctl_process(
         wait_command,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -124,25 +153,22 @@ def create_sim_device_and_boot():
     return device_id
 
 
-def handle_bootstatus_timeout(e, should_raise):
+def handle_bootstatus_timeout(e):
     print(
         "[warning] Sim failed to boot because 'subprocess.TimeoutExpired', likely should restart the machine",
         file=sys.stderr
     )
-    if should_raise:
-        raise e
+    raise e
 
 
 def main():
-    attempts = 5
-    for attempt in range(1, attempts + 1):
-        try:
-            print_sims()
-            device_id = create_sim_device_and_boot()
-            print(f'{device_id}')
-            return
-        except subprocess.TimeoutExpired as e:
-            # On the last attempt raise an exception
-            handle_bootstatus_timeout(e, attempt == attempts)
+    print_sims()
+
+    try:
+        device_id = create_sim_device_and_boot()
+        print(f'{device_id}')
+    except subprocess.TimeoutExpired as e:
+        # On the last attempt raise an exception
+        handle_bootstatus_timeout(e)
 
 main()
