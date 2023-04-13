@@ -170,4 +170,4 @@ def ios_unit_snapshot_test(name, apple_library = apple_library, **kwargs):
         apple_library: The macro used to package sources into a library.
         **kwargs: Arguments passed to the apple_library and ios_ui_test rules as appropriate.
     """
-    _ios_test(name, rules_apple_ios_ui_test, rules_apple_ios_ui_test_suite, apple_library, internal_test_deps = ["@bazel_tools//tools/cpp/runfiles"], **kwargs)
+    _ios_test(name, rules_apple_ios_unit_test, rules_apple_ios_unit_test_suite, apple_library, internal_test_deps = ["@bazel_tools//tools/cpp/runfiles"], **kwargs)
