@@ -1,0 +1,39 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'The new version to tag, ex: x.x.x'
+        required: true
+        type: string
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Create Release
+        run: |
+          set -euo pipefail
+
+          git config user.name "Release Workflow"
+          git config user.email "noreply@github.com"
+
+          # Archive the repository
+          COPYFILE_DISABLE=1 tar czvf "rules_ios.$TAG.tar.gz" ./*
+
+          # Create the release notes
+          ./.github/workflows/generate_release_notes.sh "$TAG" | tee notes.md
+
+          # Create the release
+          gh release create "$TAG" \
+            --title "$TAG" \
+            --target "$GITHUB_REF_NAME" \
+            --generate-notes \
+            --notes-file notes.md \
+            "rules_ios.$TAG.tar.gz"
+        env:
+          TAG: ${{ inputs.tag }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
