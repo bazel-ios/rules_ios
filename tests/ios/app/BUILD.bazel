@@ -1,6 +1,6 @@
 load("//rules:framework.bzl", "apple_framework")
 load("//rules:app.bzl", "ios_application")
-load("//rules:test.bzl", "ios_unit_test")
+load("//rules:test.bzl", "ios_unit_snapshot_test", "ios_unit_test")
 load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
 load(":analysis-tests.bzl", "make_tests")
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_bundle_import")
@@ -251,6 +251,15 @@ ios_unit_test(
     minimum_os_version = "10.0",
     test_exec_properties = {},
     test_host = ":AppWithInfoPlist",
+)
+
+ios_unit_snapshot_test(
+    name = "TestSnapshots",
+    srcs = ["snapshot_test.m"],
+    minimum_os_version = "10.0",
+    test_exec_properties = {},
+    test_host = ":AppWithInfoPlist",
+    deps = ["//rules/test/snapshot:BazelRunfileBridge"],
 )
 
 # Configurable xcconfig, infoplist and entitlements

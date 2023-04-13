@@ -24,7 +24,7 @@ _IOS_TEST_KWARGS = [
     "test_filter",
 ]
 
-def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_build_setting = {}, split_name_to_kwargs = {}, **kwargs):
+def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_build_setting = {}, split_name_to_kwargs = {}, internal_test_deps = [], **kwargs):
     """
     Builds and packages iOS Unit/UI Tests.
 
@@ -111,7 +111,7 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
             tests.append(test_name)
             split_rule(
                 name = test_name,
-                deps = [dep_name],
+                deps = [dep_name] + internal_test_deps,
                 frameworks = frameworks,
                 testonly = testonly,
                 infoplists = select(infoplists),
@@ -131,7 +131,7 @@ def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_bui
 
         rule(
             name = name,
-            deps = [dep_name],
+            deps = [dep_name] + internal_test_deps,
             frameworks = frameworks,
             infoplists = select(infoplists),
             **ios_test_kwargs
@@ -160,3 +160,14 @@ def ios_ui_test(name, apple_library = apple_library, **kwargs):
     if not kwargs.get("test_host", None):
         fail("test_host is required for ios_ui_test.")
     _ios_test(name, rules_apple_ios_ui_test, rules_apple_ios_ui_test_suite, apple_library, **kwargs)
+
+def ios_unit_snapshot_test(name, apple_library = apple_library, **kwargs):
+    """
+    Builds and packages iOS Unit Snapshot Tests.
+
+    Args:
+        name: The name of the UI test.
+        apple_library: The macro used to package sources into a library.
+        **kwargs: Arguments passed to the apple_library and ios_unit_test rules as appropriate.
+    """
+    _ios_test(name, rules_apple_ios_unit_test, rules_apple_ios_unit_test_suite, apple_library, internal_test_deps = ["@bazel_tools//tools/cpp/runfiles"], **kwargs)
