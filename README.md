@@ -31,8 +31,9 @@ ios_application(
 
 ### Xcode project generation
 
-_Bazel optimized Xcode project generation that's tested and works end to end with open source remote execution and caching_
+There are currently at least three options to generate Xcode projects that build with Bazel.
 
+`rules_ios` has its own project generator that is considered stable and ready to be used in production. Here's a minimal example of how to load it in your `BUILD` file:
 ```python
 load("@build_bazel_rules_ios//rules:xcodeproj.bzl", "xcodeproj")
 
@@ -42,9 +43,15 @@ xcodeproj(
     deps = [ ":iOS-App"] 
 )
 ```
+Checkout [legacy_xcodeproj.bzl](https://github.com/bazel-ios/rules_ios/blob/master/rules/legacy_xcodeproj.bzl) for available attributes.
 
-_projects are optimized to build with Bazel and optionally fallback to building with Xcode_
+Alternatively the `bazel-ios` org has forks of both [XCHammer](https://github.com/bazel-ios/xchammer) and [Tulsi](https://github.com/bazel-ios/tulsi) with some changes to make it work with `rules_ios` and optionally enable the "build with Xcode" use case. This is currently considered "alpha" software and not recommended to be used in production. If you want to test it out when loading `rules_ios` per [WORKSPACE setup](#workspace-setup) instructions below load `rules_ios` dependencies like so
+```python
+rules_ios_dependencies(load_xchammer_dependencies = True)
+```
+and additionally pass this attribute to the `xcodeproj` macro above `use_xchammer = True`, optionally pass `generate_xcode_schemes = True` to build with Xcode.
 
+Last, [rules_xcodeproj](https://github.com/MobileNativeFoundation/rules_xcodeproj) is another great alternative and we're working with them to better integrate it with `rules_ios`. Checkout [examples/rules_ios](https://github.com/MobileNativeFoundation/rules_xcodeproj/tree/main/examples/rules_ios) for examples of how to use it with `rules_ios`.
 
 ### Frameworks
 

@@ -3,12 +3,9 @@ workspace(name = "build_bazel_rules_ios")
 load(
     "//rules:repositories.bzl",
     "rules_ios_dependencies",
-    "rules_ios_xchammer_dependencies",
 )
 
-rules_ios_dependencies()
-
-rules_ios_xchammer_dependencies()
+rules_ios_dependencies(load_xchammer_dependencies = True)
 
 load(
     "@build_bazel_rules_apple//apple:repositories.bzl",
