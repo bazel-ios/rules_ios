@@ -1,13 +1,10 @@
-#import "BazelRunfileBundleBridge.h"
+#import "BazelRunfileBridge.h"
 #include "tools/cpp/runfiles/runfiles.h"
 #include <string>
 
-@implementation NSBundle (BazelRunfileBundleBridge)
-
 using namespace bazel::tools::cpp::runfiles;
 
-
-- (NSString *)bazelRunfilePathForResource:(NSString *)resource
+NSString *BazelRunfilePathForResource(NSString *resource)
 {
     // TODO: confirm if Bazel runfile support will work E2E 👍
     // Does the existing C++ code load it for us correctly, otherwise what
@@ -24,5 +21,3 @@ using namespace bazel::tools::cpp::runfiles;
         return nil;
     }
 }
-
-@end
