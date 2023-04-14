@@ -210,9 +210,11 @@ _DEFAULT_LIBRARY_TOOLS = {
 def _append_headermap_copts(hmap, flag, objc_copts, swift_copts, cc_copts):
     copt = flag + "$(execpath :{hmap})".format(hmap = hmap)
 
-    objc_copts.append(copt)
-    cc_copts.append(copt)
-    swift_copts.extend(("-Xcc", copt))
+    objc_copts += [copt]
+    cc_copts += [copt]
+    swift_copts += ["-Xcc", copt]
+
+    return objc_copts, swift_copts, cc_copts
 
 def _uppercase_string(s):
     return s.upper()
@@ -448,7 +450,17 @@ def _find_imported_xcframework_name(outputs):
         return fw_name
     return None
 
-def apple_library(name, library_tools = {}, export_private_headers = True, namespace_is_module_name = True, default_xcconfig_name = None, xcconfig = {}, xcconfig_by_build_setting = {}, objc_defines = [], swift_defines = [], **kwargs):
+def apple_library(
+        name,
+        library_tools = {},
+        export_private_headers = True,
+        namespace_is_module_name = True,
+        default_xcconfig_name = None,
+        xcconfig = {},
+        xcconfig_by_build_setting = {},
+        objc_defines = [],
+        swift_defines = [],
+        **kwargs):
     """Create libraries for native source code on Apple platforms.
 
     Automatically handles mixed-source libraries and comes with
@@ -854,7 +866,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             tags = _MANUAL,
         )
         private_dep_names.append(public_hmap_name)
-        _append_headermap_copts(public_hmap_name, "-I", additional_objc_copts, additional_swift_copts, additional_cc_copts)
+        additional_objc_copts, additional_swift_copts, additional_cc_copts = _append_headermap_copts(public_hmap_name, "-I", additional_objc_copts, additional_swift_copts, additional_cc_copts)
 
     if len(objc_non_exported_hdrs + objc_private_hdrs) > 0:
         private_hmap_name = name + "_private_hmap"
@@ -865,7 +877,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
             tags = _MANUAL,
         )
         private_dep_names.append(private_hmap_name)
-        _append_headermap_copts(private_hmap_name, "-I", additional_objc_copts, additional_swift_copts, additional_cc_copts)
+        additional_objc_copts, additional_swift_copts, additional_cc_copts = _append_headermap_copts(private_hmap_name, "-I", additional_objc_copts, additional_swift_copts, additional_cc_copts)
 
     ## END HMAP
 
@@ -888,14 +900,17 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
     module_data = library_tools["wrap_resources_in_filegroup"](name = name + "_wrapped_resources_filegroup", srcs = data, testonly = testonly)
 
     if swift_sources:
-        additional_swift_copts.extend(("-Xcc", "-I."))
+        additional_swift_copts += ["-Xcc", "-I."]
         if module_map:
             # Frameworks find the modulemap file via the framework vfs overlay
             if not namespace_is_module_name:
                 additional_swift_copts += ["-Xcc", "-fmodule-map-file=" + "$(execpath " + module_map + ")"]
-            additional_swift_copts.append(
-                "-import-underlying-module",
-            )
+
+            additional_swift_copts += select({
+                "@build_bazel_rules_ios//:swift_disable_import_underlying_module": [],
+                "//conditions:default": ["-import-underlying-module"],
+            })
+
         swiftc_inputs = other_inputs + objc_hdrs + objc_private_hdrs
         if module_map:
             swiftc_inputs.append(module_map)
@@ -975,7 +990,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                 testonly = testonly,
             )
             private_dep_names.append(swift_doublequote_hmap_name)
-            _append_headermap_copts(swift_doublequote_hmap_name, "-iquote", additional_objc_copts, additional_swift_copts, additional_cc_copts)
+            additional_objc_copts, additional_swift_copts, additional_cc_copts = _append_headermap_copts(swift_doublequote_hmap_name, "-iquote", additional_objc_copts, additional_swift_copts, additional_cc_copts)
 
             # Add generated swift header to header maps for angle bracket imports
             swift_angle_bracket_hmap_name = name + "_swift_angle_bracket_hmap"
@@ -988,7 +1003,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                 testonly = testonly,
             )
             private_dep_names.append(swift_angle_bracket_hmap_name)
-            _append_headermap_copts(swift_angle_bracket_hmap_name, "-I", additional_objc_copts, additional_swift_copts, additional_cc_copts)
+            additional_objc_copts, additional_swift_copts, additional_cc_copts = _append_headermap_copts(swift_angle_bracket_hmap_name, "-I", additional_objc_copts, additional_swift_copts, additional_cc_copts)
 
     if cpp_sources:
         additional_cc_copts.append("-I.")

@@ -7,4 +7,7 @@ feature_names = struct(
 
     # Use the ARM deps for the simulator - see rules/import_middleman.bzl
     arm64_simulator_use_device_deps = "apple.arm64_simulator_use_device_deps",
+
+    # When set disable passing the `-import-underlying-module` copt to `swift_library` targets
+    swift_disable_import_underlying_module = "swift.swift_disable_import_underlying_module",
 )

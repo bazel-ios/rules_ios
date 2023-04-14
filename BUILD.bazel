@@ -33,6 +33,13 @@ config_setting(
     },
 )
 
+config_setting(
+    name = "swift_disable_import_underlying_module",
+    values = {
+        "features": feature_names.swift_disable_import_underlying_module,
+    },
+)
+
 selects.config_setting_group(
     name = "arm64_simulator_use_device_deps",
     match_any = [
