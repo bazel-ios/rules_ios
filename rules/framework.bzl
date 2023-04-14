@@ -698,6 +698,11 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
 
     # TODO(jmarino) - consider how to better handle frameworks of frameworks
     processor_partials = []
+
+    product_type = rule_descriptor.product_type
+    if ctx.attr.link_dynamic:
+        product_type = apple_product_type.framework
+
     processor_partials.append(
         partials.apple_bundle_info_partial(
             actions = actions,
@@ -708,7 +713,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
             label_name = label.name,
             platform_prerequisites = platform_prerequisites,
             predeclared_outputs = predeclared_outputs,
-            product_type = rule_descriptor.product_type,
+            product_type = product_type,
         ),
     )
     processor_partials.append(
