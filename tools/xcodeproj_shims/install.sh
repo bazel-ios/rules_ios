@@ -11,6 +11,9 @@ find "${BAZEL_DIAGNOSTICS_DIR}" -type f -atime +7d -delete
 case "${PRODUCT_TYPE}" in
 com.apple.product-type.framework)
     input_options=("bazel-bin/$BAZEL_BIN_SUBDIR/${TARGET_NAME}/${FULL_PRODUCT_NAME}")
+    if [ ! -d "$input_options" ]; then
+        input_options=("bazel-bin/$BAZEL_BIN_SUBDIR/${FULL_PRODUCT_NAME}")
+    fi
     ;;
 com.apple.product-type.framework.static)
     # For static library, as the output is not under bazel-bin, we have to get it based on build event

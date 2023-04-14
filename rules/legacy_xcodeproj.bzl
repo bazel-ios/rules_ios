@@ -805,7 +805,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
             if product_type != existing_type:
                 fail(_CONFLICTING_TARGET_MSG.format(ctx.label, target_name, existing_type, target_info.bazel_build_target_name, target_info.product_type))
 
-        target_macho_type = "staticlib" if product_type == "framework" else "$(inherited)"
+        target_macho_type = "staticlib" if product_type == "framework.static" else "$(inherited)"
         compiled_sources = [{
             "path": paths.join(src_dot_dots, s.short_path),
             "optional": True,
