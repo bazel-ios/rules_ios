@@ -3,6 +3,7 @@ load("//rules:legacy_xcodeproj.bzl", "xcodeproj_project_options")
 load("//rules:additional_scheme_info.bzl", "additional_scheme_info")
 load("//rules:xchammer_xcodeproj.bzl", "xchammer_xcodeproj")
 load("@xchammer//:BazelExtensions/xchammerconfig.bzl", "bazel_build_service_config")
+load("@rules_xcodeproj//xcodeproj:defs.bzl", rules_xcodeproj = "xcodeproj")
 
 xcodeproj(
     name = "Single-Static-Framework-Project",
@@ -243,5 +244,15 @@ xchammer_xcodeproj(
         "//tests/ios/app:App",
         "//tests/ios/extensions:ExampleExtension",
         "//tests/ios/frameworks/with-bundle-id:FrameworkWithBundleId",
+    ],
+)
+
+rules_xcodeproj(
+    name = "foo",
+    install_directory = "",
+    project_name = "foo",
+    top_level_targets = [
+        # "//tests/ios/app:App",
+        "//tests/ios/unit-test/test-imports-app:TestImports-App",
     ],
 )

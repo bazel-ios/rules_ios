@@ -70,6 +70,7 @@ build_cocoapods_frameworks(
 
 load(
     "@bazel_tools//tools/build_defs/repo:http.bzl",
+    "http_archive",
     "http_file",
 )
 
@@ -113,3 +114,16 @@ xcode_configure(
 load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
 
 rules_pkg_dependencies()
+
+git_repository(
+    name = "rules_xcodeproj",
+    commit = "b8faae5ff4bb730719014b16f2d908c929acde75",
+    remote = "https://github.com/MobileNativeFoundation/rules_xcodeproj.git",
+)
+
+load(
+    "@rules_xcodeproj//xcodeproj:repositories.bzl",
+    "xcodeproj_rules_dependencies",
+)
+
+xcodeproj_rules_dependencies()
