@@ -49,7 +49,18 @@ Alternatively the `bazel-ios` org has forks of both [XCHammer](https://github.co
 ```python
 rules_ios_dependencies(load_xchammer_dependencies = True)
 ```
-and additionally pass this attribute to the `xcodeproj` macro above `use_xchammer = True`, optionally pass `generate_xcode_schemes = True` to build with Xcode.
+and additionally declare the `xchammer_xcodeproj` macro this way
+```python
+load("@build_bazel_rules_ios//rules:xchammer_xcodeproj.bzl", "xchammer_xcodeproj")
+
+xchammer_xcodeproj(
+    name = "MyXcode",
+    bazel_path = "bazelisk",
+    generate_xcode_schemes = False # if True enables "build with Xcode"
+    targets = [ ":iOS-App"]
+)
+```
+Checkout [xchammer_xcodeproj.bzl](https://github.com/bazel-ios/rules_ios/blob/master/rules/xchammer_xcodeproj.bzl) for available attributes.
 
 Last, [rules_xcodeproj](https://github.com/MobileNativeFoundation/rules_xcodeproj) is another great alternative and we're working with them to better integrate it with `rules_ios`. Checkout [examples/rules_ios](https://github.com/MobileNativeFoundation/rules_xcodeproj/tree/main/examples/rules_ios) for examples of how to use it with `rules_ios`.
 
