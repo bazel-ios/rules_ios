@@ -992,20 +992,7 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
         lib_names.append(swift_libname)
 
         if objc_sources or cpp_sources:
-            # Add generated swift header to header maps for double quote imports
-            swift_doublequote_hmap_name = name + "_swift_doublequote_hmap"
-            headermap(
-                name = swift_doublequote_hmap_name,
-                namespace = namespace,
-                hdrs = [],
-                direct_hdr_providers = [swift_libname],
-                tags = _MANUAL,
-                testonly = testonly,
-            )
-            private_dep_names.append(swift_doublequote_hmap_name)
-            _append_headermap_copts(swift_doublequote_hmap_name, "-iquote", additional_objc_copts, additional_swift_copts, additional_cc_copts)
-
-            # Add generated swift header to header maps for angle bracket imports
+            # Add swift header to header maps for angle bracket and quote imports
             swift_angle_bracket_hmap_name = name + "_swift_angle_bracket_hmap"
             headermap(
                 name = swift_angle_bracket_hmap_name,
