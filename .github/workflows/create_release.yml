@@ -22,7 +22,15 @@ jobs:
           git config user.email "noreply@github.com"
 
           # Archive the repository
-          COPYFILE_DISABLE=1 tar czvf "rules_ios.$TAG.tar.gz" ./*
+          # Considerations:
+          # - Dont package hidden files (including the .git directory)
+          # - Dont package the bazel-* symlink directories
+          # - Dont package the tests directory
+          COPYFILE_DISABLE=1 tar czvf "rules_ios.$TAG.tar.gz" \
+            --exclude="./.*" \
+            --exclude="./bazel-*" \
+            --exclude="./tests" \
+            ./*
 
           # Create the release notes
           ./.github/workflows/generate_release_notes.sh "$TAG" | tee notes.md
