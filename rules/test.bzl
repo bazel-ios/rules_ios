@@ -5,23 +5,23 @@ load("//rules:plists.bzl", "process_infoplists")
 load("//rules/internal:framework_middleman.bzl", "dep_middleman", "framework_middleman")
 
 _IOS_TEST_KWARGS = [
-    "bundle_id",
-    "infoplists",
-    "minimum_os_version",
-    "test_host",
-    "env",
     "args",
-    "size",
-    "timeout",
-    "visibility",
-    "resources",
-    "tags",
-    "shard_count",
+    "bundle_id",
+    "env",
     "flaky",
     "frameworks",
+    "infoplists",
+    "minimum_os_version",
     "provisioning_profile",
+    "resources",
+    "shard_count",
+    "size",
+    "tags",
     "test_coverage_manifest",
     "test_filter",
+    "test_host",
+    "timeout",
+    "visibility",
 ]
 
 def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_build_setting = {}, split_name_to_kwargs = {}, internal_test_deps = [], **kwargs):
