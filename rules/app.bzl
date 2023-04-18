@@ -36,6 +36,8 @@ _IOS_APPLICATION_KWARGS = [
     "frameworks",
     "version",
     "app_clips",
+    "linkopts",
+    "additional_linker_inputs",
 ]
 
 def ios_application(
