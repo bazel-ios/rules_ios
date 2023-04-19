@@ -24,7 +24,16 @@ _IOS_TEST_KWARGS = [
     "visibility",
 ]
 
-def _ios_test(name, test_rule, test_suite_rule, apple_library, infoplists_by_build_setting = {}, split_name_to_kwargs = {}, internal_test_deps = [], **kwargs):
+def _ios_test(
+    name, 
+    test_rule, 
+    test_suite_rule, 
+    apple_library, 
+    infoplists_by_build_setting = {}, 
+    split_name_to_kwargs = {}, 
+    internal_test_deps = ["@bazel_tools//tools/cpp/runfiles"],
+    **kwargs
+    ):
     """
     Builds and packages iOS Unit/UI Tests.
 
@@ -170,4 +179,4 @@ def ios_unit_snapshot_test(name, apple_library = apple_library, **kwargs):
         apple_library: The macro used to package sources into a library.
         **kwargs: Arguments passed to the apple_library and ios_unit_test rules as appropriate.
     """
-    _ios_test(name, rules_apple_ios_unit_test, rules_apple_ios_unit_test_suite, apple_library, internal_test_deps = ["@bazel_tools//tools/cpp/runfiles"], **kwargs)
+    _ios_test(name, rules_apple_ios_unit_test, rules_apple_ios_unit_test_suite, apple_library, **kwargs)
