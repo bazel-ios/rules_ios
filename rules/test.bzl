@@ -25,13 +25,13 @@ _IOS_TEST_KWARGS = [
 ]
 
 def _ios_test(
-    name, 
-    test_rule, 
-    test_suite_rule, 
-    apple_library, 
-    infoplists_by_build_setting = {}, 
-    split_name_to_kwargs = {}, 
-    internal_test_deps = ["@bazel_tools//tools/cpp/runfiles"],
+    name,
+    test_rule,
+    test_suite_rule,
+    apple_library,
+    include_internal_test_deps,
+    infoplists_by_build_setting = {},
+    split_name_to_kwargs = {},    
     **kwargs
     ):
     """
@@ -53,6 +53,7 @@ def _ios_test(
         **kwargs: Arguments passed to the apple_library and test_rule rules as appropriate.
     """
 
+    internal_test_deps = ["@bazel_tools//tools/cpp/runfiles"] if include_internal_test_deps else []
     testonly = kwargs.pop("testonly", True)
     ios_test_kwargs = {arg: kwargs.pop(arg) for arg in _IOS_TEST_KWARGS if arg in kwargs}
     ios_test_kwargs["data"] = kwargs.pop("test_data", [])
@@ -146,7 +147,7 @@ def _ios_test(
             **ios_test_kwargs
         )
 
-def ios_unit_test(name, apple_library = apple_library, **kwargs):
+def ios_unit_test(name, apple_library = apple_library, include_internal_test_deps = False, **kwargs):
     """
     Builds and packages iOS Unit Tests.
 
@@ -155,9 +156,9 @@ def ios_unit_test(name, apple_library = apple_library, **kwargs):
         apple_library: The macro used to package sources into a library.
         **kwargs: Arguments passed to the apple_library and ios_unit_test rules as appropriate.
     """
-    _ios_test(name, rules_apple_ios_unit_test, rules_apple_ios_unit_test_suite, apple_library, **kwargs)
+    _ios_test(name, rules_apple_ios_unit_test, rules_apple_ios_unit_test_suite, apple_library, include_internal_test_deps, **kwargs)
 
-def ios_ui_test(name, apple_library = apple_library, **kwargs):
+def ios_ui_test(name, apple_library = apple_library, include_internal_test_deps = False, **kwargs):
     """
     Builds and packages iOS UI Tests.
 
@@ -168,9 +169,9 @@ def ios_ui_test(name, apple_library = apple_library, **kwargs):
     """
     if not kwargs.get("test_host", None):
         fail("test_host is required for ios_ui_test.")
-    _ios_test(name, rules_apple_ios_ui_test, rules_apple_ios_ui_test_suite, apple_library, **kwargs)
+    _ios_test(name, rules_apple_ios_ui_test, rules_apple_ios_ui_test_suite, apple_library, include_internal_test_deps, **kwargs)
 
-def ios_unit_snapshot_test(name, apple_library = apple_library, **kwargs):
+def ios_unit_snapshot_test(name, apple_library = apple_library, include_internal_test_deps = True, **kwargs):
     """
     Builds and packages iOS Unit Snapshot Tests.
 
@@ -179,4 +180,4 @@ def ios_unit_snapshot_test(name, apple_library = apple_library, **kwargs):
         apple_library: The macro used to package sources into a library.
         **kwargs: Arguments passed to the apple_library and ios_unit_test rules as appropriate.
     """
-    _ios_test(name, rules_apple_ios_unit_test, rules_apple_ios_unit_test_suite, apple_library, **kwargs)
+    _ios_test(name, rules_apple_ios_unit_test, rules_apple_ios_unit_test_suite, apple_library, include_internal_test_deps, **kwargs)
