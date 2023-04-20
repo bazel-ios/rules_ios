@@ -7,6 +7,7 @@ load("//rules/internal:framework_middleman.bzl", "dep_middleman", "framework_mid
 _IOS_TEST_KWARGS = [
     "args",
     "bundle_id",
+    "bundle_name",
     "env",
     "flaky",
     "frameworks",
