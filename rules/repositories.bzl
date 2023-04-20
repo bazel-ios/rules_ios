@@ -58,11 +58,13 @@ def _get_bazel_version():
     return struct(major = 0, minor = 0, patch = 0)
 
 def rules_ios_dependencies(
-        load_xchammer_dependencies = False):
+        load_xchammer_dependencies = False,
+        override_toolchain = False):
     """Fetches repositories that are dependencies of `rules_ios`.
 
     Args:
         load_xchammer_dependencies: if `True` loads XCHammer and xcbuildkit dependencies (this is considered "alpha" software at the moment, see `README`)
+        override_toolchain: if `True` will override the Apple toolchain to add support for Xcode 14.3 on Bazel 5, it has no effect if you're using other major Bazel versions (see `README`)
     """
     _maybe(
         github_repo,
@@ -75,6 +77,16 @@ def rules_ios_dependencies(
 
     bazel_version = _get_bazel_version()
     if bazel_version.major == "5":
+        if override_toolchain:
+            _maybe(
+                github_repo,
+                name = "build_bazel_apple_support",
+                ref = "20a27ea6ed7709769d2583b34890981466863d41",
+                project = "bazel-ios",
+                repo = "apple_support",
+                sha256 = "eb8f754104661174a70b22e6a21c0ffc9c9188419ca9e9e139fefc43e7f86b8a",
+            )
+
         # LTS support. Some of our third party deps from bazelbuild org don't
         # support LTS but from time to time we'll evaluate supporting this to
         # allow us to all run on HEAD

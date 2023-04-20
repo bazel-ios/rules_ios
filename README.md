@@ -198,3 +198,26 @@ Debugging does not work in sandbox mode, due to issue [#108](https://github.com/
 Bazel version required by current rules is [here](https://github.com/bazel-ios/rules_ios/blob/master/.bazelversion)
 
 **Xcode 13** and above supported, to find the last `SHA` with support for older versions see the list of git tags.
+
+## Xcode 14.3 support on Bazel 5
+
+If you're using Bazel 5 and want to update to Xcode 14.3 there's an incompatibility issue related to [this commit](https://github.com/bazelbuild/bazel//commit/43dadb275b3f9690242bf2d94a0757c721d231a9) in Bazel 6. In order to fix that you can use our fork of `apple_support` which will override the toolchain and fix the Xcode locator compilation invocation. Just add this to your `.bazelrc`:
+
+```python
+build --apple_crosstool_top=@local_config_apple_cc//:toolchain
+build --crosstool_top=@local_config_apple_cc//:toolchain
+build --host_crosstool_top=@local_config_apple_cc//:toolchain
+common --repo_env=BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1
+```
+
+Additionally if your Xcode is not installed under `/Appplications` add this:
+
+```python
+common --repo_env=BAZEL_ALLOW_NON_APPLICATIONS_XCODE=1
+```
+
+Finally, when loading `rules_ios` dependecies in your `WORKSPACE` file pass this flag:
+
+```python
+rules_ios_dependencies(override_toolchain = True)
+```
