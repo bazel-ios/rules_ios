@@ -1,9 +1,7 @@
-load("@build_bazel_rules_apple//apple/testing/default_runner:ios_xctestrun_runner.bzl", "ios_xctestrun_runner")
-
 exports_files(["integration-test.mobileprovision"])
 
-ios_xctestrun_runner(
+alias(
     name = "standard_runner",
-    device_type = "iPhone 14",
+    actual = "@rules_apple_ios_test_runner//:standard_runner",
     visibility = ["//visibility:public"],
 )

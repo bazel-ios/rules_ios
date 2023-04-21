@@ -6,6 +6,7 @@ load(
     "http_file",
 )
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository", "new_git_repository")
+load("//repository_rules:local_repository.bzl", "local_repository")
 load("//rules/third_party:xchammer_repositories.bzl", "xchammer_dependencies")
 load("//rules/third_party:xcbuildkit_repositories.bzl", xcbuildkit_dependencies = "dependencies")
 
@@ -95,6 +96,34 @@ def rules_ios_dependencies(
             project = "bazelbuild",
             repo = "rules_apple",
             sha256 = "46186d7ceb726aedce566458b4a3e389fa2b20ce5a714180c74c875fc1a945fb",
+        )
+
+    # LTS support for `ios_xctestrun_runner`
+    if bazel_version.major == "5":
+        local_repository(
+            name = "rules_apple_ios_test_runner",
+            build_file_content = """
+load("@build_bazel_rules_apple//apple/testing/default_runner:ios_test_runner.bzl", "ios_test_runner")
+
+ios_test_runner(
+    name = "standard_runner",
+    device_type = "iPhone 14",
+    visibility = ["//visibility:public"],
+)
+""",
+        )
+    else:
+        local_repository(
+            name = "rules_apple_ios_test_runner",
+            build_file_content = """
+load("@build_bazel_rules_apple//apple/testing/default_runner:ios_xctestrun_runner.bzl", "ios_xctestrun_runner")
+
+ios_xctestrun_runner(
+    name = "standard_runner",
+    device_type = "iPhone 14",
+    visibility = ["//visibility:public"],
+)
+""",
         )
 
     _maybe(
