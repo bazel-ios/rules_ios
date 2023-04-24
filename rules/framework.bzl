@@ -989,6 +989,10 @@ def _apple_framework_packaging_impl(ctx):
         direct = [],
         transitive = [getattr(dep[CcInfo].compilation_context, "includes") for dep in deps if CcInfo in dep],
     ))
+    objc_provider_utils.add_to_dict_if_present(compilation_context_fields, "framework_includes", depset(
+        direct = [],
+        transitive = [getattr(dep[CcInfo].compilation_context, "framework_includes") for dep in deps if CcInfo in dep],
+    ))
 
     # Compute cc_info and swift_info
     virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
