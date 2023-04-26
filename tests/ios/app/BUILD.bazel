@@ -5,7 +5,7 @@ load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
 load(":analysis-tests.bzl", "make_tests")
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_bundle_import")
 load("//rules/test/output:output_test.bzl", "output_test")
-load("@rules_xcodeproj//xcodeproj:defs.bzl", rules_xcodeproj = "xcodeproj")
+load("@rules_xcodeproj//xcodeproj:defs.bzl", "xcode_schemes", rules_xcodeproj = "xcodeproj")
 
 apple_framework(
     name = "CppLib",
@@ -452,6 +452,16 @@ rules_xcodeproj(
     name = "foo",
     install_directory = "",
     project_name = "foo",
+    schemes = [
+        xcode_schemes.scheme(
+            name = "Custom-Single-Application-RunnableTestSuite",
+            test_action = xcode_schemes.test_action(
+                targets = [
+                    "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite",
+                ],
+            ),
+        ),
+    ],
     top_level_targets = [
         ":App",
         "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite",

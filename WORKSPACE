@@ -117,8 +117,8 @@ rules_pkg_dependencies()
 
 http_archive(
     name = "rules_xcodeproj",
-    sha256 = "7967b372bd1777214ce65c87a82ac0630150b7504b443de0315ea52e45758e0c",
-    urls = ["https://github.com/MobileNativeFoundation/rules_xcodeproj/releases/download/1.3.3/release.tar.gz"],
+    sha256 = "3d6123ae2c1c3181a0c55083f6f1815c9b9bd56cd83da75175320f40966f1cde",
+    url = "https://github.com/MobileNativeFoundation/rules_xcodeproj/releases/download/1.5.0/release.tar.gz",
 )
 
 load(
