@@ -90,11 +90,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
-        run: .github/workflows/preflight_env.sh
+        # Dont test Bazel 5 with bzlmod
+        run: .github/workflows/preflight_env.sh --no-bzlmod
       - name: Build and Test
         run: |
-          # iOS tests
+          # iOS tests without bzlmod on Bazel 5
           bazelisk build \
+            --noexperimental_enable_bzlmod \
             --config=ci_with_caches \
             --config=ios \
             --config=vfs \
@@ -147,7 +149,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
-        run: .github/workflows/preflight_env.sh
+        # TODO: stardoc doesn't currently support bzlmod: https://github.com/bazelbuild/stardoc/issues/117
+        run: .github/workflows/preflight_env.sh --no-bzlmod
         # Note: we need to pass the absolute to the Bazel run
       - name: buildifier
         run: |
@@ -166,7 +169,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
-        run: .github/workflows/preflight_env.sh
+        run: .github/workflows/preflight_env.sh --no-bzlmod
       - name: Run tests
         run: ./tests/xcodeproj-tests.sh --run && ./tests/test-tests.sh
       - uses: actions/upload-artifact@v2

@@ -3,13 +3,15 @@
 load("@build_bazel_rules_swift//swift/internal:feature_names.bzl", "SWIFT_FEATURE_USE_GLOBAL_INDEX_STORE")
 load("//rules:features.bzl", "feature_names")
 load("@bazel_skylib//lib:selects.bzl", "selects")
+load("@buildifier_prebuilt//:rules.bzl", "buildifier")
 
-sh_binary(
+buildifier(
     name = "buildifier",
-    srcs = select({
-        "@bazel_tools//src/conditions:darwin_x86_64": ["@buildifier.mac.amd64//file"],
-        "@bazel_tools//src/conditions:darwin_arm64": ["@buildifier.mac.arm64//file"],
-    }),
+    exclude_patterns = [
+        "./.git/*",
+        "./bazel-*/*",
+    ],
+    mode = "fix",
 )
 
 config_setting(
