@@ -42,6 +42,7 @@ jobs:
         with:
           name: bazel-testlogs
           path: bazel-testlogs
+
   build_virtual_frameworks:
     # Build the entire tree with this feature enabled. Longer term, we'll likely
     # consider merging this feature into the default behavior and can re-align
@@ -129,12 +130,13 @@ jobs:
         run: find $PWD -type f \( -name 'WORKSPACE' -o -name '*.bzl' -o -name '*.bazel' \) | xargs bazel run buildifier -- -lint=fix && git diff --exit-code
       - name: Check docs
         run: bazelisk run docs && git diff --exit-code docs
+
   xcodeproj_tests:
-    name: .xcodeproj Tests on Xcode 14.2.0
+    name: .xcodeproj Tests on Xcode 14.3.0
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
-      - name: Select Xcode 14.2.0
+      - name: Select Xcode 14.3.0
         run: .github/workflows/xcode_select.sh
       - name: Run tests
         run: ./tests/xcodeproj-tests.sh --run && ./tests/test-tests.sh
@@ -145,11 +147,11 @@ jobs:
           path: bazel-testlogs
 
   lldb_ios_tests_xcode:
-    name: LLDB tests on Xcode 14.2.0
+    name: LLDB tests on Xcode 14.3.0
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
-      - name: Select Xcode 14.2.0
+      - name: Select Xcode 14.23.0
         run: .github/workflows/xcode_select.sh
       - name: Run tests
         run: bazelisk test tests/ios/lldb/app:objc_app_po_test  tests/ios/lldb/app:objc_app_variable_test --config lldb_ios_test
@@ -158,6 +160,7 @@ jobs:
         with:
           name: bazel-testlogs
           path: bazel-testlogs
+
   multi_arch_support:
     name: Build iOS App for Multiple Architecture
     runs-on: macos-12
