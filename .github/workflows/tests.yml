@@ -151,7 +151,7 @@ jobs:
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
-      - name: Select Xcode 14.23.0
+      - name: Select Xcode 14.3.0
         run: .github/workflows/xcode_select.sh
       - name: Run tests
         run: bazelisk test tests/ios/lldb/app:objc_app_po_test  tests/ios/lldb/app:objc_app_variable_test --config lldb_ios_test
