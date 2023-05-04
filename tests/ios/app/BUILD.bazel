@@ -479,10 +479,10 @@ rules_xcodeproj(
     # ],
     top_level_targets = [
         ":App",
-        # "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite",
-        # "//tests/macos/xcodeproj:Single-Application-UnitTests",
-        "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite_iPad-Air-2__16.2",
+        "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite",
+        # "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite_iPad-Air-2__16.2",
         # "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite_iPhone-13-Pro__16.2",
         # ":foo_og_test",
+        # "//tests/macos/xcodeproj:Single-Application-UnitTests",
     ],
 )
