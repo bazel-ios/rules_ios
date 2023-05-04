@@ -467,16 +467,16 @@ rules_xcodeproj(
     name = "foo",
     install_directory = "",
     project_name = "foo",
-    # schemes = [
-    #     xcode_schemes.scheme(
-    #         name = "Custom-Single-Application-RunnableTestSuite",
-    #         test_action = xcode_schemes.test_action(
-    #             targets = [
-    #                 "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite",
-    #             ],
-    #         ),
-    #     ),
-    # ],
+    schemes = [
+        xcode_schemes.scheme(
+            name = "Custom-Single-Application-RunnableTestSuite",
+            test_action = xcode_schemes.test_action(
+                targets = [
+                    "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite",
+                ],
+            ),
+        ),
+    ],
     top_level_targets = [
         ":App",
         "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite",
