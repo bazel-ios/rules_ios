@@ -6,6 +6,7 @@ load(":analysis-tests.bzl", "make_tests")
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_bundle_import")
 load("//rules/test/output:output_test.bzl", "output_test")
 load("@rules_xcodeproj//xcodeproj:defs.bzl", "xcode_schemes", rules_xcodeproj = "xcodeproj")
+load("@build_bazel_rules_apple//apple:ios.bzl", rules_apple_ios_unit_test = "ios_unit_test")
 
 apple_framework(
     name = "CppLib",
@@ -448,22 +449,40 @@ ios_application(
     ],
 )
 
+rules_apple_ios_unit_test(
+    name = "foo_og_test",
+    minimum_os_version = "10.0",
+    visibility = ["//visibility:public"],
+    deps = [":foo_og_test_lib"],
+)
+
+objc_library(
+    name = "foo_og_test_lib",
+    srcs = ["empty_tests.m"],
+    enable_modules = True,
+    visibility = ["//visibility:public"],
+)
+
 rules_xcodeproj(
     name = "foo",
     install_directory = "",
     project_name = "foo",
-    schemes = [
-        xcode_schemes.scheme(
-            name = "Custom-Single-Application-RunnableTestSuite",
-            test_action = xcode_schemes.test_action(
-                targets = [
-                    "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite",
-                ],
-            ),
-        ),
-    ],
+    # schemes = [
+    #     xcode_schemes.scheme(
+    #         name = "Custom-Single-Application-RunnableTestSuite",
+    #         test_action = xcode_schemes.test_action(
+    #             targets = [
+    #                 "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite",
+    #             ],
+    #         ),
+    #     ),
+    # ],
     top_level_targets = [
         ":App",
-        "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite",
+        # "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite",
+        # "//tests/macos/xcodeproj:Single-Application-UnitTests",
+        "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite_iPad-Air-2__16.2",
+        # "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite_iPhone-13-Pro__16.2",
+        # ":foo_og_test",
     ],
 )

@@ -21,6 +21,7 @@ ios_unit_test(
         "NonArcObject.m",
     ],
     sdk_frameworks = ["XCTest"],
+    visibility = ["//visibility:public"],
 )
 
 default_ios_test_runner(
