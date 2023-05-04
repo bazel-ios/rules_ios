@@ -1,28 +1,10 @@
 """
 ############################################################################
 #                   THIS IS GENERATED CODE                                 #
-# Extracted from Xcode 14.2                                     #
+# Extracted from Xcode 14.3                                     #
 # To update, in rules_ios run `bazel run data_generators:extract_xcspecs`  #
 ############################################################################
 """
-
-def _com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_ARCHS__Condition(xcconfigs, id_configs):
-    # $(USE_LLVM_TARGET_TRIPLES_FOR_CLANG)
-
-    used_user_content = False
-
-    eval_val_0 = ""
-    eval_key_0 = "USE_LLVM_TARGET_TRIPLES_FOR_CLANG"
-    if eval_key_0 in xcconfigs:
-        eval_val_0 = xcconfigs[eval_key_0]
-        used_user_content = True
-    elif eval_key_0 in id_configs:
-        opt = id_configs[eval_key_0]
-        if "DefaultValue" in opt:
-            (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
-            used_user_content = used_user_content or eval_val_0_used_user_content
-
-    return (used_user_content, (eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_ARCHS__DefaultValue(xcconfigs, id_configs):
     # $(CURRENT_ARCH)
@@ -41,42 +23,6 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_ARCHS__DefaultValue
             used_user_content = used_user_content or eval_val_0_used_user_content
 
     return (used_user_content, eval_val_0)
-
-def _com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_VARIANTS__Condition(xcconfigs, id_configs):
-    # $(USE_LLVM_TARGET_TRIPLES_FOR_CLANG)
-
-    used_user_content = False
-
-    eval_val_0 = ""
-    eval_key_0 = "USE_LLVM_TARGET_TRIPLES_FOR_CLANG"
-    if eval_key_0 in xcconfigs:
-        eval_val_0 = xcconfigs[eval_key_0]
-        used_user_content = True
-    elif eval_key_0 in id_configs:
-        opt = id_configs[eval_key_0]
-        if "DefaultValue" in opt:
-            (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
-            used_user_content = used_user_content or eval_val_0_used_user_content
-
-    return (used_user_content, (eval_val_0 == "YES"))
-
-def _com_apple_compilers_llvm_clang_1_0__arch__Condition(xcconfigs, id_configs):
-    # !$(USE_LLVM_TARGET_TRIPLES_FOR_CLANG)
-
-    used_user_content = False
-
-    eval_val_0 = ""
-    eval_key_0 = "USE_LLVM_TARGET_TRIPLES_FOR_CLANG"
-    if eval_key_0 in xcconfigs:
-        eval_val_0 = xcconfigs[eval_key_0]
-        used_user_content = True
-    elif eval_key_0 in id_configs:
-        opt = id_configs[eval_key_0]
-        if "DefaultValue" in opt:
-            (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
-            used_user_content = used_user_content or eval_val_0_used_user_content
-
-    return (used_user_content, (not eval_val_0 == "YES"))
 
 def _com_apple_compilers_llvm_clang_1_0__diagnostic_message_length__DefaultValue(xcconfigs, id_configs):
     # 0
@@ -532,6 +478,10 @@ def _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_MODULE_IMPLEMENTATION_OF__
     return (False, "YES")
 
 def _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_BOUNDS_ATTRIBUTES__DefaultValue(xcconfigs, id_configs):
+    # NO
+    return (False, "NO")
+
+def _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_BOUNDS_SAFETY__DefaultValue(xcconfigs, id_configs):
     # NO
     return (False, "NO")
 
@@ -1382,53 +1332,6 @@ def _com_apple_compilers_llvm_clang_1_0__GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS__De
 def _com_apple_compilers_llvm_clang_1_0__GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO__DefaultValue(xcconfigs, id_configs):
     # YES
     return (False, "YES")
-
-def _com_apple_compilers_llvm_clang_1_0__GCC_MACOSX_VERSION_MIN__Condition(xcconfigs, id_configs):
-    # !$(USE_LLVM_TARGET_TRIPLES_FOR_CLANG)
-
-    used_user_content = False
-
-    eval_val_0 = ""
-    eval_key_0 = "USE_LLVM_TARGET_TRIPLES_FOR_CLANG"
-    if eval_key_0 in xcconfigs:
-        eval_val_0 = xcconfigs[eval_key_0]
-        used_user_content = True
-    elif eval_key_0 in id_configs:
-        opt = id_configs[eval_key_0]
-        if "DefaultValue" in opt:
-            (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
-            used_user_content = used_user_content or eval_val_0_used_user_content
-
-    return (used_user_content, (not eval_val_0 == "YES"))
-
-def _com_apple_compilers_llvm_clang_1_0__GCC_MACOSX_VERSION_MIN__DefaultValue(xcconfigs, id_configs):
-    # $($(DEPLOYMENT_TARGET_SETTING_NAME))
-
-    used_user_content = False
-
-    eval_val_0 = ""
-    eval_key_0 = "DEPLOYMENT_TARGET_SETTING_NAME"
-    if eval_key_0 in xcconfigs:
-        eval_val_0 = xcconfigs[eval_key_0]
-        used_user_content = True
-    elif eval_key_0 in id_configs:
-        opt = id_configs[eval_key_0]
-        if "DefaultValue" in opt:
-            (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
-            used_user_content = used_user_content or eval_val_0_used_user_content
-
-    eval_val_1 = ""
-    eval_key_1 = eval_val_0
-    if eval_key_1 in xcconfigs:
-        eval_val_1 = xcconfigs[eval_key_1]
-        used_user_content = True
-    elif eval_key_1 in id_configs:
-        opt = id_configs[eval_key_1]
-        if "DefaultValue" in opt:
-            (eval_val_1_used_user_content, eval_val_1) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
-            used_user_content = used_user_content or eval_val_1_used_user_content
-
-    return (used_user_content, eval_val_1)
 
 def _com_apple_compilers_llvm_clang_1_0__GCC_DEBUG_INFORMATION_FORMAT__Condition(xcconfigs, id_configs):
     # $(GCC_GENERATE_DEBUGGING_SYMBOLS)
@@ -2336,23 +2239,9 @@ def _com_apple_compilers_model_coredatamapping__MAPC_MODULE__DefaultValue(xcconf
 
     return (used_user_content, eval_val_0)
 
-def _com_apple_pbx_linkers_ld__LD_TARGET_TRIPLE_ARCHS__Condition(xcconfigs, id_configs):
-    # $(USE_LLVM_TARGET_TRIPLES_FOR_LD)
-
-    used_user_content = False
-
-    eval_val_0 = ""
-    eval_key_0 = "USE_LLVM_TARGET_TRIPLES_FOR_LD"
-    if eval_key_0 in xcconfigs:
-        eval_val_0 = xcconfigs[eval_key_0]
-        used_user_content = True
-    elif eval_key_0 in id_configs:
-        opt = id_configs[eval_key_0]
-        if "DefaultValue" in opt:
-            (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
-            used_user_content = used_user_content or eval_val_0_used_user_content
-
-    return (used_user_content, (eval_val_0 == "YES"))
+def _com_apple_pbx_linkers_ld__LD_DETERMINISTIC_MODE__DefaultValue(xcconfigs, id_configs):
+    # YES
+    return (False, "YES")
 
 def _com_apple_pbx_linkers_ld__LD_TARGET_TRIPLE_ARCHS__DefaultValue(xcconfigs, id_configs):
     # $(CURRENT_ARCH)
@@ -2371,42 +2260,6 @@ def _com_apple_pbx_linkers_ld__LD_TARGET_TRIPLE_ARCHS__DefaultValue(xcconfigs, i
             used_user_content = used_user_content or eval_val_0_used_user_content
 
     return (used_user_content, eval_val_0)
-
-def _com_apple_pbx_linkers_ld__LD_TARGET_TRIPLE_VARIANTS__Condition(xcconfigs, id_configs):
-    # $(USE_LLVM_TARGET_TRIPLES_FOR_LD)
-
-    used_user_content = False
-
-    eval_val_0 = ""
-    eval_key_0 = "USE_LLVM_TARGET_TRIPLES_FOR_LD"
-    if eval_key_0 in xcconfigs:
-        eval_val_0 = xcconfigs[eval_key_0]
-        used_user_content = True
-    elif eval_key_0 in id_configs:
-        opt = id_configs[eval_key_0]
-        if "DefaultValue" in opt:
-            (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
-            used_user_content = used_user_content or eval_val_0_used_user_content
-
-    return (used_user_content, (eval_val_0 == "YES"))
-
-def _com_apple_pbx_linkers_ld__arch__Condition(xcconfigs, id_configs):
-    # !$(USE_LLVM_TARGET_TRIPLES_FOR_LD)
-
-    used_user_content = False
-
-    eval_val_0 = ""
-    eval_key_0 = "USE_LLVM_TARGET_TRIPLES_FOR_LD"
-    if eval_key_0 in xcconfigs:
-        eval_val_0 = xcconfigs[eval_key_0]
-        used_user_content = True
-    elif eval_key_0 in id_configs:
-        opt = id_configs[eval_key_0]
-        if "DefaultValue" in opt:
-            (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
-            used_user_content = used_user_content or eval_val_0_used_user_content
-
-    return (used_user_content, (not eval_val_0 == "YES"))
 
 def _com_apple_pbx_linkers_ld____INPUT_FILE_LIST_PATH____DefaultValue(xcconfigs, id_configs):
     # $(LINK_FILE_LIST_$(variant)_$(arch))
@@ -2594,53 +2447,6 @@ def _com_apple_pbx_linkers_ld__LD_MAP_FILE_PATH__DefaultValue(xcconfigs, id_conf
 def _com_apple_pbx_linkers_ld__LINK_WITH_STANDARD_LIBRARIES__DefaultValue(xcconfigs, id_configs):
     # YES
     return (False, "YES")
-
-def _com_apple_pbx_linkers_ld__LD_DEPLOYMENT_TARGET__Condition(xcconfigs, id_configs):
-    # !$(USE_LLVM_TARGET_TRIPLES_FOR_LD)
-
-    used_user_content = False
-
-    eval_val_0 = ""
-    eval_key_0 = "USE_LLVM_TARGET_TRIPLES_FOR_LD"
-    if eval_key_0 in xcconfigs:
-        eval_val_0 = xcconfigs[eval_key_0]
-        used_user_content = True
-    elif eval_key_0 in id_configs:
-        opt = id_configs[eval_key_0]
-        if "DefaultValue" in opt:
-            (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
-            used_user_content = used_user_content or eval_val_0_used_user_content
-
-    return (used_user_content, (not eval_val_0 == "YES"))
-
-def _com_apple_pbx_linkers_ld__LD_DEPLOYMENT_TARGET__DefaultValue(xcconfigs, id_configs):
-    # $($(DEPLOYMENT_TARGET_SETTING_NAME))
-
-    used_user_content = False
-
-    eval_val_0 = ""
-    eval_key_0 = "DEPLOYMENT_TARGET_SETTING_NAME"
-    if eval_key_0 in xcconfigs:
-        eval_val_0 = xcconfigs[eval_key_0]
-        used_user_content = True
-    elif eval_key_0 in id_configs:
-        opt = id_configs[eval_key_0]
-        if "DefaultValue" in opt:
-            (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
-            used_user_content = used_user_content or eval_val_0_used_user_content
-
-    eval_val_1 = ""
-    eval_key_1 = eval_val_0
-    if eval_key_1 in xcconfigs:
-        eval_val_1 = xcconfigs[eval_key_1]
-        used_user_content = True
-    elif eval_key_1 in id_configs:
-        opt = id_configs[eval_key_1]
-        if "DefaultValue" in opt:
-            (eval_val_1_used_user_content, eval_val_1) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
-            used_user_content = used_user_content or eval_val_1_used_user_content
-
-    return (used_user_content, eval_val_1)
 
 def _com_apple_pbx_linkers_ld__KEEP_PRIVATE_EXTERNS__DefaultValue(xcconfigs, id_configs):
     # NO
@@ -3795,6 +3601,14 @@ def _com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_BARE_SLASH_REGEX__Defaul
     # YES
     return (False, "YES")
 
+def _com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_EMIT_CONST_VALUES__DefaultValue(xcconfigs, id_configs):
+    # NO
+    return (False, "NO")
+
+def _com_apple_xcode_tools_swift_compiler__SWIFT_EMIT_CONST_VALUE_PROTOCOLS__DefaultValue(xcconfigs, id_configs):
+    #
+    return (False, "")
+
 def _com_apple_xcode_tools_swift_compiler__SWIFT_STRICT_CONCURRENCY__DefaultValue(xcconfigs, id_configs):
     # minimal
     return (False, "minimal")
@@ -3974,22 +3788,8 @@ def _com_apple_xcode_tools_swift_compiler__SWIFT_THREAD_SANITIZER__DefaultValue(
     return (used_user_content, eval_val_0)
 
 def _com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_TESTABILITY__DefaultValue(xcconfigs, id_configs):
-    # $(ENABLE_TESTABILITY)
-
-    used_user_content = False
-
-    eval_val_0 = ""
-    eval_key_0 = "ENABLE_TESTABILITY"
-    if eval_key_0 in xcconfigs:
-        eval_val_0 = xcconfigs[eval_key_0]
-        used_user_content = True
-    elif eval_key_0 in id_configs:
-        opt = id_configs[eval_key_0]
-        if "DefaultValue" in opt:
-            (eval_val_0_used_user_content, eval_val_0) = XCSPEC_EVALS[opt["DefaultValue"]](xcconfigs, id_configs)
-            used_user_content = used_user_content or eval_val_0_used_user_content
-
-    return (used_user_content, eval_val_0)
+    # NO
+    return (False, "NO")
 
 def _com_apple_xcode_tools_swift_compiler__SWIFT_SUPPRESS_WARNINGS__DefaultValue(xcconfigs, id_configs):
     # NO
@@ -4126,6 +3926,7 @@ XCSPEC_EVALS = {
     "com_apple_compilers_llvm_clang_1_0__CLANG_DEBUG_MODULES__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_DEBUG_MODULES__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_APP_EXTENSION__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_APP_EXTENSION__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_BOUNDS_ATTRIBUTES__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_BOUNDS_ATTRIBUTES__DefaultValue,
+    "com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_BOUNDS_SAFETY__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_BOUNDS_SAFETY__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_CODE_COVERAGE__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_CODE_COVERAGE__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_CPP_STATIC_DESTRUCTORS__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_CPP_STATIC_DESTRUCTORS__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_MODULES__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_MODULES__DefaultValue,
@@ -4163,9 +3964,7 @@ XCSPEC_EVALS = {
     "com_apple_compilers_llvm_clang_1_0__CLANG_RETAIN_COMMENTS_FROM_SYSTEM_HEADERS__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_RETAIN_COMMENTS_FROM_SYSTEM_HEADERS__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_SANITIZER_COVERAGE__Condition": _com_apple_compilers_llvm_clang_1_0__CLANG_SANITIZER_COVERAGE__Condition,
     "com_apple_compilers_llvm_clang_1_0__CLANG_SANITIZER_COVERAGE__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_SANITIZER_COVERAGE__DefaultValue,
-    "com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_ARCHS__Condition": _com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_ARCHS__Condition,
     "com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_ARCHS__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_ARCHS__DefaultValue,
-    "com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_VARIANTS__Condition": _com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_VARIANTS__Condition,
     "com_apple_compilers_llvm_clang_1_0__CLANG_THREAD_SANITIZER__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_THREAD_SANITIZER__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_TRIVIAL_AUTO_VAR_INIT__DefaultValue": _com_apple_compilers_llvm_clang_1_0__CLANG_TRIVIAL_AUTO_VAR_INIT__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTEGER__Condition": _com_apple_compilers_llvm_clang_1_0__CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTEGER__Condition,
@@ -4270,8 +4069,6 @@ XCSPEC_EVALS = {
     "com_apple_compilers_llvm_clang_1_0__GCC_INPUT_FILETYPE__DefaultValue": _com_apple_compilers_llvm_clang_1_0__GCC_INPUT_FILETYPE__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__GCC_INSTRUMENT_PROGRAM_FLOW_ARCS__DefaultValue": _com_apple_compilers_llvm_clang_1_0__GCC_INSTRUMENT_PROGRAM_FLOW_ARCS__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__GCC_LINK_WITH_DYNAMIC_LIBRARIES__DefaultValue": _com_apple_compilers_llvm_clang_1_0__GCC_LINK_WITH_DYNAMIC_LIBRARIES__DefaultValue,
-    "com_apple_compilers_llvm_clang_1_0__GCC_MACOSX_VERSION_MIN__Condition": _com_apple_compilers_llvm_clang_1_0__GCC_MACOSX_VERSION_MIN__Condition,
-    "com_apple_compilers_llvm_clang_1_0__GCC_MACOSX_VERSION_MIN__DefaultValue": _com_apple_compilers_llvm_clang_1_0__GCC_MACOSX_VERSION_MIN__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__GCC_NO_COMMON_BLOCKS__DefaultValue": _com_apple_compilers_llvm_clang_1_0__GCC_NO_COMMON_BLOCKS__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__GCC_OBJC_ABI_VERSION__DefaultValue": _com_apple_compilers_llvm_clang_1_0__GCC_OBJC_ABI_VERSION__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__GCC_OBJC_LEGACY_DISPATCH__DefaultValue": _com_apple_compilers_llvm_clang_1_0__GCC_OBJC_LEGACY_DISPATCH__DefaultValue,
@@ -4337,7 +4134,6 @@ XCSPEC_EVALS = {
     "com_apple_compilers_llvm_clang_1_0__USE_HEADERMAP__DefaultValue": _com_apple_compilers_llvm_clang_1_0__USE_HEADERMAP__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__USE_HEADER_SYMLINKS__DefaultValue": _com_apple_compilers_llvm_clang_1_0__USE_HEADER_SYMLINKS__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__WARNING_CFLAGS__DefaultValue": _com_apple_compilers_llvm_clang_1_0__WARNING_CFLAGS__DefaultValue,
-    "com_apple_compilers_llvm_clang_1_0__arch__Condition": _com_apple_compilers_llvm_clang_1_0__arch__Condition,
     "com_apple_compilers_llvm_clang_1_0__diagnostic_message_length__DefaultValue": _com_apple_compilers_llvm_clang_1_0__diagnostic_message_length__DefaultValue,
     "com_apple_compilers_llvm_clang_1_0__print_note_include_stack__DefaultValue": _com_apple_compilers_llvm_clang_1_0__print_note_include_stack__DefaultValue,
     "com_apple_compilers_model_coredata__DEPLOYMENT_TARGET__DefaultValue": _com_apple_compilers_model_coredata__DEPLOYMENT_TARGET__DefaultValue,
@@ -4369,8 +4165,7 @@ XCSPEC_EVALS = {
     "com_apple_pbx_linkers_ld__LD_DEBUG_VARIANT__Condition": _com_apple_pbx_linkers_ld__LD_DEBUG_VARIANT__Condition,
     "com_apple_pbx_linkers_ld__LD_DEBUG_VARIANT__DefaultValue": _com_apple_pbx_linkers_ld__LD_DEBUG_VARIANT__DefaultValue,
     "com_apple_pbx_linkers_ld__LD_DEPENDENCY_INFO_FILE__DefaultValue": _com_apple_pbx_linkers_ld__LD_DEPENDENCY_INFO_FILE__DefaultValue,
-    "com_apple_pbx_linkers_ld__LD_DEPLOYMENT_TARGET__Condition": _com_apple_pbx_linkers_ld__LD_DEPLOYMENT_TARGET__Condition,
-    "com_apple_pbx_linkers_ld__LD_DEPLOYMENT_TARGET__DefaultValue": _com_apple_pbx_linkers_ld__LD_DEPLOYMENT_TARGET__DefaultValue,
+    "com_apple_pbx_linkers_ld__LD_DETERMINISTIC_MODE__DefaultValue": _com_apple_pbx_linkers_ld__LD_DETERMINISTIC_MODE__DefaultValue,
     "com_apple_pbx_linkers_ld__LD_DONT_RUN_DEDUPLICATION__Condition": _com_apple_pbx_linkers_ld__LD_DONT_RUN_DEDUPLICATION__Condition,
     "com_apple_pbx_linkers_ld__LD_DONT_RUN_DEDUPLICATION__DefaultValue": _com_apple_pbx_linkers_ld__LD_DONT_RUN_DEDUPLICATION__DefaultValue,
     "com_apple_pbx_linkers_ld__LD_DYLIB_ALLOWABLE_CLIENTS__DefaultValue": _com_apple_pbx_linkers_ld__LD_DYLIB_ALLOWABLE_CLIENTS__DefaultValue,
@@ -4391,9 +4186,7 @@ XCSPEC_EVALS = {
     "com_apple_pbx_linkers_ld__LD_OBJC_ABI_VERSION__DefaultValue": _com_apple_pbx_linkers_ld__LD_OBJC_ABI_VERSION__DefaultValue,
     "com_apple_pbx_linkers_ld__LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER__DefaultValue": _com_apple_pbx_linkers_ld__LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER__DefaultValue,
     "com_apple_pbx_linkers_ld__LD_RUNPATH_SEARCH_PATHS__DefaultValue": _com_apple_pbx_linkers_ld__LD_RUNPATH_SEARCH_PATHS__DefaultValue,
-    "com_apple_pbx_linkers_ld__LD_TARGET_TRIPLE_ARCHS__Condition": _com_apple_pbx_linkers_ld__LD_TARGET_TRIPLE_ARCHS__Condition,
     "com_apple_pbx_linkers_ld__LD_TARGET_TRIPLE_ARCHS__DefaultValue": _com_apple_pbx_linkers_ld__LD_TARGET_TRIPLE_ARCHS__DefaultValue,
-    "com_apple_pbx_linkers_ld__LD_TARGET_TRIPLE_VARIANTS__Condition": _com_apple_pbx_linkers_ld__LD_TARGET_TRIPLE_VARIANTS__Condition,
     "com_apple_pbx_linkers_ld__LD_THREAD_SANITIZER__DefaultValue": _com_apple_pbx_linkers_ld__LD_THREAD_SANITIZER__DefaultValue,
     "com_apple_pbx_linkers_ld__LD_VERIFY_BITCODE__Condition": _com_apple_pbx_linkers_ld__LD_VERIFY_BITCODE__Condition,
     "com_apple_pbx_linkers_ld__LD_VERIFY_BITCODE__DefaultValue": _com_apple_pbx_linkers_ld__LD_VERIFY_BITCODE__DefaultValue,
@@ -4405,7 +4198,6 @@ XCSPEC_EVALS = {
     "com_apple_pbx_linkers_ld__PRESERVE_DEAD_CODE_INITS_AND_TERMS__DefaultValue": _com_apple_pbx_linkers_ld__PRESERVE_DEAD_CODE_INITS_AND_TERMS__DefaultValue,
     "com_apple_pbx_linkers_ld__UNEXPORTED_SYMBOLS_FILE__Condition": _com_apple_pbx_linkers_ld__UNEXPORTED_SYMBOLS_FILE__Condition,
     "com_apple_pbx_linkers_ld____INPUT_FILE_LIST_PATH____DefaultValue": _com_apple_pbx_linkers_ld____INPUT_FILE_LIST_PATH____DefaultValue,
-    "com_apple_pbx_linkers_ld__arch__Condition": _com_apple_pbx_linkers_ld__arch__Condition,
     "com_apple_xcode_tools_ibtool_compiler__IBC_COMPILER_AUTO_ACTIVATE_CUSTOM_FONTS__DefaultValue": _com_apple_xcode_tools_ibtool_compiler__IBC_COMPILER_AUTO_ACTIVATE_CUSTOM_FONTS__DefaultValue,
     "com_apple_xcode_tools_ibtool_compiler__IBC_COMPILER_USE_NIBKEYEDARCHIVER_FOR_MACOS__DefaultValue": _com_apple_xcode_tools_ibtool_compiler__IBC_COMPILER_USE_NIBKEYEDARCHIVER_FOR_MACOS__DefaultValue,
     "com_apple_xcode_tools_ibtool_compiler__IBC_ERRORS__DefaultValue": _com_apple_xcode_tools_ibtool_compiler__IBC_ERRORS__DefaultValue,
@@ -4432,10 +4224,12 @@ XCSPEC_EVALS = {
     "com_apple_xcode_tools_swift_compiler__SWIFT_CROSS_MODULE_OPTIMIZATION__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_CROSS_MODULE_OPTIMIZATION__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__SWIFT_DEPLOYMENT_TARGET__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_DEPLOYMENT_TARGET__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__SWIFT_DISABLE_SAFETY_CHECKS__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_DISABLE_SAFETY_CHECKS__DefaultValue,
+    "com_apple_xcode_tools_swift_compiler__SWIFT_EMIT_CONST_VALUE_PROTOCOLS__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_EMIT_CONST_VALUE_PROTOCOLS__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__SWIFT_EMIT_MODULE_INTERFACE__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_EMIT_MODULE_INTERFACE__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_APP_EXTENSION__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_APP_EXTENSION__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_BARE_SLASH_REGEX__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_BARE_SLASH_REGEX__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_BATCH_MODE__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_BATCH_MODE__DefaultValue,
+    "com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_EMIT_CONST_VALUES__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_EMIT_CONST_VALUES__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_INCREMENTAL_COMPILATION__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_INCREMENTAL_COMPILATION__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_LIBRARY_EVOLUTION__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_LIBRARY_EVOLUTION__DefaultValue,
     "com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_TESTABILITY__DefaultValue": _com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_TESTABILITY__DefaultValue,
