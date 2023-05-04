@@ -1,7 +1,7 @@
 """
 ############################################################################
 #                   THIS IS GENERATED CODE                                 #
-# Extracted from Xcode 14.2                                     #
+# Extracted from Xcode 14.3                                     #
 # To update, in rules_ios run `bazel run data_generators:extract_xcspecs`  #
 ############################################################################
 """
@@ -34,20 +34,13 @@ SETTINGS = {
                     "-target",
                     "$(value)-$(LLVM_TARGET_TRIPLE_VENDOR)-$(LLVM_TARGET_TRIPLE_OS_VERSION)$(LLVM_TARGET_TRIPLE_SUFFIX)",
                 ],
-                "Condition": "com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_ARCHS__Condition",
                 "DefaultValue": "com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_ARCHS__DefaultValue",
                 "Type": "StringList",
             },
             "CLANG_TARGET_TRIPLE_VARIANTS": {
                 "CommandLineFlag": "-target-variant",
-                "Condition": "com_apple_compilers_llvm_clang_1_0__CLANG_TARGET_TRIPLE_VARIANTS__Condition",
                 "ConditionFlavors": ["arch"],
                 "Type": "StringList",
-            },
-            "arch": {
-                "CommandLineFlag": "-arch",
-                "Condition": "com_apple_compilers_llvm_clang_1_0__arch__Condition",
-                "Type": "String",
             },
             "CLANG_TOOLCHAIN_FLAGS": {"CommandLineArgs": ["$(value)"], "Type": "StringList"},
             "diagnostic_message_length": {
@@ -136,10 +129,8 @@ SETTINGS = {
                 "CommandLineArgs": {
                     "<<otherwise>>": ["-std=$(value)"],
                     "c++0x": ["-std=c++11"],
-                    "c++17": ["-std=c++1z"],
                     "compiler-default": [],
                     "gnu++0x": ["-std=gnu++11"],
-                    "gnu++17": ["-std=gnu++1z"],
                 },
                 "DefaultValue": "com_apple_compilers_llvm_clang_1_0__CLANG_CXX_LANGUAGE_STANDARD__DefaultValue",
                 "FileTypes": ["sourcecode.cpp.cpp", "sourcecode.cpp.objcpp"],
@@ -350,6 +341,12 @@ SETTINGS = {
             "CLANG_ENABLE_BOUNDS_ATTRIBUTES": {
                 "CommandLineArgs": {"NO": [], "YES": ["-fbounds-attributes"]},
                 "DefaultValue": "com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_BOUNDS_ATTRIBUTES__DefaultValue",
+                "FileTypes": ["sourcecode.c.c"],
+                "Type": "Boolean",
+            },
+            "CLANG_ENABLE_BOUNDS_SAFETY": {
+                "CommandLineArgs": {"NO": [], "YES": ["-fbounds-safety"]},
+                "DefaultValue": "com_apple_compilers_llvm_clang_1_0__CLANG_ENABLE_BOUNDS_SAFETY__DefaultValue",
                 "FileTypes": ["sourcecode.c.c"],
                 "Type": "Boolean",
             },
@@ -1434,15 +1431,6 @@ SETTINGS = {
                 ],
                 "Type": "Boolean",
             },
-            "GCC_MACOSX_VERSION_MIN": {
-                "CommandLineArgs": {
-                    "": [],
-                    "<<otherwise>>": ["-$(DEPLOYMENT_TARGET_CLANG_FLAG_NAME)=$(value)"],
-                },
-                "Condition": "com_apple_compilers_llvm_clang_1_0__GCC_MACOSX_VERSION_MIN__Condition",
-                "DefaultValue": "com_apple_compilers_llvm_clang_1_0__GCC_MACOSX_VERSION_MIN__DefaultValue",
-                "Type": "String",
-            },
             "GCC_DEBUG_INFORMATION_FORMAT": {
                 "CommandLineArgs": {
                     "<<otherwise>>": [],
@@ -2148,18 +2136,22 @@ SETTINGS = {
         "IsAbstract": "Yes",
         "Name": "Ld",
         "Options": {
+            "LD_DETERMINISTIC_MODE": {
+                "CommandLineArgs": {"NO": [], "YES": ["-Xlinker", "-reproducible"]},
+                "DefaultValue": "com_apple_pbx_linkers_ld__LD_DETERMINISTIC_MODE__DefaultValue",
+                "SupportedVersionRanges": ["804"],
+                "Type": "Boolean",
+            },
             "LD_TARGET_TRIPLE_ARCHS": {
                 "CommandLineArgs": [
                     "-target",
                     "$(value)-$(LLVM_TARGET_TRIPLE_VENDOR)-$(LLVM_TARGET_TRIPLE_OS_VERSION)$(LLVM_TARGET_TRIPLE_SUFFIX)",
                 ],
-                "Condition": "com_apple_pbx_linkers_ld__LD_TARGET_TRIPLE_ARCHS__Condition",
                 "DefaultValue": "com_apple_pbx_linkers_ld__LD_TARGET_TRIPLE_ARCHS__DefaultValue",
                 "Type": "StringList",
             },
             "LD_TARGET_TRIPLE_VARIANTS": {
                 "CommandLineFlag": "-target-variant",
-                "Condition": "com_apple_pbx_linkers_ld__LD_TARGET_TRIPLE_VARIANTS__Condition",
                 "ConditionFlavors": ["arch"],
                 "Type": "StringList",
             },
@@ -2167,11 +2159,6 @@ SETTINGS = {
                 "CommandLineArgs": "$(value)",
                 "ConditionFlavors": ["arch"],
                 "Type": "StringList",
-            },
-            "arch": {
-                "CommandLineFlag": "-arch",
-                "Condition": "com_apple_pbx_linkers_ld__arch__Condition",
-                "Type": "String",
             },
             "MACH_O_TYPE": {
                 "Type": "Enumeration",
@@ -2287,16 +2274,6 @@ SETTINGS = {
                 "CommandLineArgs": {"NO": ["-nostdlib"]},
                 "DefaultValue": "com_apple_pbx_linkers_ld__LINK_WITH_STANDARD_LIBRARIES__DefaultValue",
                 "Type": "Boolean",
-            },
-            "LD_DEPLOYMENT_TARGET": {
-                "CommandLineArgs": {
-                    "": [],
-                    "<<otherwise>>": ["-$(DEPLOYMENT_TARGET_CLANG_FLAG_NAME)=$(value)"],
-                },
-                "Condition": "com_apple_pbx_linkers_ld__LD_DEPLOYMENT_TARGET__Condition",
-                "DefaultValue": "com_apple_pbx_linkers_ld__LD_DEPLOYMENT_TARGET__DefaultValue",
-                "SetValueInEnvironmentVariable": "$(DEPLOYMENT_TARGET_CLANG_ENV_NAME)",
-                "Type": "String",
             },
             "KEEP_PRIVATE_EXTERNS": {
                 "CommandLineFlag": "-keep_private_externs",
@@ -2889,6 +2866,23 @@ SETTINGS = {
                                "(-enable-bare-slash-regex)",
                 "DisplayName": "Enable Bare Slash Regex Literals",
                 "Type": "Boolean",
+            },
+            "SWIFT_ENABLE_EMIT_CONST_VALUES": {
+                "Category": "Language",
+                "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_ENABLE_EMIT_CONST_VALUES__DefaultValue",
+                "Description": "Emit the extracted compile-time known " +
+                               "values from the Swift compiler " +
+                               "(-emit-const-values)",
+                "DisplayName": "Emit Swift const values",
+                "Type": "Boolean",
+            },
+            "SWIFT_EMIT_CONST_VALUE_PROTOCOLS": {
+                "DefaultValue": "com_apple_xcode_tools_swift_compiler__SWIFT_EMIT_CONST_VALUE_PROTOCOLS__DefaultValue",
+                "Description": "A list of protocol names whose " +
+                               "conformances the Swift compiler is to " +
+                               "emit compile-time-known values for.",
+                "DisplayName": "Const value emission protocol list",
+                "Type": "StringList",
             },
             "SWIFT_STRICT_CONCURRENCY": {
                 "Category": "Language",
