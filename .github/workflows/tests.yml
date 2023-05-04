@@ -14,7 +14,7 @@ concurrency:
 jobs:
   integration_tests:
     name: Build and Test
-    runs-on: macos-12
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v3
       - name: Select Xcode
@@ -48,7 +48,7 @@ jobs:
     # consider merging this feature into the default behavior and can re-align
     # the CI job
     name: Build and Test ( Virtual Frameworks )
-    runs-on: macos-12
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v3
       - name: Select Xcode
@@ -73,7 +73,7 @@ jobs:
 
   lts_ios_integration_tests:
     name: Build and Test ( Virtual Frameworks + LTS )
-    runs-on: macos-12
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v3
       - name: Select Xcode
@@ -93,7 +93,7 @@ jobs:
 
   build_arm64_simulator:
     name: Build arm64 Simulator
-    runs-on: macos-12
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v3
       - name: Select Xcode
@@ -120,7 +120,7 @@ jobs:
 
   buildifier:
     name: Check Starlark and Docs
-    runs-on: macos-12
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v3
       - name: Select Xcode
@@ -133,7 +133,7 @@ jobs:
 
   xcodeproj_tests:
     name: .xcodeproj Tests on Xcode 14.3.0
-    runs-on: macos-12
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v3
       - name: Select Xcode 14.3.0
@@ -148,7 +148,7 @@ jobs:
 
   lldb_ios_tests_xcode:
     name: LLDB tests on Xcode 14.3.0
-    runs-on: macos-12
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v3
       - name: Select Xcode 14.3.0
@@ -163,7 +163,7 @@ jobs:
 
   multi_arch_support:
     name: Build iOS App for Multiple Architecture
-    runs-on: macos-12
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v3
       - name: Select Xcode
