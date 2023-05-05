@@ -99,7 +99,7 @@ extend_modulemap = rule(
     doc = "Extends a modulemap with a Swift submodule",
 )
 
-def _write_modulemap(name, library_tools, umbrella_header = None, public_headers = [], private_headers = [], module_name = None, framework = False, **kwargs):
+def _write_modulemap(name, umbrella_header = None, module_name = None, framework = False):
     basename = "{}.modulemap".format(name)
     destination = paths.join(name + "-modulemap", basename)
     if not module_name:
@@ -802,13 +802,9 @@ def apple_library(name, library_tools = {}, export_private_headers = True, names
                 objc_hdrs.append(umbrella_header)
             module_map = library_tools["modulemap_generator"](
                 name = name,
-                library_tools = library_tools,
                 umbrella_header = paths.basename(umbrella_header),
-                public_headers = objc_hdrs,
-                private_headers = objc_private_hdrs,
                 module_name = module_name,
                 framework = True,
-                **kwargs
             )
 
     framework_vfs_overlay(
