@@ -473,6 +473,7 @@ rules_xcodeproj(
             test_action = xcode_schemes.test_action(
                 targets = [
                     "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite",
+                    # "//tests/macos/xcodeproj:Single-Application-RunnableTestSuite_iPhone-13-Pro__16.2",
                 ],
             ),
         ),
