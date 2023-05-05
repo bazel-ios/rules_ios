@@ -7,4 +7,7 @@
 - (void)foo {
 }
 
+- (void)bar2 {
+}
+
 @end
