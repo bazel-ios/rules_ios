@@ -1,9 +1,9 @@
 install! 'cocoapods',
   :integrate_targets => false,
-  :generate_multiple_pod_projects => true # More perfomant, see http://blog.cocoapods.org/CocoaPods-1.7.0-beta/#multiple-xcodeproj-generation
+  :generate_multiple_pod_projects => true # More performant, see http://blog.cocoapods.org/CocoaPods-1.7.0-beta/#multiple-xcodeproj-generation
 
 use_frameworks!
-platform :ios, '11.0'
+platform :ios, '16.0'
 workspace 'All'
 
 #################
@@ -22,9 +22,9 @@ end
 # Third party modules
 #################
 
-pod 'SnapKit', '5.0.1', :binary => $useBinaries
-pod 'Google-Mobile-Ads-SDK', '7.66.0', :binary => $useBinaries
-pod 'GoogleUserMessagingPlatform', '1.1.0', :binary => $useBinaries
+pod 'SnapKit', '5.6.0' :binary => $useBinaries
+pod 'Google-Mobile-Ads-SDK', '10.4.0' :binary => $useBinaries
+pod 'GoogleUserMessagingPlatform', '2.0.1' :binary => $useBinaries
 
 #################
 # Set swift versions for pods that do not specify them
