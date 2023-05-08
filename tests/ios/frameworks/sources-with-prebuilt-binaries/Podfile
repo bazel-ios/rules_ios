@@ -22,9 +22,9 @@ end
 # Third party modules
 #################
 
-pod 'SnapKit', '5.6.0' :binary => $useBinaries
-pod 'Google-Mobile-Ads-SDK', '10.4.0' :binary => $useBinaries
-pod 'GoogleUserMessagingPlatform', '2.0.1' :binary => $useBinaries
+pod 'SnapKit', '5.6.0', :binary => $useBinaries
+pod 'Google-Mobile-Ads-SDK', '10.4.0', :binary => $useBinaries
+pod 'GoogleUserMessagingPlatform', '2.0.1', :binary => $useBinaries
 
 #################
 # Set swift versions for pods that do not specify them
