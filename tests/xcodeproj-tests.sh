@@ -81,7 +81,7 @@ update() {
 }
 
 if [[ "$(arch)" == "arm"* ]]; then
-    echo -e "warning: rerun where Bazel is an x64_64 bazel:\narch -arch x86_64 /bin/bash -l -c \"$0 ${@}\""
+    echo -e "warning: rerun where Bazel is an x86_64 bazel:\narch -arch x86_64 /bin/bash -l -c \"$0 ${@}\""
 
     # This should work - rules_ios has been proven to work in this. If you
     # don't have the right version of Bazelisk then install it.
