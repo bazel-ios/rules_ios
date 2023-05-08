@@ -6,6 +6,7 @@ printenv
 
 sudo xcode-select -p
 sudo xcode-select -s /Applications/Xcode_14.3.app
+echo "Xcode version: $(xcode-select -p)"
 
 echo "Generating bazelrc"
 
