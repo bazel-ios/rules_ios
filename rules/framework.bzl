@@ -24,7 +24,7 @@ load("@build_bazel_rules_apple//apple/internal:rule_support.bzl", "rule_support"
 load("@build_bazel_rules_apple//apple/internal:apple_toolchains.bzl", "AppleMacToolsToolchainInfo", "AppleXPlatToolsToolchainInfo")
 load("@build_bazel_rules_apple//apple/internal/utils:clang_rt_dylibs.bzl", "clang_rt_dylibs")
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo", "IosFrameworkBundleInfo")
-load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo", "swift_clang_module_aspect", "swift_common")
+load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo", "swift_common")
 load(
     "@build_bazel_rules_apple//apple/internal/aspects:resource_aspect.bzl",
     "apple_resource_aspect",
@@ -1118,7 +1118,6 @@ The default behavior bakes this into the top level app. When false, it's statica
 """,
         ),
         "transitive_deps": attr.label_list(
-            aspects = [swift_clang_module_aspect],
             mandatory = True,
             cfg = apple_common.multi_arch_split,
             doc =
