@@ -196,7 +196,11 @@ def _xcodeproj_aspect_impl(target, ctx):
 
     deps = []
     deps += getattr(ctx.rule.attr, "deps", [])
-    deps += getattr(ctx.rule.attr, "infoplists", [])
+
+    # Hold `infoplists` to be used below when creating infos
+    infoplists = getattr(ctx.rule.attr, "infoplists", [])
+    deps += infoplists
+
     deps += getattr(ctx.rule.attr, "extensions", [])
     tags = getattr(ctx.rule.attr, "tags", [])
 
@@ -258,6 +262,12 @@ def _xcodeproj_aspect_impl(target, ctx):
                 test_host_appname = test_host_target[_TargetInfo].direct_targets[0].name
 
         framework_includes = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "framework_includes"))
+
+        infoplist = None
+        if infoplists:
+            if infoplists[0].files.to_list():
+                infoplist = infoplists[0].files.to_list()[0]
+
         info = struct(
             name = bundle_info.bundle_name,
             bundle_id = bundle_info.bundle_id,
@@ -285,6 +295,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             objc_copts = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "objc_copts")),
             commandline_args = commandline_args,
             targeted_device_family = _targeted_device_family(ctx),
+            infoplist = infoplist,
         )
         if ctx.rule.kind != "apple_framework_packaging":
             providers.append(
@@ -301,6 +312,7 @@ def _xcodeproj_aspect_impl(target, ctx):
                     swift_copts = info.swift_copts,
                     objc_copts = info.objc_copts,
                     swift_module_paths = info.swift_module_paths,
+                    infoplist = info.infoplist,
                 ),
             )
 
@@ -879,10 +891,16 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
 
         target_settings["BAZEL_LLDB_INIT_FILE"] = lldbinit_file
 
+        target_infoplist = None
+        if target_info.infoplist:
+            target_infoplist = "$BAZEL_WORKSPACE_ROOT/%s" % target_info.infoplist.path
+            target_settings["INFOPLIST_FILE"] = target_infoplist
+
         if product_type == "application" or product_type == "app-extension":
             # Prevent XcodeGen from inferring a plist path on its own from target source files.
             # See PRs #593 and #601 for more context.
             target_settings["INFOPLIST_FILE"] = ""
+            target_infoplist = None
             target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
 
         if product_type == "bundle.unit-test":
@@ -918,6 +936,8 @@ fi
         pre_build_scripts.append({
             "name": "Build with bazel",
             "script": _BUILD_WITH_BAZEL_SCRIPT,
+            "outputFiles": [target_infoplist] if target_infoplist else None,  # Info.plist files are generated (even when there's no substitutions)
+            "basedOnDependencyAnalysis": False,  # Bazel builds should always run
         })
 
         target_settings = _set_target_settings_by_config(ctx, target_settings)
