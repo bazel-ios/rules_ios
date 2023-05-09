@@ -11,6 +11,8 @@
 		A723107E296F112D0035D90D /* Foo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A723107C296F112D0035D90D /* Foo.swift */; };
 		A7231082296F11370035D90D /* BasicXCFrameworkDynamic.h in Headers */ = {isa = PBXBuildFile; fileRef = A7231080296F11370035D90D /* BasicXCFrameworkDynamic.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7231083296F11370035D90D /* Foo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7231081296F11370035D90D /* Foo.swift */; };
+		A77FD8AA2A0A9F6300DF2D77 /* Bar.h in Headers */ = {isa = PBXBuildFile; fileRef = A77FD8A92A0A9F6300DF2D77 /* Bar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A77FD8AB2A0A9F6B00DF2D77 /* Bar.h in Headers */ = {isa = PBXBuildFile; fileRef = A77FD8A82A0A9F5400DF2D77 /* Bar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +22,8 @@
 		A723107C296F112D0035D90D /* Foo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Foo.swift; sourceTree = "<group>"; };
 		A7231080296F11370035D90D /* BasicXCFrameworkDynamic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicXCFrameworkDynamic.h; sourceTree = "<group>"; };
 		A7231081296F11370035D90D /* Foo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Foo.swift; sourceTree = "<group>"; };
+		A77FD8A82A0A9F5400DF2D77 /* Bar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Bar.h; sourceTree = "<group>"; };
+		A77FD8A92A0A9F6300DF2D77 /* Bar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Bar.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +67,7 @@
 			children = (
 				A723107B296F112D0035D90D /* BasicXCFrameworkStatic.h */,
 				A723107C296F112D0035D90D /* Foo.swift */,
+				A77FD8A82A0A9F5400DF2D77 /* Bar.h */,
 			);
 			path = BasicXCFrameworkStatic;
 			sourceTree = "<group>";
@@ -72,6 +77,7 @@
 			children = (
 				A7231080296F11370035D90D /* BasicXCFrameworkDynamic.h */,
 				A7231081296F11370035D90D /* Foo.swift */,
+				A77FD8A92A0A9F6300DF2D77 /* Bar.h */,
 			);
 			path = BasicXCFrameworkDynamic;
 			sourceTree = "<group>";
@@ -83,6 +89,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A77FD8AA2A0A9F6300DF2D77 /* Bar.h in Headers */,
 				A7231082296F11370035D90D /* BasicXCFrameworkDynamic.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -91,6 +98,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A77FD8AB2A0A9F6B00DF2D77 /* Bar.h in Headers */,
 				A723107D296F112D0035D90D /* BasicXCFrameworkStatic.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

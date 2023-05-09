@@ -4,17 +4,21 @@
 <dict>
 	<key>files</key>
 	<dict>
+		<key>Headers/Bar.h</key>
+		<data>
+		k+VOkHyoRhupUo9/JBH6M5g9qpA=
+		</data>
 		<key>Headers/BasicXCFrameworkStatic-Swift.h</key>
 		<data>
 		rczl862K7Ia/qhVQmDVm6+O9txE=
 		</data>
 		<key>Headers/BasicXCFrameworkStatic.h</key>
 		<data>
-		UTB4W/2rKrZg1Y3vmfQORhiUJTo=
+		MvRdcNiDaKmhGVQLAaZvlBoFAT8=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		acHzzR6BkqvaQeUEbWVvaEJeWFA=
+		5tW2VvwMu5vJHC4QpPr8T/L503Q=
 		</data>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/arm64-apple-ios.abi.json</key>
 		<data>
@@ -43,6 +47,17 @@
 	</dict>
 	<key>files2</key>
 	<dict>
+		<key>Headers/Bar.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			k+VOkHyoRhupUo9/JBH6M5g9qpA=
+			</data>
+			<key>hash2</key>
+			<data>
+			Dz/25ldAIlCIpVLfD+DEYWW/1Rd49y9zs0EMJMujLa8=
+			</data>
+		</dict>
 		<key>Headers/BasicXCFrameworkStatic-Swift.h</key>
 		<dict>
 			<key>hash</key>
@@ -58,11 +73,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			UTB4W/2rKrZg1Y3vmfQORhiUJTo=
+			MvRdcNiDaKmhGVQLAaZvlBoFAT8=
 			</data>
 			<key>hash2</key>
 			<data>
-			wt0HRmlH8pm9M2X7/7csMSGiN6Im+d4km9tfEpl/qKQ=
+			W3+S0sGtg4eVKZIWN0rh6Sj/z+zHacdS4eMUbwSaA04=
 			</data>
 		</dict>
 		<key>Modules/BasicXCFrameworkStatic.swiftmodule/arm64-apple-ios.abi.json</key>
