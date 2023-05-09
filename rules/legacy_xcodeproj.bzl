@@ -883,7 +883,8 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
             # Prevent XcodeGen from inferring a plist path on its own from target source files.
             # See PRs #593 and #601 for more context.
             target_settings["INFOPLIST_FILE"] = ""
-            target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
+            if product_type != "framework.static":
+                target_settings["PRODUCT_BUNDLE_IDENTIFIER"] = target_info.bundle_id
 
         if product_type == "bundle.unit-test":
             target_settings["SUPPORTS_MACCATALYST"] = False
