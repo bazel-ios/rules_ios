@@ -9,10 +9,6 @@ build --strategy=Stardoc=standalone
 build --verbose_failures # Print the full command line for commands that failed
 build --test_output=errors # Prints log file output to the console on failure
 
-# By default do not build the tests for sources-with-prebuilt-binaries,
-# because it takes quite some time. They will only run on CI
-build --deleted_packages tests/ios/frameworks/sources-with-prebuilt-binaries
-
 # Enable dbg compilation mode in this repo, so we can test xcodeproj-built
 # binaries contain debug symbol tables.
 build --compilation_mode=dbg

@@ -18,10 +18,6 @@ _RULES = [
     "transition_support",
 ]
 
-_REPOSITORY_RULES = [
-    "framework_builder",
-]
-
 bzl_library(
     name = "data",
     srcs = [
@@ -46,24 +42,9 @@ bzl_library(
     for name in _RULES
 ]
 
-[
-    stardoc(
-        name = "%s-docs" % name,
-        out = "%s_doc.md" % name,
-        input = "//repository_rules:%s.bzl" % name,
-        tags = ["manual"],
-        visibility = ["//:__pkg__"],
-        deps = [
-            ":data",
-            "@build_bazel_rules_apple//apple",
-        ],
-    )
-    for name in _REPOSITORY_RULES
-]
-
 filegroup(
     name = "_all_docs",
-    srcs = ["%s-docs" % name for name in (_RULES + _REPOSITORY_RULES)],
+    srcs = ["%s-docs" % name for name in _RULES],
     tags = ["manual"],
 )
 
