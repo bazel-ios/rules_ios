@@ -10,7 +10,7 @@
 		</data>
 		<key>Headers/BasicXCFrameworkDynamic-Swift.h</key>
 		<data>
-		ne6DeNXZEvKF2Q8V/wx0sArFTnA=
+		xT9czTu23R9CY/8KqwPtd7c6IbQ=
 		</data>
 		<key>Headers/BasicXCFrameworkDynamic.h</key>
 		<data>
@@ -18,7 +18,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		/ozZnGIFWCpe6j13osZzHv3X1qI=
+		oo68NZ39TH4wIDGvmmmi+NDmLRs=
 		</data>
 		<key>Modules/BasicXCFrameworkDynamic.swiftmodule/arm64-apple-ios.abi.json</key>
 		<data>
@@ -26,19 +26,19 @@
 		</data>
 		<key>Modules/BasicXCFrameworkDynamic.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
 		<data>
-		3m9M+qie7wZO8KFPvNuKXMzP4rU=
+		UZ1fAU8xWnogPwuSvwH1xh1DXR0=
 		</data>
 		<key>Modules/BasicXCFrameworkDynamic.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<data>
-		TUrKMT9Gkk3flhh8+HoG9Z6Plug=
+		hayy7IXdmeammLmE/A1oGEoNZIU=
 		</data>
 		<key>Modules/BasicXCFrameworkDynamic.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<data>
-		3m9M+qie7wZO8KFPvNuKXMzP4rU=
+		UZ1fAU8xWnogPwuSvwH1xh1DXR0=
 		</data>
 		<key>Modules/BasicXCFrameworkDynamic.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		AXsgoRwe+QHc1vbX2RQ94spNFVg=
+		WFOoK1tfS3YKF6zSYW2Fjl+/k/o=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -62,11 +62,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			ne6DeNXZEvKF2Q8V/wx0sArFTnA=
+			xT9czTu23R9CY/8KqwPtd7c6IbQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			PqbSTMlJcpsK+AjtO9ow/f+swGigXeBLAi3dGGa4jJ4=
+			AUHMnT0zKZST8Nzc/dfkNAq9YPkr6Gy7nJEpSuD51OQ=
 			</data>
 		</dict>
 		<key>Headers/BasicXCFrameworkDynamic.h</key>
@@ -95,44 +95,44 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			3m9M+qie7wZO8KFPvNuKXMzP4rU=
+			UZ1fAU8xWnogPwuSvwH1xh1DXR0=
 			</data>
 			<key>hash2</key>
 			<data>
-			flSeI0SNvvoZQSXflfsdLE7i5uBg8X/BZU6NdL3Zq54=
+			nqyqAh96uJlYz6sZY3mGJyhSG/T6ORCnk95M5r0W4Zc=
 			</data>
 		</dict>
 		<key>Modules/BasicXCFrameworkDynamic.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			TUrKMT9Gkk3flhh8+HoG9Z6Plug=
+			hayy7IXdmeammLmE/A1oGEoNZIU=
 			</data>
 			<key>hash2</key>
 			<data>
-			5Wnh91b+31BU7MA9M6G968FDDUBIc5ihpj+AxH6ot0U=
+			Wre4pQUwmXvpvPog3cAxxyw71UAJhK+f9+S/mnkqElw=
 			</data>
 		</dict>
 		<key>Modules/BasicXCFrameworkDynamic.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			3m9M+qie7wZO8KFPvNuKXMzP4rU=
+			UZ1fAU8xWnogPwuSvwH1xh1DXR0=
 			</data>
 			<key>hash2</key>
 			<data>
-			flSeI0SNvvoZQSXflfsdLE7i5uBg8X/BZU6NdL3Zq54=
+			nqyqAh96uJlYz6sZY3mGJyhSG/T6ORCnk95M5r0W4Zc=
 			</data>
 		</dict>
 		<key>Modules/BasicXCFrameworkDynamic.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			AXsgoRwe+QHc1vbX2RQ94spNFVg=
+			WFOoK1tfS3YKF6zSYW2Fjl+/k/o=
 			</data>
 			<key>hash2</key>
 			<data>
-			ECQBrZC/TpeSWaA0QVLXbow/Xfb6oqn0WZqH1pTUipY=
+			ebfYFg6ObkYW9jGLTxhge5SrA4nGhnTEe1zW/ndBNXk=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
