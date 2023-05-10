@@ -13,6 +13,8 @@ breeze.
 
 _Learn more at [bazel-ios.github.io](https://bazel-ios.github.io/)_
 
+_Looking for the CocoaPods/Carthage rules?_ [See this section](#cocoapods-and-carthage).
+
 ## Reference documentation
 
 [Click here](https://github.com/bazel-ios/rules_ios/tree/master/docs)
@@ -198,3 +200,10 @@ Debugging does not work in sandbox mode, due to issue [#108](https://github.com/
 Bazel version required by current rules is [here](https://github.com/bazel-ios/rules_ios/blob/master/.bazelversion)
 
 **Xcode 13** and above supported, to find the last `SHA` with support for older versions see the list of git tags.
+
+## CocoaPods and Carthage
+
+The existing CocoaPods and Carthage rules have been removed for maintenance reasons, instead use these other solutions:
+
+- For CocoaPods: [cocoapods-bazel](https://github.com/bazel-ios/cocoapods-bazel)
+- For Carthage: [apple_framework_import](https://github.com/bazelbuild/rules_apple/blob/master/doc/rules-apple.md#apple_dynamic_framework_import)

@@ -17,8 +17,7 @@ echo "build --jobs=4" >> user.bazelrc
 echo "build --spawn_strategy=standalone" >> user.bazelrc
 echo "build --xcode_version_config=//:host_xcodes" >> user.bazelrc
 
-# `deleted_packages` is needed below in order to override the value of the .bazelrc file
-echo "build:ios --apple_platform_type=ios --deleted_packages=''" >> user.bazelrc
+echo "build:ios --apple_platform_type=ios" >> user.bazelrc
 
 # Remote cache
 echo "build --remote_cache=grpcs://remote.buildbuddy.io" >> user.bazelrc
