@@ -1,4 +1,4 @@
- def _add_to_dict_if_present(dict, key, value):
+def _add_to_dict_if_present(dict, key, value):
     if value:
         dict[key] = value
 
