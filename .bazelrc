@@ -54,9 +54,9 @@ build:ios_multi_arch_test --ios_minimum_os=10.2
 build:ios_multi_arch_test --ios_multi_cpus=i386,x86_64
 
 # - Remote cache configuration
-build:cache --remote_cache=grpcs://remote.buildbuddy.io
-build:cache --remote_timeout=3600
-build:cache --modify_execution_info=^(BitcodeSymbolsCopy|BundleApp|BundleTreeApp|DsymDwarf|DsymLipo|GenerateAppleSymbolsFile|ObjcBinarySymbolStrip|CppLink|ObjcLink|ProcessAndSign|SignBinary|SwiftArchive|SwiftStdlibCopy)$=+no-remote,^(BundleResources|ImportedDynamicFrameworkProcessor)$=+no-remote-exec
+build:remote_cache --remote_cache=grpcs://remote.buildbuddy.io
+build:remote_cache --remote_timeout=3600
+build:remote_cache --modify_execution_info=^(BitcodeSymbolsCopy|BundleApp|BundleTreeApp|DsymDwarf|DsymLipo|GenerateAppleSymbolsFile|ObjcBinarySymbolStrip|CppLink|ObjcLink|ProcessAndSign|SignBinary|SwiftArchive|SwiftStdlibCopy)$=+no-remote,^(BundleResources|ImportedDynamicFrameworkProcessor)$=+no-remote-exec
 
 # - CI Configuration
 # disable curses control since CI logs are not interactive

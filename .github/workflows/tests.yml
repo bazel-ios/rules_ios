@@ -91,7 +91,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Select Xcode
         run: .github/workflows/xcode_select.sh
-      - name: Build and Test
+      - name: Build
         run: |
           # iOS tests
           bazelisk build \
@@ -114,7 +114,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Select Xcode
         run: .github/workflows/xcode_select.sh
-      - name: Build and Test
+      - name: Build
         run: |
           bazelisk build \
             --config=ci \
@@ -187,6 +187,7 @@ jobs:
           bazelisk test \
             --config=ci \
             --config=ios_lldb_test \
+            -- \
             tests/ios/lldb/app:objc_app_po_test \
             tests/ios/lldb/app:objc_app_variable_test
 
@@ -208,4 +209,5 @@ jobs:
           bazelisk build \
             --config=ci \
             --config=ios_multi_arch_test \
+            -- \
             tests/ios/app/App
