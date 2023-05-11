@@ -55,29 +55,9 @@ def _merge_dynamic_framework_providers(dynamic_framework_providers):
 
     return apple_common.new_dynamic_framework_provider(**fields)
 
-def _merge_cc_info_providers(cc_info_providers, merge_keys = [
-    "headers",
-    "includes",
-    "defines",
-]):
-    fields = {}
-    for key in merge_keys:
-        set = depset(
-            direct = [],
-            # Note:  we may want to merge this with the below inputs?
-            transitive = [getattr(dep.compilation_context, key) for dep in cc_info_providers],
-        )
-        _add_to_dict_if_present(fields, key, set)
-
-    # We don't use this on Bazel 4-5 for now
-    linking_context = cc_common.create_linking_context(linker_inputs = depset())
-    compilation_context = cc_common.create_compilation_context(**fields)
-    return CcInfo(compilation_context = compilation_context, linking_context = linking_context)
-
 objc_provider_utils = struct(
     merge_objc_providers_dict = _merge_objc_providers_dict,
     merge_objc_providers = _merge_objc_providers,
-    merge_cc_info_providers = _merge_cc_info_providers,
     merge_dynamic_framework_providers = _merge_dynamic_framework_providers,
     add_to_dict_if_present = _add_to_dict_if_present,
 )
