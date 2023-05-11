@@ -22,7 +22,7 @@ jobs:
       - name: Build and Test
         run: |
           # Host config
-          bazelisk test --local_test_jobs=1 -- //... -//tests/ios/...
+          bazelisk test --compilation_mode=opt --local_test_jobs=1 -- //... -//tests/ios/...
 
           # Clean up after simctl (https://github.com/bazelbuild/rules_apple/issues/185)
           pgrep Simulator | xargs kill || true
@@ -30,7 +30,7 @@ jobs:
           # Create single ephemeral iOS sim
           SIMULATOR_UDID=$(./tools/tests/prepare_sim.py)
 
-          bazelisk test \
+          bazelisk test --compilation_mode=opt \
             --local_test_jobs=1 \
             --apple_platform_type=ios \
             --test_arg=--destination=platform=ios_simulator,id=$SIMULATOR_UDID \
@@ -53,9 +53,9 @@ jobs:
       - name: Build and Test
         run: |
           # Host config
-          bazelisk build --features apple.virtualize_frameworks --local_test_jobs=1 -- //... -//tests/ios/...
+          bazelisk build --compilation_mode=opt --features apple.virtualize_frameworks --local_test_jobs=1 -- //... -//tests/ios/...
 
-          bazelisk build --features apple.virtualize_frameworks \
+          bazelisk build --compilation_mode=opt --features apple.virtualize_frameworks \
               --local_test_jobs=1 \
               --apple_platform_type=ios \
               -- //tests/ios/...
@@ -76,7 +76,7 @@ jobs:
       - name: Build and Test
         run: |
           export USE_BAZEL_VERSION=5.3.2
-          bazelisk build --features apple.virtualize_frameworks \
+          bazelisk build --compilation_mode=opt --features apple.virtualize_frameworks \
               --config=ios \
               -- //tests/ios/...
       - uses: actions/upload-artifact@v2
@@ -94,14 +94,14 @@ jobs:
         run: .github/workflows/xcode_select.sh
       - name: Build and Test
         run: |
-          bazelisk build \
+          bazelisk build --compilation_mode=opt \
             --ios_multi_cpus=sim_arm64  \
             --features apple.virtualize_frameworks \
             -- //... -//tests/ios/...
 
           # Misc issues:
           #   - Fails on a non fat framework for //tests/ios/unit-test/test-imports-app/
-          bazelisk build \
+          bazelisk build --compilation_mode=opt \
             --ios_multi_cpus=sim_arm64 \
             --features apple.virtualize_frameworks \
             --apple_platform_type=ios \
