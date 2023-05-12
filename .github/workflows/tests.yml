@@ -21,8 +21,12 @@ jobs:
         run: .github/workflows/xcode_select.sh
       - name: Build and Test
         run: |
-          # Host config
-          bazelisk test --local_test_jobs=1 -- //... -//tests/ios/...
+          # non-iOS tests
+          bazelisk test \
+            --config=ci \
+            -- \
+            //... \
+            -//tests/ios/...
 
           # Clean up after simctl (https://github.com/bazelbuild/rules_apple/issues/185)
           pgrep Simulator | xargs kill || true
@@ -30,16 +34,20 @@ jobs:
           # Create single ephemeral iOS sim
           SIMULATOR_UDID=$(./tools/tests/prepare_sim.py)
 
+          # iOS tests
           bazelisk test \
-            --local_test_jobs=1 \
-            --apple_platform_type=ios \
+            --config=ci \
+            --config=ios \
             --test_arg=--destination=platform=ios_simulator,id=$SIMULATOR_UDID \
-            -- //tests/ios/...
+            -- \
+            //tests/ios/...
+
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
           name: bazel-testlogs
           path: bazel-testlogs
+
   build_virtual_frameworks:
     # Build the entire tree with this feature enabled. Longer term, we'll likely
     # consider merging this feature into the default behavior and can re-align
@@ -52,13 +60,21 @@ jobs:
         run: .github/workflows/xcode_select.sh
       - name: Build and Test
         run: |
-          # Host config
-          bazelisk build --features apple.virtualize_frameworks --local_test_jobs=1 -- //... -//tests/ios/...
+          # non-iOS tests
+          bazelisk test \
+            --config=ci \
+            --config=vfs \
+            -- \
+            //... \
+            -//tests/ios/...
 
-          bazelisk build --features apple.virtualize_frameworks \
-              --local_test_jobs=1 \
-              --apple_platform_type=ios \
-              -- //tests/ios/...
+          # iOS tests
+          bazelisk test \
+            --config=ci \
+            --config=ios \
+            --config=vfs \
+            -- \
+            //tests/ios/...
 
       - uses: actions/upload-artifact@v2
         if: failure()
@@ -69,16 +85,22 @@ jobs:
   lts_ios_integration_tests:
     name: Build and Test ( Virtual Frameworks + LTS )
     runs-on: macos-12
+    env:
+      USE_BAZEL_VERSION: 5.3.2
     steps:
       - uses: actions/checkout@v3
       - name: Select Xcode
         run: .github/workflows/xcode_select.sh
       - name: Build and Test
         run: |
-          export USE_BAZEL_VERSION=5.3.2
-          bazelisk build --features apple.virtualize_frameworks \
-              --config=ios \
-              -- //tests/ios/...
+          # iOS tests
+          bazelisk build \
+            --config=ci \
+            --config=ios \
+            --config=vfs \
+            -- \
+            //tests/ios/...
+
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
@@ -95,17 +117,23 @@ jobs:
       - name: Build and Test
         run: |
           bazelisk build \
+            --config=ci \
+            --config=vfs \
             --ios_multi_cpus=sim_arm64  \
-            --features apple.virtualize_frameworks \
-            -- //... -//tests/ios/...
+            -- \
+            //... \
+            -//tests/ios/...
 
           # Misc issues:
           #   - Fails on a non fat framework for //tests/ios/unit-test/test-imports-app/
           bazelisk build \
+            --config=ci \
+            --config=ios \
+            --config=vfs \
             --ios_multi_cpus=sim_arm64 \
-            --features apple.virtualize_frameworks \
-            --apple_platform_type=ios \
-            -- //tests/ios/... -//tests/ios/unit-test/test-imports-app/...
+            -- \
+            //tests/ios/... \
+            -//tests/ios/unit-test/test-imports-app/...
 
       - uses: actions/upload-artifact@v2
         if: failure()
@@ -113,7 +141,7 @@ jobs:
           name: bazel-testlogs
           path: bazel-testlogs
 
-  buildifier:
+  lint:
     name: Check Starlark and Docs
     runs-on: macos-12
     steps:
@@ -122,9 +150,16 @@ jobs:
         run: .github/workflows/xcode_select.sh
         # Note: we need to pass the absolute to the Bazel run
       - name: buildifier
-        run: find $PWD -type f \( -name 'WORKSPACE' -o -name '*.bzl' -o -name '*.bazel' \) | xargs bazel run buildifier -- -lint=fix && git diff --exit-code
+        run: |
+          find $PWD -type f \( -name 'WORKSPACE' -o -name '*.bzl' -o -name '*.bazel' \) | xargs bazel run //:buildifier -- -lint=fix
+          git diff --exit-code
       - name: Check docs
-        run: bazelisk run docs && git diff --exit-code docs
+        run: |
+          bazelisk run \
+            --config=ci \
+            //docs
+          git diff --exit-code docs
+
   xcodeproj_tests:
     name: .xcodeproj Tests on Xcode 14.2.0
     runs-on: macos-12
@@ -148,12 +183,20 @@ jobs:
       - name: Select Xcode 14.2.0
         run: .github/workflows/xcode_select.sh
       - name: Run tests
-        run: bazelisk test tests/ios/lldb/app:objc_app_po_test  tests/ios/lldb/app:objc_app_variable_test --config lldb_ios_test
+        run: |
+          bazelisk test \
+            --config=ci \
+            --config=ios_lldb_test \
+            -- \
+            tests/ios/lldb/app:objc_app_po_test \
+            tests/ios/lldb/app:objc_app_variable_test
+
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
           name: bazel-testlogs
           path: bazel-testlogs
+
   multi_arch_support:
     name: Build iOS App for Multiple Architecture
     runs-on: macos-12
@@ -162,4 +205,9 @@ jobs:
       - name: Select Xcode
         run: .github/workflows/xcode_select.sh
       - name: Build App
-        run: bazelisk build -s tests/ios/app/App --apple_platform_type=ios --ios_minimum_os=10.2  --ios_multi_cpus=i386,x86_64
+        run: |
+          bazelisk build \
+            --config=ci \
+            --config=ios_multi_arch_test \
+            -- \
+            tests/ios/app/App
