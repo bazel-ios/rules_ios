@@ -41,7 +41,7 @@ def _private_headers_impl(ctx):
 _private_headers = rule(
     implementation = _private_headers_impl,
     attrs = {
-        "headers": attr.label_list(mandatory = True, allow_files = [".h", ".hh", ".hpp"]),
+        "headers": attr.label_list(mandatory = True, allow_files = [".inc", ".h", ".hh", ".hpp"]),
     },
 )
 
