@@ -783,10 +783,8 @@ def _set_target_settings_by_config(ctx, target_settings):
 
     return updated_target_settings
 
-def _xcodeproj_is_mixed(targets):
-    all_srcs = []
-    for t in targets:
-        all_srcs.extend(t.srcs.to_list() + t.non_arc_srcs.to_list())
+def _target_is_mixed(target_info):
+    all_srcs = target_info.srcs.to_list() + target_info.non_arc_srcs.to_list()
     has_swift = len([s for s in all_srcs if s.path.endswith(".swift")]) > 0
     has_objc = len([s for s in all_srcs if s.path.endswith(".m") or s.path.endswith(".h")]) > 0
     return has_swift and has_objc
@@ -808,9 +806,9 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
     """
     xcodeproj_targets_by_name = {}
     xcodeproj_schemes_by_name = {}
-    mixed = _xcodeproj_is_mixed(targets)
 
     for target_info in targets:
+        mixed = _target_is_mixed(target_info)
         target_name = target_info.name
         product_type = target_info.product_type
         lldbinit_file = "$CONFIGURATION_TEMP_DIR/%s.lldbinit" % target_name
