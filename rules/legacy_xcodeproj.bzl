@@ -364,8 +364,8 @@ def _xcodeproj_aspect_impl(target, ctx):
                 swift_defines = depset([], transitive = swift_defines),
                 direct_srcs = srcs,
                 hmap_paths = depset(hmap_paths),
-                swift_copts = depset(direct = swift_copts),
-                objc_copts = depset(direct = objc_copts),
+                swift_copts = depset(direct = swift_copts, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "swift_copts")),
+                objc_copts = depset(direct = objc_copts, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "objc_copts")),
                 swift_module_paths = depset(swift_module_paths, transitive = _get_attr_values_for_name(deps, _SrcsInfo, "swift_module_paths")),
             ),
         )
@@ -595,14 +595,8 @@ def _header_search_paths_for_target(target_name, all_transitive_targets):
     header_search_paths.append("\"$BAZEL_WORKSPACE_ROOT\"")
     return " ".join(header_search_paths)
 
-def _swift_copts_for_target(target_name, all_transitive_targets, mixed = False):
+def _swift_copts_for_target(target_name, all_transitive_targets):
     copts = []
-    if mixed:
-        copts = [
-            "-import-underlying-module",
-            "-Xcc",
-            "-Wno-error=non-modular-include-in-framework-module",
-        ]
     for at in all_transitive_targets:
         # Returns the first matching targets - consider finding this in another
         # routine
@@ -783,12 +777,6 @@ def _set_target_settings_by_config(ctx, target_settings):
 
     return updated_target_settings
 
-def _target_is_mixed(target_info):
-    all_srcs = target_info.srcs.to_list() + target_info.non_arc_srcs.to_list()
-    has_swift = len([s for s in all_srcs if s.path.endswith(".swift")]) > 0
-    has_objc = len([s for s in all_srcs if s.path.endswith(".m") or s.path.endswith(".h")]) > 0
-    return has_swift and has_objc
-
 def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_transitive_targets):
     """Helper method to generate dicts for targets and schemes inside Xcode context
 
@@ -808,7 +796,6 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
     xcodeproj_schemes_by_name = {}
 
     for target_info in targets:
-        mixed = _target_is_mixed(target_info)
         target_name = target_info.name
         product_type = target_info.product_type
         lldbinit_file = "$CONFIGURATION_TEMP_DIR/%s.lldbinit" % target_name
@@ -844,7 +831,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
 
         virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
         if virtualize_frameworks:
-            target_settings["OTHER_SWIFT_FLAGS"] = _swift_copts_for_target(target_name, all_transitive_targets, mixed)
+            target_settings["OTHER_SWIFT_FLAGS"] = _swift_copts_for_target(target_name, all_transitive_targets)
             target_settings["OTHER_CFLAGS"] = _objc_copts_for_target(target_name, all_transitive_targets)
         else:
             target_settings["BAZEL_SWIFTMODULEFILES_TO_COPY"] = _swiftmodulepaths_for_target(target_name, all_transitive_targets)
