@@ -721,16 +721,6 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         ),
     )
     processor_partials.append(
-        partials.bitcode_symbols_partial(
-            actions = actions,
-            binary_artifact = binary_artifact,
-            bitcode_symbol_maps = debug_outputs.bitcode_symbol_maps,
-            dependency_targets = dep_frameworks,
-            label_name = label.name,
-            platform_prerequisites = platform_prerequisites,
-        ),
-    )
-    processor_partials.append(
         partials.codesigning_dossier_partial(
             actions = actions,
             apple_mac_toolchain_info = apple_mac_toolchain_info,
