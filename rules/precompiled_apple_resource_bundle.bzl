@@ -121,7 +121,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     control_files = []
     input_files = []
     output_files = []
-    output_bundle_dir = ctx.actions.declare_directory(paths.join(ctx.attr.name, bundle_name + ".bundle"))
+    output_bundle_dir = ctx.actions.declare_directory(paths.join(ctx.attr.name, bundle_name + ctx.attr.bundle_extension))
 
     # Need getattr since the partial_ouput struct will be empty when there are no resources.
     # Even so, we want to generate a resource bundle for compatibility.
@@ -252,7 +252,7 @@ _precompiled_apple_resource_bundle = rule(
         ),
         bundle_extension = attr.string(
             mandatory = False,
-            default = "bundle",
+            default = ".bundle",
             doc = "The extension of the resource bundle.",
         ),
         platforms = attr.string_dict(
