@@ -82,6 +82,8 @@ def ios_application(
         namespace_is_module_name = False,
         platforms = {"ios": application_kwargs.get("minimum_os_version")},
         testonly = testonly,
+        xcconfig = xcconfig,
+        xcconfig_by_build_setting = xcconfig_by_build_setting,
         **kwargs
     )
 
