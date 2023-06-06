@@ -197,18 +197,7 @@ int hmap_save(HeaderMap* hmap, char* path) {
         perror(path);
         rc = 1;
     }
-
-    // Don't fsync if it failed
-    if (rc != 1 && fsync(fd) < 0) {
-        perror(path);
-        rc = 1;
-    }
-
-    // Close regardless of failure
-    if (close(fd)) {
-        perror(path);
-        rc = 1;
-    }
+    close(fd);
     return rc;
 }
 
