@@ -32,7 +32,11 @@ def _make_hmap(actions, headermap_builder, output, namespace, hdrs_lists):
     args.set_param_file_format(format = "multiline")
     args.use_param_file("@%s")
 
+    inputs = []
+    for h in hdrs_lists:
+        inputs.extend(h)
     actions.run(
+        inputs = inputs,
         mnemonic = "HmapCreate",
         arguments = [args],
         executable = headermap_builder,
