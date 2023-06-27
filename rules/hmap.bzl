@@ -19,6 +19,7 @@ def _make_hmap(actions, headermap_builder, output, namespace, hdrs_lists):
         namespace: the prefix to be used for header imports
         hdrs_lists: an array of enumerables containing headers to be added to the hmap
     """
+    inputs = []
 
     args = actions.args()
     if namespace:
@@ -28,11 +29,13 @@ def _make_hmap(actions, headermap_builder, output, namespace, hdrs_lists):
 
     for hdrs in hdrs_lists:
         args.add_all(hdrs)
+        inputs.extend(hdrs)
 
     args.set_param_file_format(format = "multiline")
     args.use_param_file("@%s")
 
     actions.run(
+        inputs = inputs,
         mnemonic = "HmapCreate",
         arguments = [args],
         executable = headermap_builder,
