@@ -330,6 +330,8 @@ def _get_framework_files(ctx, deps):
     swiftdoc_out = None
     infoplist_in = None
     infoplist_out = None
+    symbol_graph_in = None
+    symbol_graph_out = None
 
     # collect files
     for dep in deps:
@@ -386,6 +388,11 @@ def _get_framework_files(ctx, deps):
                     elif hdr.path.endswith(".modulemap"):
                         modulemap_in = hdr
 
+        # If theres a symbol graph, we need to copy it over
+        if dep.output_groups and hasattr(dep.output_groups, "swift_symbol_graph"):
+            symbol_graph_in = dep.output_groups.swift_symbol_graph.to_list()[0]
+            symbol_graph_out = paths.join(framework_dir, framework_name + ".symbolgraph")
+
         if not has_header:
             # only thing is the generated module map -- we don't want it
             continue
@@ -435,6 +442,7 @@ def _get_framework_files(ctx, deps):
     swiftinterface_out = _framework_packaging_single(ctx, "swiftinterface", [swiftinterface_in], swiftinterface_out, framework_manifest)
     swiftdoc_out = _framework_packaging_single(ctx, "swiftdoc", [swiftdoc_in], swiftdoc_out, framework_manifest)
     infoplist_out = _framework_packaging_single(ctx, "infoplist", [infoplist_in], infoplist_out, framework_manifest)
+    symbol_graph_out = _framework_packaging_single(ctx, "symbol_graph", [symbol_graph_in], symbol_graph_out, framework_manifest)
 
     outputs = struct(
         binary = binary_out,
@@ -446,6 +454,7 @@ def _get_framework_files(ctx, deps):
         swiftdoc = swiftdoc_out,
         swiftinterface = swiftinterface_out,
         manifest = framework_manifest,
+        symbol_graph = symbol_graph_out,
     )
 
     inputs = struct(
@@ -456,6 +465,7 @@ def _get_framework_files(ctx, deps):
         swiftmodule = swiftmodule_in,
         swiftdoc = swiftdoc_in,
         swiftinterface = swiftinterface_in,
+        symbol_graph = symbol_graph_in,
     )
     return struct(inputs = inputs, outputs = outputs)
 
@@ -528,6 +538,7 @@ def _copy_swiftmodule(ctx, framework_files):
         swiftdoc = outputs.swiftdoc,
         swiftmodule = outputs.swiftmodule,
         swiftinterface = outputs.swiftinterface,
+        symbol_graph = outputs.symbol_graph,
     )
 
     if swiftmodule_name != ctx.attr.framework_name:
@@ -538,6 +549,7 @@ def _copy_swiftmodule(ctx, framework_files):
             swiftdoc = inputs.swiftdoc,
             swiftmodule = inputs.swiftmodule,
             swiftinterface = inputs.swiftinterface,
+            symbol_graph = inputs.symbol_graph,
         )
 
     return [
