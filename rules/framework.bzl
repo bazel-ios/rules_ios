@@ -525,6 +525,20 @@ def _get_symlinked_framework_clean_action(ctx, framework_files, compilation_cont
     else:
         ctx.actions.write(framework_manifest, "# Empty framework\n")
 
+def _create_swiftmodule(attrs):
+    kwargs = {}
+
+    # The upstream code will try collect it - it will be None when non existent
+    if attrs.symbol_graph:
+        kwargs["symbol_graph"] = attrs.symbol_graph
+
+    return swift_common.create_swift_module(
+        swiftdoc = attrs.swiftdoc,
+        swiftmodule = attrs.swiftmodule,
+        swiftinterface = attrs.swiftinterface,
+        **kwargs
+    )
+
 def _copy_swiftmodule(ctx, framework_files):
     inputs = framework_files.inputs
     outputs = framework_files.outputs
@@ -534,23 +548,13 @@ def _copy_swiftmodule(ctx, framework_files):
 
     # need to include the swiftmodule here, even though it will be found through the framework search path,
     # since swift_library needs to know that the swiftdoc is an input to the compile action
-    swift_module = swift_common.create_swift_module(
-        swiftdoc = outputs.swiftdoc,
-        swiftmodule = outputs.swiftmodule,
-        swiftinterface = outputs.swiftinterface,
-        symbol_graph = outputs.symbol_graph,
-    )
+    swift_module = _create_swiftmodule(outputs)
 
     if swiftmodule_name != ctx.attr.framework_name:
         # Swift won't find swiftmodule files inside of frameworks whose name doesn't match the
         # module name. It's annoying (since clang finds them just fine), but we have no choice but to point to the
         # original swift module/doc, so that swift can find it.
-        swift_module = swift_common.create_swift_module(
-            swiftdoc = inputs.swiftdoc,
-            swiftmodule = inputs.swiftmodule,
-            swiftinterface = inputs.swiftinterface,
-            symbol_graph = inputs.symbol_graph,
-        )
+        swift_module = _create_swiftmodule(inputs)
 
     return [
         # only add the swift module, the objc modulemap is already listed as a header,
