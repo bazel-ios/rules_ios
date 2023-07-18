@@ -64,17 +64,19 @@ def rules_ios_dependencies(
     Args:
         load_xchammer_dependencies: if `True` loads XCHammer and xcbuildkit dependencies (this is considered "alpha" software at the moment, see `README`)
     """
-    _maybe(
-        github_repo,
-        name = "build_bazel_rules_swift",
-        project = "bazelbuild",
-        ref = "17e20f7edf27e647f1b45f11ed75d51c17820c3b",
-        repo = "rules_swift",
-        sha256 = "d50c2cb6f1c2c30cf44a8ea60469cd399f7458061169bde76a177b63d6b74330",
-    )
-
     bazel_version = _get_bazel_version()
     if bazel_version.major == "5":
+        # Minimum commit vetted of rules_swift - not necessarily exclusive with
+        # this bazel version or rules_apple version but tested on CI as so.
+        _maybe(
+            github_repo,
+            name = "build_bazel_rules_swift",
+            project = "bazel-ios",
+            ref = "e0272df7d98a563c07aa2e78722cd8ce62549864",
+            repo = "rules_swift",
+            sha256 = "006743d481c477928796ad985ba32b591f5926cd590d32b207e018049b569594",
+        )
+
         # LTS support. Some of our third party deps from bazelbuild org don't
         # support LTS but from time to time we'll evaluate supporting this to
         # allow us to all run on HEAD
@@ -88,6 +90,15 @@ def rules_ios_dependencies(
             sha256 = "1618fc82e556ebc97ea360b8cacd3365ca3b0e0a85ccb32422468204843e752d",
         )
     else:
+        _maybe(
+            github_repo,
+            name = "build_bazel_rules_swift",
+            project = "bazelbuild",
+            ref = "17e20f7edf27e647f1b45f11ed75d51c17820c3b",
+            repo = "rules_swift",
+            sha256 = "d50c2cb6f1c2c30cf44a8ea60469cd399f7458061169bde76a177b63d6b74330",
+        )
+
         _maybe(
             github_repo,
             name = "build_bazel_rules_apple",
