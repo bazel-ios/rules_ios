@@ -11,6 +11,23 @@ If you are a maintainer of the repository and would like to tag a new release, f
 - Type in a version number, follow SemVer whenever possible.
 - After a few minutes the release should show up in the [Releases](https://github.com/bazel-ios/rules_ios/releases) page.
 
+## Updating Xcode fixtures
+
+Check the output of `find . -name '*.xcodeproj'` and note that there are many `.xcodeproj` fixtures used to ensure we catch regressions as changes that affect the Xcode project generator are made. If you made such changes and want to update the fixtures before opening a PR run:
+```sh
+./tests/xcodeproj-tests.sh --update
+```
+
+**IMPORTANT**: If you're on Intel the command above should generally "just work" but if you're on Apple Silicon you have to ensure your `bazelisk` installation is a `FAT` file so the script can select the `x86_64` architecture and generate the correct fixtures. In other words the command
+```sh
+lipo -info $(which bazelisk)
+```
+should return something like this
+```sh
+Architectures in the fat file: path/to/bazelisk are: x86_64 arm64
+```
+otherwise you won't be able to update fixtures locally.
+
 ## Bazel 6 & LTS Support
 
 ### 5.x.x LTS Support on HEAD

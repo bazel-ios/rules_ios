@@ -4,3 +4,5 @@ load("//rules:plists_test.bzl", "plists_test_suite")
 xcconfig_test_suite(name = "xcconfig_test")
 
 plists_test_suite(name = "plists_test")
+
+exports_files(["wrapped_bazelisk.sh"])

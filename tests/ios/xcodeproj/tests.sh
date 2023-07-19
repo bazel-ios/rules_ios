@@ -2,10 +2,6 @@ set -eux
 
 cd $(dirname $0)
 
-if [[ "$(arch)" == "arm"* ]]; then
-    echo -e "warning: rerun where Bazel is an x64_64 bazel:\narch -arch x86_64 /bin/bash -l -c \"$0 ${@}\""
-fi
-
 xcrun simctl list devices \
 | grep -q rules_ios:iPhone-14 || \
         xcrun simctl create "rules_ios:iPhone-14" \

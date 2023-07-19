@@ -127,8 +127,9 @@ cat <<'EOS' > $@
 #!/bin/sh
 set -euxo pipefail
 rm -fr {package_name}/{target_name}.xcodeproj
-bazelisk run {package_name}:{target_name}
-bazelisk run {package_name}:{target_name}
+source tests/wrapped_bazelisk.sh
+wrapped_bazelisk run {package_name}:{target_name}
+wrapped_bazelisk run {package_name}:{target_name}
 EOS
     """.format(
         package_name = package_name(),
@@ -147,8 +148,9 @@ cat <<'EOS' > $@
 #!/bin/sh
 set -euxo pipefail
 rm -fr {package_name}/{target_name}.xcodeproj
-bazelisk run {package_name}:{target_name}
-bazelisk run {package_name}:{target_name}
+source tests/wrapped_bazelisk.sh
+wrapped_bazelisk run {package_name}:{target_name}
+wrapped_bazelisk run {package_name}:{target_name}
 EOS
     """.format(
         package_name = package_name(),

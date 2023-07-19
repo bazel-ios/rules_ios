@@ -2,18 +2,20 @@
 
 set -euo pipefail
 
+source tests/wrapped_bazelisk.sh
+
 test_macos() {
     echo ".xcodeproj Tests for Mac OS platform"
-    bazelisk query 'kind("xcodeproj rule", tests/macos/xcodeproj/...)' | xargs -n 1 bazelisk run
-    bazelisk query 'attr(executable, 1, kind(genrule, tests/macos/xcodeproj/...))' | xargs -n 1 bazelisk run
+    wrapped_bazelisk query 'kind("xcodeproj rule", tests/macos/xcodeproj/...)' | xargs -n 1 /bin/bash -c 'wrapped_bazelisk run "$@"' _
+    wrapped_bazelisk query 'attr(executable, 1, kind(genrule, tests/macos/xcodeproj/...))' | xargs -n 1 /bin/bash -c 'wrapped_bazelisk run "$@"' _
     ./tests/macos/xcodeproj/build.sh
     ./tests/macos/xcodeproj/tests.sh
 }
 
 test_simulator() {
     echo ".xcodeproj Tests for iOS platform (simulator)"
-    bazelisk query 'kind("xcodeproj rule", tests/ios/xcodeproj/...)' | xargs -n 1 bazelisk run
-    bazelisk query 'attr(executable, 1, kind(genrule, tests/ios/xcodeproj/...))' | xargs -n 1 bazelisk run
+    wrapped_bazelisk query 'kind("xcodeproj rule", tests/ios/xcodeproj/...)' | xargs -n 1 /bin/bash -c 'wrapped_bazelisk run "$@"' _
+    wrapped_bazelisk query 'attr(executable, 1, kind(genrule, tests/ios/xcodeproj/...))' | xargs -n 1 /bin/bash -c 'wrapped_bazelisk run "$@"' _
     ./tests/ios/xcodeproj/pre_build_check.sh
     ./tests/ios/xcodeproj/build.sh simulator
     ./tests/ios/xcodeproj/post_build_check.sh simulator
@@ -34,7 +36,7 @@ test_custom_output() {
 
 test_build_for_device() {
     XCODE_PROJ_NAME="Test-BuildForDevice-Project"
-    bazelisk run //tests/ios/xcodeproj:$XCODE_PROJ_NAME --ios_multi_cpus=arm64
+    wrapped_bazelisk run //tests/ios/xcodeproj:$XCODE_PROJ_NAME --ios_multi_cpus=arm64
 
     ./tests/ios/xcodeproj/pre_build_check.sh $XCODE_PROJ_NAME
     ./tests/ios/xcodeproj/build.sh device $XCODE_PROJ_NAME
@@ -73,25 +75,12 @@ clean_projects() {
 
 update() {
     echo "Updating projects."
-    bazelisk query 'kind("xcodeproj rule", tests/macos/xcodeproj/...)' | xargs -n 1 bazelisk run
-    bazelisk query 'attr(executable, 1, kind(genrule, tests/macos/xcodeproj/...))' | xargs -n 1 bazelisk run
-    bazelisk query 'kind("xcodeproj rule", tests/ios/xcodeproj/...)' | xargs -n 1 bazelisk run
-    bazelisk query 'attr(executable, 1, kind(genrule, tests/ios/xcodeproj/...))' | xargs -n 1 bazelisk run
-    bazelisk run //tests/ios/xcodeproj:Test-BuildForDevice-Project --ios_multi_cpus=arm64
+    wrapped_bazelisk query 'kind("xcodeproj rule", tests/macos/xcodeproj/...)' | xargs -n 1 /bin/bash -c 'wrapped_bazelisk run "$@"' _
+    wrapped_bazelisk query 'attr(executable, 1, kind(genrule, tests/macos/xcodeproj/...))' | xargs -n 1 /bin/bash -c 'wrapped_bazelisk run "$@"' _
+    wrapped_bazelisk query 'kind("xcodeproj rule", tests/ios/xcodeproj/...)' | xargs -n 1 /bin/bash -c 'wrapped_bazelisk run "$@"' _
+    wrapped_bazelisk query 'attr(executable, 1, kind(genrule, tests/ios/xcodeproj/...))' | xargs -n 1 /bin/bash -c 'wrapped_bazelisk run "$@"' _
+    wrapped_bazelisk run //tests/ios/xcodeproj:Test-BuildForDevice-Project --ios_multi_cpus=arm64
 }
-
-if [[ "$(arch)" == "arm"* ]]; then
-    echo -e "warning: rerun where Bazel is an x86_64 bazel:\narch -arch x86_64 /bin/bash -l -c \"$0 ${@}\""
-
-    # This should work - rules_ios has been proven to work in this. If you
-    # don't have the right version of Bazelisk then install it.
-    #
-    # This is tested on bash Montery M1 Max to work. A lot of these tools will
-    # not work when spawned under rosetta without a login shell
-    arch -arch x86_64 $SHELL -l -c "$0 ${@}"
-    exit $?
-fi
-
 
 for ARG in "$@"; do
     case "$ARG" in
