@@ -207,6 +207,7 @@ _DEFAULT_LIBRARY_TOOLS = {
     "fetch_default_xcconfig": _error_on_default_xcconfig,
 }
 
+# buildifier: disable=list-append
 def _append_headermap_copts(hmap, flag, objc_copts, swift_copts, cc_copts):
     copt = flag + "$(execpath :{hmap})".format(hmap = hmap)
 
