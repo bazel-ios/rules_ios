@@ -582,7 +582,7 @@ def _merge_root_infoplists(ctx):
     current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
     platform_type = str(current_apple_platform.platform.platform_type)
     apple_mac_toolchain_info = ctx.attr._toolchain[AppleMacToolsToolchainInfo]
-    rule_descriptor = rule_support.rule_descriptor(ctx)
+    rule_descriptor = rule_support.rule_descriptor_no_ctx(platform_type, apple_product_type.static_framework)
 
     resource_actions.merge_root_infoplists(
         actions = ctx.actions,
@@ -648,8 +648,8 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
     rules_apple_api_version = getattr(bundling_support, "rule_api_version", None)
     use_lts_5_rules_apple_api = rules_apple_api_version == 1.0
 
-    bundle_name, bundle_extension = bundling_support.bundle_full_name_from_rule_ctx(ctx)
-    executable_name = bundling_support.executable_name(ctx)
+    bundle_name = ctx.attr.framework_name
+    bundle_extension = ".framework"
     features = features_support.compute_enabled_features(
         requested_features = ctx.features,
         unsupported_features = ctx.disabled_features,
@@ -663,11 +663,13 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
 
     provisioning_profile = None
     resource_deps = ctx.attr.deps + ctx.attr.transitive_deps + ctx.attr.data
-    rule_descriptor = rule_support.rule_descriptor(ctx)
+    current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
+    platform_type = str(current_apple_platform.platform.platform_type)
+    rule_descriptor = rule_support.rule_descriptor_no_ctx(platform_type, apple_product_type.framework)
     signed_frameworks = []
     if provisioning_profile:
         signed_frameworks = [
-            bundle_name + rule_descriptor.bundle_extension,
+            bundle_name + bundle_extension,
         ]
     top_level_resources = resources.collect(
         attr = ctx.attr,
@@ -703,7 +705,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         actions = actions,
         bundle_name = bundle_name,
         bundle_extension = bundle_extension,
-        executable_name = executable_name,
+        executable_name = bundle_name,
         label_name = label.name,
         rule_descriptor = rule_descriptor,
         platform_prerequisites = platform_prerequisites,
@@ -721,7 +723,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
             bundle_extension = bundle_extension,
             bundle_id = bundle_id,
             bundle_name = bundle_name,
-            executable_name = executable_name,
+            executable_name = bundle_name,
             label_name = label.name,
             platform_prerequisites = platform_prerequisites,
             predeclared_outputs = predeclared_outputs,
@@ -733,7 +735,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
             actions = actions,
             binary_artifact = binary_artifact,
             bundle_name = bundle_name,
-            executable_name = executable_name,
+            executable_name = bundle_name,
             label_name = label.name,
         ),
     )
@@ -775,7 +777,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
                 dsym_binaries = debug_outputs.dsym_binaries,
                 linkmaps = debug_outputs.linkmaps,
                 dsym_info_plist_template = apple_mac_toolchain_info.dsym_info_plist_template,
-                executable_name = executable_name,
+                executable_name = bundle_name,
                 platform_prerequisites = platform_prerequisites,
                 bin_root_path = bin_root_path,
             ),
@@ -790,7 +792,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
                 dsym_binaries = debug_outputs.dsym_binaries,
                 linkmaps = debug_outputs.linkmaps,
                 dsym_info_plist_template = apple_mac_toolchain_info.dsym_info_plist_template,
-                executable_name = executable_name,
+                executable_name = bundle_name,
                 platform_prerequisites = platform_prerequisites,
             ),
         )
@@ -855,7 +857,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
             bundle_id = bundle_id,
             bundle_name = bundle_name,
             environment_plist = ctx.file.environment_plist,
-            executable_name = executable_name,
+            executable_name = bundle_name,
             launch_storyboard = None,
             platform_prerequisites = platform_prerequisites,
             resource_deps = resource_deps,
@@ -897,7 +899,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         bundle_name = bundle_name,
         codesign_inputs = [],
         codesignopts = [],
-        executable_name = executable_name,
+        executable_name = bundle_name,
         features = features,
         ipa_post_processor = None,
         partials = processor_partials,
@@ -1210,7 +1212,6 @@ that this target depends on.
 If not given, the framework will be built for the platform it inherits from the target that uses
 the framework as a dependency.""",
         ),
-        "_product_type": attr.string(default = apple_product_type.static_framework),
         "_xcode_config": attr.label(
             default = configuration_field(
                 name = "xcode_config_label",
@@ -1238,6 +1239,13 @@ the framework as a dependency.""",
         ),
         "minimum_os_version": attr.string(
             mandatory = False,
+            doc =
+                """Internal - currently rules_ios the dict `platforms`
+""",
+        ),
+        "families": attr.string_list(
+            mandatory = False,
+            default = ["iphone", "ipad"],
             doc =
                 """Internal - currently rules_ios the dict `platforms`
 """,
