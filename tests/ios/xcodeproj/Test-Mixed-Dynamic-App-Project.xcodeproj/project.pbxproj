@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5BFBE1232ED117FC88EFC560 /* lib.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42D4FFF4D2D5509A78D4D8F /* lib.swift */; };
 		5F2EC34B89C8DE4841F20794 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FE81D9E9639A366E8EB839 /* main.m */; };
 		B7CEB124F7B155E8E630F812 /* lib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD05C1A97322FF05C07A575 /* lib.swift */; };
 		BBEDC71D36023AFFFB98A8BA /* lib.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42D4FFF4D2D5509A78D4D8F /* lib.swift */; };
@@ -17,9 +18,11 @@
 		02153936701CAAE5E5530BE4 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		49A50B056BD5E4179AC67F43 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		4B591E98E01C3FB1BE1C7410 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
+		4E0674CDE1D42113DF39B8D1 /* aWithResourceBundles.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = aWithResourceBundles.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CD05C1A97322FF05C07A575 /* lib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lib.swift; sourceTree = "<group>"; };
 		77CDBB7A7D720A26918F4EBB /* c.framework */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; path = c.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DCCC28E852EEDD2A2805FB8 /* a.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = a.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B10BC15CC0B159F6E1990E8 /* data.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = data.txt; sourceTree = "<group>"; };
 		8BD8BAFA513836E6FFFA7A8C /* b_data.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = b_data.txt; sourceTree = "<group>"; };
 		99827A0C0BB92411E52602A4 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		A2BAF01C313B0C71204CCEDF /* c_data.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = c_data.txt; sourceTree = "<group>"; };
@@ -37,6 +40,7 @@
 			isa = PBXGroup;
 			children = (
 				02153936701CAAE5E5530BE4 /* BUILD.bazel */,
+				8B10BC15CC0B159F6E1990E8 /* data.txt */,
 				D301EC754F6CE825ED9D7D69 /* Info.plist */,
 				F42D4FFF4D2D5509A78D4D8F /* lib.swift */,
 			);
@@ -111,6 +115,7 @@
 			children = (
 				7DCCC28E852EEDD2A2805FB8 /* a.framework */,
 				FECA1E7A15F2CB0A2ED79E6E /* App.app */,
+				4E0674CDE1D42113DF39B8D1 /* aWithResourceBundles.framework */,
 				C75592B2FDAAFAD42D0AEC72 /* b.framework */,
 				77CDBB7A7D720A26918F4EBB /* c.framework */,
 			);
@@ -187,6 +192,22 @@
 			productReference = 77CDBB7A7D720A26918F4EBB /* c.framework */;
 			productType = "com.apple.product-type.framework.static";
 		};
+		95CE74D181C7ACF5B6BCDC7B /* aWithResourceBundles */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EDE430459E3202E1844593B7 /* Build configuration list for PBXNativeTarget "aWithResourceBundles" */;
+			buildPhases = (
+				5D9585E2657AFFE4BBA1374D /* Build with bazel */,
+				D75A67A7E055CD424D3D5D40 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = aWithResourceBundles;
+			productName = aWithResourceBundles;
+			productReference = 4E0674CDE1D42113DF39B8D1 /* aWithResourceBundles.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		F94C915BEAD1CA777D8B0DCF /* a */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E5A6522DC6E5968ED08439F4 /* Build configuration list for PBXNativeTarget "a" */;
@@ -228,6 +249,7 @@
 			targets = (
 				66A1334E30F3E6565E1D3198 /* App */,
 				F94C915BEAD1CA777D8B0DCF /* a */,
+				95CE74D181C7ACF5B6BCDC7B /* aWithResourceBundles */,
 				523FCCCDED4985ED99987ED2 /* b */,
 				7879C76D9CF929DA30FBD895 /* c */,
 			);
@@ -235,6 +257,24 @@
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		5D9585E2657AFFE4BBA1374D /* Build with bazel */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build with bazel";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\nexport BAZEL_DIAGNOSTICS_DIR=\"$BUILD_DIR/../../bazel-xcode-diagnostics/\"\nmkdir -p $BAZEL_DIAGNOSTICS_DIR\nexport DATE_SUFFIX=\"$(date +%Y%m%d.%H%M%S%L)\"\nexport BAZEL_BUILD_EVENT_TEXT_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-event-$DATE_SUFFIX.txt\"\nexport BAZEL_BUILD_EXECUTION_LOG_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-execution-log-$DATE_SUFFIX.log\"\nexport BAZEL_PROFILE_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-profile-$DATE_SUFFIX.log\"\nenv -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC $BAZEL_BUILD_TARGET_LABEL\n$BAZEL_INSTALLER\n";
+		};
 		70F3188C2CC462C7F69449B3 /* Build with bazel */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -334,6 +374,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D75A67A7E055CD424D3D5D40 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5BFBE1232ED117FC88EFC560 /* lib.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E2BBAE3FDCEAE14A71BF242F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -406,6 +454,29 @@
 			};
 			name = Debug;
 		};
+		6335A78F5252C4DEB3D5BB9D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/dynamic/a;
+				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/dynamic/a:aWithResourceBundles";
+				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/aWithResourceBundles.lldbinit;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/a/aWithResourceBundles.swiftmodule bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/a/aWithResourceBundles.swiftdoc bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/a/aWithResourceBundles.swiftsourceinfo";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/b/b\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/c/c\"";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/a/aWithResourceBundles_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
+				INFOPLIST_FILE = ../../../tests/ios/frameworks/dynamic/a/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = aWithResourceBundles;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
+			};
+			name = Release;
+		};
 		742C8BBFA0F7572B4F573C51 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -417,7 +488,7 @@
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/a/a\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/b/b\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/c/c\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/a/a\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/b/b\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/c/c\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/a/aWithResourceBundles\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "";
@@ -465,7 +536,7 @@
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/a/a\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/b/b\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/c/c\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/a/a\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/b/b\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/c/c\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/a/aWithResourceBundles\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "";
@@ -583,6 +654,29 @@
 			};
 			name = Release;
 		};
+		C06B5D344AD579BDD8033F1B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/dynamic/a;
+				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/dynamic/a:aWithResourceBundles";
+				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/aWithResourceBundles.lldbinit;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/a/aWithResourceBundles.swiftmodule bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/a/aWithResourceBundles.swiftdoc bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/a/aWithResourceBundles.swiftsourceinfo";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/b/b\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/c/c\"";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/a/aWithResourceBundles_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
+				INFOPLIST_FILE = ../../../tests/ios/frameworks/dynamic/a/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = aWithResourceBundles;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
+			};
+			name = Debug;
+		};
 		C0CB1A2D12CFC5E176255303 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -649,6 +743,15 @@
 			buildConfigurations = (
 				80355A77DBD90ED31ADAC1F4 /* Debug */,
 				9DF1B98334CC90036B9AEB11 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		EDE430459E3202E1844593B7 /* Build configuration list for PBXNativeTarget "aWithResourceBundles" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C06B5D344AD579BDD8033F1B /* Debug */,
+				6335A78F5252C4DEB3D5BB9D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

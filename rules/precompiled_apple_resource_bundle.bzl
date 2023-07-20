@@ -110,7 +110,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         input_plists = ctx.files.infoplists,
         output_pkginfo = None,
         output_plist = output_plist,
-        output_discriminator = None,
+        output_discriminator = "bundle",
         resolved_plisttool = apple_mac_toolchain_info.resolved_plisttool,
         **partials_args
     )

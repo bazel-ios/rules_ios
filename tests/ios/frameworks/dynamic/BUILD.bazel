@@ -12,6 +12,7 @@ ios_application(
     # This should automatically bake in a,b
     deps = [
         "//tests/ios/frameworks/dynamic/a",
+        "//tests/ios/frameworks/dynamic/a:aWithResourceBundles",
     ],
 )
 
