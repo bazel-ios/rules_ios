@@ -22,6 +22,7 @@ load("@build_bazel_rules_apple//apple/internal:resource_actions.bzl", "resource_
 load("@build_bazel_rules_apple//apple/internal:resources.bzl", "resources")
 load("@build_bazel_rules_apple//apple/internal:rule_support.bzl", "rule_support")
 load("@build_bazel_rules_apple//apple/internal:apple_toolchains.bzl", "AppleMacToolsToolchainInfo", "AppleXPlatToolsToolchainInfo")
+load("@build_bazel_rules_apple//apple/internal:swift_support.bzl", "swift_support")
 load("@build_bazel_rules_apple//apple/internal/utils:clang_rt_dylibs.bzl", "clang_rt_dylibs")
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo", "IosFrameworkBundleInfo")
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo", "swift_clang_module_aspect", "swift_common")
@@ -596,19 +597,7 @@ def _merge_root_infoplists(ctx):
         output_plist = output_plist,
         output_pkginfo = None,
         output_discriminator = "framework",
-        platform_prerequisites = platform_support.platform_prerequisites(
-            apple_fragment = ctx.fragments.apple,
-            config_vars = ctx.var,
-            device_families = rule_descriptor.allowed_device_families,
-            explicit_minimum_os = None,
-            explicit_minimum_deployment_os = None,
-            objc_fragment = None,
-            platform_type_string = platform_type,
-            uses_swift = False,
-            xcode_version_config = ctx.attr._xcode_config[apple_common.XcodeVersionConfig],
-            disabled_features = [],
-            features = [],
-        ),
+        platform_prerequisites = _platform_prerequisites(ctx, rule_descriptor, platform_type),
         resolved_plisttool = apple_mac_toolchain_info.resolved_plisttool,
         rule_descriptor = rule_descriptor,
         rule_label = ctx.label,
@@ -624,6 +613,26 @@ def _attrs_for_split_slice(attrs_by_split_slices, split_slice_key):
         return attrs_by_split_slices.values()[0]
     else:
         return attrs_by_split_slices[split_slice_key]
+
+def _platform_prerequisites(ctx, rule_descriptor, platform_type):
+    # Consider plumbing this in
+    deps = getattr(ctx.attr, "deps", None)
+    uses_swift = swift_support.uses_swift(deps) if deps else False
+
+    return platform_support.platform_prerequisites(
+        apple_fragment = ctx.fragments.apple,
+        config_vars = ctx.var,
+        cpp_fragment = ctx.fragments.cpp,
+        device_families = rule_descriptor.allowed_device_families,
+        disabled_features = ctx.disabled_features,
+        explicit_minimum_deployment_os = ctx.attr.minimum_deployment_os_version,
+        explicit_minimum_os = ctx.attr.minimum_os_version,
+        features = ctx.features,
+        objc_fragment = ctx.fragments.objc,
+        platform_type_string = platform_type,
+        uses_swift = uses_swift,
+        xcode_version_config = ctx.attr._xcode_config[apple_common.XcodeVersionConfig],
+    )
 
 def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
     """Packages this as dynamic framework
@@ -655,7 +664,6 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         unsupported_features = ctx.disabled_features,
     )
     label = ctx.label
-    platform_prerequisites = platform_support.platform_prerequisites_from_rule_ctx(ctx)
 
     # This file is used as part of the rules_apple bundling logic
     archive = actions.declare_file(ctx.attr.name + ".framework.zip")
@@ -666,6 +674,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
     current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
     platform_type = str(current_apple_platform.platform.platform_type)
     rule_descriptor = rule_support.rule_descriptor_no_ctx(platform_type, apple_product_type.framework)
+    platform_prerequisites = _platform_prerequisites(ctx, rule_descriptor, platform_type)
     signed_frameworks = []
     if provisioning_profile:
         signed_frameworks = [
@@ -1239,13 +1248,6 @@ the framework as a dependency.""",
         ),
         "minimum_os_version": attr.string(
             mandatory = False,
-            doc =
-                """Internal - currently rules_ios the dict `platforms`
-""",
-        ),
-        "families": attr.string_list(
-            mandatory = False,
-            default = ["iphone", "ipad"],
             doc =
                 """Internal - currently rules_ios the dict `platforms`
 """,
