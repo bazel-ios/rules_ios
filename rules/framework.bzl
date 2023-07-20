@@ -625,7 +625,7 @@ def _attrs_for_split_slice(attrs_by_split_slices, split_slice_key):
     else:
         return attrs_by_split_slices[split_slice_key]
 
-def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps, product_type):
+def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
     """Packages this as dynamic framework
 
     Currently, this doesn't include headers or other interface files.
@@ -725,7 +725,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps, product_type):
             label_name = label.name,
             platform_prerequisites = platform_prerequisites,
             predeclared_outputs = predeclared_outputs,
-            product_type = product_type if product_type else ctx.attr._product_type,
+            product_type = apple_product_type.framework,
         ),
     )
     processor_partials.append(
@@ -922,7 +922,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps, product_type):
         ] + processor_result.providers,
     )
 
-def _bundle_static_framework(ctx, is_extension_safe, current_apple_platform, outputs, product_type):
+def _bundle_static_framework(ctx, is_extension_safe, current_apple_platform, outputs):
     """Returns bundle info for a static framework commonly used intra-build"""
     partial_output = partial.call(
         partials.extension_safe_validation_partial(
@@ -946,7 +946,7 @@ def _bundle_static_framework(ctx, is_extension_safe, current_apple_platform, out
             minimum_os_version = str(current_apple_platform.target_os_version),
             minimum_deployment_os_version = ctx.attr.minimum_deployment_os_version,
             platform_type = str(current_apple_platform.platform.platform_type),
-            product_type = product_type if product_type else ctx.attr._product_type,
+            product_type = apple_product_type.static_framework,
             uses_swift = outputs.swiftmodule != None,
         ),
     ] + partial_output.providers)
@@ -1039,10 +1039,10 @@ def _apple_framework_packaging_impl(ctx):
 
     # If we link dynamic - then package it as dynamic
     if ctx.attr.link_dynamic:
-        bundle_outs = _bundle_dynamic_framework(ctx, is_extension_safe = is_extension_safe, avoid_deps = avoid_deps, product_type = apple_product_type.framework)
+        bundle_outs = _bundle_dynamic_framework(ctx, is_extension_safe = is_extension_safe, avoid_deps = avoid_deps)
         avoid_deps_info = AvoidDepsInfo(libraries = depset(avoid_deps + ctx.attr.deps).to_list(), link_dynamic = True)
     else:
-        bundle_outs = _bundle_static_framework(ctx, is_extension_safe = is_extension_safe, current_apple_platform = current_apple_platform, outputs = outputs, product_type = apple_product_type.static_framework)
+        bundle_outs = _bundle_static_framework(ctx, is_extension_safe = is_extension_safe, current_apple_platform = current_apple_platform, outputs = outputs)
         avoid_deps_info = AvoidDepsInfo(libraries = depset(avoid_deps).to_list(), link_dynamic = False)
     swift_info = _get_merged_swift_info(ctx, framework_files, transitive_deps)
 
