@@ -19,14 +19,14 @@
 		4B591E98E01C3FB1BE1C7410 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		6CD05C1A97322FF05C07A575 /* lib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lib.swift; sourceTree = "<group>"; };
 		77CDBB7A7D720A26918F4EBB /* c.framework */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; path = c.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7DCCC28E852EEDD2A2805FB8 /* a.framework */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; path = a.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7DCCC28E852EEDD2A2805FB8 /* a.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = a.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BD8BAFA513836E6FFFA7A8C /* b_data.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = b_data.txt; sourceTree = "<group>"; };
 		99827A0C0BB92411E52602A4 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		A2BAF01C313B0C71204CCEDF /* c_data.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = c_data.txt; sourceTree = "<group>"; };
 		A6299BB10CB8595BD904D1DC /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		B1B9B586F9DB3911E06810C8 /* lib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lib.swift; sourceTree = "<group>"; };
 		C3FE81D9E9639A366E8EB839 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		C75592B2FDAAFAD42D0AEC72 /* b.framework */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; path = b.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C75592B2FDAAFAD42D0AEC72 /* b.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = b.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D301EC754F6CE825ED9D7D69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F42D4FFF4D2D5509A78D4D8F /* lib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lib.swift; sourceTree = "<group>"; };
 		FECA1E7A15F2CB0A2ED79E6E /* App.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -153,7 +153,7 @@
 			name = b;
 			productName = b;
 			productReference = C75592B2FDAAFAD42D0AEC72 /* b.framework */;
-			productType = "com.apple.product-type.framework.static";
+			productType = "com.apple.product-type.framework";
 		};
 		66A1334E30F3E6565E1D3198 /* App */ = {
 			isa = PBXNativeTarget;
@@ -201,7 +201,7 @@
 			name = a;
 			productName = a;
 			productReference = 7DCCC28E852EEDD2A2805FB8 /* a.framework */;
-			productType = "com.apple.product-type.framework.static";
+			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
@@ -576,7 +576,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/c/c_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				MACH_O_TYPE = "$(inherited)";
+				MACH_O_TYPE = staticlib;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = c;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
@@ -598,7 +598,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-d31cf6d5fbab/bin/tests/ios/frameworks/dynamic/c/c_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				MACH_O_TYPE = "$(inherited)";
+				MACH_O_TYPE = staticlib;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = c;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";

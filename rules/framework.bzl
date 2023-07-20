@@ -714,6 +714,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
 
     # TODO(jmarino) - consider how to better handle frameworks of frameworks
     processor_partials = []
+
     processor_partials.append(
         partials.apple_bundle_info_partial(
             actions = actions,
@@ -724,7 +725,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
             label_name = label.name,
             platform_prerequisites = platform_prerequisites,
             predeclared_outputs = predeclared_outputs,
-            product_type = rule_descriptor.product_type,
+            product_type = apple_product_type.framework,
         ),
     )
     processor_partials.append(
@@ -945,7 +946,7 @@ def _bundle_static_framework(ctx, is_extension_safe, current_apple_platform, out
             minimum_os_version = str(current_apple_platform.target_os_version),
             minimum_deployment_os_version = ctx.attr.minimum_deployment_os_version,
             platform_type = str(current_apple_platform.platform.platform_type),
-            product_type = ctx.attr._product_type,
+            product_type = apple_product_type.static_framework,
             uses_swift = outputs.swiftmodule != None,
         ),
     ] + partial_output.providers)
