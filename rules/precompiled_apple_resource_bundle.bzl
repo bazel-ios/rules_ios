@@ -196,6 +196,13 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         outputs = [output_bundle_dir],
     )
 
+    xccurrentversions = [
+        f
+        for resource_files in ctx.attr.resources
+        for f in resource_files.files.to_list()
+        if f.path.count("xccurrentversion")
+    ]
+
     return [
         AppleResourceInfo(
             unowned_resources = depset(),
@@ -213,6 +220,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
             #    Foo.bundle directory that contains our real resources
             unprocessed = [
                 (output_bundle_dir.basename, None, depset([output_bundle_dir, output_plist])),
+                (None, None, depset(xccurrentversions)),
             ],
         ),
         AppleResourceBundleInfo(),
