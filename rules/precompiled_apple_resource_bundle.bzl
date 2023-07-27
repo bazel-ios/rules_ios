@@ -199,6 +199,12 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     return [
         AppleResourceInfo(
             unowned_resources = depset(),
+            datamodels = [
+                (output_bundle_dir.basename, None, depset([f]))
+                for resource_files in ctx.attr.resources
+                for f in resource_files.files.to_list()
+                if f.path.count("xcdatamodel")
+            ],
             owners = depset([
                 (output_bundle_dir.short_path, ctx.label),
                 (output_plist.short_path, ctx.label),
