@@ -9,9 +9,11 @@
 /* Begin PBXBuildFile section */
 		28DC502501A36DE46FB2FDAE /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EF81609D3AA2C86BD531FC9 /* test.m */; };
 		318F5B16837DD5CFA4D00889 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B776E1DCA016E54FFA3DD126 /* main.m */; };
+		40A384B2941319FD1BD99CA1 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73221B560A37B48E430A8EE2 /* Person.swift */; };
 		C7087EC243FF0E3AB1AB011E /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9CDCA4AFFA244654BAAF8B /* test.swift */; };
 		E99867EE1F1D782F81A4FE00 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED99215913B1CD2AA84B255 /* empty.swift */; };
 		EFADD50C4F0A43EB535E96A2 /* testhelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 40DADB6CCA7C34899493F0DF /* testhelper.m */; };
+		F131ED4033308AD6C7312F0E /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A229488E3B1C3546E8E4FA23 /* CoreDataManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,6 +27,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A8835BC04CDD487716FF7C1 /* CoreDataExample.framework */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; path = CoreDataExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A9CDCA4AFFA244654BAAF8B /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
 		13569230489FEDC63798F45E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		2782A0E3F33311285AE36FC8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -33,12 +36,17 @@
 		40DADB6CCA7C34899493F0DF /* testhelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = testhelper.m; sourceTree = "<group>"; };
 		4EA47E87D37B93163DC37DFE /* Header2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header2.h; sourceTree = "<group>"; };
 		4ED99215913B1CD2AA84B255 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
+		60ACCE5B70D3CCC84A8588FC /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		632CFB9DFB491CE5041EE814 /* TestStickers.xcstickers */ = {isa = PBXFileReference; lastKnownFileType = folder.stickers; path = TestStickers.xcstickers; sourceTree = "<group>"; };
+		73221B560A37B48E430A8EE2 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		8CEB7F29BE7079D1C68021EB /* TestImports-Unit-Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestImports-Unit-Tests-Bridging-Header.h"; sourceTree = "<group>"; };
 		9A0FD8DAF9B3FB660F838C23 /* testhelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = testhelper.h; sourceTree = "<group>"; };
 		A1558B75425B9A00EAECC6AA /* TestImports-App-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestImports-App-Bridging-Header.h"; sourceTree = "<group>"; };
+		A229488E3B1C3546E8E4FA23 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		B4CD841B3F2A7DEE174D9413 /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header.h; sourceTree = "<group>"; };
 		B776E1DCA016E54FFA3DD126 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		BB3B315C949FA776420EEED2 /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
+		C27FF0EC89E2716C7E38A1DB /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		D3853399B479656CD9D1B02D /* TestModelMapping.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = TestModelMapping.xcmappingmodel; sourceTree = "<group>"; };
 		DC14973A34F715D81983EBEE /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		EC730E57A94AE56443A8D68E /* TestImports-App.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "TestImports-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -51,6 +59,7 @@
 		16425F9DA3B24C7DB08487A0 /* ios */ = {
 			isa = PBXGroup;
 			children = (
+				C2DE097FE1F0767E219A539F /* frameworks */,
 				3098D956609A70129E4CEF39 /* unit-test */,
 			);
 			path = ios;
@@ -75,6 +84,15 @@
 				BA2ACFB90DE930D947464421 /* build_bazel_rules_ios */,
 				8910DAC3B74F70E3EAF715F8 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		2C68F83A66434450AA09C4C8 /* core-data-resource-bundle */ = {
+			isa = PBXGroup;
+			children = (
+				C27FF0EC89E2716C7E38A1DB /* BUILD.bazel */,
+				C7A82DF2D610A78D57BC7BFB /* CoreDataExample */,
+			);
+			path = "core-data-resource-bundle";
 			sourceTree = "<group>";
 		};
 		3098D956609A70129E4CEF39 /* unit-test */ = {
@@ -115,6 +133,7 @@
 		8910DAC3B74F70E3EAF715F8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				0A8835BC04CDD487716FF7C1 /* CoreDataExample.framework */,
 				EC730E57A94AE56443A8D68E /* TestImports-App.app */,
 				FFC67BEE5C0F371E96445C00 /* TestImports-Unit-Tests.xctest */,
 			);
@@ -131,6 +150,24 @@
 			path = ../../..;
 			sourceTree = "<group>";
 		};
+		C2DE097FE1F0767E219A539F /* frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2C68F83A66434450AA09C4C8 /* core-data-resource-bundle */,
+			);
+			path = frameworks;
+			sourceTree = "<group>";
+		};
+		C7A82DF2D610A78D57BC7BFB /* CoreDataExample */ = {
+			isa = PBXGroup;
+			children = (
+				A229488E3B1C3546E8E4FA23 /* CoreDataManager.swift */,
+				D1263C5B71D1593D7C571F57 /* Model.xcdatamodeld */,
+				73221B560A37B48E430A8EE2 /* Person.swift */,
+			);
+			path = CoreDataExample;
+			sourceTree = "<group>";
+		};
 		DD3F59257AC4C8A5C0227F76 /* tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -142,6 +179,22 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		175917CC524FA177AB1BC3D9 /* CoreDataExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6916160C9D1F653ED14DB367 /* Build configuration list for PBXNativeTarget "CoreDataExample" */;
+			buildPhases = (
+				43F51953F7CE18CC538B6265 /* Build with bazel */,
+				13A0E9BFB06AD6AA4E7925F1 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CoreDataExample;
+			productName = CoreDataExample;
+			productReference = 0A8835BC04CDD487716FF7C1 /* CoreDataExample.framework */;
+			productType = "com.apple.product-type.framework.static";
+		};
 		BAE883963A69FF9CDA89E73E /* TestImports-App */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DD122DE14C36AF0A16AA3CC5 /* Build configuration list for PBXNativeTarget "TestImports-App" */;
@@ -197,6 +250,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				175917CC524FA177AB1BC3D9 /* CoreDataExample */,
 				BAE883963A69FF9CDA89E73E /* TestImports-App */,
 				E2BD7425648456079213996C /* TestImports-Unit-Tests */,
 			);
@@ -205,6 +259,24 @@
 
 /* Begin PBXShellScriptBuildPhase section */
 		04239F1A5092A1EE207BE0F0 /* Build with bazel */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build with bazel";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\nexport BAZEL_DIAGNOSTICS_DIR=\"$BUILD_DIR/../../bazel-xcode-diagnostics/\"\nmkdir -p $BAZEL_DIAGNOSTICS_DIR\nexport DATE_SUFFIX=\"$(date +%Y%m%d.%H%M%S%L)\"\nexport BAZEL_BUILD_EVENT_TEXT_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-event-$DATE_SUFFIX.txt\"\nexport BAZEL_BUILD_EXECUTION_LOG_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-execution-log-$DATE_SUFFIX.log\"\nexport BAZEL_PROFILE_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-profile-$DATE_SUFFIX.log\"\nenv -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC $BAZEL_BUILD_TARGET_LABEL\n$BAZEL_INSTALLER\n";
+		};
+		43F51953F7CE18CC538B6265 /* Build with bazel */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -250,6 +322,15 @@
 				28DC502501A36DE46FB2FDAE /* test.m in Sources */,
 				C7087EC243FF0E3AB1AB011E /* test.swift in Sources */,
 				EFADD50C4F0A43EB535E96A2 /* testhelper.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13A0E9BFB06AD6AA4E7925F1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F131ED4033308AD6C7312F0E /* CoreDataManager.swift in Sources */,
+				40A384B2941319FD1BD99CA1 /* Person.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,6 +425,50 @@
 				SWIFT_USE_INTEGRATED_DRIVER = NO;
 				SWIFT_VERSION = 5;
 				USE_HEADERMAP = 0;
+			};
+			name = Release;
+		};
+		2F98E5DE1C5746BE2A254C13 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BIN_SUBDIR = "/tests/ios/frameworks/core-data-resource-bundle";
+				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/core-data-resource-bundle:CoreDataExample";
+				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/CoreDataExample.lldbinit;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-1e9bd6890b07/bin/tests/ios/frameworks/core-data-resource-bundle/CoreDataExample.swiftmodule bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-1e9bd6890b07/bin/tests/ios/frameworks/core-data-resource-bundle/CoreDataExample.swiftdoc bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-1e9bd6890b07/bin/tests/ios/frameworks/core-data-resource-bundle/CoreDataExample.swiftsourceinfo";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-1e9bd6890b07/bin/tests/ios/frameworks/core-data-resource-bundle/CoreDataExample_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MACH_O_TYPE = staticlib;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = CoreDataExample;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
+			};
+			name = Debug;
+		};
+		47E40CB08200FA04595579B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BIN_SUBDIR = "/tests/ios/frameworks/core-data-resource-bundle";
+				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/core-data-resource-bundle:CoreDataExample";
+				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/CoreDataExample.lldbinit;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-1e9bd6890b07/bin/tests/ios/frameworks/core-data-resource-bundle/CoreDataExample.swiftmodule bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-1e9bd6890b07/bin/tests/ios/frameworks/core-data-resource-bundle/CoreDataExample.swiftdoc bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-1e9bd6890b07/bin/tests/ios/frameworks/core-data-resource-bundle/CoreDataExample.swiftsourceinfo";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-1e9bd6890b07/bin/tests/ios/frameworks/core-data-resource-bundle/CoreDataExample_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MACH_O_TYPE = staticlib;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = CoreDataExample;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
 			};
 			name = Release;
 		};
@@ -448,6 +573,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		6916160C9D1F653ED14DB367 /* Build configuration list for PBXNativeTarget "CoreDataExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2F98E5DE1C5746BE2A254C13 /* Debug */,
+				47E40CB08200FA04595579B2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		76DF430C8942076293D1F36C /* Build configuration list for PBXProject "Test-Imports-App-Project" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -476,6 +610,20 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		D1263C5B71D1593D7C571F57 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				BB3B315C949FA776420EEED2 /* Model 2.xcdatamodel */,
+				60ACCE5B70D3CCC84A8588FC /* Model.xcdatamodel */,
+			);
+			currentVersion = BB3B315C949FA776420EEED2 /* Model 2.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 36C95CC23D076CD1E4D6F262 /* Project object */;
 }

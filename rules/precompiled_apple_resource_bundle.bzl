@@ -196,8 +196,17 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         outputs = [output_bundle_dir],
     )
 
+    # See https://github.com/bazel-ios/rules_ios/pull/747 for context
+    xccurrentversions = [
+        (None, None, depset([f]))
+        for resource_files in ctx.attr.resources
+        for f in resource_files.files.to_list()
+        if f.extension == "xccurrentversion"
+    ]
+
     return [
         AppleResourceInfo(
+            datamodels = xccurrentversions,
             unowned_resources = depset(),
             owners = depset([
                 (output_bundle_dir.short_path, ctx.label),
