@@ -198,7 +198,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
 
     # See https://github.com/bazel-ios/rules_ios/pull/747 for context
     xccurrentversions = [
-        (None, None, depset([f]))
+        f
         for resource_files in ctx.attr.resources
         for f in resource_files.files.to_list()
         if f.extension == "xccurrentversion"
@@ -206,12 +206,19 @@ def _precompiled_apple_resource_bundle_impl(ctx):
 
     return [
         AppleResourceInfo(
-            datamodels = xccurrentversions,
+            datamodels = [
+                (None, None, depset(xccurrentversions)),
+            ],
             unowned_resources = depset(),
-            owners = depset([
-                (output_bundle_dir.short_path, ctx.label),
-                (output_plist.short_path, ctx.label),
-            ]),
+            owners = depset(
+                [
+                    (output_bundle_dir.short_path, ctx.label),
+                    (output_plist.short_path, ctx.label),
+                ] + [
+                    (f.short_path, ctx.label)
+                    for f in xccurrentversions
+                ],
+            ),
             # This is a list of the resources to propagate without changing further
             # In this case the tuple parameters are:
             # 1. The final directory the resources should end up in, ex Foo.bundle
