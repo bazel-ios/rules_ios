@@ -207,8 +207,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     return [
         AppleResourceInfo(
             datamodels = [
-                (None, None, depset([f]))
-                for f in xccurrentversions
+                (None, None, depset(xccurrentversions)),
             ],
             unowned_resources = depset(),
             owners = depset(
