@@ -220,6 +220,8 @@ def _precompiled_apple_resource_bundle_impl(ctx):
             #    Foo.bundle directory that contains our real resources
             unprocessed = [
                 (output_bundle_dir.basename, None, depset([output_bundle_dir, output_plist])),
+                # Handles an edge case when using `rules_xcodeproj`
+                # TODO: Link the PR here
                 (None, None, depset(xccurrentversions)),
             ],
         ),
