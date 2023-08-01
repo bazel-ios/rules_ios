@@ -17,8 +17,8 @@ jobs:
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
-      - name: Select Xcode
-        run: .github/workflows/xcode_select.sh
+      - name: Preflight Env
+        run: .github/workflows/preflight_env.sh
       - name: Build and Test
         run: |
           # non-iOS tests
@@ -56,8 +56,8 @@ jobs:
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
-      - name: Select Xcode
-        run: .github/workflows/xcode_select.sh
+      - name: Preflight Env
+        run: .github/workflows/preflight_env.sh
       - name: Build and Test
         run: |
           # non-iOS tests
@@ -89,8 +89,8 @@ jobs:
       USE_BAZEL_VERSION: 5.3.2
     steps:
       - uses: actions/checkout@v3
-      - name: Select Xcode
-        run: .github/workflows/xcode_select.sh
+      - name: Preflight Env
+        run: .github/workflows/preflight_env.sh
       - name: Build and Test
         run: |
           # iOS tests
@@ -112,8 +112,8 @@ jobs:
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
-      - name: Select Xcode
-        run: .github/workflows/xcode_select.sh
+      - name: Preflight Env
+        run: .github/workflows/preflight_env.sh
       - name: Build and Test
         run: |
           bazelisk build \
@@ -146,8 +146,8 @@ jobs:
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
-      - name: Select Xcode
-        run: .github/workflows/xcode_select.sh
+      - name: Preflight Env
+        run: .github/workflows/preflight_env.sh
         # Note: we need to pass the absolute to the Bazel run
       - name: buildifier
         run: |
@@ -165,8 +165,8 @@ jobs:
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
-      - name: Select Xcode 14.2.0
-        run: .github/workflows/xcode_select.sh
+      - name: Preflight Env
+        run: .github/workflows/preflight_env.sh
       - name: Run tests
         run: ./tests/xcodeproj-tests.sh --run && ./tests/test-tests.sh
       - uses: actions/upload-artifact@v2
@@ -180,8 +180,8 @@ jobs:
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
-      - name: Select Xcode 14.2.0
-        run: .github/workflows/xcode_select.sh
+      - name: Preflight Env
+        run: .github/workflows/preflight_env.sh
       - name: Run tests
         run: |
           bazelisk test \
@@ -202,8 +202,8 @@ jobs:
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
-      - name: Select Xcode
-        run: .github/workflows/xcode_select.sh
+      - name: Preflight Env
+        run: .github/workflows/preflight_env.sh
       - name: Build App
         run: |
           bazelisk build \
