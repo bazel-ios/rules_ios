@@ -41,6 +41,7 @@ ios_application(
     visibility = ["//visibility:public"],
     deps = [
         ":SomeFramework",
+        "//tests/ios/frameworks/core-data-resource-bundle:CoreDataExample",
         "@GoogleMobileAdsSDK//:GoogleMobileAds",
         "@TensorFlowLiteC",
         "@TensorFlowLiteC//:TensorFlowLiteCCoreML",
@@ -90,7 +91,6 @@ ios_unit_test(
     visibility = ["//visibility:public"],
     deps = [
         ":TestImports-App_framework_unlinked",
-        "//tests/ios/frameworks/core-data-resource-bundle:CoreDataExample",
     ],
 )
 
