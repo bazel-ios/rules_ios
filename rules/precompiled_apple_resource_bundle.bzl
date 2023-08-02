@@ -161,6 +161,19 @@ def _precompiled_apple_resource_bundle_impl(ctx):
 
     # Create a file for bundletool to know what files to copy
     # https://github.com/bazelbuild/rules_apple/blob/d29df97b9652e0442ebf21f1bc0e04921b584f76/tools/bundletool/bundletool_experimental.py#L29-L46
+    #
+    # ps: removing `.momd` files from here since they'll be collected in `AppleResourceInfo` => `datamodels`
+    # below and added under the `.bundle` directory like other resources. This is so data model files
+    # are visible to other rules looking for information in the `AppleResourceInfo` provider. See this
+    # PR for more context: https://github.com/bazel-ios/rules_ios/pull/750
+    updated_control_files = []
+    for f in control_files:
+        if hasattr(f, "src"):
+            if f.src.endswith(".momd"):
+                continue
+        updated_control_files.append(f)
+    control_files = updated_control_files
+
     bundletool_instructions = struct(
         bundle_merge_files = control_files,
         bundle_merge_zips = [],
@@ -196,7 +209,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         outputs = [output_bundle_dir],
     )
 
-    # See https://github.com/bazel-ios/rules_ios/pull/747 for context
+    # See https://github.com/bazel-ios/rules_ios/pull/750 for context
     datamodel_files = [
         f
         for resource_files in ctx.attr.resources
@@ -207,7 +220,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     return [
         AppleResourceInfo(
             datamodels = [
-                (None, None, depset(datamodel_files)),
+                (output_bundle_dir.basename, None, depset(datamodel_files)),
             ],
             unowned_resources = depset(),
             owners = depset(
