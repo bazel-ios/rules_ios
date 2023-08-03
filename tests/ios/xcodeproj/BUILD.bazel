@@ -224,6 +224,16 @@ xcodeproj(
     ],
 )
 
+xcodeproj(
+    name = "Test-AppTestOnly-Project",
+    testonly = True,
+    bazel_path = "bazelisk",
+    include_transitive_targets = True,
+    deps = [
+        "//tests/ios/app:AppTestOnly",
+    ],
+)
+
 xchammer_xcodeproj(
     name = "App-XCHammer",
     deps = [
