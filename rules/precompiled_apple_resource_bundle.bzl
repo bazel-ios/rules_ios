@@ -166,13 +166,11 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     # below and added under the `.bundle` directory like other resources. This is so data model files
     # are visible to other rules looking for information in the `AppleResourceInfo` provider. See this
     # PR for more context: https://github.com/bazel-ios/rules_ios/pull/750
-    updated_control_files = []
-    for f in control_files:
-        if hasattr(f, "src"):
-            if f.src.endswith(".momd"):
-                continue
-        updated_control_files.append(f)
-    control_files = updated_control_files
+    control_files = [
+        f
+        for f in control_files
+        if hasattr(f, "src") and not f.src.endswith(".momd")
+    ]
 
     bundletool_instructions = struct(
         bundle_merge_files = control_files,
