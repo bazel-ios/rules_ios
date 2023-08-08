@@ -196,7 +196,6 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         outputs = [output_bundle_dir],
     )
 
-    # See https://github.com/bazel-ios/rules_ios/pull/747 for context
     xccurrentversions = [
         f
         for resource_files in ctx.attr.resources
@@ -206,17 +205,11 @@ def _precompiled_apple_resource_bundle_impl(ctx):
 
     return [
         AppleResourceInfo(
-            datamodels = [
-                (None, None, depset(xccurrentversions)),
-            ],
             unowned_resources = depset(),
             owners = depset(
                 [
                     (output_bundle_dir.short_path, ctx.label),
                     (output_plist.short_path, ctx.label),
-                ] + [
-                    (f.short_path, ctx.label)
-                    for f in xccurrentversions
                 ],
             ),
             # This is a list of the resources to propagate without changing further
@@ -229,6 +222,9 @@ def _precompiled_apple_resource_bundle_impl(ctx):
             #    Foo.bundle directory that contains our real resources
             unprocessed = [
                 (output_bundle_dir.basename, None, depset([output_bundle_dir, output_plist])),
+                # So the `.xccurrentversion` files are visible in the provider and can be picked
+                # up by other rule sets (e.g. Xcode project generation aspects)
+                (None, None, depset(xccurrentversions)),
             ],
         ),
         AppleResourceBundleInfo(),
