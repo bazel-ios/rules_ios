@@ -68,7 +68,6 @@ xcodeproj(
     include_transitive_targets = False,
     provide_build_settings_from_target_for_pre_post_actions = True,
     deps = [
-        "//tests/ios/frameworks/core-data-resource-bundle:CoreDataExample",
         "//tests/ios/unit-test/test-imports-app:TestImports-App",
         "//tests/ios/unit-test/test-imports-app:TestImports-App_framework_unlinked",
         "//tests/ios/unit-test/test-imports-app:TestImports-Unit-Tests",
