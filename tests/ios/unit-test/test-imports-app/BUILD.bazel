@@ -11,6 +11,7 @@ apple_framework(
     },
     visibility = ["//visibility:public"],
     deps = [
+        "//tests/ios/frameworks/core-data-resource-bundle:CoreDataExample",
         "//tests/ios/unit-test/test-imports-app/frameworks/Basic",
         "//tests/ios/unit-test/test-imports-app/frameworks/Nested",
     ],

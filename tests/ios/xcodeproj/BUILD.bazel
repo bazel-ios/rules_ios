@@ -3,6 +3,7 @@ load("//rules:legacy_xcodeproj.bzl", "xcodeproj_project_options")
 load("//rules:additional_scheme_info.bzl", "additional_scheme_info")
 load("//rules:xchammer_xcodeproj.bzl", "xchammer_xcodeproj")
 load("@xchammer//:BazelExtensions/xchammerconfig.bzl", "bazel_build_service_config")
+load("@rules_xcodeproj//xcodeproj:defs.bzl", rules_xcodeproj = "xcodeproj")
 
 xcodeproj(
     name = "Single-Static-Framework-Project",
@@ -48,29 +49,13 @@ xcodeproj_project_options(
     name = "ProjectOptions",
 )
 
-xcodeproj(
-    name = "Test-Imports-App-Project",
-    testonly = True,
-    additional_post_actions = {
-        "build": [
-            "echo 'post_build_action_1'",
-            "echo 'post_build_action_2'",
-        ],
-    },
-    additional_pre_actions = {
-        "build": [
-            "echo 'pre_build_action_1'",
-            "echo 'pre_build_action_2'",
-        ],
-    },
+rules_xcodeproj(
+    name = "Foo",
     bazel_path = "bazelisk",
-    generate_schemes_for_product_types = ["application"],
-    include_transitive_targets = False,
-    provide_build_settings_from_target_for_pre_post_actions = True,
-    deps = [
-        "//tests/ios/frameworks/core-data-resource-bundle:CoreDataExample",
+    install_directory = "",
+    project_name = "Foo",
+    top_level_targets = [
         "//tests/ios/unit-test/test-imports-app:TestImports-App",
-        "//tests/ios/unit-test/test-imports-app:TestImports-App_framework_unlinked",
         "//tests/ios/unit-test/test-imports-app:TestImports-Unit-Tests",
     ],
 )

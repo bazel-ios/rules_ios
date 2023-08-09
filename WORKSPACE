@@ -100,3 +100,16 @@ xcode_configure(
 load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
 
 rules_pkg_dependencies()
+
+git_repository(
+    name = "rules_xcodeproj",
+    commit = "1e80c1b8997bf938ace9adbc0e0f8244b3c21f17",
+    remote = "https://github.com/MobileNativeFoundation/rules_xcodeproj.git",
+)
+
+load(
+    "@rules_xcodeproj//xcodeproj:repositories.bzl",
+    "xcodeproj_rules_dependencies",
+)
+
+xcodeproj_rules_dependencies()
