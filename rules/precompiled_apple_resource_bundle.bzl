@@ -203,6 +203,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         for f in resource_files.files.to_list()
         if f.extension == "xccurrentversion"
     ]
+    xccurrentversions = []
 
     return [
         AppleResourceInfo(
