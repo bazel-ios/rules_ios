@@ -17,13 +17,13 @@ jobs:
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
-      - name: Select Xcode
-        run: .github/workflows/xcode_select.sh
+      - name: Preflight Env
+        run: .github/workflows/preflight_env.sh
       - name: Build and Test
         run: |
           # non-iOS tests
           bazelisk test \
-            --config=ci \
+            --config=ci_with_caches \
             -- \
             //... \
             -//tests/ios/...
@@ -36,7 +36,7 @@ jobs:
 
           # iOS tests
           bazelisk test \
-            --config=ci \
+            --config=ci_with_caches \
             --config=ios \
             --test_arg=--destination=platform=ios_simulator,id=$SIMULATOR_UDID \
             -- \
@@ -56,13 +56,13 @@ jobs:
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
-      - name: Select Xcode
-        run: .github/workflows/xcode_select.sh
+      - name: Preflight Env
+        run: .github/workflows/preflight_env.sh
       - name: Build and Test
         run: |
           # non-iOS tests
           bazelisk test \
-            --config=ci \
+            --config=ci_with_caches \
             --config=vfs \
             -- \
             //... \
@@ -70,7 +70,7 @@ jobs:
 
           # iOS tests
           bazelisk test \
-            --config=ci \
+            --config=ci_with_caches \
             --config=ios \
             --config=vfs \
             -- \
@@ -89,13 +89,13 @@ jobs:
       USE_BAZEL_VERSION: 5.3.2
     steps:
       - uses: actions/checkout@v3
-      - name: Select Xcode
-        run: .github/workflows/xcode_select.sh
+      - name: Preflight Env
+        run: .github/workflows/preflight_env.sh
       - name: Build and Test
         run: |
           # iOS tests
           bazelisk build \
-            --config=ci \
+            --config=ci_with_caches \
             --config=ios \
             --config=vfs \
             -- \
@@ -112,12 +112,12 @@ jobs:
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
-      - name: Select Xcode
-        run: .github/workflows/xcode_select.sh
+      - name: Preflight Env
+        run: .github/workflows/preflight_env.sh
       - name: Build and Test
         run: |
           bazelisk build \
-            --config=ci \
+            --config=ci_with_caches \
             --config=vfs \
             --ios_multi_cpus=sim_arm64  \
             -- \
@@ -127,7 +127,7 @@ jobs:
           # Misc issues:
           #   - Fails on a non fat framework for //tests/ios/unit-test/test-imports-app/
           bazelisk build \
-            --config=ci \
+            --config=ci_with_caches \
             --config=ios \
             --config=vfs \
             --ios_multi_cpus=sim_arm64 \
@@ -146,8 +146,8 @@ jobs:
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
-      - name: Select Xcode
-        run: .github/workflows/xcode_select.sh
+      - name: Preflight Env
+        run: .github/workflows/preflight_env.sh
         # Note: we need to pass the absolute to the Bazel run
       - name: buildifier
         run: |
@@ -156,7 +156,7 @@ jobs:
       - name: Check docs
         run: |
           bazelisk run \
-            --config=ci \
+            --config=ci_with_caches \
             //docs
           git diff --exit-code docs
 
@@ -165,8 +165,8 @@ jobs:
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
-      - name: Select Xcode 14.2.0
-        run: .github/workflows/xcode_select.sh
+      - name: Preflight Env
+        run: .github/workflows/preflight_env.sh
       - name: Run tests
         run: ./tests/xcodeproj-tests.sh --run && ./tests/test-tests.sh
       - uses: actions/upload-artifact@v2
@@ -180,12 +180,12 @@ jobs:
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
-      - name: Select Xcode 14.2.0
-        run: .github/workflows/xcode_select.sh
+      - name: Preflight Env
+        run: .github/workflows/preflight_env.sh
       - name: Run tests
         run: |
           bazelisk test \
-            --config=ci \
+            --config=ci_with_caches \
             --config=ios_lldb_test \
             -- \
             tests/ios/lldb/app:objc_app_po_test \
@@ -202,12 +202,12 @@ jobs:
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
-      - name: Select Xcode
-        run: .github/workflows/xcode_select.sh
+      - name: Preflight Env
+        run: .github/workflows/preflight_env.sh
       - name: Build App
         run: |
           bazelisk build \
-            --config=ci \
+            --config=ci_with_caches \
             --config=ios_multi_arch_test \
             -- \
             tests/ios/app/App

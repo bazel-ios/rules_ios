@@ -54,19 +54,17 @@ build:ios_multi_arch_test --ios_minimum_os=10.2
 build:ios_multi_arch_test --ios_multi_cpus=i386,x86_64
 
 # - Remote cache configuration
-build:remote_cache --bes_backend=grpcs://remote.buildbuddy.io
-build:remote_cache --bes_results_url=https://app.buildbuddy.io/invocation/
-build:remote_cache --experimental_build_event_upload_strategy=local
-build:remote_cache --experimental_remote_cache_compression
-build:remote_cache --experimental_remote_merkle_tree_cache
-build:remote_cache --modify_execution_info=^(BitcodeSymbolsCopy|BundleApp|BundleTreeApp|DsymDwarf|DsymLipo|GenerateAppleSymbolsFile|ObjcBinarySymbolStrip|CppLink|ObjcLink|ProcessAndSign|SignBinary|SwiftArchive|SwiftStdlibCopy)$=+no-remote,^(BundleResources|ImportedDynamicFrameworkProcessor)$=+no-remote-exec
-build:remote_cache --nolegacy_important_outputs
-build:remote_cache --noslim_profile
-build:remote_cache --remote_cache=grpcs://remote.buildbuddy.io
-build:remote_cache --remote_timeout=3600
-
-# Enable remote_cache config by default
-build --config=remote_cache
+build:ci_with_caches --bes_backend=grpcs://remote.buildbuddy.io
+build:ci_with_caches --bes_results_url=https://app.buildbuddy.io/invocation/
+build:ci_with_caches --experimental_build_event_upload_strategy=local
+build:ci_with_caches --experimental_remote_cache_compression
+build:ci_with_caches --experimental_remote_merkle_tree_cache
+build:ci_with_caches --modify_execution_info=^(BitcodeSymbolsCopy|BundleApp|BundleTreeApp|DsymDwarf|DsymLipo|GenerateAppleSymbolsFile|ObjcBinarySymbolStrip|CppLink|ObjcLink|ProcessAndSign|SignBinary|SwiftArchive|SwiftStdlibCopy)$=+no-remote,^(BundleResources|ImportedDynamicFrameworkProcessor)$=+no-remote-exec
+build:ci_with_caches --nolegacy_important_outputs
+build:ci_with_caches --noslim_profile
+build:ci_with_caches --remote_cache=grpcs://remote.buildbuddy.io
+build:ci_with_caches --remote_timeout=3600
+build:ci_with_caches --config=ci
 
 # By default don't upload local results to remote cache, only CI does this.
 build --noremote_upload_local_results
@@ -82,7 +80,6 @@ common:ci --show_progress_rate_limit=15.0
 build:ci --progress_report_interval=60
 # enable more verbose logging
 build:ci --verbose_failures
-build:ci --subcommands
 # ci setup for tests, tend to be more flaky on github actions
 build:ci --jobs=4
 # allow extra time for simulators to boot
