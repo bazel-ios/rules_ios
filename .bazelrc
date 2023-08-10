@@ -6,7 +6,7 @@ build --strategy=Stardoc=standalone
 build --spawn_strategy=standalone
 
 # Setup Xcode configuration for xcodeproj tests
-build --xcode_version_config=//:host_xcodes
+# build --xcode_version_config=//:host_xcodes
 
 build --verbose_failures # Print the full command line for commands that failed
 build --test_output=errors # Prints log file output to the console on failure
@@ -54,16 +54,16 @@ build:ios_multi_arch_test --ios_minimum_os=10.2
 build:ios_multi_arch_test --ios_multi_cpus=i386,x86_64
 
 # - Remote cache configuration
-build:ci_with_caches --bes_backend=grpcs://remote.buildbuddy.io
-build:ci_with_caches --bes_results_url=https://app.buildbuddy.io/invocation/
-build:ci_with_caches --experimental_build_event_upload_strategy=local
-build:ci_with_caches --experimental_remote_cache_compression
-build:ci_with_caches --experimental_remote_merkle_tree_cache
-build:ci_with_caches --modify_execution_info=^(BitcodeSymbolsCopy|BundleApp|BundleTreeApp|DsymDwarf|DsymLipo|GenerateAppleSymbolsFile|ObjcBinarySymbolStrip|CppLink|ObjcLink|ProcessAndSign|SignBinary|SwiftArchive|SwiftStdlibCopy)$=+no-remote,^(BundleResources|ImportedDynamicFrameworkProcessor)$=+no-remote-exec
-build:ci_with_caches --nolegacy_important_outputs
-build:ci_with_caches --noslim_profile
-build:ci_with_caches --remote_cache=grpcs://remote.buildbuddy.io
-build:ci_with_caches --remote_timeout=3600
+#build:ci_with_caches --bes_backend=grpcs://remote.buildbuddy.io
+#build:ci_with_caches --bes_results_url=https://app.buildbuddy.io/invocation/
+#build:ci_with_caches --experimental_build_event_upload_strategy=local
+#build:ci_with_caches --experimental_remote_cache_compression
+#build:ci_with_caches --experimental_remote_merkle_tree_cache
+#build:ci_with_caches --modify_execution_info=^(BitcodeSymbolsCopy|BundleApp|BundleTreeApp|DsymDwarf|DsymLipo|GenerateAppleSymbolsFile|ObjcBinarySymbolStrip|CppLink|ObjcLink|ProcessAndSign|SignBinary|SwiftArchive|SwiftStdlibCopy)$=+no-remote,^(BundleResources|ImportedDynamicFrameworkProcessor)$=+no-remote-exec
+#build:ci_with_caches --nolegacy_important_outputs
+#build:ci_with_caches --noslim_profile
+#build:ci_with_caches --remote_cache=grpcs://remote.buildbuddy.io
+#build:ci_with_caches --remote_timeout=3600
 build:ci_with_caches --config=ci
 
 # By default don't upload local results to remote cache, only CI does this.
