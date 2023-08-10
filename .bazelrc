@@ -80,7 +80,6 @@ common:ci --show_progress_rate_limit=15.0
 build:ci --progress_report_interval=60
 # enable more verbose logging
 build:ci --verbose_failures
-build:ci --subcommands
 # ci setup for tests, tend to be more flaky on github actions
 build:ci --jobs=4
 # allow extra time for simulators to boot
