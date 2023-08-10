@@ -23,7 +23,7 @@ jobs:
         run: |
           # non-iOS tests
           bazelisk test \
-            --config=ci \
+            --config=ci_with_caches \
             -- \
             //... \
             -//tests/ios/...
@@ -36,7 +36,7 @@ jobs:
 
           # iOS tests
           bazelisk test \
-            --config=ci \
+            --config=ci_with_caches \
             --config=ios \
             --test_arg=--destination=platform=ios_simulator,id=$SIMULATOR_UDID \
             -- \
@@ -62,7 +62,7 @@ jobs:
         run: |
           # non-iOS tests
           bazelisk test \
-            --config=ci \
+            --config=ci_with_caches \
             --config=vfs \
             -- \
             //... \
@@ -70,7 +70,7 @@ jobs:
 
           # iOS tests
           bazelisk test \
-            --config=ci \
+            --config=ci_with_caches \
             --config=ios \
             --config=vfs \
             -- \
@@ -95,7 +95,7 @@ jobs:
         run: |
           # iOS tests
           bazelisk build \
-            --config=ci \
+            --config=ci_with_caches \
             --config=ios \
             --config=vfs \
             -- \
@@ -117,7 +117,7 @@ jobs:
       - name: Build and Test
         run: |
           bazelisk build \
-            --config=ci \
+            --config=ci_with_caches \
             --config=vfs \
             --ios_multi_cpus=sim_arm64  \
             -- \
@@ -127,7 +127,7 @@ jobs:
           # Misc issues:
           #   - Fails on a non fat framework for //tests/ios/unit-test/test-imports-app/
           bazelisk build \
-            --config=ci \
+            --config=ci_with_caches \
             --config=ios \
             --config=vfs \
             --ios_multi_cpus=sim_arm64 \
@@ -156,7 +156,7 @@ jobs:
       - name: Check docs
         run: |
           bazelisk run \
-            --config=ci \
+            --config=ci_with_caches \
             //docs
           git diff --exit-code docs
 
@@ -185,7 +185,7 @@ jobs:
       - name: Run tests
         run: |
           bazelisk test \
-            --config=ci \
+            --config=ci_with_caches \
             --config=ios_lldb_test \
             -- \
             tests/ios/lldb/app:objc_app_po_test \
@@ -207,7 +207,7 @@ jobs:
       - name: Build App
         run: |
           bazelisk build \
-            --config=ci \
+            --config=ci_with_caches \
             --config=ios_multi_arch_test \
             -- \
             tests/ios/app/App
