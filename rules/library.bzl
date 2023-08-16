@@ -777,8 +777,9 @@ def apple_library(
         fail("no support for dynamic library: %s" % vendored_dynamic_library)
 
     # TODO(jmarino)Perhaps it uses a import_middleman here
+    should_update_in_place = kwargs.pop("should_update_in_place", True)
     if len(vendored_deps):
-        import_middleman(name = name + ".import_middleman", deps = vendored_deps, tags = ["manual"])
+        import_middleman(name = name + ".import_middleman", deps = vendored_deps, tags = ["manual"], should_update_in_place = should_update_in_place)
         deps += select({
             "@build_bazel_rules_ios//:arm64_simulator_use_device_deps": [name + ".import_middleman"],
             "//conditions:default": vendored_deps,

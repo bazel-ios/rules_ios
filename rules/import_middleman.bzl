@@ -16,6 +16,9 @@ _FindImportsAspectInfo = provider(fields = {
 })
 
 def _update_framework(ctx, framework):
+    if not ctx.attr.should_update_in_place:
+        return framework
+
     # Updates the `framework` for Apple Silicon
     out_file = ctx.actions.declare_file(ctx.attr.name + "/" + framework.basename + ".framework" + "/" + framework.basename)
     out_dir = ctx.actions.declare_file(ctx.attr.name + "/" + framework.basename + ".framework")
@@ -296,6 +299,7 @@ import_middleman = rule(
         "deps": attr.label_list(aspects = [find_imports]),
         "test_deps": attr.label_list(aspects = [find_imports], allow_empty = True),
         "update_in_place": attr.label(executable = True, default = Label("//tools/m1_utils:update_in_place"), cfg = "exec"),
+        "should_update_in_place": attr.bool(default = True),
     },
     doc = """
 This rule adds the ability to update the Mach-o header on imported
