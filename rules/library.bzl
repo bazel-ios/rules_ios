@@ -451,6 +451,15 @@ def _find_imported_xcframework_name(outputs):
         return fw_name
     return None
 
+def _xcframework_contains_arm64_sim_slice(xcframework):
+    slices = xcframework["slices"]
+    for s in slices:
+        if s["platform"] == "ios" and \
+           s["platform_variant"] == "simulator" and \
+           "arm64" in s["supported_archs"]:
+            return True
+    return False
+
 def apple_library(
         name,
         library_tools = {},
@@ -767,8 +776,10 @@ def apple_library(
         )
         import_vfsoverlays.append(import_name + "_vfs")
 
+    vendored_deps_contains_arm64_sim_slice = {}
     for xcframework in kwargs.pop("vendored_xcframeworks", []):
         xcframework_name, xcframework_name_vfs = _xcframework(library_name = name, **xcframework)
+        vendored_deps_contains_arm64_sim_slice[xcframework_name] = _xcframework_contains_arm64_sim_slice(xcframework)
         vendored_deps.append(xcframework_name)
         import_vfsoverlays.append(xcframework_name_vfs)
 
@@ -776,13 +787,21 @@ def apple_library(
     for vendored_dynamic_library in kwargs.pop("vendored_dynamic_libraries", []):
         fail("no support for dynamic library: %s" % vendored_dynamic_library)
 
-    # TODO(jmarino)Perhaps it uses a import_middleman here
-    if len(vendored_deps):
-        import_middleman(name = name + ".import_middleman", deps = vendored_deps, tags = ["manual"])
+    vendored_deps_non_arm64_sim = [d for d in vendored_deps if not vendored_deps_contains_arm64_sim_slice.get(d, False)]
+    if vendored_deps_non_arm64_sim:
+        import_middleman(
+            name = name + ".import_middleman",
+            deps = vendored_deps_non_arm64_sim,
+            tags = ["manual"],
+        )
         deps += select({
             "@build_bazel_rules_ios//:arm64_simulator_use_device_deps": [name + ".import_middleman"],
-            "//conditions:default": vendored_deps,
+            "//conditions:default": vendored_deps_non_arm64_sim,
         })
+
+    vendored_deps_arm64_sim = [d for d in vendored_deps if vendored_deps_contains_arm64_sim_slice.get(d, False)]
+    if vendored_deps_arm64_sim:
+        deps += vendored_deps_arm64_sim
 
     resource_bundles = library_tools["resource_bundle_generator"](
         name = name,
