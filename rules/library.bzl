@@ -289,6 +289,7 @@ def _xcframework_slice(*, xcframework_name, identifier, platform, platform_varia
             deps = [],
             dsym_imports = dsym_imports,
             tags = _MANUAL,
+            visibility = ["//visibility:public"],
         )
         import_headers, import_module_map, import_swiftmodules = _xcframework_slice_imports(path)
         _make_xcframework_vfs(import_headers, import_module_map, import_swiftmodules)
@@ -301,6 +302,7 @@ def _xcframework_slice(*, xcframework_name, identifier, platform, platform_varia
             ),
             deps = [],
             tags = _MANUAL,
+            visibility = ["//visibility:public"],
         )
         import_headers, import_module_map, import_swiftmodules = _xcframework_slice_imports(path)
         _make_xcframework_vfs(import_headers, import_module_map, import_swiftmodules)
@@ -316,6 +318,7 @@ def _xcframework_slice(*, xcframework_name, identifier, platform, platform_varia
             hdrs = import_headers,
             includes = includes,
             tags = _MANUAL,
+            visibility = ["//visibility:public"],
         )
         _make_xcframework_vfs(import_headers, import_module_map, import_swiftmodules, static = True)
     else:
