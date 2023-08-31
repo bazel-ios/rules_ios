@@ -109,6 +109,7 @@ def _make_test(name, test_rule, **kwargs):
         test_host = kwargs.pop("test_host", None),
         deps = kwargs.pop("deps", []),
         testonly = kwargs.pop("testonly", True),
+        minimum_os_version = kwargs.pop("minimum_os_version"),
         **test_attrs
     )
 

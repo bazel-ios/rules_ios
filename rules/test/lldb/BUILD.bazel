@@ -19,7 +19,7 @@ py_library(
 # Wrap this to feed into py_library - doesn't like the name with the dot in it
 genrule(
     name = "sim_template",
-    srcs = ["@build_bazel_rules_apple//apple/internal/templates:ios_sim_template"],
+    srcs = ["@build_bazel_rules_apple//apple/internal/templates:apple_simulator_template"],
     outs = ["sim_template.py"],
     cmd = "cp $(SRCS) $(OUTS)",
 )

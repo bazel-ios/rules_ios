@@ -1,4 +1,5 @@
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleFrameworkImportInfo")
+load("@build_bazel_rules_apple//apple/internal:providers.bzl", "new_appleframeworkimportinfo")
 load("//rules:features.bzl", "feature_names")
 load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
 
@@ -69,7 +70,7 @@ def _make_imports(transitive_sets):
 
     # TODO: consider passing along the dsyms
     provider_fields["dsym_imports"] = depset()
-    return [AppleFrameworkImportInfo(**provider_fields)]
+    return [new_appleframeworkimportinfo(**provider_fields)]
 
 def _find_imports_impl(target, ctx):
     static_framework_file = []
@@ -211,10 +212,10 @@ def _file_collector_rule_impl(ctx):
     deduped_dynamic_framework = depset(_deduplicate_test_deps(test_linker_deps[2], exisiting_dynamic_framework.to_list()))
     dynamic_framework_file = []
     dynamic_framework_dirs = []
-    replaced_dyanmic_framework = {}
+    replaced_dynamic_framework = {}
     for f in input_dynamic_frameworks:
         out = _update_framework(ctx, f)
-        replaced_dyanmic_framework[f] = out
+        replaced_dynamic_framework[f] = out
         dynamic_framework_file.append(out)
         dynamic_framework_dirs.append(out)
 
@@ -226,12 +227,12 @@ def _file_collector_rule_impl(ctx):
         dynamic_framework_dirs.extend(ad_hoc_file)
 
     for f in deduped_dynamic_framework.to_list():
-        if not replaced_dyanmic_framework.get(f, False):
+        if not replaced_dynamic_framework.get(f, False):
             dynamic_framework_file.append(f)
             dynamic_framework_dirs.append(f)
     objc_provider_fields["dynamic_framework_file"] = depset(dynamic_framework_file)
 
-    replaced_frameworks = replaced_dyanmic_framework.values() + replaced_static_framework.replaced.values()
+    replaced_frameworks = replaced_dynamic_framework.values() + replaced_static_framework.replaced.values()
 
     compat_link_opt = ["-L__BAZEL_XCODE_DEVELOPER_DIR__/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator", "-Wl,-weak-lswiftCompatibility51"]
 

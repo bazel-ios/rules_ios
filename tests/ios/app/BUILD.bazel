@@ -32,6 +32,7 @@ apple_framework(
 
 apple_framework(
     name = "Empty",
+    platforms = {"ios": "10.0"},
 )
 
 apple_framework(

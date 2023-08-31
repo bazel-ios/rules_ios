@@ -57,22 +57,25 @@ def _get_bazel_version():
 
 def rules_ios_dependencies():
     """Fetches repositories that are dependencies of `rules_ios`"""
+
+    # rules_swift 1.10.0
     _maybe(
         github_repo,
         name = "build_bazel_rules_swift",
         project = "bazelbuild",
-        ref = "17e20f7edf27e647f1b45f11ed75d51c17820c3b",
+        ref = "267512835d70610865aa00300d317c3ef1e1f8bf",
         repo = "rules_swift",
-        sha256 = "d50c2cb6f1c2c30cf44a8ea60469cd399f7458061169bde76a177b63d6b74330",
+        sha256 = "4fdeb69da7a40155b2e10f431a6624bd767fb8983effba630cf12b7f34d24c83",
     )
 
+    # rules_apple 3.0.0
     _maybe(
         github_repo,
         name = "build_bazel_rules_apple",
-        ref = "915ac30a9fa1fd3809599a5ab90fa1c6640fe8dc",
+        ref = "55cf5c2bec04b05b9ab435e24174834c5681be12",
         project = "bazelbuild",
         repo = "rules_apple",
-        sha256 = "0204016496a39d5c70247650e098905d129f25347c7e1f019f838ca74252ce2d",
+        sha256 = "11422f86bf0dd6503b8b6b3eb0e9ab29e8c84db15ca38ea000935d1d020107e0",
     )
 
     _maybe(

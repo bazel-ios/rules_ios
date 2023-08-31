@@ -1,9 +1,13 @@
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load(
     "@build_bazel_rules_apple//apple:providers.bzl",
-    "AppleBundleInfo",
     "AppleResourceInfo",
     "IosFrameworkBundleInfo",
+)
+load(
+    "@build_bazel_rules_apple//apple/internal:providers.bzl",
+    "new_applebundleinfo",
+    "new_iosframeworkbundleinfo",
 )
 load(
     "@build_bazel_rules_apple//apple/internal:partials.bzl",
@@ -81,8 +85,8 @@ def _framework_middleman(ctx):
         dynamic_framework_provider,
         cc_info_provider,
         objc_provider,
-        IosFrameworkBundleInfo(),
-        AppleBundleInfo(
+        new_iosframeworkbundleinfo(),
+        new_applebundleinfo(
             archive = None,
             archive_root = None,
             binary = None,

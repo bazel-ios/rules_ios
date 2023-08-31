@@ -344,8 +344,10 @@ def _xcframework(*, library_name, name, slices):
 
         for arch in archs:
             if platform == "ios":
-                if (arch == "armv7s" or arch == "arm64e"):
-                    # unsupported platform-arch by rules_apple
+                # unsupported platform-arch by rules_apple
+                unsupported_platforms = ["armv7", "armv7s", "i386"]
+
+                if arch in unsupported_platforms:
                     continue
                 elif platform_variant == "maccatalyst":
                     # TODO: support maccatalyst

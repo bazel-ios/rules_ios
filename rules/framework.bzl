@@ -22,8 +22,10 @@ load("@build_bazel_rules_apple//apple/internal:resources.bzl", "resources")
 load("@build_bazel_rules_apple//apple/internal:rule_support.bzl", "rule_support")
 load("@build_bazel_rules_apple//apple/internal:apple_toolchains.bzl", "AppleMacToolsToolchainInfo", "AppleXPlatToolsToolchainInfo")
 load("@build_bazel_rules_apple//apple/internal:swift_support.bzl", "swift_support")
+load("@build_bazel_rules_apple//apple/internal:transition_support.bzl", rules_apple_transition_support = "transition_support")
 load("@build_bazel_rules_apple//apple/internal/utils:clang_rt_dylibs.bzl", "clang_rt_dylibs")
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo", "IosFrameworkBundleInfo")
+load("@build_bazel_rules_apple//apple/internal:providers.bzl", "new_applebundleinfo", "new_iosframeworkbundleinfo")
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo", "swift_clang_module_aspect", "swift_common")
 load(
     "@build_bazel_rules_apple//apple/internal/aspects:resource_aspect.bzl",
@@ -582,7 +584,14 @@ def _merge_root_infoplists(ctx):
     current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
     platform_type = str(current_apple_platform.platform.platform_type)
     apple_mac_toolchain_info = ctx.attr._toolchain[AppleMacToolsToolchainInfo]
-    rule_descriptor = rule_support.rule_descriptor_no_ctx(platform_type, apple_product_type.static_framework)
+    rule_descriptor = rule_support.rule_descriptor(
+        platform_type = platform_type,
+        product_type = apple_product_type.static_framework,
+    )
+    features = features_support.compute_enabled_features(
+        requested_features = ctx.features,
+        unsupported_features = ctx.disabled_features,
+    )
 
     resource_actions.merge_root_infoplists(
         actions = ctx.actions,
@@ -596,7 +605,7 @@ def _merge_root_infoplists(ctx):
         output_plist = output_plist,
         output_pkginfo = None,
         output_discriminator = "framework",
-        platform_prerequisites = _platform_prerequisites(ctx, rule_descriptor, platform_type),
+        platform_prerequisites = _platform_prerequisites(ctx, rule_descriptor, platform_type, features),
         resolved_plisttool = apple_mac_toolchain_info.resolved_plisttool,
         rule_descriptor = rule_descriptor,
         rule_label = ctx.label,
@@ -613,20 +622,22 @@ def _attrs_for_split_slice(attrs_by_split_slices, split_slice_key):
     else:
         return attrs_by_split_slices[split_slice_key]
 
-def _platform_prerequisites(ctx, rule_descriptor, platform_type):
+def _platform_prerequisites(ctx, rule_descriptor, platform_type, features):
     # Consider plumbing this in
     deps = getattr(ctx.attr, "deps", None)
     uses_swift = swift_support.uses_swift(deps) if deps else False
 
+    apple_xplat_toolchain_info = ctx.attr._xplat_toolchain[AppleXPlatToolsToolchainInfo]
+
     return platform_support.platform_prerequisites(
         apple_fragment = ctx.fragments.apple,
+        build_settings = apple_xplat_toolchain_info.build_settings,
         config_vars = ctx.var,
         cpp_fragment = ctx.fragments.cpp,
         device_families = rule_descriptor.allowed_device_families,
-        disabled_features = ctx.disabled_features,
         explicit_minimum_deployment_os = ctx.attr.minimum_deployment_os_version,
         explicit_minimum_os = ctx.attr.minimum_os_version,
-        features = ctx.features,
+        features = features,
         objc_fragment = ctx.fragments.objc,
         platform_type_string = platform_type,
         uses_swift = uses_swift,
@@ -664,8 +675,11 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
     resource_deps = ctx.attr.deps + ctx.attr.transitive_deps + ctx.attr.data
     current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
     platform_type = str(current_apple_platform.platform.platform_type)
-    rule_descriptor = rule_support.rule_descriptor_no_ctx(platform_type, apple_product_type.framework)
-    platform_prerequisites = _platform_prerequisites(ctx, rule_descriptor, platform_type)
+    rule_descriptor = rule_support.rule_descriptor(
+        platform_type = platform_type,
+        product_type = apple_product_type.framework,
+    )
+    platform_prerequisites = _platform_prerequisites(ctx, rule_descriptor, platform_type, features)
     signed_frameworks = []
     if provisioning_profile:
         signed_frameworks = [
@@ -694,6 +708,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         ctx,
         avoid_deps = avoid_deps,
         entitlements = None,
+        exported_symbols_lists = ctx.files.exported_symbols_lists,
         extra_linkopts = extra_linkopts,
         platform_prerequisites = platform_prerequisites,
         stamp = ctx.attr.stamp,
@@ -705,7 +720,6 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         actions = actions,
         bundle_name = bundle_name,
         bundle_extension = bundle_extension,
-        executable_name = bundle_name,
         label_name = label.name,
         rule_descriptor = rule_descriptor,
         platform_prerequisites = platform_prerequisites,
@@ -728,6 +742,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
             platform_prerequisites = platform_prerequisites,
             predeclared_outputs = predeclared_outputs,
             product_type = apple_product_type.framework,
+            rule_descriptor = rule_descriptor,
         ),
     )
     processor_partials.append(
@@ -743,6 +758,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         partials.codesigning_dossier_partial(
             actions = actions,
             apple_mac_toolchain_info = apple_mac_toolchain_info,
+            apple_xplat_toolchain_info = apple_xplat_toolchain_info,
             bundle_extension = bundle_extension,
             bundle_location = processor.location.framework,
             bundle_name = bundle_name,
@@ -750,6 +766,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
             embedded_targets = dep_frameworks,
             label_name = label.name,
             platform_prerequisites = platform_prerequisites,
+            predeclared_outputs = predeclared_outputs,
             provisioning_profile = provisioning_profile,
             rule_descriptor = rule_descriptor,
         ),
@@ -773,10 +790,14 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
             bundle_name = bundle_name,
             debug_dependencies = dep_frameworks,
             dsym_binaries = debug_outputs.dsym_binaries,
+            label_name = label.name,
             linkmaps = debug_outputs.linkmaps,
             dsym_info_plist_template = apple_mac_toolchain_info.dsym_info_plist_template,
             executable_name = bundle_name,
             platform_prerequisites = platform_prerequisites,
+            resolved_plisttool = apple_mac_toolchain_info.resolved_plisttool,
+            rule_label = label,
+            version = None,
         ),
     )
 
@@ -869,7 +890,6 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         bundle_name = bundle_name,
         codesign_inputs = [],
         codesignopts = [],
-        executable_name = bundle_name,
         features = features,
         ipa_post_processor = None,
         partials = processor_partials,
@@ -884,7 +904,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
     return struct(
         files = processor_result.output_files,
         providers = [
-            IosFrameworkBundleInfo(),
+            new_iosframeworkbundleinfo(),
             OutputGroupInfo(
                 **outputs.merge_output_groups(
                     link_result.output_groups,
@@ -906,7 +926,7 @@ def _bundle_static_framework(ctx, is_extension_safe, current_apple_platform, out
 
     # Static packaging - archives are passed from library deps
     return struct(files = depset([]), providers = [
-        AppleBundleInfo(
+        new_applebundleinfo(
             archive = None,
             archive_root = None,
             binary = outputs.binary,
@@ -1053,7 +1073,7 @@ apple_framework_packaging = rule(
         ),
         "deps": attr.label_list(
             mandatory = True,
-            cfg = apple_common.multi_arch_split,
+            cfg = rules_apple_transition_support.apple_rule_transition,
             aspects = [apple_resource_aspect],
             doc =
                 """Objc or Swift rules to be packed by the framework rule
@@ -1061,7 +1081,7 @@ apple_framework_packaging = rule(
         ),
         "private_deps": attr.label_list(
             mandatory = False,
-            cfg = apple_common.multi_arch_split,
+            cfg = rules_apple_transition_support.apple_rule_transition,
             aspects = [apple_resource_aspect],
             doc =
                 """Objc or Swift private rules to be packed by the framework rule
@@ -1069,7 +1089,7 @@ apple_framework_packaging = rule(
         ),
         "data": attr.label_list(
             mandatory = False,
-            cfg = apple_common.multi_arch_split,
+            cfg = rules_apple_transition_support.apple_rule_transition,
             allow_files = True,
             doc =
                 """Objc or Swift rules to be packed by the framework rule
@@ -1091,7 +1111,7 @@ The default behavior bakes this into the top level app. When false, it's statica
         ),
         "vfs": attr.label_list(
             mandatory = False,
-            cfg = apple_common.multi_arch_split,
+            cfg = rules_apple_transition_support.apple_rule_transition,
             doc =
                 """Additional VFS for the framework to export
 """,
@@ -1099,7 +1119,7 @@ The default behavior bakes this into the top level app. When false, it's statica
         "transitive_deps": attr.label_list(
             aspects = [swift_clang_module_aspect],
             mandatory = True,
-            cfg = apple_common.multi_arch_split,
+            cfg = rules_apple_transition_support.apple_rule_transition,
             doc =
                 """Deps of the deps
 """,
@@ -1144,7 +1164,7 @@ A list of framework targets (see
 [`ios_framework`](https://github.com/bazelbuild/rules_apple/blob/master/doc/rules-ios.md#ios_framework))
 that this target depends on.
 """,
-            cfg = apple_common.multi_arch_split,
+            cfg = rules_apple_transition_support.apple_rule_transition,
         ),
         "_headermap_builder": attr.label(
             executable = True,
@@ -1163,7 +1183,7 @@ that this target depends on.
             """,
         ),
         "_child_configuration_dummy": attr.label(
-            cfg = apple_common.multi_arch_split,
+            cfg = rules_apple_transition_support.apple_rule_transition,
             default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
         ),
         "bundle_id": attr.string(
