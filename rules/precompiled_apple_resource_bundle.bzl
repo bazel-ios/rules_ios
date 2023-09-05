@@ -105,6 +105,9 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         paths.join("%s-intermediates" % ctx.label.name, "Info.plist"),
     )
 
+    # as fake_rule_label is being used to get module_name for compiling xibs, storyboards, core data models etc.
+    # we have to change it to target name because of clashing writing actions when we build multiple targets with same module_name
+    partials_args["rule_label"] = Label("//fake_package:" + ctx.label.name)
     resource_actions.merge_root_infoplists(
         bundle_id = ctx.attr.bundle_id or bundle_identifier_for_bundle(bundle_name),
         input_plists = ctx.files.infoplists,
