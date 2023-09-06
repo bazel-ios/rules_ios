@@ -7,8 +7,5 @@ tests/ios/xcodeproj/**/xcuserdata
 /tests/macos/Index/
 /tests/index-import.pid
 user.bazelrc
-# XCHammer specific things to ignore for now
 external
-*-XCHammer*.xcodeproj
-xchammer-includes
 index-import.runfiles

@@ -5,7 +5,7 @@ load(
     "rules_ios_dependencies",
 )
 
-rules_ios_dependencies(load_xchammer_dependencies = True)
+rules_ios_dependencies()
 
 load(
     "@build_bazel_rules_apple//apple:repositories.bzl",
