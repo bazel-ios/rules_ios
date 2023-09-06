@@ -11,7 +11,7 @@
 // @testBundle a string with the path:
 // e.g. "/Users/some/Library/Developer/Xcode/DerivedData/bazel-project-*/Build/Products/Debug-iphonesimulator/Some.xctest";
 // Note: this code is effectively a noop on other test runners than Xcode's GUI
-static NSURL *getWorkspacePath(NSURL *testBundle)
+static NSURL *getWorkspacePath(NSString *testBundle)
 {
     NSArray *components = testBundle.pathComponents;
     if (components.count < 4) {
