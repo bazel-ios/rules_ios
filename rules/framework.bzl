@@ -649,14 +649,6 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         # processed infoplit its possible, but validate for the common case
         fail("Missing bundle_id: Info.plist actions require one")
 
-    # Determine the interface version of rules_apple. We don't want to force
-    # "hail mary" type rules and Bazel bumps on the community to run a given
-    # version of rules_ios and the API we depend on is relatively lts_5. If
-    # this ceases to be the case than consider mainlining the few components we
-    # use from it to remove this complexity.
-    rules_apple_api_version = getattr(bundling_support, "rule_api_version", None)
-    use_lts_5_rules_apple_api = rules_apple_api_version == 1.0
-
     bundle_name = ctx.attr.framework_name
     bundle_extension = ".framework"
     features = features_support.compute_enabled_features(
@@ -775,36 +767,19 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         ),
     )
 
-    if use_lts_5_rules_apple_api:
-        processor_partials.append(
-            partials.debug_symbols_partial(
-                actions = actions,
-                rule_label = label,
-                bundle_extension = bundle_extension,
-                bundle_name = bundle_name,
-                debug_dependencies = dep_frameworks,
-                dsym_binaries = debug_outputs.dsym_binaries,
-                linkmaps = debug_outputs.linkmaps,
-                dsym_info_plist_template = apple_mac_toolchain_info.dsym_info_plist_template,
-                executable_name = bundle_name,
-                platform_prerequisites = platform_prerequisites,
-                bin_root_path = bin_root_path,
-            ),
-        )
-    else:
-        processor_partials.append(
-            partials.debug_symbols_partial(
-                actions = actions,
-                bundle_extension = bundle_extension,
-                bundle_name = bundle_name,
-                debug_dependencies = dep_frameworks,
-                dsym_binaries = debug_outputs.dsym_binaries,
-                linkmaps = debug_outputs.linkmaps,
-                dsym_info_plist_template = apple_mac_toolchain_info.dsym_info_plist_template,
-                executable_name = bundle_name,
-                platform_prerequisites = platform_prerequisites,
-            ),
-        )
+    processor_partials.append(
+        partials.debug_symbols_partial(
+            actions = actions,
+            bundle_extension = bundle_extension,
+            bundle_name = bundle_name,
+            debug_dependencies = dep_frameworks,
+            dsym_binaries = debug_outputs.dsym_binaries,
+            linkmaps = debug_outputs.linkmaps,
+            dsym_info_plist_template = apple_mac_toolchain_info.dsym_info_plist_template,
+            executable_name = bundle_name,
+            platform_prerequisites = platform_prerequisites,
+        ),
+    )
 
     processor_partials.append(
         partials.embedded_bundles_partial(
@@ -822,41 +797,28 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         ),
     )
 
-    if use_lts_5_rules_apple_api:
-        processor_partials.append(
-            partials.framework_provider_partial(
-                actions = actions,
-                bin_root_path = bin_root_path,
-                binary_artifact = binary_artifact,
-                bundle_name = bundle_name,
-                bundle_only = False,
-                objc_provider = link_result.objc,
-                rule_label = label,
-            ),
-        )
-    else:
-        cc_toolchain = find_cpp_toolchain(ctx)
-        cc_features = cc_common.configure_features(
-            ctx = ctx,
+    cc_toolchain = find_cpp_toolchain(ctx)
+    cc_features = cc_common.configure_features(
+        ctx = ctx,
+        cc_toolchain = cc_toolchain,
+        language = "objc",
+        requested_features = ctx.features,
+        unsupported_features = ctx.disabled_features,
+    )
+    processor_partials.append(
+        partials.framework_provider_partial(
+            actions = actions,
+            bin_root_path = bin_root_path,
+            binary_artifact = binary_artifact,
+            bundle_name = bundle_name,
+            bundle_only = False,
+            cc_features = cc_features,
+            cc_info = link_result.cc_info,
             cc_toolchain = cc_toolchain,
-            language = "objc",
-            requested_features = ctx.features,
-            unsupported_features = ctx.disabled_features,
-        )
-        processor_partials.append(
-            partials.framework_provider_partial(
-                actions = actions,
-                bin_root_path = bin_root_path,
-                binary_artifact = binary_artifact,
-                bundle_name = bundle_name,
-                bundle_only = False,
-                cc_features = cc_features,
-                cc_info = link_result.cc_info,
-                cc_toolchain = cc_toolchain,
-                objc_provider = link_result.objc,
-                rule_label = label,
-            ),
-        )
+            objc_provider = link_result.objc,
+            rule_label = label,
+        ),
+    )
 
     processor_partials.append(
         partials.resources_partial(

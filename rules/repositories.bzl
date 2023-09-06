@@ -57,49 +57,23 @@ def _get_bazel_version():
 
 def rules_ios_dependencies():
     """Fetches repositories that are dependencies of `rules_ios`"""
-    bazel_version = _get_bazel_version()
-    if bazel_version.major == "5":
-        # Minimum commit vetted of rules_swift - not necessarily exclusive with
-        # this bazel version or rules_apple version but tested on CI as so.
-        _maybe(
-            github_repo,
-            name = "build_bazel_rules_swift",
-            project = "bazel-ios",
-            ref = "e0272df7d98a563c07aa2e78722cd8ce62549864",
-            repo = "rules_swift",
-            sha256 = "006743d481c477928796ad985ba32b591f5926cd590d32b207e018049b569594",
-        )
+    _maybe(
+        github_repo,
+        name = "build_bazel_rules_swift",
+        project = "bazelbuild",
+        ref = "17e20f7edf27e647f1b45f11ed75d51c17820c3b",
+        repo = "rules_swift",
+        sha256 = "d50c2cb6f1c2c30cf44a8ea60469cd399f7458061169bde76a177b63d6b74330",
+    )
 
-        # LTS support. Some of our third party deps from bazelbuild org don't
-        # support LTS but from time to time we'll evaluate supporting this to
-        # allow us to all run on HEAD
-        # For rules_apple, we maintain a tag rules_ios_1.0
-        _maybe(
-            github_repo,
-            name = "build_bazel_rules_apple",
-            ref = "6f93e73382a01595d576247db9fa886769536605",
-            project = "bazelbuild",
-            repo = "rules_apple",
-            sha256 = "1618fc82e556ebc97ea360b8cacd3365ca3b0e0a85ccb32422468204843e752d",
-        )
-    else:
-        _maybe(
-            github_repo,
-            name = "build_bazel_rules_swift",
-            project = "bazelbuild",
-            ref = "17e20f7edf27e647f1b45f11ed75d51c17820c3b",
-            repo = "rules_swift",
-            sha256 = "d50c2cb6f1c2c30cf44a8ea60469cd399f7458061169bde76a177b63d6b74330",
-        )
-
-        _maybe(
-            github_repo,
-            name = "build_bazel_rules_apple",
-            ref = "915ac30a9fa1fd3809599a5ab90fa1c6640fe8dc",
-            project = "bazelbuild",
-            repo = "rules_apple",
-            sha256 = "0204016496a39d5c70247650e098905d129f25347c7e1f019f838ca74252ce2d",
-        )
+    _maybe(
+        github_repo,
+        name = "build_bazel_rules_apple",
+        ref = "915ac30a9fa1fd3809599a5ab90fa1c6640fe8dc",
+        project = "bazelbuild",
+        repo = "rules_apple",
+        sha256 = "0204016496a39d5c70247650e098905d129f25347c7e1f019f838ca74252ce2d",
+    )
 
     _maybe(
         http_archive,
