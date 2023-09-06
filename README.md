@@ -95,7 +95,7 @@ ios_application(
 
 ### Xcode project generation
 
-There are currently at least three options to generate Xcode projects that build with Bazel.
+There are currently two options to generate Xcode projects that build with Bazel.
 
 `rules_ios` has its own project generator that is considered stable and ready to be used in production. Here's a minimal example of how to load it in your `BUILD` file:
 
@@ -111,28 +111,7 @@ xcodeproj(
 
 Checkout [legacy_xcodeproj.bzl](https://github.com/bazel-ios/rules_ios/blob/master/rules/legacy_xcodeproj.bzl) for available attributes.
 
-Alternatively the `bazel-ios` org has forks of both [XCHammer](https://github.com/bazel-ios/xchammer) and [Tulsi](https://github.com/bazel-ios/tulsi) with some changes to make it work with `rules_ios` and optionally enable the "build with Xcode" use case. This is currently considered "alpha" software and not recommended to be used in production. If you want to test it out when loading `rules_ios` per [WORKSPACE setup](#workspace-setup) instructions load `rules_ios` dependencies like so
-
-```python
-rules_ios_dependencies(load_xchammer_dependencies = True)
-```
-
-and additionally declare the `xchammer_xcodeproj` macro this way
-
-```python
-load("@build_bazel_rules_ios//rules:xchammer_xcodeproj.bzl", "xchammer_xcodeproj")
-
-xchammer_xcodeproj(
-    name = "MyXcode",
-    bazel_path = "bazelisk",
-    generate_xcode_schemes = False # if True enables "build with Xcode"
-    targets = [ ":iOS-App"]
-)
-```
-
-Checkout [xchammer_xcodeproj.bzl](https://github.com/bazel-ios/rules_ios/blob/master/rules/xchammer_xcodeproj.bzl) for available attributes.
-
-Last, [rules_xcodeproj](https://github.com/MobileNativeFoundation/rules_xcodeproj) is another great alternative and we're working with them to better integrate it with `rules_ios`. Checkout [examples/rules_ios](https://github.com/MobileNativeFoundation/rules_xcodeproj/tree/main/examples/rules_ios) for examples of how to use it with `rules_ios`.
+Alternatively, [rules_xcodeproj](https://github.com/MobileNativeFoundation/rules_xcodeproj) is another great generator and we're working with them to better integrate it with `rules_ios`. Checkout [examples/rules_ios](https://github.com/MobileNativeFoundation/rules_xcodeproj/tree/main/examples/rules_ios) for examples of how to use it with `rules_ios`.
 
 ### Frameworks
 

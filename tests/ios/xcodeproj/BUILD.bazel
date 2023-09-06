@@ -1,8 +1,6 @@
 load("//rules:xcodeproj.bzl", "xcodeproj")
 load("//rules:legacy_xcodeproj.bzl", "xcodeproj_project_options")
 load("//rules:additional_scheme_info.bzl", "additional_scheme_info")
-load("//rules:xchammer_xcodeproj.bzl", "xchammer_xcodeproj")
-load("@xchammer//:BazelExtensions/xchammerconfig.bzl", "bazel_build_service_config")
 
 xcodeproj(
     name = "Single-Static-Framework-Project",
@@ -221,27 +219,5 @@ xcodeproj(
     project_attributes_overrides = {"ORGANIZATIONNAME": "rules_ios"},
     deps = [
         "//tests/ios/frameworks/dynamic:App",
-    ],
-)
-
-xchammer_xcodeproj(
-    name = "App-XCHammer",
-    deps = [
-        "//tests/ios/app:App",
-        "//tests/ios/extensions:ExampleExtension",
-        "//tests/ios/frameworks/with-bundle-id:FrameworkWithBundleId",
-    ],
-)
-
-xchammer_xcodeproj(
-    name = "App-XCHammerWithXCBuildKit",
-    bazel_build_service_config = bazel_build_service_config(
-        indexing_enabled = True,
-        progress_bar_enabled = True,
-    ),
-    deps = [
-        "//tests/ios/app:App",
-        "//tests/ios/extensions:ExampleExtension",
-        "//tests/ios/frameworks/with-bundle-id:FrameworkWithBundleId",
     ],
 )
