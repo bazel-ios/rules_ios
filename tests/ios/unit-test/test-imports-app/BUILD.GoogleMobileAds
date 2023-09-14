@@ -10,7 +10,7 @@ apple_static_framework_import(
         allow_empty = False,
     ),
     sdk_dylibs = [
-        "libsqlite3",
+        "libsqlite3.dylib",
         "libz",
     ],
     sdk_frameworks = [

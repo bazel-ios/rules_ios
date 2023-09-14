@@ -170,6 +170,16 @@ def _dedupe_key(key, avoid_libraries, objc_provider_fields, check_name = False):
         updated_library.append(f)
     objc_provider_fields[key] = depset(updated_library)
 
+def _get_lib_name(name):
+    """return a lib name for a name dropping prefix/suffix"""
+    if name.startswith("lib"):
+        name = name[3:]
+    if name.endswith(".dylib"):
+        name = name[:-6]
+    elif name.endswith(".so"):
+        name = name[:-3]
+    return name
+
 def _dep_middleman(ctx):
     objc_providers = []
     cc_providers = []
@@ -224,6 +234,18 @@ def _dep_middleman(ctx):
     _dedupe_key("force_load_library", avoid_libraries, objc_provider_fields)
     _dedupe_key("imported_library", avoid_libraries, objc_provider_fields, check_name = True)
     _dedupe_key("static_framework_file", avoid_libraries, objc_provider_fields, check_name = True)
+
+    if "sdk_dylib" in objc_provider_fields:
+        # Put sdk_dylib at _end_ of the linker invocation. Apple's linkers have
+        # problems when SDK dylibs are first in the list, starting with Bazel
+        # 6.0 this is backwards by default
+        objc_provider_fields["linkopt"] = depset(
+            [],
+            transitive = [
+                objc_provider_fields.get("linkopt", depset([])),
+                depset(["-l" + _get_lib_name(lib) for lib in objc_provider_fields.pop("sdk_dylib").to_list()]),
+            ],
+        )
 
     objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
     cc_info_provider = cc_common.merge_cc_infos(direct_cc_infos = [], cc_infos = cc_providers)
