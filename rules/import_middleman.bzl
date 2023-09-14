@@ -1,3 +1,8 @@
+# Notes on Bazel 5.x.x VS 6.x.x and rules_apple rule_api_version changes:
+# The provider field that contains the `static_framework_file` changed to
+# `imported_library` - see
+# https://github.com/bazelbuild/rules_apple/commit/8d841342c238457896cd7596cc29b2d06c9a75f0
+
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleFrameworkImportInfo")
 load("//rules:features.bzl", "feature_names")
 load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
@@ -100,8 +105,6 @@ def _find_imports_impl(target, ctx):
         if use_lts_5_rules_apple_api:
             static_framework_file.append(target[apple_common.Objc].static_framework_file)
         else:
-            # The provider field that contains the `static_framework_file` changed in
-            # https://github.com/bazelbuild/rules_apple/commit/8d841342c238457896cd7596cc29b2d06c9a75f0
             static_framework_file.append(target[apple_common.Objc].imported_library)
 
         target_dynamic_framework_file = target[apple_common.Objc].dynamic_framework_file
@@ -217,7 +220,6 @@ def _file_collector_rule_impl(ctx):
     if use_lts_5_rules_apple_api:
         objc_provider_fields["static_framework_file"] = depset(replaced_static_framework.inputs)
     else:
-        # See comment in file above regarding this name in 6.x.x
         objc_provider_fields["imported_library"] = depset([], transitive = [
             depset(replaced_static_framework.inputs),
             objc_provider_fields.get("imported_library", depset([])),
@@ -250,8 +252,6 @@ def _file_collector_rule_impl(ctx):
     objc_provider_fields["dynamic_framework_file"] = depset(dynamic_framework_file)
 
     all_replaced_frameworks = replaced_dyanmic_framework.values() + replaced_static_framework.replaced.values()
-
-    # This slightly varies in Bazel 6.x.x
     if use_lts_5_rules_apple_api:
         replaced_frameworks = all_replaced_frameworks
     else:
