@@ -204,10 +204,11 @@ def _ios_test(name, bundle_rule, test_rule, test_factory, apple_library, infopli
     # Set this to a single __internal__ test bundle.
     test_bundle_name = name + ".__internal__.__test_bundle"
     bundle_attrs = {k: v for (k, v) in ios_test_kwargs.items() if k in _APPLE_BUNDLE_ATTRS}
+    bundle_name = bundle_attrs.pop("bundle_name", name)
     bundle_rule(
         name = test_bundle_name,
-        bundle_name = name,
-        test_bundle_output = "{}.zip".format(name),
+        bundle_name = bundle_name,
+        test_bundle_output = "{}.zip".format(bundle_name),
         testonly = True,
         frameworks = frameworks,
         infoplists = select(infoplists),

@@ -16,6 +16,7 @@ ios_unit_test(
         "empty.m",
         "empty.swift",
     ],
+    bundle_name = "DefaultHosted_bundle",
     minimum_os_version = "10.0",
     test_host = True,
     # Adding visibility so the xcodeproject tests can depend on this target
