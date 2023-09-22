@@ -14,9 +14,9 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "20A37CC084B553DAC3470E18"
-               BuildableName = "DefaultHosted.xctest"
-               BlueprintName = "DefaultHosted"
+               BlueprintIdentifier = "46B625EA057EE2C8BA6FA0B1"
+               BuildableName = "DefaultHosted_bundle.xctest"
+               BlueprintName = "DefaultHosted_bundle"
                ReferencedContainer = "container:Test-Target-With-Test-Host-Project.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,15 +28,15 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       onlyGenerateCoverageForSpecifiedTargets = "NO"
       shouldUseLaunchSchemeArgsEnv = "YES"
-      customLLDBInitFile = "$CONFIGURATION_TEMP_DIR/DefaultHosted.lldbinit">
+      customLLDBInitFile = "$CONFIGURATION_TEMP_DIR/DefaultHosted_bundle.lldbinit">
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "20A37CC084B553DAC3470E18"
-               BuildableName = "DefaultHosted.xctest"
-               BlueprintName = "DefaultHosted"
+               BlueprintIdentifier = "46B625EA057EE2C8BA6FA0B1"
+               BuildableName = "DefaultHosted_bundle.xctest"
+               BlueprintName = "DefaultHosted_bundle"
                ReferencedContainer = "container:Test-Target-With-Test-Host-Project.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -44,9 +44,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "20A37CC084B553DAC3470E18"
-            BuildableName = "DefaultHosted.xctest"
-            BlueprintName = "DefaultHosted"
+            BlueprintIdentifier = "46B625EA057EE2C8BA6FA0B1"
+            BuildableName = "DefaultHosted_bundle.xctest"
+            BlueprintName = "DefaultHosted_bundle"
             ReferencedContainer = "container:Test-Target-With-Test-Host-Project.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,13 +63,13 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES"
-      customLLDBInitFile = "$CONFIGURATION_TEMP_DIR/DefaultHosted.lldbinit">
+      customLLDBInitFile = "$CONFIGURATION_TEMP_DIR/DefaultHosted_bundle.lldbinit">
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "20A37CC084B553DAC3470E18"
-            BuildableName = "DefaultHosted.xctest"
-            BlueprintName = "DefaultHosted"
+            BlueprintIdentifier = "46B625EA057EE2C8BA6FA0B1"
+            BuildableName = "DefaultHosted_bundle.xctest"
+            BlueprintName = "DefaultHosted_bundle"
             ReferencedContainer = "container:Test-Target-With-Test-Host-Project.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -86,9 +86,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "20A37CC084B553DAC3470E18"
-            BuildableName = "DefaultHosted.xctest"
-            BlueprintName = "DefaultHosted"
+            BlueprintIdentifier = "46B625EA057EE2C8BA6FA0B1"
+            BuildableName = "DefaultHosted_bundle.xctest"
+            BlueprintName = "DefaultHosted_bundle"
             ReferencedContainer = "container:Test-Target-With-Test-Host-Project.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

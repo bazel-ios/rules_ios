@@ -8,11 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		4D9FC7A3A45FAD1826CE314F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ECF1D7133544DD5E82A3EB0 /* main.m */; };
+		77CEA17F2CA7DD5E92DE1D2F /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5478D8BA2BE2A548270A80 /* empty.swift */; };
 		8B8703078ED965C24F7DFC6D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 211B0D62D65A5D8BEFE42153 /* main.m */; };
 		9C997105C8FCCC97A52F3C37 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF21FC7C23005F0603AD4F0 /* test.swift */; };
+		A4F944E364C32E57F5B25D01 /* empty.m in Sources */ = {isa = PBXBuildFile; fileRef = 018DA4ABD245EA72FEA9BA46 /* empty.m */; };
 		A92FEA9E7CEAA5C1D707216B /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = EC2BF9F658BA7B0FF93BA215 /* test.m */; };
-		C61986BF5CBA4DAEAF33BE91 /* empty.m in Sources */ = {isa = PBXBuildFile; fileRef = 018DA4ABD245EA72FEA9BA46 /* empty.m */; };
-		C6B1D1CBC7730A53A2C04E0D /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5478D8BA2BE2A548270A80 /* empty.swift */; };
 		C95405553A2746A500C5E3E6 /* testhelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF0C0F5D81C125CD2559615 /* testhelper.m */; };
 		E676560B3EE63A86606530C8 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AC323968F3E7DC9BAFEC85 /* empty.swift */; };
 /* End PBXBuildFile section */
@@ -25,7 +25,7 @@
 			remoteGlobalIDString = 1ECB59A3C8C905569C62BCE7;
 			remoteInfo = "TestImports-App";
 		};
-		78CCC3248A576BED58D23977 /* PBXContainerItemProxy */ = {
+		5679EF529BB197155D24404E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0D82F964E7A8A27136301FFF /* Project object */;
 			proxyType = 1;
@@ -38,8 +38,8 @@
 		0052687FF99FFC1CF0644A94 /* iOS-10.0-AppHost.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "iOS-10.0-AppHost.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		018DA4ABD245EA72FEA9BA46 /* empty.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = empty.m; sourceTree = "<group>"; };
 		0A3BB7488A9B93655A5A80A7 /* TestModelMapping.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = TestModelMapping.xcmappingmodel; sourceTree = "<group>"; };
-		1AC28A58E3C7738C108353BE /* DefaultHosted.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = DefaultHosted.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		211B0D62D65A5D8BEFE42153 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		348B04B51F448DD66CEE21AA /* DefaultHosted_bundle.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = DefaultHosted_bundle.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CCFF4E96CDD4C2949F0F71A /* Header2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header2.h; sourceTree = "<group>"; };
 		3ECF1D7133544DD5E82A3EB0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4BF0C0F5D81C125CD2559615 /* testhelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = testhelper.m; sourceTree = "<group>"; };
@@ -93,7 +93,7 @@
 		41BE2FF5579DA46E599A01EC /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1AC28A58E3C7738C108353BE /* DefaultHosted.xctest */,
+				348B04B51F448DD66CEE21AA /* DefaultHosted_bundle.xctest */,
 				0052687FF99FFC1CF0644A94 /* iOS-10.0-AppHost.app */,
 				61CE3CBBAD0BFAFC0953377B /* TestImports-App.app */,
 				9E7E8177A9991D407C446EF6 /* TestImports-Unit-Tests.xctest */,
@@ -198,21 +198,21 @@
 			productReference = 61CE3CBBAD0BFAFC0953377B /* TestImports-App.app */;
 			productType = "com.apple.product-type.application";
 		};
-		20A37CC084B553DAC3470E18 /* DefaultHosted */ = {
+		46B625EA057EE2C8BA6FA0B1 /* DefaultHosted_bundle */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A5C34E19D5BE5E6D9373D9D0 /* Build configuration list for PBXNativeTarget "DefaultHosted" */;
+			buildConfigurationList = 13905967A63C27453E8EC4D7 /* Build configuration list for PBXNativeTarget "DefaultHosted_bundle" */;
 			buildPhases = (
-				6DBC122A6C2C8B5D5805E16D /* Build with bazel */,
-				17D1A00F4E8DB77A4AD36F1D /* Sources */,
+				BC6F7CEFD120F8ABE7E6B253 /* Build with bazel */,
+				86044D5CFD5EA5E03D25038A /* Sources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				16E0AEE91BD6B2AE076ACA19 /* PBXTargetDependency */,
+				50C400FAEC6F650AA54FE793 /* PBXTargetDependency */,
 			);
-			name = DefaultHosted;
-			productName = DefaultHosted;
-			productReference = 1AC28A58E3C7738C108353BE /* DefaultHosted.xctest */;
+			name = DefaultHosted_bundle;
+			productName = DefaultHosted_bundle;
+			productReference = 348B04B51F448DD66CEE21AA /* DefaultHosted_bundle.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		5BB71AB936CCD5BDF68DE298 /* TestImports-Unit-Tests */ = {
@@ -270,7 +270,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				20A37CC084B553DAC3470E18 /* DefaultHosted */,
+				46B625EA057EE2C8BA6FA0B1 /* DefaultHosted_bundle */,
 				1ECB59A3C8C905569C62BCE7 /* TestImports-App */,
 				5BB71AB936CCD5BDF68DE298 /* TestImports-Unit-Tests */,
 				7B42EBEE80E70A0FA637B11B /* iOS-10.0-AppHost */,
@@ -333,7 +333,7 @@
 			shellPath = /bin/sh;
 			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\nexport BAZEL_DIAGNOSTICS_DIR=\"$BUILD_DIR/../../bazel-xcode-diagnostics/\"\nmkdir -p $BAZEL_DIAGNOSTICS_DIR\nexport DATE_SUFFIX=\"$(date +%Y%m%d.%H%M%S%L)\"\nexport BAZEL_BUILD_EVENT_TEXT_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-event-$DATE_SUFFIX.txt\"\nexport BAZEL_BUILD_EXECUTION_LOG_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-execution-log-$DATE_SUFFIX.log\"\nexport BAZEL_PROFILE_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-profile-$DATE_SUFFIX.log\"\nenv -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC $BAZEL_BUILD_TARGET_LABEL\n$BAZEL_INSTALLER\n";
 		};
-		6DBC122A6C2C8B5D5805E16D /* Build with bazel */ = {
+		BC6F7CEFD120F8ABE7E6B253 /* Build with bazel */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -364,21 +364,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		17D1A00F4E8DB77A4AD36F1D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C61986BF5CBA4DAEAF33BE91 /* empty.m in Sources */,
-				C6B1D1CBC7730A53A2C04E0D /* empty.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		30D6283F065DDEDCF32C8E92 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				E676560B3EE63A86606530C8 /* empty.swift in Sources */,
 				4D9FC7A3A45FAD1826CE314F /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		86044D5CFD5EA5E03D25038A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A4F944E364C32E57F5B25D01 /* empty.m in Sources */,
+				77CEA17F2CA7DD5E92DE1D2F /* empty.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,10 +393,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		16E0AEE91BD6B2AE076ACA19 /* PBXTargetDependency */ = {
+		50C400FAEC6F650AA54FE793 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 7B42EBEE80E70A0FA637B11B /* iOS-10.0-AppHost */;
-			targetProxy = 78CCC3248A576BED58D23977 /* PBXContainerItemProxy */;
+			targetProxy = 5679EF529BB197155D24404E /* PBXContainerItemProxy */;
 		};
 		FFCD8F4448902A3D0CB74E5D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -427,6 +427,30 @@
 				SUPPORTS_MACCATALYST = 0;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestImports-App.app/TestImports-App";
+			};
+			name = Release;
+		};
+		1DB06FE883B9B9422682772E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
+				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test:DefaultHosted";
+				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/DefaultHosted_bundle.lldbinit;
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-65c06fec92bf/bin/tests/ios/unit-test/DefaultHosted.swiftmodule bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-65c06fec92bf/bin/tests/ios/unit-test/DefaultHosted.swiftdoc bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-65c06fec92bf/bin/tests/ios/unit-test/DefaultHosted.swiftsourceinfo";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = DefaultHosted_bundle;
+				SUPPORTS_MACCATALYST = 0;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS-10.0-AppHost.app/iOS-10.0-AppHost";
 			};
 			name = Release;
 		};
@@ -476,30 +500,6 @@
 				SUPPORTS_MACCATALYST = 0;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestImports-App.app/TestImports-App";
-			};
-			name = Debug;
-		};
-		35319915CD86528CFD9DACD6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
-				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test:DefaultHosted";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
-				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/DefaultHosted.lldbinit;
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-65c06fec92bf/bin/tests/ios/unit-test/DefaultHosted.swiftmodule bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-65c06fec92bf/bin/tests/ios/unit-test/DefaultHosted.swiftdoc bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-65c06fec92bf/bin/tests/ios/unit-test/DefaultHosted.swiftsourceinfo";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				MACH_O_TYPE = "$(inherited)";
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = DefaultHosted;
-				SUPPORTS_MACCATALYST = 0;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS-10.0-AppHost.app/iOS-10.0-AppHost";
 			};
 			name = Debug;
 		};
@@ -652,13 +652,13 @@
 			};
 			name = Debug;
 		};
-		E23B39181F1860849E079269 /* Release */ = {
+		BE3095D218A665E2C191E55E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test:DefaultHosted";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
-				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/DefaultHosted.lldbinit;
+				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/DefaultHosted_bundle.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-65c06fec92bf/bin/tests/ios/unit-test/DefaultHosted.swiftmodule bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-65c06fec92bf/bin/tests/ios/unit-test/DefaultHosted.swiftdoc bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-65c06fec92bf/bin/tests/ios/unit-test/DefaultHosted.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
@@ -669,30 +669,30 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MACH_O_TYPE = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = DefaultHosted;
+				PRODUCT_NAME = DefaultHosted_bundle;
 				SUPPORTS_MACCATALYST = 0;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS-10.0-AppHost.app/iOS-10.0-AppHost";
 			};
-			name = Release;
+			name = Debug;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		13905967A63C27453E8EC4D7 /* Build configuration list for PBXNativeTarget "DefaultHosted_bundle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BE3095D218A665E2C191E55E /* Debug */,
+				1DB06FE883B9B9422682772E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		925C7EC36E5BD69BB75B98CD /* Build configuration list for PBXProject "Test-Target-With-Test-Host-Project" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AD55644E2B6185FA4E29AA4F /* Debug */,
 				83C6FAF9D19E66ABD6FC3866 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		A5C34E19D5BE5E6D9373D9D0 /* Build configuration list for PBXNativeTarget "DefaultHosted" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				35319915CD86528CFD9DACD6 /* Debug */,
-				E23B39181F1860849E079269 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
