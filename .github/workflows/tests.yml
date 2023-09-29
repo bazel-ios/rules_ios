@@ -82,7 +82,7 @@ jobs:
           name: bazel-testlogs
           path: bazel-testlogs
 
-  lts_ios_integration_tests:
+  bazel_lts_ios_integration_tests:
     name: Build and Test ( Virtual Frameworks + LTS )
     runs-on: macos-12
     env:
@@ -97,6 +97,31 @@ jobs:
           # iOS tests without bzlmod on Bazel 5
           bazelisk build \
             --noexperimental_enable_bzlmod \
+            --config=ci_with_caches \
+            --config=ios \
+            --config=vfs \
+            -- \
+            //tests/ios/...
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: bazel-testlogs
+          path: bazel-testlogs
+
+  rules_apple_2_ios_integration_tests:
+    name: Build and Test ( Virtual Frameworks + rules_apple 2.x )
+    runs-on: macos-12
+    env:
+      USE_BAZEL_VERSION: 6.1.2
+    steps:
+      - uses: actions/checkout@v3
+      - name: Preflight Env
+        run: .github/workflows/preflight_env.sh
+      - name: Build and Test
+        run: |
+          # iOS tests
+          bazelisk build \
             --config=ci_with_caches \
             --config=ios \
             --config=vfs \
@@ -203,6 +228,10 @@ jobs:
   multi_arch_support:
     name: Build iOS App for Multiple Architecture
     runs-on: macos-12
+    env:
+      # i386 was removed on rules_apple 3.x.x - this test case needs reworking
+      # to exemplify fat binaries on the latest version
+      USE_BAZEL_VERSION: 6.1.2
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env

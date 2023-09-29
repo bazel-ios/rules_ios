@@ -37,6 +37,7 @@ bzl_library(
         deps = [
             ":data",
             "@build_bazel_rules_apple//apple",
+            "@rules_ios_apple_api//:api",
         ],
     )
     for name in _RULES
