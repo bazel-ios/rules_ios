@@ -1,49 +1,67 @@
 load("@io_bazel_stardoc//stardoc:stardoc.bzl", "stardoc")
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 
 package(default_visibility = ["//visibility:private"])
 
-# Targets to document.
-# Must have a corresponding `bzl_library` target in `//rules:BUILD.bazel`.
-_DOC_SRCS = [
-    "app_clip",
+_RULES = [
     "app",
     "apple_patched",
-    "extension",
-    "features",
-    "force_load_direct_deps",
     "framework",
     "hmap",
-    "import_middleman",
     "library",
     "plists",
     "precompiled_apple_resource_bundle",
-    "providers",
     "substitute_build_settings",
     "test",
     "transition_support",
-    "vfs_overlay.doc",
-    "xcconfig.doc",
 ]
 
-# Create stardoc targets for each documentation target defined
+_REPOSITORY_RULES = [
+    "framework_builder",
+]
+
+bzl_library(
+    name = "data",
+    srcs = [
+        "//data:xcspecs.bzl",
+    ],
+    tags = ["manual"],
+    visibility = ["//visibility:private"],
+)
 
 [
     stardoc(
-        name = file + "_doc",
-        out = file + ".gen.md",
-        input = "//rules:%s.bzl" % file,
-        tags = [
-            "no-cache",
-            "no-sandbox",  # https://github.com/bazelbuild/stardoc/issues/112
+        name = "%s-docs" % name,
+        out = "%s_doc.md" % name,
+        input = "//rules:%s.bzl" % name,
+        tags = ["manual"],
+        visibility = ["//:__pkg__"],
+        deps = [
+            ":data",
+            "@build_bazel_rules_apple//apple",
         ],
-        deps = ["//rules:" + file],
     )
-    for file in _DOC_SRCS
+    for name in _RULES
+]
+
+[
+    stardoc(
+        name = "%s-docs" % name,
+        out = "%s_doc.md" % name,
+        input = "//repository_rules:%s.bzl" % name,
+        tags = ["manual"],
+        visibility = ["//:__pkg__"],
+        deps = [
+            ":data",
+            "@build_bazel_rules_apple//apple",
+        ],
+    )
+    for name in _REPOSITORY_RULES
 ]
 
 filegroup(
     name = "_all_docs",
-    srcs = ["%s.gen.md" % name for name in _DOC_SRCS],
+    srcs = ["%s-docs" % name for name in (_RULES + _REPOSITORY_RULES)],
     tags = ["manual"],
 )
 
@@ -59,9 +77,7 @@ genrule(
 echo "#!/bin/bash" > $(OUTS)
 echo "set -eu" > $(OUTS)
 echo 'function copy() {
-    src_name=$$(basename "$$1")
-    dest_name=$${src_name%%.*}_doc.md # replace generated extension with '_doc.md'
-    dest="$${BUILD_WORKSPACE_DIRECTORY}/docs/$${dest_name}"
+    dest="$${BUILD_WORKSPACE_DIRECTORY}/docs/$$(basename $$1)"
     cp "$$1" "$$dest"
     chmod +w "$$dest"
 }' >> $(OUTS)

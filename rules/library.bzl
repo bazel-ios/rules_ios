@@ -14,6 +14,7 @@ load("//rules/library:resources.bzl", "wrap_resources_in_filegroup")
 load("//rules/library:xcconfig.bzl", "copts_by_build_setting_with_defaults")
 load("//rules:import_middleman.bzl", "import_middleman")
 load("//rules:utils.bzl", "bundle_identifier_for_bundle")
+load("@rules_ios_apple_api//:version.bzl", "apple_api_version")
 
 PrivateHeadersInfo = provider(
     doc = "Propagates private headers, so they can be accessed if necessary",
@@ -330,9 +331,13 @@ def _xcframework(*, library_name, name, slices):
 
         for arch in archs:
             if platform == "ios":
-                if (arch == "armv7s" or arch == "arm64e"):
-                    # unsupported platform-arch by rules_apple
+                if apple_api_version == "3.0":
+                    unsupported_platforms = ["armv7", "armv7s", "i386"]
+                else:
+                    unsupported_platforms = ["armv7", "arm64e"]
+                if arch in unsupported_platforms:
                     continue
+
                 elif platform_variant == "maccatalyst":
                     # TODO: support maccatalyst
                     continue

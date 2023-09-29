@@ -19,7 +19,7 @@
 """iOS test runner rule."""
 
 load(
-    "@build_bazel_rules_apple//apple/testing:apple_test_rules.bzl",
+    "@build_bazel_rules_apple//apple:providers.bzl",
     "AppleTestRunnerInfo",
 )
 

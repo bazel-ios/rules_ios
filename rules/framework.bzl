@@ -11,7 +11,6 @@ load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
 load("@build_bazel_rules_apple//apple/internal:apple_product_type.bzl", "apple_product_type")
-load("@build_bazel_rules_apple//apple/internal:bundling_support.bzl", "bundling_support")
 load("@build_bazel_rules_apple//apple/internal:features_support.bzl", "features_support")
 load("@build_bazel_rules_apple//apple/internal:linking_support.bzl", "linking_support")
 load("@build_bazel_rules_apple//apple/internal:outputs.bzl", "outputs")
@@ -25,6 +24,8 @@ load("@build_bazel_rules_apple//apple/internal:apple_toolchains.bzl", "AppleMacT
 load("@build_bazel_rules_apple//apple/internal:swift_support.bzl", "swift_support")
 load("@build_bazel_rules_apple//apple/internal/utils:clang_rt_dylibs.bzl", "clang_rt_dylibs")
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo", "IosFrameworkBundleInfo")
+load("@rules_ios_apple_api//:providers.bzl", "new_applebundleinfo", "new_iosframeworkbundleinfo")
+load("@rules_ios_apple_api//:version.bzl", "apple_api_version")
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo", "swift_clang_module_aspect", "swift_common")
 load(
     "@build_bazel_rules_apple//apple/internal/aspects:resource_aspect.bzl",
@@ -105,6 +106,25 @@ def apple_framework(
 
     framework_deps = []
 
+    platforms = library.platforms if library.platforms else {}
+
+    # At the time of writing this is still used in the output path
+    # computation
+    minimum_os_version = select({
+        "@build_bazel_rules_ios//rules/apple_platform:ios": platforms.get("ios", ""),
+        "@build_bazel_rules_ios//rules/apple_platform:macos": platforms.get("macos", ""),
+        "@build_bazel_rules_ios//rules/apple_platform:tvos": platforms.get("tvos", ""),
+        "@build_bazel_rules_ios//rules/apple_platform:watchos": platforms.get("watchos", ""),
+        "//conditions:default": "",
+    })
+    platform_type = select({
+        "@build_bazel_rules_ios//rules/apple_platform:ios": "ios",
+        "@build_bazel_rules_ios//rules/apple_platform:macos": "macos",
+        "@build_bazel_rules_ios//rules/apple_platform:tvos": "tvos",
+        "@build_bazel_rules_ios//rules/apple_platform:watchos": "watchos",
+        "//conditions:default": "",
+    })
+
     # Setup force loading here - only for direct deps / direct libs and when `link_dynamic` is set.
     force_load_name = name + ".force_load_direct_deps"
     force_load_direct_deps(
@@ -113,11 +133,12 @@ def apple_framework(
         should_force_load = framework_packaging_kwargs.get("link_dynamic", False),
         testonly = testonly,
         tags = ["manual"],
+        minimum_os_version = minimum_os_version,
+        platform_type = platform_type,
     )
     framework_deps.append(force_load_name)
 
     framework_deps += library.lib_names
-    platforms = library.platforms if library.platforms else {}
     apple_framework_packaging(
         name = name,
         framework_name = library.namespace,
@@ -129,23 +150,9 @@ def apple_framework(
         platforms = platforms,
         private_deps = kwargs.get("private_deps", []),
         library_linkopts = library.linkopts,
-        # At the time of writing this is still used in the output path
-        # computation
-        minimum_os_version = select({
-            "@build_bazel_rules_ios//rules/apple_platform:ios": platforms.get("ios", ""),
-            "@build_bazel_rules_ios//rules/apple_platform:macos": platforms.get("macos", ""),
-            "@build_bazel_rules_ios//rules/apple_platform:tvos": platforms.get("tvos", ""),
-            "@build_bazel_rules_ios//rules/apple_platform:watchos": platforms.get("watchos", ""),
-            "//conditions:default": "",
-        }),
-        platform_type = select({
-            "@build_bazel_rules_ios//rules/apple_platform:ios": "ios",
-            "@build_bazel_rules_ios//rules/apple_platform:macos": "macos",
-            "@build_bazel_rules_ios//rules/apple_platform:tvos": "tvos",
-            "@build_bazel_rules_ios//rules/apple_platform:watchos": "watchos",
-            "//conditions:default": "",
-        }),
         testonly = testonly,
+        minimum_os_version = minimum_os_version,
+        platform_type = platform_type,
         **framework_packaging_kwargs
     )
 
@@ -583,21 +590,32 @@ def _merge_root_infoplists(ctx):
     current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
     platform_type = str(current_apple_platform.platform.platform_type)
     apple_mac_toolchain_info = ctx.attr._toolchain[AppleMacToolsToolchainInfo]
-    rule_descriptor = rule_support.rule_descriptor_no_ctx(platform_type, apple_product_type.static_framework)
+    if hasattr(rule_support, "rule_descriptor_no_ctx"):
+        descriptor_fn = rule_support.rule_descriptor_no_ctx
+    else:
+        descriptor_fn = rule_support.rule_descriptor
+
+    rule_descriptor = descriptor_fn(
+        platform_type = platform_type,
+        product_type = apple_product_type.static_framework,
+    )
+    features = features_support.compute_enabled_features(
+        requested_features = ctx.features,
+        unsupported_features = ctx.disabled_features,
+    )
 
     resource_actions.merge_root_infoplists(
         actions = ctx.actions,
         bundle_name = bundle_name,
         bundle_id = ctx.attr.bundle_id,
         bundle_extension = ctx.attr.bundle_extension,
-        executable_name = bundle_name,
         environment_plist = ctx.file.environment_plist,
         input_plists = ctx.files.infoplists,
         launch_storyboard = None,
         output_plist = output_plist,
         output_pkginfo = None,
         output_discriminator = "framework",
-        platform_prerequisites = _platform_prerequisites(ctx, rule_descriptor, platform_type),
+        platform_prerequisites = _platform_prerequisites(ctx, rule_descriptor, platform_type, features),
         resolved_plisttool = apple_mac_toolchain_info.resolved_plisttool,
         rule_descriptor = rule_descriptor,
         rule_label = ctx.label,
@@ -614,24 +632,34 @@ def _attrs_for_split_slice(attrs_by_split_slices, split_slice_key):
     else:
         return attrs_by_split_slices[split_slice_key]
 
-def _platform_prerequisites(ctx, rule_descriptor, platform_type):
+def _platform_prerequisites(ctx, rule_descriptor, platform_type, features):
     # Consider plumbing this in
     deps = getattr(ctx.attr, "deps", None)
     uses_swift = swift_support.uses_swift(deps) if deps else False
+
+    apple_xplat_toolchain_info = ctx.attr._xplat_toolchain[AppleXPlatToolsToolchainInfo]
+    if apple_api_version == "3.0":
+        version_args = {
+            "build_settings": apple_xplat_toolchain_info.build_settings,
+        }
+    else:
+        version_args = {
+            "disabled_features": ctx.disabled_features,
+        }
 
     return platform_support.platform_prerequisites(
         apple_fragment = ctx.fragments.apple,
         config_vars = ctx.var,
         cpp_fragment = ctx.fragments.cpp,
         device_families = rule_descriptor.allowed_device_families,
-        disabled_features = ctx.disabled_features,
         explicit_minimum_deployment_os = ctx.attr.minimum_deployment_os_version,
         explicit_minimum_os = ctx.attr.minimum_os_version,
-        features = ctx.features,
+        features = features,
         objc_fragment = ctx.fragments.objc,
         platform_type_string = platform_type,
         uses_swift = uses_swift,
         xcode_version_config = ctx.attr._xcode_config[apple_common.XcodeVersionConfig],
+        **version_args
     )
 
 def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
@@ -649,14 +677,6 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         # processed infoplit its possible, but validate for the common case
         fail("Missing bundle_id: Info.plist actions require one")
 
-    # Determine the interface version of rules_apple. We don't want to force
-    # "hail mary" type rules and Bazel bumps on the community to run a given
-    # version of rules_ios and the API we depend on is relatively lts_5. If
-    # this ceases to be the case than consider mainlining the few components we
-    # use from it to remove this complexity.
-    rules_apple_api_version = getattr(bundling_support, "rule_api_version", None)
-    use_lts_5_rules_apple_api = rules_apple_api_version == 1.0
-
     bundle_name = ctx.attr.framework_name
     bundle_extension = ".framework"
     features = features_support.compute_enabled_features(
@@ -673,8 +693,15 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
     resource_deps = ctx.attr.deps + ctx.attr.transitive_deps + ctx.attr.data
     current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
     platform_type = str(current_apple_platform.platform.platform_type)
-    rule_descriptor = rule_support.rule_descriptor_no_ctx(platform_type, apple_product_type.framework)
-    platform_prerequisites = _platform_prerequisites(ctx, rule_descriptor, platform_type)
+    if hasattr(rule_support, "rule_descriptor_no_ctx"):
+        descriptor_fn = rule_support.rule_descriptor_no_ctx
+    else:
+        descriptor_fn = rule_support.rule_descriptor
+    rule_descriptor = descriptor_fn(
+        platform_type = platform_type,
+        product_type = apple_product_type.framework,
+    )
+    platform_prerequisites = _platform_prerequisites(ctx, rule_descriptor, platform_type, features)
     signed_frameworks = []
     if provisioning_profile:
         signed_frameworks = [
@@ -699,70 +726,130 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         attr = ctx.attr,
         res_attrs = ["infoplists"],
     )
-    link_result = linking_support.register_binary_linking_action(
-        ctx,
-        avoid_deps = avoid_deps,
-        entitlements = None,
-        extra_linkopts = extra_linkopts,
-        platform_prerequisites = platform_prerequisites,
-        stamp = ctx.attr.stamp,
-    )
+    if apple_api_version == "3.0":
+        link_result = linking_support.register_binary_linking_action(
+            ctx,
+            avoid_deps = avoid_deps,
+            entitlements = None,
+            exported_symbols_lists = ctx.files.exported_symbols_lists,
+            extra_linkopts = extra_linkopts,
+            platform_prerequisites = platform_prerequisites,
+            stamp = ctx.attr.stamp,
+        )
+    else:
+        link_result = linking_support.register_binary_linking_action(
+            ctx,
+            avoid_deps = avoid_deps,
+            entitlements = None,
+            extra_linkopts = extra_linkopts,
+            platform_prerequisites = platform_prerequisites,
+            stamp = ctx.attr.stamp,
+        )
+
     binary_artifact = link_result.binary
     debug_outputs = linking_support.debug_outputs_by_architecture(link_result.outputs)
 
-    archive_for_embedding = outputs.archive_for_embedding(
-        actions = actions,
-        bundle_name = bundle_name,
-        bundle_extension = bundle_extension,
-        executable_name = bundle_name,
-        label_name = label.name,
-        rule_descriptor = rule_descriptor,
-        platform_prerequisites = platform_prerequisites,
-        predeclared_outputs = predeclared_outputs,
-    )
+    if apple_api_version == "3.0":
+        archive_for_embedding = outputs.archive_for_embedding(
+            actions = actions,
+            bundle_name = bundle_name,
+            bundle_extension = bundle_extension,
+            label_name = label.name,
+            rule_descriptor = rule_descriptor,
+            platform_prerequisites = platform_prerequisites,
+            predeclared_outputs = predeclared_outputs,
+        )
+    else:
+        archive_for_embedding = outputs.archive_for_embedding(
+            actions = actions,
+            bundle_name = bundle_name,
+            executable_name = bundle_name,
+            bundle_extension = bundle_extension,
+            label_name = label.name,
+            rule_descriptor = rule_descriptor,
+            platform_prerequisites = platform_prerequisites,
+            predeclared_outputs = predeclared_outputs,
+        )
 
     dep_frameworks = ctx.attr.frameworks
 
     # TODO(jmarino) - consider how to better handle frameworks of frameworks
     processor_partials = []
 
-    processor_partials.append(
-        partials.apple_bundle_info_partial(
-            actions = actions,
-            bundle_extension = bundle_extension,
-            bundle_id = bundle_id,
-            bundle_name = bundle_name,
-            executable_name = bundle_name,
-            label_name = label.name,
-            platform_prerequisites = platform_prerequisites,
-            predeclared_outputs = predeclared_outputs,
-            product_type = apple_product_type.framework,
-        ),
-    )
+    if apple_api_version == "3.0":
+        processor_partials.append(
+            partials.apple_bundle_info_partial(
+                actions = actions,
+                bundle_extension = bundle_extension,
+                bundle_id = bundle_id,
+                bundle_name = bundle_name,
+                executable_name = bundle_name,
+                label_name = label.name,
+                platform_prerequisites = platform_prerequisites,
+                predeclared_outputs = predeclared_outputs,
+                product_type = apple_product_type.framework,
+                rule_descriptor = rule_descriptor,
+            ),
+        )
+    else:
+        processor_partials.append(
+            partials.apple_bundle_info_partial(
+                actions = actions,
+                bundle_extension = bundle_extension,
+                bundle_id = bundle_id,
+                bundle_name = bundle_name,
+                executable_name = bundle_name,
+                label_name = label.name,
+                platform_prerequisites = platform_prerequisites,
+                predeclared_outputs = predeclared_outputs,
+                product_type = apple_product_type.framework,
+            ),
+        )
+
     processor_partials.append(
         partials.binary_partial(
+            executable_name = bundle_name,
             actions = actions,
             binary_artifact = binary_artifact,
             bundle_name = bundle_name,
-            executable_name = bundle_name,
             label_name = label.name,
         ),
     )
-    processor_partials.append(
-        partials.codesigning_dossier_partial(
-            actions = actions,
-            apple_mac_toolchain_info = apple_mac_toolchain_info,
-            bundle_extension = bundle_extension,
-            bundle_location = processor.location.framework,
-            bundle_name = bundle_name,
-            embed_target_dossiers = False,
-            embedded_targets = dep_frameworks,
-            label_name = label.name,
-            platform_prerequisites = platform_prerequisites,
-            provisioning_profile = provisioning_profile,
-            rule_descriptor = rule_descriptor,
-        ),
-    )
+    if apple_api_version == "3.0":
+        processor_partials.append(
+            partials.codesigning_dossier_partial(
+                actions = actions,
+                apple_mac_toolchain_info = apple_mac_toolchain_info,
+                apple_xplat_toolchain_info = apple_xplat_toolchain_info,
+                bundle_extension = bundle_extension,
+                bundle_location = processor.location.framework,
+                bundle_name = bundle_name,
+                embed_target_dossiers = False,
+                embedded_targets = dep_frameworks,
+                label_name = label.name,
+                platform_prerequisites = platform_prerequisites,
+                predeclared_outputs = predeclared_outputs,
+                provisioning_profile = provisioning_profile,
+                rule_descriptor = rule_descriptor,
+            ),
+        )
+    else:
+        processor_partials.append(
+            partials.codesigning_dossier_partial(
+                actions = actions,
+                apple_mac_toolchain_info = apple_mac_toolchain_info,
+                bundle_extension = bundle_extension,
+                bundle_location = processor.location.framework,
+                bundle_name = bundle_name,
+                embed_target_dossiers = False,
+                embedded_targets = dep_frameworks,
+                label_name = label.name,
+                platform_prerequisites = platform_prerequisites,
+                provisioning_profile = provisioning_profile,
+                rule_descriptor = rule_descriptor,
+            ),
+        )
+
     processor_partials.append(
         partials.clang_rt_dylibs_partial(
             actions = actions,
@@ -775,7 +862,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         ),
     )
 
-    if use_lts_5_rules_apple_api:
+    if apple_api_version == "1.0":
         processor_partials.append(
             partials.debug_symbols_partial(
                 actions = actions,
@@ -791,7 +878,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
                 bin_root_path = bin_root_path,
             ),
         )
-    else:
+    elif apple_api_version == "2.0":
         processor_partials.append(
             partials.debug_symbols_partial(
                 actions = actions,
@@ -803,6 +890,23 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
                 dsym_info_plist_template = apple_mac_toolchain_info.dsym_info_plist_template,
                 executable_name = bundle_name,
                 platform_prerequisites = platform_prerequisites,
+            ),
+        )
+    else:
+        processor_partials.append(
+            partials.debug_symbols_partial(
+                actions = actions,
+                bundle_extension = bundle_extension,
+                bundle_name = bundle_name,
+                debug_dependencies = dep_frameworks,
+                dsym_binaries = debug_outputs.dsym_binaries,
+                label_name = label.name,
+                linkmaps = debug_outputs.linkmaps,
+                dsym_info_plist_template = apple_mac_toolchain_info.dsym_info_plist_template,
+                platform_prerequisites = platform_prerequisites,
+                resolved_plisttool = apple_mac_toolchain_info.resolved_plisttool,
+                rule_label = label,
+                version = None,
             ),
         )
 
@@ -822,7 +926,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         ),
     )
 
-    if use_lts_5_rules_apple_api:
+    if apple_api_version == "1.0":
         processor_partials.append(
             partials.framework_provider_partial(
                 actions = actions,
@@ -901,6 +1005,12 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         ),
     )
 
+    if apple_api_version == "3.0":
+        process_version_args = {}
+    else:
+        process_version_args = {
+            "executable_name": bundle_name,
+        }
     processor_result = processor.process(
         actions = actions,
         apple_mac_toolchain_info = apple_mac_toolchain_info,
@@ -908,7 +1018,6 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         bundle_name = bundle_name,
         codesign_inputs = [],
         codesignopts = [],
-        executable_name = bundle_name,
         features = features,
         ipa_post_processor = None,
         partials = processor_partials,
@@ -919,11 +1028,13 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         provisioning_profile = provisioning_profile,
         rule_descriptor = rule_descriptor,
         rule_label = label,
+        **process_version_args
     )
+
     return struct(
         files = processor_result.output_files,
         providers = [
-            IosFrameworkBundleInfo(),
+            new_iosframeworkbundleinfo(),
             OutputGroupInfo(
                 **outputs.merge_output_groups(
                     link_result.output_groups,
@@ -945,7 +1056,7 @@ def _bundle_static_framework(ctx, is_extension_safe, current_apple_platform, out
 
     # Static packaging - archives are passed from library deps
     return struct(files = depset([]), providers = [
-        AppleBundleInfo(
+        new_applebundleinfo(
             archive = None,
             archive_root = None,
             binary = outputs.binary,
@@ -1092,7 +1203,7 @@ apple_framework_packaging = rule(
         ),
         "deps": attr.label_list(
             mandatory = True,
-            cfg = apple_common.multi_arch_split,
+            cfg = transition_support.split_transition,
             aspects = [apple_resource_aspect],
             doc =
                 """Objc or Swift rules to be packed by the framework rule
@@ -1100,7 +1211,7 @@ apple_framework_packaging = rule(
         ),
         "private_deps": attr.label_list(
             mandatory = False,
-            cfg = apple_common.multi_arch_split,
+            cfg = transition_support.split_transition,
             aspects = [apple_resource_aspect],
             doc =
                 """Objc or Swift private rules to be packed by the framework rule
@@ -1108,7 +1219,7 @@ apple_framework_packaging = rule(
         ),
         "data": attr.label_list(
             mandatory = False,
-            cfg = apple_common.multi_arch_split,
+            cfg = transition_support.split_transition,
             allow_files = True,
             doc =
                 """Objc or Swift rules to be packed by the framework rule
@@ -1130,7 +1241,7 @@ The default behavior bakes this into the top level app. When false, it's statica
         ),
         "vfs": attr.label_list(
             mandatory = False,
-            cfg = apple_common.multi_arch_split,
+            cfg = transition_support.split_transition,
             doc =
                 """Additional VFS for the framework to export
 """,
@@ -1138,7 +1249,7 @@ The default behavior bakes this into the top level app. When false, it's statica
         "transitive_deps": attr.label_list(
             aspects = [swift_clang_module_aspect],
             mandatory = True,
-            cfg = apple_common.multi_arch_split,
+            cfg = transition_support.split_transition,
             doc =
                 """Deps of the deps
 """,
@@ -1183,7 +1294,7 @@ A list of framework targets (see
 [`ios_framework`](https://github.com/bazelbuild/rules_apple/blob/master/doc/rules-ios.md#ios_framework))
 that this target depends on.
 """,
-            cfg = apple_common.multi_arch_split,
+            cfg = transition_support.split_transition,
         ),
         "_headermap_builder": attr.label(
             executable = True,
@@ -1202,7 +1313,7 @@ that this target depends on.
             """,
         ),
         "_child_configuration_dummy": attr.label(
-            cfg = apple_common.multi_arch_split,
+            cfg = transition_support.split_transition,
             default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
         ),
         "bundle_id": attr.string(

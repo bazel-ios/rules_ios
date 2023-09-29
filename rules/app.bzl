@@ -96,6 +96,8 @@ def ios_application(
         deps = kwargs.get("deps", []) + library.lib_names,
         tags = ["manual"],
         testonly = testonly,
+        platform_type = "ios",
+        minimum_os_version = application_kwargs.get("minimum_os_version"),
     )
 
     # Setup framework middlemen - need to process deps and libs
@@ -105,6 +107,8 @@ def ios_application(
         framework_deps = kwargs.get("deps", []) + library.lib_names,
         tags = ["manual"],
         testonly = testonly,
+        platform_type = "ios",
+        minimum_os_version = application_kwargs.get("minimum_os_version"),
     )
     frameworks = [fw_name] + kwargs.pop("frameworks", [])
 
@@ -114,6 +118,8 @@ def ios_application(
         deps = kwargs.get("deps", []) + library.lib_names,
         tags = ["manual"],
         testonly = testonly,
+        platform_type = "ios",
+        minimum_os_version = application_kwargs.get("minimum_os_version"),
     )
     deps = [dep_name] + [force_load_name]
 
