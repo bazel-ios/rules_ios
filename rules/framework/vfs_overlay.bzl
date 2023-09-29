@@ -69,7 +69,7 @@ def _build_subtrees(paths, vfs_prefix):
             parts_len = 1
 
         if parts_len == 0:
-            fail("[ERROR] Failed to build VFS subtrees, path with empty split: parts=%s, parts_len=%s" % (parts, parts_len))
+            fail("[ERROR] Failed to build VFS subtrees, path with empty split on '/': path=%s, parts=%s" % (path, parts))
 
         # current pointer to the current subdirs while walking the path
         curr_subdirs = subdirs
