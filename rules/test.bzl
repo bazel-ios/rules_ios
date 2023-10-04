@@ -191,11 +191,26 @@ def _ios_test(name, bundle_rule, test_rule, test_factory, apple_library, infopli
 
     # Setup framework middlemen - need to process deps and libs
     fw_name = name + ".framework_middleman"
-    framework_middleman(name = fw_name, framework_deps = kwargs.get("deps", []) + library.lib_names, testonly = testonly, tags = ["manual"])
+    framework_middleman(
+        name = fw_name,
+        framework_deps = kwargs.get("deps", []) + library.lib_names,
+        testonly = testonly,
+        tags = ["manual"],
+        platform_type = "ios",
+        minimum_os_version = ios_test_kwargs.get("minimum_os_version"),
+    )
     frameworks = [fw_name] + ios_test_kwargs.pop("frameworks", [])
 
     dep_name = name + ".dep_middleman"
-    dep_middleman(name = dep_name, deps = kwargs.get("deps", []) + library.lib_names, testonly = testonly, tags = ["manual"], test_deps = host_args)
+    dep_middleman(
+        name = dep_name,
+        deps = kwargs.get("deps", []) + library.lib_names,
+        testonly = testonly,
+        tags = ["manual"],
+        test_deps = host_args,
+        platform_type = "ios",
+        minimum_os_version = ios_test_kwargs.get("minimum_os_version"),
+    )
 
     infoplists = process_infoplists(
         name = name,
