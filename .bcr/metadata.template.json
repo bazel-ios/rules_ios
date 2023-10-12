@@ -1,0 +1,14 @@
+{
+  "homepage": "https://github.com/bazel-ios/rules_ios",
+  "maintainers": [
+    {
+      "email": "rules_ios@squareup.com",
+      "name": "rules_ios Maintainers"
+    }
+  ],
+  "repository": [
+    "github:bazel-ios/rules_ios"
+  ],
+  "versions": [],
+  "yanked_versions": {}
+}
