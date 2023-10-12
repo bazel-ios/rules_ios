@@ -1,11 +1,19 @@
+# This file marks the root of the Bazel workspace.
+# See MODULE.bazel for dependencies and setup.
+# It is only used when bzlmod is disabled.
+# When bzlmod is enabled WORKSPACE.bzlmod is used.
+
 workspace(name = "build_bazel_rules_ios")
 
 load(
     "//rules:repositories.bzl",
     "rules_ios_dependencies",
+    "rules_ios_dev_dependencies",
 )
 
 rules_ios_dependencies()
+
+rules_ios_dev_dependencies()
 
 load(
     "@build_bazel_rules_apple//apple:repositories.bzl",
@@ -55,25 +63,14 @@ load("@io_bazel_stardoc//:setup.bzl", "stardoc_repositories")
 
 stardoc_repositories()
 
-load(
-    "@bazel_tools//tools/build_defs/repo:http.bzl",
-    "http_file",
-)
+# Download prebuilt binaries buildifier
+load("@buildifier_prebuilt//:deps.bzl", "buildifier_prebuilt_deps")
 
-# Download offical release of buildifier.mac
-http_file(
-    name = "buildifier.mac.amd64",
-    executable = True,
-    sha256 = "c9378d9f4293fc38ec54a08fbc74e7a9d28914dae6891334401e59f38f6e65dc",
-    urls = ["https://github.com/bazelbuild/buildtools/releases/download/5.1.0/buildifier-darwin-amd64"],
-)
+buildifier_prebuilt_deps()
 
-http_file(
-    name = "buildifier.mac.arm64",
-    executable = True,
-    sha256 = "745feb5ea96cb6ff39a76b2821c57591fd70b528325562486d47b5d08900e2e4",
-    urls = ["https://github.com/bazelbuild/buildtools/releases/download/5.1.0/buildifier-darwin-arm64"],
-)
+load("@buildifier_prebuilt//:defs.bzl", "buildifier_prebuilt_register_toolchains")
+
+buildifier_prebuilt_register_toolchains()
 
 load(
     "//tests/ios/frameworks/external-dependency:external_dependency.bzl",
