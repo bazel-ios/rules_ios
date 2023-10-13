@@ -4,24 +4,3 @@
 # This file will generally be kept empty in favor of using MODULE.bazel fully.
 
 workspace(name = "build_bazel_rules_ios")
-
-# TODO: stardoc doesn't currently support bzlmod: https://github.com/bazelbuild/stardoc/issues/117
-# Once that closes we should depend on it via the WORKSPACE file.
-# In the meantime, this is a workaround to at least allow building.
-# Note however that updating docs with bzlmod will not work until the above is resolved.
-# Until then use: --noenable_bzlmod
-load(
-    "@bazel_tools//tools/build_defs/repo:git.bzl",
-    "git_repository",
-)
-
-git_repository(
-    name = "io_bazel_stardoc",
-    commit = "6f274e903009158504a9d9130d7f7d5f3e9421ed",
-    remote = "https://github.com/bazelbuild/stardoc.git",
-    shallow_since = "1667581897 -0400",
-)
-
-load("@io_bazel_stardoc//:setup.bzl", "stardoc_repositories")
-
-stardoc_repositories()
