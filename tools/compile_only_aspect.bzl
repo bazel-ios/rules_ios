@@ -4,7 +4,7 @@ big mono-repo refactors.
 
 In a mono-repo a developer will change much objc and swift source code. We don't
 want to link or codesign the intermediates. This program collects the relevate
-compile actions 
+compile actions
 
 bazel build -s tests/ios/app:App  --aspects rules/compile_only_aspect.bzl%compile_only_aspect --output_groups=compiles
 """
@@ -12,14 +12,17 @@ bazel build -s tests/ios/app:App  --aspects rules/compile_only_aspect.bzl%compil
 def _compile_only_aspect_impl(target, ctx):
     outs = depset([])
 
+    swift_rule_kinds = ["swift_library", "swift_test"]
+    objc_rule_kinds = ["objc_library"]
+
     # Consider in Swift compilation how to only generate the intefaces
     # through the feature of interface splitting
-    if ctx.rule.kind == "swift_library":
+    if ctx.rule.kind in swift_rule_kinds:
         for action in target.actions:
             if action.mnemonic == "SwiftCompile":
                 outs = action.outputs
                 break
-    elif ctx.rule.kind == "objc_library":
+    elif ctx.rule.kind in objc_rule_kinds:
         outs = depset([], transitive = [action.outputs for action in target.actions if action.mnemonic == "ObjcCompile"])
     deps = getattr(ctx.rule.attr, "deps", [])
     transitive = [dep[OutputGroupInfo].compiles for dep in deps if OutputGroupInfo in dep]
