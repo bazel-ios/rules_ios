@@ -4,8 +4,8 @@ Defines macros for working with plist files.
 
 load("@bazel_skylib//lib:types.bzl", "types")
 load("@bazel_skylib//lib:sets.bzl", "sets")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@build_bazel_rules_ios//rules:substitute_build_settings.bzl", "substitute_build_settings")
-load("//rules:library.bzl", "write_file")
 load("//rules/library:xcconfig.bzl", "build_setting_name", "merge_xcconfigs")
 
 def process_infoplists(name, infoplists, infoplists_by_build_setting, xcconfig, xcconfig_by_build_setting):
@@ -109,8 +109,8 @@ def write_info_plists_if_needed(name, plists):
             plist_name = "{name}.infoplist.{idx}".format(name = name, idx = idx)
             write_file(
                 name = plist_name,
-                destination = plist_name + ".plist",
-                content = struct(**plist).to_json(),
+                out = plist_name + ".plist",
+                content = [struct(**plist).to_json()],
             )
             written_plists.append(plist_name)
         else:

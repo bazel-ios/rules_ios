@@ -3,6 +3,7 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@bazel_skylib//lib:selects.bzl", "selects")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@build_bazel_rules_apple//apple:apple.bzl", "apple_dynamic_framework_import", "apple_static_framework_import")
 load("@build_bazel_rules_apple//apple/internal/resource_rules:apple_intent_library.bzl", "apple_intent_library")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
@@ -43,21 +44,6 @@ _private_headers = rule(
     attrs = {
         "headers": attr.label_list(mandatory = True, allow_files = [".inc", ".h", ".hh", ".hpp"]),
     },
-)
-
-def _write_file_impl(ctx):
-    ctx.actions.write(
-        output = ctx.outputs.destination,
-        content = ctx.attr.content,
-    )
-
-write_file = rule(
-    implementation = _write_file_impl,
-    attrs = {
-        "content": attr.string(mandatory = True),
-        "destination": attr.output(mandatory = True),
-    },
-    doc = "Writes out a file verbatim",
 )
 
 def _extend_modulemap_impl(ctx):
@@ -120,8 +106,8 @@ module {module_name} {{
 
     write_file(
         name = basename + "~",
-        destination = destination,
-        content = content,
+        out = destination,
+        content = content.split("\n"),
         tags = _MANUAL,
     )
     return destination
@@ -170,8 +156,8 @@ FOUNDATION_EXPORT const unsigned char {module_name}VersionString[];
 
     write_file(
         name = basename + "~",
-        destination = destination,
-        content = content,
+        out = destination,
+        content = content.split("\n"),
         tags = _MANUAL,
     )
     return destination
