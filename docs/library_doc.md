@@ -20,8 +20,8 @@ Extends a modulemap with a Swift submodule
 | <a id="extend_modulemap-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
 | <a id="extend_modulemap-destination"></a>destination |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  |
 | <a id="extend_modulemap-module_name"></a>module_name |  -   | String | required |  |
-| <a id="extend_modulemap-source"></a>source |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | optional | <code>None</code> |
-| <a id="extend_modulemap-swift_header"></a>swift_header |  -   | String | optional | <code>""</code> |
+| <a id="extend_modulemap-source"></a>source |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
+| <a id="extend_modulemap-swift_header"></a>swift_header |  -   | String | optional |  `""`  |
 
 
 <a id="PrivateHeadersInfo"></a>
@@ -64,14 +64,14 @@ reasonable defaults that mimic Xcode's behavior.
 | Name  | Description | Default Value |
 | :------------- | :------------- | :------------- |
 | <a id="apple_library-name"></a>name |  The base name for all of the underlying targets.   |  none |
-| <a id="apple_library-library_tools"></a>library_tools |  An optional dictionary containing overrides for default behaviors.   |  <code>{}</code> |
-| <a id="apple_library-export_private_headers"></a>export_private_headers |  Whether private headers should be exported via a <code>PrivateHeadersInfo</code> provider.   |  <code>True</code> |
-| <a id="apple_library-namespace_is_module_name"></a>namespace_is_module_name |  Whether the module name should be used as the namespace for header imports, instead of the target name.   |  <code>True</code> |
-| <a id="apple_library-default_xcconfig_name"></a>default_xcconfig_name |  The name of a default xcconfig to be applied to this target.   |  <code>None</code> |
-| <a id="apple_library-xcconfig"></a>xcconfig |  A dictionary of Xcode build settings to be applied to this target in the form of different <code>copt</code> attributes.   |  <code>{}</code> |
-| <a id="apple_library-xcconfig_by_build_setting"></a>xcconfig_by_build_setting |  A dictionary of Xcode build settings grouped by bazel build setting.<br><br>Each value is applied (overriding any matching setting in 'xcconfig') if the respective bazel build setting is resolved during the analysis phase.   |  <code>{}</code> |
-| <a id="apple_library-objc_defines"></a>objc_defines |  A list of Objective-C defines to add to the compilation command line. They should be in the form KEY=VALUE or simply KEY and are passed not only to the compiler for this target (as copts are) but also to all objc_ dependers of this target.   |  <code>[]</code> |
-| <a id="apple_library-swift_defines"></a>swift_defines |  A list of Swift defines to add to the compilation command line. Swift defines do not have values, so strings in this list should be simple identifiers and not KEY=VALUE pairs. (only expections are KEY=1 and KEY=0). These flags are added for the target and every target that depends on it.   |  <code>[]</code> |
+| <a id="apple_library-library_tools"></a>library_tools |  An optional dictionary containing overrides for default behaviors.   |  `{}` |
+| <a id="apple_library-export_private_headers"></a>export_private_headers |  Whether private headers should be exported via a `PrivateHeadersInfo` provider.   |  `True` |
+| <a id="apple_library-namespace_is_module_name"></a>namespace_is_module_name |  Whether the module name should be used as the namespace for header imports, instead of the target name.   |  `True` |
+| <a id="apple_library-default_xcconfig_name"></a>default_xcconfig_name |  The name of a default xcconfig to be applied to this target.   |  `None` |
+| <a id="apple_library-xcconfig"></a>xcconfig |  A dictionary of Xcode build settings to be applied to this target in the form of different `copt` attributes.   |  `{}` |
+| <a id="apple_library-xcconfig_by_build_setting"></a>xcconfig_by_build_setting |  A dictionary of Xcode build settings grouped by bazel build setting.<br><br>Each value is applied (overriding any matching setting in 'xcconfig') if the respective bazel build setting is resolved during the analysis phase.   |  `{}` |
+| <a id="apple_library-objc_defines"></a>objc_defines |  A list of Objective-C defines to add to the compilation command line. They should be in the form KEY=VALUE or simply KEY and are passed not only to the compiler for this target (as copts are) but also to all objc_ dependers of this target.   |  `[]` |
+| <a id="apple_library-swift_defines"></a>swift_defines |  A list of Swift defines to add to the compilation command line. Swift defines do not have values, so strings in this list should be simple identifiers and not KEY=VALUE pairs. (only expections are KEY=1 and KEY=0). These flags are added for the target and every target that depends on it.   |  `[]` |
 | <a id="apple_library-kwargs"></a>kwargs |  keyword arguments.   |  none |
 
 **RETURNS**

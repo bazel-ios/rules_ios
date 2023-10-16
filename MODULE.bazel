@@ -56,8 +56,8 @@ bazel_dep(
 bazel_dep(
     name = "stardoc",
     version = "0.6.2",
-    repo_name = "io_bazel_stardoc",
     dev_dependency = True,
+    repo_name = "io_bazel_stardoc",
 )
 
 # Load non-bzlmod dependencies from rules_ios

@@ -12,15 +12,198 @@ genrule(
 )
 
 bzl_library(
-    name = "bzl",
-    srcs = [
-        "app.bzl",
-        "extension.bzl",
-        "framework.bzl",
-        "hmap.bzl",
-        "library.bzl",
-        "test.bzl",
-    ],
+    name = "providers",
+    srcs = ["providers.bzl"],
     visibility = ["//visibility:public"],
-    deps = ["@build_bazel_rules_apple//apple"],
+)
+
+bzl_library(
+    name = "transition_support",
+    srcs = ["transition_support.bzl"],
+    visibility = ["//visibility:public"],
+)
+
+bzl_library(
+    name = "hmap",
+    srcs = ["hmap.bzl"],
+    visibility = ["//visibility:public"],
+    deps = ["@build_bazel_rules_swift//swift"],
+)
+
+bzl_library(
+    name = "features",
+    srcs = ["features.bzl"],
+    visibility = ["//visibility:public"],
+)
+
+bzl_library(
+    name = "substitute_build_settings",
+    srcs = ["substitute_build_settings.bzl"],
+    visibility = ["//visibility:public"],
+)
+
+bzl_library(
+    name = "force_load_direct_deps",
+    srcs = ["force_load_direct_deps.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [":providers"],
+)
+
+bzl_library(
+    name = "xcconfig.doc",
+    srcs = ["xcconfig.doc.bzl"],
+    visibility = ["//visibility:public"],
+    deps = ["//rules/library:xcconfig"],
+)
+
+bzl_library(
+    name = "plists",
+    srcs = ["plists.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":substitute_build_settings",
+        "//rules/library:xcconfig",
+        "@bazel_skylib//lib:sets",
+        "@bazel_skylib//lib:types",
+        "@bazel_skylib//rules:write_file",
+    ],
+)
+
+bzl_library(
+    name = "vfs_overlay.doc",
+    srcs = ["vfs_overlay.doc.bzl"],
+    visibility = ["//visibility:public"],
+    deps = ["//rules/framework:vfs_overlay"],
+)
+
+bzl_library(
+    name = "precompiled_apple_resource_bundle",
+    srcs = ["precompiled_apple_resource_bundle.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":transition_support",
+        ":utils.bzl",
+        "@bazel_skylib//lib:partial",
+        "@bazel_skylib//lib:paths",
+        "@build_bazel_apple_support//lib:apple_support",
+        "@build_bazel_rules_apple//apple",
+    ],
+)
+
+bzl_library(
+    name = "import_middleman",
+    srcs = ["import_middleman.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":features",
+        "//rules/internal:objc_provider_utils",
+        "@build_bazel_rules_apple//apple",
+    ],
+)
+
+bzl_library(
+    name = "library",
+    srcs = ["library.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":hmap",
+        ":import_middleman",
+        ":precompiled_apple_resource_bundle",
+        ":utils.bzl",
+        "//rules/framework:vfs_overlay",
+        "//rules/library:resources",
+        "//rules/library:xcconfig",
+        "@bazel_skylib//lib:paths",
+        "@bazel_skylib//lib:selects",
+        "@bazel_skylib//lib:sets",
+        "@bazel_skylib//rules:write_file",
+        "@build_bazel_rules_apple//apple",
+        "@build_bazel_rules_apple//apple:apple_static_library",
+        "@build_bazel_rules_apple//apple:resources",
+        "@build_bazel_rules_swift//swift",
+    ],
+)
+
+bzl_library(
+    name = "framework",
+    srcs = ["framework.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":features",
+        ":force_load_direct_deps",
+        ":library",
+        ":plists",
+        ":providers",
+        ":transition_support",
+        "//rules/framework:vfs_overlay",
+        "//rules/internal:objc_provider_utils",
+        "@bazel_skylib//lib:partial",
+        "@bazel_skylib//lib:paths",
+        "@bazel_tools//tools/cpp:toolchain_utils.bzl",
+        "@build_bazel_rules_apple//apple",
+        "@build_bazel_rules_swift//swift",
+    ],
+)
+
+bzl_library(
+    name = "apple_patched",
+    srcs = ["apple_patched.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":features",
+        ":providers",
+        "//rules/framework:vfs_overlay",
+        "@build_bazel_rules_apple//apple",
+        "@build_bazel_rules_swift//swift",
+    ],
+)
+
+bzl_library(
+    name = "app_clip",
+    srcs = ["app_clip.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":force_load_direct_deps",
+        ":plists",
+        "//rules/internal:framework_middleman",
+        "@build_bazel_rules_apple//apple:ios",
+    ],
+)
+
+bzl_library(
+    name = "app",
+    srcs = ["app.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":force_load_direct_deps",
+        ":library",
+        ":plists",
+        "//rules/internal:framework_middleman",
+        "@build_bazel_rules_apple//apple:ios",
+    ],
+)
+
+bzl_library(
+    name = "extension",
+    srcs = ["extension.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":force_load_direct_deps",
+        ":plists",
+        "//rules/internal:framework_middleman",
+        "@build_bazel_rules_apple//apple:ios",
+    ],
+)
+
+bzl_library(
+    name = "test",
+    srcs = ["test.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":library",
+        ":plists",
+        "//rules/internal:framework_middleman",
+        "@bazel_skylib//lib:types",
+        "@build_bazel_rules_apple//apple:ios",
+    ],
 )
