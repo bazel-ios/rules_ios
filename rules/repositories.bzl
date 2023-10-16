@@ -170,6 +170,16 @@ def _rules_ios_bzlmod_dev_dependencies():
         ],
     )
 
+    _maybe(
+        http_archive,
+        name = "io_bazel_stardoc",
+        sha256 = "62bd2e60216b7a6fec3ac79341aa201e0956477e7c8f6ccc286f279ad1d96432",
+        urls = [
+            "https://mirror.bazel.build/github.com/bazelbuild/stardoc/releases/download/0.6.2/stardoc-0.6.2.tar.gz",
+            "https://github.com/bazelbuild/stardoc/releases/download/0.6.2/stardoc-0.6.2.tar.gz",
+        ],
+    )
+
 def _rules_ios_legacy_xcodeproj_dependencies():
     """Fetches the repositories that are dependencies of the legacy xcode project generator"""
 

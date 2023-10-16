@@ -47,21 +47,27 @@ load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 
 bazel_skylib_workspace()
 
-load(
-    "@bazel_tools//tools/build_defs/repo:git.bzl",
-    "git_repository",
-)
-
-git_repository(
-    name = "io_bazel_stardoc",
-    commit = "6f274e903009158504a9d9130d7f7d5f3e9421ed",
-    remote = "https://github.com/bazelbuild/stardoc.git",
-    shallow_since = "1667581897 -0400",
-)
+# Load stardoc and it's deps
 
 load("@io_bazel_stardoc//:setup.bzl", "stardoc_repositories")
 
 stardoc_repositories()
+
+load("@rules_jvm_external//:repositories.bzl", "rules_jvm_external_deps")
+
+rules_jvm_external_deps()
+
+load("@rules_jvm_external//:setup.bzl", "rules_jvm_external_setup")
+
+rules_jvm_external_setup()
+
+load("@io_bazel_stardoc//:deps.bzl", "stardoc_external_deps")
+
+stardoc_external_deps()
+
+load("@stardoc_maven//:defs.bzl", stardoc_pinned_maven_install = "pinned_maven_install")
+
+stardoc_pinned_maven_install()
 
 # Download prebuilt binaries buildifier
 load("@buildifier_prebuilt//:deps.bzl", "buildifier_prebuilt_deps")
