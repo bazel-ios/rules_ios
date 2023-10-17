@@ -16,12 +16,12 @@ load("@build_bazel_rules_apple//apple/internal:partials.bzl", "partials")
 load("@build_bazel_rules_apple//apple/internal:platform_support.bzl", "platform_support")
 load("@build_bazel_rules_apple//apple/internal:resources.bzl", "resources")
 load("@build_bazel_rules_apple//apple/internal:resource_actions.bzl", "resource_actions")
-load("@rules_ios_apple_api//:ios_rules.bzl", "rule_attrs")
-load("@rules_ios_apple_api//:providers.bzl", "new_appleresourcebundleinfo", "new_appleresourceinfo")
+load("@rules_apple_api//:ios_rules.bzl", "rule_attrs")
+load("@rules_apple_api//:providers.bzl", "new_appleresourcebundleinfo", "new_appleresourceinfo")
 load("@build_bazel_rules_apple//apple/internal:apple_toolchains.bzl", "AppleMacToolsToolchainInfo")
 load("//rules:transition_support.bzl", "transition_support")
 load("//rules:utils.bzl", "bundle_identifier_for_bundle")
-load("@rules_ios_apple_api//:version.bzl", "apple_api_version")
+load("@rules_apple_api//:version.bzl", "apple_api_version")
 
 _FAKE_BUNDLE_PRODUCT_TYPE_BY_PLATFORM_TYPE = {
     "ios": apple_product_type.application,

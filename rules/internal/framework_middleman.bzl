@@ -6,7 +6,7 @@ load(
 )
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load(
-    "@rules_ios_apple_api//:providers.bzl",
+    "@rules_apple_api//:providers.bzl",
     "new_applebundleinfo",
     "new_iosframeworkbundleinfo",
 )

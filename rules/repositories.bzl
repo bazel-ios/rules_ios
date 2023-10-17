@@ -93,7 +93,7 @@ def _rules_apple_api_impl(ctx):
     # Some of our third party deps from bazelbuild org don't support LTS but
     # from time to time we'll evaluate supporting this to allow us to all run on
     # HEAD and best interop with the rules_apple based dependencies.
-    # This simply symlinks the diretory rules/rules_apple_api/$vesrion onto "@rules_ios_apple_api" where we import
+    # This simply symlinks the diretory rules/rules_apple_api/$vesrion onto "@rules_apple_api" where we import
     # the interface.
     base_path = str(ctx.path(ctx.attr.rules_ios).dirname)
     path = base_path + "/rules/rules_apple_api/" + ctx.attr.version
@@ -122,7 +122,7 @@ def _rules_ios_bzlmod_dependencies():
         _maybe(
             github_repo,
             name = "build_bazel_rules_swift",
-            project = "bazel-ios",
+            project = "bazelbuild",
             ref = "e0272df7d98a563c07aa2e78722cd8ce62549864",
             repo = "rules_swift",
             sha256 = "006743d481c477928796ad985ba32b591f5926cd590d32b207e018049b569594",
@@ -137,8 +137,17 @@ def _rules_ios_bzlmod_dependencies():
         )
         _maybe(
             rules_apple_api,
-            name = "rules_ios_apple_api",
+            name = "rules_apple_api",
             version = "1_0",
+        )
+        _maybe(
+            http_archive,
+            name = "bazel_skylib",
+            urls = [
+                "https://github.com/bazelbuild/bazel-skylib/releases/download/1.1.1/bazel-skylib-1.1.1.tar.gz",
+                "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.1.1/bazel-skylib-1.1.1.tar.gz",
+            ],
+            sha256 = "c6966ec828da198c5d9adbaa94c05e3a1c7f21bd012a0b29ba8ddbccb2c93b0d",
         )
     elif bazel_version.major == "6" and bazel_version.minor == "1":
         _maybe(
@@ -159,13 +168,23 @@ def _rules_ios_bzlmod_dependencies():
         )
         _maybe(
             rules_apple_api,
-            name = "rules_ios_apple_api",
+            name = "rules_apple_api",
             version = "2_0",
         )
+        _maybe(
+            http_archive,
+            name = "bazel_skylib",
+            urls = [
+                "https://github.com/bazelbuild/bazel-skylib/releases/download/1.1.1/bazel-skylib-1.1.1.tar.gz",
+                "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.1.1/bazel-skylib-1.1.1.tar.gz",
+            ],
+            sha256 = "c6966ec828da198c5d9adbaa94c05e3a1c7f21bd012a0b29ba8ddbccb2c93b0d",
+        )
+
     else:
         # Bazel 6+ codepath - you can use the 2_x version of rules_apple here if
         # you'd like to set it. If you want to use a different rules_apple than
-        # we have here - define rules_ios_apple_api - to the value you'd like
+        # we have here - define rules_apple_api - to the value you'd like
         _maybe(
             github_repo,
             name = "build_bazel_rules_swift",
@@ -185,10 +204,18 @@ def _rules_ios_bzlmod_dependencies():
         )
         _maybe(
             rules_apple_api,
-            name = "rules_ios_apple_api",
+            name = "rules_apple_api",
             version = "3_0",
         )
-
+        _maybe(
+            http_archive,
+            name = "bazel_skylib",
+            sha256 = "b8a1527901774180afc798aeb28c4634bdccf19c4d98e7bdd1ce79d1fe9aaad7",
+            urls = [
+                "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.4.1/bazel-skylib-1.4.1.tar.gz",
+                "https://github.com/bazelbuild/bazel-skylib/releases/download/1.4.1/bazel-skylib-1.4.1.tar.gz",
+            ],
+        )
 
     _maybe(
         http_archive,

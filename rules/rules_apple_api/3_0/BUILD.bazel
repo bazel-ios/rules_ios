@@ -9,4 +9,8 @@ bzl_library(
     ],
     tags = ["manual"],
     visibility = ["//visibility:public"],
+    deps = [
+        "@build_bazel_apple_support//lib:apple_support",
+        "@build_bazel_rules_apple//apple",
+    ],
 )
