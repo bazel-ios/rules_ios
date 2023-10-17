@@ -24,26 +24,6 @@ Extends a modulemap with a Swift submodule
 | <a id="extend_modulemap-swift_header"></a>swift_header |  -   | String | optional | <code>""</code> |
 
 
-<a id="write_file"></a>
-
-## write_file
-
-<pre>
-write_file(<a href="#write_file-name">name</a>, <a href="#write_file-content">content</a>, <a href="#write_file-destination">destination</a>)
-</pre>
-
-Writes out a file verbatim
-
-**ATTRIBUTES**
-
-
-| Name  | Description | Type | Mandatory | Default |
-| :------------- | :------------- | :------------- | :------------- | :------------- |
-| <a id="write_file-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
-| <a id="write_file-content"></a>content |  -   | String | required |  |
-| <a id="write_file-destination"></a>destination |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | required |  |
-
-
 <a id="PrivateHeadersInfo"></a>
 
 ## PrivateHeadersInfo
