@@ -82,8 +82,8 @@ jobs:
           name: bazel-testlogs
           path: bazel-testlogs
 
-  bazel_lts_ios_integration_tests:
-    name: Build and Test ( Virtual Frameworks + LTS )
+  bazel_5_ios_integration_tests:
+    name: Build and Test ( Virtual Frameworks + Bazel 5 )
     runs-on: macos-12
     env:
       USE_BAZEL_VERSION: 5.3.2
