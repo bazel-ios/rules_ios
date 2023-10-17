@@ -69,6 +69,9 @@ def rules_ios_dependencies(
     if load_bzlmod_dependencies:
         _rules_ios_bzlmod_dependencies()
 
+    # Non-bzlmod tool dependencies that are used in the rule APIs
+    _rules_ios_tool_dependencies()
+
     # If legacy project generator is deprecated this can be removed.
     _rules_ios_legacy_xcodeproj_dependencies()
 
@@ -84,7 +87,6 @@ def rules_ios_dev_dependencies(
     if load_bzlmod_dependencies:
         _rules_ios_bzlmod_dev_dependencies()
 
-    _rules_ios_tool_dependencies()
     _rules_ios_test_dependencies()
 
 def _rules_ios_bzlmod_dependencies():
@@ -141,13 +143,6 @@ def _rules_ios_bzlmod_dependencies():
         ],
     )
 
-def _rules_ios_bzlmod_dev_dependencies():
-    """
-    Fetches repositories that are development dependencies of `rules_ios` and available via bzlmod.
-
-    These are only included when using WORKSPACE, when using bzlmod they're loaded in MODULE.bazel
-    """
-
     _maybe(
         http_archive,
         name = "rules_pkg",
@@ -157,6 +152,13 @@ def _rules_ios_bzlmod_dev_dependencies():
         ],
         sha256 = "8f9ee2dc10c1ae514ee599a8b42ed99fa262b757058f65ad3c384289ff70c4b8",
     )
+
+def _rules_ios_bzlmod_dev_dependencies():
+    """
+    Fetches repositories that are development dependencies of `rules_ios` and available via bzlmod.
+
+    These are only included when using WORKSPACE, when using bzlmod they're loaded in MODULE.bazel
+    """
 
     _maybe(
         http_archive,

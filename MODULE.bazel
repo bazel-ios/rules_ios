@@ -58,7 +58,9 @@ bazel_dep(
 non_module_deps = use_extension("//rules:module_extensions.bzl", "non_module_deps")
 use_repo(
     non_module_deps,
+    "arm64-to-sim",
     "com_github_yonaskolb_xcodegen",
+    "tart",
 )
 
 non_module_dev_deps = use_extension(
@@ -70,9 +72,7 @@ use_repo(
     non_module_dev_deps,
     "GoogleMobileAdsSDK",
     "TensorFlowLiteC",
-    "arm64-to-sim",
     "com_github_apple_swiftcollections",
-    "tart",
 )
 
 # Configure Xcode
