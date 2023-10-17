@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4D9FC7A3A45FAD1826CE314F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ECF1D7133544DD5E82A3EB0 /* main.m */; };
-		77CEA17F2CA7DD5E92DE1D2F /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5478D8BA2BE2A548270A80 /* empty.swift */; };
-		8B8703078ED965C24F7DFC6D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 211B0D62D65A5D8BEFE42153 /* main.m */; };
-		9C997105C8FCCC97A52F3C37 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF21FC7C23005F0603AD4F0 /* test.swift */; };
-		A4F944E364C32E57F5B25D01 /* empty.m in Sources */ = {isa = PBXBuildFile; fileRef = 018DA4ABD245EA72FEA9BA46 /* empty.m */; };
-		A92FEA9E7CEAA5C1D707216B /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = EC2BF9F658BA7B0FF93BA215 /* test.m */; };
-		C95405553A2746A500C5E3E6 /* testhelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF0C0F5D81C125CD2559615 /* testhelper.m */; };
-		E676560B3EE63A86606530C8 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AC323968F3E7DC9BAFEC85 /* empty.swift */; };
+		2A372C9ACA7AA78BCAC9A662 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EAA9612823F454F8B26E7ED /* test.swift */; };
+		52F554489DFA319E3F31EBF3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29F358F7A55EA8EB574E298A /* main.m */; };
+		6D1A42FCF5A8F991A2D8D1ED /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = C26F5E178D48CC37414432CD /* test.m */; };
+		6E1E20AFA6FBFCC1DF202559 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B2F74BA1A64C1111E78B73 /* empty.swift */; };
+		7AF29F5CA4423C2857E2F530 /* testhelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7886C9FCDAC92F521F4DA00B /* testhelper.m */; };
+		DE5C8E1B30DD28CA25D49620 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 15438498FB1A425C030AF89D /* main.m */; };
+		E6DA9C35C0D3EA912D2130E5 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F3EF9D07A26A7ED77F7678 /* empty.swift */; };
+		F175294FAD71824A69136E05 /* empty.m in Sources */ = {isa = PBXBuildFile; fileRef = A06052BB1F060A9062255B8B /* empty.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,58 +36,52 @@
 
 /* Begin PBXFileReference section */
 		0052687FF99FFC1CF0644A94 /* iOS-10.0-AppHost.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "iOS-10.0-AppHost.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		018DA4ABD245EA72FEA9BA46 /* empty.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = empty.m; sourceTree = "<group>"; };
-		0A3BB7488A9B93655A5A80A7 /* TestModelMapping.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = TestModelMapping.xcmappingmodel; sourceTree = "<group>"; };
-		211B0D62D65A5D8BEFE42153 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		15438498FB1A425C030AF89D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		19B2F74BA1A64C1111E78B73 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
+		29F358F7A55EA8EB574E298A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3193999688B1976443D053CE /* testhelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = testhelper.h; sourceTree = "<group>"; };
 		348B04B51F448DD66CEE21AA /* DefaultHosted_bundle.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = DefaultHosted_bundle.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		3CCFF4E96CDD4C2949F0F71A /* Header2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header2.h; sourceTree = "<group>"; };
-		3ECF1D7133544DD5E82A3EB0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		4BF0C0F5D81C125CD2559615 /* testhelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = testhelper.m; sourceTree = "<group>"; };
-		4DACF9F33F414B6BED4E227B /* testhelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = testhelper.h; sourceTree = "<group>"; };
-		57D04511C7357979F7EB5058 /* TestModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestModel.xcdatamodel; sourceTree = "<group>"; };
-		5EF21FC7C23005F0603AD4F0 /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
+		3EAA9612823F454F8B26E7ED /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
+		53DB66CC2129ED41F60F5573 /* TestModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestModel.xcdatamodel; sourceTree = "<group>"; };
+		5C20D02A36926E2D37377C60 /* TestImports-Unit-Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestImports-Unit-Tests-Bridging-Header.h"; sourceTree = "<group>"; };
 		61CE3CBBAD0BFAFC0953377B /* TestImports-App.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "TestImports-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6B5478D8BA2BE2A548270A80 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
-		6B9EC009A2921D74329BE9EA /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
-		6F61436FF5DC80B583273E47 /* TestImports-Unit-Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestImports-Unit-Tests-Bridging-Header.h"; sourceTree = "<group>"; };
-		8BBBE8333A9A3A09CEFFD917 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		9683E3E05D116FBB2D85DC23 /* TestImports-App-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestImports-App-Bridging-Header.h"; sourceTree = "<group>"; };
+		61F594B006684EF9FFCCEC39 /* Header2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header2.h; sourceTree = "<group>"; };
+		6A7E77AFDBD65417838AA0E9 /* TestImports-App-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestImports-App-Bridging-Header.h"; sourceTree = "<group>"; };
+		7886C9FCDAC92F521F4DA00B /* testhelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = testhelper.m; sourceTree = "<group>"; };
+		7ABE3DB1D38AEBC07E671828 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
+		89F3EF9D07A26A7ED77F7678 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
+		9428BA651F9FD2FFEBE20C6C /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		9E7E8177A9991D407C446EF6 /* TestImports-Unit-Tests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "TestImports-Unit-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A038F6999FF698D9E7E393F6 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
-		A5AC323968F3E7DC9BAFEC85 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
-		AF7BF530BE9F3ED2CB34B356 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
-		BE18C5CC5D69DC93C244A788 /* TestModel2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestModel2.xcdatamodel; sourceTree = "<group>"; };
-		BFBF7DC447A9E302E7E2946B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		C3241F917953C6BD1D2BE62A /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
-		D08289E7727590A63B67489C /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header.h; sourceTree = "<group>"; };
-		D229E599DDBCC713FF997122 /* TestStickers.xcstickers */ = {isa = PBXFileReference; lastKnownFileType = folder.stickers; path = TestStickers.xcstickers; sourceTree = "<group>"; };
-		EC2BF9F658BA7B0FF93BA215 /* test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = test.m; sourceTree = "<group>"; };
+		A06052BB1F060A9062255B8B /* empty.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = empty.m; sourceTree = "<group>"; };
+		A5985FF3F6E4ADBFFEF18D15 /* TestModel2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestModel2.xcdatamodel; sourceTree = "<group>"; };
+		BAEAF767D6F495948D572644 /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header.h; sourceTree = "<group>"; };
+		BC2D65793AAA762B6A82E6F0 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
+		C26F5E178D48CC37414432CD /* test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = test.m; sourceTree = "<group>"; };
+		C79CEC8DCA1CD7DF8522C3A8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		E7F2BFA8DEEB6AE0FA55BB92 /* TestStickers.xcstickers */ = {isa = PBXFileReference; lastKnownFileType = folder.stickers; path = TestStickers.xcstickers; sourceTree = "<group>"; };
+		F0957BE90A94DF7C11DD7953 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		FC2A4AD817CAEF80C7FE9232 /* TestModelMapping.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = TestModelMapping.xcmappingmodel; sourceTree = "<group>"; };
+		FEF385F9E4C2B90E2013CDCB /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
-		06B23FF0DFF8BD111D851949 /* ios */ = {
+		0B844B51ACD480A85C933C78 /* tests */ = {
 			isa = PBXGroup;
 			children = (
-				64B768958760ECC68D48BCA8 /* unit-test */,
-			);
-			path = ios;
-			sourceTree = "<group>";
-		};
-		086FBDD761E762B1598CC05E /* test_host_app */ = {
-			isa = PBXGroup;
-			children = (
-				C3241F917953C6BD1D2BE62A /* BUILD.bazel */,
-				211B0D62D65A5D8BEFE42153 /* main.m */,
-			);
-			path = test_host_app;
-			sourceTree = "<group>";
-		};
-		12AC35FA4ADBC321A4E27AFC /* tests */ = {
-			isa = PBXGroup;
-			children = (
-				06B23FF0DFF8BD111D851949 /* ios */,
+				A30A4120C0738C2877133621 /* ios */,
 			);
 			path = tests;
+			sourceTree = "<group>";
+		};
+		3A6515B71BCA8EDEC3253E5B /* _main */ = {
+			isa = PBXGroup;
+			children = (
+				FEF385F9E4C2B90E2013CDCB /* BUILD.bazel */,
+				4954DF7D7B7527AD58883BE8 /* rules */,
+				0B844B51ACD480A85C933C78 /* tests */,
+			);
+			name = _main;
+			path = ../../..;
 			sourceTree = "<group>";
 		};
 		41BE2FF5579DA46E599A01EC /* Products */ = {
@@ -101,82 +95,88 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		53A1C0AA09C71D538BA9031C /* Resources2 */ = {
+		4445B6DA1CBA494B9A977EB1 /* test-imports-app */ = {
 			isa = PBXGroup;
 			children = (
-				BFBF7DC447A9E302E7E2946B /* Images.xcassets */,
+				7ABE3DB1D38AEBC07E671828 /* BUILD.bazel */,
+				89F3EF9D07A26A7ED77F7678 /* empty.swift */,
+				BAEAF767D6F495948D572644 /* Header.h */,
+				61F594B006684EF9FFCCEC39 /* Header2.h */,
+				29F358F7A55EA8EB574E298A /* main.m */,
+				BD9AF60378CB23BF94DA6531 /* Resources */,
+				C26F5E178D48CC37414432CD /* test.m */,
+				3EAA9612823F454F8B26E7ED /* test.swift */,
+				3193999688B1976443D053CE /* testhelper.h */,
+				7886C9FCDAC92F521F4DA00B /* testhelper.m */,
+				6A7E77AFDBD65417838AA0E9 /* TestImports-App-Bridging-Header.h */,
+				5C20D02A36926E2D37377C60 /* TestImports-Unit-Tests-Bridging-Header.h */,
 			);
-			path = Resources2;
+			path = "test-imports-app";
 			sourceTree = "<group>";
 		};
-		64B768958760ECC68D48BCA8 /* unit-test */ = {
+		4954DF7D7B7527AD58883BE8 /* rules */ = {
 			isa = PBXGroup;
 			children = (
-				A038F6999FF698D9E7E393F6 /* BUILD.bazel */,
-				018DA4ABD245EA72FEA9BA46 /* empty.m */,
-				6B5478D8BA2BE2A548270A80 /* empty.swift */,
-				9D68117D7BA652584708D01D /* test-imports-app */,
+				FF68BA16221315448441FC7B /* test_host_app */,
 			);
-			path = "unit-test";
+			path = rules;
 			sourceTree = "<group>";
 		};
 		7CECA2AB833A306EC3500168 = {
 			isa = PBXGroup;
 			children = (
-				EEFB98134D768549E03E39A5 /* build_bazel_rules_ios */,
+				3A6515B71BCA8EDEC3253E5B /* _main */,
 				41BE2FF5579DA46E599A01EC /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		9D68117D7BA652584708D01D /* test-imports-app */ = {
+		A30A4120C0738C2877133621 /* ios */ = {
 			isa = PBXGroup;
 			children = (
-				AF7BF530BE9F3ED2CB34B356 /* BUILD.bazel */,
-				A5AC323968F3E7DC9BAFEC85 /* empty.swift */,
-				D08289E7727590A63B67489C /* Header.h */,
-				3CCFF4E96CDD4C2949F0F71A /* Header2.h */,
-				3ECF1D7133544DD5E82A3EB0 /* main.m */,
-				DC21B9839449D8D9195E4A22 /* Resources */,
-				EC2BF9F658BA7B0FF93BA215 /* test.m */,
-				5EF21FC7C23005F0603AD4F0 /* test.swift */,
-				4DACF9F33F414B6BED4E227B /* testhelper.h */,
-				4BF0C0F5D81C125CD2559615 /* testhelper.m */,
-				9683E3E05D116FBB2D85DC23 /* TestImports-App-Bridging-Header.h */,
-				6F61436FF5DC80B583273E47 /* TestImports-Unit-Tests-Bridging-Header.h */,
+				E7A24EC280DEDEC42E9B579D /* unit-test */,
 			);
-			path = "test-imports-app";
+			path = ios;
 			sourceTree = "<group>";
 		};
-		B0B40062B117F993E7D160D6 /* rules */ = {
+		BD9AF60378CB23BF94DA6531 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				086FBDD761E762B1598CC05E /* test_host_app */,
-			);
-			path = rules;
-			sourceTree = "<group>";
-		};
-		DC21B9839449D8D9195E4A22 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				8BBBE8333A9A3A09CEFFD917 /* Images.xcassets */,
-				53A1C0AA09C71D538BA9031C /* Resources2 */,
-				57D04511C7357979F7EB5058 /* TestModel.xcdatamodel */,
-				BE18C5CC5D69DC93C244A788 /* TestModel2.xcdatamodel */,
-				0A3BB7488A9B93655A5A80A7 /* TestModelMapping.xcmappingmodel */,
-				D229E599DDBCC713FF997122 /* TestStickers.xcstickers */,
+				C79CEC8DCA1CD7DF8522C3A8 /* Images.xcassets */,
+				CF83A90DE062FFE9BF03FB39 /* Resources2 */,
+				53DB66CC2129ED41F60F5573 /* TestModel.xcdatamodel */,
+				A5985FF3F6E4ADBFFEF18D15 /* TestModel2.xcdatamodel */,
+				FC2A4AD817CAEF80C7FE9232 /* TestModelMapping.xcmappingmodel */,
+				E7F2BFA8DEEB6AE0FA55BB92 /* TestStickers.xcstickers */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		EEFB98134D768549E03E39A5 /* build_bazel_rules_ios */ = {
+		CF83A90DE062FFE9BF03FB39 /* Resources2 */ = {
 			isa = PBXGroup;
 			children = (
-				6B9EC009A2921D74329BE9EA /* BUILD.bazel */,
-				B0B40062B117F993E7D160D6 /* rules */,
-				12AC35FA4ADBC321A4E27AFC /* tests */,
+				F0957BE90A94DF7C11DD7953 /* Images.xcassets */,
 			);
-			name = build_bazel_rules_ios;
-			path = ../../..;
+			path = Resources2;
+			sourceTree = "<group>";
+		};
+		E7A24EC280DEDEC42E9B579D /* unit-test */ = {
+			isa = PBXGroup;
+			children = (
+				BC2D65793AAA762B6A82E6F0 /* BUILD.bazel */,
+				A06052BB1F060A9062255B8B /* empty.m */,
+				19B2F74BA1A64C1111E78B73 /* empty.swift */,
+				4445B6DA1CBA494B9A977EB1 /* test-imports-app */,
+			);
+			path = "unit-test";
+			sourceTree = "<group>";
+		};
+		FF68BA16221315448441FC7B /* test_host_app */ = {
+			isa = PBXGroup;
+			children = (
+				9428BA651F9FD2FFEBE20C6C /* BUILD.bazel */,
+				15438498FB1A425C030AF89D /* main.m */,
+			);
+			path = test_host_app;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -358,9 +358,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A92FEA9E7CEAA5C1D707216B /* test.m in Sources */,
-				9C997105C8FCCC97A52F3C37 /* test.swift in Sources */,
-				C95405553A2746A500C5E3E6 /* testhelper.m in Sources */,
+				6D1A42FCF5A8F991A2D8D1ED /* test.m in Sources */,
+				2A372C9ACA7AA78BCAC9A662 /* test.swift in Sources */,
+				7AF29F5CA4423C2857E2F530 /* testhelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -368,8 +368,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E676560B3EE63A86606530C8 /* empty.swift in Sources */,
-				4D9FC7A3A45FAD1826CE314F /* main.m in Sources */,
+				E6DA9C35C0D3EA912D2130E5 /* empty.swift in Sources */,
+				52F554489DFA319E3F31EBF3 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -377,8 +377,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A4F944E364C32E57F5B25D01 /* empty.m in Sources */,
-				77CEA17F2CA7DD5E92DE1D2F /* empty.swift in Sources */,
+				F175294FAD71824A69136E05 /* empty.m in Sources */,
+				6E1E20AFA6FBFCC1DF202559 /* empty.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,7 +386,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B8703078ED965C24F7DFC6D /* main.m in Sources */,
+				DE5C8E1B30DD28CA25D49620 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -411,13 +411,13 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test/test-imports-app:TestImports-Unit-Tests";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/TestImports-Unit-Tests.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftmodule bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftdoc bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftsourceinfo";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-2a586287bf70/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-2a586287bf70/bin/tests/ios/unit-test/test-imports-app/SomeFramework\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Basic/ios\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Nested/ios\" \"$BAZEL_WORKSPACE_ROOT/external/GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\" \"$BAZEL_WORKSPACE_ROOT/external/TensorFlowLiteC/Frameworks\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-2a586287bf70/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-2a586287bf70/bin/tests/ios/unit-test/test-imports-app/SomeFramework\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Basic/ios\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Nested/ios\" \"$BAZEL_WORKSPACE_ROOT/external/GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\" \"$BAZEL_WORKSPACE_ROOT/external/TensorFlowLiteC/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-2a586287bf70/bin/tests/ios/unit-test/test-imports-app/SomeFramework\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Basic/ios\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Nested/ios\" \"$BAZEL_WORKSPACE_ROOT/external/_main~non_module_dev_deps~GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\" \"$BAZEL_WORKSPACE_ROOT/external/_main~non_module_dev_deps~TensorFlowLiteC/Frameworks\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-2a586287bf70/bin/tests/ios/unit-test/test-imports-app/SomeFramework\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Basic/ios\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Nested/ios\" \"$BAZEL_WORKSPACE_ROOT/external/_main~non_module_dev_deps~GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\" \"$BAZEL_WORKSPACE_ROOT/external/_main~non_module_dev_deps~TensorFlowLiteC/Frameworks\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -435,10 +435,10 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test:DefaultHosted";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/DefaultHosted_bundle.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/DefaultHosted.swiftmodule bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/DefaultHosted.swiftdoc bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/DefaultHosted.swiftsourceinfo";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/unit-test/DefaultHosted.swiftmodule bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/unit-test/DefaultHosted.swiftdoc bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/unit-test/DefaultHosted.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -459,13 +459,13 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test/test-imports-app:TestImports-App";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/TestImports-App.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/external/GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\" \"$BAZEL_WORKSPACE_ROOT/external/TensorFlowLiteC/Frameworks\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/test-imports-app/SomeFramework\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Basic/ios\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Nested/ios\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/external/_main~non_module_dev_deps~GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\" \"$BAZEL_WORKSPACE_ROOT/external/_main~non_module_dev_deps~TensorFlowLiteC/Frameworks\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/test-imports-app/SomeFramework\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Basic/ios\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Nested/ios\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "";
@@ -484,13 +484,13 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test/test-imports-app:TestImports-Unit-Tests";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/TestImports-Unit-Tests.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftmodule bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftdoc bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftsourceinfo";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/test-imports-app/TestImports_Unit_Tests.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-2a586287bf70/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-2a586287bf70/bin/tests/ios/unit-test/test-imports-app/SomeFramework\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Basic/ios\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Nested/ios\" \"$BAZEL_WORKSPACE_ROOT/external/GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\" \"$BAZEL_WORKSPACE_ROOT/external/TensorFlowLiteC/Frameworks\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-2a586287bf70/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-2a586287bf70/bin/tests/ios/unit-test/test-imports-app/SomeFramework\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Basic/ios\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Nested/ios\" \"$BAZEL_WORKSPACE_ROOT/external/GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\" \"$BAZEL_WORKSPACE_ROOT/external/TensorFlowLiteC/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-2a586287bf70/bin/tests/ios/unit-test/test-imports-app/SomeFramework\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Basic/ios\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Nested/ios\" \"$BAZEL_WORKSPACE_ROOT/external/_main~non_module_dev_deps~GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\" \"$BAZEL_WORKSPACE_ROOT/external/_main~non_module_dev_deps~TensorFlowLiteC/Frameworks\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/test-imports-app/TestImports-App_framework_unlinked\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-2a586287bf70/bin/tests/ios/unit-test/test-imports-app/SomeFramework\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Basic/ios\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Nested/ios\" \"$BAZEL_WORKSPACE_ROOT/external/_main~non_module_dev_deps~GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\" \"$BAZEL_WORKSPACE_ROOT/external/_main~non_module_dev_deps~TensorFlowLiteC/Frameworks\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -508,13 +508,13 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test/test-imports-app";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test/test-imports-app:TestImports-App";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/TestImports-App.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/test-imports-app/TestImports_App.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/external/GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\" \"$BAZEL_WORKSPACE_ROOT/external/TensorFlowLiteC/Frameworks\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/test-imports-app/SomeFramework\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Basic/ios\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Nested/ios\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/external/_main~non_module_dev_deps~GoogleMobileAdsSDK/Frameworks/GoogleMobileAdsFramework-Current/GoogleMobileAds.xcframework/ios-arm64_x86_64-simulator\" \"$BAZEL_WORKSPACE_ROOT/external/_main~non_module_dev_deps~TensorFlowLiteC/Frameworks\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/test-imports-app/SomeFramework\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Basic/ios\" \"$BAZEL_WORKSPACE_ROOT/tests/ios/unit-test/test-imports-app/frameworks/Nested/ios\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "";
@@ -569,7 +569,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				BAZEL_BUILD_TARGET_LABEL = "rules/test_host_app:iOS-10.0-AppHost";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/iOS-10.0-AppHost.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -594,7 +594,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				BAZEL_BUILD_TARGET_LABEL = "rules/test_host_app:iOS-10.0-AppHost";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/iOS-10.0-AppHost.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -657,10 +657,10 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test:DefaultHosted";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/DefaultHosted_bundle.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/DefaultHosted.swiftmodule bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/DefaultHosted.swiftdoc bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/DefaultHosted.swiftsourceinfo";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/unit-test/DefaultHosted.swiftmodule bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/unit-test/DefaultHosted.swiftdoc bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/unit-test/DefaultHosted.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";

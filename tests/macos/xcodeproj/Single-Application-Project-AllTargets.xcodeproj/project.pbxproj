@@ -7,40 +7,48 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		045D4161C1AD7DBC32E8B780 /* NonArcObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EB0D04543A3924BA34C4E72B /* NonArcObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		2530CD9920C75C7CC2BE6EC7 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8309CFF8A1900D3AB1BF293D /* test.swift */; };
-		92A134A20F5F9E93BCB6F756 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 705989AC65B3703138E736BB /* main.m */; };
-		EC6016D70E0EEF1F8C1B0F2D /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8309CFF8A1900D3AB1BF293D /* test.swift */; };
+		112612C633544B209501430A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BCA956DE69D56D4269755C4E /* main.m */; };
+		2177D13DF467961295CA7EE7 /* NonArcObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A69FDE0D2BAE0DDC4AD2B60E /* NonArcObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		54E284C952BA84F5A26D9500 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93050616F90AD3F2C265E217 /* test.swift */; };
+		CED568483D8F220F491297E8 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93050616F90AD3F2C265E217 /* test.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0CED6BFA64273E7D643365B7 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		5976518F3C0E5F4753E44514 /* Single-Application-RunnableTestSuite.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "Single-Application-RunnableTestSuite.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		705989AC65B3703138E736BB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		78FAC8B505DC9C839473A482 /* iOS-12.0-AppHost.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "iOS-12.0-AppHost.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		8309CFF8A1900D3AB1BF293D /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
-		A37BC5C944123D1C4F844A8D /* NonArcObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NonArcObject.h; sourceTree = "<group>"; };
-		D4C8DCB5E3E8D93979B164F7 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
-		EB0D04543A3924BA34C4E72B /* NonArcObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NonArcObject.m; sourceTree = "<group>"; };
+		82EA84E2D2C69850C3FB8BA4 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
+		8480354DB164867A2FDD219D /* NonArcObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NonArcObject.h; sourceTree = "<group>"; };
+		93050616F90AD3F2C265E217 /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
+		A69FDE0D2BAE0DDC4AD2B60E /* NonArcObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NonArcObject.m; sourceTree = "<group>"; };
+		BCA956DE69D56D4269755C4E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		EFADB1CE81C3F97F647C9255 /* Single-Application-UnitTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "Single-Application-UnitTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F332216E1FA0B3572CD83EC3 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		0E2CEDC8EC87B38723449716 = {
 			isa = PBXGroup;
 			children = (
-				96AA1EC3CAE5469A1C1C2395 /* build_bazel_rules_ios */,
+				46507F684C1C7162879F206E /* _main */,
 				39BC217F37AF4DE132EB386D /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		115C7AEB91C272085DB228D1 /* test_host_app */ = {
+		1C10D303DFB3522ACCC3BA04 /* test_host_app */ = {
 			isa = PBXGroup;
 			children = (
-				0CED6BFA64273E7D643365B7 /* BUILD.bazel */,
-				705989AC65B3703138E736BB /* main.m */,
+				F332216E1FA0B3572CD83EC3 /* BUILD.bazel */,
+				BCA956DE69D56D4269755C4E /* main.m */,
 			);
 			path = test_host_app;
+			sourceTree = "<group>";
+		};
+		33D6D6F1F420C0A02747AD82 /* macos */ = {
+			isa = PBXGroup;
+			children = (
+				91B773D993FD233C747DF654 /* xcodeproj */,
+			);
+			path = macos;
 			sourceTree = "<group>";
 		};
 		39BC217F37AF4DE132EB386D /* Products */ = {
@@ -53,47 +61,39 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		5954C75FECF8C35239E1C677 /* macos */ = {
+		46507F684C1C7162879F206E /* _main */ = {
 			isa = PBXGroup;
 			children = (
-				6475D4D028980AC2448C6B05 /* xcodeproj */,
+				FB68721A43D9E0B27BA773D6 /* rules */,
+				C0869F3DA1FB0B3DEAA919E4 /* tests */,
 			);
-			path = macos;
+			name = _main;
+			path = ../../..;
 			sourceTree = "<group>";
 		};
-		6475D4D028980AC2448C6B05 /* xcodeproj */ = {
+		91B773D993FD233C747DF654 /* xcodeproj */ = {
 			isa = PBXGroup;
 			children = (
-				D4C8DCB5E3E8D93979B164F7 /* BUILD.bazel */,
-				A37BC5C944123D1C4F844A8D /* NonArcObject.h */,
-				EB0D04543A3924BA34C4E72B /* NonArcObject.m */,
-				8309CFF8A1900D3AB1BF293D /* test.swift */,
+				82EA84E2D2C69850C3FB8BA4 /* BUILD.bazel */,
+				8480354DB164867A2FDD219D /* NonArcObject.h */,
+				A69FDE0D2BAE0DDC4AD2B60E /* NonArcObject.m */,
+				93050616F90AD3F2C265E217 /* test.swift */,
 			);
 			path = xcodeproj;
 			sourceTree = "<group>";
 		};
-		96AA1EC3CAE5469A1C1C2395 /* build_bazel_rules_ios */ = {
+		C0869F3DA1FB0B3DEAA919E4 /* tests */ = {
 			isa = PBXGroup;
 			children = (
-				FC403F79B12D53A4AED07C1A /* rules */,
-				EE1B6D796F7CE9D7186B65A5 /* tests */,
-			);
-			name = build_bazel_rules_ios;
-			path = ../../..;
-			sourceTree = "<group>";
-		};
-		EE1B6D796F7CE9D7186B65A5 /* tests */ = {
-			isa = PBXGroup;
-			children = (
-				5954C75FECF8C35239E1C677 /* macos */,
+				33D6D6F1F420C0A02747AD82 /* macos */,
 			);
 			path = tests;
 			sourceTree = "<group>";
 		};
-		FC403F79B12D53A4AED07C1A /* rules */ = {
+		FB68721A43D9E0B27BA773D6 /* rules */ = {
 			isa = PBXGroup;
 			children = (
-				115C7AEB91C272085DB228D1 /* test_host_app */,
+				1C10D303DFB3522ACCC3BA04 /* test_host_app */,
 			);
 			path = rules;
 			sourceTree = "<group>";
@@ -240,7 +240,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2530CD9920C75C7CC2BE6EC7 /* test.swift in Sources */,
+				CED568483D8F220F491297E8 /* test.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -248,7 +248,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92A134A20F5F9E93BCB6F756 /* main.m in Sources */,
+				112612C633544B209501430A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,8 +256,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				045D4161C1AD7DBC32E8B780 /* NonArcObject.m in Sources */,
-				EC6016D70E0EEF1F8C1B0F2D /* test.swift in Sources */,
+				2177D13DF467961295CA7EE7 /* NonArcObject.m in Sources */,
+				54E284C952BA84F5A26D9500 /* test.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,10 +269,10 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				BAZEL_BUILD_TARGET_LABEL = "tests/macos/xcodeproj:Single-Application-UnitTests";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/Single-Application-UnitTests.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-D'REQUIRED_DEFINED_FLAG=1' -D'FLAG_WITH_VALUE_ZERO=0'";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftmodule bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftdoc bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftsourceinfo";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-cc0765bdd06d/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftmodule bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-cc0765bdd06d/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftdoc bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-cc0765bdd06d/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -292,7 +292,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				BAZEL_BUILD_TARGET_LABEL = "rules/test_host_app:iOS-12.0-AppHost";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/iOS-12.0-AppHost.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -317,7 +317,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				BAZEL_BUILD_TARGET_LABEL = "rules/test_host_app:iOS-12.0-AppHost";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/iOS-12.0-AppHost.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -416,10 +416,10 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				BAZEL_BUILD_TARGET_LABEL = "tests/macos/xcodeproj:Single-Application-RunnableTestSuite_iPad-Air-2__16.2";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/Single-Application-RunnableTestSuite.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-D'REQUIRED_DEFINED_FLAG=1' -D'FLAG_WITH_VALUE_ZERO=0'";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftmodule bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftdoc bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftsourceinfo";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-cc0765bdd06d/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftmodule bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-cc0765bdd06d/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftdoc bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-cc0765bdd06d/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -439,10 +439,10 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				BAZEL_BUILD_TARGET_LABEL = "tests/macos/xcodeproj:Single-Application-RunnableTestSuite_iPad-Air-2__16.2";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/Single-Application-RunnableTestSuite.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-D'REQUIRED_DEFINED_FLAG=1' -D'FLAG_WITH_VALUE_ZERO=0'";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftmodule bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftdoc bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftsourceinfo";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-cc0765bdd06d/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftmodule bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-cc0765bdd06d/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftdoc bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-cc0765bdd06d/bin/tests/macos/xcodeproj/Single_Application_RunnableTestSuite.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -462,10 +462,10 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/macos/xcodeproj;
 				BAZEL_BUILD_TARGET_LABEL = "tests/macos/xcodeproj:Single-Application-UnitTests";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/Single-Application-UnitTests.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "-D'REQUIRED_DEFINED_FLAG=1' -D'FLAG_WITH_VALUE_ZERO=0'";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftmodule bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftdoc bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftsourceinfo";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-cc0765bdd06d/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftmodule bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-cc0765bdd06d/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftdoc bazel-out/ios-x86_64-min11.0-applebin_ios-ios_x86_64-dbg-ST-cc0765bdd06d/bin/tests/macos/xcodeproj/Single_Application_UnitTests.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";

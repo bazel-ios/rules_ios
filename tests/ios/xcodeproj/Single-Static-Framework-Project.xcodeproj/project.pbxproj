@@ -7,90 +7,85 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0885BB7826170B11D31035F7 /* DummyAssembly.S in Sources */ = {isa = PBXBuildFile; fileRef = D6DF3200A22C76322C4A8B04 /* DummyAssembly.S */; };
-		523A35A873BDD558AB2EA0CF /* FooFrameworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 091655034CF618D208C22AE8 /* FooFrameworkTests.m */; };
-		5C8EED4DAAF3B4B069337569 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7A2F537C999952921627A8 /* main.m */; };
-		A69ED002F8D1E4FBF129570E /* FooFrameworkTesting.m in Sources */ = {isa = PBXBuildFile; fileRef = D7D26FCF8D7CCD3C802C6987 /* FooFrameworkTesting.m */; };
+		8DF7FA286EAB5717852BCA37 /* FooFrameworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 03086340B58578F0F688F474 /* FooFrameworkTests.m */; };
+		C07B1092DDDA1A679DE7226D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D781D192288D73D724F44F64 /* main.m */; };
+		D37D9F8EF0D1DA3A08BCE8FC /* FooFrameworkTesting.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9A2AB5EC65B9EC67EF299C /* FooFrameworkTesting.m */; };
+		D511EB91F18E56B29F02C8F4 /* DummyAssembly.S in Sources */ = {isa = PBXBuildFile; fileRef = 4D3BE9BBFF2F6098A1B605A6 /* DummyAssembly.S */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		091655034CF618D208C22AE8 /* FooFrameworkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FooFrameworkTests.m; sourceTree = "<group>"; };
-		11B98E6654D00F1E74B2DA47 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
-		1D0F320499C268F88E5BB697 /* FooFrameworkTesting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FooFrameworkTesting.h; sourceTree = "<group>"; };
+		03086340B58578F0F688F474 /* FooFrameworkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FooFrameworkTests.m; sourceTree = "<group>"; };
 		24C22223D1434365B1D0A956 /* ObjcFrameworkTestLib.framework */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; path = ObjcFrameworkTestLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D0B327B85DDF396BA0D6819 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		413EA7F09E2ABDF7CFCB736D /* ObjcFrameworkTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ObjcFrameworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BB7A0F977B290B8648FFDB0 /* ObjcFramework.framework */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; path = ObjcFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C38752828BD4A02D1CA50F6 /* README */ = {isa = PBXFileReference; path = README; sourceTree = "<group>"; };
-		AD7402651F16555F753997F4 /* HeaderA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HeaderA.h; sourceTree = "<group>"; };
-		B0F23CA5658C110F84D43E6D /* foo.podspec */ = {isa = PBXFileReference; path = foo.podspec; sourceTree = "<group>"; };
-		CF7A2F537C999952921627A8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		D6DF3200A22C76322C4A8B04 /* DummyAssembly.S */ = {isa = PBXFileReference; path = DummyAssembly.S; sourceTree = "<group>"; };
-		D7D26FCF8D7CCD3C802C6987 /* FooFrameworkTesting.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FooFrameworkTesting.m; sourceTree = "<group>"; };
+		4D3BE9BBFF2F6098A1B605A6 /* DummyAssembly.S */ = {isa = PBXFileReference; path = DummyAssembly.S; sourceTree = "<group>"; };
+		818A0DD24B68C460A8A45D92 /* foo.podspec */ = {isa = PBXFileReference; path = foo.podspec; sourceTree = "<group>"; };
+		9E90799CF332B912C1F138D8 /* HeaderA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HeaderA.h; sourceTree = "<group>"; };
+		A706BBF427585A06EEAD2251 /* FooFrameworkTesting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FooFrameworkTesting.h; sourceTree = "<group>"; };
+		ADE6BAB8291C8A4A4DB9663B /* README */ = {isa = PBXFileReference; path = README; sourceTree = "<group>"; };
+		CC9A2AB5EC65B9EC67EF299C /* FooFrameworkTesting.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FooFrameworkTesting.m; sourceTree = "<group>"; };
+		D781D192288D73D724F44F64 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
-		0A2CB2A75E2EAAB1095F1214 /* objc */ = {
+		08D453D0456ED7304BA61972 /* ios */ = {
 			isa = PBXGroup;
 			children = (
-				B700EA6CBD2B48611E1290FE /* additional_files */,
-				11B98E6654D00F1E74B2DA47 /* BUILD.bazel */,
-				D6DF3200A22C76322C4A8B04 /* DummyAssembly.S */,
-				AD7402651F16555F753997F4 /* HeaderA.h */,
-				CF7A2F537C999952921627A8 /* main.m */,
-				7CF4F5ED68FE1E9E6486ED55 /* testing */,
-				37D2E41255E69DF775A9E8A7 /* tests */,
-			);
-			path = objc;
-			sourceTree = "<group>";
-		};
-		1E3DFBAC8DCF4B75D9A8F878 /* tests */ = {
-			isa = PBXGroup;
-			children = (
-				7EDC6B4DDC5CF54A9237A106 /* ios */,
-			);
-			path = tests;
-			sourceTree = "<group>";
-		};
-		37D2E41255E69DF775A9E8A7 /* tests */ = {
-			isa = PBXGroup;
-			children = (
-				091655034CF618D208C22AE8 /* FooFrameworkTests.m */,
-			);
-			path = tests;
-			sourceTree = "<group>";
-		};
-		7CF4F5ED68FE1E9E6486ED55 /* testing */ = {
-			isa = PBXGroup;
-			children = (
-				1D0F320499C268F88E5BB697 /* FooFrameworkTesting.h */,
-				D7D26FCF8D7CCD3C802C6987 /* FooFrameworkTesting.m */,
-			);
-			path = testing;
-			sourceTree = "<group>";
-		};
-		7EDC6B4DDC5CF54A9237A106 /* ios */ = {
-			isa = PBXGroup;
-			children = (
-				D0115B467F0DE21A500FA41C /* frameworks */,
+				8E3DEA63DDB95D7A7F784205 /* frameworks */,
 			);
 			path = ios;
 			sourceTree = "<group>";
 		};
-		B700EA6CBD2B48611E1290FE /* additional_files */ = {
+		2C2A8E9419E1A370571D967D /* tests */ = {
 			isa = PBXGroup;
 			children = (
-				B0F23CA5658C110F84D43E6D /* foo.podspec */,
-				4C38752828BD4A02D1CA50F6 /* README */,
+				08D453D0456ED7304BA61972 /* ios */,
+			);
+			path = tests;
+			sourceTree = "<group>";
+		};
+		74C3312110B1AE159D135D99 /* _main */ = {
+			isa = PBXGroup;
+			children = (
+				2C2A8E9419E1A370571D967D /* tests */,
+			);
+			name = _main;
+			path = ../../..;
+			sourceTree = "<group>";
+		};
+		8E3DEA63DDB95D7A7F784205 /* frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E6FE3AD946319E01AE49F974 /* objc */,
+			);
+			path = frameworks;
+			sourceTree = "<group>";
+		};
+		9DB00A28C571EF5E826139AA /* testing */ = {
+			isa = PBXGroup;
+			children = (
+				A706BBF427585A06EEAD2251 /* FooFrameworkTesting.h */,
+				CC9A2AB5EC65B9EC67EF299C /* FooFrameworkTesting.m */,
+			);
+			path = testing;
+			sourceTree = "<group>";
+		};
+		9DD1F181778C1AE505629EE4 /* additional_files */ = {
+			isa = PBXGroup;
+			children = (
+				818A0DD24B68C460A8A45D92 /* foo.podspec */,
+				ADE6BAB8291C8A4A4DB9663B /* README */,
 			);
 			path = additional_files;
 			sourceTree = "<group>";
 		};
-		D0115B467F0DE21A500FA41C /* frameworks */ = {
+		C3C2DF55BD7AD394EDA0D8DA /* tests */ = {
 			isa = PBXGroup;
 			children = (
-				0A2CB2A75E2EAAB1095F1214 /* objc */,
+				03086340B58578F0F688F474 /* FooFrameworkTests.m */,
 			);
-			path = frameworks;
+			path = tests;
 			sourceTree = "<group>";
 		};
 		D86E9FCCC4BB853B2A451672 /* Products */ = {
@@ -103,21 +98,26 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		E6FE3AD946319E01AE49F974 /* objc */ = {
+			isa = PBXGroup;
+			children = (
+				9DD1F181778C1AE505629EE4 /* additional_files */,
+				3D0B327B85DDF396BA0D6819 /* BUILD.bazel */,
+				4D3BE9BBFF2F6098A1B605A6 /* DummyAssembly.S */,
+				9E90799CF332B912C1F138D8 /* HeaderA.h */,
+				D781D192288D73D724F44F64 /* main.m */,
+				9DB00A28C571EF5E826139AA /* testing */,
+				C3C2DF55BD7AD394EDA0D8DA /* tests */,
+			);
+			path = objc;
+			sourceTree = "<group>";
+		};
 		E8099B19B67C1115D200E916 = {
 			isa = PBXGroup;
 			children = (
-				EB104984AF478D5D5F2B07DE /* build_bazel_rules_ios */,
+				74C3312110B1AE159D135D99 /* _main */,
 				D86E9FCCC4BB853B2A451672 /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		EB104984AF478D5D5F2B07DE /* build_bazel_rules_ios */ = {
-			isa = PBXGroup;
-			children = (
-				1E3DFBAC8DCF4B75D9A8F878 /* tests */,
-			);
-			name = build_bazel_rules_ios;
-			path = ../../..;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -263,8 +263,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0885BB7826170B11D31035F7 /* DummyAssembly.S in Sources */,
-				5C8EED4DAAF3B4B069337569 /* main.m in Sources */,
+				D511EB91F18E56B29F02C8F4 /* DummyAssembly.S in Sources */,
+				C07B1092DDDA1A679DE7226D /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,7 +272,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				523A35A873BDD558AB2EA0CF /* FooFrameworkTests.m in Sources */,
+				8DF7FA286EAB5717852BCA37 /* FooFrameworkTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,7 +280,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A69ED002F8D1E4FBF129570E /* FooFrameworkTesting.m in Sources */,
+				D37D9F8EF0D1DA3A08BCE8FC /* FooFrameworkTesting.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,7 +292,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFramework";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFramework.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -314,7 +314,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFrameworkTestLib";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFrameworkTestLib.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -336,13 +336,13 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFrameworkTests";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFrameworkTests.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-6efdc35ec3bf/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-6efdc35ec3bf/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFramework\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFramework\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -359,13 +359,13 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFrameworkTests";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFrameworkTests.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-6efdc35ec3bf/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-6efdc35ec3bf/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFramework\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFramework\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -382,7 +382,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFramework";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFramework.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -444,7 +444,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFrameworkTestLib";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFrameworkTestLib.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -466,7 +466,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFramework";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFramework.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -526,13 +526,13 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFrameworkTests";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFrameworkTests.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-6efdc35ec3bf/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-6efdc35ec3bf/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFramework\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFramework\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -587,7 +587,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFrameworkTestLib";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFrameworkTestLib.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -647,7 +647,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFramework";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFramework.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -669,13 +669,13 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFrameworkTests";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFrameworkTests.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-6efdc35ec3bf/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-6efdc35ec3bf/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFramework\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/frameworks/objc/ObjcFramework\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -692,7 +692,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/frameworks/objc;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/frameworks/objc:ObjcFrameworkTestLib";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ObjcFrameworkTestLib.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";

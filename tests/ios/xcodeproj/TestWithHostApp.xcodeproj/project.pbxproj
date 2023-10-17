@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1F9C7A237281769B16354A44 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FB08B7C929A64386CDFE06 /* empty.swift */; };
-		31AA2C5800D29E42C589B56B /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FB08B7C929A64386CDFE06 /* empty.swift */; };
-		83CAB78009AF4F0196136FB6 /* empty.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F973C72CDD8C3C263F6A615 /* empty.m */; };
-		90364CB6CB510200E694DB55 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B78B78C06FA82FF60423814 /* main.m */; };
-		DBAF1B7C6B592F06CC4BA7A8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB410C7AEEA183BE996E1ED /* main.m */; };
-		F7A8C565DBE2C1D3FE326524 /* empty.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F973C72CDD8C3C263F6A615 /* empty.m */; };
+		0B4EAC3EE93C5B7A3C5708CE /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694150B3CB06339481950B9C /* empty.swift */; };
+		23B84B3BA3F087D3492489D6 /* empty.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F584FCC8B47706A482D9443 /* empty.m */; };
+		4BCCBC7FEB6847CF8BB3B829 /* empty.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F584FCC8B47706A482D9443 /* empty.m */; };
+		4E9E734BD8A11D4D88D9EE7A /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694150B3CB06339481950B9C /* empty.swift */; };
+		804C9CC2686E6640D6EBF45C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B34BFAA65E196A59E781675D /* main.m */; };
+		BE8B80E762E4E67B97F60786 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E22EAFC8713ED67121687C56 /* main.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,62 +33,64 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		087F3B42D7BE6F86AB8C54F0 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		1A670BBD3E8C25AB89221850 /* iOS-9.3-AppHost.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "iOS-9.3-AppHost.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		25CC3FD487846D1A2F5FA8CF /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		280A96A1BB45418328EE8F8C /* ExampleExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ExampleExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		3DB410C7AEEA183BE996E1ED /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		3F973C72CDD8C3C263F6A615 /* empty.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = empty.m; sourceTree = "<group>"; };
-		4B78B78C06FA82FF60423814 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		4C504B1FC1C79ADAEE541422 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
-		52FB08B7C929A64386CDFE06 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
-		6AA79D51459F5745C6597549 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
-		8B877778D4F1B40E730E3950 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
+		2F8E19B1E2E8271E29B81E64 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
+		4F584FCC8B47706A482D9443 /* empty.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = empty.m; sourceTree = "<group>"; };
+		694150B3CB06339481950B9C /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
+		6A944759B075D2D679EEC5ED /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
+		8ABB54658CF9901F9A5C8727 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
 		A7A135B2F45AA4AE95B5C366 /* ExplicitHosted.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ExplicitHosted.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B34BFAA65E196A59E781675D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C5009185C598753F8C31B6F6 /* ExplicitHostedWithAppExtensions.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ExplicitHostedWithAppExtensions.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6B0D6BD4AF86F9BE813EB4B /* App.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E22EAFC8713ED67121687C56 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
-		3F0ED6F34AF3A58C237AF38E /* rules */ = {
+		2051C389671632645975EEB8 /* app */ = {
 			isa = PBXGroup;
 			children = (
-				48EC573E873376EF2328B54F /* test_host_app */,
+				5127C5395B8C211A2CD8436B /* App */,
+				2F8E19B1E2E8271E29B81E64 /* BUILD.bazel */,
 			);
-			path = rules;
+			path = app;
 			sourceTree = "<group>";
 		};
 		4458650FCF08ECB7D12D6103 = {
 			isa = PBXGroup;
 			children = (
-				E0A6B3D7DB2877F8279F72D1 /* build_bazel_rules_ios */,
+				81B3E302FCA3A0E019435675 /* _main */,
 				80B743DAD4870A59BE6681A5 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		45F58BD53C393F0DABB4D530 /* app */ = {
+		5127C5395B8C211A2CD8436B /* App */ = {
 			isa = PBXGroup;
 			children = (
-				EB779FFB9EA472BA6943847B /* App */,
-				4C504B1FC1C79ADAEE541422 /* BUILD.bazel */,
+				E22EAFC8713ED67121687C56 /* main.m */,
 			);
-			path = app;
+			path = App;
 			sourceTree = "<group>";
 		};
-		48EC573E873376EF2328B54F /* test_host_app */ = {
+		5419E53DD7A8306E9EA891A2 /* unit-test */ = {
 			isa = PBXGroup;
 			children = (
-				087F3B42D7BE6F86AB8C54F0 /* BUILD.bazel */,
-				4B78B78C06FA82FF60423814 /* main.m */,
+				6A944759B075D2D679EEC5ED /* BUILD.bazel */,
+				4F584FCC8B47706A482D9443 /* empty.m */,
+				694150B3CB06339481950B9C /* empty.swift */,
+			);
+			path = "unit-test";
+			sourceTree = "<group>";
+		};
+		54C8A37709CA820646B22CAF /* test_host_app */ = {
+			isa = PBXGroup;
+			children = (
+				25CC3FD487846D1A2F5FA8CF /* BUILD.bazel */,
+				B34BFAA65E196A59E781675D /* main.m */,
 			);
 			path = test_host_app;
-			sourceTree = "<group>";
-		};
-		512C182CEE334BD83EC15E18 /* extensions */ = {
-			isa = PBXGroup;
-			children = (
-				8B877778D4F1B40E730E3950 /* BUILD.bazel */,
-			);
-			path = extensions;
 			sourceTree = "<group>";
 		};
 		80B743DAD4870A59BE6681A5 /* Products */ = {
@@ -103,50 +105,48 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		9A72A8B989632B31533CCF07 /* unit-test */ = {
+		81B3E302FCA3A0E019435675 /* _main */ = {
 			isa = PBXGroup;
 			children = (
-				6AA79D51459F5745C6597549 /* BUILD.bazel */,
-				3F973C72CDD8C3C263F6A615 /* empty.m */,
-				52FB08B7C929A64386CDFE06 /* empty.swift */,
+				8444871C2F1AD11030A2B809 /* rules */,
+				9C05D08357563E9D1F53C550 /* tests */,
 			);
-			path = "unit-test";
+			name = _main;
+			path = ../../..;
 			sourceTree = "<group>";
 		};
-		A00021A91B77EC95CF688BAA /* ios */ = {
+		8444871C2F1AD11030A2B809 /* rules */ = {
 			isa = PBXGroup;
 			children = (
-				45F58BD53C393F0DABB4D530 /* app */,
-				512C182CEE334BD83EC15E18 /* extensions */,
-				9A72A8B989632B31533CCF07 /* unit-test */,
+				54C8A37709CA820646B22CAF /* test_host_app */,
 			);
-			path = ios;
+			path = rules;
 			sourceTree = "<group>";
 		};
-		DCBB2E5ECC3355E25E5F9E3F /* tests */ = {
+		9C05D08357563E9D1F53C550 /* tests */ = {
 			isa = PBXGroup;
 			children = (
-				A00021A91B77EC95CF688BAA /* ios */,
+				A59E8444BC4DC187CBCF3538 /* ios */,
 			);
 			path = tests;
 			sourceTree = "<group>";
 		};
-		E0A6B3D7DB2877F8279F72D1 /* build_bazel_rules_ios */ = {
+		A59E8444BC4DC187CBCF3538 /* ios */ = {
 			isa = PBXGroup;
 			children = (
-				3F0ED6F34AF3A58C237AF38E /* rules */,
-				DCBB2E5ECC3355E25E5F9E3F /* tests */,
+				2051C389671632645975EEB8 /* app */,
+				B7E7387C0B45FA1845F0ABCF /* extensions */,
+				5419E53DD7A8306E9EA891A2 /* unit-test */,
 			);
-			name = build_bazel_rules_ios;
-			path = ../../..;
+			path = ios;
 			sourceTree = "<group>";
 		};
-		EB779FFB9EA472BA6943847B /* App */ = {
+		B7E7387C0B45FA1845F0ABCF /* extensions */ = {
 			isa = PBXGroup;
 			children = (
-				3DB410C7AEEA183BE996E1ED /* main.m */,
+				8ABB54658CF9901F9A5C8727 /* BUILD.bazel */,
 			);
-			path = App;
+			path = extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -363,8 +363,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F7A8C565DBE2C1D3FE326524 /* empty.m in Sources */,
-				1F9C7A237281769B16354A44 /* empty.swift in Sources */,
+				23B84B3BA3F087D3492489D6 /* empty.m in Sources */,
+				0B4EAC3EE93C5B7A3C5708CE /* empty.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,7 +372,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				90364CB6CB510200E694DB55 /* main.m in Sources */,
+				804C9CC2686E6640D6EBF45C /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,7 +387,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DBAF1B7C6B592F06CC4BA7A8 /* main.m in Sources */,
+				BE8B80E762E4E67B97F60786 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -395,8 +395,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83CAB78009AF4F0196136FB6 /* empty.m in Sources */,
-				31AA2C5800D29E42C589B56B /* empty.swift in Sources */,
+				4BCCBC7FEB6847CF8BB3B829 /* empty.m in Sources */,
+				4E9E734BD8A11D4D88D9EE7A /* empty.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,7 +421,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/extensions;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/extensions:ExampleExtension";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ExampleExtension.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -446,7 +446,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/app:App";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/App.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -509,7 +509,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/app:App";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/App.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -534,10 +534,10 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test:ExplicitHostedWithAppExtensions";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ExplicitHostedWithAppExtensions.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/ExplicitHostedWithAppExtensions.swiftmodule bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/ExplicitHostedWithAppExtensions.swiftdoc bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/ExplicitHostedWithAppExtensions.swiftsourceinfo";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/ExplicitHostedWithAppExtensions.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/ExplicitHostedWithAppExtensions.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/ExplicitHostedWithAppExtensions.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -558,7 +558,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				BAZEL_BUILD_TARGET_LABEL = "rules/test_host_app:iOS-9.3-AppHost";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/iOS-9.3-AppHost.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -583,7 +583,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
 				BAZEL_BUILD_TARGET_LABEL = "rules/test_host_app:iOS-9.3-AppHost";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/iOS-9.3-AppHost.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -644,10 +644,10 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test:ExplicitHostedWithAppExtensions";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ExplicitHostedWithAppExtensions.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/ExplicitHostedWithAppExtensions.swiftmodule bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/ExplicitHostedWithAppExtensions.swiftdoc bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/ExplicitHostedWithAppExtensions.swiftsourceinfo";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/ExplicitHostedWithAppExtensions.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/ExplicitHostedWithAppExtensions.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/ExplicitHostedWithAppExtensions.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -668,7 +668,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/extensions;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/extensions:ExampleExtension";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ExampleExtension.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -693,10 +693,10 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test:ExplicitHosted";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ExplicitHosted.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/ExplicitHosted.swiftmodule bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/ExplicitHosted.swiftdoc bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/ExplicitHosted.swiftsourceinfo";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/ExplicitHosted.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/ExplicitHosted.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/ExplicitHosted.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
@@ -717,10 +717,10 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = "/tests/ios/unit-test";
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/unit-test:ExplicitHosted";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ExplicitHosted.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/ExplicitHosted.swiftmodule bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/ExplicitHosted.swiftdoc bazel-out/ios-x86_64-applebin_ios-ios_x86_64-dbg-ST-b69e301a6ea2/bin/tests/ios/unit-test/ExplicitHosted.swiftsourceinfo";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/ExplicitHosted.swiftmodule bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/ExplicitHosted.swiftdoc bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/unit-test/ExplicitHosted.swiftsourceinfo";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";

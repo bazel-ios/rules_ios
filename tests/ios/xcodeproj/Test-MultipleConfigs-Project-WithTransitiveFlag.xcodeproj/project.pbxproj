@@ -7,31 +7,53 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		102BD1F0256A0C412AFC03E4 /* FW.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D8C347E5F20AB550C507AE /* FW.m */; };
-		237DC29D3EDB640C22E12C77 /* FW2.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F5243CDA891CA94629FC430 /* FW2.m */; };
-		3DF73FAD53D0A91C9EFE99C4 /* OnlySources.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A3A80773667B3313649167E /* OnlySources.m */; };
-		4DE0BDAA19658FF59165F380 /* FW_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 948A9DA2AB9E07E95A7A1F12 /* FW_Private.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		760C0061CEA9636469AC6674 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C2E414444C372DCF13A567DB /* main.m */; };
+		2C68E70A7D8F5E6C20CD8F39 /* OnlySources.m in Sources */ = {isa = PBXBuildFile; fileRef = 065E53C211AD411B02C953CB /* OnlySources.m */; };
+		6753E2F3DAC7A8A31D466B76 /* FW.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D166310A43F37B6E6836E58 /* FW.m */; };
+		6C0A041523F4EE3038D6D4D8 /* FW2.m in Sources */ = {isa = PBXBuildFile; fileRef = 59110DA1DF2D43C1CEDB9918 /* FW2.m */; };
+		B00305969665FE0A6D151C68 /* FW_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 52CA49A0CBD26548996362F2 /* FW_Private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B06521CFBE325EF1308C7A0E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AF5E5727E8D588711EFFCB /* main.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		04D8C347E5F20AB550C507AE /* FW.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FW.m; sourceTree = "<group>"; };
+		025516A5E188606D657DDB2D /* FW2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FW2.h; sourceTree = "<group>"; };
+		065E53C211AD411B02C953CB /* OnlySources.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OnlySources.m; sourceTree = "<group>"; };
 		07774DB019275D39308A1548 /* FW2.framework */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; path = FW2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		1463668723465C798E673230 /* FW.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FW.h; sourceTree = "<group>"; };
-		206990066655BFAE5C81A4EA /* FW2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FW2.h; sourceTree = "<group>"; };
-		39477307F8DF86D918747B9F /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
-		4A3A80773667B3313649167E /* OnlySources.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OnlySources.m; sourceTree = "<group>"; };
+		42AF5E5727E8D588711EFFCB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		52CA49A0CBD26548996362F2 /* FW_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FW_Private.h; sourceTree = "<group>"; };
+		59110DA1DF2D43C1CEDB9918 /* FW2.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FW2.m; sourceTree = "<group>"; };
 		5A5DD8D99887CD20B0A3D7A1 /* App.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		8250AA98E874BF8BACA5317E /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
+		64AE337E2C101D0D53131179 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
+		7E465592CCAF024173E9370B /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
+		8D166310A43F37B6E6836E58 /* FW.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FW.m; sourceTree = "<group>"; };
 		9052B4371FD6FA0EEB331C16 /* ExampleExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ExampleExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		948A9DA2AB9E07E95A7A1F12 /* FW_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FW_Private.h; sourceTree = "<group>"; };
-		9F5243CDA891CA94629FC430 /* FW2.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FW2.m; sourceTree = "<group>"; };
 		A75BF5BF59112DC3CF68ACB0 /* FW.framework */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; path = FW.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C2E414444C372DCF13A567DB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		CA2619BC8F2E4EE9F12A2B52 /* FW.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FW.h; sourceTree = "<group>"; };
 		FDFA25BC92149ED0819B1D1C /* OnlySources.framework */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; path = OnlySources.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		0D6ED17F1357D8375E711F6F /* FW */ = {
+			isa = PBXGroup;
+			children = (
+				52CA49A0CBD26548996362F2 /* FW_Private.h */,
+				CA2619BC8F2E4EE9F12A2B52 /* FW.h */,
+				8D166310A43F37B6E6836E58 /* FW.m */,
+			);
+			path = FW;
+			sourceTree = "<group>";
+		};
+		1A3D31553476644C48B0A61B /* app */ = {
+			isa = PBXGroup;
+			children = (
+				90DB7D017DCE76029AB40246 /* App */,
+				64AE337E2C101D0D53131179 /* BUILD.bazel */,
+				0D6ED17F1357D8375E711F6F /* FW */,
+				549611642DA0BDF828061A37 /* FW2 */,
+				BB757563F9A41249DCFCDF9F /* OnlySources */,
+			);
+			path = app;
+			sourceTree = "<group>";
+		};
 		2D2D895AE338EB9595893FEC /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -47,90 +69,68 @@
 		37056929C3E5B1D45B7ADB22 = {
 			isa = PBXGroup;
 			children = (
-				FF6E776994AA685DB884266A /* build_bazel_rules_ios */,
+				4D4D566378D4D00B9D2437E1 /* _main */,
 				2D2D895AE338EB9595893FEC /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		45BEFF852D6FC48F9F0FAE63 /* tests */ = {
+		4D4D566378D4D00B9D2437E1 /* _main */ = {
 			isa = PBXGroup;
 			children = (
-				D2F628667BF1DE168029F9B1 /* ios */,
+				9F3CD41697D90B55898DB828 /* tests */,
 			);
-			path = tests;
+			name = _main;
+			path = ../../..;
 			sourceTree = "<group>";
 		};
-		A7D52DE6FB3C195998617569 /* OnlySources */ = {
+		549611642DA0BDF828061A37 /* FW2 */ = {
 			isa = PBXGroup;
 			children = (
-				4A3A80773667B3313649167E /* OnlySources.m */,
-			);
-			path = OnlySources;
-			sourceTree = "<group>";
-		};
-		BFC4E81AACCD33E2DE624F04 /* App */ = {
-			isa = PBXGroup;
-			children = (
-				C2E414444C372DCF13A567DB /* main.m */,
-			);
-			path = App;
-			sourceTree = "<group>";
-		};
-		D2F628667BF1DE168029F9B1 /* ios */ = {
-			isa = PBXGroup;
-			children = (
-				D4A18C8707D64A0B844CA10A /* app */,
-				DEC45FCD518A03A1405A9F66 /* extensions */,
-			);
-			path = ios;
-			sourceTree = "<group>";
-		};
-		D4A18C8707D64A0B844CA10A /* app */ = {
-			isa = PBXGroup;
-			children = (
-				BFC4E81AACCD33E2DE624F04 /* App */,
-				39477307F8DF86D918747B9F /* BUILD.bazel */,
-				F1148781187BE083F44488DF /* FW */,
-				FCAD8185F6E9497488EC0EA8 /* FW2 */,
-				A7D52DE6FB3C195998617569 /* OnlySources */,
-			);
-			path = app;
-			sourceTree = "<group>";
-		};
-		DEC45FCD518A03A1405A9F66 /* extensions */ = {
-			isa = PBXGroup;
-			children = (
-				8250AA98E874BF8BACA5317E /* BUILD.bazel */,
-			);
-			path = extensions;
-			sourceTree = "<group>";
-		};
-		F1148781187BE083F44488DF /* FW */ = {
-			isa = PBXGroup;
-			children = (
-				948A9DA2AB9E07E95A7A1F12 /* FW_Private.h */,
-				1463668723465C798E673230 /* FW.h */,
-				04D8C347E5F20AB550C507AE /* FW.m */,
-			);
-			path = FW;
-			sourceTree = "<group>";
-		};
-		FCAD8185F6E9497488EC0EA8 /* FW2 */ = {
-			isa = PBXGroup;
-			children = (
-				206990066655BFAE5C81A4EA /* FW2.h */,
-				9F5243CDA891CA94629FC430 /* FW2.m */,
+				025516A5E188606D657DDB2D /* FW2.h */,
+				59110DA1DF2D43C1CEDB9918 /* FW2.m */,
 			);
 			path = FW2;
 			sourceTree = "<group>";
 		};
-		FF6E776994AA685DB884266A /* build_bazel_rules_ios */ = {
+		90DB7D017DCE76029AB40246 /* App */ = {
 			isa = PBXGroup;
 			children = (
-				45BEFF852D6FC48F9F0FAE63 /* tests */,
+				42AF5E5727E8D588711EFFCB /* main.m */,
 			);
-			name = build_bazel_rules_ios;
-			path = ../../..;
+			path = App;
+			sourceTree = "<group>";
+		};
+		9F3CD41697D90B55898DB828 /* tests */ = {
+			isa = PBXGroup;
+			children = (
+				F95BEFB540B756816135BC39 /* ios */,
+			);
+			path = tests;
+			sourceTree = "<group>";
+		};
+		ABD616D8DE7AF666C04DC1EC /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				7E465592CCAF024173E9370B /* BUILD.bazel */,
+			);
+			path = extensions;
+			sourceTree = "<group>";
+		};
+		BB757563F9A41249DCFCDF9F /* OnlySources */ = {
+			isa = PBXGroup;
+			children = (
+				065E53C211AD411B02C953CB /* OnlySources.m */,
+			);
+			path = OnlySources;
+			sourceTree = "<group>";
+		};
+		F95BEFB540B756816135BC39 /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				1A3D31553476644C48B0A61B /* app */,
+				ABD616D8DE7AF666C04DC1EC /* extensions */,
+			);
+			path = ios;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,7 +140,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4DE0BDAA19658FF59165F380 /* FW_Private.h in Headers */,
+				B00305969665FE0A6D151C68 /* FW_Private.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,7 +357,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				760C0061CEA9636469AC6674 /* main.m in Sources */,
+				B06521CFBE325EF1308C7A0E /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -365,7 +365,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				102BD1F0256A0C412AFC03E4 /* FW.m in Sources */,
+				6753E2F3DAC7A8A31D466B76 /* FW.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -380,7 +380,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				237DC29D3EDB640C22E12C77 /* FW2.m in Sources */,
+				6C0A041523F4EE3038D6D4D8 /* FW2.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -388,7 +388,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3DF73FAD53D0A91C9EFE99C4 /* OnlySources.m in Sources */,
+				2C68E70A7D8F5E6C20CD8F39 /* OnlySources.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,7 +400,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/app:FW2";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/FW2.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -422,7 +422,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/extensions;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/extensions:ExampleExtension";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ExampleExtension.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -447,7 +447,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/app:OnlySources";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/OnlySources.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -469,7 +469,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/app:FW";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/FW.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -529,7 +529,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/app:OnlySources";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/OnlySources.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -551,7 +551,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/extensions;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/extensions:ExampleExtension";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/ExampleExtension.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -576,7 +576,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/app:App";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/App.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -601,7 +601,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/app:FW2";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/FW2.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -623,7 +623,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/app:App";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/App.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
@@ -648,7 +648,7 @@
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /tests/ios/app;
 				BAZEL_BUILD_TARGET_LABEL = "tests/ios/app:FW";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_BUILD_TARGET_WORKSPACE = _main;
 				BAZEL_LLDB_INIT_FILE = $CONFIGURATION_TEMP_DIR/FW.lldbinit;
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
