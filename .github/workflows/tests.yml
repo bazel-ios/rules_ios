@@ -117,7 +117,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
-        run: .github/workflows/preflight_env.sh
+        run: .github/workflows/preflight_env.sh --no-bzlmod
       - name: Build and Test
         run: |
           # iOS tests
@@ -226,16 +226,16 @@ jobs:
           path: bazel-testlogs
 
   multi_arch_support:
+    # i386 was removed on rules_apple 3.x.x - this test case needs reworking
+    # to exemplify fat binaries on the latest version
     name: Build iOS App for Multiple Architecture
     runs-on: macos-12
     env:
-      # i386 was removed on rules_apple 3.x.x - this test case needs reworking
-      # to exemplify fat binaries on the latest version
       USE_BAZEL_VERSION: 6.1.2
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
-        run: .github/workflows/preflight_env.sh
+        run: .github/workflows/preflight_env.sh --no-bzlmod
       - name: Build App
         run: |
           bazelisk build \

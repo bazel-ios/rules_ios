@@ -4,8 +4,8 @@
 # https://github.com/bazelbuild/rules_apple/commit/8d841342c238457896cd7596cc29b2d06c9a75f0
 
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleFrameworkImportInfo")
-load("@rules_ios_apple_api//:providers.bzl", "new_appleframeworkimportinfo")
-load("@rules_ios_apple_api//:version.bzl", "apple_api_version")
+load("@rules_apple_api//:providers.bzl", "new_appleframeworkimportinfo")
+load("@rules_apple_api//:version.bzl", "apple_api_version")
 load("//rules:features.bzl", "feature_names")
 load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
 load("@build_bazel_rules_apple//apple/internal:bundling_support.bzl", "bundling_support")

@@ -3,7 +3,7 @@ load("@bazel_skylib//lib:types.bzl", "types")
 load("//rules:library.bzl", "apple_library")
 load("//rules:plists.bzl", "process_infoplists")
 load("//rules/internal:framework_middleman.bzl", "dep_middleman", "framework_middleman")
-load("@rules_ios_apple_api//:version.bzl", "apple_api_version")
+load("@rules_apple_api//:version.bzl", "apple_api_version")
 
 _IOS_TEST_KWARGS = [
     "args",

@@ -24,8 +24,8 @@ load("@build_bazel_rules_apple//apple/internal:apple_toolchains.bzl", "AppleMacT
 load("@build_bazel_rules_apple//apple/internal:swift_support.bzl", "swift_support")
 load("@build_bazel_rules_apple//apple/internal/utils:clang_rt_dylibs.bzl", "clang_rt_dylibs")
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo", "IosFrameworkBundleInfo")
-load("@rules_ios_apple_api//:providers.bzl", "new_applebundleinfo", "new_iosframeworkbundleinfo")
-load("@rules_ios_apple_api//:version.bzl", "apple_api_version")
+load("@rules_apple_api//:providers.bzl", "new_applebundleinfo", "new_iosframeworkbundleinfo")
+load("@rules_apple_api//:version.bzl", "apple_api_version")
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo", "swift_clang_module_aspect", "swift_common")
 load(
     "@build_bazel_rules_apple//apple/internal/aspects:resource_aspect.bzl",

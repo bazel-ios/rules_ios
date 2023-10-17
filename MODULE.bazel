@@ -20,7 +20,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "rules_apple",
-    version = "2.3.0",
+    version = "3.0.0",
     repo_name = "build_bazel_rules_apple",
 )
 bazel_dep(
@@ -52,6 +52,12 @@ bazel_dep(
     name = "bazel_skylib",
     version = "1.4.1",
     dev_dependency = True,
+)
+
+rules_apple_api_deps = use_extension("//rules:module_extensions.bzl", "rules_apple_api_deps")
+use_repo(
+    rules_apple_api_deps,
+    "rules_apple_api",
 )
 
 # Load non-bzlmod dependencies from rules_ios
