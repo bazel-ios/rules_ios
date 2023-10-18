@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - master
+      - jmarino/tmp
 
 # One active job per PR, cancel older ones on push
 concurrency:
@@ -200,8 +201,8 @@ jobs:
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
-          name: bazel-testlogs
-          path: bazel-testlogs
+          name: tests
+          path: tests
 
   lldb_ios_tests_xcode:
     name: LLDB tests on Xcode 14.2.0
