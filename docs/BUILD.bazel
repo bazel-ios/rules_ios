@@ -3,7 +3,7 @@ load("@io_bazel_stardoc//stardoc:stardoc.bzl", "stardoc")
 package(default_visibility = ["//visibility:private"])
 
 # Targets to document.
-# Must have a coressponding `bzl_library` target in `//rules:BUILD.bazel`.
+# Must have a corresponding `bzl_library` target in `//rules:BUILD.bazel`.
 _DOC_SRCS = [
     "app_clip",
     "app",
