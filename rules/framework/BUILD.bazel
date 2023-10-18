@@ -1,7 +1,20 @@
 load("@rules_python//python:defs.bzl", "py_binary")
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 
 py_binary(
     name = "framework_packaging",
     srcs = ["framework_packaging.py"],
     visibility = ["//visibility:public"],
+)
+
+bzl_library(
+    name = "vfs_overlay",
+    srcs = ["vfs_overlay.bzl"],
+    visibility = ["//rules:__pkg__"],
+    deps = [
+        "//rules:features",
+        "//rules:providers",
+        "@bazel_tools//tools/cpp:toolchain_utils.bzl",
+        "@build_bazel_rules_swift//swift",
+    ],
 )

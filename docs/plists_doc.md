@@ -1,8 +1,6 @@
 <!-- Generated with Stardoc: http://skydoc.bazel.build -->
 
-
 Defines macros for working with plist files.
-
 
 <a id="process_infoplists"></a>
 
@@ -13,7 +11,7 @@ process_infoplists(<a href="#process_infoplists-name">name</a>, <a href="#proces
                    <a href="#process_infoplists-xcconfig_by_build_setting">xcconfig_by_build_setting</a>)
 </pre>
 
-    Constructs substituted_plists by substituting build settings from an xcconfig dict into the variables of a plist.
+Constructs substituted_plists by substituting build settings from an xcconfig dict into the variables of a plist.
 
 **PARAMETERS**
 
@@ -39,7 +37,7 @@ A selectable dict of the substituted_plists grouped by config_setting
 substituted_plist(<a href="#substituted_plist-name">name</a>, <a href="#substituted_plist-plist">plist</a>, <a href="#substituted_plist-xcconfig">xcconfig</a>)
 </pre>
 
-    Substitutes build settings from an xcconfig dict into the variables of a plist.
+Substitutes build settings from an xcconfig dict into the variables of a plist.
 
 **PARAMETERS**
 
@@ -63,7 +61,7 @@ The plist target with the substituted variables.
 write_info_plists_if_needed(<a href="#write_info_plists_if_needed-name">name</a>, <a href="#write_info_plists_if_needed-plists">plists</a>)
 </pre>
 
-    Writes info plists for a bundle if needed.
+Writes info plists for a bundle if needed.
 
 Given a list of infoplists, will write out any plists that are passed as a
 dict, and will add a default app Info.plist if no non-dict plists are passed.

@@ -2,10 +2,6 @@
 # TODO: While supporting Bazel 5 we need to keep experimental flag vs using "--enable_bzlmod"
 common --experimental_enable_bzlmod
 
-# We can't create a bzl_library for rules-swift because of its visibility,
-# so circumvent by not using the sandbox
-build --strategy=Stardoc=standalone
-
 # Spawn strategy required for some tests
 build --spawn_strategy=standalone
 

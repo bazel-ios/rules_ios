@@ -7,7 +7,7 @@ Header Map rules
 ## headermap
 
 <pre>
-headermap(<a href="#headermap-name">name</a>, <a href="#headermap-direct_hdr_providers">direct_hdr_providers</a>, <a href="#headermap-hdrs">hdrs</a>, <a href="#headermap-namespace">namespace</a>)
+headermap(<a href="#headermap-name">name</a>, <a href="#headermap-hdrs">hdrs</a>, <a href="#headermap-direct_hdr_providers">direct_hdr_providers</a>, <a href="#headermap-namespace">namespace</a>)
 </pre>
 
 Creates a binary headermap file from the given headers,
@@ -15,7 +15,6 @@ suitable for passing to clang.
 
 This can be used to allow headers to be imported at a consistent path,
 regardless of the package structure being used.
-    
 
 **ATTRIBUTES**
 
@@ -23,9 +22,9 @@ regardless of the package structure being used.
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
 | <a id="headermap-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
-| <a id="headermap-direct_hdr_providers"></a>direct_hdr_providers |  Targets whose direct headers should be added to the list of hdrs   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional | <code>[]</code> |
 | <a id="headermap-hdrs"></a>hdrs |  The list of headers included in the headermap   | <a href="https://bazel.build/concepts/labels">List of labels</a> | required |  |
-| <a id="headermap-namespace"></a>namespace |  The prefix to be used for header imports   | String | optional | <code>""</code> |
+| <a id="headermap-direct_hdr_providers"></a>direct_hdr_providers |  Targets whose direct headers should be added to the list of hdrs   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
+| <a id="headermap-namespace"></a>namespace |  The prefix to be used for header imports   | String | optional |  `""`  |
 
 
 <a id="HeaderMapInfo"></a>

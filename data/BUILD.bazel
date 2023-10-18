@@ -1,6 +1,17 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+
 package(default_visibility = ["//rules/library:__pkg__"])
 
 exports_files(
     ["xcspecs.bzl"],
     visibility = ["//docs:__pkg__"],
+)
+
+bzl_library(
+    name = "xcspecs",
+    srcs = [
+        "xcspec_evals.bzl",
+        "xcspecs.bzl",
+    ],
+    visibility = ["//visibility:public"],
 )

@@ -149,8 +149,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
-        # TODO: stardoc doesn't currently support bzlmod: https://github.com/bazelbuild/stardoc/issues/117
-        run: .github/workflows/preflight_env.sh --no-bzlmod
+        run: .github/workflows/preflight_env.sh
         # Note: we need to pass the absolute to the Bazel run
       - name: buildifier
         run: |

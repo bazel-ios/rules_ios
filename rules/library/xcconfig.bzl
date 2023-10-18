@@ -257,6 +257,7 @@ def build_setting_name(build_setting):
     Args:
         build_setting: The fully-qualified label for a bazel build setting, e.g.,
                        '@repo_name//path/to/package:target_name'
+
     Returns:
         The string 'target_name' in '@repo_name//path/to/package:target_name'
     """
@@ -284,6 +285,7 @@ def copts_by_build_setting_with_defaults(xcconfig = {}, fetch_default_xcconfig =
                                 to be applied for the keys that are not set.
         xcconfig_by_build_setting: A dictionary where the keys are build settings names and
                                    the values are the respective dictionaries of Xcode build settings
+
     Returns:
         Struct with different copts behind 'select()' statements
     """
@@ -333,6 +335,7 @@ def merge_xcconfigs(*xcconfigs):
 
     Args:
         *xcconfigs: A list of dictionaries of Xcode build settings
+
     Returns:
         A dictionary of Xcode build settings
     """

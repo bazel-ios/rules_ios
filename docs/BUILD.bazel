@@ -1,50 +1,49 @@
 load("@io_bazel_stardoc//stardoc:stardoc.bzl", "stardoc")
-load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 
 package(default_visibility = ["//visibility:private"])
 
-_RULES = [
+# Targets to document.
+# Must have a corresponding `bzl_library` target in `//rules:BUILD.bazel`.
+_DOC_SRCS = [
     "app_clip",
     "app",
     "apple_patched",
     "extension",
+    "features",
+    "force_load_direct_deps",
     "framework",
     "hmap",
+    "import_middleman",
     "library",
     "plists",
     "precompiled_apple_resource_bundle",
+    "providers",
     "substitute_build_settings",
     "test",
     "transition_support",
+    "vfs_overlay.doc",
+    "xcconfig.doc",
 ]
 
-bzl_library(
-    name = "data",
-    srcs = [
-        "//data:xcspecs.bzl",
-    ],
-    tags = ["manual"],
-    visibility = ["//visibility:private"],
-)
+# Create stardoc targets for each documentation target defined
 
 [
     stardoc(
-        name = "%s-docs" % name,
-        out = "%s_doc.md" % name,
-        input = "//rules:%s.bzl" % name,
-        tags = ["manual"],
-        visibility = ["//:__pkg__"],
-        deps = [
-            ":data",
-            "@build_bazel_rules_apple//apple",
+        name = file + "_doc",
+        out = file + ".gen.md",
+        input = "//rules:%s.bzl" % file,
+        tags = [
+            "no-cache",
+            "no-sandbox",  # https://github.com/bazelbuild/stardoc/issues/112
         ],
+        deps = ["//rules:" + file],
     )
-    for name in _RULES
+    for file in _DOC_SRCS
 ]
 
 filegroup(
     name = "_all_docs",
-    srcs = ["%s-docs" % name for name in _RULES],
+    srcs = ["%s.gen.md" % name for name in _DOC_SRCS],
     tags = ["manual"],
 )
 
@@ -60,7 +59,9 @@ genrule(
 echo "#!/bin/bash" > $(OUTS)
 echo "set -eu" > $(OUTS)
 echo 'function copy() {
-    dest="$${BUILD_WORKSPACE_DIRECTORY}/docs/$$(basename $$1)"
+    src_name=$$(basename "$$1")
+    dest_name=$${src_name%%.*}_doc.md # replace generated extension with '_doc.md'
+    dest="$${BUILD_WORKSPACE_DIRECTORY}/docs/$${dest_name}"
     cp "$$1" "$$dest"
     chmod +w "$$dest"
 }' >> $(OUTS)

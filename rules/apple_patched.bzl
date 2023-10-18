@@ -1,7 +1,7 @@
 """This file contains drop-in replacements for rules in the rules_apple repository"""
 
 load(
-    "@build_bazel_rules_apple//apple:apple.bzl",
+    "@build_bazel_rules_apple//apple/internal:apple_framework_import.bzl",
     apple_dynamic_framework_import_original = "apple_dynamic_framework_import",
     apple_static_framework_import_original = "apple_static_framework_import",
 )

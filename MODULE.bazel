@@ -50,8 +50,14 @@ bazel_dep(
 )
 bazel_dep(
     name = "bazel_skylib",
-    version = "1.4.1",
+    version = "1.4.2",
     dev_dependency = True,
+)
+bazel_dep(
+    name = "stardoc",
+    version = "0.6.2",
+    dev_dependency = True,
+    repo_name = "io_bazel_stardoc",
 )
 
 # Load non-bzlmod dependencies from rules_ios
