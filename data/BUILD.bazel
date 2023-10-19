@@ -13,6 +13,5 @@ bzl_library(
         "xcspec_evals.bzl",
         "xcspecs.bzl",
     ],
-    tags = ["manual"],
     visibility = ["//visibility:public"],
 )

@@ -8,7 +8,6 @@ exports_files([
 bzl_library(
     name = "xcconfig",
     srcs = ["xcconfig.bzl"],
-    tags = ["manual"],
     visibility = ["//rules:__pkg__"],
     deps = [
         "//data:xcspecs",
@@ -21,6 +20,5 @@ bzl_library(
 bzl_library(
     name = "resources",
     srcs = ["resources.bzl"],
-    tags = ["manual"],
     visibility = ["//rules:__pkg__"],
 )
