@@ -23,10 +23,7 @@ bzl_library(
     srcs = ["transition_support.bzl"],
     tags = ["manual"],
     visibility = ["//visibility:public"],
-    deps = [
-        "@build_bazel_apple_support//lib:apple_support",
-        "@rules_apple_api//:api",
-    ],
+    deps = [":bzl_srcs"],
 )
 
 bzl_library(
@@ -52,23 +49,11 @@ bzl_library(
 )
 
 bzl_library(
-    name = "force_load_direct_deps",
-    srcs = ["force_load_direct_deps.bzl"],
-    tags = ["manual"],
-    visibility = ["//visibility:public"],
-    deps = [
-        ":providers",
-        ":transition_support",
-        "@rules_apple_api//:api",
-    ],
-)
-
-bzl_library(
     name = "xcconfig.doc",
     srcs = ["xcconfig.doc.bzl"],
     tags = ["manual"],
     visibility = ["//visibility:public"],
-    deps = ["//rules/library:xcconfig"],
+    deps = ["bzl_srcs"],
 )
 
 bzl_library(
@@ -76,13 +61,7 @@ bzl_library(
     srcs = ["plists.bzl"],
     tags = ["manual"],
     visibility = ["//visibility:public"],
-    deps = [
-        ":substitute_build_settings",
-        "//rules/library:xcconfig",
-        "@bazel_skylib//lib:sets",
-        "@bazel_skylib//lib:types",
-        "@bazel_skylib//rules:write_file",
-    ],
+    deps = [":bzl_srcs"],
 )
 
 bzl_library(
@@ -99,25 +78,7 @@ bzl_library(
     tags = ["manual"],
     visibility = ["//visibility:public"],
     deps = [
-        ":transition_support",
-        ":utils.bzl",
-        "@bazel_skylib//lib:partial",
-        "@bazel_skylib//lib:paths",
-        "@build_bazel_apple_support//lib:apple_support",
-        "@build_bazel_rules_apple//apple",
-    ],
-)
-
-bzl_library(
-    name = "import_middleman",
-    srcs = ["import_middleman.bzl"],
-    tags = ["manual"],
-    visibility = ["//visibility:public"],
-    deps = [
-        ":features",
-        "//rules/internal:objc_provider_utils",
-        "@build_bazel_rules_apple//apple",
-        "@rules_apple_api//:api",
+        ":bzl_srcs",
     ],
 )
 
@@ -126,24 +87,7 @@ bzl_library(
     srcs = ["library.bzl"],
     tags = ["manual"],
     visibility = ["//visibility:public"],
-    deps = [
-        ":hmap",
-        ":import_middleman",
-        ":precompiled_apple_resource_bundle",
-        ":utils.bzl",
-        "//rules/framework:vfs_overlay",
-        "//rules/library:resources",
-        "//rules/library:xcconfig",
-        "@bazel_skylib//lib:paths",
-        "@bazel_skylib//lib:selects",
-        "@bazel_skylib//lib:sets",
-        "@bazel_skylib//rules:write_file",
-        "@build_bazel_rules_apple//apple",
-        "@build_bazel_rules_apple//apple:apple_static_library",
-        "@build_bazel_rules_apple//apple:resources",
-        "@build_bazel_rules_swift//swift",
-        "@rules_apple_api//:api",
-    ],
+    deps = [":bzl_srcs"],
 )
 
 bzl_library(
@@ -151,22 +95,7 @@ bzl_library(
     srcs = ["framework.bzl"],
     tags = ["manual"],
     visibility = ["//visibility:public"],
-    deps = [
-        ":features",
-        ":force_load_direct_deps",
-        ":library",
-        ":plists",
-        ":providers",
-        ":transition_support",
-        "//rules/framework:vfs_overlay",
-        "//rules/internal:objc_provider_utils",
-        "@bazel_skylib//lib:partial",
-        "@bazel_skylib//lib:paths",
-        "@bazel_tools//tools/cpp:toolchain_utils.bzl",
-        "@build_bazel_rules_apple//apple",
-        "@build_bazel_rules_swift//swift",
-        "@rules_apple_api//:api",
-    ],
+    deps = [":bzl_srcs"],
 )
 
 bzl_library(
@@ -174,13 +103,7 @@ bzl_library(
     srcs = ["apple_patched.bzl"],
     tags = ["manual"],
     visibility = ["//visibility:public"],
-    deps = [
-        ":features",
-        ":providers",
-        "//rules/framework:vfs_overlay",
-        "@build_bazel_rules_apple//apple",
-        "@build_bazel_rules_swift//swift",
-    ],
+    deps = [":bzl_srcs"],
 )
 
 bzl_library(
@@ -188,12 +111,7 @@ bzl_library(
     srcs = ["app_clip.bzl"],
     tags = ["manual"],
     visibility = ["//visibility:public"],
-    deps = [
-        ":force_load_direct_deps",
-        ":plists",
-        "//rules/internal:framework_middleman",
-        "@build_bazel_rules_apple//apple:ios",
-    ],
+    deps = [":bzl_srcs"],
 )
 
 bzl_library(
@@ -201,13 +119,7 @@ bzl_library(
     srcs = ["app.bzl"],
     tags = ["manual"],
     visibility = ["//visibility:public"],
-    deps = [
-        ":force_load_direct_deps",
-        ":library",
-        ":plists",
-        "//rules/internal:framework_middleman",
-        "@build_bazel_rules_apple//apple:ios",
-    ],
+    deps = [":bzl_srcs"],
 )
 
 bzl_library(
@@ -215,12 +127,32 @@ bzl_library(
     srcs = ["extension.bzl"],
     tags = ["manual"],
     visibility = ["//visibility:public"],
+    deps = [":bzl_srcs"],
+)
+
+# A library for all of the bzl_srcs, to satisfy `stardoc`'s deps attribute.
+bzl_library(
+    name = "bzl_srcs",
+    srcs = glob([
+        "*.bzl",
+        "internal/*.bzl",
+    ]),
+    tags = ["manual"],
+    visibility = ["//visibility:public"],
     deps = [
-        ":force_load_direct_deps",
-        ":plists",
-        ":transition_support",
-        "//rules/internal:framework_middleman",
+        "//data:xcspecs",
+        "//rules/framework:vfs_overlay",
+        "//rules/library:bzl_srcs",
+        "@bazel_skylib//lib:paths",
+        "@bazel_skylib//lib:selects",
+        "@bazel_skylib//lib:sets",
+        "@bazel_skylib//lib:types",
+        "@bazel_skylib//rules:write_file",
+        "@build_bazel_rules_apple//apple",
+        "@build_bazel_rules_apple//apple:apple_static_library",
         "@build_bazel_rules_apple//apple:ios",
+        "@build_bazel_rules_apple//apple:resources",
+        "@build_bazel_rules_swift//swift",
         "@rules_apple_api//:api",
     ],
 )
@@ -230,11 +162,5 @@ bzl_library(
     srcs = ["test.bzl"],
     tags = ["manual"],
     visibility = ["//visibility:public"],
-    deps = [
-        ":library",
-        ":plists",
-        "//rules/internal:framework_middleman",
-        "@bazel_skylib//lib:types",
-        "@build_bazel_rules_apple//apple:ios",
-    ],
+    deps = [":bzl_srcs"],
 )
