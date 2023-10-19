@@ -4,6 +4,8 @@
 # https://github.com/bazelbuild/rules_apple/commit/8d841342c238457896cd7596cc29b2d06c9a75f0
 
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleFrameworkImportInfo")
+load("@rules_apple_api//:providers.bzl", "new_appleframeworkimportinfo")
+load("@rules_apple_api//:version.bzl", "apple_api_version")
 load("//rules:features.bzl", "feature_names")
 load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
 load("@build_bazel_rules_apple//apple/internal:bundling_support.bzl", "bundling_support")
@@ -75,7 +77,7 @@ def _make_imports(transitive_sets):
 
     # TODO: consider passing along the dsyms
     provider_fields["dsym_imports"] = depset()
-    return [AppleFrameworkImportInfo(**provider_fields)]
+    return [new_appleframeworkimportinfo(**provider_fields)]
 
 def _find_imports_impl(target, ctx):
     static_framework_file = []
@@ -215,8 +217,7 @@ def _file_collector_rule_impl(ctx):
     deduped_static_framework = depset(_deduplicate_test_deps(test_linker_deps[0], existing_static_framework.to_list()))
 
     replaced_static_framework = _replace_inputs(ctx, deduped_static_framework, input_static_frameworks, _update_framework)
-    rules_apple_api_version = getattr(bundling_support, "rule_api_version", None)
-    use_lts_5_rules_apple_api = rules_apple_api_version == 1.0
+    use_lts_5_rules_apple_api = apple_api_version == "1.0"
     if use_lts_5_rules_apple_api:
         objc_provider_fields["static_framework_file"] = depset(replaced_static_framework.inputs)
     else:
@@ -231,10 +232,10 @@ def _file_collector_rule_impl(ctx):
     deduped_dynamic_framework = depset(_deduplicate_test_deps(test_linker_deps[2], exisiting_dynamic_framework.to_list()))
     dynamic_framework_file = []
     dynamic_framework_dirs = []
-    replaced_dyanmic_framework = {}
+    replaced_dynamic_framework = {}
     for f in input_dynamic_frameworks:
         out = _update_framework(ctx, f)
-        replaced_dyanmic_framework[f] = out
+        replaced_dynamic_framework[f] = out
         dynamic_framework_file.append(out)
         dynamic_framework_dirs.append(out)
 
@@ -246,16 +247,16 @@ def _file_collector_rule_impl(ctx):
         dynamic_framework_dirs.extend(ad_hoc_file)
 
     for f in deduped_dynamic_framework.to_list():
-        if not replaced_dyanmic_framework.get(f, False):
+        if not replaced_dynamic_framework.get(f, False):
             dynamic_framework_file.append(f)
             dynamic_framework_dirs.append(f)
     objc_provider_fields["dynamic_framework_file"] = depset(dynamic_framework_file)
 
-    all_replaced_frameworks = replaced_dyanmic_framework.values() + replaced_static_framework.replaced.values()
+    all_replaced_frameworks = replaced_dynamic_framework.values() + replaced_static_framework.replaced.values()
     if use_lts_5_rules_apple_api:
         replaced_frameworks = all_replaced_frameworks
     else:
-        replaced_frameworks = replaced_dyanmic_framework.values()
+        replaced_frameworks = replaced_dynamic_framework.values()
 
     compat_link_opt = ["-L__BAZEL_XCODE_DEVELOPER_DIR__/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator", "-Wl,-weak-lswiftCompatibility51"]
 

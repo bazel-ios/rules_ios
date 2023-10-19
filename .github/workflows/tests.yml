@@ -82,8 +82,8 @@ jobs:
           name: bazel-testlogs
           path: bazel-testlogs
 
-  lts_ios_integration_tests:
-    name: Build and Test ( Virtual Frameworks + LTS )
+  bazel_5_ios_integration_tests:
+    name: Build and Test ( Virtual Frameworks + Bazel 5 )
     runs-on: macos-12
     env:
       USE_BAZEL_VERSION: 5.3.2
@@ -97,6 +97,31 @@ jobs:
           # iOS tests without bzlmod on Bazel 5
           bazelisk build \
             --noexperimental_enable_bzlmod \
+            --config=ci_with_caches \
+            --config=ios \
+            --config=vfs \
+            -- \
+            //tests/ios/...
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: bazel-testlogs
+          path: bazel-testlogs
+
+  rules_apple_2_ios_integration_tests:
+    name: Build and Test ( Virtual Frameworks + rules_apple 2.x )
+    runs-on: macos-12
+    env:
+      USE_BAZEL_VERSION: 6.1.2
+    steps:
+      - uses: actions/checkout@v3
+      - name: Preflight Env
+        run: .github/workflows/preflight_env.sh --no-bzlmod
+      - name: Build and Test
+        run: |
+          # iOS tests
+          bazelisk build \
             --config=ci_with_caches \
             --config=ios \
             --config=vfs \
@@ -149,7 +174,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
-        run: .github/workflows/preflight_env.sh
+        # stardoc latest version and bzlmod is broken with this in a few ways
+        # Please revert this to the version which worked reasonablly:
+        # https://github.com/bazelbuild/stardoc/issues/192
+        run: .github/workflows/preflight_env.sh --no-bzlmod
         # Note: we need to pass the absolute to the Bazel run
       - name: buildifier
         run: |
@@ -200,12 +228,16 @@ jobs:
           path: bazel-testlogs
 
   multi_arch_support:
+    # i386 was removed on rules_apple 3.x.x - this test case needs reworking
+    # to exemplify fat binaries on the latest version
     name: Build iOS App for Multiple Architecture
     runs-on: macos-12
+    env:
+      USE_BAZEL_VERSION: 6.1.2
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
-        run: .github/workflows/preflight_env.sh
+        run: .github/workflows/preflight_env.sh --no-bzlmod
       - name: Build App
         run: |
           bazelisk build \

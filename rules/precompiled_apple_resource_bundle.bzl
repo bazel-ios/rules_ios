@@ -6,6 +6,7 @@ https://github.com/bazelbuild/rules_apple/issues/319
 if this is ever fixed in bazel it should be removed
 """
 
+load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@build_bazel_apple_support//lib:apple_support.bzl", "apple_support")
@@ -15,11 +16,12 @@ load("@build_bazel_rules_apple//apple/internal:partials.bzl", "partials")
 load("@build_bazel_rules_apple//apple/internal:platform_support.bzl", "platform_support")
 load("@build_bazel_rules_apple//apple/internal:resources.bzl", "resources")
 load("@build_bazel_rules_apple//apple/internal:resource_actions.bzl", "resource_actions")
-load("@build_bazel_rules_apple//apple/internal:rule_factory.bzl", "rule_factory")
+load("@rules_apple_api//:ios_rules.bzl", "rule_attrs")
+load("@rules_apple_api//:providers.bzl", "new_appleresourcebundleinfo", "new_appleresourceinfo")
 load("@build_bazel_rules_apple//apple/internal:apple_toolchains.bzl", "AppleMacToolsToolchainInfo")
-load("@build_bazel_rules_apple//apple:providers.bzl", "AppleResourceBundleInfo", "AppleResourceInfo")
 load("//rules:transition_support.bzl", "transition_support")
 load("//rules:utils.bzl", "bundle_identifier_for_bundle")
+load("@rules_apple_api//:version.bzl", "apple_api_version")
 
 _FAKE_BUNDLE_PRODUCT_TYPE_BY_PLATFORM_TYPE = {
     "ios": apple_product_type.application,
@@ -50,6 +52,15 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     # passing a swift_module attr
     fake_rule_label = Label("//fake_package:" + (ctx.attr.swift_module or bundle_name))
 
+    if apple_api_version == "3.0":
+        platform_prerequisites_version_args = {
+            "build_settings": None,
+        }
+    else:
+        platform_prerequisites_version_args = {
+            "disabled_features": ctx.disabled_features,
+        }
+
     platform_prerequisites = platform_support.platform_prerequisites(
         apple_fragment = ctx.fragments.apple,
         config_vars = ctx.var,
@@ -60,8 +71,8 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         platform_type_string = platform_type,
         uses_swift = False,
         xcode_version_config = ctx.attr._xcode_config[apple_common.XcodeVersionConfig],
-        disabled_features = [],
         features = [],
+        **platform_prerequisites_version_args
     )
     partials_args = dict(
         actions = ctx.actions,
@@ -197,7 +208,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     )
 
     return [
-        AppleResourceInfo(
+        new_appleresourceinfo(
             unowned_resources = depset(),
             owners = depset([
                 (output_bundle_dir.short_path, ctx.label),
@@ -215,7 +226,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
                 (output_bundle_dir.basename, None, depset([output_bundle_dir, output_plist])),
             ],
         ),
-        AppleResourceBundleInfo(),
+        new_appleresourcebundleinfo(),
         apple_common.new_objc_provider(),
         CcInfo(),
     ]
@@ -224,9 +235,7 @@ _precompiled_apple_resource_bundle = rule(
     implementation = _precompiled_apple_resource_bundle_impl,
     fragments = ["apple"],
     cfg = transition_support.apple_rule_transition,
-    attrs = dict(
-        # This includes all the undocumented tool requirements for this rule
-        rule_factory.common_tool_attributes,
+    attrs = dicts.add(rule_attrs.common_tool_attrs(), dict(
         infoplists = attr.label_list(
             allow_files = [".plist"],
             default = [
@@ -287,7 +296,7 @@ the bundle as a dependency.""",
             default = Label("@build_bazel_rules_apple//apple/internal:mac_tools_toolchain"),
             providers = [[AppleMacToolsToolchainInfo]],
         ),
-    ),
+    )),
 )
 
 def precompiled_apple_resource_bundle(**kwargs):

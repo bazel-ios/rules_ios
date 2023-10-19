@@ -10,12 +10,12 @@ _DOC_SRCS = [
     "apple_patched",
     "extension",
     "features",
-    "force_load_direct_deps",
     "framework",
     "hmap",
     "import_middleman",
     "library",
     "plists",
+    "force_load_direct_deps",
     "precompiled_apple_resource_bundle",
     "providers",
     "substitute_build_settings",
@@ -33,6 +33,7 @@ _DOC_SRCS = [
         out = file + ".gen.md",
         input = "//rules:%s.bzl" % file,
         tags = [
+            "manual",
             "no-cache",
             "no-sandbox",  # https://github.com/bazelbuild/stardoc/issues/112
         ],

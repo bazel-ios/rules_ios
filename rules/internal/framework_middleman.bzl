@@ -1,9 +1,14 @@
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load(
     "@build_bazel_rules_apple//apple:providers.bzl",
-    "AppleBundleInfo",
     "AppleResourceInfo",
     "IosFrameworkBundleInfo",
+)
+load("@bazel_skylib//lib:dicts.bzl", "dicts")
+load(
+    "@rules_apple_api//:providers.bzl",
+    "new_applebundleinfo",
+    "new_iosframeworkbundleinfo",
 )
 load(
     "@build_bazel_rules_apple//apple/internal:partials.bzl",
@@ -30,6 +35,7 @@ load(
     "//rules/internal:objc_provider_utils.bzl",
     "objc_provider_utils",
 )
+load("//rules:transition_support.bzl", "split_transition_rule_attrs", "transition_support")
 
 def _framework_middleman(ctx):
     resource_providers = []
@@ -81,8 +87,8 @@ def _framework_middleman(ctx):
         dynamic_framework_provider,
         cc_info_provider,
         objc_provider,
-        IosFrameworkBundleInfo(),
-        AppleBundleInfo(
+        new_iosframeworkbundleinfo(),
+        new_applebundleinfo(
             archive = None,
             archive_root = None,
             binary = None,
@@ -118,9 +124,9 @@ def _framework_middleman(ctx):
 
 framework_middleman = rule(
     implementation = _framework_middleman,
-    attrs = {
+    attrs = dicts.add(split_transition_rule_attrs, {
         "framework_deps": attr.label_list(
-            cfg = apple_common.multi_arch_split,
+            cfg = transition_support.split_transition,
             mandatory = True,
             doc =
                 """Deps that may contain frameworks
@@ -150,7 +156,7 @@ framework_middleman = rule(
                 """Internal - The product type of the framework
 """,
         ),
-    },
+    }),
     doc = """
         This is a volatile internal rule to make frameworks work with
         rules_apples bundling logic
@@ -257,16 +263,16 @@ def _dep_middleman(ctx):
 
 dep_middleman = rule(
     implementation = _dep_middleman,
-    attrs = {
+    attrs = dicts.add(split_transition_rule_attrs, {
         "deps": attr.label_list(
-            cfg = apple_common.multi_arch_split,
+            cfg = transition_support.split_transition,
             mandatory = True,
             doc =
                 """Deps that may contain frameworks
 """,
         ),
         "test_deps": attr.label_list(
-            cfg = apple_common.multi_arch_split,
+            cfg = transition_support.split_transition,
             allow_empty = True,
         ),
         "platform_type": attr.string(
@@ -281,7 +287,7 @@ dep_middleman = rule(
                 """Internal - currently rules_ios the dict `platforms`
 """,
         ),
-    },
+    }),
     doc = """
         This is a volatile internal rule to make frameworks work with
         rules_apples bundling logic

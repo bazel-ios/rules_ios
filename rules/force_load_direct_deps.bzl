@@ -1,4 +1,6 @@
 load("//rules:providers.bzl", "AvoidDepsInfo")
+load("//rules:transition_support.bzl", "split_transition_rule_attrs", "transition_support")
+load("@bazel_skylib//lib:dicts.bzl", "dicts")
 
 def _impl(ctx):
     if not ctx.attr.should_force_load:
@@ -30,13 +32,30 @@ def _impl(ctx):
 
 force_load_direct_deps = rule(
     implementation = _impl,
-    attrs = {
-        "deps": attr.label_list(),
+    attrs = dicts.add(split_transition_rule_attrs, {
+        "deps": attr.label_list(
+            cfg = transition_support.split_transition,
+            mandatory = True,
+            doc =
+                "Deps",
+        ),
         "should_force_load": attr.bool(
             default = True,
             doc = "Allows parametrically enabling the functionality in this rule.",
         ),
-    },
+        "platform_type": attr.string(
+            mandatory = False,
+            doc =
+                """Internal - currently rules_ios uses the dict `platforms`
+""",
+        ),
+        "minimum_os_version": attr.string(
+            mandatory = False,
+            doc =
+                """Internal - currently rules_ios the dict `platforms`
+""",
+        ),
+    }),
     doc = """
 A rule to link with `-force_load` for direct`deps`
 
