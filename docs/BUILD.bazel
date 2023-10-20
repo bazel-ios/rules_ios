@@ -33,7 +33,6 @@ _DOC_SRCS = [
         out = file + ".gen.md",
         input = "//rules:%s.bzl" % file,
         tags = [
-            "manual",
             "no-cache",
             "no-sandbox",  # https://github.com/bazelbuild/stardoc/issues/112
         ],
@@ -45,7 +44,6 @@ _DOC_SRCS = [
 filegroup(
     name = "_all_docs",
     srcs = ["%s.gen.md" % name for name in _DOC_SRCS],
-    tags = ["manual"],
 )
 
 genrule(
@@ -71,5 +69,4 @@ for s in $(SRCS); do
 done
     """,
     executable = 1,
-    tags = ["manual"],
 )

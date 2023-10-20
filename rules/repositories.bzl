@@ -186,21 +186,17 @@ def _rules_ios_bzlmod_dependencies():
         # you'd like to set it. If you want to use a different rules_apple than
         # we have here - define rules_apple_api - to the value you'd like
         _maybe(
-            github_repo,
+            http_archive,
             name = "build_bazel_rules_swift",
-            project = "bazelbuild",
-            ref = "267512835d70610865aa00300d317c3ef1e1f8bf",
-            repo = "rules_swift",
-            sha256 = "4fdeb69da7a40155b2e10f431a6624bd767fb8983effba630cf12b7f34d24c83",
+            sha256 = "28a66ff5d97500f0304f4e8945d936fe0584e0d5b7a6f83258298007a93190ba",
+            url = "https://github.com/bazelbuild/rules_swift/releases/download/1.13.0/rules_swift.1.13.0.tar.gz",
         )
 
         _maybe(
-            github_repo,
+            http_archive,
             name = "build_bazel_rules_apple",
-            ref = "55cf5c2bec04b05b9ab435e24174834c5681be12",
-            project = "bazelbuild",
-            repo = "rules_apple",
-            sha256 = "11422f86bf0dd6503b8b6b3eb0e9ab29e8c84db15ca38ea000935d1d020107e0",
+            sha256 = "34c41bfb59cdaea29ac2df5a2fa79e5add609c71bb303b2ebb10985f93fa20e7",
+            url = "https://github.com/bazelbuild/rules_apple/releases/download/3.1.1/rules_apple.3.1.1.tar.gz",
         )
         _maybe(
             rules_apple_api,
