@@ -20,23 +20,23 @@ _FindImportsAspectInfo = provider(fields = {
 def _update_framework(ctx, framework):
     # Updates the `framework` for Apple Silicon
     out_file = ctx.actions.declare_file(ctx.attr.name + "/" + framework.basename + ".framework" + "/" + framework.basename)
-    out_dir = ctx.actions.declare_file(ctx.attr.name + "/" + framework.basename + ".framework")
     cmd = """
      set -e
      TOOL="{}"
-     FRAMEWORK_BINARY="{}"
-     OUT_DIR="{}"
-     FW_DIR="$(dirname "$FRAMEWORK_BINARY")"
+     INPUT_FRAMEWORK_BINARY="{}"
+     OUTPUT_FRAMEWORK_BINARY="{}"
+     INPUT_FW_DIR="$(dirname "$INPUT_FRAMEWORK_BINARY")"
+     OUTPUT_FW_DIR="$(dirname "$OUTPUT_FRAMEWORK_BINARY")"
 
      # Duplicate the _entire_ input framework
-     mkdir -p "$(dirname "$OUT_DIR")"
+     mkdir -p "$OUTPUT_FW_DIR"
 
-     ditto "$FW_DIR" "$OUT_DIR"
-     "$TOOL" "$OUT_DIR/$(basename "$FRAMEWORK_BINARY")"
-   """.format(ctx.files.update_in_place[0].path, framework.path, out_dir.path)
+     ditto "$INPUT_FW_DIR" "$OUTPUT_FW_DIR"
+     "$TOOL" "$OUTPUT_FW_DIR/$(basename "$INPUT_FRAMEWORK_BINARY")"
+   """.format(ctx.files.update_in_place[0].path, framework.path, out_file.path)
 
     ctx.actions.run_shell(
-        outputs = [out_dir, out_file],
+        outputs = [out_file],
         inputs = depset([framework] + ctx.attr.update_in_place[DefaultInfo].default_runfiles.files.to_list()),
         command = cmd,
         execution_requirements = {"no-remote": "1"},

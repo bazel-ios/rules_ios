@@ -8,6 +8,8 @@ build --spawn_strategy=standalone
 # Setup Xcode configuration for xcodeproj tests
 build --xcode_version_config=//:host_xcodes
 
+build --experimental_strict_conflict_checks
+
 build --verbose_failures # Print the full command line for commands that failed
 build --test_output=errors # Prints log file output to the console on failure
 
