@@ -1,12 +1,6 @@
-bcr_test_module:
-  module_path: "e2e/bzlmod"
-  matrix:
-    platform: ["macos"]
-  tasks:
-    build_flags:
-      - "--config=ios"
-    run_tests:
-      name: "Run test module"
-      platform: ${{ platform }}
-      build_targets:
-        - "//..."
+tasks:
+  verify_build_targets:
+    name: Verify Build targets on macOS
+    platform: macos
+    build_targets:
+      - "@rules_ios//rules/..."

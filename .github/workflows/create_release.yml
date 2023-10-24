@@ -23,13 +23,15 @@ jobs:
 
           # Archive the repository
           # Considerations:
-          # - Dont package hidden files (including the .git directory)
+          # - Dont package development files (vscode config, etc)
           # - Dont package the bazel-* symlink directories
-          # - Dont package the tests directory
+          # - Dont package most of the tests directory
           COPYFILE_DISABLE=1 tar czvf "rules_ios.$TAG.tar.gz" \
-            --exclude="./.*" \
+            --exclude="./.vscode" \
             --exclude="./bazel-*" \
-            --exclude="./tests" \
+            --exclude="./tests/framework" \
+            --exclude="./tests/ios" \
+            --exclude="./tests/macos" \
             ./*
 
           # Create the release notes

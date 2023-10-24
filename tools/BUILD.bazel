@@ -1,0 +1,12 @@
+load("@buildifier_prebuilt//:rules.bzl", "buildifier")
+
+buildifier(
+    name = "buildifier",
+    exclude_patterns = [
+        "./.git/*",
+        "./bazel-*/*",
+    ],
+    mode = "fix",
+    tags = ["manual"],
+    visibility = ["//:__pkg__"],
+)

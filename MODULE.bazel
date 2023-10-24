@@ -36,6 +36,10 @@ bazel_dep(
     version = "1.13.0",
     repo_name = "build_bazel_rules_swift",
 )
+bazel_dep(
+    name = "bazel_skylib",
+    version = "1.4.2",
+)
 
 # Declare the development dependencies needed for rules_ios development
 bazel_dep(
@@ -46,11 +50,6 @@ bazel_dep(
 bazel_dep(
     name = "rules_pkg",
     version = "0.9.1",
-    dev_dependency = True,
-)
-bazel_dep(
-    name = "bazel_skylib",
-    version = "1.4.2",
     dev_dependency = True,
 )
 bazel_dep(
