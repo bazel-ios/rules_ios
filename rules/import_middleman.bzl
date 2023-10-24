@@ -23,15 +23,16 @@ def _update_framework(ctx, framework):
     cmd = """
      set -e
      TOOL="{}"
-     FRAMEWORK_BINARY="{}"
-     OUT_DIR="{}"
-     FW_DIR="$(dirname "$FRAMEWORK_BINARY")"
+     INPUT_FRAMEWORK_BINARY="{}"
+     OUTPUT_FRAMEWORK_BINARY="{}"
+     INPUT_FW_DIR="$(dirname "$INPUT_FRAMEWORK_BINARY")"
+     OUTPUT_FW_DIR="$(dirname "$OUTPUT_FRAMEWORK_BINARY")"
 
      # Duplicate the _entire_ input framework
-     mkdir -p "$(dirname "$OUT_DIR")"
+     mkdir -p "$OUTPUT_FW_DIR"
 
-     ditto "$FW_DIR" "$OUT_DIR"
-     "$TOOL" "$OUT_DIR/$(basename "$FRAMEWORK_BINARY")"
+     ditto "$INPUT_FW_DIR" "$(dirname "$OUTPUT_FRAMEWORK_BINARY")"
+     "$TOOL" "$OUTPUT_FW_DIR/$(basename "$INPUT_FRAMEWORK_BINARY")"
    """.format(ctx.files.update_in_place[0].path, framework.path, out_file.path)
 
     ctx.actions.run_shell(
