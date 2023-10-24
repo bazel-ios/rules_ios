@@ -20,7 +20,6 @@ _FindImportsAspectInfo = provider(fields = {
 def _update_framework(ctx, framework):
     # Updates the `framework` for Apple Silicon
     out_file = ctx.actions.declare_file(ctx.attr.name + "/" + framework.basename + ".framework" + "/" + framework.basename)
-    out_dir = ctx.actions.declare_file(ctx.attr.name + "/" + framework.basename + ".framework")
     cmd = """
      set -e
      TOOL="{}"
@@ -33,10 +32,10 @@ def _update_framework(ctx, framework):
 
      ditto "$FW_DIR" "$OUT_DIR"
      "$TOOL" "$OUT_DIR/$(basename "$FRAMEWORK_BINARY")"
-   """.format(ctx.files.update_in_place[0].path, framework.path, out_dir.path)
+   """.format(ctx.files.update_in_place[0].path, framework.path, out_file.path)
 
     ctx.actions.run_shell(
-        outputs = [out_dir, out_file],
+        outputs = [out_file],
         inputs = depset([framework] + ctx.attr.update_in_place[DefaultInfo].default_runfiles.files.to_list()),
         command = cmd,
         execution_requirements = {"no-remote": "1"},
