@@ -31,7 +31,7 @@ def _update_framework(ctx, framework):
      # Duplicate the _entire_ input framework
      mkdir -p "$OUTPUT_FW_DIR"
 
-     ditto "$INPUT_FW_DIR" "$(dirname "$OUTPUT_FRAMEWORK_BINARY")"
+     ditto "$INPUT_FW_DIR" "$OUTPUT_FW_DIR"
      "$TOOL" "$OUTPUT_FW_DIR/$(basename "$INPUT_FRAMEWORK_BINARY")"
    """.format(ctx.files.update_in_place[0].path, framework.path, out_file.path)
 
