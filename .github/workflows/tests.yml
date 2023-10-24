@@ -184,7 +184,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
-        run: .github/workflows/preflight_env.sh --no-bzlmod
+        run: .github/workflows/preflight_env.sh --no-bzlmod --use-remote-cache
       - name: Run tests
         run: ./tests/xcodeproj-tests.sh --run && ./tests/test-tests.sh
       - uses: actions/upload-artifact@v2
