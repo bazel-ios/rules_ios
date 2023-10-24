@@ -22,12 +22,21 @@ for the documentation.
 
 ## Getting started
 
+### Bzlmod setup
+
+Add the Bazel module to your `MODULE.bazel` file:
+See the [latest release](https://github.com/bazel-ios/rules_ios/releases/latest) for an up-to-date snippet!
+
+```bzl
+bazel_dep(name = "rules_ios", version = "x.x.x", repo_name = "build_bazel_rules_ios")
+```
+
 ### WORKSPACE setup
 
 Add the following lines to your `WORKSPACE` file.
 See the [latest release](https://github.com/bazel-ios/rules_ios/releases/latest) for an up-to-date snippet!
 
-```python
+```bzl
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 # See https://github.com/bazel-ios/rules_ios/releases/latest

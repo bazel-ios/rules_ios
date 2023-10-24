@@ -14,6 +14,12 @@ readonly release_archive="rules_ios.$new_version.tar.gz"
 sha=$(shasum -a 256 "$release_archive" | cut -d " " -f1)
 
 cat <<EOF
+### Bzlmod Snippet
+
+\`\`\`bzl
+bazel_dep(name = "rules_ios", version = "$new_version", repo_name = "build_bazel_rules_ios")
+\`\`\`
+
 ### Workspace Snippet
 
 \`\`\`bzl
