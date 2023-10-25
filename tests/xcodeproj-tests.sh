@@ -47,7 +47,7 @@ test_create_and_launch_sim() {
         xcrun simctl create "rules_ios:iPhone-14" \
             com.apple.CoreSimulator.SimDeviceType.iPhone-14
 
-    pushd $(dirname $0)
+    pushd $(dirname $0)/ios/xcodeproj
     export SIM_DEVICE_ID=$(xcodebuild \
         -project Single-Application-Project-AllTargets.xcodeproj \
         -scheme Single-Application-UnitTests \
@@ -64,7 +64,7 @@ test_create_and_launch_sim() {
 }
 
 test_shutdown_sim() {
-    pushd $(dirname $0)
+    pushd $(dirname $0)/ios/xcodeproj
     export SIM_DEVICE_ID=$(xcodebuild \
         -project Single-Application-Project-AllTargets.xcodeproj \
         -scheme Single-Application-UnitTests \
