@@ -18,12 +18,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
-        run: .github/workflows/preflight_env.sh
+        run: .github/workflows/preflight_env.sh --use-remote-cache
       - name: Build and Test
         run: |
           # non-iOS tests
           bazelisk test \
-            --config=ci_with_caches \
             -- \
             //... \
             -//tests/ios/...
@@ -36,7 +35,6 @@ jobs:
 
           # iOS tests
           bazelisk test \
-            --config=ci_with_caches \
             --config=ios \
             --test_arg=--destination=platform=ios_simulator,id=$SIMULATOR_UDID \
             -- \
@@ -57,12 +55,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
-        run: .github/workflows/preflight_env.sh
+        run: .github/workflows/preflight_env.sh --use-remote-cache
       - name: Build and Test
         run: |
           # non-iOS tests
           bazelisk test \
-            --config=ci_with_caches \
             --config=vfs \
             -- \
             //... \
@@ -70,7 +67,6 @@ jobs:
 
           # iOS tests
           bazelisk test \
-            --config=ci_with_caches \
             --config=ios \
             --config=vfs \
             -- \
@@ -91,13 +87,12 @@ jobs:
       - uses: actions/checkout@v3
       - name: Preflight Env
         # Dont test Bazel 5 with bzlmod
-        run: .github/workflows/preflight_env.sh --no-bzlmod
+        run: .github/workflows/preflight_env.sh --no-bzlmod --use-remote-cache
       - name: Build and Test
         run: |
           # iOS tests without bzlmod on Bazel 5
           bazelisk build \
             --noexperimental_enable_bzlmod \
-            --config=ci_with_caches \
             --config=ios \
             --config=vfs \
             -- \
@@ -117,12 +112,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
-        run: .github/workflows/preflight_env.sh --no-bzlmod
+        run: .github/workflows/preflight_env.sh --no-bzlmod --use-remote-cache
       - name: Build and Test
         run: |
           # iOS tests
           bazelisk build \
-            --config=ci_with_caches \
             --config=ios \
             --config=vfs \
             -- \
@@ -140,11 +134,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
-        run: .github/workflows/preflight_env.sh
+        run: .github/workflows/preflight_env.sh --use-remote-cache
       - name: Build and Test
         run: |
           bazelisk build \
-            --config=ci_with_caches \
             --config=vfs \
             --ios_multi_cpus=sim_arm64  \
             -- \
@@ -154,7 +147,6 @@ jobs:
           # Misc issues:
           #   - Fails on a non fat framework for //tests/ios/unit-test/test-imports-app/
           bazelisk build \
-            --config=ci_with_caches \
             --config=ios \
             --config=vfs \
             --ios_multi_cpus=sim_arm64 \
@@ -174,7 +166,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
-        run: .github/workflows/preflight_env.sh
+        run: .github/workflows/preflight_env.sh --use-remote-cache
         # Note: we need to pass the absolute to the Bazel run
       - name: buildifier
         run: |
@@ -183,7 +175,6 @@ jobs:
       - name: Check docs
         run: |
           bazelisk run \
-            --config=ci_with_caches \
             //docs
           git diff --exit-code docs
 
@@ -193,7 +184,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
-        run: .github/workflows/preflight_env.sh --no-bzlmod
+        run: .github/workflows/preflight_env.sh --no-bzlmod --use-remote-cache
       - name: Run tests
         run: ./tests/xcodeproj-tests.sh --run && ./tests/test-tests.sh
       - uses: actions/upload-artifact@v2
@@ -208,11 +199,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
-        run: .github/workflows/preflight_env.sh
+        run: .github/workflows/preflight_env.sh --use-remote-cache
       - name: Run tests
         run: |
           bazelisk test \
-            --config=ci_with_caches \
             --config=ios_lldb_test \
             -- \
             tests/ios/lldb/app:objc_app_po_test \
@@ -234,11 +224,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
-        run: .github/workflows/preflight_env.sh --no-bzlmod
+        run: .github/workflows/preflight_env.sh --no-bzlmod --use-remote-cache
       - name: Build App
         run: |
           bazelisk build \
-            --config=ci_with_caches \
             --config=ios_multi_arch_test \
             -- \
             tests/ios/app/App

@@ -2,7 +2,11 @@
 
 # If flag --no-bzlmod is passed, writes a user.bazelrc file to disable Bzlmod.
 if [[ "$*" == *--no-bzlmod* ]]; then
-  echo "build --noexperimental_enable_bzlmod" > user.bazelrc
+  echo "build --noexperimental_enable_bzlmod" >> user.bazelrc
+fi
+# If flag --use-remote-cache is passed, writes a user.bazelrc file to enable remote cache.
+if [[ "$*" == *--use-remote-cache* ]]; then
+  echo "build --config=ci_with_caches" >> user.bazelrc
 fi
 
 set -e
