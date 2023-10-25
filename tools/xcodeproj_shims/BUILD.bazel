@@ -1,5 +1,3 @@
-load("@rules_python//python:defs.bzl", "py_binary")
-
 STUB_VISIBILITY = ["//visibility:public"]
 
 sh_binary(
@@ -23,6 +21,7 @@ sh_binary(
 py_binary(
     name = "print_json_leaf_nodes",
     srcs = ["print_json_leaf_nodes.py"],
+    srcs_version = "PY3",
     visibility = STUB_VISIBILITY,
 )
 
