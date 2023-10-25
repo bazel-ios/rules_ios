@@ -47,16 +47,9 @@ test_create_and_launch_sim() {
         xcrun simctl create "rules_ios:iPhone-14" \
             com.apple.CoreSimulator.SimDeviceType.iPhone-14
 
-    pushd $(dirname $0)/macos/xcodeproj
-    export SIM_DEVICE_ID=$(xcodebuild \
-        -project Single-Application-Project-AllTargets.xcodeproj \
-        -scheme Single-Application-UnitTests \
-        -showdestinations \
-        -destination "generic/platform=iOS Simulator" | \
-        grep "name:rules_ios:iPhone-14" | \
-        head -1 | \
-        ruby -e "puts STDIN.read.split(',')[1].split(':').last")
-    popd
+    export SIM_DEVICE_ID=$(xcrun simctl list devices | \
+        grep rules_ios:iPhone-14 | \
+        ruby -e "puts STDIN.read.split(' ')[1][1...-1]")
 
     xcrun simctl boot $SIM_DEVICE_ID
     # Block until simulator is booted
