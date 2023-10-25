@@ -41,6 +41,36 @@ test_build_for_device() {
     ./tests/ios/xcodeproj/post_build_check.sh device $XCODE_PROJ_NAME
 }
 
+test_create_and_launch_sim() {
+    xcrun simctl list devices \
+    | grep -q rules_ios:iPhone-14 || \
+        xcrun simctl create "rules_ios:iPhone-14" \
+            com.apple.CoreSimulator.SimDeviceType.iPhone-14
+
+    export SIM_DEVICE_ID=$(xcrun simctl list devices | \
+        grep rules_ios:iPhone-14 | \
+        ruby -e "puts STDIN.read.split(' ')[1][1...-1]")
+
+    xcrun simctl boot $SIM_DEVICE_ID
+    # Block until simulator is booted
+    xcrun simctl bootstatus $SIM_DEVICE_ID
+}
+
+test_shutdown_sim() {
+    pushd $(dirname $0)/macos/xcodeproj
+    export SIM_DEVICE_ID=$(xcodebuild \
+        -project Single-Application-Project-AllTargets.xcodeproj \
+        -scheme Single-Application-UnitTests \
+        -showdestinations \
+        -destination "generic/platform=iOS Simulator" | \
+        grep "name:rules_ios:iPhone-14" | \
+        head -1 | \
+        ruby -e "puts STDIN.read.split(',')[1].split(':').last")
+    popd
+
+    xcrun simctl shutdown $SIM_DEVICE_ID
+}
+
 verify() {
     echo "Checking for .xcodeproj changes"
     git diff --exit-code tests/ios/xcodeproj tests/macos/xcodeproj
@@ -54,10 +84,12 @@ verify() {
 }
 
 test_main() {
+    test_create_and_launch_sim
     test_macos
     test_simulator
     test_custom_output
     test_build_for_device
+    test_shutdown_sim
     verify
 }
 
