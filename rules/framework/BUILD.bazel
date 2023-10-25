@@ -1,9 +1,9 @@
-load("@rules_python//python:defs.bzl", "py_binary")
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 
 py_binary(
     name = "framework_packaging",
     srcs = ["framework_packaging.py"],
+    srcs_version = "PY3",
     visibility = ["//visibility:public"],
 )
 

@@ -1,4 +1,3 @@
-load("@rules_python//python:defs.bzl", "py_test")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
 
 # End to end "Shell" test that a breakpoint can resolve a location
@@ -98,12 +97,13 @@ def _ios_breakpoint_test_wrapper(name, application, cmds, test_spec, sdk, device
         visibility = ["//visibility:public"],
     )
 
-    py_test(
+    native.py_test(
         name = name,
         main = "@build_bazel_rules_ios//rules/test/lldb:lldb_breakpoint_test_main.py",
         srcs = [
             "@build_bazel_rules_ios//rules/test/lldb:lldb_breakpoint_test_main.py",
         ],
+        srcs_version = "PY3",
         args = [
             "--app",
             "$(execpath " + application + ").app",

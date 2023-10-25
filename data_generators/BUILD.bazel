@@ -1,8 +1,7 @@
-load("@rules_python//python:defs.bzl", "py_binary")
-
 py_binary(
     name = "xcspec_extractor",
     srcs = ["xcspec_extractor.py"],
+    srcs_version = "PY3",
 )
 
 genrule(
