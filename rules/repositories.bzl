@@ -59,15 +59,17 @@ def _get_bazel_version():
     return struct(major = 0, minor = 0, patch = 0)
 
 def rules_ios_dependencies(
-        load_bzlmod_dependencies = True):
+        load_bzlmod_dependencies = True,
+        bazel_6_use_rules_apple_2 = False):
     """Fetches repositories that are public dependencies of `rules_ios`.
 
     Args:
         load_bzlmod_dependencies: if `True` loads dependencies that are available via bzlmod (set to True when using WORKSPACE, and False when using bzlmod)
+        bazel_6_use_rules_apple_2: if `True` loads rules_apple 2.x instead of the latest one when using Bazel 6
     """
 
     if load_bzlmod_dependencies:
-        _rules_ios_bzlmod_dependencies()
+        _rules_ios_bzlmod_dependencies(bazel_6_use_rules_apple_2 = bazel_6_use_rules_apple_2)
 
     # Non-bzlmod tool dependencies that are used in the rule APIs
     _rules_ios_tool_dependencies()
@@ -108,7 +110,7 @@ rules_apple_api = repository_rule(
     local = True,
 )
 
-def _rules_ios_bzlmod_dependencies():
+def _rules_ios_bzlmod_dependencies(bazel_6_use_rules_apple_2 = False):
     """Fetches repositories that are dependencies of `rules_ios`
 
     These are only included when using WORKSPACE, when using bzlmod they're loaded in MODULE.bazel
@@ -149,7 +151,7 @@ def _rules_ios_bzlmod_dependencies():
             ],
             sha256 = "c6966ec828da198c5d9adbaa94c05e3a1c7f21bd012a0b29ba8ddbccb2c93b0d",
         )
-    elif bazel_version.major == "6" and bazel_version.minor == "1":
+    elif bazel_version.major == "6" and bazel_6_use_rules_apple_2:
         _maybe(
             github_repo,
             name = "build_bazel_rules_swift",
