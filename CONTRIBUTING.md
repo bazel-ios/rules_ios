@@ -11,6 +11,14 @@ If you are a maintainer of the repository and would like to tag a new release, f
 - Type in a version number, follow SemVer whenever possible.
 - After a few minutes the release should show up in the [Releases](https://github.com/bazel-ios/rules_ios/releases) page.
 
+## Publishing new versions to the Bazel Central Registry
+
+We automate publishing to the [Bazel Central Registry](https://registry.bazel.build/) with the [Publish to BCR](https://github.com/bazel-contrib/publish-to-bcr) GitHub app.
+
+It will create a [PR like this one](https://github.com/bazelbuild/bazel-central-registry/pull/1063) whenever a new release is created. As such, there is no extra action required from the maintainers. Simply create a release and let the app publish it to the BCR.
+
+If you need more reviews in the BCR repository you can ask in the [#bzlmod channel of the Bazel Slack](https://bazelbuild.slack.com/archives/C014RARENH0).
+
 ## Bazel 6 & LTS Support
 
 ### 5.x.x LTS Support on HEAD
@@ -35,7 +43,7 @@ For `rules_apple` we attempt to achieve multi versions and smoothing over
 maintainer velocity issues on a patched tag. For instance we may back-ported
 some features to our tag like [framework_import_support](https://github.com/bazel-ios/rules_apple/commit/78476e542160be2c32d467ef856ccc2e9152f187)
 
-### Maintainer concerns and rules_apple compatability
+### Maintainer concerns and rules_apple compatibility
 
 We may shim APIs, back port patches from `rules_apple` to add features and
 smooth over integration. The unstable tag `rules_ios_1.0` has it all. If you're

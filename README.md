@@ -195,3 +195,7 @@ The existing CocoaPods and Carthage rules have been removed for maintenance reas
 
 - For CocoaPods: [cocoapods-bazel](https://github.com/bazel-ios/cocoapods-bazel)
 - For Carthage: [apple_framework_import](https://github.com/bazelbuild/rules_apple/blob/master/doc/rules-apple.md#apple_dynamic_framework_import)
+
+## Contributing
+
+For information on contributing / maintaining this repository see: [CONTRIBUTING.md](./CONTRIBUTING.md)
