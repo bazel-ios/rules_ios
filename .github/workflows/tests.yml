@@ -116,6 +116,7 @@ jobs:
       - name: Build and Test
         run: |
           # iOS tests
+          sed -i '' 's/LOAD_RULES_APPLE_2_DEPS = False/LOAD_RULES_APPLE_2_DEPS = True/' WORKSPACE && \
           bazelisk build \
             --config=ios \
             --config=vfs \
@@ -227,6 +228,7 @@ jobs:
         run: .github/workflows/preflight_env.sh --no-bzlmod --use-remote-cache
       - name: Build App
         run: |
+          sed -i '' 's/LOAD_RULES_APPLE_2_DEPS = False/LOAD_RULES_APPLE_2_DEPS = True/' WORKSPACE && \
           bazelisk build \
             --config=ios_multi_arch_test \
             -- \

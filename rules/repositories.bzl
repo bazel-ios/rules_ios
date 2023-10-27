@@ -59,15 +59,17 @@ def _get_bazel_version():
     return struct(major = 0, minor = 0, patch = 0)
 
 def rules_ios_dependencies(
-        load_bzlmod_dependencies = True):
+        load_bzlmod_dependencies = True,
+        load_rules_apple_2_dependencies = False):
     """Fetches repositories that are public dependencies of `rules_ios`.
 
     Args:
         load_bzlmod_dependencies: if `True` loads dependencies that are available via bzlmod (set to True when using WORKSPACE, and False when using bzlmod)
+        load_rules_apple_2_dependencies: if `True` loads rules_apple 2.x dependencies instead of the latest
     """
 
     if load_bzlmod_dependencies:
-        _rules_ios_bzlmod_dependencies()
+        _rules_ios_bzlmod_dependencies(load_rules_apple_2_dependencies = load_rules_apple_2_dependencies)
 
     # Non-bzlmod tool dependencies that are used in the rule APIs
     _rules_ios_tool_dependencies()
@@ -108,7 +110,7 @@ rules_apple_api = repository_rule(
     local = True,
 )
 
-def _rules_ios_bzlmod_dependencies():
+def _rules_ios_bzlmod_dependencies(load_rules_apple_2_dependencies = False):
     """Fetches repositories that are dependencies of `rules_ios`
 
     These are only included when using WORKSPACE, when using bzlmod they're loaded in MODULE.bazel
@@ -149,22 +151,22 @@ def _rules_ios_bzlmod_dependencies():
             ],
             sha256 = "c6966ec828da198c5d9adbaa94c05e3a1c7f21bd012a0b29ba8ddbccb2c93b0d",
         )
-    elif bazel_version.major == "6" and bazel_version.minor == "1":
+    elif load_rules_apple_2_dependencies:
+        # This `load_rules_apple_2_dependencies` flag is simply a convenience for consumers on
+        # any supported Bazel version wanting to use the default versions of the deps below (e.g. `rules_apple` 2.x.x).
+        #
+        # For context see discussion in this PR: https://github.com/bazel-ios/rules_ios/pull/793
         _maybe(
-            github_repo,
+            http_archive,
             name = "build_bazel_rules_swift",
-            project = "bazelbuild",
-            ref = "17e20f7edf27e647f1b45f11ed75d51c17820c3b",
-            repo = "rules_swift",
-            sha256 = "d50c2cb6f1c2c30cf44a8ea60469cd399f7458061169bde76a177b63d6b74330",
+            sha256 = "3a595a64afdcaf65b74b794661556318041466d727e175fa8ce20bdf1bb84ba0",
+            url = "https://github.com/bazelbuild/rules_swift/releases/download/1.10.0/rules_swift.1.10.0.tar.gz",
         )
         _maybe(
-            github_repo,
+            http_archive,
             name = "build_bazel_rules_apple",
-            ref = "915ac30a9fa1fd3809599a5ab90fa1c6640fe8dc",
-            project = "bazelbuild",
-            repo = "rules_apple",
-            sha256 = "0204016496a39d5c70247650e098905d129f25347c7e1f019f838ca74252ce2d",
+            sha256 = "8ac4c7997d863f3c4347ba996e831b5ec8f7af885ee8d4fe36f1c3c8f0092b2c",
+            url = "https://github.com/bazelbuild/rules_apple/releases/download/2.5.0/rules_apple.2.5.0.tar.gz",
         )
         _maybe(
             rules_apple_api,
@@ -182,9 +184,8 @@ def _rules_ios_bzlmod_dependencies():
         )
 
     else:
-        # Bazel 6+ codepath - you can use the 2_x version of rules_apple here if
-        # you'd like to set it. If you want to use a different rules_apple than
-        # we have here - define rules_apple_api - to the value you'd like
+        # (Bazel 6.x.x, rules_apple 3.x.x) codepath - you can use the 2.x.x version of rules_apple if
+        # you'd like either by setting `load_rules_apple_2_dependencies = True` or defining `rules_apple_api` in your WORKSPACE.
         _maybe(
             http_archive,
             name = "build_bazel_rules_swift",
