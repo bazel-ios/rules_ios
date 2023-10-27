@@ -152,6 +152,10 @@ def _rules_ios_bzlmod_dependencies(load_rules_apple_2_dependencies = False):
             sha256 = "c6966ec828da198c5d9adbaa94c05e3a1c7f21bd012a0b29ba8ddbccb2c93b0d",
         )
     elif load_rules_apple_2_dependencies:
+        # This `load_rules_apple_2_dependencies` flag is simply a convenience for consumers on
+        # any supported Bazel version wanting to use the default versions of the deps below (e.g. `rules_apple` 2.x.x).
+        #
+        # For context see discussion in this PR: https://github.com/bazel-ios/rules_ios/pull/793
         _maybe(
             http_archive,
             name = "build_bazel_rules_swift",
@@ -180,9 +184,8 @@ def _rules_ios_bzlmod_dependencies(load_rules_apple_2_dependencies = False):
         )
 
     else:
-        # Bazel 6+ codepath - you can use the 2_x version of rules_apple here if
-        # you'd like to set it. If you want to use a different rules_apple than
-        # we have here - define rules_apple_api - to the value you'd like
+        # (Bazel 6.x.x, rules_apple 3.x.x) codepath - you can use the 2.x.x version of rules_apple if
+        # you'd like either by setting `load_rules_apple_2_dependencies = True` or defining `rules_apple_api` in your WORKSPACE.
         _maybe(
             http_archive,
             name = "build_bazel_rules_swift",
