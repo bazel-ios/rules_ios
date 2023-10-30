@@ -3,6 +3,7 @@
 load(
     "//rules:repositories.bzl",
     "rules_apple_api",
+    "rules_ios_bazel_version",
     "rules_ios_dependencies",
     "rules_ios_dev_dependencies",
 )
@@ -18,6 +19,13 @@ def _rules_apple_api(_):
     )
 
 rules_apple_api_deps = module_extension(implementation = _rules_apple_api)
+
+def _rules_ios_bazel_version(_):
+    rules_ios_bazel_version(
+        name = "rules_ios_bazel_version",
+    )
+
+rules_ios_bazel_version_deps = module_extension(implementation = _rules_ios_bazel_version)
 
 def _non_module_deps_impl(_):
     rules_ios_dependencies(
