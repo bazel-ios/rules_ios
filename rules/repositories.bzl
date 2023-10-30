@@ -93,8 +93,8 @@ def _rules_apple_api_impl(ctx):
     # the interface.
     base_path = str(ctx.path(ctx.attr.rules_ios).dirname)
 
-    rules_apple_path = base_path + "/rules/rules_apple_api/" + ctx.attr.version
-    ctx.symlink(rules_apple_path, "")
+    path = base_path + "/rules/rules_apple_api/" + ctx.attr.version
+    ctx.symlink(path, "")
 
 rules_apple_api = repository_rule(
     implementation = _rules_apple_api_impl,
@@ -106,7 +106,17 @@ rules_apple_api = repository_rule(
 )
 
 def _rules_ios_bazel_version_impl(ctx):
-    ctx.file("BUILD.bazel", content = "")
+    ctx.file("BUILD.bazel", content = """
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+
+bzl_library(
+    name = "api",
+    srcs = [
+        "version.bzl",
+    ],
+    visibility = ["//visibility:public"],
+)
+""")
 
     # Write Bazel version to a file
     ctx.file("version.bzl", content = "bazel_version = \"{}\"".format(ctx.attr._bazel_version))

@@ -25,6 +25,7 @@ bzl_library(
         "//rules/internal:bazel_version",
         "@build_bazel_apple_support//lib:apple_support",
         "@rules_apple_api//:api",
+        "@rules_ios_bazel_version//:api",
     ],
 )
 
