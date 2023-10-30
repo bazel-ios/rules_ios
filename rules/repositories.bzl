@@ -9,6 +9,10 @@ load(
     "@bazel_tools//tools/build_defs/repo:git.bzl",
     "new_git_repository",
 )
+load(
+    "//rules/internal:bazel_version.bzl",
+    "get_bazel_version",
+)
 
 def _maybe(repo_rule, name, **kwargs):
     """Executes the given repository rule if it hasn't been executed already.
@@ -47,16 +51,6 @@ def github_repo(name, project, repo, ref, sha256 = None, **kwargs):
         canonical_id = github_url,
         **kwargs
     )
-
-def _get_bazel_version():
-    bazel_version = getattr(native, "bazel_version", "")
-    if bazel_version:
-        parts = bazel_version.split(".")
-        if len(parts) > 2:
-            return struct(major = parts[0], minor = parts[1], patch = parts[2])
-
-    # Unknown, but don't crash
-    return struct(major = 0, minor = 0, patch = 0)
 
 def rules_ios_dependencies(
         load_bzlmod_dependencies = True,
@@ -98,8 +92,9 @@ def _rules_apple_api_impl(ctx):
     # This simply symlinks the diretory rules/rules_apple_api/$vesrion onto "@rules_apple_api" where we import
     # the interface.
     base_path = str(ctx.path(ctx.attr.rules_ios).dirname)
-    path = base_path + "/rules/rules_apple_api/" + ctx.attr.version
-    ctx.symlink(path, "")
+
+    rules_apple_path = base_path + "/rules/rules_apple_api/" + ctx.attr.version
+    ctx.symlink(rules_apple_path, "")
 
 rules_apple_api = repository_rule(
     implementation = _rules_apple_api_impl,
@@ -110,12 +105,31 @@ rules_apple_api = repository_rule(
     local = True,
 )
 
+def _rules_ios_bazel_version_impl(ctx):
+    ctx.file("BUILD.bazel", content = "")
+
+    # Write Bazel version to a file
+    ctx.file("version.bzl", content = "bazel_version = \"{}\"".format(ctx.attr._bazel_version))
+
+rules_ios_bazel_version = repository_rule(
+    implementation = _rules_ios_bazel_version_impl,
+    attrs = {
+        "_bazel_version": attr.string(default = getattr(native, "bazel_version", "")),
+    },
+    local = True,
+)
+
 def _rules_ios_bzlmod_dependencies(load_rules_apple_2_dependencies = False):
     """Fetches repositories that are dependencies of `rules_ios`
 
     These are only included when using WORKSPACE, when using bzlmod they're loaded in MODULE.bazel
     """
-    bazel_version = _get_bazel_version()
+    _maybe(
+        rules_ios_bazel_version,
+        name = "rules_ios_bazel_version",
+    )
+
+    bazel_version = get_bazel_version()
     if bazel_version.major == "5":
         # For rules_apple 1.x, we maintained a tag rules_ios_1.0
 

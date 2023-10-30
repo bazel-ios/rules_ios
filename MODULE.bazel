@@ -61,6 +61,12 @@ use_repo(
     "rules_apple_api",
 )
 
+rules_ios_bazel_version_deps = use_extension("//rules:module_extensions.bzl", "rules_ios_bazel_version_deps")
+use_repo(
+    rules_ios_bazel_version_deps,
+    "rules_ios_bazel_version",
+)
+
 # Load non-bzlmod dependencies from rules_ios
 non_module_deps = use_extension("//rules:module_extensions.bzl", "non_module_deps")
 use_repo(
