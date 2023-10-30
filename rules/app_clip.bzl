@@ -84,7 +84,6 @@ def ios_app_clip(
         deps = deps,
         frameworks = frameworks,
         families = families,
-        output_discriminator = None,
         infoplists = select(processed_infoplists),
         testonly = testonly,
         **kwargs

@@ -87,7 +87,6 @@ def ios_extension(
         deps = deps,
         families = families,
         frameworks = frameworks,
-        output_discriminator = None,
         infoplists = select(processed_infoplists),
         testonly = testonly,
         **kwargs
