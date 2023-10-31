@@ -1192,6 +1192,7 @@ def _apple_framework_packaging_impl(ctx):
 
 apple_framework_packaging = rule(
     implementation = _apple_framework_packaging_impl,
+    toolchains = ["@bazel_tools//tools/cpp:toolchain_type"],
     cfg = transition_support.apple_rule_transition,
     fragments = ["apple", "cpp", "objc"],
     output_to_genfiles = True,

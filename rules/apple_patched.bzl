@@ -144,6 +144,7 @@ def _apple_framework_import_modulemap_impl(ctx):
 
 _apple_framework_import_modulemap = rule(
     implementation = _apple_framework_import_modulemap_impl,
+    toolchains = ["@bazel_tools//tools/cpp:toolchain_type"],
     fragments = ["apple"],
     attrs = {
         "legacy_target": attr.label(
