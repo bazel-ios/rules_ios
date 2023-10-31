@@ -56,10 +56,14 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         platform_prerequisites_version_args = {
             "build_settings": None,
         }
+        rules_api_3_resource_partials_args = {
+            "include_executable_name": False,  # Must be set to False or bundle_name is now used if executable_name is None
+        }
     else:
         platform_prerequisites_version_args = {
             "disabled_features": ctx.disabled_features,
         }
+        rules_api_3_resource_partials_args = {}
 
     platform_prerequisites = platform_support.platform_prerequisites(
         apple_fragment = ctx.fragments.apple,
@@ -90,6 +94,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         ),
         rule_label = fake_rule_label,
         version = None,
+        **rules_api_3_resource_partials_args
     )
 
     apple_mac_toolchain_info = ctx.attr._toolchain[AppleMacToolsToolchainInfo]
