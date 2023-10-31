@@ -424,6 +424,7 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules
 
 framework_vfs_overlay = rule(
     implementation = _framework_vfs_overlay_impl,
+    toolchains = ["@bazel_tools//tools/cpp:toolchain_type"],
     attrs = {
         "framework_name": attr.string(mandatory = True),
         "extra_search_paths": attr.string(mandatory = False),
