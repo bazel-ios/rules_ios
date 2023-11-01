@@ -552,6 +552,7 @@ def apple_library(
     # * Optionally, allow the consumers to set generate_default_umbrella_header to False, so the
     #   generated umbrella header does not contain any imports
     generate_default_umbrella_header = kwargs.pop("generate_default_umbrella_header", True)
+    generate_default_modulemap = kwargs.pop("generate_default_modulemap", True)
     cc_copts = kwargs.pop("cc_copts", [])
     additional_cc_copts = []
     swift_copts = kwargs.pop("swift_copts", [])
@@ -823,16 +824,17 @@ def apple_library(
             )
             if umbrella_header:
                 objc_hdrs.append(umbrella_header)
-            module_map = library_tools["modulemap_generator"](
-                name = name,
-                library_tools = library_tools,
-                umbrella_header = paths.basename(umbrella_header),
-                public_headers = objc_hdrs,
-                private_headers = objc_private_hdrs,
-                module_name = module_name,
-                framework = True,
-                **kwargs
-            )
+            if generate_default_modulemap:
+                module_map = library_tools["modulemap_generator"](
+                    name = name,
+                    library_tools = library_tools,
+                    umbrella_header = paths.basename(umbrella_header),
+                    public_headers = objc_hdrs,
+                    private_headers = objc_private_hdrs,
+                    module_name = module_name,
+                    framework = True,
+                    **kwargs
+                )
 
     framework_vfs_overlay(
         name = framework_vfs_overlay_name_swift,
