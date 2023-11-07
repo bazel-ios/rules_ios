@@ -446,3 +446,21 @@ ios_application(
         "//tests/ios/frameworks/testonly:SwiftLibrary",
     ],
 )
+
+ios_application(
+    name = "AppWithDisabledCodesigning",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    codesign_inputs = ["@build_bazel_rules_apple//tools/codesigningtool:disable_signing_resource_rules"],
+    codesignopts = [
+        "--digest-algorithm=sha1",
+        "--resource-rules=$(RESOURCE_RULES)",
+    ],
+    minimum_os_version = "10.0",
+    toolchains = ["@build_bazel_rules_apple//tools/codesigningtool:disable_signing_resource_rules"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":FW",
+        ":OnlySources",
+    ],
+)
