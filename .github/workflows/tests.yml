@@ -30,6 +30,9 @@ jobs:
           # Clean up after simctl (https://github.com/bazelbuild/rules_apple/issues/185)
           pgrep Simulator | xargs kill || true
 
+          # GitHub runners are hitting 'module not found pkg_resources' required by prepare_sim.py
+          pip install setuptools
+
           # Create single ephemeral iOS sim
           SIMULATOR_UDID=$(./tools/tests/prepare_sim.py)
 
