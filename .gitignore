@@ -1,3 +1,4 @@
+/MODULE.bazel.lock
 bazel-*
 .idea
 tests/macos/xcodeproj/**/xcuserdata
