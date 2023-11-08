@@ -1,4 +1,5 @@
 """Library rules"""
+
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:sets.bzl", "sets")
@@ -962,7 +963,7 @@ def apple_library(
 
     if swift_sources:
         # To be backward compatible with rules_apple 2.x
-        swift_kwargs = dicts.add(kwargs, {"plugins" : plugins} if plugins else {})
+        swift_kwargs = dicts.add(kwargs, {"plugins": plugins} if plugins else {})
 
         swift_library(
             name = swift_libname,
