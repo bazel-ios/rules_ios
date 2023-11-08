@@ -1,5 +1,5 @@
 """Library rules"""
-
+load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@bazel_skylib//lib:selects.bzl", "selects")
@@ -582,7 +582,7 @@ def apple_library(
     defines = kwargs.pop("defines", [])
     testonly = kwargs.pop("testonly", False)
     features = kwargs.pop("features", [])
-    plugins = kwargs.pop("plugins", [])
+    plugins = kwargs.pop("plugins", None)
 
     for (k, v) in {"momc_copts": momc_copts, "mapc_copts": mapc_copts, "ibtool_copts": ibtool_copts}.items():
         if v:
@@ -961,6 +961,9 @@ def apple_library(
     )
 
     if swift_sources:
+        # To be backward compatible with rules_apple 2.x
+        swift_kwargs = dicts.add(kwargs, {"plugins" : plugins} if plugins else {})
+
         swift_library(
             name = swift_libname,
             module_name = module_name,
@@ -986,8 +989,7 @@ def apple_library(
             tags = tags_manual,
             defines = defines + swift_defines,
             testonly = testonly,
-            plugins = plugins,
-            **kwargs
+            **swift_kwargs
         )
         lib_names.append(swift_libname)
 
