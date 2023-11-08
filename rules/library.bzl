@@ -536,8 +536,6 @@ def apple_library(
     module_map = kwargs.pop("module_map", None)
     swift_objc_bridging_header = kwargs.pop("swift_objc_bridging_header", None)
 
-    plugins = kwargs.pop("plugins", [])
-
     # Historically, xcode and cocoapods use an umbrella header that imports Foundation and UIKit at the
     # beginning of it. See:
     # * https://github.com/CocoaPods/CocoaPods/issues/6815#issuecomment-330046236
@@ -584,6 +582,7 @@ def apple_library(
     defines = kwargs.pop("defines", [])
     testonly = kwargs.pop("testonly", False)
     features = kwargs.pop("features", [])
+    plugins = kwargs.pop("plugins", [])
 
     for (k, v) in {"momc_copts": momc_copts, "mapc_copts": mapc_copts, "ibtool_copts": ibtool_copts}.items():
         if v:
