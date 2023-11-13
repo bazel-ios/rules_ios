@@ -24,6 +24,7 @@ _IOS_APPLICATION_KWARGS = [
     "env",
     "executable_name",
     "extensions",
+    "features",
     "frameworks",
     "include_symbols_in_bundle",
     "infoplists",

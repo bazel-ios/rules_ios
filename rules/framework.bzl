@@ -35,6 +35,7 @@ load("//rules:force_load_direct_deps.bzl", "force_load_direct_deps")
 
 _APPLE_FRAMEWORK_PACKAGING_KWARGS = [
     "visibility",
+    "features",
     "frameworks",
     "tags",
     "bundle_id",
