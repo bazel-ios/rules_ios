@@ -29,6 +29,8 @@ _PRODUCT_SPECIFIER_LENGTH = len("com.apple.product-type.")
 
 _IGNORE_AS_TARGET_TAG = "xcodeproj-ignore-as-target"
 
+_BAZEL_DIAGNOSTICS_DIR = "$BUILD_DIR/../../bazel-xcode-diagnostics/"
+
 def _dir(o):
     return [
         x
@@ -730,7 +732,7 @@ _BUILD_WITH_BAZEL_SCRIPT = """
 set -euxo pipefail
 cd $BAZEL_WORKSPACE_ROOT
 
-export BAZEL_DIAGNOSTICS_DIR="$BUILD_DIR/../../bazel-xcode-diagnostics/"
+export BAZEL_DIAGNOSTICS_DIR="{BAZEL_DIAGNOSTICS_DIR}"
 mkdir -p $BAZEL_DIAGNOSTICS_DIR
 export DATE_SUFFIX="$(date +%Y%m%d.%H%M%S%L)"
 export BAZEL_BUILD_EVENT_TEXT_FILENAME="$BAZEL_DIAGNOSTICS_DIR/build-event-$DATE_SUFFIX.txt"
@@ -738,7 +740,7 @@ export BAZEL_BUILD_EXECUTION_LOG_FILENAME="$BAZEL_DIAGNOSTICS_DIR/build-executio
 export BAZEL_PROFILE_FILENAME="$BAZEL_DIAGNOSTICS_DIR/build-profile-$DATE_SUFFIX.log"
 env -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC $BAZEL_BUILD_TARGET_LABEL
 $BAZEL_INSTALLER
-"""
+""".format(BAZEL_DIAGNOSTICS_DIR = _BAZEL_DIAGNOSTICS_DIR)
 
 # See https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md#scheme
 # on structure of xcodeproj_schemes_by_name[target_info.name]
@@ -1069,6 +1071,7 @@ def _xcodeproj_impl(ctx):
         "BAZEL_INSTALLER": "$BAZEL_INSTALLERS_DIR/%s" % ctx.executable.installer.basename,
         "BAZEL_EXECUTION_LOG_ENABLED": ctx.attr.bazel_execution_log_enabled,
         "BAZEL_PROFILE_ENABLED": ctx.attr.bazel_profile_enabled,
+        "BAZEL_DIAGNOSTICS_DIR": _BAZEL_DIAGNOSTICS_DIR,
         "BAZEL_CONFIGS": ctx.attr.configs.keys(),
         "BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS": " ".join(["{} ".format(opt) for opt in ctx.attr.additional_bazel_build_options]),
         "BAZEL_ADDITIONAL_LLDB_SETTINGS": "\n".join(ctx.attr.additional_lldb_settings),
