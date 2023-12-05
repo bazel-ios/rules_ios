@@ -3,11 +3,11 @@ diff -r ./tests/ios/xcodeproj/Test-LLDB-Logs-Project.xcodeproj/project.pbxproj .
 < 			path = ../../..;
 ---
 > 			path = ../../../..;
-211c211
+212c212
 < 				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../..;
 ---
 > 				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../../..;
-269c269
+271c271
 < 				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../..;
 ---
 > 				BAZEL_WORKSPACE_ROOT = $SRCROOT/../../../..;
