@@ -345,14 +345,13 @@ def _xcframework(*, library_name, name, slices):
                 elif arch == "arm64":
                     if platform_variant == "simulator":
                         arm64_simulator_slice = name
-
-                        # Skip this - it's later defined
-                        continue
                     else:
                         arm64_ios_device_slice = name
 
             rules_apple_platfrom = "darwin" if platform == "macos" else platform
-            arch_setting = "@build_bazel_rules_apple//apple:{}_{}".format(rules_apple_platfrom, arch)
+            arch_prefix = "sim_" if platform_variant == "simulator" and arch == "arm64" else ""
+            arch_setting = "@build_bazel_rules_apple//apple:{}_{}{}".format(rules_apple_platfrom, arch_prefix, arch)
+
             config_setting_name = "{}-{}".format(
                 xcframework_name,
                 "_".join([x for x in (platform, platform_variant, arch) if x]),
