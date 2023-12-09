@@ -1,10 +1,10 @@
 """Framework rules"""
 
-load("//rules/framework:vfs_overlay.bzl", "VFSOverlayInfo", "make_vfsoverlay")
+load("//rules/framework:vfs_overlay.bzl", "make_vfsoverlay")
 load("//rules:features.bzl", "feature_names")
-load("//rules:library.bzl", "PrivateHeadersInfo", "apple_library")
+load("//rules:library.bzl", "apple_library")
 load("//rules:plists.bzl", "process_infoplists")
-load("//rules:providers.bzl", "AvoidDepsInfo", "FrameworkInfo")
+load("//rules:providers.bzl", "AvoidDepsInfo", "FrameworkInfo", "NewVFSInfo", "PrivateHeadersInfo", "VFSOverlayInfo")
 load("//rules:transition_support.bzl", "transition_support")
 load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
 load("@bazel_skylib//lib:partial.bzl", "partial")
@@ -32,6 +32,7 @@ load(
     "apple_resource_aspect",
 )
 load("//rules:force_load_direct_deps.bzl", "force_load_direct_deps")
+load("//rules/framework:vfs_aspect.bzl", "framework_vfs_aspect")
 
 _APPLE_FRAMEWORK_PACKAGING_KWARGS = [
     "visibility",
@@ -260,19 +261,30 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
         for dep in vfs
         if VFSOverlayInfo in dep
     ]
+    initial_nodes = [
+        dep[VFSOverlayInfo].nodes
+        for dep in vfs
+        if VFSOverlayInfo in dep
+    ]
 
     # Propagated interface headers - this must encompass all of them
     propagated_interface_headers = []
 
     # We need to map all the deps here - for both swift headers and others
     fw_dep_vfsoverlays = []
+    all_nodes = initial_nodes
     for dep in transitive_deps + deps:
         # Collect transitive headers. For now, this needs to include all of the
         # transitive headers
+        # if VFSOverlayInfo in dep:
+        #     all_nodes += [dep[VFSOverlayInfo].nodes]
         if CcInfo in dep:
             compilation_context = dep[CcInfo].compilation_context
             propagated_interface_headers.append(compilation_context.headers)
+        if NewVFSInfo in dep:
+            all_nodes += [dep[NewVFSInfo].nodes]
         if FrameworkInfo in dep:
+            all_nodes += [dep[FrameworkInfo].nodes]
             framework_info = dep[FrameworkInfo]
             fw_dep_vfsoverlays.extend(framework_info.vfsoverlay_infos)
             framework_headers = depset(framework_info.headers + framework_info.modulemap + framework_info.private_headers)
@@ -280,6 +292,7 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
 
     outputs = framework_files.outputs
     compile_with_xcode = feature_names.compile_with_xcode in ctx.features
+
     vfs = make_vfsoverlay(
         ctx,
         hdrs = outputs.headers,
@@ -290,6 +303,7 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
         private_hdrs = outputs.private_headers,
         has_swift = True if outputs.swiftmodule else False,
         merge_vfsoverlays = [] if compile_with_xcode else (fw_dep_vfsoverlays + import_vfsoverlays),
+        merge_nodes = all_nodes,
     )
 
     # Includes interface headers here ( handled in cc_info merge for no virtual )
@@ -305,6 +319,9 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
         modulemap = outputs.modulemaps,
         swiftmodule = outputs.swiftmodule,
         swiftdoc = outputs.swiftdoc,
+        # only this is needed to make the diff empty (?)
+        nodes = vfs.nodes,
+        # nodes = depset([]),
     )
 
 def _get_framework_files(ctx, deps):
@@ -380,6 +397,7 @@ def _get_framework_files(ctx, deps):
                 )
 
         if PrivateHeadersInfo in dep:
+            # Need this private hdr pattern in the aspect?
             for hdr in dep[PrivateHeadersInfo].headers.to_list():
                 private_headers_in.append(hdr)
                 destination = paths.join(framework_dir, "PrivateHeaders", hdr.basename)
@@ -1205,7 +1223,8 @@ apple_framework_packaging = rule(
         "deps": attr.label_list(
             mandatory = True,
             cfg = transition_support.split_transition,
-            aspects = [apple_resource_aspect],
+            aspects = [apple_resource_aspect, framework_vfs_aspect],
+            # aspects = [apple_resource_aspect],
             doc =
                 """Objc or Swift rules to be packed by the framework rule
 """,
@@ -1243,12 +1262,14 @@ The default behavior bakes this into the top level app. When false, it's statica
         "vfs": attr.label_list(
             mandatory = False,
             cfg = transition_support.split_transition,
+            aspects = [framework_vfs_aspect],
             doc =
                 """Additional VFS for the framework to export
 """,
         ),
         "transitive_deps": attr.label_list(
-            aspects = [swift_clang_module_aspect],
+            aspects = [swift_clang_module_aspect, framework_vfs_aspect],
+            # aspects = [swift_clang_module_aspect],
             mandatory = True,
             cfg = transition_support.split_transition,
             doc =

@@ -9,20 +9,13 @@ in-memory tree roots, it pre-pends the prefix of the `vfsoverlay` path
 to each of the entries.
 """
 
-load("//rules:providers.bzl", "FrameworkInfo")
+load("//rules/framework:vfs_aspect.bzl", "framework_vfs_aspect", "vfs_node")
+load("//rules:providers.bzl", "FrameworkInfo", "NewVFSInfo", "VFSOverlayInfo")
 load("//rules:features.bzl", "feature_names")
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_common")
 
 FRAMEWORK_SEARCH_PATH = "/build_bazel_rules_ios/frameworks"
-
-VFSOverlayInfo = provider(
-    doc = "Propagates vfs overlays",
-    fields = {
-        "files": "depset with overlays",
-        "vfs_info": "intneral obj",
-    },
-)
 
 # Computes the "back" segment for a path length
 def _make_relative_prefix(length):
@@ -117,7 +110,23 @@ def _get_public_framework_header(path):
 # and incrementality. For imported frameworks, there is additional search paths
 # enabled
 # buildifier: disable=list-append
-def _make_root(vfs_prefix, target_triple, swiftmodules, root_dir, extra_search_paths, module_map, hdrs, private_hdrs):
+def _make_root(
+        vfs_prefix,
+        target_triple,
+        swiftmodules,
+        root_dir,
+        extra_search_paths,
+        module_map,
+        hdrs,
+        private_hdrs,
+        force_root_names = {}):
+    if root_dir in force_root_names:
+        return [{
+            "name": root_dir,
+            "type": "directory",
+            "contents": [],
+        }]
+
     private_headers_contents = []
     headers_contents = []
 
@@ -267,6 +276,251 @@ def _framework_vfs_overlay_impl(ctx):
             if VFSOverlayInfo in dep:
                 vfsoverlays.append(dep[VFSOverlayInfo].vfs_info)
 
+    foo_uniq = []
+    sq_core_dict = {}
+
+    def root_fmw_template(n):
+        foo = {
+            "name": "%s.framework" % n.framework_name,
+            "type": "directory",
+            "contents": [
+                {
+                    "name": "Headers",
+                    "type": "directory",
+                    "contents": [],
+                },
+                {
+                    "name": "Modules",
+                    "type": "directory",
+                    "contents": [],
+                },
+            ],
+        }
+
+        return foo
+
+    def root_swiftmodule_template(framework_name):
+        return {
+            "name": "%s.swiftmodule" % framework_name,
+            "type": "directory",
+            "contents": [],
+        }
+
+    # Uniq from aspect
+    visited_hdrs = []
+    new_fmw_roots = {}
+    calculated_split_bases = {}
+    for d in ctx.attr.deps:
+        if NewVFSInfo not in d:
+            continue
+        for n in d[NewVFSInfo].nodes.to_list():
+            if n.path in visited_hdrs:
+                continue
+            if not n.framework_name:
+                continue
+
+            visited_hdrs += [n.path]
+            is_swiftmodule = n.path.endswith(".swiftmodule") or n.path.endswith(".swiftdoc")
+
+            framework_name_key = None
+            if is_swiftmodule:
+                framework_name_key = n.framework_name + ".swiftmodule"
+            else:
+                framework_name_key = n.framework_name + ".framework"
+
+            if not framework_name_key in calculated_split_bases:
+                calculated_split_bases[framework_name_key] = []
+
+            fmw_template = {}
+            if not framework_name_key in new_fmw_roots:
+                if is_swiftmodule:
+                    fmw_template = root_swiftmodule_template(n.framework_name)
+                else:
+                    fmw_template = root_fmw_template(n)
+                new_fmw_roots[framework_name_key] = fmw_template
+            else:
+                fmw_template = new_fmw_roots[framework_name_key]
+
+            if n.path.endswith(".h"):
+                has_private_headers = "PrivateHeaders" in [d["name"] for d in fmw_template["contents"]]
+
+                # SPLIT START
+                inner_node = None
+                outer_node = None
+                split_base_calculated = n.split_base in calculated_split_bases[framework_name_key]
+
+                if n.split_base and not split_base_calculated:
+                    new_nodes = []
+                    splitted = n.split_base_splitted.to_list()
+                    for idx in range(0, len(splitted)):
+                        dir_name = splitted[idx]
+                        new_node = {
+                            "name": dir_name,
+                            "type": "directory",
+                            "contents": [],
+                        }
+                        new_nodes += [new_node]
+
+                    curr_node = None
+                    if new_nodes:
+                        for idx in range(len(new_nodes) - 1, -1, -1):
+                            split_node_after = new_nodes[idx]
+                            if curr_node:
+                                split_node_after = curr_node
+                            else:
+                                inner_node = split_node_after
+                            if idx - 1 >= 0:
+                                split_node_before = new_nodes[idx - 1]
+                                split_node_before["contents"] += [split_node_after]
+                                curr_node = split_node_before
+                            else:
+                                break
+                    outer_node = curr_node
+
+                    # set split_base_calculated effectively
+                    calculated_split_bases[framework_name_key] += [n.split_base]
+                    if not inner_node or not outer_node:
+                        fail("missing notes to handle split")
+
+                # SPLIT END
+
+                if not n.is_private_hdrs:
+                    for d2 in fmw_template["contents"]:
+                        def _find_inner_node(n, d2):
+                            ds_list = []
+                            for d in n.split_base_splitted.to_list():
+                                if not ds_list:
+                                    ds_list = [x for x in d2["contents"] if x["name"] == d]
+                                else:
+                                    for y in ds_list:
+                                        ds_list = [x for x in y["contents"] if x["name"] == d]
+                                if not len(ds_list):
+                                    fail(n)
+                            return ds_list[0]
+
+                        def _add_hdr_node(new_node, n, d2):
+                            if not n.split_base:
+                                d2["contents"] += [new_node]
+                                return
+
+                            tmp_root = d2
+                            split_base_splitted = n.split_base.split("/")
+                            foo_len = len(split_base_splitted)
+                            for idx in range(0, foo_len):
+                                d = split_base_splitted[idx]
+                                should_print = n.path.endswith("wire/package-info.h")
+                                tmp_a = [x for x in tmp_root["contents"] if x["name"] == d]
+                                if not tmp_a and idx == (foo_len - 1):
+                                    new_inner_node = {"name": d, "type": "directory", "contents": [new_node]}
+                                    tmp_root["contents"] += [new_inner_node]
+                                elif not tmp_a and idx < (foo_len - 1):
+                                    new_inner_node = {"name": d, "type": "directory", "contents": []}
+                                    tmp_root["contents"] += [new_inner_node]
+                                    tmp_root = new_inner_node
+                                elif tmp_a and idx == (foo_len - 1):
+                                    tmp_root = tmp_a[0]
+                                    tmp_root["contents"] += [new_node]
+                                elif tmp_a and idx < (foo_len - 1):
+                                    tmp_root = tmp_a[0]
+                                else:
+                                    fail("nope")
+
+                        if d2["name"] == "Headers":
+                            if n.path.endswith(".pbobjc.h") or \
+                               n.path.endswith("-umbrella.h") or \
+                               n.path.endswith("-Swift.h") or \
+                               n.path.count("_proto_"):
+                                new_node = {
+                                    "type": "file",
+                                    "name": n.basename,
+                                    "external-contents": "../../../../../" + n.path,
+                                }
+
+                                _add_hdr_node(new_node, n, d2)
+                                # if inner_node and outer_node:
+                                #     inner_node["contents"] += [new_node]
+                                #     d2["contents"] += [outer_node]
+                                # elif n.split_base and not inner_node:
+                                #     inner_node = _find_inner_node(n, d2)
+                                #     inner_node["contents"] += [new_node]
+                                # else:
+                                #     d2["contents"] += [new_node]
+
+                            elif not n.is_private_hdrs:
+                                new_node = {
+                                    "name": n.basename,
+                                    "type": "file",
+                                    "external-contents": "../../../../../" + n.path,
+                                }
+
+                                # if n.basename == "LineItemRuleNode.h":
+                                #     print(n.split_base)
+                                # print(calculated_split_bases[framework_name_key])
+
+                                # if n.basename == "DiscountHelper.h":
+                                #     print(calculated_split_bases[framework_name_key])
+
+                                _add_hdr_node(new_node, n, d2)
+                                # if inner_node and outer_node:
+                                #     inner_node["contents"] += [new_node]
+                                #     d2["contents"] += [outer_node]
+                                # elif n.split_base and not inner_node:
+                                #     inner_node = _find_inner_node(n, d2)
+                                #     inner_node["contents"] += [new_node]
+                                # else:
+                                #     d2["contents"] += [new_node]
+
+                else:
+                    if not has_private_headers:
+                        fmw_template["contents"] += [{
+                            "name": "PrivateHeaders",
+                            "type": "directory",
+                            "contents": [],
+                        }]
+                    for d2 in fmw_template["contents"]:
+                        if d2["name"] == "PrivateHeaders":
+                            new_node = {
+                                "name": n.basename,
+                                "type": "file",
+                                "external-contents": "../../../../../" + n.og_private_hdr_path if n.og_private_hdr_path else n.path,
+                            }
+
+                            _add_hdr_node(new_node, n, d2)
+                            # if inner_node and outer_node:
+                            #     inner_node["contents"] += [new_node]
+                            #     d2["contents"] += [outer_node]
+                            # elif n.split_base and not inner_node:
+                            #     inner_node = _find_inner_node(n, d2)
+                            #     inner_node["contents"] += [new_node]
+                            # else:
+                            #     d2["contents"] += [new_node]
+
+            elif n.path.endswith(".modulemap"):
+                for d2 in fmw_template["contents"]:
+                    if d2["name"] == "Modules":
+                        # Assign instead of appending to .extended wins
+                        d2["contents"] += [{
+                            "type": "file",
+                            "name": "module.modulemap",
+                            "external-contents": "../../../../../" + n.path,
+                        }]
+                        if len(d2["contents"]) > 1:
+                            d2["contents"] = [f for f in d2["contents"] if f["external-contents"].count(".extended.modulemap")]
+            elif is_swiftmodule:
+                fmw_template["contents"] += [{
+                    "name": n.basename,
+                    "type": "file",
+                    "external-contents": "../../../../../" + n.path,
+                }]
+
+            if framework_name_key not in foo_uniq:
+                foo_uniq += [framework_name_key]
+
+    force_roots = []
+    force_roots += [
+        dict(v)
+        for (k, v) in new_fmw_roots.items()
+    ]
     vfs = make_vfsoverlay(
         ctx,
         hdrs = ctx.files.hdrs,
@@ -277,7 +531,20 @@ def _framework_vfs_overlay_impl(ctx):
         merge_vfsoverlays = vfsoverlays,
         output = ctx.outputs.vfsoverlay_file,
         extra_search_paths = ctx.attr.extra_search_paths,
+        force_roots = force_roots,
     )
+
+    # if ctx.attr.name == "Some_vfs":
+    # if len(foo_uniq) == 0:
+    #     fail("foo_uniq empty")
+
+    # foo_diff = []
+    # for f in vfs.fmw_names:
+    #     if f not in foo_uniq:
+    #         foo_diff += [f]
+
+    # if foo_diff:
+    #     print("diff len: %s" % len(foo_diff))
 
     headers = depset([vfs.vfsoverlay_file])
     cc_info = CcInfo(
@@ -285,12 +552,14 @@ def _framework_vfs_overlay_impl(ctx):
             headers = headers,
         ),
     )
+
     return [
         apple_common.new_objc_provider(),
         cc_info,
         VFSOverlayInfo(
             files = depset([vfs.vfsoverlay_file]),
             vfs_info = vfs.vfs_info,
+            nodes = vfs.nodes,
         ),
         swift_common.create_swift_info(),
     ]
@@ -342,7 +611,7 @@ def _get_basic_llvm_tripple(ctx):
 
 # Roots must be computed _relative_ to the vfs_parent. It is no longer possible
 # to memoize VFS computations because of this.
-def _roots_from_datas(vfs_prefix, target_triple, datas):
+def _roots_from_datas(vfs_prefix, target_triple, datas, force_root_names = {}):
     return [
         root
         for data in datas
@@ -355,10 +624,25 @@ def _roots_from_datas(vfs_prefix, target_triple, datas):
             swiftmodules = data.swiftmodules,
             hdrs = data.hdrs,
             private_hdrs = data.private_hdrs,
+            force_root_names = force_root_names,
         )
     ]
 
-def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules = [], merge_vfsoverlays = [], extra_search_paths = None, output = None, framework_name = None):
+def make_vfsoverlay(
+        ctx,
+        hdrs,
+        module_map,
+        private_hdrs,
+        has_swift,
+        swiftmodules = [],
+        merge_vfsoverlays = [],
+        extra_search_paths = None,
+        output = None,
+        framework_name = None,
+        merge_nodes = [],
+        force_roots = []):
+    force_root_names = [f["name"] for f in force_roots]
+
     if framework_name == None:
         framework_name = ctx.attr.framework_name
 
@@ -385,9 +669,11 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules
     target_triple = _get_basic_llvm_tripple(ctx)
 
     vfs_info = _make_vfs_info(framework_name, data)
+    all_vfs_infos = [vfs_info]
     if merge_vfsoverlays:
         vfs_info = _merge_vfs_infos(vfs_info, merge_vfsoverlays)
-        roots = _roots_from_datas(vfs_prefix, target_triple, vfs_info.values() + [data])
+        all_vfs_infos = vfs_info.values()
+        roots = _roots_from_datas(vfs_prefix, target_triple, all_vfs_infos, force_root_names)
     else:
         roots = _make_root(
             vfs_prefix = vfs_prefix,
@@ -398,10 +684,73 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules
             swiftmodules = swiftmodules,
             hdrs = hdrs,
             private_hdrs = private_hdrs,
+            force_root_names = force_root_names,
         )
 
+    # all_hdrs = hdrs + private_hdrs + module_map + swiftmodules
+    # No need to propagated private_hdrs due to PrivateHeadersInfo
+    # being collected in vfs_aspect (?)
+    all_hdrs = hdrs + module_map + swiftmodules
+
+    # for h in all_hdrs:
+    #     print(h.path)
+    all_nodes = [
+        vfs_node(
+            ctx,
+            h,
+            framework_name,
+            extra_search_paths,
+            target_triple,
+        )
+        for h in all_hdrs
+    ]
+    all_transitive_nodes = []
+    # all_transitive_nodes += merge_nodes
+    # for d in ctx.attr.deps:
+    #     if FrameworkInfo in d:
+    #         all_transitive_nodes += [d[FrameworkInfo].nodes]
+    #     if VFSOverlayInfo in d:
+    #         all_transitive_nodes += [d[VFSOverlayInfo].nodes]
+
+    foo_names = []
+    for r in roots:
+        if r["name"] not in foo_names:
+            foo_names += [r["name"]]
+
+    should_print = False
+    if should_print:
+        print("(%s) foo-1: %s" % (framework_name, len(merge_vfsoverlays)))
+
+    # swiftmodules get in this conditional
     if output == None:
-        return struct(vfsoverlay_file = None, vfs_info = vfs_info)
+        if should_print:
+            print("(%s) foo-2: %s" % (framework_name, len(merge_vfsoverlays)))
+
+        return struct(
+            fmw_names = foo_names,
+            vfsoverlay_file = None,
+            vfs_info = vfs_info,
+            nodes = depset(
+                all_nodes,
+                transitive = all_transitive_nodes,
+            ),
+        )
+    elif should_print:
+        print("(%s) foo-3: %s" % (framework_name, len(merge_vfsoverlays)))
+
+    new_roots = []
+    all_root_names = [d["name"] for d in roots]
+    extra_force_root_names = [f for f in force_root_names if f not in all_root_names]
+    new_roots = [f for f in force_roots if f["name"] in extra_force_root_names]
+
+    for d in roots:
+        if d["name"] in force_root_names:
+            # print("REPLACING: %s" % d["name"])
+            tmp_new_root = [f for f in force_roots if f["name"] == d["name"]]
+            tmp_new_root = tmp_new_root[0]
+            new_roots += [tmp_new_root]
+        else:
+            new_roots += [d]
 
     vfsoverlay_object = {
         "version": 0,
@@ -411,16 +760,25 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules
         "roots": [{
             "name": FRAMEWORK_SEARCH_PATH,
             "type": "directory",
-            "contents": roots,
+            "contents": new_roots,
         }],
     }
+
     vfsoverlay_yaml = struct(**vfsoverlay_object).to_json()
     ctx.actions.write(
         content = vfsoverlay_yaml,
         output = output,
     )
 
-    return struct(vfsoverlay_file = output, vfs_info = vfs_info)
+    return struct(
+        fmw_names = foo_names,
+        vfsoverlay_file = output,
+        vfs_info = vfs_info,
+        nodes = depset(
+            all_nodes,
+            transitive = all_transitive_nodes,
+        ),
+    )
 
 framework_vfs_overlay = rule(
     implementation = _framework_vfs_overlay_impl,
@@ -432,7 +790,8 @@ framework_vfs_overlay = rule(
         "swiftmodules": attr.label_list(allow_files = True, doc = "Everything under a .swiftmodule dir if exists"),
         "hdrs": attr.label_list(allow_files = True),
         "private_hdrs": attr.label_list(allow_files = True, default = []),
-        "deps": attr.label_list(allow_files = True, default = []),
+        # "deps": attr.label_list(allow_files = True, default = [], aspects = [framework_vfs_aspect]),
+        "deps": attr.label_list(allow_files = True, default = [], aspects = [framework_vfs_aspect]),
         "_cc_toolchain": attr.label(
             default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
             doc = """\

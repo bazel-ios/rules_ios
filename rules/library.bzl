@@ -16,13 +16,7 @@ load("//rules/library:xcconfig.bzl", "copts_by_build_setting_with_defaults")
 load("//rules:import_middleman.bzl", "import_middleman")
 load("//rules:utils.bzl", "bundle_identifier_for_bundle")
 load("@rules_apple_api//:version.bzl", "apple_api_version")
-
-PrivateHeadersInfo = provider(
-    doc = "Propagates private headers, so they can be accessed if necessary",
-    fields = {
-        "headers": "Private headers",
-    },
-)
+load("//rules:providers.bzl", "PrivateHeadersInfo")
 
 GLOBAL_INDEX_STORE_PATH = "bazel-out/_global_index_store"
 

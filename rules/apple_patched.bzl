@@ -101,7 +101,9 @@ def _get_framework_info_providers(ctx, old_cc_info, modulemap_list):
         has_swift = False,
         framework_name = imported_framework_name,
         extra_search_paths = imported_framework_name,
+        merge_nodes = [],
     )
+
     framework_info = FrameworkInfo(
         vfsoverlay_infos = [vfs.vfs_info],
         headers = hdrs_list,
@@ -109,6 +111,7 @@ def _get_framework_info_providers(ctx, old_cc_info, modulemap_list):
         modulemap = modulemap_list,
         swiftmodule = [],
         swiftdoc = [],
+        nodes = vfs.nodes,
     )
     return [framework_info]
 

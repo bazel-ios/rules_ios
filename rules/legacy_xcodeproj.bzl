@@ -5,7 +5,8 @@ load("@build_bazel_rules_apple//apple/internal:platform_support.bzl", "platform_
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//rules:hmap.bzl", "HeaderMapInfo")
-load("//rules/framework:vfs_overlay.bzl", "VFSOverlayInfo", VFS_OVERLAY_FRAMEWORK_SEARCH_PATH = "FRAMEWORK_SEARCH_PATH")
+load("//rules:providers.bzl", "VFSOverlayInfo")
+load("//rules/framework:vfs_overlay.bzl", VFS_OVERLAY_FRAMEWORK_SEARCH_PATH = "FRAMEWORK_SEARCH_PATH")
 load("//rules:additional_scheme_info.bzl", "AdditionalSchemeInfo")
 load("//rules:features.bzl", "feature_names")
 
