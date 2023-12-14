@@ -292,10 +292,10 @@ native_binary(
     visibility = ["//visibility:public"],
 )
 """,
-        canonical_id = "xcodegen-2.18.0-12-g04d6749",
-        sha256 = "3742eee89850cea75367b0f67662a58da5765f66c1be9b4189a59529b4e5099e",
+        canonical_id = "xcodegen-2.19.0",
+        sha256 = "a70a815cdde2f8fd834b9f0605d0a2eb05f2c0a4b424480ab9bb6ef8d48156cf",
         strip_prefix = "xcodegen",
-        urls = ["https://github.com/segiddins/XcodeGen/releases/download/2.18.0-12-g04d6749/xcodegen.zip"],
+        urls = ["https://github.com/bazel-ios/XcodeGen/releases/download/2.19.0/xcodegen.zip"],
     )
 
 def _rules_ios_tool_dependencies():
