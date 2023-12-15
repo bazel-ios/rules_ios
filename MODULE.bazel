@@ -77,8 +77,6 @@ non_module_dev_deps = use_extension(
 )
 use_repo(
     non_module_dev_deps,
-    "GoogleMobileAdsSDK",
-    "TensorFlowLiteC",
     "com_github_apple_swiftcollections",
 )
 

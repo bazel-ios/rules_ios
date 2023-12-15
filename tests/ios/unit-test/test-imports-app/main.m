@@ -2,8 +2,6 @@
 #import <TestImports-App/Header.h>
 #import <TestImports-App/TestImports_App-Swift.h>
 
-@import GoogleMobileAds;
-
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 @import UIKit;
 
@@ -23,7 +21,6 @@
     NSAssert([EmptyClass emptyDescription] != nil, @"Empty class description exists");
     NSAssert([[EmptyClass new] emptyDescription] != nil, @"Empty instance description exists");
     [self.window makeKeyAndVisible];
-    [[GADMobileAds sharedInstance] startWithCompletionHandler:nil];
 
     return YES;
 }

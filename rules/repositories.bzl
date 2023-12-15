@@ -207,20 +207,3 @@ def _rules_ios_test_dependencies():
         repo = "swift-collections",
         sha256 = "e6f36a1f9bb163437b4e9bc8da641a6129f16af7799eb8418c4a35749ceb1ef7",
     )
-
-    _maybe(
-        http_archive,
-        name = "TensorFlowLiteC",
-        url = "https://dl.google.com/dl/cpdc/3895e5bf508673ae/TensorFlowLiteC-2.6.0.tar.gz",
-        sha256 = "a28ce764da496830c0a145b46e5403fb486b5b6231c72337aaa8eaf3d762cc8d",
-        build_file = "@//tests/ios/unit-test/test-imports-app:BUILD.TensorFlowLiteC",
-        strip_prefix = "TensorFlowLiteC-2.6.0",
-    )
-
-    _maybe(
-        http_archive,
-        name = "GoogleMobileAdsSDK",
-        url = "https://dl.google.com/dl/cpdc/e0dda986a9f84d14/Google-Mobile-Ads-SDK-8.10.0.tar.gz",
-        sha256 = "0726df5d92165912c9e60a79504a159ad9b7231dda851abede8f8792b266dba5",
-        build_file = "@//tests/ios/unit-test/test-imports-app:BUILD.GoogleMobileAds",
-    )
