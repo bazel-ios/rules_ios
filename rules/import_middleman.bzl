@@ -1,4 +1,4 @@
-# Notes on Bazel 5.x.x VS 6.x.x and rules_apple rule_api_version changes:
+# Notes on Bazel 5.x.x VS 6.x.x and rules_apple apple_api_version changes:
 # The provider field that contains the `static_framework_file` changed to
 # `imported_library` - see
 # https://github.com/bazelbuild/rules_apple/commit/8d841342c238457896cd7596cc29b2d06c9a75f0
@@ -102,8 +102,7 @@ def _find_imports_impl(target, ctx):
         imported_library_file.append(target[apple_common.Objc].imported_library)
 
     elif AppleFrameworkImportInfo in target:
-        rules_apple_api_version = getattr(bundling_support, "rule_api_version", None)
-        use_lts_5_rules_apple_api = rules_apple_api_version == 1.0
+        use_lts_5_rules_apple_api = apple_api_version == "1.0"
         if use_lts_5_rules_apple_api:
             static_framework_file.append(target[apple_common.Objc].static_framework_file)
         else:
