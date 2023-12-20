@@ -5,6 +5,7 @@ load(
     "IosFrameworkBundleInfo",
 )
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
+load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
 load(
     "@rules_apple_api//:providers.bzl",
     "new_applebundleinfo",
@@ -35,7 +36,12 @@ load(
     "//rules/internal:objc_provider_utils.bzl",
     "objc_provider_utils",
 )
-load("//rules:transition_support.bzl", "split_transition_rule_attrs", "transition_support")
+load(
+    "//rules:transition_support.bzl",
+    "dynamic_framework_provider_rule_attrs",
+    "split_transition_rule_attrs",
+    "transition_support",
+)
 
 def _framework_middleman(ctx):
     resource_providers = []
@@ -77,7 +83,15 @@ def _framework_middleman(ctx):
     ])
 
     # Add the frameworks to the linker command
-    dynamic_framework_provider = objc_provider_utils.merge_dynamic_framework_providers(dynamic_framework_providers)
+    supports_cc_info_in_dynamic_framework_provider_flag = ctx.attr._supports_cc_info_in_dynamic_framework_provider_flag
+    if getattr(ctx.split_attr, "_supports_cc_info_in_dynamic_framework_provider_flag", None):
+        supports_cc_info_in_dynamic_framework_provider_flag = ctx.split_attr._supports_cc_info_in_dynamic_framework_provider_flag
+    supports_cc_info_in_dynamic_framework_provider = supports_cc_info_in_dynamic_framework_provider_flag[BuildSettingInfo].value
+
+    dynamic_framework_provider = objc_provider_utils.merge_dynamic_framework_providers(
+        dynamic_framework_providers,
+        supports_cc_info_in_dynamic_framework_provider = supports_cc_info_in_dynamic_framework_provider,
+    )
     objc_provider_fields["dynamic_framework_file"] = depset(
         transitive = [dynamic_framework_provider.framework_files, objc_provider_fields.get("dynamic_framework_file", depset([]))],
     )
@@ -124,7 +138,7 @@ def _framework_middleman(ctx):
 
 framework_middleman = rule(
     implementation = _framework_middleman,
-    attrs = dicts.add(split_transition_rule_attrs, {
+    attrs = dicts.add(split_transition_rule_attrs, dynamic_framework_provider_rule_attrs, {
         "framework_deps": attr.label_list(
             cfg = transition_support.split_transition,
             mandatory = True,
@@ -148,6 +162,13 @@ framework_middleman = rule(
             doc =
                 """Internal - currently rules_ios the dict `platforms`
 """,
+        ),
+        "_supports_cc_info_in_dynamic_framework_provider_flag": attr.label(
+            default = "//rules:supports_cc_info_in_dynamic_framework_provider_flag",
+            cfg = transition_support.dynamic_framework_provider_transition,
+            providers = [BuildSettingInfo],
+            doc = """Internal - the flag to check if the compiler supports cc info in dynamic frameworks
+        """,
         ),
         "product_type": attr.string(
             mandatory = False,
