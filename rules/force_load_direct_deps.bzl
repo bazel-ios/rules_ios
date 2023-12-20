@@ -2,9 +2,9 @@ load("//rules:providers.bzl", "AvoidDepsInfo")
 load("//rules:transition_support.bzl", "split_transition_rule_attrs", "transition_support")
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 
-def _impl(ctx):
+def _force_load_direct_deps_impl(ctx):
     if not ctx.attr.should_force_load:
-        return apple_common.new_objc_provider()
+        return [apple_common.new_objc_provider(), CcInfo()]
 
     force_load = []
 
@@ -15,23 +15,47 @@ def _impl(ctx):
 
     avoid_libraries = {}
     for dep in avoid_deps:
-        if apple_common.Objc in dep:
-            for lib in dep[apple_common.Objc].library.to_list():
-                avoid_libraries[lib] = True
+        if CcInfo in dep:
+            for linker_input in dep[CcInfo].linking_context.linker_inputs.to_list():
+                for lib in linker_input.libraries:
+                    avoid_libraries[lib] = True
 
     force_load = []
     for dep in ctx.attr.deps:
-        if apple_common.Objc in dep:
-            for lib in dep[apple_common.Objc].library.to_list():
-                if not lib in avoid_libraries:
-                    force_load.append(lib)
-    return apple_common.new_objc_provider(
-        force_load_library = depset(force_load),
-        link_inputs = depset(force_load),
-    )
+        if CcInfo in dep:
+            for linker_input in dep[CcInfo].linking_context.linker_inputs.to_list():
+                for lib in linker_input.libraries:
+                    if not lib in avoid_libraries:
+                        force_load.append(lib)
+
+    static_libraries = [lib.static_library for lib in force_load if lib.static_library != None]
+    return [
+        apple_common.new_objc_provider(
+            force_load_library = depset(static_libraries),
+            link_inputs = depset(static_libraries),
+        ),
+        CcInfo(
+            linking_context = cc_common.create_linking_context(
+                linker_inputs = depset([
+                    cc_common.create_linker_input(
+                        owner = ctx.label,
+                        libraries = depset([
+                            cc_common.create_library_to_link(
+                                actions = ctx.actions,
+                                static_library = lib,
+                                alwayslink = True,
+                            )
+                            for lib in static_libraries
+                        ]),
+                        additional_inputs = depset(static_libraries),
+                    ),
+                ]),
+            ),
+        ),
+    ]
 
 force_load_direct_deps = rule(
-    implementation = _impl,
+    implementation = _force_load_direct_deps_impl,
     attrs = dicts.add(split_transition_rule_attrs, {
         "deps": attr.label_list(
             cfg = transition_support.split_transition,

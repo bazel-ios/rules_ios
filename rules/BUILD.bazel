@@ -1,4 +1,11 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
+
+bool_flag(
+    name = "supports_cc_info_in_dynamic_framework_provider_flag",
+    build_setting_default = True,
+    visibility = ["//visibility:public"],
+)
 
 exports_files(
     glob(["*.bzl"]),
