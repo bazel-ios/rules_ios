@@ -37,7 +37,7 @@ def _merge_objc_providers(providers, transitive = []):
     )
     return apple_common.new_objc_provider(**objc_provider_fields)
 
-def _merge_dynamic_framework_providers(dynamic_framework_providers):
+def _merge_dynamic_framework_providers(dynamic_framework_providers, supports_cc_info_in_dynamic_framework_provider):
     fields = {}
     merge_keys = [
         "framework_dirs",
@@ -52,6 +52,11 @@ def _merge_dynamic_framework_providers(dynamic_framework_providers):
         _add_to_dict_if_present(fields, key, set)
 
     fields["objc"] = apple_common.new_objc_provider()
+
+    if not supports_cc_info_in_dynamic_framework_provider:
+        fields.pop("cc_info", None)
+    elif "cc_info" not in fields:
+        fields["cc_info"] = CcInfo()
 
     return apple_common.new_dynamic_framework_provider(**fields)
 
