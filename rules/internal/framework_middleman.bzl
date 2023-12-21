@@ -38,7 +38,6 @@ load(
 )
 load(
     "//rules:transition_support.bzl",
-    "dynamic_framework_provider_rule_attrs",
     "split_transition_rule_attrs",
     "transition_support",
 )
@@ -83,9 +82,7 @@ def _framework_middleman(ctx):
     ])
 
     # Add the frameworks to the linker command
-    supports_cc_info_in_dynamic_framework_provider_flag = ctx.attr._supports_cc_info_in_dynamic_framework_provider_flag
-    if getattr(ctx.split_attr, "_supports_cc_info_in_dynamic_framework_provider_flag", None):
-        supports_cc_info_in_dynamic_framework_provider_flag = ctx.split_attr._supports_cc_info_in_dynamic_framework_provider_flag
+    supports_cc_info_in_dynamic_framework_provider_flag = ctx.attr._supports_cc_info_in_dynamic_framework_provider_flag[0]
     supports_cc_info_in_dynamic_framework_provider = supports_cc_info_in_dynamic_framework_provider_flag[BuildSettingInfo].value
 
     dynamic_framework_provider = objc_provider_utils.merge_dynamic_framework_providers(
@@ -138,7 +135,7 @@ def _framework_middleman(ctx):
 
 framework_middleman = rule(
     implementation = _framework_middleman,
-    attrs = dicts.add(split_transition_rule_attrs, dynamic_framework_provider_rule_attrs, {
+    attrs = {
         "framework_deps": attr.label_list(
             cfg = transition_support.split_transition,
             mandatory = True,
@@ -163,13 +160,6 @@ framework_middleman = rule(
                 """Internal - currently rules_ios the dict `platforms`
 """,
         ),
-        "_supports_cc_info_in_dynamic_framework_provider_flag": attr.label(
-            default = "//rules:supports_cc_info_in_dynamic_framework_provider_flag",
-            cfg = transition_support.dynamic_framework_provider_transition,
-            providers = [BuildSettingInfo],
-            doc = """Internal - the flag to check if the compiler supports cc info in dynamic frameworks
-        """,
-        ),
         "product_type": attr.string(
             mandatory = False,
             default = apple_product_type.framework,
@@ -177,7 +167,19 @@ framework_middleman = rule(
                 """Internal - The product type of the framework
 """,
         ),
-    }),
+        "_supports_cc_info_in_dynamic_framework_provider_flag": attr.label(
+            default = "//rules:supports_cc_info_in_dynamic_framework_provider_flag",
+            # 1:1 transition
+            cfg = transition_support.dynamic_framework_provider_transition,
+            doc = """Internal - the flag to check if the compiler supports cc info in dynamic frameworks
+""",
+        ),
+        "_allowlist_function_transition": attr.label(
+            default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
+            doc = """Needed to allow this rule to have an incoming edge configuration transition.
+""",
+        ),
+    },
     doc = """
         This is a volatile internal rule to make frameworks work with
         rules_apples bundling logic

@@ -1,12 +1,6 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
 
-bool_flag(
-    name = "supports_cc_info_in_dynamic_framework_provider_flag",
-    build_setting_default = True,
-    visibility = ["//visibility:public"],
-)
-
 exports_files(
     glob(["*.bzl"]),
     visibility = ["//docs:__pkg__"],
@@ -228,4 +222,10 @@ bzl_library(
         "@bazel_skylib//lib:types",
         "@build_bazel_rules_apple//apple:ios",
     ],
+)
+
+bool_flag(
+    name = "supports_cc_info_in_dynamic_framework_provider_flag",
+    build_setting_default = False,
+    visibility = ["//:__subpackages__"],
 )

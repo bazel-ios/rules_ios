@@ -401,16 +401,16 @@ _split_transition = transition(
     ] + _bazel_7_outputs,
 )
 
-_is_bazel_5 = int(get_bazel_version(bazel_version).major) < 6
-
-def _dynamic_framework_provider_transition_impl(__, _):
+def _dynamic_framework_provider_transition_impl(settings, attr):
+    _ignore = (settings, attr)
+    _is_bazel_5 = int(get_bazel_version(bazel_version).major) == 5
     return {
         "//rules:supports_cc_info_in_dynamic_framework_provider_flag": not _is_bazel_5,
     }
 
 _dynamic_framework_provider_transition = transition(
     implementation = _dynamic_framework_provider_transition_impl,
-    inputs = ["//rules:supports_cc_info_in_dynamic_framework_provider_flag"],
+    inputs = [],
     outputs = ["//rules:supports_cc_info_in_dynamic_framework_provider_flag"],
 )
 
@@ -419,7 +419,7 @@ transition_support = struct(
 
     # In older versions of rules_apple and Bazel this is a starlark transiton
     split_transition = _split_transition if apple_api_version == "3.0" else apple_common.multi_arch_split,
-    dynamic_framework_provider_transition = _dynamic_framework_provider_transition if _is_bazel_5 else None,
+    dynamic_framework_provider_transition = _dynamic_framework_provider_transition,
     current_apple_platform = _current_apple_platform,
 )
 
@@ -430,11 +430,3 @@ split_transition_rule_attrs = {
         doc = "Needed to allow this rule to have an incoming edge configuration transition.",
     ),
 } if apple_api_version == "3.0" else {}
-
-# For the above comment
-dynamic_framework_provider_rule_attrs = {
-    "_allowlist_function_transition": attr.label(
-        default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
-        doc = "Needed to allow this rule to have an incoming edge configuration transition.",
-    ),
-} if _is_bazel_5 else {}
