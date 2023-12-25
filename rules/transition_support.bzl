@@ -6,6 +6,10 @@ load(
     "//rules/internal:bazel_version.bzl",
     "get_bazel_version",
 )
+load(
+    "@build_bazel_apple_support//configs:platforms.bzl",
+    "CPU_TO_DEFAULT_PLATFORM_NAME",
+)
 
 def _current_apple_platform(apple_fragment, xcode_config):
     """Returns a struct containing the platform and target os version"""
@@ -190,6 +194,13 @@ _PLATFORM_TYPE_TO_CPUS_FLAG = {
     "watchos": "//command_line_option:watchos_cpus",
 }
 
+_CPU_TO_DEFAULT_PLATFORM_FLAG = {
+    cpu: "@build_bazel_apple_support//platforms:{}_platform".format(
+        platform_name,
+    )
+    for cpu, platform_name in CPU_TO_DEFAULT_PLATFORM_NAME.items()
+}
+
 def _platform_specific_cpu_setting_name(platform_type):
     """Returns the name of a platform-specific CPU setting."""
     flag = _PLATFORM_TYPE_TO_CPUS_FLAG.get(platform_type, None)
@@ -268,20 +279,26 @@ def _split_transition_impl(settings, attr):
         cpu_string = _cpu_string(environment_arch, platform_type, settings)
         ios_multi_cpus = cpu_string[4:] if platform_type == "ios" else settings["//command_line_option:ios_multi_cpus"]
         attr_platforms = getattr(attr, "platforms", None)
+        _is_bazel_7 = int(get_bazel_version(bazel_version).major) == 7
+        apple_platforms_value = settings["//command_line_option:apple_platforms"]
+        apple_platforms = apple_platforms_value if apple_platforms_value else []
+        cpu = _cpu_string(
+            environment_arch = None,
+            platform_type = platform_type,
+            settings = settings,
+        )
+        default_platforms = [settings[_CPU_TO_DEFAULT_PLATFORM_FLAG[cpu]]] if _is_bazel_7 else []
         output_dictionary = {
             "//command_line_option:apple configuration distinguisher": "applebin_" + platform_type,
             "//command_line_option:apple_platform_type": platform_type,
             "//command_line_option:apple_split_cpu": environment_arch if (environment_arch and environment_arch != "") else None,
             "//command_line_option:compiler": None,
-            "//command_line_option:cpu": _cpu_string(
-                environment_arch = None,
-                platform_type = platform_type,
-                settings = settings,
-            ),
+            "//command_line_option:cpu": cpu,
             "//command_line_option:crosstool_top": (
                 settings["//command_line_option:apple_crosstool_top"]
             ),
             "//command_line_option:fission": [],
+            "//command_line_option:platforms": [apple_platforms[0]] if apple_platforms else default_platforms,
             "//command_line_option:grte_top": None,
             "//command_line_option:ios_minimum_os": _min_os_version_or_none(attr, attr_platforms, "ios", platform_type),
             "//command_line_option:ios_multi_cpus": ios_multi_cpus,
@@ -313,16 +330,17 @@ def _split_transition_impl(settings, attr):
 _split_transition = transition(
     implementation = _split_transition_impl,
     inputs = [
-        "//command_line_option:apple_platforms",
-        "//command_line_option:platforms",
-        "//command_line_option:cpu",
-        "//command_line_option:apple_crosstool_top",
-        "//command_line_option:ios_multi_cpus",
-        "//command_line_option:macos_cpus",
-        "//command_line_option:tvos_cpus",
-        "//command_line_option:watchos_cpus",
-        "//command_line_option:minimum_os_version",
-    ] + (["//command_line_option:visionos_cpus"] if _supports_visionos else []),
+                 "//command_line_option:apple_platforms",
+                 "//command_line_option:platforms",
+                 "//command_line_option:cpu",
+                 "//command_line_option:apple_crosstool_top",
+                 "//command_line_option:ios_multi_cpus",
+                 "//command_line_option:macos_cpus",
+                 "//command_line_option:tvos_cpus",
+                 "//command_line_option:watchos_cpus",
+                 "//command_line_option:minimum_os_version",
+             ] + (["//command_line_option:visionos_cpus"] if _supports_visionos else []) +
+             _CPU_TO_DEFAULT_PLATFORM_FLAG.values(),
     outputs = [
         "//command_line_option:apple configuration distinguisher",
         "//command_line_option:apple_platform_type",
@@ -330,6 +348,7 @@ _split_transition = transition(
         "//command_line_option:compiler",
         "//command_line_option:cpu",
         "//command_line_option:crosstool_top",
+        "//command_line_option:platforms",
         "//command_line_option:fission",
         "//command_line_option:grte_top",
         "//command_line_option:ios_minimum_os",
