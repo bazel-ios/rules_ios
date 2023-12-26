@@ -17,6 +17,22 @@ ios_application(
 )
 
 ios_application(
+    name = "AppWithFrameworks",
+    srcs = ["App/main.m"],
+    bundle_id = "com.example.app",
+    frameworks = [
+        "//tests/ios/frameworks/dynamic/a",
+    ],
+    minimum_os_version = "10.0",
+    visibility = ["//visibility:public"],
+    # This should automatically bake in a,b
+    deps = [
+        "//tests/ios/frameworks/dynamic/a",
+        "//tests/ios/frameworks/dynamic/a:aWithResourceBundles",
+    ],
+)
+
+ios_application(
     name = "AppWithExtension",
     srcs = ["App/main.m"],
     bundle_id = "com.example.app",
