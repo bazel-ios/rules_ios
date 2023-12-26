@@ -30,7 +30,7 @@ ios_application(
         "iphone",
     ],
     infoplists = [":Info.plist"],
-    minimum_os_version = "12.0",
+    minimum_os_version = "14.5",
     module_name = "TestImports_App",
     resource_bundles = {"ResourceBundle": glob(
         ["Resources/**/*"],
@@ -53,7 +53,7 @@ apple_framework_packaging(
     name = "TestImports-App_framework_unlinked",
     framework_name = "TestImports-App",
     platforms = {
-        "ios": "12.0",
+        "ios": "14.5",
     },
     skip_packaging = ["binary"],
     tags = [
@@ -81,7 +81,7 @@ ios_unit_test(
         "testhelper.h",
         "testhelper.m",
     ],
-    minimum_os_version = "12.0",
+    minimum_os_version = "14.5",
     module_name = "TestImports_Unit_Tests",
     sdk_frameworks = ["XCTest"],
     swift_objc_bridging_header = "TestImports-Unit-Tests-Bridging-Header.h",

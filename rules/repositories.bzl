@@ -341,10 +341,10 @@ def _rules_ios_test_dependencies():
     _maybe(
         http_archive,
         name = "TensorFlowLiteC",
-        url = "https://dl.google.com/dl/cpdc/3895e5bf508673ae/TensorFlowLiteC-2.6.0.tar.gz",
-        sha256 = "a28ce764da496830c0a145b46e5403fb486b5b6231c72337aaa8eaf3d762cc8d",
+        url = "https://dl.google.com/tflite-release/ios/prod/tensorflow/lite/release/ios/release/30/20231002-210715/TensorFlowLiteC/2.14.0/883c6fc838e0354b/TensorFlowLiteC-2.14.0.tar.gz",
+        sha256 = "07796e23745e8b5380f7a346ee4a858f0768961b239666aed96edd4ffe31a7d0",
         build_file = "@//tests/ios/unit-test/test-imports-app:BUILD.TensorFlowLiteC",
-        strip_prefix = "TensorFlowLiteC-2.6.0",
+        strip_prefix = "TensorFlowLiteC-2.14.0",
     )
 
     _maybe(
