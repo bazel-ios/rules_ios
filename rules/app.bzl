@@ -114,7 +114,7 @@ def ios_application(
         platform_type = "ios",
         minimum_os_version = application_kwargs.get("minimum_os_version"),
     )
-    frameworks = [fw_name] + kwargs.pop("frameworks", [])
+    frameworks = [fw_name] + application_kwargs.pop("frameworks", [])
 
     dep_name = name + ".dep_middleman"
     dep_middleman(
