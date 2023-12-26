@@ -98,7 +98,7 @@
 				280A96A1BB45418328EE8F8C /* ExampleExtension.appex */,
 				A7A135B2F45AA4AE95B5C366 /* ExplicitHosted.xctest */,
 				C5009185C598753F8C31B6F6 /* ExplicitHostedWithAppExtensions.xctest */,
-				1A670BBD3E8C25AB89221850 /* iOS-9.3-AppHost.app */,
+				1A670BBD3E8C25AB89221850 /* iOS-12.0-AppHost.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -201,9 +201,9 @@
 			productReference = A7A135B2F45AA4AE95B5C366 /* ExplicitHosted.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		9541626BF2F6C0EE11CA1AD7 /* iOS-9.3-AppHost */ = {
+		9541626BF2F6C0EE11CA1AD7 /* iOS-12.0-AppHost */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 85B0F18E389439629F1AEA96 /* Build configuration list for PBXNativeTarget "iOS-9.3-AppHost" */;
+			buildConfigurationList = 85B0F18E389439629F1AEA96 /* Build configuration list for PBXNativeTarget "iOS-12.0-AppHost" */;
 			buildPhases = (
 				911B498434C94010071D5767 /* Build with bazel */,
 				65484997632584E56344A3A2 /* Sources */,
@@ -212,9 +212,9 @@
 			);
 			dependencies = (
 			);
-			name = "iOS-9.3-AppHost";
+			name = "iOS-12.0-AppHost";
 			productName = "iOS-9.3-AppHost";
-			productReference = 1A670BBD3E8C25AB89221850 /* iOS-9.3-AppHost.app */;
+			productReference = 1A670BBD3E8C25AB89221850 /* iOS-12.0-AppHost.app */;
 			productType = "com.apple.product-type.application";
 		};
 		A66AE4DA1051F1DAB24B0FB2 /* ExplicitHostedWithAppExtensions */ = {
@@ -260,7 +260,7 @@
 				2C3A627878C5E65865D4B494 /* ExampleExtension */,
 				5AE0FC080FA6A17C35721D0C /* ExplicitHosted */,
 				A66AE4DA1051F1DAB24B0FB2 /* ExplicitHostedWithAppExtensions */,
-				9541626BF2F6C0EE11CA1AD7 /* iOS-9.3-AppHost */,
+				9541626BF2F6C0EE11CA1AD7 /* iOS-12.0-AppHost */,
 			);
 		};
 /* End PBXProject section */
@@ -405,7 +405,7 @@
 /* Begin PBXTargetDependency section */
 		7B117CC3FAAB21A99FD3F683 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 9541626BF2F6C0EE11CA1AD7 /* iOS-9.3-AppHost */;
+			target = 9541626BF2F6C0EE11CA1AD7 /* iOS-12.0-AppHost */;
 			targetProxy = F38C65FC54D7CD052E02657E /* PBXContainerItemProxy */;
 		};
 		D3229F57C9937AC425CB58C3 /* PBXTargetDependency */ = {
@@ -431,7 +431,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.app.example-extension";
@@ -456,7 +456,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.app;
@@ -521,7 +521,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.app;
@@ -570,11 +570,11 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ios-app-host-9.3";
-				PRODUCT_NAME = "iOS-9.3-AppHost";
+				PRODUCT_NAME = "iOS-12.0-AppHost";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -595,11 +595,11 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ios-app-host-9.3";
-				PRODUCT_NAME = "iOS-9.3-AppHost";
+				PRODUCT_NAME = "iOS-12.0-AppHost";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -682,7 +682,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.app.example-extension";
@@ -761,7 +761,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		85B0F18E389439629F1AEA96 /* Build configuration list for PBXNativeTarget "iOS-9.3-AppHost" */ = {
+		85B0F18E389439629F1AEA96 /* Build configuration list for PBXNativeTarget "iOS-12.0-AppHost" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				676421DD17502BB445A7A830 /* Debug */,

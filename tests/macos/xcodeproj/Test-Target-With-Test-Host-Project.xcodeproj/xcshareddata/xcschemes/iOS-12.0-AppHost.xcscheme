@@ -14,10 +14,10 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9541626BF2F6C0EE11CA1AD7"
-               BuildableName = "iOS-9.3-AppHost.app"
-               BlueprintName = "iOS-9.3-AppHost"
-               ReferencedContainer = "container:TestWithHostApp.xcodeproj">
+               BlueprintIdentifier = "84CC69EA44599BEE165A5E48"
+               BuildableName = "iOS-12.0-AppHost.app"
+               BlueprintName = "iOS-12.0-AppHost"
+               ReferencedContainer = "container:Test-Target-With-Test-Host-Project.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,10 +33,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9541626BF2F6C0EE11CA1AD7"
-            BuildableName = "iOS-9.3-AppHost.app"
-            BlueprintName = "iOS-9.3-AppHost"
-            ReferencedContainer = "container:TestWithHostApp.xcodeproj">
+            BlueprintIdentifier = "84CC69EA44599BEE165A5E48"
+            BuildableName = "iOS-12.0-AppHost.app"
+            BlueprintName = "iOS-12.0-AppHost"
+            ReferencedContainer = "container:Test-Target-With-Test-Host-Project.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -50,15 +50,15 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES"
-      customLLDBInitFile = "$CONFIGURATION_TEMP_DIR/iOS-9.3-AppHost.lldbinit">
+      customLLDBInitFile = "$CONFIGURATION_TEMP_DIR/iOS-12.0-AppHost.lldbinit">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9541626BF2F6C0EE11CA1AD7"
-            BuildableName = "iOS-9.3-AppHost.app"
-            BlueprintName = "iOS-9.3-AppHost"
-            ReferencedContainer = "container:TestWithHostApp.xcodeproj">
+            BlueprintIdentifier = "84CC69EA44599BEE165A5E48"
+            BuildableName = "iOS-12.0-AppHost.app"
+            BlueprintName = "iOS-12.0-AppHost"
+            ReferencedContainer = "container:Test-Target-With-Test-Host-Project.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
@@ -74,10 +74,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9541626BF2F6C0EE11CA1AD7"
-            BuildableName = "iOS-9.3-AppHost.app"
-            BlueprintName = "iOS-9.3-AppHost"
-            ReferencedContainer = "container:TestWithHostApp.xcodeproj">
+            BlueprintIdentifier = "84CC69EA44599BEE165A5E48"
+            BuildableName = "iOS-12.0-AppHost.app"
+            BlueprintName = "iOS-12.0-AppHost"
+            ReferencedContainer = "container:Test-Target-With-Test-Host-Project.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
