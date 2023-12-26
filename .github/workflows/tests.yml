@@ -14,7 +14,7 @@ concurrency:
 jobs:
   integration_tests:
     name: Build and Test
-    runs-on: macos-12
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
@@ -54,7 +54,7 @@ jobs:
     # consider merging this feature into the default behavior and can re-align
     # the CI job
     name: Build and Test ( Virtual Frameworks )
-    runs-on: macos-12
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
@@ -83,7 +83,7 @@ jobs:
 
   bazel_5_ios_integration_tests:
     name: Build and Test ( Virtual Frameworks + Bazel 5 )
-    runs-on: macos-12
+    runs-on: macos-13
     env:
       USE_BAZEL_VERSION: 5.3.2
     steps:
@@ -109,7 +109,7 @@ jobs:
 
   rules_apple_2_ios_integration_tests:
     name: Build and Test ( Virtual Frameworks + rules_apple 2.x )
-    runs-on: macos-12
+    runs-on: macos-13
     env:
       USE_BAZEL_VERSION: 6.1.2
     steps:
@@ -134,7 +134,7 @@ jobs:
 
   build_arm64_simulator:
     name: Build arm64 Simulator
-    runs-on: macos-12
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
@@ -166,7 +166,7 @@ jobs:
 
   lint:
     name: Check Starlark and Docs
-    runs-on: macos-12
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
@@ -183,8 +183,8 @@ jobs:
           git diff --exit-code docs
 
   xcodeproj_tests:
-    name: .xcodeproj Tests on Xcode 14.2.0
-    runs-on: macos-12
+    name: .xcodeproj Tests on Xcode 15.1.0
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
@@ -198,8 +198,8 @@ jobs:
           path: bazel-testlogs
 
   lldb_ios_tests_xcode:
-    name: LLDB tests on Xcode 14.2.0
-    runs-on: macos-12
+    name: LLDB tests on Xcode 15.1.0
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
@@ -222,7 +222,7 @@ jobs:
     # i386 was removed on rules_apple 3.x.x - this test case needs reworking
     # to exemplify fat binaries on the latest version
     name: Build iOS App for Multiple Architecture
-    runs-on: macos-12
+    runs-on: macos-13
     env:
       USE_BAZEL_VERSION: 6.1.2
     steps:
