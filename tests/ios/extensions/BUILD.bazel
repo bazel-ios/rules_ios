@@ -9,7 +9,7 @@ ios_extension(
     infoplists = [
         "ExampleExtension/Info.plist",
     ],
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     visibility = ["//visibility:public"],
     deps = [
         "//tests/ios/app:FW",
@@ -25,7 +25,7 @@ ios_extension(
     infoplists = [
         "ExampleExtension/Info.plist",
     ],
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     visibility = ["//visibility:public"],
     deps = [
         "//tests/ios/frameworks/dynamic/a",
@@ -42,7 +42,7 @@ ios_extension(
     infoplists = [
         "ExampleExtension/Info.plist",
     ],
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     visibility = ["//visibility:public"],
     deps = [
         "//tests/ios/frameworks/testonly:SwiftLibrary",

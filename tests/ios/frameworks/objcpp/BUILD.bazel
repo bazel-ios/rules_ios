@@ -13,7 +13,7 @@ apple_framework(
         "-fmodules",
         "-fcxx-modules",
     ],
-    platforms = {"ios": "10.0"},
+    platforms = {"ios": "12.0"},
     public_headers = glob(
         [
             "ObjCppMixedLib/A.h",
@@ -30,7 +30,7 @@ apple_framework(
             "ObjCLib/*.m",
         ],
     ),
-    platforms = {"ios": "10.0"},
+    platforms = {"ios": "12.0"},
     public_headers = glob(
         [
             "ObjCLib/C.h",
@@ -47,7 +47,7 @@ ios_unit_test(
             "ObjCppMixedLibTests/*.m",
         ],
     ),
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     visibility = ["//visibility:public"],
     deps = [
         ":ObjCLib",

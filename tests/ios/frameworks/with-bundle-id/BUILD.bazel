@@ -6,7 +6,7 @@ apple_framework(
         "FrameworkWithBundleId/Foo.h",
         "FrameworkWithBundleId/Foo.m",
     ],
-    platforms = {"ios": "10.0"},
+    platforms = {"ios": "12.0"},
     resource_bundles = {
         "TargetXIB": glob(["TargetXIB/**/*.xib"]),
     },
