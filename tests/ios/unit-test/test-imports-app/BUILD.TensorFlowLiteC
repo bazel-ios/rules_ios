@@ -6,7 +6,7 @@ load(
 apple_static_framework_import(
     name = "TensorFlowLiteCCoreML",
     framework_imports = glob(
-        ["Frameworks/TensorFlowLiteCCoreML.framework/**"],
+        ["Frameworks/TensorFlowLiteCCoreML.xcframework/ios-arm64_x86_64-simulator/TensorFlowLiteCCoreML.framework/**"],
         allow_empty = False,
     ),
     visibility = ["//visibility:public"],
@@ -15,7 +15,7 @@ apple_static_framework_import(
 apple_static_framework_import(
     name = "TensorFlowLiteC",
     framework_imports = glob(
-        ["Frameworks/TensorFlowLiteC.framework/**"],
+        ["Frameworks/TensorFlowLiteC.xcframework/ios-arm64_x86_64-simulator/TensorFlowLiteC.framework/**"],
         allow_empty = False,
     ),
     visibility = ["//visibility:public"],
