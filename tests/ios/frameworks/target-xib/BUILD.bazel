@@ -5,7 +5,7 @@ apple_framework(
     name = "TargetXIB",
     srcs = glob(["TargetXIB/**/*.swift"]),
     data = glob(["TargetXIB/**/*.xib"]),
-    platforms = {"ios": "11.0"},
+    platforms = {"ios": "12.0"},
     visibility = ["//visibility:public"],
 )
 
@@ -13,13 +13,13 @@ apple_framework(
     name = "TargetXIBTestsLib",
     testonly = True,
     srcs = glob(["TargetXIBTests/**/*.swift"]),
-    platforms = {"ios": "11.0"},
+    platforms = {"ios": "12.0"},
     visibility = ["//visibility:public"],
     deps = [":TargetXIB"],
 )
 
 ios_unit_test(
     name = "TargetXIBTests",
-    minimum_os_version = "11.0",
+    minimum_os_version = "12.0",
     deps = [":TargetXIBTestsLib"],
 )

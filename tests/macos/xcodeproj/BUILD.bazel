@@ -14,7 +14,7 @@ ios_unit_test(
         "test_envvar_key1": "test_envvar_value1",
         "test_envvar_key2": "test_envvar_value2",
     },
-    minimum_os_version = "11.0",
+    minimum_os_version = "12.0",
     module_name = "Single_Application_UnitTests",
     non_arc_srcs = [
         "NonArcObject.h",
@@ -49,7 +49,7 @@ ios_unit_test(
         "test_envvar_key1": "test_envvar_value1",
         "test_envvar_key2": "test_envvar_value2",
     },
-    minimum_os_version = "11.0",
+    minimum_os_version = "12.0",
     module_name = "Single_Application_RunnableTestSuite",
     runners = [
         "iPhone-13-Pro__16.2",

@@ -4,7 +4,7 @@ ios_application(
     name = "App",
     srcs = ["App/main.swift"],
     bundle_id = "com.example.app",
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     visibility = ["//visibility:public"],
     deps = [
         "//tests/ios/frameworks/mixed-source/only-source:SwiftLibrary",

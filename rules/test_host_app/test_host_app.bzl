@@ -8,9 +8,6 @@ and pass in additional attributes to be set in all `ios_application` rules
 load("//rules:app.bzl", "ios_application")
 
 DEFAULT_MINIMUM_OS_VERSION_LIST = [
-    "9.3",
-    "10.0",
-    "11.0",
     "12.0",
     "12.2",
     "12.4",

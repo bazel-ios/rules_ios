@@ -2,10 +2,10 @@ load("//rules:framework.bzl", "apple_framework")
 load("//rules:app.bzl", "ios_application")
 
 _VERSIONS = {
-    "macos": ["10.10", "10.11"],
-    "ios": ["10.0", "10.2", "12.0"],
-    "tvos": ["10.0", "10.2", "12.0"],
-    "watchos": ["3.2"],
+    "macos": ["13.3", "14.2"],
+    "ios": ["16.1", "16.4", "17.2"],
+    "tvos": ["16.1", "16.4", "17.2"],
+    "watchos": ["10.2"],
 }
 
 def _version_int(version):
