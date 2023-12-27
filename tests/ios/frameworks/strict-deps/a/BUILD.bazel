@@ -5,7 +5,7 @@ apple_framework(
     name = "a",
     srcs = glob(["*.swift"]),
     infoplists = ["//rules/test_host_app:Info.plist"],
-    platforms = {"ios": "10.0"},
+    platforms = {"ios": "12.0"},
     skip_packaging = ["infoplist"],
     visibility = ["//visibility:public"],
     deps = ["//tests/ios/frameworks/strict-deps/b"],
@@ -15,7 +15,7 @@ apple_framework(
     name = "a_with_plist",
     srcs = glob(["*.swift"]),
     infoplists = [":testHostPlist"],
-    platforms = {"ios": "10.0"},
+    platforms = {"ios": "12.0"},
     visibility = ["//visibility:public"],
     deps = ["//tests/ios/frameworks/strict-deps/b"],
 )

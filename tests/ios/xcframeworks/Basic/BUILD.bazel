@@ -16,7 +16,7 @@ ios_application(
     name = "XCFrameworksApp",
     srcs = ["App/main.m"],
     bundle_id = "com.example.app",
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     provisioning_profile = "@build_bazel_rules_ios//tests/ios:integration-test.mobileprovision",
     visibility = ["//visibility:public"],
     deps = [
