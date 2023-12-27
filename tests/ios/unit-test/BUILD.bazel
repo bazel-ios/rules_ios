@@ -30,7 +30,7 @@ ios_unit_test(
         "empty.swift",
     ],
     minimum_os_version = "12.0",
-    test_host = "//rules/test_host_app:iOS-9.3-AppHost",
+    test_host = "//rules/test_host_app:iOS-12.0-AppHost",
     # Adding visibility so the xcodeproject tests can depend on this target
     visibility = ["//visibility:public"],
 )
