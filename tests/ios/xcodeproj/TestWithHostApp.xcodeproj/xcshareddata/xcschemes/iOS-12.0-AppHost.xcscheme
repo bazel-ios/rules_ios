@@ -43,7 +43,7 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      customLLDBInitFile = "$CONFIGURATION_TEMP_DIR/iOS-9.3-AppHost.lldbinit"
+      customLLDBInitFile = "$CONFIGURATION_TEMP_DIR/iOS-12.0-AppHost.lldbinit"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
