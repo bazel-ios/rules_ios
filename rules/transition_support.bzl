@@ -401,17 +401,17 @@ _split_transition = transition(
     ] + _bazel_7_outputs,
 )
 
-def _dynamic_framework_provider_transition_impl(settings, attr):
+def _migrates_cc_info_linking_info_transition_impl(settings, attr):
     _ignore = (settings, attr)
-    _is_bazel_5 = int(get_bazel_version(bazel_version).major) == 5
+    _is_bazel_7 = int(get_bazel_version(bazel_version).major) >= 7
     return {
-        "//rules:supports_cc_info_in_dynamic_framework_provider_flag": not _is_bazel_5,
+        "//rules:migrates_cc_info_linking_info": _is_bazel_7,
     }
 
-_dynamic_framework_provider_transition = transition(
-    implementation = _dynamic_framework_provider_transition_impl,
+_migrates_cc_info_linking_info_transition = transition(
+    implementation = _migrates_cc_info_linking_info_transition_impl,
     inputs = [],
-    outputs = ["//rules:supports_cc_info_in_dynamic_framework_provider_flag"],
+    outputs = ["//rules:migrates_cc_info_linking_info"],
 )
 
 transition_support = struct(
@@ -419,7 +419,7 @@ transition_support = struct(
 
     # In older versions of rules_apple and Bazel this is a starlark transiton
     split_transition = _split_transition if apple_api_version == "3.0" else apple_common.multi_arch_split,
-    dynamic_framework_provider_transition = _dynamic_framework_provider_transition,
+    migrates_cc_info_linking_info_transition = _migrates_cc_info_linking_info_transition,
     current_apple_platform = _current_apple_platform,
 )
 

@@ -32,6 +32,7 @@ load(
     "apple_resource_aspect",
 )
 load("//rules:force_load_direct_deps.bzl", "force_load_direct_deps")
+load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
 
 _APPLE_FRAMEWORK_PACKAGING_KWARGS = [
     "visibility",
@@ -1140,11 +1141,25 @@ def _apple_framework_packaging_impl(ctx):
         # If not virtualizing the framework - then it runs a "clean"
         _get_symlinked_framework_clean_action(ctx, framework_files, compilation_context_fields)
 
-    cc_info_provider = CcInfo(
-        compilation_context = cc_common.create_compilation_context(
-            **compilation_context_fields
-        ),
-    )
+    _migrates_cc_info_linking_info_transition_flag = ctx.attr._migrates_cc_info_linking_info_transition_flag[0]
+    _migrates_cc_info_linking_info_transition_provider = _migrates_cc_info_linking_info_transition_flag[BuildSettingInfo].value
+
+    if _migrates_cc_info_linking_info_transition_provider:
+        cc_info_provider = CcInfo(
+            compilation_context = cc_common.create_compilation_context(
+                **compilation_context_fields
+            ),
+            linking_context = cc_common.merge_cc_infos(
+                direct_cc_infos = [],
+                cc_infos = [dep[CcInfo] for dep in deps],
+            ).linking_context,
+        )
+    else:
+        cc_info_provider = CcInfo(
+            compilation_context = cc_common.create_compilation_context(
+                **compilation_context_fields
+            ),
+        )
 
     if virtualize_frameworks:
         cc_info = cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider])
@@ -1380,6 +1395,13 @@ the framework as a dependency.""",
             doc = """\
 The C++ toolchain from which linking flags and other tools needed by the Swift
 toolchain (such as `clang`) will be retrieved.
+""",
+        ),
+        "_migrates_cc_info_linking_info_transition_flag": attr.label(
+            default = "//rules:migrates_cc_info_linking_info",
+            # 1:1 transition
+            cfg = transition_support.migrates_cc_info_linking_info_transition,
+            doc = """Internal - the flag to check if the compiler supports cc info in dynamic frameworks
 """,
         ),
     },

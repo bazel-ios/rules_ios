@@ -224,8 +224,9 @@ bzl_library(
     ],
 )
 
+# enabled in bazel 7
 bool_flag(
-    name = "supports_cc_info_in_dynamic_framework_provider_flag",
+    name = "migrates_cc_info_linking_info",
     build_setting_default = False,
-    visibility = ["//:__subpackages__"],
+    visibility = ["//visibility:public"],
 )

@@ -82,12 +82,12 @@ def _framework_middleman(ctx):
     ])
 
     # Add the frameworks to the linker command
-    supports_cc_info_in_dynamic_framework_provider_flag = ctx.attr._supports_cc_info_in_dynamic_framework_provider_flag[0]
-    supports_cc_info_in_dynamic_framework_provider = supports_cc_info_in_dynamic_framework_provider_flag[BuildSettingInfo].value
+    _migrates_cc_info_linking_info_transition_flag = ctx.attr._migrates_cc_info_linking_info_transition_flag[0]
+    _migrates_cc_info_linking_info_provider = _migrates_cc_info_linking_info_transition_flag[BuildSettingInfo].value
 
     dynamic_framework_provider = objc_provider_utils.merge_dynamic_framework_providers(
         dynamic_framework_providers,
-        supports_cc_info_in_dynamic_framework_provider = supports_cc_info_in_dynamic_framework_provider,
+        supports_cc_info_in_dynamic_framework_provider = _migrates_cc_info_linking_info_provider,
     )
     objc_provider_fields["dynamic_framework_file"] = depset(
         transitive = [dynamic_framework_provider.framework_files, objc_provider_fields.get("dynamic_framework_file", depset([]))],
@@ -167,10 +167,10 @@ framework_middleman = rule(
                 """Internal - The product type of the framework
 """,
         ),
-        "_supports_cc_info_in_dynamic_framework_provider_flag": attr.label(
-            default = "//rules:supports_cc_info_in_dynamic_framework_provider_flag",
+        "_migrates_cc_info_linking_info_transition_flag": attr.label(
+            default = "//rules:migrates_cc_info_linking_info",
             # 1:1 transition
-            cfg = transition_support.dynamic_framework_provider_transition,
+            cfg = transition_support.migrates_cc_info_linking_info_transition,
             doc = """Internal - the flag to check if the compiler supports cc info in dynamic frameworks
 """,
         ),
