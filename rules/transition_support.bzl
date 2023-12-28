@@ -7,6 +7,51 @@ load(
     "get_bazel_version",
 )
 
+_PLATFORM_TYPE_TO_CPUS_FLAG = {
+    "ios": "//command_line_option:ios_multi_cpus",
+    "macos": "//command_line_option:macos_cpus",
+    "tvos": "//command_line_option:tvos_cpus",
+    "visionos": "//command_line_option:visionos_cpus",
+    "watchos": "//command_line_option:watchos_cpus",
+}
+
+# Could not load it directly from bazel_build_apple_support
+# As we support multiple versions of rules_apple_support
+# Where some don't have the file. So we copied it
+# https://github.com/bazelbuild/apple_support/blob/d87e8b07f3345e750834dbb6ce38c7c7d3b8b44b/configs/platforms.bzl#L108
+_CPU_TO_DEFAULT_PLATFORM_NAME = {
+    "darwin_arm64": "macos_arm64",
+    "darwin_arm64e": "macos_arm64e",
+    "darwin_x86_64": "macos_x86_64",
+    "ios_arm64": "ios_arm64",
+    "ios_arm64e": "ios_arm64e",
+    "ios_x86_64": "ios_x86_64",
+    "ios_sim_arm64": "ios_sim_arm64",
+    "tvos_arm64": "tvos_arm64",
+    "tvos_x86_64": "tvos_x86_64",
+    "tvos_sim_arm64": "tvos_sim_arm64",
+    "visionos_arm64": "visionos_arm64",
+    "visionos_sim_arm64": "visionos_sim_arm64",
+    "visionos_x86_64": "visionos_x86_64",
+    "watchos_arm64": "watchos_arm64",
+    "watchos_arm64_32": "watchos_arm64_32",
+    "watchos_armv7k": "watchos_armv7k",
+    "watchos_x86_64": "watchos_x86_64",
+}
+
+_CPU_TO_DEFAULT_PLATFORM_FLAG = {
+    cpu: "@build_bazel_apple_support//platforms:{}_platform".format(
+        platform_name,
+    )
+    for cpu, platform_name in _CPU_TO_DEFAULT_PLATFORM_NAME.items()
+}
+
+_bazel_version = get_bazel_version(bazel_version)
+_bazel_major_version = int(_bazel_version.major)
+_is_bazel_7 = _bazel_major_version > 6
+_bazel_7_inputs = ["//command_line_option:apple_platforms"] + _CPU_TO_DEFAULT_PLATFORM_FLAG.values() if _is_bazel_7 else []
+_bazel_7_outputs = ["//command_line_option:apple_platforms", "//command_line_option:platforms"] if _is_bazel_7 else []
+
 def _current_apple_platform(apple_fragment, xcode_config):
     """Returns a struct containing the platform and target os version"""
     platform = apple_fragment.single_arch_platform
@@ -33,32 +78,40 @@ def _cpu_string(environment_arch, platform_type, settings):
             return "ios_{}".format(environment_arch)
         ios_cpus = settings["//command_line_option:ios_multi_cpus"]
         if ios_cpus:
-            return "ios_%s" % ios_cpus[0]
-        if settings["//command_line_option:cpu"] == "darwin_arm64":
+            return "ios_{}".format(ios_cpus[0])
+        cpu_value = settings["//command_line_option:cpu"]
+        if cpu_value.startswith("ios_"):
+            return cpu_value
+        if cpu_value == "darwin_arm64":
             return "ios_sim_arm64"
-        else:
-            return "ios_x86_64"
-    if platform_type == "macos":
-        if environment_arch:
-            return "darwin_{}".format(environment_arch)
-        macos_cpus = settings["//command_line_option:macos_cpus"]
-        if macos_cpus:
-            return "darwin_%s" % macos_cpus[0]
-        return "darwin_x86_64"
-    if platform_type == "tvos":
-        if environment_arch:
-            return "tvos_{}".format(environment_arch)
-        tvos_cpus = settings["//command_line_option:tvos_cpus"]
-        if tvos_cpus:
-            return "tvos_%s" % tvos_cpus[0]
-        return "tvos_x86_64"
+        return "ios_x86_64"
     if platform_type == "visionos":
         if environment_arch:
             return "visionos_{}".format(environment_arch)
         visionos_cpus = settings["//command_line_option:visionos_cpus"]
         if visionos_cpus:
             return "visionos_{}".format(visionos_cpus[0])
-        return "visionos_x86_64"
+        cpu_value = settings["//command_line_option:cpu"]
+        if cpu_value.startswith("visionos_"):
+            return cpu_value
+        return "visionos_sim_arm64"
+    if platform_type == "macos":
+        if environment_arch:
+            return "darwin_{}".format(environment_arch)
+        macos_cpus = settings["//command_line_option:macos_cpus"]
+        if macos_cpus:
+            return "darwin_{}".format(macos_cpus[0])
+        cpu_value = settings["//command_line_option:cpu"]
+        if cpu_value.startswith("darwin_"):
+            return cpu_value
+        return "darwin_x86_64"
+    if platform_type == "tvos":
+        if environment_arch:
+            return "tvos_{}".format(environment_arch)
+        tvos_cpus = settings["//command_line_option:tvos_cpus"]
+        if tvos_cpus:
+            return "tvos_{}".format(tvos_cpus[0])
+        return "tvos_x86_64"
     if platform_type == "watchos":
         if environment_arch:
             return "watchos_{}".format(environment_arch)
@@ -67,7 +120,7 @@ def _cpu_string(environment_arch, platform_type, settings):
             return "watchos_{}".format(watchos_cpus[0])
         return "watchos_x86_64"
 
-    fail("ERROR: Unknown platform type: %s" % platform_type)
+    fail("ERROR: Unknown platform type: {}".format(platform_type))
 
 def _min_os_version_or_none(attr, attr_platforms, platform, attr_platform_type):
     if attr_platform_type != platform:
@@ -80,6 +133,21 @@ def _min_os_version_or_none(attr, attr_platforms, platform, attr_platform_type):
         return attr.minimum_os_version if attr.minimum_os_version != "" else None
 
     return None
+
+def _bazel_7_objc_library_transition_values(settings, platform_type):
+    if not _is_bazel_7:
+        return {}
+    cpu = _cpu_string(
+        environment_arch = None,
+        platform_type = platform_type,
+        settings = settings,
+    )
+    apple_platforms_value = settings["//command_line_option:apple_platforms"]
+    apple_platforms = apple_platforms_value if apple_platforms_value else []
+    return {
+        "//command_line_option:apple_platforms": apple_platforms,
+        "//command_line_option:platforms": [apple_platforms[0]] if apple_platforms else [settings[_CPU_TO_DEFAULT_PLATFORM_FLAG[cpu]]],
+    }
 
 def _apple_rule_transition_impl(settings, attr):
     """Rule transition for Apple rules."""
@@ -102,6 +170,7 @@ def _apple_rule_transition_impl(settings, attr):
     # Transition ios_multi_cpus to to a single cpu when building for iOS.
     # Rules using this transition (e.g., apple_framework_packaging, precompiled_apple_resource_bundle) don't need any artifacts from other archs.
     ios_multi_cpus = cpu_string[4:] if platform_type == "ios" else settings["//command_line_option:ios_multi_cpus"]
+
     ret = {
         "//command_line_option:apple configuration distinguisher": "applebin_" + platform_type,
         "//command_line_option:apple_platform_type": platform_type,
@@ -119,12 +188,10 @@ def _apple_rule_transition_impl(settings, attr):
         "//command_line_option:tvos_minimum_os": _min_os_version_or_none(attr, attr_platforms, "tvos", platform_type),
         "//command_line_option:watchos_minimum_os": _min_os_version_or_none(attr, attr_platforms, "watchos", platform_type),
     }
+    ret.update(_bazel_7_objc_library_transition_values(settings, platform_type))
     return ret
 
 _supports_visionos = hasattr(apple_common.platform_type, "visionos")
-
-_bazel_version = get_bazel_version(bazel_version)
-_bazel_major_version = int(_bazel_version.major)
 
 # `--apple_compiler` was removed in https://github.com/bazelbuild/bazel/commit/1acdfc422e724b4fe12c7bf5248086ab514ec4be
 _supports_clo_apple_compiler = _bazel_major_version < 7
@@ -154,7 +221,7 @@ _apple_rule_transition = transition(
         ["//command_line_option:apple_compiler"] if _supports_clo_apple_compiler else []
     ) + (
         ["//command_line_option:apple_grte_top"] if _supports_clo_apple_grte_top else []
-    ),
+    ) + _bazel_7_inputs,
     outputs = [
         "//command_line_option:apple configuration distinguisher",
         "//command_line_option:apple_platform_type",
@@ -169,7 +236,7 @@ _apple_rule_transition = transition(
         "//command_line_option:macos_minimum_os",
         "//command_line_option:tvos_minimum_os",
         "//command_line_option:watchos_minimum_os",
-    ],
+    ] + _bazel_7_outputs,
 )
 
 def _is_arch_supported_for_target_tuple(*, environment_arch, minimum_os_version, platform_type):
@@ -181,14 +248,6 @@ def _is_arch_supported_for_target_tuple(*, environment_arch, minimum_os_version,
         dotted_minimum_os_version >= apple_common.dotted_version("9.0")):
         return False
     return True
-
-_PLATFORM_TYPE_TO_CPUS_FLAG = {
-    "ios": "//command_line_option:ios_multi_cpus",
-    "macos": "//command_line_option:macos_cpus",
-    "tvos": "//command_line_option:tvos_cpus",
-    "visionos": "//command_line_option:visionos_cpus",
-    "watchos": "//command_line_option:watchos_cpus",
-}
 
 def _platform_specific_cpu_setting_name(platform_type):
     """Returns the name of a platform-specific CPU setting."""
@@ -290,6 +349,7 @@ def _split_transition_impl(settings, attr):
             "//command_line_option:watchos_minimum_os": _min_os_version_or_none(attr, attr_platforms, "watchos", platform_type),
             "//command_line_option:minimum_os_version": minimum_os_version,
         }
+        output_dictionary.update(_bazel_7_objc_library_transition_values(settings, platform_type))
         output_dictionary["@build_bazel_rules_swift//swift:emit_swiftinterface"] = emit_swiftinterface
         split_output_dictionary[found_cpu] = output_dictionary
 
@@ -313,16 +373,15 @@ def _split_transition_impl(settings, attr):
 _split_transition = transition(
     implementation = _split_transition_impl,
     inputs = [
-        "//command_line_option:apple_platforms",
-        "//command_line_option:platforms",
-        "//command_line_option:cpu",
-        "//command_line_option:apple_crosstool_top",
-        "//command_line_option:ios_multi_cpus",
-        "//command_line_option:macos_cpus",
-        "//command_line_option:tvos_cpus",
-        "//command_line_option:watchos_cpus",
-        "//command_line_option:minimum_os_version",
-    ] + (["//command_line_option:visionos_cpus"] if _supports_visionos else []),
+                 "//command_line_option:cpu",
+                 "//command_line_option:apple_crosstool_top",
+                 "//command_line_option:ios_multi_cpus",
+                 "//command_line_option:macos_cpus",
+                 "//command_line_option:tvos_cpus",
+                 "//command_line_option:watchos_cpus",
+                 "//command_line_option:minimum_os_version",
+             ] + (["//command_line_option:visionos_cpus"] if _supports_visionos else []) +
+             _bazel_7_inputs,
     outputs = [
         "//command_line_option:apple configuration distinguisher",
         "//command_line_option:apple_platform_type",
@@ -339,7 +398,7 @@ _split_transition = transition(
         "//command_line_option:tvos_minimum_os",
         "//command_line_option:watchos_minimum_os",
         "@build_bazel_rules_swift//swift:emit_swiftinterface",
-    ],
+    ] + _bazel_7_outputs,
 )
 
 transition_support = struct(
