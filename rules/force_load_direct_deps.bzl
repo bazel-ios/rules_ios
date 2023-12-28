@@ -1,6 +1,6 @@
 load("//rules:providers.bzl", "AvoidDepsInfo")
-load("//rules:transition_support.bzl", "split_transition_rule_attrs", "transition_support")
-load("@bazel_skylib//lib:dicts.bzl", "dicts")
+load("//rules:transition_support.bzl", "transition_support")
+load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
 
 def _force_load_direct_deps_impl(ctx):
     if not ctx.attr.should_force_load:
@@ -14,49 +14,71 @@ def _force_load_direct_deps_impl(ctx):
             avoid_deps.extend(dep[AvoidDepsInfo].libraries)
 
     avoid_libraries = {}
-    for dep in avoid_deps:
-        if CcInfo in dep:
-            for linker_input in dep[CcInfo].linking_context.linker_inputs.to_list():
-                for lib in linker_input.libraries:
-                    avoid_libraries[lib] = True
 
-    force_load = []
-    for dep in ctx.attr.deps:
-        if CcInfo in dep:
-            for linker_input in dep[CcInfo].linking_context.linker_inputs.to_list():
-                for lib in linker_input.libraries:
+    _migrates_cc_info_linking_info_transition_flag = ctx.attr._migrates_cc_info_linking_info_transition_flag[0]
+    _migrates_cc_info_linking_info_provider = _migrates_cc_info_linking_info_transition_flag[BuildSettingInfo].value
+
+    if _migrates_cc_info_linking_info_provider:
+        for dep in avoid_deps:
+            if CcInfo in dep:
+                for linker_input in dep[CcInfo].linking_context.linker_inputs.to_list():
+                    for lib in linker_input.libraries:
+                        avoid_libraries[lib] = True
+
+        force_load = []
+        for dep in ctx.attr.deps:
+            if CcInfo in dep:
+                for linker_input in dep[CcInfo].linking_context.linker_inputs.to_list():
+                    for lib in linker_input.libraries:
+                        if not lib in avoid_libraries:
+                            force_load.append(lib)
+
+        static_libraries = [lib.static_library for lib in force_load if lib.static_library != None]
+        return [
+            apple_common.new_objc_provider(
+                force_load_library = depset(static_libraries),
+                link_inputs = depset(static_libraries),
+            ),
+            CcInfo(
+                linking_context = cc_common.create_linking_context(
+                    linker_inputs = depset([
+                        cc_common.create_linker_input(
+                            owner = ctx.label,
+                            libraries = depset([
+                                cc_common.create_library_to_link(
+                                    actions = ctx.actions,
+                                    static_library = lib,
+                                    alwayslink = True,
+                                )
+                                for lib in static_libraries
+                            ]),
+                            additional_inputs = depset(static_libraries),
+                        ),
+                    ]),
+                ),
+            ),
+        ]
+    else:
+        for dep in avoid_deps:
+            if apple_common.Objc in dep:
+                for lib in dep[apple_common.Objc].library.to_list():
+                    avoid_libraries[lib] = True
+            force_load = []
+
+        for dep in ctx.attr.deps:
+            if apple_common.Objc in dep:
+                for lib in dep[apple_common.Objc].library.to_list():
                     if not lib in avoid_libraries:
                         force_load.append(lib)
 
-    static_libraries = [lib.static_library for lib in force_load if lib.static_library != None]
-    return [
-        apple_common.new_objc_provider(
-            force_load_library = depset(static_libraries),
-            link_inputs = depset(static_libraries),
-        ),
-        CcInfo(
-            linking_context = cc_common.create_linking_context(
-                linker_inputs = depset([
-                    cc_common.create_linker_input(
-                        owner = ctx.label,
-                        libraries = depset([
-                            cc_common.create_library_to_link(
-                                actions = ctx.actions,
-                                static_library = lib,
-                                alwayslink = True,
-                            )
-                            for lib in static_libraries
-                        ]),
-                        additional_inputs = depset(static_libraries),
-                    ),
-                ]),
-            ),
-        ),
-    ]
+        return apple_common.new_objc_provider(
+            force_load_library = depset(force_load),
+            link_inputs = depset(force_load),
+        )
 
 force_load_direct_deps = rule(
     implementation = _force_load_direct_deps_impl,
-    attrs = dicts.add(split_transition_rule_attrs, {
+    attrs = {
         "deps": attr.label_list(
             cfg = transition_support.split_transition,
             mandatory = True,
@@ -79,7 +101,18 @@ force_load_direct_deps = rule(
                 """Internal - currently rules_ios the dict `platforms`
 """,
         ),
-    }),
+        "_migrates_cc_info_linking_info_transition_flag": attr.label(
+            default = "//rules:migrates_cc_info_linking_info",
+            # 1:1 transition
+            cfg = transition_support.migrates_cc_info_linking_info_transition,
+            doc = """Internal - the flag to check if the compiler supports cc info in dynamic frameworks
+""",
+        ),
+        "_allowlist_function_transition": attr.label(
+            default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
+            doc = "Needed to allow this rule to have an incoming edge configuration transition.",
+        ),
+    },
     doc = """
 A rule to link with `-force_load` for direct`deps`
 

@@ -322,9 +322,23 @@ _split_transition = transition(
     ],
 )
 
+def _migrates_cc_info_linking_info_transition_impl(settings, attr):
+    _ignore = (settings, attr)
+    _is_bazel_7 = int(get_bazel_version(bazel_version).major) >= 7
+    return {
+        "//rules:migrates_cc_info_linking_info": _is_bazel_7,
+    }
+
+_migrates_cc_info_linking_info_transition = transition(
+    implementation = _migrates_cc_info_linking_info_transition_impl,
+    inputs = [],
+    outputs = ["//rules:migrates_cc_info_linking_info"],
+)
+
 transition_support = struct(
     apple_rule_transition = _apple_rule_transition,
     split_transition = _split_transition,
+    migrates_cc_info_linking_info_transition = _migrates_cc_info_linking_info_transition,
     current_apple_platform = _current_apple_platform,
 )
 
