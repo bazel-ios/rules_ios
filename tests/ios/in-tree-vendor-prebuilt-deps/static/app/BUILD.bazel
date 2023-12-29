@@ -44,7 +44,7 @@ apple_framework(
     platforms = {"ios": "12.0"},
     swift_version = "5.9",
     visibility = ["//visibility:public"],
-    deps = ["//tests/ios/in-tree-vendor-prebuilt-deps/Pods/Tink"],
+    deps = ["//tests/ios/in-tree-vendor-prebuilt-deps/Pods/Lottie"],
 )
 
 ios_application(

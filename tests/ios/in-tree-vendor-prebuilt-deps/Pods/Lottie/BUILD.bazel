@@ -1,0 +1,10 @@
+load("@build_bazel_rules_ios//rules:framework.bzl", "apple_framework")
+
+apple_framework(
+    name = "Lottie",
+    platforms = {"ios": "9.0"},
+    sdk_dylibs = ["c++"],
+    vendored_static_frameworks = ["Frameworks/Lottie.framework"],
+    visibility = ["//visibility:public"],
+    deps = ["//tests/ios/in-tree-vendor-prebuilt-deps/Pods/rapidjson"],
+)

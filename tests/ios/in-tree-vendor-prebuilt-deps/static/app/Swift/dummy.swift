@@ -1,7 +1,7 @@
-import Tink
+import Lottie
 
 // Just require a symbol from Tink
-private var keyset: TINKKeysetHandle?
+private var lottieAnimationView: LottieAnimationView?
 public func xa(){}
 
 private enum Dummy {}
