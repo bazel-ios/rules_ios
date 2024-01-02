@@ -1,3 +1,4 @@
+load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
 load("//rules:test.bzl", "ios_unit_test")
 
 ios_unit_test(
@@ -31,6 +32,33 @@ ios_unit_test(
     ],
     minimum_os_version = "12.0",
     test_host = "//rules/test_host_app:iOS-9.3-AppHost",
+    # Adding visibility so the xcodeproject tests can depend on this target
+    visibility = ["//visibility:public"],
+)
+
+bool_flag(
+    name = "other_test_host",
+    build_setting_default = False,
+)
+
+config_setting(
+    name = "use_other_test_host",
+    flag_values = {
+        "//tests/ios/unit-test:other_test_host": "True",
+    },
+)
+
+ios_unit_test(
+    name = "ExplicitHostedWithSelect",
+    srcs = [
+        "empty.m",
+        "empty.swift",
+    ],
+    minimum_os_version = "12.0",
+    test_host = select({
+        "//tests/ios/unit-test:use_other_test_host": "//rules/test_host_app:iOS-9.3-AppHost",
+        "//conditions:default": "//rules/test_host_app:iOS-14.0-AppHost",
+    }),
     # Adding visibility so the xcodeproject tests can depend on this target
     visibility = ["//visibility:public"],
 )

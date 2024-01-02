@@ -184,11 +184,6 @@ def _ios_test(name, bundle_rule, test_rule, test_factory, apple_library, infopli
     if split_name_to_kwargs:
         ios_test_kwargs["split_name_to_kwargs"] = split_name_to_kwargs
 
-    # Deduplicate against the test deps
-    if ios_test_kwargs.get("test_host", None):
-        host_args = [ios_test_kwargs["test_host"]]
-    else:
-        host_args = []
     library = apple_library(name = name, namespace_is_module_name = False, platforms = {"ios": ios_test_kwargs.get("minimum_os_version")}, testonly = testonly, **kwargs)
 
     # Setup framework middlemen - need to process deps and libs
@@ -209,7 +204,6 @@ def _ios_test(name, bundle_rule, test_rule, test_factory, apple_library, infopli
         deps = kwargs.get("deps", []) + library.lib_names,
         testonly = testonly,
         tags = ["manual"],
-        test_deps = host_args,
         platform_type = "ios",
         minimum_os_version = ios_test_kwargs.get("minimum_os_version"),
     )

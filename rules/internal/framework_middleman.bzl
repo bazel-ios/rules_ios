@@ -216,11 +216,6 @@ def _dep_middleman(ctx):
             for lib_dep in dep[AvoidDepsInfo].libraries:
                 _collect_providers(lib_dep)
 
-    # Pull AvoidDeps from test deps
-    for dep in (ctx.attr.test_deps if ctx.attr.test_deps else []):
-        if AvoidDepsInfo in dep:
-            _process_avoid_deps(dep[AvoidDepsInfo].libraries)
-
     # Merge the entire provider here
     objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(providers = objc_providers, merge_keys = [
         "force_load_library",
@@ -270,10 +265,6 @@ dep_middleman = rule(
             doc =
                 """Deps that may contain frameworks
 """,
-        ),
-        "test_deps": attr.label_list(
-            cfg = transition_support.split_transition,
-            allow_empty = True,
         ),
         "platform_type": attr.string(
             mandatory = False,
