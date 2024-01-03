@@ -10,9 +10,9 @@ find "${BAZEL_DIAGNOSTICS_DIR}" -type f -atime +7d -delete
 
 case "${PRODUCT_TYPE}" in
 com.apple.product-type.framework)
-    input_options=("bazel-bin$BAZEL_BIN_SUBDIR/${TARGET_NAME}.framework")
+    input_options=("bazel-bin/$BAZEL_BIN_SUBDIR/${TARGET_NAME}.framework")
     if [ ! -d "$input_options" ]; then
-        input_options=("bazel-bin$BAZEL_BIN_SUBDIR/${TARGET_NAME}.framework.zip")
+        input_options=("bazel-bin/$BAZEL_BIN_SUBDIR/${TARGET_NAME}.framework.zip")
     fi
     ;;
 com.apple.product-type.framework.static)
