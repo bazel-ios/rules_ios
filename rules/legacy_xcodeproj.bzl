@@ -127,6 +127,13 @@ def _xcodeproj_aspect_collect_swift_copts(deps, ctx):
     copts = None
     if ctx.rule.kind == "swift_library":
         copts = _make_swift_copts(deps)
+
+        # Ensures `-import-underlying-module` gets into the generated Xcode project if applied,
+        # otherwise indexing might fail in mixed modules
+        # https://github.com/bazel-ios/rules_ios/blob/883cc859daffb1f02bd0e153fca39177d2fa7eb4/rules/library.bzl#L923
+        if hasattr(ctx.rule.attr, "copts"):
+            if "-import-underlying-module" in ctx.rule.attr.copts:
+                copts += ["-import-underlying-module"]
     else:
         for dep in deps:
             if _SrcsInfo in dep:
