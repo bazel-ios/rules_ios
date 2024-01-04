@@ -13,9 +13,10 @@ _PLATFORM_TYPE_TO_CPUS_FLAG = {
     "watchos": "//command_line_option:watchos_cpus",
 }
 
+# TODO: Should be loaded from bazel_build_apple_support when we migrate to v1.10.0
 # Could not load it directly from bazel_build_apple_support
-# As we support multiple versions of rules_apple_support
-# Where some don't have the file. So we copied it
+# As we support multiple versions of rules_apple_support (v2 and v3)
+# Where <v3.1.0 don't have the updated dependency. So we copied it
 # https://github.com/bazelbuild/apple_support/blob/d87e8b07f3345e750834dbb6ce38c7c7d3b8b44b/configs/platforms.bzl#L108
 _CPU_TO_DEFAULT_PLATFORM_NAME = {
     "darwin_arm64": "macos_arm64",
