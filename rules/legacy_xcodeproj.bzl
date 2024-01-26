@@ -745,6 +745,7 @@ export DATE_SUFFIX="$(date +%Y%m%d.%H%M%S%L)"
 export BAZEL_BUILD_EVENT_TEXT_FILENAME="$BAZEL_DIAGNOSTICS_DIR/build-event-$DATE_SUFFIX.txt"
 export BAZEL_BUILD_EXECUTION_LOG_FILENAME="$BAZEL_DIAGNOSTICS_DIR/build-execution-log-$DATE_SUFFIX.log"
 export BAZEL_PROFILE_FILENAME="$BAZEL_DIAGNOSTICS_DIR/build-profile-$DATE_SUFFIX.log"
+export BAZEL_STARLARK_CPU_PROFILE_FILENAME="$BAZEL_DIAGNOSTICS_DIR/starlark-cpu-profile-$DATE_SUFFIX.log"
 env -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC $BAZEL_BUILD_TARGET_LABEL
 $BAZEL_INSTALLER
 """.format(BAZEL_DIAGNOSTICS_DIR = _BAZEL_DIAGNOSTICS_DIR)
@@ -1078,6 +1079,7 @@ def _xcodeproj_impl(ctx):
         "BAZEL_INSTALLER": "$BAZEL_INSTALLERS_DIR/%s" % ctx.executable.installer.basename,
         "BAZEL_EXECUTION_LOG_ENABLED": ctx.attr.bazel_execution_log_enabled,
         "BAZEL_PROFILE_ENABLED": ctx.attr.bazel_profile_enabled,
+        "BAZEL_STARLARK_CPU_PROFILE_ENABLED": ctx.attr.bazel_starlark_cpu_profile_enabled,
         "BAZEL_DIAGNOSTICS_DIR": _BAZEL_DIAGNOSTICS_DIR,
         "BAZEL_CONFIGS": ctx.attr.configs.keys(),
         "BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS": " ".join(["{} ".format(opt) for opt in ctx.attr.additional_bazel_build_options]),
@@ -1343,6 +1345,7 @@ Additional LLDB settings to be added in each target's .lldbinit configuration fi
         """),
         "bazel_execution_log_enabled": attr.bool(default = False, mandatory = False),
         "bazel_profile_enabled": attr.bool(default = False, mandatory = False),
+        "bazel_starlark_cpu_profile_enabled": attr.bool(default = False, mandatory = False),
         "disable_main_thread_checker": attr.bool(default = False, mandatory = False),
         "force_x86_sim": attr.bool(default = False, mandatory = False),
     },
