@@ -1,5 +1,7 @@
 # iOS Rules for [Bazel](https://bazel.build)
 
+Fake change to repro CI pipeline issue
+
 ![master](https://github.com/bazel-ios/rules_ios/workflows/CI-master/badge.svg)
 
 `rules_ios` is [community developed Bazel rules](https://bazel-ios.github.io/)
