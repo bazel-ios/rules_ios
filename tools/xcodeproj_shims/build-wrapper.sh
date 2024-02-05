@@ -18,6 +18,10 @@ if [ $BAZEL_PROFILE_ENABLED -gt 0 ]; then
     BAZEL_BUILD_OPTIONS+=("--profile=$BAZEL_PROFILE_FILENAME")
 fi
 
+if [ $BAZEL_STARLARK_CPU_PROFILE_ENABLED -gt 0 ]; then
+    BAZEL_BUILD_OPTIONS+=("--starlark_cpu_profile=$BAZEL_STARLARK_CPU_PROFILE_FILENAME")
+fi
+
 # When building for an iOS device in XCode, TARGET_DEVICE_IDENTIFIER is exported, and PLATFORM_NAME is iphoneos.
 if [ -n "${TARGET_DEVICE_IDENTIFIER:-}" ] && [ "$PLATFORM_NAME" = "iphoneos" ]; then
     echo "Builds with --ios_multi_cpus=arm64 since the target is an iOS device."
