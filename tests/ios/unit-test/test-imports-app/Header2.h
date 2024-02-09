@@ -1,3 +1,5 @@
+#pragma once
+
 @import Foundation;
 
 NS_ASSUME_NONNULL_BEGIN
