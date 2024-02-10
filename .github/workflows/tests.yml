@@ -31,7 +31,7 @@ jobs:
           pgrep Simulator | xargs kill || true
 
           # GitHub runners are hitting 'module not found pkg_resources' required by prepare_sim.py
-          pip install setuptools
+          pip3 install setuptools
 
           # Create single ephemeral iOS sim
           SIMULATOR_UDID=$(./tools/tests/prepare_sim.py)
