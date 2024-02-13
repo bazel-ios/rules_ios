@@ -22,10 +22,7 @@ bzl_library(
     srcs = ["transition_support.bzl"],
     visibility = ["//visibility:public"],
     deps = [
-        "//rules/internal:bazel_version",
         "@build_bazel_apple_support//lib:apple_support",
-        "@rules_apple_api//:api",
-        "@rules_ios_bazel_version//:api",
     ],
 )
 
@@ -55,7 +52,7 @@ bzl_library(
     deps = [
         ":providers",
         ":transition_support",
-        "@rules_apple_api//:api",
+        "@bazel_skylib//lib:dicts",
     ],
 )
 
@@ -108,7 +105,6 @@ bzl_library(
         ":features",
         "//rules/internal:objc_provider_utils",
         "@build_bazel_rules_apple//apple",
-        "@rules_apple_api//:api",
     ],
 )
 
@@ -132,7 +128,6 @@ bzl_library(
         "@build_bazel_rules_apple//apple:apple_static_library",
         "@build_bazel_rules_apple//apple:resources",
         "@build_bazel_rules_swift//swift",
-        "@rules_apple_api//:api",
     ],
 )
 
@@ -154,7 +149,6 @@ bzl_library(
         "@bazel_tools//tools/cpp:toolchain_utils.bzl",
         "@build_bazel_rules_apple//apple",
         "@build_bazel_rules_swift//swift",
-        "@rules_apple_api//:api",
     ],
 )
 
@@ -206,7 +200,6 @@ bzl_library(
         ":transition_support",
         "//rules/internal:framework_middleman",
         "@build_bazel_rules_apple//apple:ios",
-        "@rules_apple_api//:api",
     ],
 )
 

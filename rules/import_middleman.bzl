@@ -1,11 +1,4 @@
-# Notes on Bazel 5.x.x VS 6.x.x and rules_apple apple_api_version changes:
-# The provider field that contains the `static_framework_file` changed to
-# `imported_library` - see
-# https://github.com/bazelbuild/rules_apple/commit/8d841342c238457896cd7596cc29b2d06c9a75f0
-
-load("@build_bazel_rules_apple//apple:providers.bzl", "AppleFrameworkImportInfo")
-load("@rules_apple_api//:providers.bzl", "new_appleframeworkimportinfo")
-load("@rules_apple_api//:version.bzl", "apple_api_version")
+load("@build_bazel_rules_apple//apple/internal:providers.bzl", "AppleFrameworkImportInfo", "new_appleframeworkimportinfo")
 load("//rules:features.bzl", "feature_names")
 load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
 load("@build_bazel_rules_apple//apple/internal:bundling_support.bzl", "bundling_support")
@@ -102,12 +95,7 @@ def _find_imports_impl(target, ctx):
         imported_library_file.append(target[apple_common.Objc].imported_library)
 
     elif AppleFrameworkImportInfo in target:
-        use_lts_5_rules_apple_api = apple_api_version == "1.0"
-        if use_lts_5_rules_apple_api:
-            static_framework_file.append(target[apple_common.Objc].static_framework_file)
-        else:
-            static_framework_file.append(target[apple_common.Objc].imported_library)
-
+        static_framework_file.append(target[apple_common.Objc].imported_library)
         target_dynamic_framework_file = target[apple_common.Objc].dynamic_framework_file
         target_dynamic_framework_file_list = target_dynamic_framework_file.to_list()
         if len(target_dynamic_framework_file_list) > 0:
@@ -216,14 +204,10 @@ def _file_collector_rule_impl(ctx):
     deduped_static_framework = depset(_deduplicate_test_deps(test_linker_deps[0], existing_static_framework.to_list()))
 
     replaced_static_framework = _replace_inputs(ctx, deduped_static_framework, input_static_frameworks, _update_framework)
-    use_lts_5_rules_apple_api = apple_api_version == "1.0"
-    if use_lts_5_rules_apple_api:
-        objc_provider_fields["static_framework_file"] = depset(replaced_static_framework.inputs)
-    else:
-        objc_provider_fields["imported_library"] = depset([], transitive = [
-            depset(replaced_static_framework.inputs),
-            objc_provider_fields.get("imported_library", depset([])),
-        ])
+    objc_provider_fields["imported_library"] = depset([], transitive = [
+        depset(replaced_static_framework.inputs),
+        objc_provider_fields.get("imported_library", depset([])),
+    ])
 
     # Update dynamic frameworks - note that we need to do some additional
     # processing for the ad-hoc files e.g. ( Info.plist )
@@ -252,10 +236,7 @@ def _file_collector_rule_impl(ctx):
     objc_provider_fields["dynamic_framework_file"] = depset(dynamic_framework_file)
 
     all_replaced_frameworks = replaced_dynamic_framework.values() + replaced_static_framework.replaced.values()
-    if use_lts_5_rules_apple_api:
-        replaced_frameworks = all_replaced_frameworks
-    else:
-        replaced_frameworks = replaced_dynamic_framework.values()
+    replaced_frameworks = replaced_dynamic_framework.values()
 
     compat_link_opt = ["-L__BAZEL_XCODE_DEVELOPER_DIR__/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator", "-Wl,-weak-lswiftCompatibility51"]
 
