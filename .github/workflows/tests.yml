@@ -81,57 +81,6 @@ jobs:
           name: bazel-testlogs
           path: bazel-testlogs
 
-  bazel_5_ios_integration_tests:
-    name: Build and Test ( Virtual Frameworks + Bazel 5 )
-    runs-on: macos-12
-    env:
-      USE_BAZEL_VERSION: 5.3.2
-    steps:
-      - uses: actions/checkout@v3
-      - name: Preflight Env
-        # Dont test Bazel 5 with bzlmod
-        run: .github/workflows/preflight_env.sh --no-bzlmod --use-remote-cache
-      - name: Build and Test
-        run: |
-          # iOS tests without bzlmod on Bazel 5
-          bazelisk build \
-            --noexperimental_enable_bzlmod \
-            --config=ios \
-            --config=vfs \
-            -- \
-            //tests/ios/...
-
-      - uses: actions/upload-artifact@v2
-        if: failure()
-        with:
-          name: bazel-testlogs
-          path: bazel-testlogs
-
-  rules_apple_2_ios_integration_tests:
-    name: Build and Test ( Virtual Frameworks + rules_apple 2.x )
-    runs-on: macos-12
-    env:
-      USE_BAZEL_VERSION: 6.1.2
-    steps:
-      - uses: actions/checkout@v3
-      - name: Preflight Env
-        run: .github/workflows/preflight_env.sh --no-bzlmod --use-remote-cache
-      - name: Build and Test
-        run: |
-          # iOS tests
-          sed -i '' 's/LOAD_RULES_APPLE_2_DEPS = False/LOAD_RULES_APPLE_2_DEPS = True/' WORKSPACE && \
-          bazelisk build \
-            --config=ios \
-            --config=vfs \
-            -- \
-            //tests/ios/...
-
-      - uses: actions/upload-artifact@v2
-        if: failure()
-        with:
-          name: bazel-testlogs
-          path: bazel-testlogs
-
   build_arm64_simulator:
     name: Build arm64 Simulator
     runs-on: macos-12
@@ -143,6 +92,7 @@ jobs:
         run: |
           bazelisk build \
             --config=vfs \
+            --features apple.arm64_simulator_use_device_deps \
             --ios_multi_cpus=sim_arm64  \
             -- \
             //... \
@@ -153,6 +103,7 @@ jobs:
           bazelisk build \
             --config=ios \
             --config=vfs \
+            --features apple.arm64_simulator_use_device_deps \
             --ios_multi_cpus=sim_arm64 \
             -- \
             //tests/ios/... \
@@ -223,15 +174,12 @@ jobs:
     # to exemplify fat binaries on the latest version
     name: Build iOS App for Multiple Architecture
     runs-on: macos-12
-    env:
-      USE_BAZEL_VERSION: 6.1.2
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
-        run: .github/workflows/preflight_env.sh --no-bzlmod --use-remote-cache
+        run: .github/workflows/preflight_env.sh --use-remote-cache
       - name: Build App
         run: |
-          sed -i '' 's/LOAD_RULES_APPLE_2_DEPS = False/LOAD_RULES_APPLE_2_DEPS = True/' WORKSPACE && \
           bazelisk build \
             --config=ios_multi_arch_test \
             -- \
