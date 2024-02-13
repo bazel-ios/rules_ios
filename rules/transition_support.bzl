@@ -266,9 +266,9 @@ def _split_transition_impl(settings, attr):
             "//command_line_option:ios_minimum_os": _min_os_version_or_none(attr, attr_platforms, "ios", platform_type),
             "//command_line_option:ios_multi_cpus": ios_multi_cpus,
             "//command_line_option:macos_minimum_os": _min_os_version_or_none(attr, attr_platforms, "macos", platform_type),
+            "//command_line_option:minimum_os_version": minimum_os_version,
             "//command_line_option:tvos_minimum_os": _min_os_version_or_none(attr, attr_platforms, "tvos", platform_type),
             "//command_line_option:watchos_minimum_os": _min_os_version_or_none(attr, attr_platforms, "watchos", platform_type),
-            "//command_line_option:minimum_os_version": minimum_os_version,
         }
         output_dictionary["@build_bazel_rules_swift//swift:emit_swiftinterface"] = emit_swiftinterface
         split_output_dictionary[found_cpu] = output_dictionary

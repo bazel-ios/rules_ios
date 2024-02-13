@@ -1,12 +1,73 @@
-load("@buildifier_prebuilt//:rules.bzl", "buildifier")
+load("@buildifier_prebuilt//:rules.bzl", "buildifier", "buildifier_test")
+
+_BUILDIFIER_EXCLUDE_PATTERNS = [
+    "./.git/*",
+    "./bazel-*/*",
+    "./data/*",
+]
+
+_BUILDIFIER_WARNINGS = [
+    "attr-cfg",
+    "attr-non-empty",
+    "attr-output-default",
+    "attr-single-file",
+    "build-args-kwargs",
+    "confusing-name",
+    "constant-glob",
+    "ctx-actions",
+    "ctx-args",
+    "deprecated-function",
+    "depset-items",
+    "depset-iteration",
+    "depset-union",
+    "dict-concatenation",
+    "dict-method-named-arg",
+    "duplicated-name",
+    "filetype",
+    "git-repository",
+    "http-archive",
+    "integer-division",
+    "keyword-positional-params",
+    "list-append",
+    "load",
+    "load-on-top",
+    "no-effect",
+    "out-of-order-load",
+    "output-group",
+    "overly-nested-depset",
+    "package-name",
+    "package-on-top",
+    "positional-args",
+    "redefined-variable",
+    "repository-name",
+    "return-value",
+    "rule-impl-return",
+    "same-origin-load",
+    "skylark-comment",
+    "skylark-docstring",
+    "string-iteration",
+    "uninitialized",
+    "unreachable",
+    "unsorted-dict-items",
+    "unused-variable",
+]
 
 buildifier(
     name = "buildifier",
-    exclude_patterns = [
-        "./.git/*",
-        "./bazel-*/*",
-    ],
+    exclude_patterns = _BUILDIFIER_EXCLUDE_PATTERNS,
+    lint_mode = "fix",
+    lint_warnings = _BUILDIFIER_WARNINGS,
     mode = "fix",
     tags = ["manual"],
     visibility = ["//:__pkg__"],
+)
+
+buildifier_test(
+    name = "buildifier_check_test",
+    exclude_patterns = _BUILDIFIER_EXCLUDE_PATTERNS,
+    lint_mode = "warn",
+    lint_warnings = _BUILDIFIER_WARNINGS,
+    mode = "check",
+    no_sandbox = True,
+    workspace = "//:WORKSPACE",
 )

@@ -1,13 +1,11 @@
 load("@build_bazel_rules_apple//apple/internal:providers.bzl", "AppleFrameworkImportInfo", "new_appleframeworkimportinfo")
-load("//rules:features.bzl", "feature_names")
 load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
-load("@build_bazel_rules_apple//apple/internal:bundling_support.bzl", "bundling_support")
 
 _FindImportsAspectInfo = provider(fields = {
-    "imported_library_file": "",
-    "static_framework_file": "",
     "dynamic_framework_file": "",
     "import_infos": "",
+    "imported_library_file": "",
+    "static_framework_file": "",
 })
 
 def _update_framework(ctx, framework):
@@ -174,7 +172,6 @@ def _file_collector_rule_impl(ctx):
         # This should be correctly configured upstream: see setup in rules_ios
         fail("using import_middleman ({}) on wrong transition ({},{},is_device={})".format(ctx.attr.name, platform, arch, ctx.fragments.apple.single_arch_platform.is_device))
 
-    virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
     merge_keys = [
         "sdk_dylib",
         "sdk_framework",

@@ -1,5 +1,5 @@
-load("@build_bazel_rules_apple//apple/internal/testing:ios_rules.bzl", _ios_internal_ui_test_bundle = "ios_internal_ui_test_bundle", _ios_internal_unit_test_bundle = "ios_internal_unit_test_bundle", _ios_ui_test = "ios_ui_test", _ios_unit_test = "ios_unit_test")
 load("@bazel_skylib//lib:types.bzl", "types")
+load("@build_bazel_rules_apple//apple/internal/testing:ios_rules.bzl", _ios_internal_ui_test_bundle = "ios_internal_ui_test_bundle", _ios_internal_unit_test_bundle = "ios_internal_unit_test_bundle", _ios_ui_test = "ios_ui_test", _ios_unit_test = "ios_unit_test")
 load("//rules:library.bzl", "apple_library")
 load("//rules:plists.bzl", "process_infoplists")
 load("//rules/internal:framework_middleman.bzl", "dep_middleman", "framework_middleman")

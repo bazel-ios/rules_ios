@@ -1,6 +1,6 @@
 load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
-load("//rules:framework.bzl", "apple_framework")
 load("//rules:app.bzl", "ios_application")
+load("//rules:framework.bzl", "apple_framework")
 
 string_flag(
     name = "flavor",
@@ -21,18 +21,19 @@ string_flag(
 ]
 
 _XCCONFIG = {
+    "CUSTOM_XCCONFIG_1": "VALUE_1",
+    "CUSTOM_XCCONFIG_2": "VALUE_2",
     "GCC_PREPROCESSOR_DEFINITIONS": [
         "MACRO_A=0",
     ],
     "OTHER_SWIFT_FLAGS": [
         "-DNMACRO_H",
     ],
-    "CUSTOM_XCCONFIG_1": "VALUE_1",
-    "CUSTOM_XCCONFIG_2": "VALUE_2",
 }
 
 _XCCONFIG_BY_BUILD_SETTING = {
     "//tests/ios/xcconfig:blue": {
+        "CUSTOM_XCCONFIG_3": "VALUE_3+$(CUSTOM_XCCONFIG_1)",
         "GCC_PREPROCESSOR_DEFINITIONS": [
             "MACRO_A=1",
             "MACRO_B=1",
@@ -50,7 +51,6 @@ _XCCONFIG_BY_BUILD_SETTING = {
             "-DMACRO_L",
             "-DNMACRO_M",
         ],
-        "CUSTOM_XCCONFIG_3": "VALUE_3+$(CUSTOM_XCCONFIG_1)",
     },
     "//tests/ios/xcconfig:red": {
         "GCC_PREPROCESSOR_DEFINITIONS": [

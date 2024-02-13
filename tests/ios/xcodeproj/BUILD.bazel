@@ -1,6 +1,6 @@
-load("//rules:xcodeproj.bzl", "xcodeproj")
-load("//rules:legacy_xcodeproj.bzl", "xcodeproj_project_options")
 load("//rules:additional_scheme_info.bzl", "additional_scheme_info")
+load("//rules:legacy_xcodeproj.bzl", "xcodeproj_project_options")
+load("//rules:xcodeproj.bzl", "xcodeproj")
 
 xcodeproj(
     name = "Single-Static-Framework-Project",

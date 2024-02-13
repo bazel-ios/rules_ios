@@ -41,13 +41,13 @@ def _resources_filegroup_impl(ctx):
 resources_filegroup = rule(
     implementation = _resources_filegroup_impl,
     attrs = {
-        "srcs": attr.label_list(allow_files = True, allow_empty = True),
-        "extensions_to_filter": attr.string_list(mandatory = True, allow_empty = True),
         "default_launch_screen_storyboard": attr.label(
             mandatory = False,
             allow_single_file = ["storyboard", "xib"],
             default = Label("//rules/test_host_app:LaunchScreen.storyboard"),
         ),
+        "extensions_to_filter": attr.string_list(mandatory = True, allow_empty = True),
+        "srcs": attr.label_list(allow_files = True, allow_empty = True),
     },
     doc = """Wraps a set of srcs for use as `data` in an `objc_library` or `swift_library`,
 or `resources` in an `apple_resource_bundle`.

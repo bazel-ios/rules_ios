@@ -14,12 +14,10 @@ apple_framework(
         "-fcxx-modules",
     ],
     platforms = {"ios": "10.0"},
-    public_headers = glob(
-        [
-            "ObjCppMixedLib/A.h",
-            "ObjCppMixedLib/B.hpp",
-        ],
-    ),
+    public_headers = [
+        "ObjCppMixedLib/A.h",
+        "ObjCppMixedLib/B.hpp",
+    ],
     visibility = ["//visibility:public"],
 )
 
@@ -31,11 +29,9 @@ apple_framework(
         ],
     ),
     platforms = {"ios": "10.0"},
-    public_headers = glob(
-        [
-            "ObjCLib/C.h",
-        ],
-    ),
+    public_headers = [
+        "ObjCLib/C.h",
+    ],
     visibility = ["//visibility:public"],
     deps = [":ObjCppMixedLib"],
 )

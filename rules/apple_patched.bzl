@@ -1,5 +1,6 @@
 """This file contains drop-in replacements for rules in the rules_apple repository"""
 
+load("@build_bazel_rules_apple//apple:providers.bzl", "AppleFrameworkImportInfo")
 load(
     "@build_bazel_rules_apple//apple/internal:apple_framework_import.bzl",
     apple_dynamic_framework_import_original = "apple_dynamic_framework_import",
@@ -9,11 +10,10 @@ load(
     "@build_bazel_rules_apple//apple/internal:framework_import_support.bzl",
     "framework_import_support",
 )
-load("@build_bazel_rules_apple//apple:providers.bzl", "AppleFrameworkImportInfo")
 load("@build_bazel_rules_swift//swift/internal:providers.bzl", "SwiftUsageInfo")
-load("//rules/framework:vfs_overlay.bzl", "make_vfsoverlay")
-load("//rules:providers.bzl", "FrameworkInfo")
 load("//rules:features.bzl", "feature_names")
+load("//rules:providers.bzl", "FrameworkInfo")
+load("//rules/framework:vfs_overlay.bzl", "make_vfsoverlay")
 
 def apple_dynamic_framework_import(name, **kwargs):
     """Patches an apple_dynamic_framework_import target based on the problems reported in https://github.com/bazel-ios/rules_ios/issues/55
@@ -147,13 +147,13 @@ _apple_framework_import_modulemap = rule(
     toolchains = ["@bazel_tools//tools/cpp:toolchain_type"],
     fragments = ["apple"],
     attrs = {
-        "legacy_target": attr.label(
-            mandatory = True,
-            doc = "The legacy target to patch",
-        ),
         "framework_imports": attr.label_list(
             allow_files = True,
             doc = "The list of files under a `.framework` directory for `legacy_target`.",
+        ),
+        "legacy_target": attr.label(
+            mandatory = True,
+            doc = "The legacy target to patch",
         ),
         "_cc_toolchain": attr.label(
             default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),

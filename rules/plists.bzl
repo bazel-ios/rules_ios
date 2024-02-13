@@ -2,8 +2,8 @@
 Defines macros for working with plist files.
 """
 
-load("@bazel_skylib//lib:types.bzl", "types")
 load("@bazel_skylib//lib:sets.bzl", "sets")
+load("@bazel_skylib//lib:types.bzl", "types")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@build_bazel_rules_ios//rules:substitute_build_settings.bzl", "substitute_build_settings")
 load("//rules/library:xcconfig.bzl", "build_setting_name", "merge_xcconfigs")

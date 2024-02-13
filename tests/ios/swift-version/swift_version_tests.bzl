@@ -1,5 +1,5 @@
-load("//rules:framework.bzl", "apple_framework")
 load("@build_bazel_rules_swift//test/rules:action_command_line_test.bzl", "action_command_line_test")
+load("//rules:framework.bzl", "apple_framework")
 
 def apple_framework_swift_version_test(*, name, srcs = [":empty.swift"], given, expected, not_expected = []):
     framework_name = name + "_" + given.replace(".", "_")

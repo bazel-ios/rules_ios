@@ -46,8 +46,8 @@ _lldbinit = rule(
     implementation = _lldbinit_impl,
     attrs = {
         "content": attr.string(mandatory = True),
-        "out": attr.output(mandatory = True),
         "deps": attr.label_list(mandatory = False, allow_files = True),
+        "out": attr.output(mandatory = True),
     },
     doc = "Setup an lldbinit file",
 )

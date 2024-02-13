@@ -15,29 +15,29 @@ apple_framework(
             "name": "BasicXCFrameworkDynamic",
             "slices": [
                 {
-                    "identifier": "ios-arm64",
-                    "platform": "ios",
-                    "platform_variant": "",
-                    "supported_archs": ["arm64"],
-                    "path": "BasicXCFrameworkDynamic.xcframework/ios-arm64/BasicXCFrameworkDynamic.framework",
                     "build_type": {
                         "linkage": "dynamic",
                         "packaging": "framework",
                     },
+                    "identifier": "ios-arm64",
+                    "path": "BasicXCFrameworkDynamic.xcframework/ios-arm64/BasicXCFrameworkDynamic.framework",
+                    "platform": "ios",
+                    "platform_variant": "",
+                    "supported_archs": ["arm64"],
                 },
                 {
+                    "build_type": {
+                        "linkage": "dynamic",
+                        "packaging": "framework",
+                    },
                     "identifier": "ios-arm64_x86_64-simulator",
+                    "path": "BasicXCFrameworkDynamic.xcframework/ios-arm64_x86_64-simulator/BasicXCFrameworkDynamic.framework",
                     "platform": "ios",
                     "platform_variant": "simulator",
                     "supported_archs": [
                         "arm64",
                         "x86_64",
                     ],
-                    "path": "BasicXCFrameworkDynamic.xcframework/ios-arm64_x86_64-simulator/BasicXCFrameworkDynamic.framework",
-                    "build_type": {
-                        "linkage": "dynamic",
-                        "packaging": "framework",
-                    },
                 },
             ],
         },
@@ -60,29 +60,29 @@ apple_framework(
             "name": "BasicXCFrameworkStatic",
             "slices": [
                 {
-                    "identifier": "ios-arm64",
-                    "platform": "ios",
-                    "platform_variant": "",
-                    "supported_archs": ["arm64"],
-                    "path": "BasicXCFrameworkStatic.xcframework/ios-arm64/BasicXCFrameworkStatic.framework",
                     "build_type": {
                         "linkage": "static",
                         "packaging": "framework",
                     },
+                    "identifier": "ios-arm64",
+                    "path": "BasicXCFrameworkStatic.xcframework/ios-arm64/BasicXCFrameworkStatic.framework",
+                    "platform": "ios",
+                    "platform_variant": "",
+                    "supported_archs": ["arm64"],
                 },
                 {
+                    "build_type": {
+                        "linkage": "static",
+                        "packaging": "framework",
+                    },
                     "identifier": "ios-arm64_x86_64-simulator",
+                    "path": "BasicXCFrameworkStatic.xcframework/ios-arm64_x86_64-simulator/BasicXCFrameworkStatic.framework",
                     "platform": "ios",
                     "platform_variant": "simulator",
                     "supported_archs": [
                         "arm64",
                         "x86_64",
                     ],
-                    "path": "BasicXCFrameworkStatic.xcframework/ios-arm64_x86_64-simulator/BasicXCFrameworkStatic.framework",
-                    "build_type": {
-                        "linkage": "static",
-                        "packaging": "framework",
-                    },
                 },
             ],
         },

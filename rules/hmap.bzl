@@ -83,7 +83,7 @@ def _make_headermap_impl(ctx):
         swift_common.create_swift_info(),
     ]
 
-    hdrs_lists = [l for l in hdrs_lists if l]
+    hdrs_lists = [hdr_list for hdr_list in hdrs_lists if hdr_list]
     if len(hdrs_lists) > 0:
         providers.append(HeaderMapInfo(
             files = depset([ctx.outputs.headermap]),
@@ -98,18 +98,18 @@ headermap = rule(
     implementation = _make_headermap_impl,
     output_to_genfiles = True,
     attrs = {
-        "namespace": attr.string(
+        "direct_hdr_providers": attr.label_list(
             mandatory = False,
-            doc = "The prefix to be used for header imports",
+            doc = "Targets whose direct headers should be added to the list of hdrs",
         ),
         "hdrs": attr.label_list(
             mandatory = True,
             allow_files = True,
             doc = "The list of headers included in the headermap",
         ),
-        "direct_hdr_providers": attr.label_list(
+        "namespace": attr.string(
             mandatory = False,
-            doc = "Targets whose direct headers should be added to the list of hdrs",
+            doc = "The prefix to be used for header imports",
         ),
         "_headermap_builder": attr.label(
             executable = True,

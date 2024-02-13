@@ -1,7 +1,7 @@
 load("@build_bazel_rules_apple//apple:ios.bzl", rules_apple_ios_application = "ios_application")
+load("//rules:force_load_direct_deps.bzl", "force_load_direct_deps")
 load("//rules:library.bzl", "apple_library")
 load("//rules:plists.bzl", "process_infoplists")
-load("//rules:force_load_direct_deps.bzl", "force_load_direct_deps")
 load("//rules/internal:framework_middleman.bzl", "dep_middleman", "framework_middleman")
 
 # We need to try and partition out arguments for obj_library / swift_library

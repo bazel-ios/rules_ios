@@ -1,13 +1,13 @@
 """ Legacy Xcode Project Generation Logic """
 
+load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo")
 load("@build_bazel_rules_apple//apple/internal:platform_support.bzl", "platform_support")
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo")
-load("@bazel_skylib//lib:paths.bzl", "paths")
-load("//rules:hmap.bzl", "HeaderMapInfo")
-load("//rules/framework:vfs_overlay.bzl", "VFSOverlayInfo", VFS_OVERLAY_FRAMEWORK_SEARCH_PATH = "FRAMEWORK_SEARCH_PATH")
 load("//rules:additional_scheme_info.bzl", "AdditionalSchemeInfo")
 load("//rules:features.bzl", "feature_names")
+load("//rules:hmap.bzl", "HeaderMapInfo")
+load("//rules/framework:vfs_overlay.bzl", "VFSOverlayInfo", VFS_OVERLAY_FRAMEWORK_SEARCH_PATH = "FRAMEWORK_SEARCH_PATH")
 
 def _get_attr_values_for_name(deps, provider, field):
     return [
@@ -133,7 +133,7 @@ def _xcodeproj_aspect_collect_swift_copts(deps, ctx):
         # https://github.com/bazel-ios/rules_ios/blob/883cc859daffb1f02bd0e153fca39177d2fa7eb4/rules/library.bzl#L923
         if hasattr(ctx.rule.attr, "copts"):
             if "-import-underlying-module" in ctx.rule.attr.copts:
-                copts += ["-import-underlying-module"]
+                copts.append("-import-underlying-module")
     else:
         for dep in deps:
             if _SrcsInfo in dep:
@@ -470,9 +470,9 @@ source """ + ctx.executable.runscript.path
 xcodeproj_lldbinit = rule(
     implementation = _xcodeproj_lldbinit_impl,
     attrs = {
-        "runscript": attr.label(mandatory = False, executable = True, cfg = "exec", default = "@build_bazel_rules_ios//tools/xcodeproj_shims:lldb-settings"),
-        "project": attr.label(mandatory = True, providers = []),
         "out": attr.output(mandatory = True),
+        "project": attr.label(mandatory = True, providers = []),
+        "runscript": attr.label(mandatory = False, executable = True, cfg = "exec", default = "@build_bazel_rules_ios//tools/xcodeproj_shims:lldb-settings"),
         "target_name": attr.string(),
     },
     doc = "Internal testing rule relying on assumptions about the xcodeproj rule above",
@@ -481,9 +481,9 @@ xcodeproj_lldbinit = rule(
 def _xcodeproj_project_options_impl(ctx):
     # Map of the attr name to the options value expected by XcodeGen.
     options_map = {
-        "uses_tabs": "usesTabs",
         "indent_width": "indentWidth",
         "tab_width": "tabWidth",
+        "uses_tabs": "usesTabs",
     }
 
     # Accumulate all provided options into a Starlark dict.
@@ -497,9 +497,9 @@ def _xcodeproj_project_options_impl(ctx):
 xcodeproj_project_options = rule(
     implementation = _xcodeproj_project_options_impl,
     attrs = {
-        "uses_tabs": attr.bool(mandatory = False),
         "indent_width": attr.int(mandatory = False),
         "tab_width": attr.int(mandatory = False),
+        "uses_tabs": attr.bool(mandatory = False),
     },
     doc = "Rule to change project options, values will fallback to Xcode default if not provided",
 )
@@ -682,9 +682,9 @@ def _gather_asset_sources(target_info, path_prefix):
         # https://github.com/bazelbuild/rules_apple/blob/master/apple/internal/partials/support/resources_support.bzl#L162
         if extension == None:
             payload = {
-                "path": paths.join(path_prefix, short_path),
-                "optional": True,
                 "buildPhase": "none",
+                "optional": True,
+                "path": paths.join(path_prefix, short_path),
             }
             asset_sources.append(payload)
         elif extension in [_XCASSETS, _XCSTICKERS]:
@@ -706,25 +706,25 @@ def _gather_asset_sources(target_info, path_prefix):
 
     for datamodel_key in datamodel_groups.keys():
         payload = {
-            "path": paths.join(path_prefix, datamodel_key),
-            "optional": True,
             "buildPhase": "none",
+            "optional": True,
+            "path": paths.join(path_prefix, datamodel_key),
         }
         asset_sources.append(payload)
 
     for asset_key in catalog_groups.keys():
         payload = {
-            "path": paths.join(path_prefix, asset_key),
-            "optional": True,
             "buildPhase": "none",
+            "optional": True,
+            "path": paths.join(path_prefix, asset_key),
         }
         asset_sources.append(payload)
 
     # Append BUILD.bazel files to project
     asset_sources += [{
-        "path": paths.join(path_prefix, p),
-        "optional": True,
         "buildPhase": "none",
+        "optional": True,
+        "path": paths.join(path_prefix, p),
         # TODO: add source language type once https://github.com/yonaskolb/XcodeGen/issues/850 is resolved
     } for p in target_info.build_files.to_list()]
     return asset_sources
@@ -758,8 +758,8 @@ def _create_scheme_for_target(target_name, xcodeproj_schemes_by_name):
 
     xcodeproj_schemes_by_name[target_name] = {
         "build": {
-            "parallelizeBuild": False,
             "buildImplicitDependencies": False,
+            "parallelizeBuild": False,
             "targets": {
                 target_name: ["run", "test", "profile"],
             },
@@ -817,26 +817,26 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
 
         target_macho_type = "staticlib" if product_type == "framework.static" else "$(inherited)"
         compiled_sources = [{
-            "path": paths.join(src_dot_dots, s.short_path),
             "optional": True,
+            "path": paths.join(src_dot_dots, s.short_path),
         } for s in target_info.srcs.to_list()]
         compiled_non_arc_sources = [{
-            "path": paths.join(src_dot_dots, s.short_path),
-            "optional": True,
             "compilerFlags": "-fno-objc-arc",
+            "optional": True,
+            "path": paths.join(src_dot_dots, s.short_path),
         } for s in target_info.non_arc_srcs.to_list()]
 
         asset_sources = _gather_asset_sources(target_info, src_dot_dots)
 
         target_settings = {
-            "PRODUCT_NAME": target_name,
-            "ONLY_ACTIVE_ARCH": "YES",
             "BAZEL_BIN_SUBDIR": target_info.bazel_bin_subdir,
-            "MACH_O_TYPE": target_macho_type,
-            "CLANG_ENABLE_MODULES": "YES",
-            "CLANG_ENABLE_OBJC_ARC": "YES",
             "BAZEL_BUILD_TARGET_LABEL": target_info.bazel_build_target_name,
             "BAZEL_BUILD_TARGET_WORKSPACE": target_info.bazel_build_target_workspace,
+            "CLANG_ENABLE_MODULES": "YES",
+            "CLANG_ENABLE_OBJC_ARC": "YES",
+            "MACH_O_TYPE": target_macho_type,
+            "ONLY_ACTIVE_ARCH": "YES",
+            "PRODUCT_NAME": target_name,
         }
 
         virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
@@ -918,13 +918,13 @@ fi
         target_settings = _set_target_settings_by_config(ctx, target_settings)
 
         xcodeproj_targets_by_name[target_name] = {
+            "dependencies": target_dependencies,
+            "deploymentTarget": target_info.minimum_os_version,
+            "platform": _PLATFORM_MAPPING[target_info.platform_type],
+            "preBuildScripts": pre_build_scripts,
+            "settings": target_settings,
             "sources": compiled_sources + compiled_non_arc_sources + asset_sources,
             "type": product_type,
-            "platform": _PLATFORM_MAPPING[target_info.platform_type],
-            "deploymentTarget": target_info.minimum_os_version,
-            "settings": target_settings,
-            "dependencies": target_dependencies,
-            "preBuildScripts": pre_build_scripts,
         }
 
         # Skip a scheme generation if allowlist is not empty
@@ -974,26 +974,26 @@ fi
         if target_info.product_type == "bundle.unit-test":
             # All test targets will by default have a test action for themselves.
             xcodeproj_schemes_by_name[target_name]["test"] = {
-                "targets": [target_name],
                 "customLLDBInit": lldbinit_file,
                 "disableMainThreadChecker": ctx.attr.disable_main_thread_checker,
+                "targets": [target_name],
             }
 
         elif target_name in build_target_to_scheme_info:
             # Add additional scheme information provided by any provided scheme infos.
             scheme_info_for_target = build_target_to_scheme_info[target_name]
             xcodeproj_schemes_by_name[target_name]["test"] = {
-                "targets": scheme_info_for_target.test_action_targets,
                 "customLLDBInit": lldbinit_file,
                 "environmentVariables": [
                     {
-                        "variable": env_var_name,
-                        "value": env_var_value,
                         "isEnabled": True,
+                        "value": env_var_value,
+                        "variable": env_var_name,
                     }
                     for target in scheme_info_for_target.test_action_targets
                     for env_var_name, env_var_value in target.environment_variables.items()
                 ],
+                "targets": scheme_info_for_target.test_action_targets,
             }
 
         pre_actions_attr = ctx.attr.additional_pre_actions
@@ -1070,34 +1070,34 @@ def _xcodeproj_impl(ctx):
 
     # User defined macro for Bazel only
     proj_settings_base.update({
-        "BAZEL_BUILD_EXEC": "$BAZEL_STUBS_DIR/build-wrapper",
-        "BAZEL_OUTPUT_PROCESSOR": "$BAZEL_STUBS_DIR/output-processor.rb",
-        "BAZEL_PATH": ctx.attr.bazel_path,
-        "BAZEL_WORKSPACE_ROOT": "$SRCROOT/%s" % script_dot_dots,
-        "BAZEL_STUBS_DIR": "$PROJECT_FILE_PATH/bazelstubs",
-        "BAZEL_INSTALLERS_DIR": "$PROJECT_FILE_PATH/bazelinstallers",
-        "BAZEL_INSTALLER": "$BAZEL_INSTALLERS_DIR/%s" % ctx.executable.installer.basename,
-        "BAZEL_EXECUTION_LOG_ENABLED": ctx.attr.bazel_execution_log_enabled,
-        "BAZEL_PROFILE_ENABLED": ctx.attr.bazel_profile_enabled,
-        "BAZEL_STARLARK_CPU_PROFILE_ENABLED": ctx.attr.bazel_starlark_cpu_profile_enabled,
-        "BAZEL_DIAGNOSTICS_DIR": _BAZEL_DIAGNOSTICS_DIR,
-        "BAZEL_CONFIGS": ctx.attr.configs.keys(),
         "BAZEL_ADDITIONAL_BAZEL_BUILD_OPTIONS": " ".join(["{} ".format(opt) for opt in ctx.attr.additional_bazel_build_options]),
         "BAZEL_ADDITIONAL_LLDB_SETTINGS": "\n".join(ctx.attr.additional_lldb_settings),
+        "BAZEL_BUILD_EXEC": "$BAZEL_STUBS_DIR/build-wrapper",
+        "BAZEL_CONFIGS": ctx.attr.configs.keys(),
+        "BAZEL_DIAGNOSTICS_DIR": _BAZEL_DIAGNOSTICS_DIR,
+        "BAZEL_EXECUTION_LOG_ENABLED": ctx.attr.bazel_execution_log_enabled,
+        "BAZEL_INSTALLER": "$BAZEL_INSTALLERS_DIR/%s" % ctx.executable.installer.basename,
+        "BAZEL_INSTALLERS_DIR": "$PROJECT_FILE_PATH/bazelinstallers",
+        "BAZEL_OUTPUT_PROCESSOR": "$BAZEL_STUBS_DIR/output-processor.rb",
+        "BAZEL_PATH": ctx.attr.bazel_path,
+        "BAZEL_PROFILE_ENABLED": ctx.attr.bazel_profile_enabled,
+        "BAZEL_STARLARK_CPU_PROFILE_ENABLED": ctx.attr.bazel_starlark_cpu_profile_enabled,
+        "BAZEL_STUBS_DIR": "$PROJECT_FILE_PATH/bazelstubs",
+        "BAZEL_WORKSPACE_ROOT": "$SRCROOT/%s" % script_dot_dots,
         "INDEX_DATA_STORE_DIR": "$(INDEX_DATA_STORE_DIR)",
     })
 
     # Stubbing compiler, linker executables used by xcode so no actual building happening on Xcode side
     proj_settings_base.update({
         "CC": "$BAZEL_STUBS_DIR/clang-stub",
-        "CXX": "$CC",
         "CLANG_ANALYZER_EXEC": "$CC",
+        "CXX": "$CC",
         "LD": "$BAZEL_STUBS_DIR/ld-stub",
         "LIBTOOL": "$BAZEL_STUBS_DIR/ld-stub",
-        "SWIFT_USE_INTEGRATED_DRIVER": "NO",
-        "SWIFT_EXEC": "$BAZEL_STUBS_DIR/swiftc-stub",
         # LD isn't used for all use cases - direct it to use this LD
         "OTHER_LDFLAGS": "-fuse-ld=$BAZEL_STUBS_DIR/ld-stub",
+        "SWIFT_EXEC": "$BAZEL_STUBS_DIR/swiftc-stub",
+        "SWIFT_USE_INTEGRATED_DRIVER": "NO",
     })
 
     # Change of settings to help params used for compiling individual files to match closer to Bazel
@@ -1110,9 +1110,9 @@ def _xcodeproj_impl(ctx):
         "CODE_SIGNING_ALLOWED": False,
         "DEBUG_INFORMATION_FORMAT": "dwarf",
         "DONT_RUN_SWIFT_STDLIB_TOOL": True,
+        "FORCE_X86_SIM": ctx.attr.force_x86_sim,
         "SWIFT_OBJC_INTERFACE_HEADER_NAME": "",
         "SWIFT_VERSION": 5,
-        "FORCE_X86_SIM": ctx.attr.force_x86_sim,
     })
 
     # For debugging config only:
@@ -1198,22 +1198,22 @@ def _xcodeproj_impl(ctx):
         template = ctx.file._xcodeproj_installer_template,
         output = install_script,
         substitutions = {
-            "$(project_short_path)": project.short_path,
-            "$(project_full_path)": project.path,
-            "$(installer_runfile_short_paths)": " ".join(installer_runfile_paths),
-            "$(installer_short_path)": ctx.executable.installer.short_path,
-            "$(clang_stub_short_path)": ctx.executable.clang_stub.short_path,
-            "$(index_import_short_path)": ctx.executable.index_import.short_path,
-            "$(index_import_runfiles_paths)": " ".join(index_import_runfiles_paths),
-            "$(clang_stub_ld_path)": ctx.executable.ld_stub.short_path,
-            "$(clang_stub_swiftc_path)": ctx.executable.swiftc_stub.short_path,
-            "$(print_json_leaf_nodes_path)": ctx.executable.print_json_leaf_nodes.short_path,
-            "$(print_json_leaf_nodes_runfiles)": " ".join(print_json_leaf_nodes_runfiles),
             "$(build_wrapper_path)": ctx.executable.build_wrapper.short_path,
             "$(build_wrapper_runfile_short_paths)": " ".join(build_wrapper_runfile_paths),
-            "$(output_processor_path)": ctx.file.output_processor.short_path,
-            "$(workspacesettings_xcsettings_short_path)": ctx.file._workspace_xcsettings.short_path,
+            "$(clang_stub_ld_path)": ctx.executable.ld_stub.short_path,
+            "$(clang_stub_short_path)": ctx.executable.clang_stub.short_path,
+            "$(clang_stub_swiftc_path)": ctx.executable.swiftc_stub.short_path,
             "$(ideworkspacechecks_plist_short_path)": ctx.file._workspace_checks.short_path,
+            "$(index_import_runfiles_paths)": " ".join(index_import_runfiles_paths),
+            "$(index_import_short_path)": ctx.executable.index_import.short_path,
+            "$(installer_runfile_short_paths)": " ".join(installer_runfile_paths),
+            "$(installer_short_path)": ctx.executable.installer.short_path,
+            "$(output_processor_path)": ctx.file.output_processor.short_path,
+            "$(print_json_leaf_nodes_path)": ctx.executable.print_json_leaf_nodes.short_path,
+            "$(print_json_leaf_nodes_runfiles)": " ".join(print_json_leaf_nodes_runfiles),
+            "$(project_full_path)": project.path,
+            "$(project_short_path)": project.short_path,
+            "$(workspacesettings_xcsettings_short_path)": ctx.file._workspace_xcsettings.short_path,
         },
         is_executable = True,
     )
@@ -1251,6 +1251,32 @@ Tags for configuration:
     xcodeproj-ignore-as-target: Add this to a rule declaration so that this rule will not generates a scheme for this target
 """,
     attrs = {
+        "additional_bazel_build_options": attr.string_list(default = [], mandatory = False),
+        "additional_files": attr.label_list(allow_files = True, allow_empty = True, default = [], mandatory = False),
+        "additional_lldb_settings": attr.string_list(default = [], mandatory = False, doc = """
+Additional LLDB settings to be added in each target's .lldbinit configuration file.
+        """),
+        "additional_post_actions": attr.string_list_dict(default = {}, mandatory = False, doc = """
+Configure a list of post-actions for build/run/test in each scheme generated.
+For each entry the key is one of build/test/run and value is a list of scripts.
+And it will not surface any error or output through build log.
+        """),
+        "additional_pre_actions": attr.string_list_dict(default = {}, mandatory = False, doc = """
+Configure a list of pre-actions for build/run/test in each scheme generated.
+For each entry the key is one of build/test/run and value is a list of scripts.
+And it will not surface any error or output through build log.
+        """),
+        "additional_prebuild_script": attr.string(default = "", mandatory = False),  # Note this script will run BEFORE Bazel build script
+        "additional_scheme_infos": attr.label_list(mandatory = False, allow_empty = True, providers = [], aspects = [], doc = """
+        List of additional_scheme_info labels that append scheme information to the generated scheme for a build target.
+        Currently supports test actions, and test environment variables.
+"""),
+        "bazel_execution_log_enabled": attr.bool(default = False, mandatory = False),
+        "bazel_path": attr.string(mandatory = False, default = "bazel"),
+        "bazel_profile_enabled": attr.bool(default = False, mandatory = False),
+        "bazel_starlark_cpu_profile_enabled": attr.bool(default = False, mandatory = False),
+        "build_wrapper": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:build-wrapper"), cfg = "exec"),
+        "clang_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:clang-stub"), cfg = "exec"),
         # Important! The `Debug` is being used to conditionally pass
         # flags to LLDB, so if this behaviour ever changes that needs
         # to be considered otherwise debugging swift files will stop working
@@ -1267,6 +1293,31 @@ Tags for configuration:
         If not present the 'Debug' and 'Release' Xcode build configurations will be created by default without
         appending any additional bazel invocation flags.
         """),
+        "deps": attr.label_list(mandatory = True, allow_empty = False, providers = [], aspects = [_xcodeproj_aspect]),
+        "disable_main_thread_checker": attr.bool(default = False, mandatory = False),
+        "force_x86_sim": attr.bool(default = False, mandatory = False),
+        "generate_schemes_for_product_types": attr.string_list(mandatory = False, allow_empty = True, default = [], doc = """\
+Generate schemes only for the specified product types if this list is not empty.
+Product types must be valid apple product types, e.g. application, bundle.unit-test, framework.
+For a full list, see under keys of `PRODUCT_TYPE_UTI` under
+https://www.rubydoc.info/github/CocoaPods/Xcodeproj/Xcodeproj/Constants
+"""),
+        "include_transitive_targets": attr.bool(default = False, mandatory = False),
+        "index_import": attr.label(executable = True, default = Label("@build_bazel_rules_swift_index_import//:index_import"), cfg = "exec"),
+        "installer": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:installer"), cfg = "exec"),
+        "ld_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:ld-stub"), cfg = "exec"),
+        "output_path": attr.string(mandatory = False, default = "", doc = """
+        The output path to use when generating the xcode project.
+        Must be a relative path beneath the package where the xcodeproj rule is defined
+        """),
+        "output_processor": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:output-processor.rb"), cfg = "exec", allow_single_file = True),
+        "print_json_leaf_nodes": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:print_json_leaf_nodes"), cfg = "exec"),
+        "project_attributes_overrides": attr.string_dict(allow_empty = True, mandatory = False, default = {}, doc = "Overrides for attributes that can be set at the project base level."),
+        "project_name": attr.string(mandatory = False),
+        "project_options_overrides": attr.label(mandatory = False, providers = [_ProjectOptionsInfo], doc = "Overrides for options that can be set at the project base level. Use 'xcodeproj_project_options'."),
+        "provide_build_settings_from_target_for_pre_post_actions": attr.bool(default = False, mandatory = False),
+        "scheme_existing_envvar_overrides": attr.string_dict(allow_empty = True, default = {}, mandatory = False),
+        "swiftc_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:swiftc-stub"), cfg = "exec"),
         "target_settings_by_config": attr.string_list_dict(default = {}, doc = """
         Additional optinal dictionary with Xcode build settings to be added to all targets grouped by config (see 'configs' attribute).
 
@@ -1293,61 +1344,10 @@ Tags for configuration:
         - https://docs.bazel.build/versions/main/skylark/lib/attr.html
 
         """),
-        "deps": attr.label_list(mandatory = True, allow_empty = False, providers = [], aspects = [_xcodeproj_aspect]),
-        "include_transitive_targets": attr.bool(default = False, mandatory = False),
-        "project_name": attr.string(mandatory = False),
-        "output_path": attr.string(mandatory = False, default = "", doc = """
-        The output path to use when generating the xcode project.
-        Must be a relative path beneath the package where the xcodeproj rule is defined
-        """),
-        "bazel_path": attr.string(mandatory = False, default = "bazel"),
-        "scheme_existing_envvar_overrides": attr.string_dict(allow_empty = True, default = {}, mandatory = False),
-        "project_attributes_overrides": attr.string_dict(allow_empty = True, mandatory = False, default = {}, doc = "Overrides for attributes that can be set at the project base level."),
-        "project_options_overrides": attr.label(mandatory = False, providers = [_ProjectOptionsInfo], doc = "Overrides for options that can be set at the project base level. Use 'xcodeproj_project_options'."),
-        "additional_scheme_infos": attr.label_list(mandatory = False, allow_empty = True, providers = [], aspects = [], doc = """
-        List of additional_scheme_info labels that append scheme information to the generated scheme for a build target.
-        Currently supports test actions, and test environment variables.
-"""),
-        "generate_schemes_for_product_types": attr.string_list(mandatory = False, allow_empty = True, default = [], doc = """\
-Generate schemes only for the specified product types if this list is not empty.
-Product types must be valid apple product types, e.g. application, bundle.unit-test, framework.
-For a full list, see under keys of `PRODUCT_TYPE_UTI` under
-https://www.rubydoc.info/github/CocoaPods/Xcodeproj/Xcodeproj/Constants
-"""),
-        "_xcodeproj_installer_template": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:xcodeproj-installer.sh"), allow_single_file = ["sh"]),
-        "_workspace_xcsettings": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:WorkspaceSettings.xcsettings"), allow_single_file = ["xcsettings"]),
         "_workspace_checks": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:IDEWorkspaceChecks.plist"), allow_single_file = ["plist"]),
-        "output_processor": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:output-processor.rb"), cfg = "exec", allow_single_file = True),
+        "_workspace_xcsettings": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:WorkspaceSettings.xcsettings"), allow_single_file = ["xcsettings"]),
         "_xcodegen": attr.label(executable = True, default = Label("@com_github_yonaskolb_xcodegen//:xcodegen"), cfg = "exec"),
-        "index_import": attr.label(executable = True, default = Label("@build_bazel_rules_swift_index_import//:index_import"), cfg = "exec"),
-        "clang_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:clang-stub"), cfg = "exec"),
-        "ld_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:ld-stub"), cfg = "exec"),
-        "swiftc_stub": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:swiftc-stub"), cfg = "exec"),
-        "print_json_leaf_nodes": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:print_json_leaf_nodes"), cfg = "exec"),
-        "installer": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:installer"), cfg = "exec"),
-        "build_wrapper": attr.label(executable = True, default = Label("//tools/xcodeproj_shims:build-wrapper"), cfg = "exec"),
-        "additional_files": attr.label_list(allow_files = True, allow_empty = True, default = [], mandatory = False),
-        "additional_prebuild_script": attr.string(default = "", mandatory = False),  # Note this script will run BEFORE Bazel build script
-        "additional_bazel_build_options": attr.string_list(default = [], mandatory = False),
-        "additional_pre_actions": attr.string_list_dict(default = {}, mandatory = False, doc = """
-Configure a list of pre-actions for build/run/test in each scheme generated.
-For each entry the key is one of build/test/run and value is a list of scripts.
-And it will not surface any error or output through build log.
-        """),
-        "additional_post_actions": attr.string_list_dict(default = {}, mandatory = False, doc = """
-Configure a list of post-actions for build/run/test in each scheme generated.
-For each entry the key is one of build/test/run and value is a list of scripts.
-And it will not surface any error or output through build log.
-        """),
-        "provide_build_settings_from_target_for_pre_post_actions": attr.bool(default = False, mandatory = False),
-        "additional_lldb_settings": attr.string_list(default = [], mandatory = False, doc = """
-Additional LLDB settings to be added in each target's .lldbinit configuration file.
-        """),
-        "bazel_execution_log_enabled": attr.bool(default = False, mandatory = False),
-        "bazel_profile_enabled": attr.bool(default = False, mandatory = False),
-        "bazel_starlark_cpu_profile_enabled": attr.bool(default = False, mandatory = False),
-        "disable_main_thread_checker": attr.bool(default = False, mandatory = False),
-        "force_x86_sim": attr.bool(default = False, mandatory = False),
+        "_xcodeproj_installer_template": attr.label(executable = False, default = Label("//tools/xcodeproj_shims:xcodeproj-installer.sh"), allow_single_file = ["sh"]),
     },
     executable = True,
 )

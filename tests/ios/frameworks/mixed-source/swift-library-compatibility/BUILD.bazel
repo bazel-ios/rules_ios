@@ -1,5 +1,5 @@
-load("//rules:framework.bzl", "apple_framework_packaging")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("//rules:framework.bzl", "apple_framework_packaging")
 
 swift_library(
     name = "SwiftFramework",

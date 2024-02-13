@@ -1,6 +1,6 @@
+load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
 load("//rules:framework.bzl", "apple_framework")
 load(":tests.bzl", "xcconfig_unit_test_suite")
-load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
 
 SRCS = [
     "empty.m",
@@ -89,14 +89,14 @@ apple_framework(
     },
     xcconfig_by_build_setting = {
         ":blue": {
-            "GCC_TREAT_WARNINGS_AS_ERRORS": "YES",
             "FOO": "NO",
             "FOO_blue": "blue",
+            "GCC_TREAT_WARNINGS_AS_ERRORS": "YES",
         },
         ":red": {
-            "GCC_TREAT_WARNINGS_AS_ERRORS": "NO",
             "FOO": "NO",
             "FOO_red": "red",
+            "GCC_TREAT_WARNINGS_AS_ERRORS": "NO",
         },
     },
 )

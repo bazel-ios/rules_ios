@@ -2,19 +2,19 @@
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
-load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@bazel_skylib//lib:selects.bzl", "selects")
+load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@build_bazel_rules_apple//apple/internal:apple_framework_import.bzl", "apple_dynamic_framework_import", "apple_static_framework_import")
 load("@build_bazel_rules_apple//apple/internal/resource_rules:apple_intent_library.bzl", "apple_intent_library")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
-load("//rules:precompiled_apple_resource_bundle.bzl", "precompiled_apple_resource_bundle")
 load("//rules:hmap.bzl", "headermap")
+load("//rules:import_middleman.bzl", "import_middleman")
+load("//rules:precompiled_apple_resource_bundle.bzl", "precompiled_apple_resource_bundle")
+load("//rules:utils.bzl", "bundle_identifier_for_bundle")
 load("//rules/framework:vfs_overlay.bzl", "framework_vfs_overlay", VFS_OVERLAY_FRAMEWORK_SEARCH_PATH = "FRAMEWORK_SEARCH_PATH")
 load("//rules/library:resources.bzl", "wrap_resources_in_filegroup")
 load("//rules/library:xcconfig.bzl", "copts_by_build_setting_with_defaults")
-load("//rules:import_middleman.bzl", "import_middleman")
-load("//rules:utils.bzl", "bundle_identifier_for_bundle")
 
 PrivateHeadersInfo = provider(
     doc = "Propagates private headers, so they can be accessed if necessary",
@@ -71,13 +71,13 @@ module {module_name}.Swift {{
 extend_modulemap = rule(
     implementation = _extend_modulemap_impl,
     attrs = {
-        "source": attr.label(
-            doc = "",
-            allow_single_file = True,
-        ),
         "destination": attr.output(),
         "module_name": attr.string(
             mandatory = True,
+        ),
+        "source": attr.label(
+            doc = "",
+            allow_single_file = True,
         ),
         "swift_header": attr.string(
             doc = "",
@@ -86,6 +86,7 @@ extend_modulemap = rule(
     doc = "Extends a modulemap with a Swift submodule",
 )
 
+# buildifier: disable=unused-variable
 def _write_modulemap(name, library_tools, umbrella_header = None, public_headers = [], private_headers = [], module_name = None, framework = False, **kwargs):
     basename = "{}.modulemap".format(name)
     destination = paths.join(name + "-modulemap", basename)
@@ -112,6 +113,8 @@ module {module_name} {{
         tags = _MANUAL,
     )
     return destination
+
+# buildifier: enable=unused-variable
 
 def _write_umbrella_header(
         name,
@@ -187,11 +190,11 @@ def _error_on_default_xcconfig(name, default_xcconfig_name):
     ))
 
 _DEFAULT_LIBRARY_TOOLS = {
-    "modulemap_generator": _write_modulemap,
-    "umbrella_header_generator": _write_umbrella_header,
-    "resource_bundle_generator": _generate_resource_bundles,
-    "wrap_resources_in_filegroup": wrap_resources_in_filegroup,
     "fetch_default_xcconfig": _error_on_default_xcconfig,
+    "modulemap_generator": _write_modulemap,
+    "resource_bundle_generator": _generate_resource_bundles,
+    "umbrella_header_generator": _write_umbrella_header,
+    "wrap_resources_in_filegroup": wrap_resources_in_filegroup,
 }
 
 # buildifier: disable=list-append
@@ -382,12 +385,12 @@ def _xcframework(*, library_name, name, slices):
         native.alias(name = xcframework_name + "default_vfs", actual = select(conditions_vfs), tags = _MANUAL)
 
         conditions = {
-            "//conditions:default": xcframework_name + "default",
             "@build_bazel_rules_ios//:arm64_simulator_use_device_deps": alias_slice,
+            "//conditions:default": xcframework_name + "default",
         }
         conditions_vfs = {
-            "//conditions:default": xcframework_name + "default_vfs",
             "@build_bazel_rules_ios//:arm64_simulator_use_device_deps": alias_slice + "_vfs",
+            "//conditions:default": xcframework_name + "default_vfs",
         }
 
     native.alias(
@@ -580,7 +583,7 @@ def apple_library(
     features = kwargs.pop("features", [])
     plugins = kwargs.pop("plugins", None)
 
-    for (k, v) in {"momc_copts": momc_copts, "mapc_copts": mapc_copts, "ibtool_copts": ibtool_copts}.items():
+    for (k, v) in {"ibtool_copts": ibtool_copts, "mapc_copts": mapc_copts, "momc_copts": momc_copts}.items():
         if v:
             fail("Specifying {attr} for {name} is not yet supported. Given: {opts}".format(
                 attr = k,
@@ -906,6 +909,8 @@ def apple_library(
         additional_swift_copts += ["-swift-version", swift_version]
 
     module_data = library_tools["wrap_resources_in_filegroup"](name = name + "_wrapped_resources_filegroup", srcs = data, testonly = testonly)
+    generated_swift_header_name = None
+    swiftc_inputs = []
 
     if swift_sources:
         additional_swift_copts += ["-Xcc", "-I."]

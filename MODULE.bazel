@@ -46,7 +46,7 @@ bazel_dep(
 # Declare the development dependencies needed for rules_ios development
 bazel_dep(
     name = "buildifier_prebuilt",
-    version = "6.1.0",
+    version = "6.4.0",
     dev_dependency = True,
 )
 bazel_dep(

@@ -1,8 +1,8 @@
-load("@build_bazel_rules_ios//rules:framework.bzl", "apple_framework")
-load("@build_bazel_rules_ios//rules:app.bzl", "ios_application")
-load("@build_bazel_rules_ios//rules:test.bzl", "ios_unit_test")
 load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_bundle_import")
+load("@build_bazel_rules_ios//rules:app.bzl", "ios_application")
+load("@build_bazel_rules_ios//rules:framework.bzl", "apple_framework")
+load("@build_bazel_rules_ios//rules:test.bzl", "ios_unit_test")
 
 apple_framework(
     name = "CppLib",
@@ -128,16 +128,16 @@ filegroup(
 )
 
 INFOPLIST = {
+    "Dict": {
+        "A": "a",
+        "B": "b",
+    },
+    "Int": 1,
     "NSPhotoLibraryAddUsageDescription": "This app requires access to the photo library.",
     "NSPhotoLibraryUsageDescription": "This app requires access to the photo library.",
     "UISupportedExternalAccessoryProtocols": [
         "com.example.eap",
     ],
-    "Int": 1,
-    "Dict": {
-        "A": "a",
-        "B": "b",
-    },
 }
 
 ios_application(
@@ -181,16 +181,16 @@ string_flag(
 ]
 
 INFOPLIST_2 = {
+    "Dict": {
+        "C": "c",
+        "D": "d",
+    },
+    "Int": 2,
     "NSPhotoLibraryAddUsageDescription": "This app requires access to the photo library.",
     "NSPhotoLibraryUsageDescription": "This app requires access to the photo library.",
     "UISupportedExternalAccessoryProtocols": [
         "com.example.eap.2",
     ],
-    "Int": 2,
-    "Dict": {
-        "C": "c",
-        "D": "d",
-    },
 }
 
 ios_application(
@@ -215,14 +215,14 @@ ios_application(
     },
     xcconfig_by_build_setting = {
         ":blue": {
-            "GCC_TREAT_WARNINGS_AS_ERRORS": "YES",
             "FOO": "NO",
             "FOO_blue": "blue",
+            "GCC_TREAT_WARNINGS_AS_ERRORS": "YES",
         },
         ":red": {
-            "GCC_TREAT_WARNINGS_AS_ERRORS": "NO",
             "FOO": "NO",
             "FOO_red": "red",
+            "GCC_TREAT_WARNINGS_AS_ERRORS": "NO",
         },
     },
     deps = [
@@ -257,14 +257,14 @@ ios_application(
     },
     xcconfig_by_build_setting = {
         ":blue": {
-            "GCC_TREAT_WARNINGS_AS_ERRORS": "YES",
             "FOO": "NO",
             "FOO_blue": "blue",
+            "GCC_TREAT_WARNINGS_AS_ERRORS": "YES",
         },
         ":red": {
-            "GCC_TREAT_WARNINGS_AS_ERRORS": "NO",
             "FOO": "NO",
             "FOO_red": "red",
+            "GCC_TREAT_WARNINGS_AS_ERRORS": "NO",
         },
         "//conditions:default": {
             "FOO": "NO",

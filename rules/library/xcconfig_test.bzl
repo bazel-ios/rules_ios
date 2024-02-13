@@ -10,19 +10,19 @@ def _test_merge_xcconfigs_impl(ctx):
 
     # Given xcconfig_a which has a three string values and a single list value
     xcconfig_a = {
+        "LIST_VALUE_1": ["a", "b"],
         "VALUE_1": "a",
         "VALUE_2": "b",
         "VALUE_3": "c",
-        "LIST_VALUE_1": ["a", "b"],
     }
 
     # Given xcconfig_b which has two string values and two list values
     xcconfig_b = {
+        "LIST_VALUE_1": ["added"],
+        "LIST_VALUE_2": ["d"],
         "VALUE_1": "overriden",
         "VALUE_3": ["c"],
         "VALUE_4": "d",
-        "LIST_VALUE_1": ["added"],
-        "LIST_VALUE_2": ["d"],
     }
 
     # When we merge them

@@ -9,31 +9,31 @@ apple_framework(
             "name": "ObjcLib",
             "slices": [
                 {
+                    "build_type": {
+                        "linkage": "static",
+                        "packaging": "library",
+                    },
                     "identifier": "ios-arm64",
+                    "path": "fixtures/ObjcLib.xcframework/ios-arm64/libObjcLib.a",
                     "platform": "ios",
                     "platform_variant": "",
                     "supported_archs": [
                         "arm64",
                     ],
-                    "path": "fixtures/ObjcLib.xcframework/ios-arm64/libObjcLib.a",
+                },
+                {
                     "build_type": {
                         "linkage": "static",
                         "packaging": "library",
                     },
-                },
-                {
                     "identifier": "ios-arm64_x86_64-simulator",
+                    "path": "fixtures/ObjcLib.xcframework/ios-arm64_x86_64-simulator/libObjcLib.a",
                     "platform": "ios",
                     "platform_variant": "simulator",
                     "supported_archs": [
                         "arm64",
                         "x86_64",
                     ],
-                    "path": "fixtures/ObjcLib.xcframework/ios-arm64_x86_64-simulator/libObjcLib.a",
-                    "build_type": {
-                        "linkage": "static",
-                        "packaging": "library",
-                    },
                 },
             ],
         },

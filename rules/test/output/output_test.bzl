@@ -14,8 +14,8 @@ def _output_test_impl(ctx):
         template = ctx.file.output_checker,
         is_executable = True,
         substitutions = {
-            "%TARGET%": target_file.short_path,
             "%EXPECT%": "( " + " ".join(ctx.attr.expected) + " )",
+            "%TARGET%": target_file.short_path,
             "%UNEXPECT%": "( " + " ".join(ctx.attr.unexpected) + " )",
         },
     )
@@ -25,9 +25,9 @@ output_test = rule(
     _output_test_impl,
     test = True,
     attrs = {
-        "target": attr.label(),
-        "output_checker": attr.label(default = "//rules/test/output:output_checker.sh", allow_single_file = True),
         "expected": attr.string_list(mandatory = True),
+        "output_checker": attr.label(default = "//rules/test/output:output_checker.sh", allow_single_file = True),
+        "target": attr.label(),
         "unexpected": attr.string_list(mandatory = False, default = []),
     },
     doc = """

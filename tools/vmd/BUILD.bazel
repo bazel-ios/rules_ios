@@ -36,8 +36,8 @@ sh_binary(
 pkg_tar(
     name = "vmd_tar",
     files = {
-        "@tart//file": "tart",
-        ":vmd.sh": "vmd",
         ":bin/sshpass": "sshpass",
+        ":vmd.sh": "vmd",
+        "@tart//file": "tart",
     },
 )

@@ -43,11 +43,11 @@ def process_infoplists_test_suite(name):
         "//:debug": {
             "CUSTOM_PRODUCT_VERSION": "7.7.7",
         },
-        "//:release": {
-            "CUSTOM_PRODUCT_VERSION": "8.8.8",
-        },
         "//:recursive": {
             "RECURSIVE_CUSTOM_PRODUCT_VERSION": "$(CUSTOM_PRODUCT_VERSION).RECURSIVE",
+        },
+        "//:release": {
+            "CUSTOM_PRODUCT_VERSION": "8.8.8",
         },
     }
 
@@ -61,14 +61,14 @@ def process_infoplists_test_suite(name):
         "//:debug": [{
             "CFBundleName": "Debug.$(CUSTOM_PRODUCT_VERSION)",
         }],
-        "//:release": [{
-            "CFBundleName": "Release.$(CUSTOM_PRODUCT_VERSION)",
-        }],
         "//:other": [{
             "CFBundleName": "Other.$(CUSTOM_PRODUCT_VERSION)",
         }],
         "//:recursive": [{
             "CFBundleName": "Recusrive.$(RECURSIVE_CUSTOM_PRODUCT_VERSION)",
+        }],
+        "//:release": [{
+            "CFBundleName": "Release.$(CUSTOM_PRODUCT_VERSION)",
         }],
     }
 
@@ -83,22 +83,22 @@ def process_infoplists_test_suite(name):
 
     # Then expect substitutions are correct per config_setting based on xcconfig & xcconfig_by_build_setting
     expected_default_substitutions = {
-        "${CUSTOM_PRODUCT_VERSION}": "9.9.9",
         "$(CUSTOM_PRODUCT_VERSION)": "9.9.9",
+        "${CUSTOM_PRODUCT_VERSION}": "9.9.9",
     }
     expected_debug_substitutions = {
-        "${CUSTOM_PRODUCT_VERSION}": "7.7.7",
         "$(CUSTOM_PRODUCT_VERSION)": "7.7.7",
+        "${CUSTOM_PRODUCT_VERSION}": "7.7.7",
     }
     expected_release_substitutions = {
-        "${CUSTOM_PRODUCT_VERSION}": "8.8.8",
         "$(CUSTOM_PRODUCT_VERSION)": "8.8.8",
+        "${CUSTOM_PRODUCT_VERSION}": "8.8.8",
     }
     expected_recursive_substitutions = {
-        "${CUSTOM_PRODUCT_VERSION}": "9.9.9",
         "$(CUSTOM_PRODUCT_VERSION)": "9.9.9",
-        "${RECURSIVE_CUSTOM_PRODUCT_VERSION}": "9.9.9.RECURSIVE",
         "$(RECURSIVE_CUSTOM_PRODUCT_VERSION)": "9.9.9.RECURSIVE",
+        "${CUSTOM_PRODUCT_VERSION}": "9.9.9",
+        "${RECURSIVE_CUSTOM_PRODUCT_VERSION}": "9.9.9.RECURSIVE",
     }
 
     # Then test the default plist is correct

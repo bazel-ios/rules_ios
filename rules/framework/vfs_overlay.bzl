@@ -9,10 +9,10 @@ in-memory tree roots, it pre-pends the prefix of the `vfsoverlay` path
 to each of the entries.
 """
 
-load("//rules:providers.bzl", "FrameworkInfo")
-load("//rules:features.bzl", "feature_names")
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_common")
+load("//rules:features.bzl", "feature_names")
+load("//rules:providers.bzl", "FrameworkInfo")
 
 FRAMEWORK_SEARCH_PATH = "/build_bazel_rules_ios/frameworks"
 
@@ -53,7 +53,7 @@ def _find_top_swiftmodule_file(swiftmodules):
 def _build_subtrees(paths, vfs_prefix):
     # It uses a O(NVFSParts) sized helper dict to avoid O(NPathComponents^2)
     # worst case runtime
-    subdirs_json = {"contents": [], "type": "directory", "name": "root"}
+    subdirs_json = {"contents": [], "name": "root", "type": "directory"}
     subdirs = struct(dict = {}, json = subdirs_json)
     for path_info in paths:
         path = path_info.framework_path
@@ -81,13 +81,13 @@ def _build_subtrees(paths, vfs_prefix):
         for part in parts:
             if idx == parts_len - 1:
                 curr_subdirs.dict[part] = -1
-                curr_subdirs.json["contents"] += [{"name": part, "type": "file", "external-contents": vfs_prefix + path_info.path}]
+                curr_subdirs.json["contents"] += [{"external-contents": vfs_prefix + path_info.path, "name": part, "type": "file"}]
                 break
 
             # Lookup a value for the current subdirs, otherwise append
             next_subdirs = curr_subdirs.dict[part] if part in curr_subdirs.dict else None
             if not next_subdirs:
-                next_subdirs_json = {"contents": [], "type": "directory", "name": part}
+                next_subdirs_json = {"contents": [], "name": part, "type": "directory"}
                 next_subdirs = struct(dict = {}, json = next_subdirs_json)
 
                 curr_subdirs.dict[part] = next_subdirs
@@ -146,9 +146,9 @@ def _make_root(vfs_prefix, target_triple, swiftmodules, root_dir, extra_search_p
     modules_contents = []
     if module_map:
         modules_contents += [{
-            "type": "file",
-            "name": "module.modulemap",
             "external-contents": vfs_prefix + module_map[0].path,
+            "name": "module.modulemap",
+            "type": "file",
         }]
 
     if swiftmodules:
@@ -158,24 +158,24 @@ def _make_root(vfs_prefix, target_triple, swiftmodules, root_dir, extra_search_p
             parent_dir_base_name = any_swiftmodule_file.dirname.split("/").pop()
             if parent_dir_base_name.endswith(".swiftmodule"):
                 modules_contents += [{
-                    "type": "directory",
-                    "name": parent_dir_base_name,
                     "contents": [
                         {
-                            "type": "file",
-                            "name": file.basename,
                             "external-contents": vfs_prefix + file.path,
+                            "name": file.basename,
+                            "type": "file",
                         }
                         for file in swiftmodules
                     ],
+                    "name": parent_dir_base_name,
+                    "type": "directory",
                 }]
 
     modules = []
     if modules_contents:
         modules = [{
+            "contents": modules_contents,
             "name": "Modules",
             "type": "directory",
-            "contents": modules_contents,
         }]
 
     # If there isn't an extra search path build the default paths. Perhaps we
@@ -183,9 +183,9 @@ def _make_root(vfs_prefix, target_triple, swiftmodules, root_dir, extra_search_p
     if not extra_search_paths:
         headers_contents += [
             {
-                "type": "file",
-                "name": file.basename,
                 "external-contents": vfs_prefix + file.path,
+                "name": file.basename,
+                "type": "file",
             }
             for file in hdrs
         ]
@@ -193,17 +193,17 @@ def _make_root(vfs_prefix, target_triple, swiftmodules, root_dir, extra_search_p
     headers = []
     if headers_contents:
         headers = [{
+            "contents": headers_contents,
             "name": "Headers",
             "type": "directory",
-            "contents": headers_contents,
         }]
 
     if not extra_search_paths:
         private_headers_contents += [
             {
-                "type": "file",
-                "name": file.basename,
                 "external-contents": vfs_prefix + file.path,
+                "name": file.basename,
+                "type": "file",
             }
             for file in private_hdrs
         ]
@@ -211,17 +211,17 @@ def _make_root(vfs_prefix, target_triple, swiftmodules, root_dir, extra_search_p
     private_headers = []
     if private_headers_contents:
         private_headers = [{
+            "contents": private_headers_contents,
             "name": "PrivateHeaders",
             "type": "directory",
-            "contents": private_headers_contents,
         }]
 
     roots = []
     if headers or private_headers or modules:
         roots += [{
+            "contents": headers + private_headers + modules,
             "name": root_dir,
             "type": "directory",
-            "contents": headers + private_headers + modules,
         }]
 
     if swiftmodules:
@@ -242,17 +242,17 @@ def _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix, target_triple)
 
     contents = [
         {
-            "type": "file",
-            "name": target_triple + "." + file.extension,
             "external-contents": vfs_prefix + file.path,
+            "name": target_triple + "." + file.extension,
+            "type": "file",
         }
         for file in swiftmodules
     ]
 
     return {
-        "type": "directory",
-        "name": swiftmodule_file.basename,
         "contents": contents,
+        "name": swiftmodule_file.basename,
+        "type": "directory",
     }
 
 def _framework_vfs_overlay_impl(ctx):
@@ -404,15 +404,15 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules
         return struct(vfsoverlay_file = None, vfs_info = vfs_info)
 
     vfsoverlay_object = {
-        "version": 0,
         "case-sensitive": True,
         "overlay-relative": True,
-        "use-external-names": True,
         "roots": [{
+            "contents": roots,
             "name": FRAMEWORK_SEARCH_PATH,
             "type": "directory",
-            "contents": roots,
         }],
+        "use-external-names": True,
+        "version": 0,
     }
     vfsoverlay_yaml = struct(**vfsoverlay_object).to_json()
     ctx.actions.write(
@@ -426,14 +426,14 @@ framework_vfs_overlay = rule(
     implementation = _framework_vfs_overlay_impl,
     toolchains = ["@bazel_tools//tools/cpp:toolchain_type"],
     attrs = {
-        "framework_name": attr.string(mandatory = True),
-        "extra_search_paths": attr.string(mandatory = False),
-        "modulemap": attr.label(allow_single_file = True),
-        "has_swift": attr.bool(default = False, doc = "Set to True only if there are Swift source files"),
-        "swiftmodules": attr.label_list(allow_files = True, doc = "Everything under a .swiftmodule dir if exists"),
-        "hdrs": attr.label_list(allow_files = True),
-        "private_hdrs": attr.label_list(allow_files = True, default = []),
         "deps": attr.label_list(allow_files = True, default = []),
+        "extra_search_paths": attr.string(mandatory = False),
+        "framework_name": attr.string(mandatory = True),
+        "has_swift": attr.bool(default = False, doc = "Set to True only if there are Swift source files"),
+        "hdrs": attr.label_list(allow_files = True),
+        "modulemap": attr.label(allow_single_file = True),
+        "private_hdrs": attr.label_list(allow_files = True, default = []),
+        "swiftmodules": attr.label_list(allow_files = True, doc = "Everything under a .swiftmodule dir if exists"),
         "_cc_toolchain": attr.label(
             default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
             doc = """\

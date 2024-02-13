@@ -1,8 +1,8 @@
-load("//data:xcspecs.bzl", "SETTINGS")
-load("//data:xcspec_evals.bzl", "XCSPEC_EVALS")
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
-load("@bazel_skylib//lib:types.bzl", "types")
 load("@bazel_skylib//lib:shell.bzl", "shell")
+load("@bazel_skylib//lib:types.bzl", "types")
+load("//data:xcspec_evals.bzl", "XCSPEC_EVALS")
+load("//data:xcspecs.bzl", "SETTINGS")
 
 _CLANG = "com.apple.compilers.llvm.clang.1_0"
 _SWIFT = "com.apple.xcode.tools.swift.compiler"
@@ -187,8 +187,8 @@ def copts_from_xcconfig(xcconfig):
 
     xcconfig = dicts.add(
         {
-            "CLANG_ENABLE_MODULE_DEBUGGING": "NO",
             "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+            "CLANG_ENABLE_MODULE_DEBUGGING": "NO",
         },
         xcconfig,
     )

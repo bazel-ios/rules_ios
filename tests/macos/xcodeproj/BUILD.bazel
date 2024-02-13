@@ -1,6 +1,6 @@
+load("@build_bazel_rules_apple//apple/testing/default_runner:ios_test_runner.bzl", default_ios_test_runner = "ios_test_runner")
 load("//rules:test.bzl", "ios_unit_test")
 load("//rules:xcodeproj.bzl", "xcodeproj")
-load("@build_bazel_rules_apple//apple/testing/default_runner:ios_test_runner.bzl", default_ios_test_runner = "ios_test_runner")
 
 ios_unit_test(
     name = "Single-Application-UnitTests",

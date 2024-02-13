@@ -108,15 +108,6 @@ Optional dictionary with the environment variables that are to be propagated
 into the XCTest invocation.
 """,
         ),
-        # Probably if we make these variables not private we can try to
-        # upstream, this entire file might not be worht generalizing if we go
-        # this way.
-        "_test_template": attr.label(
-            default = Label(
-                "@build_bazel_rules_ios//tools/vmd:ios_vm_test_runner.template.sh",
-            ),
-            allow_single_file = True,
-        ),
         "testrunner": attr.label(
             default = Label(
                 "@xctestrunner//:ios_test_runner",
@@ -134,6 +125,15 @@ dependency is the test runner binary.
             ),
             executable = True,
             cfg = "exec",
+        ),
+        # Probably if we make these variables not private we can try to
+        # upstream, this entire file might not be worht generalizing if we go
+        # this way.
+        "_test_template": attr.label(
+            default = Label(
+                "@build_bazel_rules_ios//tools/vmd:ios_vm_test_runner.template.sh",
+            ),
+            allow_single_file = True,
         ),
         "_xcode_config": attr.label(
             default = configuration_field(

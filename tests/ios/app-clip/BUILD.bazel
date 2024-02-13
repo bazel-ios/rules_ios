@@ -1,6 +1,6 @@
-load("//rules:framework.bzl", "apple_framework")
-load("//rules:app_clip.bzl", "ios_app_clip")
 load("//rules:app.bzl", "ios_application")
+load("//rules:app_clip.bzl", "ios_app_clip")
+load("//rules:framework.bzl", "apple_framework")
 
 apple_framework(
     name = "AppClipFramework",

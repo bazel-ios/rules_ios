@@ -1,8 +1,13 @@
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
 # Pull buildifer.mac as an http_file, then depend on the file group to make an
 # executable
 load("@build_bazel_rules_swift//swift/internal:feature_names.bzl", "SWIFT_FEATURE_USE_GLOBAL_INDEX_STORE")
 load("//rules:features.bzl", "feature_names")
-load("@bazel_skylib//lib:selects.bzl", "selects")
+
+exports_files([
+    "WORKSPACE",
+])
 
 alias(
     name = "buildifier",

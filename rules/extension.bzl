@@ -1,6 +1,6 @@
 load("@build_bazel_rules_apple//apple:ios.bzl", rules_apple_ios_extension = "ios_extension")
-load("//rules:plists.bzl", "process_infoplists")
 load("//rules:force_load_direct_deps.bzl", "force_load_direct_deps")
+load("//rules:plists.bzl", "process_infoplists")
 load("//rules/internal:framework_middleman.bzl", "dep_middleman", "framework_middleman")
 
 def ios_extension(

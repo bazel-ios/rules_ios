@@ -1,5 +1,5 @@
-load("//rules/library:xcconfig_test.bzl", "xcconfig_test_suite")
 load("//rules:plists_test.bzl", "plists_test_suite")
+load("//rules/library:xcconfig_test.bzl", "xcconfig_test_suite")
 
 xcconfig_test_suite(name = "xcconfig_test")
 

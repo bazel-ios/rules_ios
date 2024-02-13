@@ -1,6 +1,6 @@
-load("//rules/library:xcconfig.bzl", "copts_from_xcconfig")
-load("@bazel_skylib//lib:unittest.bzl", "analysistest", "asserts")
 load("@bazel_skylib//lib:types.bzl", "types")
+load("@bazel_skylib//lib:unittest.bzl", "analysistest", "asserts")
+load("//rules/library:xcconfig.bzl", "copts_from_xcconfig")
 
 _Settings = provider()
 
@@ -15,8 +15,8 @@ def _xcconfig_test_rule_impl(ctx):
 xcconfig_test_rule = rule(
     implementation = _xcconfig_test_rule_impl,
     attrs = {
-        "str": attr.string_dict(),
         "list": attr.string_list_dict(),
+        "str": attr.string_dict(),
     },
 )
 
@@ -34,8 +34,8 @@ def _xcconfig_test_impl(ctx):
 xcconfig_test = analysistest.make(
     _xcconfig_test_impl,
     attrs = {
-        "expected": attr.string_list_dict(),
         "error": attr.string(),
+        "expected": attr.string_list_dict(),
     },
 )
 
@@ -43,8 +43,8 @@ xcconfig_failure_test = analysistest.make(
     _xcconfig_test_impl,
     expect_failure = True,
     attrs = {
-        "expected": attr.string_list_dict(),
         "error": attr.string(),
+        "expected": attr.string_list_dict(),
     },
 )
 
@@ -130,7 +130,7 @@ def xcconfig_unit_test_suite():
             assert_xcconfig(
                 name = "additional_linker_flags",
                 xcconfig = {"SWIFT_ADDRESS_SANITIZER": "YES"},
-                expected = {"swift_copts": ["-sanitize=address"], "linkopts": ["-fsanitize=address"]},
+                expected = {"linkopts": ["-fsanitize=address"], "swift_copts": ["-sanitize=address"]},
             ),
             assert_xcconfig(
                 name = "otherwise_supported",
@@ -189,12 +189,12 @@ def xcconfig_unit_test_suite():
             ),
             assert_xcconfig(
                 name = "conditioned_option_enabled",
-                xcconfig = {"LD_DONT_RUN_DEDUPLICATION": "YES", "GCC_OPTIMIZATION_LEVEL": "0"},
+                xcconfig = {"GCC_OPTIMIZATION_LEVEL": "0", "LD_DONT_RUN_DEDUPLICATION": "YES"},
                 expected = {"linkopts": ["-Wl,-no_deduplicate"]},
             ),
             assert_xcconfig(
                 name = "conditioned_option_disable",
-                xcconfig = {"LD_DONT_RUN_DEDUPLICATION": "YES", "GCC_OPTIMIZATION_LEVEL": "1"},
+                xcconfig = {"GCC_OPTIMIZATION_LEVEL": "1", "LD_DONT_RUN_DEDUPLICATION": "YES"},
                 expected = {},
             ),
             assert_xcconfig(
@@ -209,7 +209,7 @@ def xcconfig_unit_test_suite():
             ),
             assert_xcconfig(
                 name = "xlinker_to_wl",
-                xcconfig = {"REEXPORTED_FRAMEWORK_NAMES": ["a", "z"], "LINKER_DISPLAYS_MANGLED_NAMES": "YES"},
+                xcconfig = {"LINKER_DISPLAYS_MANGLED_NAMES": "YES", "REEXPORTED_FRAMEWORK_NAMES": ["a", "z"]},
                 expected = {"linkopts": ["-Wl,--no-demangle", "-Wl,-reexport_framework,'a'", "-Wl,-reexport_framework,'z'"]},
             ),
         ],

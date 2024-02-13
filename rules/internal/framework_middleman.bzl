@@ -1,4 +1,13 @@
+load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:partial.bzl", "partial")
+load(
+    "@build_bazel_rules_apple//apple/internal:apple_product_type.bzl",
+    "apple_product_type",
+)
+load(
+    "@build_bazel_rules_apple//apple/internal:partials.bzl",
+    "partials",
+)
 load(
     "@build_bazel_rules_apple//apple/internal:providers.bzl",
     "AppleResourceInfo",
@@ -6,22 +15,9 @@ load(
     "new_applebundleinfo",
     "new_iosframeworkbundleinfo",
 )
-load("@bazel_skylib//lib:dicts.bzl", "dicts")
-load(
-    "@build_bazel_rules_apple//apple/internal:partials.bzl",
-    "partials",
-)
 load(
     "@build_bazel_rules_apple//apple/internal:resources.bzl",
     "resources",
-)
-load(
-    "@build_bazel_rules_apple//apple/internal:apple_product_type.bzl",
-    "apple_product_type",
-)
-load(
-    "//rules:providers.bzl",
-    "AvoidDepsInfo",
 )
 load(
     "@build_bazel_rules_apple//apple/internal/providers:embeddable_info.bzl",
@@ -29,10 +25,14 @@ load(
     "embeddable_info",
 )
 load(
+    "//rules:providers.bzl",
+    "AvoidDepsInfo",
+)
+load("//rules:transition_support.bzl", "split_transition_rule_attrs", "transition_support")
+load(
     "//rules/internal:objc_provider_utils.bzl",
     "objc_provider_utils",
 )
-load("//rules:transition_support.bzl", "split_transition_rule_attrs", "transition_support")
 
 def _framework_middleman(ctx):
     resource_providers = []
@@ -122,6 +122,11 @@ def _framework_middleman(ctx):
 framework_middleman = rule(
     implementation = _framework_middleman,
     attrs = dicts.add(split_transition_rule_attrs, {
+        "extension_safe": attr.bool(
+            default = False,
+            doc = """Internal - allow rules_apple to populate extension safe provider
+""",
+        ),
         "framework_deps": attr.label_list(
             cfg = transition_support.split_transition,
             mandatory = True,
@@ -129,21 +134,16 @@ framework_middleman = rule(
                 """Deps that may contain frameworks
 """,
         ),
-        "extension_safe": attr.bool(
-            default = False,
-            doc = """Internal - allow rules_apple to populate extension safe provider
+        "minimum_os_version": attr.string(
+            mandatory = False,
+            doc =
+                """Internal - currently rules_ios the dict `platforms`
 """,
         ),
         "platform_type": attr.string(
             mandatory = False,
             doc =
                 """Internal - currently rules_ios uses the dict `platforms`
-""",
-        ),
-        "minimum_os_version": attr.string(
-            mandatory = False,
-            doc =
-                """Internal - currently rules_ios the dict `platforms`
 """,
         ),
         "product_type": attr.string(
@@ -263,16 +263,16 @@ dep_middleman = rule(
                 """Deps that may contain frameworks
 """,
         ),
-        "platform_type": attr.string(
-            mandatory = False,
-            doc =
-                """Internal - currently rules_ios uses the dict `platforms`
-""",
-        ),
         "minimum_os_version": attr.string(
             mandatory = False,
             doc =
                 """Internal - currently rules_ios the dict `platforms`
+""",
+        ),
+        "platform_type": attr.string(
+            mandatory = False,
+            doc =
+                """Internal - currently rules_ios uses the dict `platforms`
 """,
         ),
     }),

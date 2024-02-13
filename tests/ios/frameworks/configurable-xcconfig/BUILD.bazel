@@ -33,14 +33,14 @@ apple_framework(
     },
     xcconfig_by_build_setting = {
         ":blue": {
-            "GCC_TREAT_WARNINGS_AS_ERRORS": "YES",
             "FOO": "NO",
             "FOO_blue": "blue",
+            "GCC_TREAT_WARNINGS_AS_ERRORS": "YES",
         },
         ":red": {
-            "GCC_TREAT_WARNINGS_AS_ERRORS": "NO",
             "FOO": "NO",
             "FOO_red": "red",
+            "GCC_TREAT_WARNINGS_AS_ERRORS": "NO",
         },
     },
 )

@@ -1,35 +1,35 @@
 """Framework rules"""
 
-load("//rules/framework:vfs_overlay.bzl", "VFSOverlayInfo", "make_vfsoverlay")
-load("//rules:features.bzl", "feature_names")
-load("//rules:library.bzl", "PrivateHeadersInfo", "apple_library")
-load("//rules:plists.bzl", "process_infoplists")
-load("//rules:providers.bzl", "AvoidDepsInfo", "FrameworkInfo")
-load("//rules:transition_support.bzl", "transition_support")
-load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
 load("@build_bazel_rules_apple//apple/internal:apple_product_type.bzl", "apple_product_type")
+load("@build_bazel_rules_apple//apple/internal:apple_toolchains.bzl", "AppleMacToolsToolchainInfo", "AppleXPlatToolsToolchainInfo")
 load("@build_bazel_rules_apple//apple/internal:features_support.bzl", "features_support")
 load("@build_bazel_rules_apple//apple/internal:linking_support.bzl", "linking_support")
 load("@build_bazel_rules_apple//apple/internal:outputs.bzl", "outputs")
 load("@build_bazel_rules_apple//apple/internal:partials.bzl", "partials")
 load("@build_bazel_rules_apple//apple/internal:platform_support.bzl", "platform_support")
 load("@build_bazel_rules_apple//apple/internal:processor.bzl", "processor")
+load("@build_bazel_rules_apple//apple/internal:providers.bzl", "AppleBundleInfo", "IosFrameworkBundleInfo", "new_applebundleinfo", "new_iosframeworkbundleinfo")
 load("@build_bazel_rules_apple//apple/internal:resource_actions.bzl", "resource_actions")
 load("@build_bazel_rules_apple//apple/internal:resources.bzl", "resources")
 load("@build_bazel_rules_apple//apple/internal:rule_support.bzl", "rule_support")
-load("@build_bazel_rules_apple//apple/internal:apple_toolchains.bzl", "AppleMacToolsToolchainInfo", "AppleXPlatToolsToolchainInfo")
 load("@build_bazel_rules_apple//apple/internal:swift_support.bzl", "swift_support")
-load("@build_bazel_rules_apple//apple/internal/utils:clang_rt_dylibs.bzl", "clang_rt_dylibs")
-load("@build_bazel_rules_apple//apple/internal:providers.bzl", "AppleBundleInfo", "IosFrameworkBundleInfo", "new_applebundleinfo", "new_iosframeworkbundleinfo")
-load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo", "swift_clang_module_aspect", "swift_common")
 load(
     "@build_bazel_rules_apple//apple/internal/aspects:resource_aspect.bzl",
     "apple_resource_aspect",
 )
+load("@build_bazel_rules_apple//apple/internal/utils:clang_rt_dylibs.bzl", "clang_rt_dylibs")
+load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo", "swift_clang_module_aspect", "swift_common")
+load("//rules:features.bzl", "feature_names")
 load("//rules:force_load_direct_deps.bzl", "force_load_direct_deps")
+load("//rules:library.bzl", "PrivateHeadersInfo", "apple_library")
+load("//rules:plists.bzl", "process_infoplists")
+load("//rules:providers.bzl", "AvoidDepsInfo", "FrameworkInfo")
+load("//rules:transition_support.bzl", "transition_support")
+load("//rules/framework:vfs_overlay.bzl", "VFSOverlayInfo", "make_vfsoverlay")
+load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
 
 _APPLE_FRAMEWORK_PACKAGING_KWARGS = [
     "visibility",
@@ -1086,10 +1086,21 @@ apple_framework_packaging = rule(
     fragments = ["apple", "cpp", "objc"],
     output_to_genfiles = True,
     attrs = {
-        "framework_name": attr.string(
-            mandatory = True,
+        "bundle_extension": attr.string(
+            mandatory = False,
+            default = "framework",
+            doc = "The extension of the bundle, defaults to \"framework\".",
+        ),
+        "bundle_id": attr.string(
+            mandatory = False,
+            doc = "The bundle identifier of the framework. Currently unused.",
+        ),
+        "data": attr.label_list(
+            mandatory = False,
+            cfg = transition_support.split_transition,
+            allow_files = True,
             doc =
-                """Name of the framework, usually the same as the module name
+                """Objc or Swift rules to be packed by the framework rule
 """,
         ),
         "deps": attr.label_list(
@@ -1100,21 +1111,36 @@ apple_framework_packaging = rule(
                 """Objc or Swift rules to be packed by the framework rule
 """,
         ),
-        "private_deps": attr.label_list(
-            mandatory = False,
-            cfg = transition_support.split_transition,
-            aspects = [apple_resource_aspect],
+        "environment_plist": attr.label(
+            allow_single_file = True,
+            doc = """An executable file referencing the environment_plist tool. Used to merge infoplists.
+See https://github.com/bazelbuild/rules_apple/blob/master/apple/internal/environment_plist.bzl#L69
+            """,
+        ),
+        "exported_symbols_lists": attr.label_list(
+            allow_files = True,
+            doc = """
+            """,
+        ),
+        "framework_name": attr.string(
+            mandatory = True,
             doc =
-                """Objc or Swift private rules to be packed by the framework rule
+                """Name of the framework, usually the same as the module name
 """,
         ),
-        "data": attr.label_list(
-            mandatory = False,
-            cfg = transition_support.split_transition,
-            allow_files = True,
-            doc =
-                """Objc or Swift rules to be packed by the framework rule
+        "frameworks": attr.label_list(
+            providers = [[AppleBundleInfo, IosFrameworkBundleInfo]],
+            doc = """
+A list of framework targets (see
+[`ios_framework`](https://github.com/bazelbuild/rules_apple/blob/master/doc/rules-ios.md#ios_framework))
+that this target depends on.
 """,
+            cfg = transition_support.split_transition,
+        ),
+        "infoplists": attr.label_list(
+            mandatory = False,
+            allow_files = [".plist"],
+            doc = "The infoplists for the framework",
         ),
         "library_linkopts": attr.string_list(
             doc = """
@@ -1130,31 +1156,37 @@ Internal - A list of strings representing extra flags that are passed to the lin
 The default behavior bakes this into the top level app. When false, it's statically linked.
 """,
         ),
-        "vfs": attr.label_list(
+        "minimum_deployment_os_version": attr.string(
             mandatory = False,
-            cfg = transition_support.split_transition,
+            doc = "The bundle identifier of the framework. Currently unused.",
+            default = "",
+        ),
+        "minimum_os_version": attr.string(
+            mandatory = False,
             doc =
-                """Additional VFS for the framework to export
+                """Internal - currently rules_ios the dict `platforms`
 """,
         ),
-        "transitive_deps": attr.label_list(
-            aspects = [swift_clang_module_aspect],
-            mandatory = True,
-            cfg = transition_support.split_transition,
+        "platform_type": attr.string(
+            mandatory = False,
             doc =
-                """Deps of the deps
+                """Internal - currently rules_ios uses the dict `platforms`
 """,
         ),
-        "infoplists": attr.label_list(
+        "platforms": attr.string_dict(
             mandatory = False,
-            allow_files = [".plist"],
-            doc = "The infoplists for the framework",
+            default = {},
+            doc = """A dictionary of platform names to minimum deployment targets.
+If not given, the framework will be built for the platform it inherits from the target that uses
+the framework as a dependency.""",
         ),
-        "environment_plist": attr.label(
-            allow_single_file = True,
-            doc = """An executable file referencing the environment_plist tool. Used to merge infoplists.
-See https://github.com/bazelbuild/rules_apple/blob/master/apple/internal/environment_plist.bzl#L69
-            """,
+        "private_deps": attr.label_list(
+            mandatory = False,
+            cfg = transition_support.split_transition,
+            aspects = [apple_resource_aspect],
+            doc =
+                """Objc or Swift private rules to be packed by the framework rule
+""",
         ),
         "skip_packaging": attr.string_list(
             mandatory = False,
@@ -1171,21 +1203,46 @@ Valid values are:
 - "swiftdoc"
             """,
         ),
+        "stamp": attr.int(
+            mandatory = False,
+            default = 0,
+        ),
+        "transitive_deps": attr.label_list(
+            aspects = [swift_clang_module_aspect],
+            mandatory = True,
+            cfg = transition_support.split_transition,
+            doc =
+                """Deps of the deps
+""",
+        ),
+        "vfs": attr.label_list(
+            mandatory = False,
+            cfg = transition_support.split_transition,
+            doc =
+                """Additional VFS for the framework to export
+""",
+        ),
+        "_allowlist_function_transition": attr.label(
+            default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
+            doc = "Needed to allow this rule to have an incoming edge configuration transition.",
+        ),
+        "_cc_toolchain": attr.label(
+            default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
+            doc = """\
+The C++ toolchain from which linking flags and other tools needed by the Swift
+toolchain (such as `clang`) will be retrieved.
+""",
+        ),
+        "_child_configuration_dummy": attr.label(
+            cfg = transition_support.split_transition,
+            default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
+        ),
         "_framework_packaging": attr.label(
             cfg = "exec",
             default = Label(
                 "//rules/framework:framework_packaging",
             ),
             executable = True,
-        ),
-        "frameworks": attr.label_list(
-            providers = [[AppleBundleInfo, IosFrameworkBundleInfo]],
-            doc = """
-A list of framework targets (see
-[`ios_framework`](https://github.com/bazelbuild/rules_apple/blob/master/doc/rules-ios.md#ios_framework))
-that this target depends on.
-""",
-            cfg = transition_support.split_transition,
         ),
         "_headermap_builder": attr.label(
             executable = True,
@@ -1194,34 +1251,9 @@ that this target depends on.
                 "//rules/hmap:hmaptool",
             ),
         ),
-        "stamp": attr.int(
-            mandatory = False,
-            default = 0,
-        ),
-        "exported_symbols_lists": attr.label_list(
-            allow_files = True,
-            doc = """
-            """,
-        ),
-        "_child_configuration_dummy": attr.label(
-            cfg = transition_support.split_transition,
-            default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
-        ),
-        "bundle_id": attr.string(
-            mandatory = False,
-            doc = "The bundle identifier of the framework. Currently unused.",
-        ),
-        "bundle_extension": attr.string(
-            mandatory = False,
-            default = "framework",
-            doc = "The extension of the bundle, defaults to \"framework\".",
-        ),
-        "platforms": attr.string_dict(
-            mandatory = False,
-            default = {},
-            doc = """A dictionary of platform names to minimum deployment targets.
-If not given, the framework will be built for the platform it inherits from the target that uses
-the framework as a dependency.""",
+        "_toolchain": attr.label(
+            default = Label("@build_bazel_rules_apple//apple/internal:mac_tools_toolchain"),
+            providers = [[AppleMacToolsToolchainInfo]],
         ),
         "_xcode_config": attr.label(
             default = configuration_field(
@@ -1230,46 +1262,14 @@ the framework as a dependency.""",
             ),
             doc = "The xcode config that is used to determine the deployment target for the current platform.",
         ),
-        "_allowlist_function_transition": attr.label(
-            default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
-            doc = "Needed to allow this rule to have an incoming edge configuration transition.",
-        ),
-        "_toolchain": attr.label(
-            default = Label("@build_bazel_rules_apple//apple/internal:mac_tools_toolchain"),
-            providers = [[AppleMacToolsToolchainInfo]],
-        ),
-        "_xplat_toolchain": attr.label(
-            default = Label("@build_bazel_rules_apple//apple/internal:xplat_tools_toolchain"),
-            providers = [[AppleXPlatToolsToolchainInfo]],
-        ),
-        "platform_type": attr.string(
-            mandatory = False,
-            doc =
-                """Internal - currently rules_ios uses the dict `platforms`
-""",
-        ),
-        "minimum_os_version": attr.string(
-            mandatory = False,
-            doc =
-                """Internal - currently rules_ios the dict `platforms`
-""",
-        ),
-        "minimum_deployment_os_version": attr.string(
-            mandatory = False,
-            doc = "The bundle identifier of the framework. Currently unused.",
-            default = "",
-        ),
         "_xcrunwrapper": attr.label(
             cfg = "exec",
             default = Label("@bazel_tools//tools/objc:xcrunwrapper"),
             executable = True,
         ),
-        "_cc_toolchain": attr.label(
-            default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
-            doc = """\
-The C++ toolchain from which linking flags and other tools needed by the Swift
-toolchain (such as `clang`) will be retrieved.
-""",
+        "_xplat_toolchain": attr.label(
+            default = Label("@build_bazel_rules_apple//apple/internal:xplat_tools_toolchain"),
+            providers = [[AppleXPlatToolsToolchainInfo]],
         ),
     },
     doc = "Packages compiled code into an Apple .framework package",
