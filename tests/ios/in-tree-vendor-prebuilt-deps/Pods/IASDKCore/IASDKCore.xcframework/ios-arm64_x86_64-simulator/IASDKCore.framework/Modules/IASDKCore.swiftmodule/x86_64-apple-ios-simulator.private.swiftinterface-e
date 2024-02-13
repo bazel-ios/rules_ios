@@ -1,0 +1,43 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)
+// swift-module-flags: -target x86_64-apple-ios11.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name IASDKCore
+// swift-module-flags-ignorable: -enable-bare-slash-regex
+import AdSupport
+import Foundation
+@_exported import IASDKCore
+import MachO
+import StoreKit
+import Swift
+import UIKit
+import WebKit
+import _Concurrency
+import _StringProcessing
+import os
+extension Foundation.OperatingSystemVersion : Swift.Comparable {
+  public static func == (lhs: Foundation.OperatingSystemVersion, rhs: Foundation.OperatingSystemVersion) -> Swift.Bool
+  public static func < (lhs: Foundation.OperatingSystemVersion, rhs: Foundation.OperatingSystemVersion) -> Swift.Bool
+}
+extension Foundation.OperatingSystemVersion : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+@objc public enum DTXLogLevel : Swift.Int {
+  case off = 0
+  case fault = 1
+  case error = 2
+  case info = 3
+  case debug = 4
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers @objc(DTXLogger) public class DTXLogger : ObjectiveC.NSObject {
+  @objc public static func setLogLevel(_ logLevel: IASDKCore.DTXLogLevel)
+  @objc deinit
+}
+extension IASDKCore.DTXLogLevel : Swift.Equatable {}
+extension IASDKCore.DTXLogLevel : Swift.Hashable {}
+extension IASDKCore.DTXLogLevel : Swift.RawRepresentable {}

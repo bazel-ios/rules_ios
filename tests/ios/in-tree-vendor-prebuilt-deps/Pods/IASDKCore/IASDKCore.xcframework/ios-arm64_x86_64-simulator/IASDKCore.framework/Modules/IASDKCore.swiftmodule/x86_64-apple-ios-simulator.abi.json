@@ -1,0 +1,3865 @@
+{
+  "ABIRoot": {
+    "kind": "Root",
+    "name": "TopLevel",
+    "printedName": "TopLevel",
+    "children": [
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "StoreKit",
+        "printedName": "StoreKit",
+        "declKind": "Import",
+        "moduleName": "IASDKCore"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "AdSupport",
+        "printedName": "AdSupport",
+        "declKind": "Import",
+        "moduleName": "IASDKCore"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "IASDKCore"
+      },
+      {
+        "kind": "Import",
+        "name": "MachO",
+        "printedName": "MachO",
+        "declKind": "Import",
+        "moduleName": "IASDKCore"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "StoreKit",
+        "printedName": "StoreKit",
+        "declKind": "Import",
+        "moduleName": "IASDKCore"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "WebKit",
+        "printedName": "WebKit",
+        "declKind": "Import",
+        "moduleName": "IASDKCore"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "os",
+        "printedName": "os",
+        "declKind": "Import",
+        "moduleName": "IASDKCore"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "DTXLogLevel",
+        "printedName": "DTXLogLevel",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "off",
+            "printedName": "off",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(IASDKCore.DTXLogLevel.Type) -> IASDKCore.DTXLogLevel",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "DTXLogLevel",
+                    "printedName": "IASDKCore.DTXLogLevel",
+                    "usr": "c:@M@IASDKCore@E@DTXLogLevel"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "IASDKCore.DTXLogLevel.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "DTXLogLevel",
+                        "printedName": "IASDKCore.DTXLogLevel",
+                        "usr": "c:@M@IASDKCore@E@DTXLogLevel"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "c:@M@IASDKCore@E@DTXLogLevel@DTXLogLevelOff",
+            "mangledName": "$s9IASDKCore11DTXLogLevelO3offyA2CmF",
+            "moduleName": "IASDKCore",
+            "declAttributes": [
+              "ObjC"
+            ],
+            "fixedbinaryorder": 0
+          },
+          {
+            "kind": "Var",
+            "name": "fault",
+            "printedName": "fault",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(IASDKCore.DTXLogLevel.Type) -> IASDKCore.DTXLogLevel",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "DTXLogLevel",
+                    "printedName": "IASDKCore.DTXLogLevel",
+                    "usr": "c:@M@IASDKCore@E@DTXLogLevel"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "IASDKCore.DTXLogLevel.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "DTXLogLevel",
+                        "printedName": "IASDKCore.DTXLogLevel",
+                        "usr": "c:@M@IASDKCore@E@DTXLogLevel"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "c:@M@IASDKCore@E@DTXLogLevel@DTXLogLevelFault",
+            "mangledName": "$s9IASDKCore11DTXLogLevelO5faultyA2CmF",
+            "moduleName": "IASDKCore",
+            "declAttributes": [
+              "ObjC"
+            ],
+            "fixedbinaryorder": 1
+          },
+          {
+            "kind": "Var",
+            "name": "error",
+            "printedName": "error",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(IASDKCore.DTXLogLevel.Type) -> IASDKCore.DTXLogLevel",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "DTXLogLevel",
+                    "printedName": "IASDKCore.DTXLogLevel",
+                    "usr": "c:@M@IASDKCore@E@DTXLogLevel"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "IASDKCore.DTXLogLevel.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "DTXLogLevel",
+                        "printedName": "IASDKCore.DTXLogLevel",
+                        "usr": "c:@M@IASDKCore@E@DTXLogLevel"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "c:@M@IASDKCore@E@DTXLogLevel@DTXLogLevelError",
+            "mangledName": "$s9IASDKCore11DTXLogLevelO5erroryA2CmF",
+            "moduleName": "IASDKCore",
+            "declAttributes": [
+              "ObjC"
+            ],
+            "fixedbinaryorder": 2
+          },
+          {
+            "kind": "Var",
+            "name": "info",
+            "printedName": "info",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(IASDKCore.DTXLogLevel.Type) -> IASDKCore.DTXLogLevel",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "DTXLogLevel",
+                    "printedName": "IASDKCore.DTXLogLevel",
+                    "usr": "c:@M@IASDKCore@E@DTXLogLevel"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "IASDKCore.DTXLogLevel.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "DTXLogLevel",
+                        "printedName": "IASDKCore.DTXLogLevel",
+                        "usr": "c:@M@IASDKCore@E@DTXLogLevel"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "c:@M@IASDKCore@E@DTXLogLevel@DTXLogLevelInfo",
+            "mangledName": "$s9IASDKCore11DTXLogLevelO4infoyA2CmF",
+            "moduleName": "IASDKCore",
+            "declAttributes": [
+              "ObjC"
+            ],
+            "fixedbinaryorder": 3
+          },
+          {
+            "kind": "Var",
+            "name": "debug",
+            "printedName": "debug",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(IASDKCore.DTXLogLevel.Type) -> IASDKCore.DTXLogLevel",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "DTXLogLevel",
+                    "printedName": "IASDKCore.DTXLogLevel",
+                    "usr": "c:@M@IASDKCore@E@DTXLogLevel"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "IASDKCore.DTXLogLevel.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "DTXLogLevel",
+                        "printedName": "IASDKCore.DTXLogLevel",
+                        "usr": "c:@M@IASDKCore@E@DTXLogLevel"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "c:@M@IASDKCore@E@DTXLogLevel@DTXLogLevelDebug",
+            "mangledName": "$s9IASDKCore11DTXLogLevelO5debugyA2CmF",
+            "moduleName": "IASDKCore",
+            "declAttributes": [
+              "ObjC"
+            ],
+            "fixedbinaryorder": 4
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(rawValue:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "IASDKCore.DTXLogLevel?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "DTXLogLevel",
+                    "printedName": "IASDKCore.DTXLogLevel",
+                    "usr": "c:@M@IASDKCore@E@DTXLogLevel"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "usr": "s:Si"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:9IASDKCore11DTXLogLevelO8rawValueACSgSi_tcfc",
+            "mangledName": "$s9IASDKCore11DTXLogLevelO8rawValueACSgSi_tcfc",
+            "moduleName": "IASDKCore",
+            "implicit": true,
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Var",
+            "name": "rawValue",
+            "printedName": "rawValue",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "usr": "s:Si"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:9IASDKCore11DTXLogLevelO8rawValueSivp",
+            "mangledName": "$s9IASDKCore11DTXLogLevelO8rawValueSivp",
+            "moduleName": "IASDKCore",
+            "implicit": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:9IASDKCore11DTXLogLevelO8rawValueSivg",
+                "mangledName": "$s9IASDKCore11DTXLogLevelO8rawValueSivg",
+                "moduleName": "IASDKCore",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          }
+        ],
+        "declKind": "Enum",
+        "usr": "c:@M@IASDKCore@E@DTXLogLevel",
+        "mangledName": "$s9IASDKCore11DTXLogLevelO",
+        "moduleName": "IASDKCore",
+        "declAttributes": [
+          "AccessControl",
+          "ObjC",
+          "RawDocComment"
+        ],
+        "enumRawTypeName": "Int",
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          },
+          {
+            "kind": "Conformance",
+            "name": "RawRepresentable",
+            "printedName": "RawRepresentable",
+            "children": [
+              {
+                "kind": "TypeWitness",
+                "name": "RawValue",
+                "printedName": "RawValue",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ]
+              }
+            ],
+            "usr": "s:SY",
+            "mangledName": "$sSY"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "DTXLogger",
+        "printedName": "DTXLogger",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "setLogLevel",
+            "printedName": "setLogLevel(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "DTXLogLevel",
+                "printedName": "IASDKCore.DTXLogLevel",
+                "usr": "c:@M@IASDKCore@E@DTXLogLevel"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@IASDKCore@objc(cs)DTXLogger(cm)setLogLevel:",
+            "mangledName": "$s9IASDKCore9DTXLoggerC11setLogLevelyyAA06DTXLogE0OFZ",
+            "moduleName": "IASDKCore",
+            "static": true,
+            "declAttributes": [
+              "Final",
+              "AccessControl",
+              "ObjC"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "DTXLogger",
+                "printedName": "IASDKCore.DTXLogger",
+                "usr": "c:@M@IASDKCore@objc(cs)DTXLogger"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "c:@M@IASDKCore@objc(cs)DTXLogger(im)init",
+            "mangledName": "$s9IASDKCore9DTXLoggerCACycfc",
+            "moduleName": "IASDKCore",
+            "overriding": true,
+            "implicit": true,
+            "objc_name": "init",
+            "declAttributes": [
+              "Dynamic",
+              "ObjC",
+              "Override"
+            ],
+            "init_kind": "Designated"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "c:@M@IASDKCore@objc(cs)DTXLogger",
+        "mangledName": "$s9IASDKCore9DTXLoggerC",
+        "moduleName": "IASDKCore",
+        "objc_name": "DTXLogger",
+        "declAttributes": [
+          "AccessControl",
+          "ObjC"
+        ],
+        "superclassUsr": "c:objc(cs)NSObject",
+        "hasMissingDesignatedInitializers": true,
+        "superclassNames": [
+          "ObjectiveC.NSObject"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CVarArg",
+            "printedName": "CVarArg",
+            "usr": "s:s7CVarArgP",
+            "mangledName": "$ss7CVarArgP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "_KeyValueCodingAndObservingPublishing",
+            "printedName": "_KeyValueCodingAndObservingPublishing",
+            "usr": "s:10Foundation37_KeyValueCodingAndObservingPublishingP",
+            "mangledName": "$s10Foundation37_KeyValueCodingAndObservingPublishingP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "_KeyValueCodingAndObserving",
+            "printedName": "_KeyValueCodingAndObserving",
+            "usr": "s:10Foundation27_KeyValueCodingAndObservingP",
+            "mangledName": "$s10Foundation27_KeyValueCodingAndObservingP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CustomStringConvertible",
+            "printedName": "CustomStringConvertible",
+            "usr": "s:s23CustomStringConvertibleP",
+            "mangledName": "$ss23CustomStringConvertibleP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CustomDebugStringConvertible",
+            "printedName": "CustomDebugStringConvertible",
+            "usr": "s:s28CustomDebugStringConvertibleP",
+            "mangledName": "$ss28CustomDebugStringConvertibleP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "OperatingSystemVersion",
+        "printedName": "OperatingSystemVersion",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "==",
+            "printedName": "==(_:_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "OperatingSystemVersion",
+                "printedName": "Foundation.OperatingSystemVersion",
+                "usr": "c:@SA@NSOperatingSystemVersion"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "OperatingSystemVersion",
+                "printedName": "Foundation.OperatingSystemVersion",
+                "usr": "c:@SA@NSOperatingSystemVersion"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:So24NSOperatingSystemVersiona9IASDKCoreE2eeoiySbAB_ABtFZ",
+            "mangledName": "$sSo24NSOperatingSystemVersiona9IASDKCoreE2eeoiySbAB_ABtFZ",
+            "moduleName": "IASDKCore",
+            "static": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "<",
+            "printedName": "<(_:_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "OperatingSystemVersion",
+                "printedName": "Foundation.OperatingSystemVersion",
+                "usr": "c:@SA@NSOperatingSystemVersion"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "OperatingSystemVersion",
+                "printedName": "Foundation.OperatingSystemVersion",
+                "usr": "c:@SA@NSOperatingSystemVersion"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:So24NSOperatingSystemVersiona9IASDKCoreE1loiySbAB_ABtFZ",
+            "mangledName": "$sSo24NSOperatingSystemVersiona9IASDKCoreE1loiySbAB_ABtFZ",
+            "moduleName": "IASDKCore",
+            "static": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Var",
+            "name": "description",
+            "printedName": "description",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:So24NSOperatingSystemVersiona9IASDKCoreE11descriptionSSvp",
+            "mangledName": "$sSo24NSOperatingSystemVersiona9IASDKCoreE11descriptionSSvp",
+            "moduleName": "IASDKCore",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "isFromExtension": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:So24NSOperatingSystemVersiona9IASDKCoreE11descriptionSSvg",
+                "mangledName": "$sSo24NSOperatingSystemVersiona9IASDKCoreE11descriptionSSvg",
+                "moduleName": "IASDKCore",
+                "isFromExtension": true,
+                "accessorKind": "get"
+              }
+            ]
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "c:@SA@NSOperatingSystemVersion",
+        "moduleName": "Foundation",
+        "declAttributes": [
+          "SynthesizedProtocol",
+          "NonSendable",
+          "Sendable"
+        ],
+        "isExternal": true,
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Sendable",
+            "printedName": "Sendable",
+            "usr": "s:s8SendableP",
+            "mangledName": "$ss8SendableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Comparable",
+            "printedName": "Comparable",
+            "usr": "s:SL",
+            "mangledName": "$sSL"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CustomStringConvertible",
+            "printedName": "CustomStringConvertible",
+            "usr": "s:s23CustomStringConvertibleP",
+            "mangledName": "$ss23CustomStringConvertibleP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "Logger",
+        "printedName": "Logger",
+        "declKind": "Struct",
+        "usr": "s:2os6LoggerV",
+        "mangledName": "$s2os6LoggerV",
+        "moduleName": "os",
+        "intro_Macosx": "11.0",
+        "intro_iOS": "14.0",
+        "intro_tvOS": "14.0",
+        "intro_watchOS": "7.0",
+        "declAttributes": [
+          "Available",
+          "Available",
+          "Available",
+          "Available"
+        ],
+        "isExternal": true
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "OSLog",
+        "printedName": "OSLog",
+        "declKind": "Class",
+        "usr": "c:objc(cs)OS_os_log",
+        "moduleName": "os",
+        "isOpen": true,
+        "objc_name": "OS_os_log",
+        "declAttributes": [
+          "ObjC",
+          "Dynamic"
+        ],
+        "superclassUsr": "c:objc(cs)NSObject",
+        "isExternal": true,
+        "inheritsConvenienceInitializers": true,
+        "superclassNames": [
+          "ObjectiveC.NSObject"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CVarArg",
+            "printedName": "CVarArg",
+            "usr": "s:s7CVarArgP",
+            "mangledName": "$ss7CVarArgP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "_KeyValueCodingAndObservingPublishing",
+            "printedName": "_KeyValueCodingAndObservingPublishing",
+            "usr": "s:10Foundation37_KeyValueCodingAndObservingPublishingP",
+            "mangledName": "$s10Foundation37_KeyValueCodingAndObservingPublishingP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "_KeyValueCodingAndObserving",
+            "printedName": "_KeyValueCodingAndObserving",
+            "usr": "s:10Foundation27_KeyValueCodingAndObservingP",
+            "mangledName": "$s10Foundation27_KeyValueCodingAndObservingP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CustomStringConvertible",
+            "printedName": "CustomStringConvertible",
+            "usr": "s:s23CustomStringConvertibleP",
+            "mangledName": "$ss23CustomStringConvertibleP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CustomDebugStringConvertible",
+            "printedName": "CustomDebugStringConvertible",
+            "usr": "s:s28CustomDebugStringConvertibleP",
+            "mangledName": "$ss28CustomDebugStringConvertibleP"
+          }
+        ]
+      }
+    ],
+    "json_format_version": 8
+  },
+  "ConstValues": [
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "IntegerLiteral",
+      "offset": 851,
+      "length": 2,
+      "value": "16"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "IntegerLiteral",
+      "offset": 855,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "IntegerLiteral",
+      "offset": 858,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "FloatLiteral",
+      "offset": 882,
+      "length": 3,
+      "value": "4.0"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "IntegerLiteral",
+      "offset": 940,
+      "length": 2,
+      "value": "14"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "IntegerLiteral",
+      "offset": 944,
+      "length": 1,
+      "value": "6"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "IntegerLiteral",
+      "offset": 947,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "FloatLiteral",
+      "offset": 971,
+      "length": 3,
+      "value": "3.0"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1029,
+      "length": 2,
+      "value": "14"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1033,
+      "length": 1,
+      "value": "5"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1036,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "FloatLiteral",
+      "offset": 1060,
+      "length": 3,
+      "value": "2.2"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1118,
+      "length": 2,
+      "value": "14"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1122,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1125,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "FloatLiteral",
+      "offset": 1149,
+      "length": 3,
+      "value": "2.1"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1405,
+      "length": 2,
+      "value": "14"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1409,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1412,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "Array",
+      "offset": 1441,
+      "length": 2,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "StringLiteral",
+      "offset": 1525,
+      "length": 18,
+      "value": "\"SKAdNetworkItems\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "StringLiteral",
+      "offset": 1607,
+      "length": 56,
+      "value": "\"Error fetching SKAdNetworkItems from plist, wrong data\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "Array",
+      "offset": 1684,
+      "length": 2,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "StringLiteral",
+      "offset": 1743,
+      "length": 23,
+      "value": "\"SKAdNetworkIdentifier\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "StringLiteral",
+      "offset": 1863,
+      "length": 14,
+      "value": "\".skadnetwork\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "FloatLiteral",
+      "offset": 2114,
+      "length": 3,
+      "value": "2.2"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "BooleanLiteral",
+      "offset": 2123,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdService.swift",
+      "kind": "StringLiteral",
+      "offset": 406,
+      "length": 14,
+      "value": "\"IASDKCore.DTXSKAdService\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Components\/Reachability.swift",
+      "kind": "StringLiteral",
+      "offset": 268,
+      "length": 35,
+      "value": "\"currentReachabilityStatusAsString\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Components\/Reachability.swift",
+      "kind": "StringLiteral",
+      "offset": 370,
+      "length": 9,
+      "value": "\"unknown\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Utils\/DTXEncoder.swift",
+      "kind": "StringLiteral",
+      "offset": 1053,
+      "length": 35,
+      "value": "\"!*'();:@+$,\/?%#[]<> \\^`{|}&=\"\n\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Utils\/DTXEncoder.swift",
+      "kind": "StringLiteral",
+      "offset": 1118,
+      "length": 26,
+      "value": "\"!*'();@+$,?#[]<> \\^`{|}\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Utils\/DTXEncoder.swift",
+      "kind": "StringLiteral",
+      "offset": 1053,
+      "length": 35,
+      "value": "\"!*'();:@+$,\/?%#[]<> \\^`{|}&=\"\n\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Utils\/DTXEncoder.swift",
+      "kind": "StringLiteral",
+      "offset": 1118,
+      "length": 26,
+      "value": "\"!*'();@+$,?#[]<> \\^`{|}\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXNetworkSession.swift",
+      "kind": "Dictionary",
+      "offset": 937,
+      "length": 3,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXNetworkSession.swift",
+      "kind": "StringLiteral",
+      "offset": 990,
+      "length": 39,
+      "value": "\"com.DT.Exchange.networking-sync-queue\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXOMIDRepository.swift",
+      "kind": "IntegerLiteral",
+      "offset": 248,
+      "length": 17,
+      "value": "1"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXOMIDRepository.swift",
+      "kind": "IntegerLiteral",
+      "offset": 275,
+      "length": 21,
+      "value": "2"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXOMIDRepository.swift",
+      "kind": "IntegerLiteral",
+      "offset": 248,
+      "length": 17,
+      "value": "1"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXOMIDRepository.swift",
+      "kind": "IntegerLiteral",
+      "offset": 275,
+      "length": 21,
+      "value": "2"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXOMIDRepository.swift",
+      "kind": "StringLiteral",
+      "offset": 1856,
+      "length": 17,
+      "value": "\"IASDKCore.DTXOMIDRepository\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+CI.swift",
+      "kind": "IntegerLiteral",
+      "offset": 185,
+      "length": 2,
+      "value": "35"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+CI.swift",
+      "kind": "IntegerLiteral",
+      "offset": 205,
+      "length": 2,
+      "value": "36"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+CI.swift",
+      "kind": "IntegerLiteral",
+      "offset": 227,
+      "length": 2,
+      "value": "57"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+CI.swift",
+      "kind": "IntegerLiteral",
+      "offset": 252,
+      "length": 2,
+      "value": "11"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+CI.swift",
+      "kind": "IntegerLiteral",
+      "offset": 185,
+      "length": 2,
+      "value": "35"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+CI.swift",
+      "kind": "IntegerLiteral",
+      "offset": 205,
+      "length": 2,
+      "value": "36"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+CI.swift",
+      "kind": "IntegerLiteral",
+      "offset": 227,
+      "length": 2,
+      "value": "57"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+CI.swift",
+      "kind": "IntegerLiteral",
+      "offset": 252,
+      "length": 2,
+      "value": "11"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+CI.swift",
+      "kind": "IntegerLiteral",
+      "offset": 185,
+      "length": 2,
+      "value": "35"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+CI.swift",
+      "kind": "IntegerLiteral",
+      "offset": 205,
+      "length": 2,
+      "value": "36"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+CI.swift",
+      "kind": "IntegerLiteral",
+      "offset": 227,
+      "length": 2,
+      "value": "57"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+CI.swift",
+      "kind": "IntegerLiteral",
+      "offset": 252,
+      "length": 2,
+      "value": "11"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Utils\/PublisherInfo.swift",
+      "kind": "StringLiteral",
+      "offset": 231,
+      "length": 28,
+      "value": "\"CFBundleShortVersionString\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXRemoteFilesDataSource.swift",
+      "kind": "StringLiteral",
+      "offset": 1836,
+      "length": 15,
+      "value": "\"Last-Modified\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXRemoteFilesDataSource.swift",
+      "kind": "StringLiteral",
+      "offset": 1893,
+      "length": 19,
+      "value": "\"If-Modified-Since\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Utils\/DTXFormatter.swift",
+      "kind": "StringLiteral",
+      "offset": 413,
+      "length": 5,
+      "value": "\"UTC\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Utils\/DTXFormatter.swift",
+      "kind": "StringLiteral",
+      "offset": 451,
+      "length": 12,
+      "value": "\"yyyy-MM-dd\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Utils\/DTXFormatter.swift",
+      "kind": "StringLiteral",
+      "offset": 646,
+      "length": 5,
+      "value": "\"UTC\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Utils\/DTXFormatter.swift",
+      "kind": "StringLiteral",
+      "offset": 684,
+      "length": 4,
+      "value": "\"HH\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Utils\/DTXFormatter.swift",
+      "kind": "IntegerLiteral",
+      "offset": 969,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Utils\/DTXFormatter.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1013,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Utils\/DTXFormatter.swift",
+      "kind": "StringLiteral",
+      "offset": 1052,
+      "length": 3,
+      "value": "\":\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Utils\/DeviceInfo.swift",
+      "kind": "StringLiteral",
+      "offset": 447,
+      "length": 11,
+      "value": "\"Star trek\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Utils\/DeviceInfo.swift",
+      "kind": "StringLiteral",
+      "offset": 483,
+      "length": 6,
+      "value": "\"10.1\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/IASDKCore\/DTXExceptionHandler.swift",
+      "kind": "StringLiteral",
+      "offset": 260,
+      "length": 11,
+      "value": "\"exception\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/IASDKCore\/DTXExceptionHandler.swift",
+      "kind": "StringLiteral",
+      "offset": 297,
+      "length": 9,
+      "value": "\"symbols\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/IASDKCore\/DTXExceptionHandler.swift",
+      "kind": "StringLiteral",
+      "offset": 329,
+      "length": 6,
+      "value": "\"type\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/IASDKCore\/DTXExceptionHandler.swift",
+      "kind": "StringLiteral",
+      "offset": 361,
+      "length": 6,
+      "value": "\"addr\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/IASDKCore\/DTXExceptionHandler.swift",
+      "kind": "StringLiteral",
+      "offset": 396,
+      "length": 7,
+      "value": "\"state\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/IASDKCore\/DTXExceptionHandler.swift",
+      "kind": "StringLiteral",
+      "offset": 429,
+      "length": 9,
+      "value": "\"windows\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/IASDKCore\/DTXExceptionHandler.swift",
+      "kind": "StringLiteral",
+      "offset": 462,
+      "length": 7,
+      "value": "\"isKey\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/IASDKCore\/DTXExceptionHandler.swift",
+      "kind": "StringLiteral",
+      "offset": 492,
+      "length": 6,
+      "value": "\"mask\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/IASDKCore\/DTXExceptionHandler.swift",
+      "kind": "StringLiteral",
+      "offset": 525,
+      "length": 10,
+      "value": "\"children\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/IASDKCore\/DTXExceptionHandler.swift",
+      "kind": "StringLiteral",
+      "offset": 558,
+      "length": 6,
+      "value": "\"root\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/IASDKCore\/DTXExceptionHandler.swift",
+      "kind": "StringLiteral",
+      "offset": 597,
+      "length": 11,
+      "value": "\"presented\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/IASDKCore\/DTXExceptionHandler.swift",
+      "kind": "StringLiteral",
+      "offset": 637,
+      "length": 12,
+      "value": "\"presenting\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/IASDKCore\/DTXExceptionHandler.swift",
+      "kind": "StringLiteral",
+      "offset": 686,
+      "length": 16,
+      "value": "\"view_hierarchy\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/IASDKCore\/DTXExceptionHandler.swift",
+      "kind": "StringLiteral",
+      "offset": 742,
+      "length": 24,
+      "value": "\"Supported orientations\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/IASDKCore\/DTXExceptionHandler.swift",
+      "kind": "StringLiteral",
+      "offset": 809,
+      "length": 3,
+      "value": "\"p\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/IASDKCore\/DTXExceptionHandler.swift",
+      "kind": "StringLiteral",
+      "offset": 860,
+      "length": 3,
+      "value": "\"u\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/IASDKCore\/DTXExceptionHandler.swift",
+      "kind": "StringLiteral",
+      "offset": 906,
+      "length": 3,
+      "value": "\"l\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/IASDKCore\/DTXExceptionHandler.swift",
+      "kind": "StringLiteral",
+      "offset": 953,
+      "length": 3,
+      "value": "\"r\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 468,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "BooleanLiteral",
+      "offset": 1344,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "BooleanLiteral",
+      "offset": 10788,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 415,
+      "length": 12,
+      "value": "\"IASDKCore.DTXSKAdModel\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 19573,
+      "length": 25,
+      "value": "\"adNetworkPayloadVersion\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 19706,
+      "length": 4,
+      "value": "\"id\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 19826,
+      "length": 35,
+      "value": "\"adNetworkSourceAppStoreIdentifier\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 19958,
+      "length": 13,
+      "value": "\"adNetworkId\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 20071,
+      "length": 21,
+      "value": "\"adNetworkCampaignId\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 20201,
+      "length": 18,
+      "value": "\"sourceIdentifier\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 20341,
+      "length": 30,
+      "value": "\"adNetworkImpressionTimestamp\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 20454,
+      "length": 31,
+      "value": "\"adNetworkAttributionSignature\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 20574,
+      "length": 16,
+      "value": "\"adNetworkNonce\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 20706,
+      "length": 25,
+      "value": "\"FYB-SKAdn-Imp-Timestamp\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 20810,
+      "length": 25,
+      "value": "\"FYB-SKAdn-Imp-Signature\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 20910,
+      "length": 21,
+      "value": "\"FYB-SKAdn-Imp-Nonce\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 21019,
+      "length": 20,
+      "value": "\"SKOverlay-Position\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 21117,
+      "length": 17,
+      "value": "\"SKOverlay-Delay\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 21212,
+      "length": 24,
+      "value": "\"SKOverlay-EndcardDelay\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 21309,
+      "length": 21,
+      "value": "\"SKOverlay-Autoclose\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 21408,
+      "length": 23,
+      "value": "\"SKOverlay-Dismissible\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 19573,
+      "length": 25,
+      "value": "\"adNetworkPayloadVersion\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 19706,
+      "length": 4,
+      "value": "\"id\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 19826,
+      "length": 35,
+      "value": "\"adNetworkSourceAppStoreIdentifier\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 19958,
+      "length": 13,
+      "value": "\"adNetworkId\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 20071,
+      "length": 21,
+      "value": "\"adNetworkCampaignId\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 20201,
+      "length": 18,
+      "value": "\"sourceIdentifier\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 20341,
+      "length": 30,
+      "value": "\"adNetworkImpressionTimestamp\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 20454,
+      "length": 31,
+      "value": "\"adNetworkAttributionSignature\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 20574,
+      "length": 16,
+      "value": "\"adNetworkNonce\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 20706,
+      "length": 25,
+      "value": "\"FYB-SKAdn-Imp-Timestamp\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 20810,
+      "length": 25,
+      "value": "\"FYB-SKAdn-Imp-Signature\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 20910,
+      "length": 21,
+      "value": "\"FYB-SKAdn-Imp-Nonce\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 21019,
+      "length": 20,
+      "value": "\"SKOverlay-Position\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 21117,
+      "length": 17,
+      "value": "\"SKOverlay-Delay\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 21212,
+      "length": 24,
+      "value": "\"SKOverlay-EndcardDelay\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 21309,
+      "length": 21,
+      "value": "\"SKOverlay-Autoclose\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXSKAdModel.swift",
+      "kind": "StringLiteral",
+      "offset": 21408,
+      "length": 23,
+      "value": "\"SKOverlay-Dismissible\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Components\/AnalyticsTracker.swift",
+      "kind": "StringLiteral",
+      "offset": 706,
+      "length": 31,
+      "value": "\"kFYBDispatchEventNotification\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Components\/AnalyticsTracker.swift",
+      "kind": "StringLiteral",
+      "offset": 786,
+      "length": 15,
+      "value": "\"kFMPEventData\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Shims\/Shims.swift",
+      "kind": "StringLiteral",
+      "offset": 646,
+      "length": 32,
+      "value": "\"IASDKCore.Swift_Shim_Analytics_MarketEvent\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/UIColor.swift",
+      "kind": "FloatLiteral",
+      "offset": 206,
+      "length": 3,
+      "value": "1.0"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/UIColor.swift",
+      "kind": "FloatLiteral",
+      "offset": 498,
+      "length": 3,
+      "value": "1.0"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXAdReportViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 500,
+      "length": 63,
+      "value": "\"https:\/\/cdn2.inner-active.mobi\/client\/fyber-i-icon\/index.html\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXAdReportViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 615,
+      "length": 2,
+      "value": "44"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXAdReportViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 666,
+      "length": 2,
+      "value": "28"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXAdReportViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 880,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXAdReportViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 886,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXAdReportViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 896,
+      "length": 3,
+      "value": "300"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXAdReportViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 909,
+      "length": 2,
+      "value": "50"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXAdReportViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 5590,
+      "length": 30,
+      "value": "\"fybermarketplace:\/\/reportAd?\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXAdReportViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 5671,
+      "length": 15,
+      "value": "\"reportSent();\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Components\/CarrierInfo.swift",
+      "kind": "StringLiteral",
+      "offset": 307,
+      "length": 16,
+      "value": "\"isoCountryCode\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics.swift",
+      "kind": "Dictionary",
+      "offset": 989,
+      "length": 3,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXWatermarkView.swift",
+      "kind": "IntegerLiteral",
+      "offset": 349,
+      "length": 2,
+      "value": "18"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXWatermarkView.swift",
+      "kind": "IntegerLiteral",
+      "offset": 401,
+      "length": 8,
+      "value": "0xDCDCDC"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXWatermarkView.swift",
+      "kind": "FloatLiteral",
+      "offset": 418,
+      "length": 4,
+      "value": "0.46"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXWatermarkView.swift",
+      "kind": "IntegerLiteral",
+      "offset": 478,
+      "length": 8,
+      "value": "0x333333"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXWatermarkView.swift",
+      "kind": "FloatLiteral",
+      "offset": 495,
+      "length": 5,
+      "value": "0.533"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXWatermarkView.swift",
+      "kind": "BooleanLiteral",
+      "offset": 550,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXWatermarkView.swift",
+      "kind": "BooleanLiteral",
+      "offset": 875,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXWatermarkView.swift",
+      "kind": "BooleanLiteral",
+      "offset": 917,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXWatermarkView.swift",
+      "kind": "BooleanLiteral",
+      "offset": 2253,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXWatermarkView.swift",
+      "kind": "StringLiteral",
+      "offset": 2374,
+      "length": 13,
+      "value": "\"info_button\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXWatermarkView.swift",
+      "kind": "StringLiteral",
+      "offset": 2498,
+      "length": 22,
+      "value": "\"digital_turbine_logo\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXWatermarkView.swift",
+      "kind": "StringLiteral",
+      "offset": 2927,
+      "length": 26,
+      "value": "\"AppleSDGothicNeo-Regular\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXWatermarkView.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2961,
+      "length": 1,
+      "value": "8"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXWatermarkView.swift",
+      "kind": "IntegerLiteral",
+      "offset": 3016,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXWatermarkView.swift",
+      "kind": "IntegerLiteral",
+      "offset": 3025,
+      "length": 1,
+      "value": "8"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXWatermarkView.swift",
+      "kind": "IntegerLiteral",
+      "offset": 3036,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXWatermarkView.swift",
+      "kind": "IntegerLiteral",
+      "offset": 3046,
+      "length": 1,
+      "value": "8"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXWatermarkView.swift",
+      "kind": "BooleanLiteral",
+      "offset": 3090,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXWatermarkView.swift",
+      "kind": "IntegerLiteral",
+      "offset": 3305,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXWatermarkView.swift",
+      "kind": "StringLiteral",
+      "offset": 280,
+      "length": 16,
+      "value": "\"IASDKCore.DTXWatermarkView\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Utils\/ValidatableValuesDictionary.swift",
+      "kind": "Dictionary",
+      "offset": 261,
+      "length": 3,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Components\/SdkCore.swift",
+      "kind": "StringLiteral",
+      "offset": 440,
+      "length": 7,
+      "value": "\"appID\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Components\/SdkCore.swift",
+      "kind": "StringLiteral",
+      "offset": 516,
+      "length": 9,
+      "value": "\"version\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Components\/SdkCore.swift",
+      "kind": "StringLiteral",
+      "offset": 601,
+      "length": 19,
+      "value": "\"FairbidSdkVersion\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Components\/SdkCore.swift",
+      "kind": "StringLiteral",
+      "offset": 691,
+      "length": 13,
+      "value": "\"countryCode\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Components\/SdkCore.swift",
+      "kind": "StringLiteral",
+      "offset": 777,
+      "length": 16,
+      "value": "\"isUnderFairBid\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Components\/SdkCore.swift",
+      "kind": "BooleanLiteral",
+      "offset": 835,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXHttpRequest.swift",
+      "kind": "StringLiteral",
+      "offset": 194,
+      "length": 5,
+      "value": "\"GET\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXHttpRequest.swift",
+      "kind": "StringLiteral",
+      "offset": 216,
+      "length": 6,
+      "value": "\"POST\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXHttpRequest.swift",
+      "kind": "StringLiteral",
+      "offset": 194,
+      "length": 5,
+      "value": "\"GET\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXHttpRequest.swift",
+      "kind": "StringLiteral",
+      "offset": 216,
+      "length": 6,
+      "value": "\"POST\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXHttpRequest.swift",
+      "kind": "IntegerLiteral",
+      "offset": 913,
+      "length": 2,
+      "value": "15"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 223,
+      "length": 2,
+      "value": "62"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 263,
+      "length": 2,
+      "value": "70"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 305,
+      "length": 2,
+      "value": "75"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 348,
+      "length": 2,
+      "value": "78"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 376,
+      "length": 3,
+      "value": "301"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 411,
+      "length": 3,
+      "value": "302"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 443,
+      "length": 3,
+      "value": "303"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 484,
+      "length": 3,
+      "value": "304"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 524,
+      "length": 3,
+      "value": "305"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 560,
+      "length": 3,
+      "value": "306"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 593,
+      "length": 3,
+      "value": "307"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 626,
+      "length": 3,
+      "value": "308"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 659,
+      "length": 3,
+      "value": "309"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 683,
+      "length": 3,
+      "value": "310"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 723,
+      "length": 3,
+      "value": "311"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 759,
+      "length": 3,
+      "value": "313"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 804,
+      "length": 3,
+      "value": "390"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 835,
+      "length": 3,
+      "value": "501"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 865,
+      "length": 3,
+      "value": "502"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 903,
+      "length": 3,
+      "value": "503"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 944,
+      "length": 3,
+      "value": "603"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 997,
+      "length": 3,
+      "value": "604"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1038,
+      "length": 3,
+      "value": "605"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1070,
+      "length": 3,
+      "value": "701"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1101,
+      "length": 3,
+      "value": "702"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1141,
+      "length": 3,
+      "value": "703"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1176,
+      "length": 3,
+      "value": "704"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1230,
+      "length": 3,
+      "value": "801"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1259,
+      "length": 3,
+      "value": "802"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1290,
+      "length": 3,
+      "value": "803"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1328,
+      "length": 3,
+      "value": "850"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1370,
+      "length": 3,
+      "value": "851"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1417,
+      "length": 3,
+      "value": "853"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1462,
+      "length": 3,
+      "value": "860"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1502,
+      "length": 3,
+      "value": "862"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1533,
+      "length": 3,
+      "value": "992"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1562,
+      "length": 3,
+      "value": "999"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1614,
+      "length": 4,
+      "value": "1000"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1645,
+      "length": 4,
+      "value": "1001"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 223,
+      "length": 2,
+      "value": "62"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 263,
+      "length": 2,
+      "value": "70"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 305,
+      "length": 2,
+      "value": "75"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 348,
+      "length": 2,
+      "value": "78"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 376,
+      "length": 3,
+      "value": "301"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 411,
+      "length": 3,
+      "value": "302"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 443,
+      "length": 3,
+      "value": "303"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 484,
+      "length": 3,
+      "value": "304"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 524,
+      "length": 3,
+      "value": "305"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 560,
+      "length": 3,
+      "value": "306"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 593,
+      "length": 3,
+      "value": "307"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 626,
+      "length": 3,
+      "value": "308"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 659,
+      "length": 3,
+      "value": "309"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 683,
+      "length": 3,
+      "value": "310"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 723,
+      "length": 3,
+      "value": "311"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 759,
+      "length": 3,
+      "value": "313"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 804,
+      "length": 3,
+      "value": "390"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 835,
+      "length": 3,
+      "value": "501"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 865,
+      "length": 3,
+      "value": "502"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 903,
+      "length": 3,
+      "value": "503"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 944,
+      "length": 3,
+      "value": "603"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 997,
+      "length": 3,
+      "value": "604"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1038,
+      "length": 3,
+      "value": "605"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1070,
+      "length": 3,
+      "value": "701"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1101,
+      "length": 3,
+      "value": "702"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1141,
+      "length": 3,
+      "value": "703"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1176,
+      "length": 3,
+      "value": "704"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1230,
+      "length": 3,
+      "value": "801"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1259,
+      "length": 3,
+      "value": "802"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1290,
+      "length": 3,
+      "value": "803"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1328,
+      "length": 3,
+      "value": "850"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1370,
+      "length": 3,
+      "value": "851"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1417,
+      "length": 3,
+      "value": "853"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1462,
+      "length": 3,
+      "value": "860"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1502,
+      "length": 3,
+      "value": "862"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1533,
+      "length": 3,
+      "value": "992"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1562,
+      "length": 3,
+      "value": "999"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1614,
+      "length": 4,
+      "value": "1000"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1645,
+      "length": 4,
+      "value": "1001"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 223,
+      "length": 2,
+      "value": "62"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 263,
+      "length": 2,
+      "value": "70"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 305,
+      "length": 2,
+      "value": "75"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 348,
+      "length": 2,
+      "value": "78"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 376,
+      "length": 3,
+      "value": "301"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 411,
+      "length": 3,
+      "value": "302"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 443,
+      "length": 3,
+      "value": "303"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 484,
+      "length": 3,
+      "value": "304"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 524,
+      "length": 3,
+      "value": "305"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 560,
+      "length": 3,
+      "value": "306"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 593,
+      "length": 3,
+      "value": "307"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 626,
+      "length": 3,
+      "value": "308"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 659,
+      "length": 3,
+      "value": "309"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 683,
+      "length": 3,
+      "value": "310"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 723,
+      "length": 3,
+      "value": "311"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 759,
+      "length": 3,
+      "value": "313"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 804,
+      "length": 3,
+      "value": "390"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 835,
+      "length": 3,
+      "value": "501"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 865,
+      "length": 3,
+      "value": "502"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 903,
+      "length": 3,
+      "value": "503"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 944,
+      "length": 3,
+      "value": "603"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 997,
+      "length": 3,
+      "value": "604"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1038,
+      "length": 3,
+      "value": "605"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1070,
+      "length": 3,
+      "value": "701"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1101,
+      "length": 3,
+      "value": "702"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1141,
+      "length": 3,
+      "value": "703"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1176,
+      "length": 3,
+      "value": "704"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1230,
+      "length": 3,
+      "value": "801"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1259,
+      "length": 3,
+      "value": "802"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1290,
+      "length": 3,
+      "value": "803"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1328,
+      "length": 3,
+      "value": "850"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1370,
+      "length": 3,
+      "value": "851"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1417,
+      "length": 3,
+      "value": "853"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1462,
+      "length": 3,
+      "value": "860"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1502,
+      "length": 3,
+      "value": "862"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1533,
+      "length": 3,
+      "value": "992"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1562,
+      "length": 3,
+      "value": "999"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1614,
+      "length": 4,
+      "value": "1000"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1645,
+      "length": 4,
+      "value": "1001"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1748,
+      "length": 1,
+      "value": "5"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1789,
+      "length": 2,
+      "value": "10"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1837,
+      "length": 2,
+      "value": "11"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1878,
+      "length": 2,
+      "value": "41"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1922,
+      "length": 2,
+      "value": "50"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1957,
+      "length": 2,
+      "value": "60"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1994,
+      "length": 2,
+      "value": "61"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2029,
+      "length": 2,
+      "value": "71"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2065,
+      "length": 2,
+      "value": "72"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2105,
+      "length": 2,
+      "value": "73"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2144,
+      "length": 2,
+      "value": "74"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2184,
+      "length": 2,
+      "value": "76"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2220,
+      "length": 2,
+      "value": "77"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2277,
+      "length": 2,
+      "value": "80"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2322,
+      "length": 3,
+      "value": "312"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2363,
+      "length": 3,
+      "value": "345"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2407,
+      "length": 3,
+      "value": "346"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2448,
+      "length": 3,
+      "value": "347"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2486,
+      "length": 3,
+      "value": "348"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2537,
+      "length": 3,
+      "value": "391"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2589,
+      "length": 3,
+      "value": "392"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2637,
+      "length": 3,
+      "value": "393"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2678,
+      "length": 3,
+      "value": "394"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2720,
+      "length": 3,
+      "value": "395"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2762,
+      "length": 3,
+      "value": "396"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2814,
+      "length": 3,
+      "value": "602"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2845,
+      "length": 3,
+      "value": "804"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2894,
+      "length": 3,
+      "value": "852"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2940,
+      "length": 3,
+      "value": "863"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2978,
+      "length": 3,
+      "value": "864"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 3019,
+      "length": 3,
+      "value": "990"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 3053,
+      "length": 3,
+      "value": "993"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 3084,
+      "length": 3,
+      "value": "998"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1748,
+      "length": 1,
+      "value": "5"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1789,
+      "length": 2,
+      "value": "10"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1837,
+      "length": 2,
+      "value": "11"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1878,
+      "length": 2,
+      "value": "41"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1922,
+      "length": 2,
+      "value": "50"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1957,
+      "length": 2,
+      "value": "60"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1994,
+      "length": 2,
+      "value": "61"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2029,
+      "length": 2,
+      "value": "71"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2065,
+      "length": 2,
+      "value": "72"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2105,
+      "length": 2,
+      "value": "73"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2144,
+      "length": 2,
+      "value": "74"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2184,
+      "length": 2,
+      "value": "76"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2220,
+      "length": 2,
+      "value": "77"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2277,
+      "length": 2,
+      "value": "80"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2322,
+      "length": 3,
+      "value": "312"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2363,
+      "length": 3,
+      "value": "345"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2407,
+      "length": 3,
+      "value": "346"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2448,
+      "length": 3,
+      "value": "347"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2486,
+      "length": 3,
+      "value": "348"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2537,
+      "length": 3,
+      "value": "391"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2589,
+      "length": 3,
+      "value": "392"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2637,
+      "length": 3,
+      "value": "393"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2678,
+      "length": 3,
+      "value": "394"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2720,
+      "length": 3,
+      "value": "395"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2762,
+      "length": 3,
+      "value": "396"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2814,
+      "length": 3,
+      "value": "602"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2845,
+      "length": 3,
+      "value": "804"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2894,
+      "length": 3,
+      "value": "852"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2940,
+      "length": 3,
+      "value": "863"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2978,
+      "length": 3,
+      "value": "864"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 3019,
+      "length": 3,
+      "value": "990"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 3053,
+      "length": 3,
+      "value": "993"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 3084,
+      "length": 3,
+      "value": "998"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1748,
+      "length": 1,
+      "value": "5"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1789,
+      "length": 2,
+      "value": "10"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1837,
+      "length": 2,
+      "value": "11"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1878,
+      "length": 2,
+      "value": "41"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1922,
+      "length": 2,
+      "value": "50"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1957,
+      "length": 2,
+      "value": "60"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1994,
+      "length": 2,
+      "value": "61"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2029,
+      "length": 2,
+      "value": "71"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2065,
+      "length": 2,
+      "value": "72"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2105,
+      "length": 2,
+      "value": "73"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2144,
+      "length": 2,
+      "value": "74"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2184,
+      "length": 2,
+      "value": "76"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2220,
+      "length": 2,
+      "value": "77"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2277,
+      "length": 2,
+      "value": "80"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2322,
+      "length": 3,
+      "value": "312"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2363,
+      "length": 3,
+      "value": "345"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2407,
+      "length": 3,
+      "value": "346"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2448,
+      "length": 3,
+      "value": "347"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2486,
+      "length": 3,
+      "value": "348"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2537,
+      "length": 3,
+      "value": "391"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2589,
+      "length": 3,
+      "value": "392"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2637,
+      "length": 3,
+      "value": "393"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2678,
+      "length": 3,
+      "value": "394"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2720,
+      "length": 3,
+      "value": "395"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2762,
+      "length": 3,
+      "value": "396"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2814,
+      "length": 3,
+      "value": "602"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2845,
+      "length": 3,
+      "value": "804"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2894,
+      "length": 3,
+      "value": "852"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2940,
+      "length": 3,
+      "value": "863"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2978,
+      "length": 3,
+      "value": "864"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 3019,
+      "length": 3,
+      "value": "990"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 3053,
+      "length": 3,
+      "value": "993"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/Swift\/Analytics\/Analytics+Ids.swift",
+      "kind": "IntegerLiteral",
+      "offset": 3084,
+      "length": 3,
+      "value": "998"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXLogger.swift",
+      "kind": "IntegerLiteral",
+      "offset": 587,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXLogger.swift",
+      "kind": "IntegerLiteral",
+      "offset": 606,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXLogger.swift",
+      "kind": "IntegerLiteral",
+      "offset": 625,
+      "length": 1,
+      "value": "2"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXLogger.swift",
+      "kind": "IntegerLiteral",
+      "offset": 643,
+      "length": 1,
+      "value": "3"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXLogger.swift",
+      "kind": "IntegerLiteral",
+      "offset": 662,
+      "length": 1,
+      "value": "4"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXLogger.swift",
+      "kind": "IntegerLiteral",
+      "offset": 587,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXLogger.swift",
+      "kind": "IntegerLiteral",
+      "offset": 606,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXLogger.swift",
+      "kind": "IntegerLiteral",
+      "offset": 625,
+      "length": 1,
+      "value": "2"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXLogger.swift",
+      "kind": "IntegerLiteral",
+      "offset": 643,
+      "length": 1,
+      "value": "3"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXLogger.swift",
+      "kind": "IntegerLiteral",
+      "offset": 662,
+      "length": 1,
+      "value": "4"
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXLogger.swift",
+      "kind": "StringLiteral",
+      "offset": 1699,
+      "length": 40,
+      "value": "\"Logging level set to: \""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXLogger.swift",
+      "kind": "StringLiteral",
+      "offset": 1738,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/var\/jenkins\/workspace\/Client\/VAMP\/dt-exchange-ios-sdk@5\/build-1325\/dt-exchange-ios-sdk\/IASDKCore\/DTExchange\/DTXLogger.swift",
+      "kind": "StringLiteral",
+      "offset": 1382,
+      "length": 9,
+      "value": "\"IASDKCore.DTXLogger\""
+    }
+  ]
+}

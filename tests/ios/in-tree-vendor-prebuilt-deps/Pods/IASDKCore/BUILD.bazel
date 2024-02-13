@@ -1,0 +1,12 @@
+load("@build_bazel_rules_ios//rules:framework.bzl", "apple_framework")
+
+apple_framework(
+    name = "IASDKCore",
+    platforms = {"ios": "9.0"},
+    sdk_dylibs = ["c++"],
+    vendored_static_frameworks = ["IASDKCore.xcframework/ios-arm64_x86_64-simulator/IASDKCore.framework"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//tests/ios/in-tree-vendor-prebuilt-deps/Pods/rapidjson",
+    ],
+)

@@ -1,0 +1,11 @@
+framework module IASDKCore {
+  umbrella header "IASDKCore.h"
+
+  export *
+  module * { export * }
+}
+
+module IASDKCore.Swift {
+  header "IASDKCore-Swift.h"
+  requires objc
+}
