@@ -183,7 +183,7 @@ jobs:
           git diff --exit-code docs
 
   xcodeproj_tests:
-    name: .xcodeproj Tests on Xcode 15.1.0
+    name: .xcodeproj Tests on Xcode 15.2.0
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v3
@@ -198,7 +198,7 @@ jobs:
           path: bazel-testlogs
 
   lldb_ios_tests_xcode:
-    name: LLDB tests on Xcode 15.1.0
+    name: LLDB tests on Xcode 15.2.0
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v3

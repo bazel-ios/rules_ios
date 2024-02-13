@@ -135,34 +135,34 @@ selects.config_setting_group(
 )
 
 xcode_version(
-    name = "version15_1_0_15C65",
+    name = "version15_2_0_15C500b",
     aliases = [
-        "15.1",
+        "15.2",
         "15",
-        "15C65",
-        "15.1.0.15C65",
-        "15.1.0",
+        "15C500b",
+        "15.2.0.15C500b",
+        "15.2.0",
     ],
     default_ios_sdk_version = "17.2",
     default_macos_sdk_version = "14.2",
     default_tvos_sdk_version = "17.2",
     default_watchos_sdk_version = "10.2",
-    version = "15.1.0.15C65",
+    version = "15.2.0.15C500b",
 )
 
 xcode_config(
     name = "host_xcodes",
-    default = ":version15_1_0_15C65",
+    default = ":version15_2_0_15C500b",
     versions = [
-        ":version15_1_0_15C65",
+        ":version15_2_0_15C500b",
     ],
     visibility = ["//visibility:public"],
 )
 
 available_xcodes(
     name = "host_available_xcodes",
-    default = ":version15_1_0_15C65",
+    default = ":version15_2_0_15C500b",
     versions = [
-        ":version15_1_0_15C65",
+        ":version15_2_0_15C500b",
     ],
 )
