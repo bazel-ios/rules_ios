@@ -1,6 +1,5 @@
 # Enable Bzlmod
-# TODO: While supporting Bazel 5 we need to keep experimental flag vs using "--enable_bzlmod"
-common --experimental_enable_bzlmod
+common --enable_bzlmod
 
 # Spawn strategy required for some tests
 build --spawn_strategy=standalone

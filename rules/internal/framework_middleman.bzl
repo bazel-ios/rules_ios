@@ -1,15 +1,12 @@
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load(
-    "@build_bazel_rules_apple//apple:providers.bzl",
+    "@build_bazel_rules_apple//apple/internal:providers.bzl",
     "AppleResourceInfo",
     "IosFrameworkBundleInfo",
-)
-load("@bazel_skylib//lib:dicts.bzl", "dicts")
-load(
-    "@rules_apple_api//:providers.bzl",
     "new_applebundleinfo",
     "new_iosframeworkbundleinfo",
 )
+load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load(
     "@build_bazel_rules_apple//apple/internal:partials.bzl",
     "partials",

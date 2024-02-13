@@ -18,3 +18,13 @@ We automate publishing to the [Bazel Central Registry](https://registry.bazel.bu
 It will create a [PR like this one](https://github.com/bazelbuild/bazel-central-registry/pull/1063) whenever a new release is created. As such, there is no extra action required from the maintainers. Simply create a release and let the app publish it to the BCR.
 
 If you need more reviews in the BCR repository you can ask in the [#bzlmod channel of the Bazel Slack](https://bazelbuild.slack.com/archives/C014RARENH0).
+
+## Creating patches to older releases
+
+If you need to create a new release for an older version, follow these steps:
+
+- Create a new branch for the **major** version of the release you want to patch (e.g. to patch `3.x.x` create a branch named `v3`)
+- (Optional) If applicable in the current release, first create a pull request into `main` with your changes.
+- Create a pull request into the branch you just created with the changes you want to include in the new release.
+- Merge the pull request into the branch.
+- Create a new release as described above, but set the source branch for the action as the branch you created.

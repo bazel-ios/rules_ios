@@ -1,1 +1,0 @@
-../2_0/ios_rules.bzl
