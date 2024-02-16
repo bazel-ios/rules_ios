@@ -20,6 +20,33 @@ _Looking for the CocoaPods/Carthage rules?_ [See this section](#cocoapods-and-ca
 [Click here](https://github.com/bazel-ios/rules_ios/tree/master/docs)
 for the documentation.
 
+## Supported Bazel versions
+
+rules_ios depends on [rules_apple](https://github.com/bazelbuild/rules_apple) and [rules_swift](https://github.com/bazelbuild/rules_swift) which are often affected by changes in Bazel
+itself. This means you generally need to update these rules and rules_ios as you
+update Bazel.
+
+See the following table for supported release versions.
+
+| Bazel release | Minimum supported rules version | Final supported rules version
+|:-------------------:|:-------------------------:|:-------------------------:
+| 6.* | 2.0.0 | current
+| 5.* | 1.0.0 | 3.2.2
+| 4.* | 1.0.0 | 1.0.0
+
+## Supported [rules_apple](https://github.com/bazelbuild/rules_apple) versions
+
+rules_ios depends on [rules_apple](https://github.com/bazelbuild/rules_apple), we attempt to maintain compatibility with
+most versions of rules_apple until it becomes too difficult to do so.
+
+See the following table for supported rules_apple release versions.
+
+| rules_apple release | Minimum supported rules version | Final supported rules version
+|:-------------------:|:-------------------------:|:-------------------------:
+| 3.* | 3.* | current
+| 2.* | 2.* | 3.2.2
+| 1.* | 1.0.0 | 3.2.2
+
 ## Getting started
 
 ### Bzlmod setup
