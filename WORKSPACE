@@ -11,11 +11,7 @@ load(
     "rules_ios_dev_dependencies",
 )
 
-# Storing in a variable so `.github/workflows/tests.yml` can easily
-# mutate this before running `rules_ios`s CI tests
-LOAD_RULES_APPLE_2_DEPS = False
-
-rules_ios_dependencies(load_rules_apple_2_dependencies = LOAD_RULES_APPLE_2_DEPS)
+rules_ios_dependencies()
 
 rules_ios_dev_dependencies()
 

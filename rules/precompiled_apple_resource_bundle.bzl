@@ -10,18 +10,17 @@ load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@build_bazel_apple_support//lib:apple_support.bzl", "apple_support")
+load("@build_bazel_rules_apple//apple/internal:providers.bzl", "new_appleresourcebundleinfo", "new_appleresourceinfo")
 load("@build_bazel_rules_apple//apple/internal:apple_product_type.bzl", "apple_product_type")
 load("@build_bazel_rules_apple//apple/internal:intermediates.bzl", "intermediates")
 load("@build_bazel_rules_apple//apple/internal:partials.bzl", "partials")
 load("@build_bazel_rules_apple//apple/internal:platform_support.bzl", "platform_support")
 load("@build_bazel_rules_apple//apple/internal:resources.bzl", "resources")
 load("@build_bazel_rules_apple//apple/internal:resource_actions.bzl", "resource_actions")
-load("@rules_apple_api//:ios_rules.bzl", "rule_attrs")
-load("@rules_apple_api//:providers.bzl", "new_appleresourcebundleinfo", "new_appleresourceinfo")
+load("@build_bazel_rules_apple//apple/internal:rule_attrs.bzl", "rule_attrs")
 load("@build_bazel_rules_apple//apple/internal:apple_toolchains.bzl", "AppleMacToolsToolchainInfo")
 load("//rules:transition_support.bzl", "transition_support")
 load("//rules:utils.bzl", "bundle_identifier_for_bundle")
-load("@rules_apple_api//:version.bzl", "apple_api_version")
 
 _FAKE_BUNDLE_PRODUCT_TYPE_BY_PLATFORM_TYPE = {
     "ios": apple_product_type.application,
@@ -52,19 +51,6 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     # passing a swift_module attr
     fake_rule_label = Label("//fake_package:" + (ctx.attr.swift_module or bundle_name))
 
-    if apple_api_version == "3.0":
-        platform_prerequisites_version_args = {
-            "build_settings": None,
-        }
-        rules_api_3_resource_partials_args = {
-            "include_executable_name": False,  # Must be set to False or bundle_name is now used if executable_name is None
-        }
-    else:
-        platform_prerequisites_version_args = {
-            "disabled_features": ctx.disabled_features,
-        }
-        rules_api_3_resource_partials_args = {}
-
     platform_prerequisites = platform_support.platform_prerequisites(
         apple_fragment = ctx.fragments.apple,
         config_vars = ctx.var,
@@ -76,7 +62,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         uses_swift = False,
         xcode_version_config = ctx.attr._xcode_config[apple_common.XcodeVersionConfig],
         features = [],
-        **platform_prerequisites_version_args
+        build_settings = None,
     )
     partials_args = dict(
         actions = ctx.actions,
@@ -94,7 +80,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         ),
         rule_label = fake_rule_label,
         version = None,
-        **rules_api_3_resource_partials_args
+        include_executable_name = False,
     )
 
     apple_mac_toolchain_info = ctx.attr._toolchain[AppleMacToolsToolchainInfo]

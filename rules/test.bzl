@@ -3,7 +3,6 @@ load("@bazel_skylib//lib:types.bzl", "types")
 load("//rules:library.bzl", "apple_library")
 load("//rules:plists.bzl", "process_infoplists")
 load("//rules/internal:framework_middleman.bzl", "dep_middleman", "framework_middleman")
-load("@rules_apple_api//:version.bzl", "apple_api_version")
 
 _IOS_TEST_KWARGS = [
     "args",
@@ -106,8 +105,6 @@ def _make_test(name, test_rule, **kwargs):
     """
     runner = kwargs.pop("runner", None) or _DEFAULT_APPLE_TEST_RUNNER
     test_attrs = {k: v for (k, v) in kwargs.items() if k not in _APPLE_BUNDLE_ATTRS}
-    if apple_api_version == "3.0":
-        test_attrs["minimum_os_version"] = kwargs.pop("minimum_os_version")
 
     test_rule(
         name = name,
@@ -115,6 +112,7 @@ def _make_test(name, test_rule, **kwargs):
         test_host = kwargs.pop("test_host", None),
         deps = kwargs.pop("deps", []),
         testonly = kwargs.pop("testonly", True),
+        minimum_os_version = kwargs.pop("minimum_os_version"),
         **test_attrs
     )
 

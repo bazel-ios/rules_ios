@@ -1,12 +1,5 @@
 """Starlark transition support for Apple rules."""
 
-load("@rules_apple_api//:version.bzl", "apple_api_version")
-load("@rules_ios_bazel_version//:version.bzl", "bazel_version")
-load(
-    "//rules/internal:bazel_version.bzl",
-    "get_bazel_version",
-)
-
 def _current_apple_platform(apple_fragment, xcode_config):
     """Returns a struct containing the platform and target os version"""
     platform = apple_fragment.single_arch_platform
@@ -106,13 +99,13 @@ def _apple_rule_transition_impl(settings, attr):
         "//command_line_option:apple configuration distinguisher": "applebin_" + platform_type,
         "//command_line_option:apple_platform_type": platform_type,
         "//command_line_option:apple_split_cpu": settings["//command_line_option:apple_split_cpu"],
-        "//command_line_option:compiler": settings["//command_line_option:apple_compiler"] if _supports_clo_apple_compiler else None,
+        "//command_line_option:compiler": None,
         "//command_line_option:cpu": cpu_string,
         "//command_line_option:crosstool_top": (
             settings["//command_line_option:apple_crosstool_top"]
         ),
         "//command_line_option:fission": [],
-        "//command_line_option:grte_top": settings["//command_line_option:apple_grte_top"] if _supports_clo_apple_grte_top else None,
+        "//command_line_option:grte_top": None,
         "//command_line_option:ios_minimum_os": _min_os_version_or_none(attr, attr_platforms, "ios", platform_type),
         "//command_line_option:ios_multi_cpus": ios_multi_cpus,
         "//command_line_option:macos_minimum_os": _min_os_version_or_none(attr, attr_platforms, "macos", platform_type),
@@ -122,15 +115,6 @@ def _apple_rule_transition_impl(settings, attr):
     return ret
 
 _supports_visionos = hasattr(apple_common.platform_type, "visionos")
-
-_bazel_version = get_bazel_version(bazel_version)
-_bazel_major_version = int(_bazel_version.major)
-
-# `--apple_compiler` was removed in https://github.com/bazelbuild/bazel/commit/1acdfc422e724b4fe12c7bf5248086ab514ec4be
-_supports_clo_apple_compiler = _bazel_major_version < 7
-
-# `--apple_grte_top` was removed in https://github.com/bazelbuild/bazel/commit/fb4106bdbd23c365337ea99704921ada7b86c2df
-_supports_clo_apple_grte_top = _bazel_major_version < 7
 
 # These flags are a mix of options defined in native Bazel from the following fragments:
 # - https://github.com/bazelbuild/bazel/blob/master/src/main/java/com/google/devtools/build/lib/analysis/config/CoreOptions.java
@@ -150,10 +134,6 @@ _apple_rule_transition = transition(
         "//command_line_option:macos_minimum_os",
     ] + (
         ["//command_line_option:visionos_cpus"] if _supports_visionos else []
-    ) + (
-        ["//command_line_option:apple_compiler"] if _supports_clo_apple_compiler else []
-    ) + (
-        ["//command_line_option:apple_grte_top"] if _supports_clo_apple_grte_top else []
     ),
     outputs = [
         "//command_line_option:apple configuration distinguisher",
@@ -344,9 +324,7 @@ _split_transition = transition(
 
 transition_support = struct(
     apple_rule_transition = _apple_rule_transition,
-
-    # In older versions of rules_apple and Bazel this is a starlark transiton
-    split_transition = _split_transition if apple_api_version == "3.0" else apple_common.multi_arch_split,
+    split_transition = _split_transition,
     current_apple_platform = _current_apple_platform,
 )
 
@@ -356,4 +334,4 @@ split_transition_rule_attrs = {
         default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
         doc = "Needed to allow this rule to have an incoming edge configuration transition.",
     ),
-} if apple_api_version == "3.0" else {}
+}
