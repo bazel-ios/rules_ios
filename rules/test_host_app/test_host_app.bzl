@@ -8,9 +8,6 @@ and pass in additional attributes to be set in all `ios_application` rules
 load("//rules:app.bzl", "ios_application")
 
 DEFAULT_MINIMUM_OS_VERSION_LIST = [
-    "9.3",
-    "10.0",
-    "11.0",
     "12.0",
     "12.2",
     "12.4",
@@ -22,6 +19,23 @@ DEFAULT_MINIMUM_OS_VERSION_LIST = [
     "14.2",
     "14.3",
     "15.0",
+    "15.1",
+    "15.2",
+    "15.3",
+    "15.4",
+    "15.5",
+    "15.6",
+    "16.0",
+    "16.1",
+    "16.2",
+    "16.3",
+    "16.4",
+    "16.5",
+    "16.6",
+    "17.0",
+    "17.1",
+    "17.2",
+    "17.3",
 ]
 
 def generate_test_host_apps(versions = None, **kwargs):

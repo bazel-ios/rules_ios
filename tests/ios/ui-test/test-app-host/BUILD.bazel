@@ -11,7 +11,7 @@ ios_application(
         "iphone",
         "ipad",
     ],
-    minimum_os_version = "11.0",
+    minimum_os_version = "12.0",
     swift_version = "5.1",
     visibility = ["//visibility:public"],
 )

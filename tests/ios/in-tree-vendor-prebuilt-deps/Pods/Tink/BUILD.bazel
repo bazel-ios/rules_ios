@@ -2,7 +2,7 @@ load("@build_bazel_rules_ios//rules:framework.bzl", "apple_framework")
 
 apple_framework(
     name = "Tink",
-    platforms = {"ios": "9.0"},
+    platforms = {"ios": "12.0"},
     sdk_dylibs = ["c++"],
     vendored_static_frameworks = ["Frameworks/Tink.framework"],
     visibility = ["//visibility:public"],

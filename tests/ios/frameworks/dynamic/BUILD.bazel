@@ -7,7 +7,7 @@ ios_application(
     name = "App",
     srcs = ["App/main.m"],
     bundle_id = "com.example.app",
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     visibility = ["//visibility:public"],
     # This should automatically bake in a,b
     deps = [
@@ -23,7 +23,7 @@ ios_application(
     frameworks = [
         "//tests/ios/frameworks/dynamic/a",
     ],
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     visibility = ["//visibility:public"],
     # This should automatically bake in a,b
     deps = [
@@ -40,7 +40,7 @@ ios_application(
     extensions = [
         "//tests/ios/extensions:ExampleExtensionWithDylibs",
     ],
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     visibility = ["//visibility:public"],
     # This should automatically bake in a,b
     deps = [
@@ -86,7 +86,7 @@ ios_unit_test(
     frameworks = [
         "//tests/ios/frameworks/dynamic/a",
     ],
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     test_host = ":App",
     deps = [
         "//tests/ios/frameworks/dynamic/a",

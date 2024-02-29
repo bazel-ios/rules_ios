@@ -65,7 +65,7 @@ _XCCONFIG_BY_BUILD_SETTING = {
 apple_framework(
     name = "WithDefinesObjc",
     srcs = glob(["WithDefinesObjc/*.m"]),
-    platforms = {"ios": "10.0"},
+    platforms = {"ios": "12.0"},
     visibility = ["//visibility:public"],
     xcconfig = _XCCONFIG,
     xcconfig_by_build_setting = _XCCONFIG_BY_BUILD_SETTING,
@@ -74,7 +74,7 @@ apple_framework(
 apple_framework(
     name = "WithDefinesSwift",
     srcs = glob(["WithDefinesSwift/*.swift"]),
-    platforms = {"ios": "10.0"},
+    platforms = {"ios": "12.0"},
     swift_version = "5.1",
     visibility = ["//visibility:public"],
     xcconfig = _XCCONFIG,
@@ -84,7 +84,7 @@ apple_framework(
 apple_framework(
     name = "WithEdgeCaseConfigs",
     srcs = glob(["WithEdgeCaseConfigs/*.m"]),
-    platforms = {"ios": "10.0"},
+    platforms = {"ios": "12.0"},
     visibility = ["//visibility:public"],
     xcconfig = {
         "DEFINES_MODULE": "YES",  # Broken by Xcode 14.2 xcspec eval
@@ -96,7 +96,7 @@ ios_application(
     srcs = ["App/main.m"],
     bundle_id = "com.example.app",
     infoplists = ["Info.plist"],
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     visibility = ["//visibility:public"],
     xcconfig = _XCCONFIG,
     xcconfig_by_build_setting = _XCCONFIG_BY_BUILD_SETTING,
@@ -114,7 +114,7 @@ ios_application(
     infoplists_by_build_setting = {
         "//tests/ios/xcconfig:blue": ["Info.plist"],
     },
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     visibility = ["//visibility:public"],
     xcconfig = _XCCONFIG,
     xcconfig_by_build_setting = _XCCONFIG_BY_BUILD_SETTING,

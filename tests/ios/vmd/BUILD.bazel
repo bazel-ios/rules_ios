@@ -19,7 +19,7 @@ ios_ui_test(
     srcs = [
         "simple.swift",
     ],
-    minimum_os_version = "11.0",
+    minimum_os_version = "12.0",
     runner = ":vm_test_runner",
     tags = ["manual"],
     test_host = "//tests/ios/ui-test/test-app-host:TestAppHost",
