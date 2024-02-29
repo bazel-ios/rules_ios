@@ -5,7 +5,7 @@ common --enable_bzlmod
 build --spawn_strategy=standalone
 
 # Setup Xcode configuration for xcodeproj tests
-# build --xcode_version_config=//:host_xcodes
+build --xcode_version_config=//:host_xcodes
 
 build --experimental_strict_conflict_checks
 
