@@ -10,7 +10,7 @@ def make_tests():
     transitive_header_test(
         name = "test_App_SwiftCompilationHeaders",
         target_under_test = ":TestImports-App_swift",
-        deps = ["//tests/ios/unit-test/test-imports-app/frameworks/Basic", "@TensorFlowLiteC//:TensorFlowLiteC"],
+        deps = ["//tests/ios/unit-test/test-imports-app/frameworks/Basic"],
     )
 
     native.test_suite(
