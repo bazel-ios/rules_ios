@@ -32,7 +32,7 @@ xcspec_bzl_path = sys.argv[3]
 eval_bzl_path = sys.argv[4]
 xcode = os.path.dirname(os.path.dirname(developer_dir))
 xcode_plugins = os.path.join(
-    xcode, "Contents/PlugIns/XCBSpecifications.ideplugin/Contents/Resources"
+    xcode, "Contents/Developer/Library/Xcode/Plug-ins/XCBSpecifications.ideplugin/Contents/Resources"
 )
 
 xcspecs = [

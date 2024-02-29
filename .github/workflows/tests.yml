@@ -14,7 +14,7 @@ concurrency:
 jobs:
   integration_tests:
     name: Build and Test
-    runs-on: macos-12
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
@@ -30,11 +30,8 @@ jobs:
           # Clean up after simctl (https://github.com/bazelbuild/rules_apple/issues/185)
           pgrep Simulator | xargs kill || true
 
-          # GitHub runners are hitting 'module not found pkg_resources' required by prepare_sim.py
-          pip install setuptools
-
           # Create single ephemeral iOS sim
-          SIMULATOR_UDID=$(./tools/tests/prepare_sim.py)
+          SIMULATOR_UDID=$(python3 tools/tests/prepare_sim.py)
 
           # iOS tests
           bazelisk test \
@@ -54,7 +51,7 @@ jobs:
     # consider merging this feature into the default behavior and can re-align
     # the CI job
     name: Build and Test ( Virtual Frameworks )
-    runs-on: macos-12
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
@@ -83,7 +80,7 @@ jobs:
 
   build_arm64_simulator:
     name: Build arm64 Simulator
-    runs-on: macos-12
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
@@ -117,7 +114,7 @@ jobs:
 
   lint:
     name: Check Starlark and Docs
-    runs-on: macos-12
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
@@ -134,8 +131,8 @@ jobs:
           git diff --exit-code docs
 
   xcodeproj_tests:
-    name: .xcodeproj Tests on Xcode 14.2.0
-    runs-on: macos-12
+    name: .xcodeproj Tests on Xcode 15.2.0
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
@@ -149,8 +146,8 @@ jobs:
           path: bazel-testlogs
 
   lldb_ios_tests_xcode:
-    name: LLDB tests on Xcode 14.2.0
-    runs-on: macos-12
+    name: LLDB tests on Xcode 15.2.0
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env
@@ -173,7 +170,7 @@ jobs:
     # i386 was removed on rules_apple 3.x.x - this test case needs reworking
     # to exemplify fat binaries on the latest version
     name: Build iOS App for Multiple Architecture
-    runs-on: macos-12
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v3
       - name: Preflight Env

@@ -7,16 +7,16 @@ if [[ "$(arch)" == "arm"* ]]; then
 fi
 
 xcrun simctl list devices \
-| grep -q rules_ios:iPhone-14 || \
-        xcrun simctl create "rules_ios:iPhone-14" \
-                com.apple.CoreSimulator.SimDeviceType.iPhone-14
+| grep -q rules_ios:iPhone-15 || \
+        xcrun simctl create "rules_ios:iPhone-15" \
+                com.apple.CoreSimulator.SimDeviceType.iPhone-15
 
 export SIM_DEVICE_ID=$(xcodebuild \
   -project Single-Application-Project-AllTargets.xcodeproj \
   -scheme Single-Application-UnitTests \
   -showdestinations \
   -destination "generic/platform=iOS Simulator" | \
-  grep "name:rules_ios:iPhone-14" | \
+  grep "name:rules_ios:iPhone-15" | \
   head -1 | \
   ruby -e "puts STDIN.read.split(',')[1].split(':').last")
 

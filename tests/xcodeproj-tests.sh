@@ -43,12 +43,12 @@ test_build_for_device() {
 
 test_create_and_launch_sim() {
     xcrun simctl list devices \
-    | grep -q rules_ios:iPhone-14 || \
-        xcrun simctl create "rules_ios:iPhone-14" \
-            com.apple.CoreSimulator.SimDeviceType.iPhone-14
+    | grep -q rules_ios:iPhone-15 || \
+        xcrun simctl create "rules_ios:iPhone-15" \
+            com.apple.CoreSimulator.SimDeviceType.iPhone-15
 
     export SIM_DEVICE_ID=$(xcrun simctl list devices | \
-        grep rules_ios:iPhone-14 | \
+        grep rules_ios:iPhone-15 | \
         ruby -e "puts STDIN.read.split(' ')[1][1...-1]")
 
     xcrun simctl boot $SIM_DEVICE_ID
@@ -63,7 +63,7 @@ test_shutdown_sim() {
         -scheme Single-Application-UnitTests \
         -showdestinations \
         -destination "generic/platform=iOS Simulator" | \
-        grep "name:rules_ios:iPhone-14" | \
+        grep "name:rules_ios:iPhone-15" | \
         head -1 | \
         ruby -e "puts STDIN.read.split(',')[1].split(':').last")
     popd
