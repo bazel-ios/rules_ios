@@ -1,6 +1,0 @@
-framework module MiSnapSDKMibiData {
-  umbrella header "MiSnapSDKMibiData.h"
-
-  export *
-  module * { export * }
-}

@@ -1,0 +1,6 @@
+framework module MiSnap {
+  umbrella header "MiSnap.h"
+  export *
+
+  module * { export * }
+}

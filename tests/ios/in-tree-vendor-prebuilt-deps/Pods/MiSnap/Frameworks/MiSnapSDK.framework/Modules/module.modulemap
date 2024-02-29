@@ -1,6 +1,0 @@
-framework module MiSnapSDK {
-  umbrella header "MiSnapSDK.h"
-
-  export *
-  module * { export * }
-}
