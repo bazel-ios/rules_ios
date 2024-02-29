@@ -10,7 +10,7 @@
 		1F9C7A237281769B16354A44 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FB08B7C929A64386CDFE06 /* empty.swift */; };
 		31AA2C5800D29E42C589B56B /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FB08B7C929A64386CDFE06 /* empty.swift */; };
 		83CAB78009AF4F0196136FB6 /* empty.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F973C72CDD8C3C263F6A615 /* empty.m */; };
-		90364CB6CB510200E694DB55 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B78B78C06FA82FF60423814 /* main.m */; };
+		8DC369FEC3CA037CAFD98172 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B78B78C06FA82FF60423814 /* main.m */; };
 		DBAF1B7C6B592F06CC4BA7A8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB410C7AEEA183BE996E1ED /* main.m */; };
 		F7A8C565DBE2C1D3FE326524 /* empty.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F973C72CDD8C3C263F6A615 /* empty.m */; };
 /* End PBXBuildFile section */
@@ -23,18 +23,17 @@
 			remoteGlobalIDString = 2B7DA68C47D629972D1134C8;
 			remoteInfo = App;
 		};
-		F38C65FC54D7CD052E02657E /* PBXContainerItemProxy */ = {
+		BDB18DB4406B9E26C6B022E1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2E45F5FFD4B2FD1997C70862 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 9541626BF2F6C0EE11CA1AD7;
-			remoteInfo = "iOS-9.3-AppHost";
+			remoteGlobalIDString = 54CCE0B896129075176C8635;
+			remoteInfo = "iOS-12.0-AppHost";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		087F3B42D7BE6F86AB8C54F0 /* BUILD.bazel */ = {isa = PBXFileReference; path = BUILD.bazel; sourceTree = "<group>"; };
-		1A670BBD3E8C25AB89221850 /* iOS-9.3-AppHost.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "iOS-9.3-AppHost.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		280A96A1BB45418328EE8F8C /* ExampleExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ExampleExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DB410C7AEEA183BE996E1ED /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3F973C72CDD8C3C263F6A615 /* empty.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = empty.m; sourceTree = "<group>"; };
@@ -46,6 +45,7 @@
 		A7A135B2F45AA4AE95B5C366 /* ExplicitHosted.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ExplicitHosted.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5009185C598753F8C31B6F6 /* ExplicitHostedWithAppExtensions.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ExplicitHostedWithAppExtensions.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6B0D6BD4AF86F9BE813EB4B /* App.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E986946606848F62DBEBC6E6 /* iOS-12.0-AppHost.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "iOS-12.0-AppHost.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -98,7 +98,7 @@
 				280A96A1BB45418328EE8F8C /* ExampleExtension.appex */,
 				A7A135B2F45AA4AE95B5C366 /* ExplicitHosted.xctest */,
 				C5009185C598753F8C31B6F6 /* ExplicitHostedWithAppExtensions.xctest */,
-				1A670BBD3E8C25AB89221850 /* iOS-9.3-AppHost.app */,
+				E986946606848F62DBEBC6E6 /* iOS-12.0-AppHost.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -184,6 +184,22 @@
 			productReference = 280A96A1BB45418328EE8F8C /* ExampleExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		54CCE0B896129075176C8635 /* iOS-12.0-AppHost */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 663B0F1040283B2DC92F91A5 /* Build configuration list for PBXNativeTarget "iOS-12.0-AppHost" */;
+			buildPhases = (
+				5E847EA016D66C35CFFD001A /* Build with bazel */,
+				3142789FFD9CEEE18A977AC6 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "iOS-12.0-AppHost";
+			productName = "iOS-12.0-AppHost";
+			productReference = E986946606848F62DBEBC6E6 /* iOS-12.0-AppHost.app */;
+			productType = "com.apple.product-type.application";
+		};
 		5AE0FC080FA6A17C35721D0C /* ExplicitHosted */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B36500A688AD337FE657A850 /* Build configuration list for PBXNativeTarget "ExplicitHosted" */;
@@ -194,28 +210,12 @@
 			buildRules = (
 			);
 			dependencies = (
-				7B117CC3FAAB21A99FD3F683 /* PBXTargetDependency */,
+				85DF996DB4993E863009F941 /* PBXTargetDependency */,
 			);
 			name = ExplicitHosted;
 			productName = ExplicitHosted;
 			productReference = A7A135B2F45AA4AE95B5C366 /* ExplicitHosted.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		9541626BF2F6C0EE11CA1AD7 /* iOS-9.3-AppHost */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 85B0F18E389439629F1AEA96 /* Build configuration list for PBXNativeTarget "iOS-9.3-AppHost" */;
-			buildPhases = (
-				911B498434C94010071D5767 /* Build with bazel */,
-				65484997632584E56344A3A2 /* Sources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "iOS-9.3-AppHost";
-			productName = "iOS-9.3-AppHost";
-			productReference = 1A670BBD3E8C25AB89221850 /* iOS-9.3-AppHost.app */;
-			productType = "com.apple.product-type.application";
 		};
 		A66AE4DA1051F1DAB24B0FB2 /* ExplicitHostedWithAppExtensions */ = {
 			isa = PBXNativeTarget;
@@ -260,7 +260,7 @@
 				2C3A627878C5E65865D4B494 /* ExampleExtension */,
 				5AE0FC080FA6A17C35721D0C /* ExplicitHosted */,
 				A66AE4DA1051F1DAB24B0FB2 /* ExplicitHostedWithAppExtensions */,
-				9541626BF2F6C0EE11CA1AD7 /* iOS-9.3-AppHost */,
+				54CCE0B896129075176C8635 /* iOS-12.0-AppHost */,
 			);
 		};
 /* End PBXProject section */
@@ -284,7 +284,7 @@
 			shellPath = /bin/sh;
 			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\nexport BAZEL_DIAGNOSTICS_DIR=\"$BUILD_DIR/../../bazel-xcode-diagnostics/\"\nmkdir -p $BAZEL_DIAGNOSTICS_DIR\nexport DATE_SUFFIX=\"$(date +%Y%m%d.%H%M%S%L)\"\nexport BAZEL_BUILD_EVENT_TEXT_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-event-$DATE_SUFFIX.txt\"\nexport BAZEL_BUILD_EXECUTION_LOG_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-execution-log-$DATE_SUFFIX.log\"\nexport BAZEL_PROFILE_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-profile-$DATE_SUFFIX.log\"\nexport BAZEL_STARLARK_CPU_PROFILE_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/starlark-cpu-profile-$DATE_SUFFIX.log\"\nenv -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC $BAZEL_BUILD_TARGET_LABEL\n$BAZEL_INSTALLER\n";
 		};
-		77B3F00D2A9D11AFE1F7AC1B /* Build with bazel */ = {
+		5E847EA016D66C35CFFD001A /* Build with bazel */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -302,7 +302,7 @@
 			shellPath = /bin/sh;
 			shellScript = "\nset -euxo pipefail\ncd $BAZEL_WORKSPACE_ROOT\n\nexport BAZEL_DIAGNOSTICS_DIR=\"$BUILD_DIR/../../bazel-xcode-diagnostics/\"\nmkdir -p $BAZEL_DIAGNOSTICS_DIR\nexport DATE_SUFFIX=\"$(date +%Y%m%d.%H%M%S%L)\"\nexport BAZEL_BUILD_EVENT_TEXT_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-event-$DATE_SUFFIX.txt\"\nexport BAZEL_BUILD_EXECUTION_LOG_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-execution-log-$DATE_SUFFIX.log\"\nexport BAZEL_PROFILE_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/build-profile-$DATE_SUFFIX.log\"\nexport BAZEL_STARLARK_CPU_PROFILE_FILENAME=\"$BAZEL_DIAGNOSTICS_DIR/starlark-cpu-profile-$DATE_SUFFIX.log\"\nenv -u RUBYOPT -u RUBY_HOME -u GEM_HOME $BAZEL_BUILD_EXEC $BAZEL_BUILD_TARGET_LABEL\n$BAZEL_INSTALLER\n";
 		};
-		911B498434C94010071D5767 /* Build with bazel */ = {
+		77B3F00D2A9D11AFE1F7AC1B /* Build with bazel */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -359,20 +359,20 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		3142789FFD9CEEE18A977AC6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8DC369FEC3CA037CAFD98172 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		33FCA56F48E8BB16DC986460 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				F7A8C565DBE2C1D3FE326524 /* empty.m in Sources */,
 				1F9C7A237281769B16354A44 /* empty.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		65484997632584E56344A3A2 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				90364CB6CB510200E694DB55 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -403,10 +403,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		7B117CC3FAAB21A99FD3F683 /* PBXTargetDependency */ = {
+		85DF996DB4993E863009F941 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 9541626BF2F6C0EE11CA1AD7 /* iOS-9.3-AppHost */;
-			targetProxy = F38C65FC54D7CD052E02657E /* PBXContainerItemProxy */;
+			target = 54CCE0B896129075176C8635 /* iOS-12.0-AppHost */;
+			targetProxy = BDB18DB4406B9E26C6B022E1 /* PBXContainerItemProxy */;
 		};
 		D3229F57C9937AC425CB58C3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -431,7 +431,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.app.example-extension";
@@ -452,11 +452,11 @@
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/app/FW\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/app/FW2\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/app/OnlySources\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/app/FW\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/app/FW2\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/app/OnlySources\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.app;
@@ -517,11 +517,11 @@
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/app/FW\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/app/FW2\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min10.0-applebin_ios-ios_x86_64-dbg-ST-3e1e434faca9/bin/tests/ios/app/OnlySources\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/app/FW\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/app/FW2\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/app/OnlySources\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.app;
@@ -530,6 +530,31 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
+		};
+		35DF9E98C1ABABE52C68444D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BAZEL_BIN_SUBDIR = /rules/test_host_app;
+				BAZEL_BUILD_TARGET_LABEL = "rules/test_host_app:iOS-12.0-AppHost";
+				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
+				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/iOS-12.0-AppHost.lldbinit";
+				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
+				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
+				INFOPLIST_FILE = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MACH_O_TYPE = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ios-app-host-12.0";
+				PRODUCT_NAME = "iOS-12.0-AppHost";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
 		};
 		51D8E2D0F8AD19F227D56320 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -555,13 +580,13 @@
 			};
 			name = Release;
 		};
-		5F1F0A8FCB049380CBA75C41 /* Release */ = {
+		52C33DED1569491B37435688 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BAZEL_BIN_SUBDIR = /rules/test_host_app;
-				BAZEL_BUILD_TARGET_LABEL = "rules/test_host_app:iOS-9.3-AppHost";
+				BAZEL_BUILD_TARGET_LABEL = "rules/test_host_app:iOS-12.0-AppHost";
 				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
-				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/iOS-9.3-AppHost.lldbinit";
+				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/iOS-12.0-AppHost.lldbinit";
 				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
@@ -570,36 +595,11 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ios-app-host-9.3";
-				PRODUCT_NAME = "iOS-9.3-AppHost";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		676421DD17502BB445A7A830 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BAZEL_BIN_SUBDIR = /rules/test_host_app;
-				BAZEL_BUILD_TARGET_LABEL = "rules/test_host_app:iOS-9.3-AppHost";
-				BAZEL_BUILD_TARGET_WORKSPACE = build_bazel_rules_ios;
-				BAZEL_LLDB_INIT_FILE = "$CONFIGURATION_TEMP_DIR/iOS-9.3-AppHost.lldbinit";
-				BAZEL_LLDB_SWIFT_EXTRA_CLANG_FLAGS = "";
-				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
-				INFOPLIST_FILE = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
-				MACH_O_TYPE = "$(inherited)";
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ios-app-host-9.3";
-				PRODUCT_NAME = "iOS-9.3-AppHost";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ios-app-host-12.0";
+				PRODUCT_NAME = "iOS-12.0-AppHost";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -682,7 +682,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				INFOPLIST_FILE = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.app.example-extension";
@@ -712,7 +712,7 @@
 				PRODUCT_NAME = ExplicitHosted;
 				SUPPORTS_MACCATALYST = 0;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS-9.3-AppHost.app/iOS-9.3-AppHost";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS-12.0-AppHost.app/iOS-12.0-AppHost";
 			};
 			name = Debug;
 		};
@@ -736,7 +736,7 @@
 				PRODUCT_NAME = ExplicitHosted;
 				SUPPORTS_MACCATALYST = 0;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "\"$(inherited)\"";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS-9.3-AppHost.app/iOS-9.3-AppHost";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS-12.0-AppHost.app/iOS-12.0-AppHost";
 			};
 			name = Release;
 		};
@@ -761,11 +761,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		85B0F18E389439629F1AEA96 /* Build configuration list for PBXNativeTarget "iOS-9.3-AppHost" */ = {
+		663B0F1040283B2DC92F91A5 /* Build configuration list for PBXNativeTarget "iOS-12.0-AppHost" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				676421DD17502BB445A7A830 /* Debug */,
-				5F1F0A8FCB049380CBA75C41 /* Release */,
+				52C33DED1569491B37435688 /* Debug */,
+				35DF9E98C1ABABE52C68444D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
