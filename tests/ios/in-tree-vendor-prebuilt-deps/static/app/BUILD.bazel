@@ -7,7 +7,7 @@ load("@build_bazel_rules_apple//apple:resources.bzl", "apple_bundle_import")
 apple_framework(
     name = "CppLib",
     srcs = glob(["Cpp/*"]),
-    platforms = {"ios": "10.0"},
+    platforms = {"ios": "12.0"},
     swift_version = "5.1",
     visibility = ["//visibility:public"],
 )
@@ -15,7 +15,7 @@ apple_framework(
 apple_framework(
     name = "FW",
     srcs = glob(["FW/*"]),
-    platforms = {"ios": "10.0"},
+    platforms = {"ios": "12.0"},
     private_headers = glob(["FW/*_Private.*"]),
     visibility = ["//visibility:public"],
 )
@@ -23,7 +23,7 @@ apple_framework(
 apple_framework(
     name = "FW2",
     srcs = glob(["FW2/*"]),
-    platforms = {"ios": "10.0"},
+    platforms = {"ios": "12.0"},
     visibility = ["//visibility:public"],
     deps = [":FW"],
 )
@@ -35,13 +35,13 @@ apple_framework(
 apple_framework(
     name = "OnlySources",
     srcs = glob(["OnlySources/*.m"]),
-    platforms = {"ios": "10.0"},
+    platforms = {"ios": "12.0"},
 )
 
 apple_framework(
     name = "SwiftLib",
     srcs = glob(["Swift/*"]),
-    platforms = {"ios": "10.0"},
+    platforms = {"ios": "12.0"},
     swift_version = "5.1",
     visibility = ["//visibility:public"],
     deps = ["//tests/ios/in-tree-vendor-prebuilt-deps/Pods/Tink"],
@@ -51,7 +51,7 @@ ios_application(
     name = "App",
     srcs = ["App/main.m"],
     bundle_id = "com.example.app",
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     visibility = ["//visibility:public"],
     deps = [
         ":FW",
@@ -65,7 +65,7 @@ ios_application(
     name = "AppWithProvisioningProfile",
     srcs = ["App/main.m"],
     bundle_id = "com.example.app",
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     provisioning_profile = "@build_bazel_rules_ios//tests/ios:integration-test.mobileprovision",
     visibility = ["//visibility:public"],
     deps = [
@@ -79,7 +79,7 @@ ios_application(
     name = "AppWithEmptyDep",
     srcs = ["App/main.m"],
     bundle_id = "com.example.app",
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     visibility = ["//visibility:public"],
     deps = [
         ":Empty",
@@ -93,7 +93,7 @@ ios_application(
     name = "AppWithResources",
     srcs = ["App/main.m"],
     bundle_id = "com.example.app",
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     resources = [
         "Resources/CustomView.xib",
     ],
@@ -108,7 +108,7 @@ ios_application(
     name = "AppWithSettings",
     srcs = ["App/main.m"],
     bundle_id = "com.example.app",
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     settings_bundle = ":settings_bundle",
     deps = [
         ":Empty",
@@ -145,7 +145,7 @@ ios_application(
     srcs = ["App/main.m"],
     bundle_id = "com.example.app",
     infoplists = [INFOPLIST],
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     deps = [
         ":Empty",
         ":FW",
@@ -156,7 +156,7 @@ ios_application(
 ios_unit_test(
     name = "TestAppWithInfoPlist",
     srcs = ["infoplist_test.m"],
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     test_host = ":AppWithInfoPlist",
 )
 
@@ -208,7 +208,7 @@ ios_application(
             INFOPLIST_2,
         ],
     },
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     xcconfig = {
         "FOO": "YES",
         "GCC_TREAT_WARNINGS_AS_ERRORS": "YES",
@@ -250,7 +250,7 @@ ios_application(
             INFOPLIST,
         ],
     },
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     xcconfig = {
         "FOO": "YES",
         "GCC_TREAT_WARNINGS_AS_ERRORS": "YES",
@@ -287,7 +287,7 @@ ios_application(
         ":red": [],
     }),
     infoplists = [INFOPLIST],
-    minimum_os_version = "10.0",
+    minimum_os_version = "12.0",
     objc_copts = select({
         ":blue": ["-Wno-error=at-protocol"],
         ":red": [],

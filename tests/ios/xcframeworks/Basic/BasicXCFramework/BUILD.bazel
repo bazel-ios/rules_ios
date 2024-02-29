@@ -3,7 +3,7 @@ load("@build_bazel_rules_ios//rules:framework.bzl", "apple_framework")
 apple_framework(
     name = "BasicXCFrameworkDynamic",
     module_name = "BasicXCFrameworkDynamic",
-    platforms = {"ios": "10.0"},
+    platforms = {"ios": "12.0"},
     sdk_frameworks = [
         "Foundation",
         "SafariServices",
@@ -48,7 +48,7 @@ apple_framework(
 apple_framework(
     name = "BasicXCFrameworkStatic",
     module_name = "BasicXCFrameworkStatic",
-    platforms = {"ios": "10.0"},
+    platforms = {"ios": "12.0"},
     sdk_frameworks = [
         "Foundation",
         "SafariServices",

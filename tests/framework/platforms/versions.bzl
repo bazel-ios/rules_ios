@@ -2,9 +2,9 @@ load("//rules:framework.bzl", "apple_framework")
 load("//rules:app.bzl", "ios_application")
 
 _VERSIONS = {
-    "macos": ["10.10", "10.11"],
-    "ios": ["10.0", "10.2", "12.0"],
-    "tvos": ["10.0", "10.2", "12.0"],
+    "macos": ["10.13", "14.0"],
+    "ios": ["12.0", "16.2", "17.2"],
+    "tvos": ["12.0", "16.2", "17.2"],
     "watchos": ["3.2"],
 }
 

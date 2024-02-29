@@ -5,7 +5,7 @@ ios_ui_test(
     srcs = [
         "empty.swift",
     ],
-    minimum_os_version = "11.0",
+    minimum_os_version = "12.0",
     test_host = True,
 )
 
@@ -14,6 +14,6 @@ ios_ui_test(
     srcs = [
         "simple.swift",
     ],
-    minimum_os_version = "11.0",
+    minimum_os_version = "12.0",
     test_host = "//tests/ios/ui-test/test-app-host:TestAppHost",
 )

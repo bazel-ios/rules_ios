@@ -193,7 +193,7 @@ load("//rules:test.bzl", "ios_unit_test")
 ios_unit_test(
     name = "Unhosted",
     srcs = ["some.swift"],
-    minimum_os_version = "11.0",
+    minimum_os_version = "12.0",
     deps = [":Dynamic"]
 )
 ```

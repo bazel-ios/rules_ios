@@ -9,7 +9,7 @@ apple_framework(
         ":TestOnlyFixture",
     ],
     module_name = "SwiftLibrary",
-    platforms = {"ios": "10.0"},
+    platforms = {"ios": "12.0"},
     visibility = ["//visibility:public"],
 )
 
