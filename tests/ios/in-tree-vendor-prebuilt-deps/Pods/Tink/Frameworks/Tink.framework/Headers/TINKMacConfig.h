@@ -18,7 +18,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "TINKRegistryConfig.h"
+#import "Tink/TINKRegistryConfig.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

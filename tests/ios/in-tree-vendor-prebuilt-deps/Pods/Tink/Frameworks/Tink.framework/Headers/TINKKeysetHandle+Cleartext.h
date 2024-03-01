@@ -18,7 +18,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "TINKKeysetHandle.h"
+#import "Tink/TINKKeysetHandle.h"
 
 @class TINKKeysetReader;
 

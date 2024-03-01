@@ -29,18 +29,4 @@
  */
 + (NSString *)sdkName;
 
-/**
- *  Return the version of the Core Vision library that is linked into the framework.
- *
- *  @return An NSString containing the version of the Core Vision library
- */
-+ (NSString *)coreVisionVersion;
-
-/**
- *  Returns the name of the Core Vision library that is linked into the framework.
- *
- *  @return An NSString containing the name of the Core Vision library
- */
-+ (NSString *)coreVisionName;
-
 @end
