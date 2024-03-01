@@ -3,16 +3,12 @@ load(
     "@build_bazel_rules_apple//apple/internal:providers.bzl",
     "AppleResourceInfo",
     "IosFrameworkBundleInfo",
+    "new_applebundleinfo",
+    "new_iosframeworkbundleinfo",
 )
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
-load(
-    "@rules_apple_api//:providers.bzl",
-    "new_applebundleinfo",
-    "new_iosframeworkbundleinfo",
-)
-load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load(
     "@build_bazel_rules_apple//apple/internal:partials.bzl",
     "partials",

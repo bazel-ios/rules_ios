@@ -1,5 +1,11 @@
 """Starlark transition support for Apple rules."""
 
+load("@rules_ios_bazel_version//:version.bzl", "bazel_version")
+load(
+    "//rules/internal:bazel_version.bzl",
+    "get_bazel_version",
+)
+
 def _current_apple_platform(apple_fragment, xcode_config):
     """Returns a struct containing the platform and target os version"""
     platform = apple_fragment.single_arch_platform
