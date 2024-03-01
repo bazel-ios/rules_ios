@@ -2,6 +2,7 @@
 
 load(
     "//rules:repositories.bzl",
+    "rules_ios_bazel_version",
     "rules_ios_dependencies",
     "rules_ios_dev_dependencies",
 )
@@ -21,6 +22,13 @@ def _non_module_dev_deps_impl(_):
     rules_ios_dev_dependencies(load_bzlmod_dependencies = False)
 
 non_module_dev_deps = module_extension(implementation = _non_module_dev_deps_impl)
+
+def _rules_ios_bazel_version(_):
+    rules_ios_bazel_version(
+        name = "rules_ios_bazel_version",
+    )
+
+rules_ios_bazel_version_deps = module_extension(implementation = _rules_ios_bazel_version)
 
 def _xcode_configure_impl(module_ctx):
     for mod in module_ctx.modules:

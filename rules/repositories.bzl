@@ -118,12 +118,40 @@ def _rules_ios_bzlmod_dependencies():
         sha256 = "8f9ee2dc10c1ae514ee599a8b42ed99fa262b757058f65ad3c384289ff70c4b8",
     )
 
+def _rules_ios_bazel_version_impl(ctx):
+    ctx.file("BUILD.bazel", content = """
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+bzl_library(
+    name = "api",
+    srcs = [
+        "version.bzl",
+    ],
+    visibility = ["//visibility:public"],
+)
+""")
+
+    # Write Bazel version to a file
+    ctx.file("version.bzl", content = "bazel_version = \"{}\"".format(ctx.attr._bazel_version))
+
+rules_ios_bazel_version = repository_rule(
+    implementation = _rules_ios_bazel_version_impl,
+    attrs = {
+        "_bazel_version": attr.string(default = getattr(native, "bazel_version", "")),
+    },
+    local = True,
+)
+
 def _rules_ios_bzlmod_dev_dependencies():
     """
     Fetches repositories that are development dependencies of `rules_ios` and available via bzlmod.
 
     These are only included when using WORKSPACE, when using bzlmod they're loaded in MODULE.bazel
     """
+
+    _maybe(
+        rules_ios_bazel_version,
+        name = "rules_ios_bazel_version",
+    )
 
     _maybe(
         http_archive,

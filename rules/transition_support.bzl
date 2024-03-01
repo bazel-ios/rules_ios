@@ -1,8 +1,13 @@
 """Starlark transition support for Apple rules."""
 
+load("@rules_ios_bazel_version//:version.bzl", "bazel_version")
 load(
     "//rules/internal:bazel_version.bzl",
     "get_bazel_version",
+)
+load(
+    "@build_bazel_apple_support//configs:platforms.bzl",
+    "CPU_TO_DEFAULT_PLATFORM_NAME",
 )
 
 _PLATFORM_TYPE_TO_CPUS_FLAG = {
@@ -13,36 +18,11 @@ _PLATFORM_TYPE_TO_CPUS_FLAG = {
     "watchos": "//command_line_option:watchos_cpus",
 }
 
-# TODO: Should be loaded from bazel_build_apple_support when we migrate to v1.10.0
-# Could not load it directly from bazel_build_apple_support
-# As we support multiple versions of rules_apple_support (v2 and v3)
-# Where <v3.1.0 don't have the updated dependency. So we copied it
-# https://github.com/bazelbuild/apple_support/blob/d87e8b07f3345e750834dbb6ce38c7c7d3b8b44b/configs/platforms.bzl#L108
-_CPU_TO_DEFAULT_PLATFORM_NAME = {
-    "darwin_arm64": "macos_arm64",
-    "darwin_arm64e": "macos_arm64e",
-    "darwin_x86_64": "macos_x86_64",
-    "ios_arm64": "ios_arm64",
-    "ios_arm64e": "ios_arm64e",
-    "ios_x86_64": "ios_x86_64",
-    "ios_sim_arm64": "ios_sim_arm64",
-    "tvos_arm64": "tvos_arm64",
-    "tvos_x86_64": "tvos_x86_64",
-    "tvos_sim_arm64": "tvos_sim_arm64",
-    "visionos_arm64": "visionos_arm64",
-    "visionos_sim_arm64": "visionos_sim_arm64",
-    "visionos_x86_64": "visionos_x86_64",
-    "watchos_arm64": "watchos_arm64",
-    "watchos_arm64_32": "watchos_arm64_32",
-    "watchos_armv7k": "watchos_armv7k",
-    "watchos_x86_64": "watchos_x86_64",
-}
-
 _CPU_TO_DEFAULT_PLATFORM_FLAG = {
     cpu: "@build_bazel_apple_support//platforms:{}_platform".format(
         platform_name,
     )
-    for cpu, platform_name in _CPU_TO_DEFAULT_PLATFORM_NAME.items()
+    for cpu, platform_name in CPU_TO_DEFAULT_PLATFORM_NAME.items()
 }
 
 _bazel_version = get_bazel_version(bazel_version)

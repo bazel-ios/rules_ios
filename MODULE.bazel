@@ -70,6 +70,12 @@ use_repo(
     "tart",
 )
 
+rules_ios_bazel_version_deps = use_extension("//rules:module_extensions.bzl", "rules_ios_bazel_version_deps")
+use_repo(
+    rules_ios_bazel_version_deps,
+    "rules_ios_bazel_version",
+)
+
 non_module_dev_deps = use_extension(
     "//rules:module_extensions.bzl",
     "non_module_dev_deps",
