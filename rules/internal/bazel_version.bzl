@@ -1,5 +1,11 @@
 "Bazel version parsing"
 
+# There are utility functions for parsing versions numbers here:
+#   load("@bazel_skylib//lib:versions.bzl", "versions")
+# But we don't want to use them, as skylib is not yet loaded when code
+# in this file executes. There's no way to execute it later, because
+# `native.bazel_version`'s availability is restricted:
+#   https://github.com/bazelbuild/bazel/issues/8305
 def get_bazel_version(bazel_version = getattr(native, "bazel_version", "")):
     """
     Parse the Bazel version into a `struct`.
