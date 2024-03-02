@@ -112,19 +112,6 @@ update() {
     bazelisk run //tests/ios/xcodeproj:Test-BuildForDevice-Project --ios_multi_cpus=arm64
 }
 
-if [[ "$(arch)" == "arm"* ]]; then
-    echo -e "warning: rerun where Bazel is an x86_64 bazel:\narch -arch x86_64 /bin/bash -l -c \"$0 ${@}\""
-
-    # This should work - rules_ios has been proven to work in this. If you
-    # don't have the right version of Bazelisk then install it.
-    #
-    # This is tested on bash Montery M1 Max to work. A lot of these tools will
-    # not work when spawned under rosetta without a login shell
-    arch -arch x86_64 $SHELL -l -c "$0 ${@}"
-    exit $?
-fi
-
-
 for ARG in "$@"; do
     case "$ARG" in
     --clean)
