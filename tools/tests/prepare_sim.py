@@ -10,7 +10,7 @@ from pkg_resources import packaging
 
 _DEVICE_NAME = "BazeliOSPhone"
 _DEVICE_TYPE = os.getenv('TEST_DEVICE_MODEL') if os.getenv(
-    'TEST_DEVICE_MODEL') else "com.apple.CoreSimulator.SimDeviceType.iPhone-14"
+    'TEST_DEVICE_MODEL') else "com.apple.CoreSimulator.SimDeviceType.iPhone-15"
 _BOOT_TIMEOUT = 180
 
 _IMPLEMENTED_IN_BOTH_ERROR_STRING = "is implemented in both"

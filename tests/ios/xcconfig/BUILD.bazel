@@ -75,7 +75,7 @@ apple_framework(
     name = "WithDefinesSwift",
     srcs = glob(["WithDefinesSwift/*.swift"]),
     platforms = {"ios": "12.0"},
-    swift_version = "5.1",
+    swift_version = "5.9",
     visibility = ["//visibility:public"],
     xcconfig = _XCCONFIG,
     xcconfig_by_build_setting = _XCCONFIG_BY_BUILD_SETTING,

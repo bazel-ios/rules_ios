@@ -190,12 +190,12 @@ def xcconfig_unit_test_suite():
             assert_xcconfig(
                 name = "conditioned_option_enabled",
                 xcconfig = {"LD_DONT_RUN_DEDUPLICATION": "YES", "GCC_OPTIMIZATION_LEVEL": "0"},
-                expected = {"linkopts": ["-Wl,-no_deduplicate"]},
+                expected = {"linkopts": ["-O'0'", "-Wl,-no_deduplicate"]},
             ),
             assert_xcconfig(
                 name = "conditioned_option_disable",
                 xcconfig = {"LD_DONT_RUN_DEDUPLICATION": "YES", "GCC_OPTIMIZATION_LEVEL": "1"},
-                expected = {},
+                expected = {"linkopts": ["-O'1'"]},
             ),
             assert_xcconfig(
                 name = "product_module_name",
@@ -205,7 +205,7 @@ def xcconfig_unit_test_suite():
             assert_xcconfig(
                 name = "optimization_level_0",
                 xcconfig = {"GCC_OPTIMIZATION_LEVEL": "0"},
-                expected = {"linkopts": ["-Wl,-no_deduplicate"]},
+                expected = {"linkopts": ["-O'0'", "-Wl,-no_deduplicate"]},
             ),
             assert_xcconfig(
                 name = "xlinker_to_wl",

@@ -209,8 +209,7 @@ class TestContext():
     def Fail(self):
         traceback.print_exc()
         logger.error("FAIL")
-        with ctxlock:
-            self.status = -1
+        self.status = -1
 
     # Returns None for in progress, -1 fail, 1 pass
     def GetCompletionStatus(self):

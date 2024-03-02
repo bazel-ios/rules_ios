@@ -10,7 +10,7 @@ apple_framework(
     name = "CppLib",
     srcs = glob(["Cpp/*"]),
     platforms = {"ios": "12.0"},
-    swift_version = "5.1",
+    swift_version = "5.9",
     visibility = ["//visibility:public"],
 )
 
@@ -44,7 +44,7 @@ apple_framework(
     name = "SwiftLib",
     srcs = glob(["Swift/*"]),
     platforms = {"ios": "12.0"},
-    swift_version = "5.1",
+    swift_version = "5.9",
     visibility = ["//visibility:public"],
 )
 
@@ -80,7 +80,7 @@ apple_framework(
         "MACRO_L=1",
         "MACRO_M=0",
     ],
-    swift_version = "5.1",
+    swift_version = "5.9",
     visibility = ["//visibility:public"],
 )
 
@@ -199,7 +199,7 @@ ios_application(
         "L=1",
         "M=0",
     ],
-    swift_version = "5.1",
+    swift_version = "5.9",
     deps = [
         ":Empty",
         ":FW",
@@ -398,7 +398,7 @@ ios_application(
         ":blue": ["-DDEBUG"],
         ":red": [],
     }),
-    swift_version = "5.1",
+    swift_version = "5.9",
     deps = [
         ":CppLib",
         ":Empty",

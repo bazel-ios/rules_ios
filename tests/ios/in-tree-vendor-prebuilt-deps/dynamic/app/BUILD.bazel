@@ -8,7 +8,7 @@ apple_framework(
     name = "CppLib",
     srcs = glob(["Cpp/*"]),
     platforms = {"ios": "12.0"},
-    swift_version = "5.1",
+    swift_version = "5.9",
     visibility = ["//visibility:public"],
 )
 
@@ -42,7 +42,7 @@ apple_framework(
     name = "SwiftLib",
     srcs = glob(["Swift/*"]),
     platforms = {"ios": "12.0"},
-    swift_version = "5.1",
+    swift_version = "5.9",
     visibility = ["//visibility:public"],
     deps = ["//tests/ios/in-tree-vendor-prebuilt-deps/Pods/MobileFlow"],
 )
@@ -296,7 +296,7 @@ ios_application(
         ":blue": ["-DDEBUG"],
         ":red": [],
     }),
-    swift_version = "5.1",
+    swift_version = "5.9",
     deps = [
         ":CppLib",
         ":Empty",

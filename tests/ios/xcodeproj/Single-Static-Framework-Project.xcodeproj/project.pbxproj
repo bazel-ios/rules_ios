@@ -300,7 +300,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = staticlib;
 				ONLY_ACTIVE_ARCH = YES;
@@ -320,9 +320,9 @@
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFramework\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFramework\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = staticlib;
 				ONLY_ACTIVE_ARCH = YES;
@@ -342,7 +342,7 @@
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFramework\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFramework\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -365,7 +365,7 @@
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFramework\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFramework\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -390,7 +390,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = staticlib;
 				ONLY_ACTIVE_ARCH = YES;
@@ -452,9 +452,9 @@
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFramework\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFramework\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = staticlib;
 				ONLY_ACTIVE_ARCH = YES;
@@ -476,7 +476,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = staticlib;
 				ONLY_ACTIVE_ARCH = YES;
@@ -536,7 +536,7 @@
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFramework\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFramework\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -599,9 +599,9 @@
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFramework\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFramework\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = staticlib;
 				ONLY_ACTIVE_ARCH = YES;
@@ -663,7 +663,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFramework_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = staticlib;
 				ONLY_ACTIVE_ARCH = YES;
@@ -683,7 +683,7 @@
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFramework\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFramework\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib\" \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFramework\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -706,9 +706,9 @@
 				BAZEL_SWIFTMODULEFILES_TO_COPY = "";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFramework\"";
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks \"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFramework\"";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-x86_64-min12.0-applebin_ios-ios_x86_64-dbg-ST-43ce1e61d7d2/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
+				HEADER_SEARCH_PATHS = "\"$BAZEL_WORKSPACE_ROOT/bazel-out/ios-sim_arm64-min12.0-applebin_ios-ios_sim_arm64-dbg-ST-008b8551197e/bin/tests/ios/frameworks/objc/ObjcFrameworkTestLib_public_hmap.hmap\" \"$BAZEL_WORKSPACE_ROOT\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = staticlib;
 				ONLY_ACTIVE_ARCH = YES;
