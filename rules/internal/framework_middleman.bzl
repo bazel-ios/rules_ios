@@ -80,12 +80,10 @@ def _framework_middleman(ctx):
     ])
 
     # Add the frameworks to the linker command
-    _migrates_cc_info_linking_info_transition_flag = ctx.attr._migrates_cc_info_linking_info_transition_flag[0]
-    _migrates_cc_info_linking_info_provider = _migrates_cc_info_linking_info_transition_flag[BuildSettingInfo].value
-
+    _is_bazel_7 = not hasattr(apple_common, "apple_crosstool_transition")
     dynamic_framework_provider = objc_provider_utils.merge_dynamic_framework_providers(
         dynamic_framework_providers,
-        supports_cc_info_in_dynamic_framework_provider = _migrates_cc_info_linking_info_provider,
+        supports_cc_info_in_dynamic_framework_provider = _is_bazel_7,
     )
     objc_provider_fields["dynamic_framework_file"] = depset(
         transitive = [dynamic_framework_provider.framework_files, objc_provider_fields.get("dynamic_framework_file", depset([]))],
@@ -93,7 +91,7 @@ def _framework_middleman(ctx):
     objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
 
     cc_info_provider = cc_common.merge_cc_infos(direct_cc_infos = [], cc_infos = cc_providers)
-    if _migrates_cc_info_linking_info_provider:
+    if _is_bazel_7:
         cc_toolchain = find_cpp_toolchain(ctx)
         cc_features = cc_common.configure_features(
             ctx = ctx,
@@ -199,13 +197,6 @@ framework_middleman = rule(
                 """Internal - The product type of the framework
 """,
         ),
-        "_migrates_cc_info_linking_info_transition_flag": attr.label(
-            default = "//rules:migrates_cc_info_linking_info",
-            # 1:1 transition
-            cfg = transition_support.migrates_cc_info_linking_info_transition,
-            doc = """Internal - the flag to check if the compiler supports cc info in dynamic frameworks
-""",
-        ),
         "_allowlist_function_transition": attr.label(
             default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
             doc = """Needed to allow this rule to have an incoming edge configuration transition.
@@ -246,13 +237,12 @@ def _dep_middleman(ctx):
     cc_providers = []
     avoid_libraries = {}
 
-    _migrates_cc_info_linking_info_transition_flag = ctx.attr._migrates_cc_info_linking_info_transition_flag[0]
-    _migrates_cc_info_linking_info_provider = _migrates_cc_info_linking_info_transition_flag[BuildSettingInfo].value
+    _is_bazel_7 = not hasattr(apple_common, "apple_crosstool_transition")
 
     def _collect_providers(lib_dep):
         if apple_common.Objc in lib_dep:
             objc_providers.append(lib_dep[apple_common.Objc])
-        if _migrates_cc_info_linking_info_provider and CcInfo in lib_dep:
+        if _is_bazel_7 and CcInfo in lib_dep:
             cc_providers.append(lib_dep[CcInfo])
 
     def _process_avoid_deps(avoid_dep_libs):
@@ -336,13 +326,6 @@ dep_middleman = rule(
             mandatory = False,
             doc =
                 """Internal - currently rules_ios the dict `platforms`
-""",
-        ),
-        "_migrates_cc_info_linking_info_transition_flag": attr.label(
-            default = "//rules:migrates_cc_info_linking_info",
-            # 1:1 transition
-            cfg = transition_support.migrates_cc_info_linking_info_transition,
-            doc = """Internal - the flag to check if the compiler supports cc info in dynamic frameworks
 """,
         ),
         "_allowlist_function_transition": attr.label(

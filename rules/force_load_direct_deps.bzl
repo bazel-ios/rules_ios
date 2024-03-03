@@ -1,6 +1,5 @@
 load("//rules:providers.bzl", "AvoidDepsInfo")
 load("//rules:transition_support.bzl", "transition_support")
-load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
 
 def _force_load_direct_deps_impl(ctx):
     if not ctx.attr.should_force_load:
@@ -15,10 +14,8 @@ def _force_load_direct_deps_impl(ctx):
 
     avoid_libraries = {}
 
-    _migrates_cc_info_linking_info_transition_flag = ctx.attr._migrates_cc_info_linking_info_transition_flag[0]
-    _migrates_cc_info_linking_info_provider = _migrates_cc_info_linking_info_transition_flag[BuildSettingInfo].value
-
-    if _migrates_cc_info_linking_info_provider:
+    _is_bazel_7 = not hasattr(apple_common, "apple_crosstool_transition")
+    if _is_bazel_7:
         for dep in avoid_deps:
             if CcInfo in dep:
                 for linker_input in dep[CcInfo].linking_context.linker_inputs.to_list():
@@ -99,13 +96,6 @@ force_load_direct_deps = rule(
             mandatory = False,
             doc =
                 """Internal - currently rules_ios the dict `platforms`
-""",
-        ),
-        "_migrates_cc_info_linking_info_transition_flag": attr.label(
-            default = "//rules:migrates_cc_info_linking_info",
-            # 1:1 transition
-            cfg = transition_support.migrates_cc_info_linking_info_transition,
-            doc = """Internal - the flag to check if the compiler supports cc info in dynamic frameworks
 """,
         ),
         "_allowlist_function_transition": attr.label(

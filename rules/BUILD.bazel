@@ -1,5 +1,4 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
 
 exports_files(
     glob(["*.bzl"]),
@@ -23,9 +22,7 @@ bzl_library(
     srcs = ["transition_support.bzl"],
     visibility = ["//visibility:public"],
     deps = [
-        "//rules/internal:bazel_version",
         "@build_bazel_apple_support//configs:platforms",
-        "@rules_ios_bazel_version//:api",
     ],
 )
 
@@ -205,11 +202,4 @@ bzl_library(
         "@bazel_skylib//lib:types",
         "@build_bazel_rules_apple//apple:ios",
     ],
-)
-
-# enabled in bazel 7
-bool_flag(
-    name = "migrates_cc_info_linking_info",
-    build_setting_default = False,
-    visibility = ["//visibility:public"],
 )

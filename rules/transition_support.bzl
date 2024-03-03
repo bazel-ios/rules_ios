@@ -1,11 +1,5 @@
 """Starlark transition support for Apple rules."""
 
-load("@rules_ios_bazel_version//:version.bzl", "bazel_version")
-load(
-    "//rules/internal:bazel_version.bzl",
-    "get_bazel_version",
-)
-
 def _current_apple_platform(apple_fragment, xcode_config):
     """Returns a struct containing the platform and target os version"""
     platform = apple_fragment.single_arch_platform
@@ -328,23 +322,9 @@ _split_transition = transition(
     ],
 )
 
-def _migrates_cc_info_linking_info_transition_impl(settings, attr):
-    _ignore = (settings, attr)
-    _is_bazel_7 = int(get_bazel_version(bazel_version).major) >= 7
-    return {
-        "//rules:migrates_cc_info_linking_info": _is_bazel_7,
-    }
-
-_migrates_cc_info_linking_info_transition = transition(
-    implementation = _migrates_cc_info_linking_info_transition_impl,
-    inputs = [],
-    outputs = ["//rules:migrates_cc_info_linking_info"],
-)
-
 transition_support = struct(
     apple_rule_transition = _apple_rule_transition,
     split_transition = _split_transition,
-    migrates_cc_info_linking_info_transition = _migrates_cc_info_linking_info_transition,
     current_apple_platform = _current_apple_platform,
 )
 
