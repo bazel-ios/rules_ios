@@ -1,10 +1,5 @@
 """Starlark transition support for Apple rules."""
 
-load("@rules_ios_bazel_version//:version.bzl", "bazel_version")
-load(
-    "//rules/internal:bazel_version.bzl",
-    "get_bazel_version",
-)
 load(
     "@build_bazel_apple_support//configs:platforms.bzl",
     "CPU_TO_DEFAULT_PLATFORM_NAME",
@@ -24,9 +19,6 @@ _CPU_TO_DEFAULT_PLATFORM_FLAG = {
     )
     for cpu, platform_name in CPU_TO_DEFAULT_PLATFORM_NAME.items()
 }
-
-_bazel_version = get_bazel_version(bazel_version)
-_bazel_major_version = int(_bazel_version.major)
 
 def _current_apple_platform(apple_fragment, xcode_config):
     """Returns a struct containing the platform and target os version"""
@@ -110,7 +102,7 @@ def _min_os_version_or_none(attr, attr_platforms, platform, attr_platform_type):
 
     return None
 
-def _objc_library_transition_values(settings, platform_type):
+def _apple_platforms_base_values(settings, platform_type):
     cpu = _cpu_string(
         environment_arch = None,
         platform_type = platform_type,
@@ -162,16 +154,10 @@ def _apple_rule_transition_impl(settings, attr):
         "//command_line_option:tvos_minimum_os": _min_os_version_or_none(attr, attr_platforms, "tvos", platform_type),
         "//command_line_option:watchos_minimum_os": _min_os_version_or_none(attr, attr_platforms, "watchos", platform_type),
     }
-    ret.update(_objc_library_transition_values(settings, platform_type))
+    ret.update(_apple_platforms_base_values(settings, platform_type))
     return ret
 
 _supports_visionos = hasattr(apple_common.platform_type, "visionos")
-
-# `--apple_compiler` was removed in https://github.com/bazelbuild/bazel/commit/1acdfc422e724b4fe12c7bf5248086ab514ec4be
-_supports_clo_apple_compiler = _bazel_major_version < 7
-
-# `--apple_grte_top` was removed in https://github.com/bazelbuild/bazel/commit/fb4106bdbd23c365337ea99704921ada7b86c2df
-_supports_clo_apple_grte_top = _bazel_major_version < 7
 
 # These flags are a mix of options defined in native Bazel from the following fragments:
 # - https://github.com/bazelbuild/bazel/blob/master/src/main/java/com/google/devtools/build/lib/analysis/config/CoreOptions.java
@@ -192,10 +178,6 @@ _apple_rule_transition = transition(
         "//command_line_option:apple_platforms",
     ] + (
         ["//command_line_option:visionos_cpus"] if _supports_visionos else []
-    ) + (
-        ["//command_line_option:apple_compiler"] if _supports_clo_apple_compiler else []
-    ) + (
-        ["//command_line_option:apple_grte_top"] if _supports_clo_apple_grte_top else []
     ) + _CPU_TO_DEFAULT_PLATFORM_FLAG.values(),
     outputs = [
         "//command_line_option:apple configuration distinguisher",
@@ -326,7 +308,7 @@ def _split_transition_impl(settings, attr):
             "//command_line_option:watchos_minimum_os": _min_os_version_or_none(attr, attr_platforms, "watchos", platform_type),
             "//command_line_option:minimum_os_version": minimum_os_version,
         }
-        output_dictionary.update(_objc_library_transition_values(settings, platform_type))
+        output_dictionary.update(_apple_platforms_base_values(settings, platform_type))
         output_dictionary["@build_bazel_rules_swift//swift:emit_swiftinterface"] = emit_swiftinterface
         split_output_dictionary[found_cpu] = output_dictionary
 
