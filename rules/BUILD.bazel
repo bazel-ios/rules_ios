@@ -22,7 +22,7 @@ bzl_library(
     srcs = ["transition_support.bzl"],
     visibility = ["//visibility:public"],
     deps = [
-        "@build_bazel_apple_support//lib:apple_support",
+        "@build_bazel_apple_support//configs:platforms",
     ],
 )
 
