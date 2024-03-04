@@ -1,18 +1,24 @@
 #!/bin/bash
 
+set -e
+
+# Sets up the CI environment.
+#
+# Required environment variables:
+#   - XCODE_VERSION: The version of Xcode to use.
+
 # If flag --no-bzlmod is passed, writes a user.bazelrc file to disable Bzlmod.
 if [[ "$*" == *--no-bzlmod* ]]; then
   echo "build --noenable_bzlmod" >> user.bazelrc
 fi
-# If flag --use-remote-cache is passed, writes a user.bazelrc file to enable remote cache.
-if [[ "$*" == *--use-remote-cache* ]]; then
-  echo "build --config=ci_with_caches" >> user.bazelrc
-fi
 
-set -e
+# Add the ci config override.
+echo "common --config=ci" >> user.bazelrc
+
 echo "Selecting Xcode for environment"
+echo "Xcode before: $(xcode-select -p)"
+sudo xcode-select -s "/Applications/Xcode_$XCODE_VERSION.app"
+echo "Xcode after: $(xcode-select -p)"
 
+echo "Running with environment:"
 printenv
-
-sudo xcode-select -p
-sudo xcode-select -s /Applications/Xcode_15.2.app

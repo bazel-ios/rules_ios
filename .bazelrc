@@ -52,9 +52,6 @@ build:ios_multi_arch_test --ios_minimum_os=10.2
 # to exemplify fat binaries on the latest version
 build:ios_multi_arch_test --ios_multi_cpus=x86_64
 
-# - Remote cache configuration
-build:ci_with_caches --config=ci --config=remote_cache
-
 build:remote_cache --bes_backend=grpcs://remote.buildbuddy.io
 build:remote_cache --bes_results_url=https://app.buildbuddy.io/invocation/
 build:remote_cache --experimental_build_event_upload_strategy=local
@@ -71,6 +68,10 @@ build --noremote_upload_local_results
 build:ci --remote_upload_local_results
 
 # - CI Configuration
+# announce config values
+common:ci --announce_rc
+# enable remote cache
+build:ci --config=remote_cache
 # disable curses control since CI logs are not interactive
 common:ci --curses=no
 # turn off loading message updates
@@ -85,8 +86,8 @@ build:ci --jobs=4
 # allow extra time for simulators to boot
 test:ci --test_env=STARTUP_TIMEOUT_SEC=300
 test:ci --test_timeout=600
-test:ci --flaky_test_attempts=//tests/ios/...@3
 test:ci --local_test_jobs=1
+test:ci --flaky_test_attempts=3
 
 # Load a user.bazelrc
 try-import %workspace%/user.bazelrc
