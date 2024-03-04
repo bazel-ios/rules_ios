@@ -153,6 +153,8 @@ def _ios_test(name, bundle_rule, test_rule, test_factory, apple_library, infopli
                                      If '//conditions:default' is not set the value in 'infoplists'
                                      is set as default.
         split_name_to_kwargs: A dictionary of suffixes to kwargs that will be passed into the "split" test bundle. The suffix will be appended to the name of the suite.
+        test_factory: The factory object used to generate tests.
+        internal_test_deps: Internal test dependencies.
         **kwargs: Arguments passed to the apple_library and test_rule rules as appropriate.
     """
 
@@ -267,4 +269,5 @@ def ios_unit_snapshot_test(name, apple_library = apple_library, test_factory = d
         test_factory: Use this to generate other variations of tests.
         **kwargs: Arguments passed to the apple_library and ios_unit_test rules as appropriate.
     """
-    _ios_test(name, _ios_internal_unit_test_bundle, _ios_unit_test, test_factory, apple_library, internal_test_deps = ["@bazel_tools//tools/cpp/runfiles"], **kwargs)
+    internal_test_deps = kwargs.pop("internal_test_deps", [])  #["@bazel_tools//tools/cpp/runfiles"])
+    _ios_test(name, _ios_internal_unit_test_bundle, _ios_unit_test, test_factory, apple_library, internal_test_deps = internal_test_deps, **kwargs)
