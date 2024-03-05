@@ -5,6 +5,7 @@ load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
 load(":analysis-tests.bzl", "make_tests")
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_bundle_import")
 load("//rules/test/output:output_test.bzl", "output_test")
+load("//rules:utils.bzl", "is_bazel_7")
 
 apple_framework(
     name = "CppLib",
@@ -256,6 +257,9 @@ ios_unit_test(
 ios_unit_snapshot_test(
     name = "TestSnapshots",
     srcs = ["snapshot_test.m"],
+    # NOTE: Bazel 7 fixed linking issues which required adding this dep here in the first place
+    #       in Bazel 7 it's now properly linked from the dep in //rules/test/snapshot:BazelRunfileBridge
+    internal_test_deps = [] if is_bazel_7 else ["@bazel_tools//tools/cpp/runfiles"],
     minimum_os_version = "12.0",
     test_exec_properties = {},
     test_host = ":AppWithInfoPlist",
