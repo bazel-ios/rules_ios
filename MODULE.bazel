@@ -9,10 +9,6 @@ module(
     version = "0",
     bazel_compatibility = [
         ">=6.0.0",
-        # Temporarily limit the usage of Bazel 7+ until
-        # https://github.com/bazel-ios/rules_ios/issues/795
-        # is complete.
-        "<7.0.0",
     ],
     compatibility_level = 1,
     repo_name = "build_bazel_rules_ios",
