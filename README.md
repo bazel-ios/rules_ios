@@ -30,6 +30,7 @@ See the following table for supported release versions.
 
 | Bazel release | Minimum supported rules version | Final supported rules version
 |:-------------------:|:-------------------------:|:-------------------------:
+| 7.* | 4.4.0 | current
 | 6.* | 2.0.0 | current
 | 5.* | 1.0.0 | 3.2.2
 | 4.* | 1.0.0 | 1.0.0
