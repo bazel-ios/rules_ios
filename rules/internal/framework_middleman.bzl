@@ -122,7 +122,7 @@ framework_middleman = rule(
     implementation = _framework_middleman,
     attrs = {
         "framework_deps": attr.label_list(
-            cfg = transition_support.split_transition,
+            cfg = transition_support.apple_platform_split_transition,
             mandatory = True,
             doc =
                 """Deps that may contain frameworks
@@ -260,7 +260,7 @@ dep_middleman = rule(
     implementation = _dep_middleman,
     attrs = {
         "deps": attr.label_list(
-            cfg = transition_support.split_transition,
+            cfg = transition_support.apple_platform_split_transition,
             mandatory = True,
             doc =
                 """Deps that may contain frameworks
