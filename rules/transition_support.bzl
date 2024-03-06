@@ -368,11 +368,3 @@ transition_support = struct(
     split_transition = _split_transition,
     current_apple_platform = _current_apple_platform,
 )
-
-# For the above comment
-split_transition_rule_attrs = {
-    "_allowlist_function_transition": attr.label(
-        default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
-        doc = "Needed to allow this rule to have an incoming edge configuration transition.",
-    ),
-}
