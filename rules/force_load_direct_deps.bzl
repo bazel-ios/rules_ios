@@ -1,6 +1,5 @@
 load("//rules:providers.bzl", "AvoidDepsInfo")
-load("//rules:transition_support.bzl", "split_transition_rule_attrs", "transition_support")
-load("@bazel_skylib//lib:dicts.bzl", "dicts")
+load("//rules:transition_support.bzl", "transition_support")
 
 def _impl(ctx):
     if not ctx.attr.should_force_load:
@@ -32,7 +31,7 @@ def _impl(ctx):
 
 force_load_direct_deps = rule(
     implementation = _impl,
-    attrs = dicts.add(split_transition_rule_attrs, {
+    attrs = {
         "deps": attr.label_list(
             cfg = transition_support.split_transition,
             mandatory = True,
@@ -55,7 +54,11 @@ force_load_direct_deps = rule(
                 """Internal - currently rules_ios the dict `platforms`
 """,
         ),
-    }),
+        "_allowlist_function_transition": attr.label(
+            default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
+            doc = "Needed to allow this rule to have an incoming edge configuration transition.",
+        ),
+    },
     doc = """
 A rule to link with `-force_load` for direct`deps`
 

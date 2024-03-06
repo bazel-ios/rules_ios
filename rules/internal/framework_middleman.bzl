@@ -6,7 +6,6 @@ load(
     "new_applebundleinfo",
     "new_iosframeworkbundleinfo",
 )
-load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load(
     "@build_bazel_rules_apple//apple/internal:partials.bzl",
     "partials",
@@ -32,7 +31,7 @@ load(
     "//rules/internal:objc_provider_utils.bzl",
     "objc_provider_utils",
 )
-load("//rules:transition_support.bzl", "split_transition_rule_attrs", "transition_support")
+load("//rules:transition_support.bzl", "transition_support")
 
 def _framework_middleman(ctx):
     resource_providers = []
@@ -121,7 +120,7 @@ def _framework_middleman(ctx):
 
 framework_middleman = rule(
     implementation = _framework_middleman,
-    attrs = dicts.add(split_transition_rule_attrs, {
+    attrs = {
         "framework_deps": attr.label_list(
             cfg = transition_support.split_transition,
             mandatory = True,
@@ -153,7 +152,11 @@ framework_middleman = rule(
                 """Internal - The product type of the framework
 """,
         ),
-    }),
+        "_allowlist_function_transition": attr.label(
+            default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
+            doc = "Needed to allow this rule to have an incoming edge configuration transition.",
+        ),
+    },
     doc = """
         This is a volatile internal rule to make frameworks work with
         rules_apples bundling logic
@@ -255,7 +258,7 @@ def _dep_middleman(ctx):
 
 dep_middleman = rule(
     implementation = _dep_middleman,
-    attrs = dicts.add(split_transition_rule_attrs, {
+    attrs = {
         "deps": attr.label_list(
             cfg = transition_support.split_transition,
             mandatory = True,
@@ -275,7 +278,11 @@ dep_middleman = rule(
                 """Internal - currently rules_ios the dict `platforms`
 """,
         ),
-    }),
+        "_allowlist_function_transition": attr.label(
+            default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
+            doc = "Needed to allow this rule to have an incoming edge configuration transition.",
+        ),
+    },
     doc = """
         This is a volatile internal rule to make frameworks work with
         rules_apples bundling logic
