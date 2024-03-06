@@ -6,7 +6,9 @@ load(
     "new_applebundleinfo",
     "new_iosframeworkbundleinfo",
 )
+load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
+load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
 load(
     "@build_bazel_rules_apple//apple/internal:partials.bzl",
     "partials",
@@ -32,7 +34,11 @@ load(
     "//rules/internal:objc_provider_utils.bzl",
     "objc_provider_utils",
 )
-load("//rules:transition_support.bzl", "split_transition_rule_attrs", "transition_support")
+load(
+    "//rules:transition_support.bzl",
+    "split_transition_rule_attrs",
+    "transition_support",
+)
 
 def _framework_middleman(ctx):
     resource_providers = []
@@ -74,12 +80,48 @@ def _framework_middleman(ctx):
     ])
 
     # Add the frameworks to the linker command
-    dynamic_framework_provider = objc_provider_utils.merge_dynamic_framework_providers(dynamic_framework_providers)
+    _is_bazel_7 = not hasattr(apple_common, "apple_crosstool_transition")
+    dynamic_framework_provider = objc_provider_utils.merge_dynamic_framework_providers(
+        dynamic_framework_providers,
+        supports_cc_info_in_dynamic_framework_provider = _is_bazel_7,
+    )
     objc_provider_fields["dynamic_framework_file"] = depset(
         transitive = [dynamic_framework_provider.framework_files, objc_provider_fields.get("dynamic_framework_file", depset([]))],
     )
     objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
+
     cc_info_provider = cc_common.merge_cc_infos(direct_cc_infos = [], cc_infos = cc_providers)
+    if _is_bazel_7:
+        cc_toolchain = find_cpp_toolchain(ctx)
+        cc_features = cc_common.configure_features(
+            ctx = ctx,
+            cc_toolchain = cc_toolchain,
+            language = "objc",
+            requested_features = ctx.features,
+            unsupported_features = ctx.disabled_features,
+        )
+        dynamic_framework_libraries_to_link = [
+            cc_common.create_library_to_link(
+                actions = ctx.actions,
+                feature_configuration = cc_features,
+                cc_toolchain = cc_toolchain,
+                dynamic_library = dynamic_library,
+            )
+            for dynamic_library in objc_provider_fields["dynamic_framework_file"].to_list()
+        ]
+        cc_info_provider = cc_common.merge_cc_infos(
+            direct_cc_infos = [
+                CcInfo(
+                    linking_context = cc_common.create_linking_context(
+                        linker_inputs = depset([cc_common.create_linker_input(
+                            owner = ctx.label,
+                            libraries = depset(dynamic_framework_libraries_to_link),
+                        )]),
+                    ),
+                ),
+            ] + cc_providers,
+        )
+
     providers = [
         dynamic_framework_provider,
         cc_info_provider,
@@ -121,7 +163,9 @@ def _framework_middleman(ctx):
 
 framework_middleman = rule(
     implementation = _framework_middleman,
-    attrs = dicts.add(split_transition_rule_attrs, {
+    fragments = ["cpp"],
+    toolchains = ["@bazel_tools//tools/cpp:toolchain_type"],
+    attrs = {
         "framework_deps": attr.label_list(
             cfg = transition_support.split_transition,
             mandatory = True,
@@ -153,7 +197,12 @@ framework_middleman = rule(
                 """Internal - The product type of the framework
 """,
         ),
-    }),
+        "_allowlist_function_transition": attr.label(
+            default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
+            doc = """Needed to allow this rule to have an incoming edge configuration transition.
+""",
+        ),
+    },
     doc = """
         This is a volatile internal rule to make frameworks work with
         rules_apples bundling logic
@@ -188,9 +237,13 @@ def _dep_middleman(ctx):
     cc_providers = []
     avoid_libraries = {}
 
+    _is_bazel_7 = not hasattr(apple_common, "apple_crosstool_transition")
+
     def _collect_providers(lib_dep):
         if apple_common.Objc in lib_dep:
             objc_providers.append(lib_dep[apple_common.Objc])
+        if _is_bazel_7 and CcInfo in lib_dep:
+            cc_providers.append(lib_dep[CcInfo])
 
     def _process_avoid_deps(avoid_dep_libs):
         for dep in avoid_dep_libs:
@@ -273,6 +326,11 @@ dep_middleman = rule(
             mandatory = False,
             doc =
                 """Internal - currently rules_ios the dict `platforms`
+""",
+        ),
+        "_allowlist_function_transition": attr.label(
+            default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
+            doc = """Needed to allow this rule to have an incoming edge configuration transition.
 """,
         ),
     }),

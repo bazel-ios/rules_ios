@@ -1029,11 +1029,23 @@ def _apple_framework_packaging_impl(ctx):
         # If not virtualizing the framework - then it runs a "clean"
         _get_symlinked_framework_clean_action(ctx, framework_files, compilation_context_fields)
 
-    cc_info_provider = CcInfo(
-        compilation_context = cc_common.create_compilation_context(
-            **compilation_context_fields
-        ),
-    )
+    _is_bazel_7 = not hasattr(apple_common, "apple_crosstool_transition")
+    if _is_bazel_7:
+        cc_info_provider = CcInfo(
+            compilation_context = cc_common.create_compilation_context(
+                **compilation_context_fields
+            ),
+            linking_context = cc_common.merge_cc_infos(
+                direct_cc_infos = [],
+                cc_infos = [dep[CcInfo] for dep in deps],
+            ).linking_context,
+        )
+    else:
+        cc_info_provider = CcInfo(
+            compilation_context = cc_common.create_compilation_context(
+                **compilation_context_fields
+            ),
+        )
 
     if virtualize_frameworks:
         cc_info = cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider])
