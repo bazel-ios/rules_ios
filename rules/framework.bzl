@@ -23,7 +23,7 @@ load("@build_bazel_rules_apple//apple/internal:rule_support.bzl", "rule_support"
 load("@build_bazel_rules_apple//apple/internal:apple_toolchains.bzl", "AppleMacToolsToolchainInfo", "AppleXPlatToolsToolchainInfo")
 load("@build_bazel_rules_apple//apple/internal:swift_support.bzl", "swift_support")
 load("@build_bazel_rules_apple//apple/internal/utils:clang_rt_dylibs.bzl", "clang_rt_dylibs")
-load("@build_bazel_rules_apple//apple/internal:providers.bzl", "AppleBundleInfo", "IosFrameworkBundleInfo", "new_applebundleinfo", "new_iosframeworkbundleinfo")
+load("@build_bazel_rules_apple//apple/internal:providers.bzl", "AppleBundleInfo", "ApplePlatformInfo", "IosFrameworkBundleInfo", "new_applebundleinfo", "new_iosframeworkbundleinfo")
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo", "swift_clang_module_aspect", "swift_common")
 load(
     "@build_bazel_rules_apple//apple/internal/aspects:resource_aspect.bzl",
@@ -588,7 +588,7 @@ def _merge_root_infoplists(ctx):
     bundle_name = ctx.attr.framework_name
     current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
     platform_type = str(current_apple_platform.platform.platform_type)
-    apple_mac_toolchain_info = ctx.attr._toolchain[AppleMacToolsToolchainInfo]
+    apple_mac_toolchain_info = ctx.attr._mac_toolchain[AppleMacToolsToolchainInfo]
     if hasattr(rule_support, "rule_descriptor_no_ctx"):
         descriptor_fn = rule_support.rule_descriptor_no_ctx
     else:
@@ -662,7 +662,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
     Currently, this doesn't include headers or other interface files.
     """
     actions = ctx.actions
-    apple_mac_toolchain_info = ctx.attr._toolchain[AppleMacToolsToolchainInfo]
+    apple_mac_toolchain_info = ctx.attr._mac_toolchain[AppleMacToolsToolchainInfo]
     apple_xplat_toolchain_info = ctx.attr._xplat_toolchain[AppleXPlatToolsToolchainInfo]
     bin_root_path = ctx.bin_dir.path
     bundle_id = ctx.attr.bundle_id
@@ -1205,7 +1205,8 @@ that this target depends on.
         ),
         "_child_configuration_dummy": attr.label(
             cfg = transition_support.split_transition,
-            default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
+            providers = [cc_common.CcToolchainInfo, ApplePlatformInfo],
+            default = Label("@build_bazel_rules_apple//apple:default_cc_toolchain_forwarder"),
         ),
         "bundle_id": attr.string(
             mandatory = False,
@@ -1234,13 +1235,15 @@ the framework as a dependency.""",
             default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
             doc = "Needed to allow this rule to have an incoming edge configuration transition.",
         ),
-        "_toolchain": attr.label(
+        "_mac_toolchain": attr.label(
             default = Label("@build_bazel_rules_apple//apple/internal:mac_tools_toolchain"),
             providers = [[AppleMacToolsToolchainInfo]],
+            cfg = "exec",
         ),
         "_xplat_toolchain": attr.label(
             default = Label("@build_bazel_rules_apple//apple/internal:xplat_tools_toolchain"),
             providers = [[AppleXPlatToolsToolchainInfo]],
+            cfg = "exec",
         ),
         "platform_type": attr.string(
             mandatory = False,
@@ -1265,6 +1268,7 @@ the framework as a dependency.""",
             executable = True,
         ),
         "_cc_toolchain": attr.label(
+            providers = [cc_common.CcToolchainInfo],
             default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
             doc = """\
 The C++ toolchain from which linking flags and other tools needed by the Swift
