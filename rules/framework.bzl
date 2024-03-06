@@ -9,7 +9,7 @@ load("//rules:transition_support.bzl", "transition_support")
 load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@bazel_skylib//lib:paths.bzl", "paths")
-load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
+load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain", "use_cpp_toolchain")
 load("@build_bazel_rules_apple//apple/internal:apple_product_type.bzl", "apple_product_type")
 load("@build_bazel_rules_apple//apple/internal:features_support.bzl", "features_support")
 load("@build_bazel_rules_apple//apple/internal:linking_support.bzl", "linking_support")
@@ -1081,7 +1081,7 @@ def _apple_framework_packaging_impl(ctx):
 
 apple_framework_packaging = rule(
     implementation = _apple_framework_packaging_impl,
-    toolchains = ["@bazel_tools//tools/cpp:toolchain_type"],
+    toolchains = use_cpp_toolchain(),
     cfg = transition_support.apple_rule_transition,
     fragments = ["apple", "cpp", "objc"],
     output_to_genfiles = True,

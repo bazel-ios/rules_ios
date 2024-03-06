@@ -11,7 +11,7 @@ to each of the entries.
 
 load("//rules:providers.bzl", "FrameworkInfo")
 load("//rules:features.bzl", "feature_names")
-load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
+load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain", "use_cpp_toolchain")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_common")
 
 FRAMEWORK_SEARCH_PATH = "/build_bazel_rules_ios/frameworks"
@@ -424,7 +424,7 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules
 
 framework_vfs_overlay = rule(
     implementation = _framework_vfs_overlay_impl,
-    toolchains = ["@bazel_tools//tools/cpp:toolchain_type"],
+    toolchains = use_cpp_toolchain(),
     attrs = {
         "framework_name": attr.string(mandatory = True),
         "extra_search_paths": attr.string(mandatory = False),
