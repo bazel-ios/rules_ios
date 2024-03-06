@@ -142,8 +142,9 @@ def _ios_test(name, bundle_rule, test_rule, test_factory, apple_library, infopli
 
     Args:
         name: The name of the unit test.
-        test_rule: The underlying rules_apple test rule.
         bundle_rule: The underlying rules_apple test suite rule.
+        test_rule: The underlying rules_apple test rule.
+        test_factory: The factory object used to generate tests.
         apple_library: The macro used to package sources into a library.
         infoplists_by_build_setting: A dictionary of infoplists grouped by bazel build setting.
 
@@ -153,6 +154,7 @@ def _ios_test(name, bundle_rule, test_rule, test_factory, apple_library, infopli
                                      If '//conditions:default' is not set the value in 'infoplists'
                                      is set as default.
         split_name_to_kwargs: A dictionary of suffixes to kwargs that will be passed into the "split" test bundle. The suffix will be appended to the name of the suite.
+        internal_test_deps: Internal test dependencies.
         **kwargs: Arguments passed to the apple_library and test_rule rules as appropriate.
     """
 
@@ -241,7 +243,21 @@ def ios_unit_test(name, apple_library = apple_library, test_factory = default_te
         test_factory: Use this to generate other variations of tests.
         **kwargs: Arguments passed to the apple_library and ios_unit_test rules as appropriate.
     """
-    _ios_test(name, _ios_internal_unit_test_bundle, _ios_unit_test, test_factory, apple_library, **kwargs)
+    infoplists_by_build_setting = kwargs.pop("infoplists_by_build_setting", {})
+    split_name_to_kwargs = kwargs.pop("split_name_to_kwargs", {})
+    internal_test_deps = kwargs.pop("internal_test_deps", [])
+
+    _ios_test(
+        name = name,
+        bundle_rule = _ios_internal_unit_test_bundle,
+        test_rule = _ios_unit_test,
+        test_factory = test_factory,
+        apple_library = apple_library,
+        infoplists_by_build_setting = infoplists_by_build_setting,
+        split_name_to_kwargs = split_name_to_kwargs,
+        internal_test_deps = internal_test_deps,
+        **kwargs
+    )
 
 def ios_ui_test(name, apple_library = apple_library, test_factory = default_test_factory, **kwargs):
     """
@@ -255,7 +271,22 @@ def ios_ui_test(name, apple_library = apple_library, test_factory = default_test
     """
     if not kwargs.get("test_host", None):
         fail("test_host is required for ios_ui_test.")
-    _ios_test(name, _ios_internal_ui_test_bundle, _ios_ui_test, test_factory, apple_library, **kwargs)
+
+    infoplists_by_build_setting = kwargs.pop("infoplists_by_build_setting", {})
+    split_name_to_kwargs = kwargs.pop("split_name_to_kwargs", {})
+    internal_test_deps = kwargs.pop("internal_test_deps", [])
+
+    _ios_test(
+        name = name,
+        bundle_rule = _ios_internal_ui_test_bundle,
+        test_rule = _ios_ui_test,
+        test_factory = test_factory,
+        apple_library = apple_library,
+        infoplists_by_build_setting = infoplists_by_build_setting,
+        split_name_to_kwargs = split_name_to_kwargs,
+        internal_test_deps = internal_test_deps,
+        **kwargs
+    )
 
 def ios_unit_snapshot_test(name, apple_library = apple_library, test_factory = default_test_factory, **kwargs):
     """
@@ -267,4 +298,18 @@ def ios_unit_snapshot_test(name, apple_library = apple_library, test_factory = d
         test_factory: Use this to generate other variations of tests.
         **kwargs: Arguments passed to the apple_library and ios_unit_test rules as appropriate.
     """
-    _ios_test(name, _ios_internal_unit_test_bundle, _ios_unit_test, test_factory, apple_library, internal_test_deps = ["@bazel_tools//tools/cpp/runfiles"], **kwargs)
+    infoplists_by_build_setting = kwargs.pop("infoplists_by_build_setting", {})
+    split_name_to_kwargs = kwargs.pop("split_name_to_kwargs", {})
+    internal_test_deps = kwargs.pop("internal_test_deps", [])
+
+    _ios_test(
+        name = name,
+        bundle_rule = _ios_internal_unit_test_bundle,
+        test_rule = _ios_unit_test,
+        test_factory = test_factory,
+        apple_library = apple_library,
+        infoplists_by_build_setting = infoplists_by_build_setting,
+        split_name_to_kwargs = split_name_to_kwargs,
+        internal_test_deps = internal_test_deps,
+        **kwargs
+    )
