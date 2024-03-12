@@ -301,6 +301,7 @@ def _command_line_options(
         # `apple_split_cpu` is used by the Bazel Apple configuration distinguisher to distinguish
         # architecture and environment, therefore we set `environment_arch` when it is available.
         "//command_line_option:apple_split_cpu": environment_arch if environment_arch else "",
+        "//command_line_option:ios_multi_cpus": environment_arch if environment_arch else "",
         "//command_line_option:compiler": None,
         "//command_line_option:cpu": cpu,
         "//command_line_option:crosstool_top": (
@@ -308,7 +309,7 @@ def _command_line_options(
         ),
         "//command_line_option:fission": [],
         "//command_line_option:grte_top": None,
-        "//command_line_option:platforms": [apple_platforms[0]] if apple_platforms else default_platforms,
+        "//command_line_option:platforms": [apple_platforms[0]] if apple_platforms else (default_platforms if default_platforms else ["@build_bazel_apple_support//platforms:%s" % cpu]),
         "//command_line_option:ios_minimum_os": _min_os_version_or_none(
             minimum_os_version = minimum_os_version,
             platform = "ios",
@@ -378,6 +379,7 @@ _apple_rule_base_transition_outputs = [
     "//command_line_option:apple_platform_type",
     "//command_line_option:apple_platforms",
     "//command_line_option:apple_split_cpu",
+    "//command_line_option:ios_multi_cpus",
     "//command_line_option:compiler",
     "//command_line_option:cpu",
     "//command_line_option:crosstool_top",
