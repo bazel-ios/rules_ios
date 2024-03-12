@@ -820,6 +820,12 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         ),
     )
 
+    # Comment out the `embedded_bundles_partial` block below, build
+    #
+    # `bazel build //tests/ios/app:TestAppWithInfoPlist --define=apple.experimental.tree_artifact_outputs=1`
+    #
+    # and notice how the `Exception(f"failed to clonefile {src} to {full_dest}")` error goes away
+    #
     processor_partials.append(
         partials.embedded_bundles_partial(
             frameworks = [archive_for_embedding],

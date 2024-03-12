@@ -1,4 +1,4 @@
-load("//rules:framework.bzl", "apple_framework")
+load("//rules:framework.bzl", "apple_framework", "apple_framework_packaging")
 load("//rules:app.bzl", "ios_application")
 load("//rules:test.bzl", "ios_unit_snapshot_test", "ios_unit_test")
 load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
@@ -19,6 +19,15 @@ apple_framework(
     name = "FW",
     srcs = glob(["FW/*"]),
     platforms = {"ios": "12.0"},
+    # Set `link_dynamic = False` instead, build
+    #
+    # `bazel build //tests/ios/app:TestAppWithInfoPlist --define=apple.experimental.tree_artifact_outputs=1`
+    #
+    # and notice how the `Exception(f"failed to clonefile {src} to {full_dest}")` error goes away
+    #
+    link_dynamic = True,
+    bundle_id = "com.foo.FW",
+    infoplists = [{"foo":"bar"}],
     private_headers = glob(["FW/*_Private.*"]),
     visibility = ["//visibility:public"],
 )
@@ -246,12 +255,31 @@ ios_application(
     ],
 )
 
+apple_framework_packaging(
+    name = "AppWithInfoPlist_framework_unlinked",
+    framework_name = "AppWithInfoPlist",
+    platforms = {"ios": "15.0"},
+    skip_packaging = ["binary"],
+    tags = ["manual", "xcodeproj-ignore-as-target"],
+    transitive_deps = [
+        ":Empty",
+        ":FW",
+        ":OnlySources",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [":AppWithInfoPlist_objc"],
+)
+
 ios_unit_test(
     name = "TestAppWithInfoPlist",
     srcs = ["infoplist_test.m"],
     minimum_os_version = "12.0",
     test_exec_properties = {},
     test_host = ":AppWithInfoPlist",
+    deps = [
+        ":FW",
+        ":AppWithInfoPlist_framework_unlinked",
+    ],
 )
 
 ios_unit_snapshot_test(
