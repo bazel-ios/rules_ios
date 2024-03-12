@@ -1036,7 +1036,8 @@ def _apple_framework_packaging_impl(ctx):
     )
 
     if virtualize_frameworks:
-        cc_info = cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider])
+        dep_cc_infos = [dep[CcInfo] for dep in transitive_deps if CcInfo in dep and (dep.label.name.count("BazelRunfileBridgeImpl") or dep.label.name.count("runfiles"))]
+        cc_info = cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider], cc_infos = dep_cc_infos)
     else:
         dep_cc_infos = [dep[CcInfo] for dep in transitive_deps if CcInfo in dep]
         cc_info = cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider], cc_infos = dep_cc_infos)
@@ -1067,9 +1068,10 @@ def _apple_framework_packaging_impl(ctx):
     default_info = DefaultInfo(files = depset(out_files + bundle_outs.files.to_list()))
 
     objc_provider = objc_provider_utils.merge_objc_providers(
-        providers = [dep[apple_common.Objc] for dep in deps],
-        transitive = [dep[apple_common.Objc] for dep in transitive_deps],
+        providers = [dep[apple_common.Objc] for dep in deps if apple_common.Objc in dep],
+        transitive = [dep[apple_common.Objc] for dep in transitive_deps if apple_common.Objc in dep],
     )
+
     return [
         avoid_deps_info,
         framework_info,

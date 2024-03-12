@@ -985,6 +985,10 @@ def apple_library(
             tags = tags_manual,
             defines = defines + swift_defines,
             testonly = testonly,
+            always_include_developer_search_paths = select({
+                "@build_bazel_rules_ios//:swift_always_include_developer_search_paths": True,
+                "//conditions:default": False,
+            }),
             **swift_kwargs
         )
         lib_names.append(swift_libname)
