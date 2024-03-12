@@ -40,6 +40,7 @@ com.apple.product-type.bundle.unit-test)
     input_options=(
         "bazel-bin/$BAZEL_BIN_SUBDIR/${FULL_PRODUCT_NAME}"
         "bazel-bin/$BAZEL_BIN_SUBDIR/$TARGET_NAME.__internal__.__test_bundle_archive-root/$TARGET_NAME${WRAPPER_SUFFIX:-}"
+        "$BAZEL_BIN_DIR_PATH/$BAZEL_BIN_SUBDIR/$TARGET_NAME.__internal__.__test_bundle_archive-root/${FULL_PRODUCT_NAME}"
         "bazel-bin/$BAZEL_BIN_SUBDIR/${BAZEL_BUILD_TARGET_LABEL#*:}.runfiles/${BAZEL_BUILD_TARGET_WORKSPACE}/${BAZEL_BIN_SUBDIR}/${FULL_PRODUCT_NAME}"
         "bazel-bin/$BAZEL_BIN_SUBDIR/${BAZEL_BUILD_TARGET_LABEL#*:}.runfiles/${BAZEL_BUILD_TARGET_WORKSPACE}/${BAZEL_BIN_SUBDIR}/$TARGET_NAME.zip"
     )
