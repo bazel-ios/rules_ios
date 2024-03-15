@@ -15,6 +15,7 @@ bzl_library(
         "//rules:features",
         "//rules:providers",
         "@bazel_tools//tools/cpp:toolchain_utils.bzl",
+        "@build_bazel_rules_apple//apple",
         "@build_bazel_rules_swift//swift",
     ],
 )

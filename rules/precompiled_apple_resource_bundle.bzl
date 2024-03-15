@@ -83,7 +83,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         include_executable_name = False,
     )
 
-    apple_mac_toolchain_info = ctx.attr._toolchain[AppleMacToolsToolchainInfo]
+    apple_mac_toolchain_info = ctx.attr._mac_toolchain[AppleMacToolsToolchainInfo]
     partial_output = partial.call(
         partials.resources_partial(
             apple_mac_toolchain_info = apple_mac_toolchain_info,
@@ -283,9 +283,10 @@ the bundle as a dependency.""",
             default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
             doc = "Needed to allow this rule to have an incoming edge configuration transition.",
         ),
-        _toolchain = attr.label(
+        _mac_toolchain = attr.label(
             default = Label("@build_bazel_rules_apple//apple/internal:mac_tools_toolchain"),
             providers = [[AppleMacToolsToolchainInfo]],
+            cfg = "exec",
         ),
     )),
 )

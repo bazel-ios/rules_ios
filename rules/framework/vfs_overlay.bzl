@@ -435,6 +435,7 @@ framework_vfs_overlay = rule(
         "private_hdrs": attr.label_list(allow_files = True, default = []),
         "deps": attr.label_list(allow_files = True, default = []),
         "_cc_toolchain": attr.label(
+            providers = [cc_common.CcToolchainInfo],
             default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
             doc = """\
 The C++ toolchain from which linking flags and other tools needed by the Swift
