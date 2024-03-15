@@ -2,6 +2,7 @@
 
 load("@build_bazel_rules_apple//apple:providers.bzl", "AppleBundleInfo")
 load("@build_bazel_rules_apple//apple/internal:platform_support.bzl", "platform_support")
+load("@build_bazel_rules_apple//apple/internal:transition_support.bzl", "transition_support")
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//rules:hmap.bzl", "HeaderMapInfo")
@@ -274,6 +275,7 @@ def _xcodeproj_aspect_impl(target, ctx):
             bazel_build_target_workspace = target.label.workspace_name or ctx.workspace_name,
             bazel_build_target_name = bazel_build_target_name,
             bazel_bin_subdir = bazel_bin_subdir,
+            bin_dir_path = ctx.bin_dir.path,
             srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "srcs")),
             non_arc_srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "non_arc_srcs")),
             asset_srcs = depset([], transitive = _get_attr_values_for_name(deps, _SrcsInfo, "asset_srcs")),
@@ -832,6 +834,7 @@ def _populate_xcodeproj_targets_and_schemes(ctx, targets, src_dot_dots, all_tran
             "PRODUCT_NAME": target_name,
             "ONLY_ACTIVE_ARCH": "YES",
             "BAZEL_BIN_SUBDIR": target_info.bazel_bin_subdir,
+            "BAZEL_BIN_DIR_PATH": target_info.bin_dir_path,
             "MACH_O_TYPE": target_macho_type,
             "CLANG_ENABLE_MODULES": "YES",
             "CLANG_ENABLE_OBJC_ARC": "YES",
@@ -1293,7 +1296,19 @@ Tags for configuration:
         - https://docs.bazel.build/versions/main/skylark/lib/attr.html
 
         """),
-        "deps": attr.label_list(mandatory = True, allow_empty = False, providers = [], aspects = [_xcodeproj_aspect]),
+        "_allowlist_function_transition": attr.label(
+            default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
+            doc = "Needed to allow this rule to have an incoming edge configuration transition.",
+        ),
+        "deps": attr.label_list(
+            cfg = transition_support.apple_platform_split_transition,
+            mandatory = True,
+            allow_empty = False,
+            providers = [],
+            aspects = [_xcodeproj_aspect]
+        ),
+        "platform_type": attr.string(default = "ios"),
+        "minimum_os_version": attr.string(default = "15.0"),
         "include_transitive_targets": attr.bool(default = False, mandatory = False),
         "project_name": attr.string(mandatory = False),
         "output_path": attr.string(mandatory = False, default = "", doc = """
