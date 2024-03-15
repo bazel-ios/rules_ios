@@ -1094,7 +1094,7 @@ apple_framework_packaging = rule(
         ),
         "deps": attr.label_list(
             mandatory = True,
-            cfg = transition_support.split_transition,
+            cfg = transition_support.apple_platform_split_transition,
             aspects = [apple_resource_aspect],
             doc =
                 """Objc or Swift rules to be packed by the framework rule
@@ -1102,7 +1102,7 @@ apple_framework_packaging = rule(
         ),
         "private_deps": attr.label_list(
             mandatory = False,
-            cfg = transition_support.split_transition,
+            cfg = transition_support.apple_platform_split_transition,
             aspects = [apple_resource_aspect],
             doc =
                 """Objc or Swift private rules to be packed by the framework rule
@@ -1110,7 +1110,7 @@ apple_framework_packaging = rule(
         ),
         "data": attr.label_list(
             mandatory = False,
-            cfg = transition_support.split_transition,
+            cfg = transition_support.apple_platform_split_transition,
             allow_files = True,
             doc =
                 """Objc or Swift rules to be packed by the framework rule
@@ -1132,7 +1132,7 @@ The default behavior bakes this into the top level app. When false, it's statica
         ),
         "vfs": attr.label_list(
             mandatory = False,
-            cfg = transition_support.split_transition,
+            cfg = transition_support.apple_platform_split_transition,
             doc =
                 """Additional VFS for the framework to export
 """,
@@ -1140,7 +1140,7 @@ The default behavior bakes this into the top level app. When false, it's statica
         "transitive_deps": attr.label_list(
             aspects = [swift_clang_module_aspect],
             mandatory = True,
-            cfg = transition_support.split_transition,
+            cfg = transition_support.apple_platform_split_transition,
             doc =
                 """Deps of the deps
 """,
@@ -1185,7 +1185,7 @@ A list of framework targets (see
 [`ios_framework`](https://github.com/bazelbuild/rules_apple/blob/master/doc/rules-ios.md#ios_framework))
 that this target depends on.
 """,
-            cfg = transition_support.split_transition,
+            cfg = transition_support.apple_platform_split_transition,
         ),
         "_headermap_builder": attr.label(
             executable = True,
@@ -1204,7 +1204,7 @@ that this target depends on.
             """,
         ),
         "_child_configuration_dummy": attr.label(
-            cfg = transition_support.split_transition,
+            cfg = transition_support.apple_platform_split_transition,
             providers = [cc_common.CcToolchainInfo, ApplePlatformInfo],
             default = Label("@build_bazel_rules_apple//apple:default_cc_toolchain_forwarder"),
         ),

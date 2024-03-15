@@ -33,7 +33,7 @@ force_load_direct_deps = rule(
     implementation = _impl,
     attrs = {
         "deps": attr.label_list(
-            cfg = transition_support.split_transition,
+            cfg = transition_support.apple_platform_split_transition,
             mandatory = True,
             doc =
                 "Deps",
