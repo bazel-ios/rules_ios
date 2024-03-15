@@ -18,7 +18,7 @@ Extends a modulemap with a Swift submodule
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
 | <a id="extend_modulemap-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
-| <a id="extend_modulemap-destination"></a>destination |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  |
+| <a id="extend_modulemap-destination"></a>destination |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
 | <a id="extend_modulemap-module_name"></a>module_name |  -   | String | required |  |
 | <a id="extend_modulemap-source"></a>source |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
 | <a id="extend_modulemap-swift_header"></a>swift_header |  -   | String | optional |  `""`  |
