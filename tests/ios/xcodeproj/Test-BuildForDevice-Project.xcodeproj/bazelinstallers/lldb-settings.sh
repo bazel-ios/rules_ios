@@ -103,3 +103,7 @@ then
 settings append target.source-map ./external/ "$BAZEL_EXTERNAL_DIRNAME"
 END
 fi
+
+# Xcode 15.x: Fixes a problem in the flag parser of LLDB 15.1 potentially causing LLDB to crash
+sed -i '' 's, -vfsoverlay, -vfsoverlay ,g' $BAZEL_LLDB_INIT_FILE
+sed -i '' 's, -ivfsoverlay, -ivfsoverlay ,g' $BAZEL_LLDB_INIT_FILE
