@@ -28,38 +28,33 @@ def process_infoplists(name, infoplists, infoplists_by_build_setting, xcconfig, 
     # Final substituted infoplists_by_build_setting dict
     substituted_infoplists_by_build_setting = {}
 
-    # Default infoplists are any defined in `infoplists` OR in `infoplists_by_build_setting` with the key `//conditions:default`
-    default_infoplists = infoplists_by_build_setting.pop("//conditions:default", infoplists)
+    # Default infoplists are any defined in `infoplists`
+    default_infoplists = infoplists if infoplists else []
 
-    # Default xcconfig is the one defined in `xcconfig` OR in `xcconfig_by_build_setting` with the key `//conditions:default`
-    default_xcconfig = xcconfig_by_build_setting.pop("//conditions:default", xcconfig)
-
-    # Substitute the default infoplists
-    substituted_infoplists_by_build_setting["//conditions:default"] = [
-        substituted_plist(
-            name = "_%s.%s.info" % (name, idx),
-            plist = plist,
-            xcconfig = default_xcconfig,
-        )
-        for idx, plist in enumerate(write_info_plists_if_needed(name = name, plists = default_infoplists))
-    ]
+    # Default xcconfig is the one defined in `xcconfig`
+    default_xcconfig = xcconfig if xcconfig else {}
 
     # Collect a set of config settings to iterate over
-    config_setting_names = sets.make(infoplists_by_build_setting.keys() + xcconfig_by_build_setting.keys())
+    merged_xcconfigs = {}
+    for config_setting_name in xcconfig_by_build_setting.keys():
+        xccconfig_for_build_setting = xcconfig_by_build_setting.get(config_setting_name, {})
+        merged_xcconfigs[config_setting_name]  = merge_xcconfigs(default_xcconfig, xccconfig_for_build_setting)
+
+    # If someone hasn't specified "//conditions:default" - inject it there as upstream callers will `select` on this
+    if len(infoplists_by_build_setting.keys()) == 0:
+        infoplists_by_build_setting["//conditions:default"] = default_infoplists
 
     # Substitute the infoplists_by_build_setting
-    for config_setting_name in sets.to_list(config_setting_names):
+    for config_setting_name in infoplists_by_build_setting.keys():
         name_suffix = build_setting_name(config_setting_name)
         infoplists_for_build_setting = infoplists_by_build_setting.get(config_setting_name, default_infoplists)
-        xccconfig_for_build_setting = xcconfig_by_build_setting.get(config_setting_name, {})
-        xcconfig_for_plist = merge_xcconfigs(default_xcconfig, xccconfig_for_build_setting)
 
         # Substitute the build settings into the plists for this config_setting
         substituted_infoplists_by_build_setting[config_setting_name] = [
             substituted_plist(
                 name = "_%s.%s.%s.info" % (name, name_suffix, idx),
                 plist = plist,
-                xcconfig = xcconfig_for_plist,
+                xcconfig = select(merged_xcconfigs) if len(merged_xcconfigs.keys()) > 0 else None
             )
             for idx, plist in enumerate(write_info_plists_if_needed(name = "%s.%s" % (name, name_suffix), plists = infoplists_for_build_setting))
         ]
@@ -132,17 +127,10 @@ def _substitute_plist_vars(name, plist, xcconfig):
     Returns:
         The name of the substituted plist
     """
-
-    variables = {k: v for (k, v) in xcconfig.items() if types.is_string(v)}
-
-    if len(variables) == 0:
-        return None
-
     substitute_build_settings(
         name = name,
         source = plist,
-        variables = variables,
+        variables = xcconfig,
         tags = ["manual"],
     )
-
     return name
