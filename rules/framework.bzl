@@ -731,6 +731,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
     )
 
     binary_artifact = link_result.binary
+    #print(binary_artifact)
     debug_outputs = linking_support.debug_outputs_by_architecture(link_result.outputs)
 
     archive_for_embedding = outputs.archive_for_embedding(

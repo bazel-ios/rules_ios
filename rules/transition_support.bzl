@@ -257,7 +257,8 @@ def _command_line_options(
         force_bundle_outputs = False,
         minimum_os_version,
         platform_type,
-        settings):
+        settings,
+        is_split = False):
     """Generates a dictionary of command line options suitable for the current target.
 
     Args:
@@ -293,8 +294,8 @@ def _command_line_options(
     )
 
     default_platforms = [settings[_CPU_TO_DEFAULT_PLATFORM_FLAG[cpu]]] if _is_bazel_7 else []
-    return {
-        build_settings_labels.use_tree_artifacts_outputs: force_bundle_outputs if force_bundle_outputs else settings[build_settings_labels.use_tree_artifacts_outputs],
+    foo =  {
+        build_settings_labels.use_tree_artifacts_outputs: force_bundle_outputs if force_bundle_outputs else settings[build_settings_labels.use_tree_artifacts_outputs],        
         "//command_line_option:apple configuration distinguisher": "applebin_" + platform_type,
         "//command_line_option:apple_platform_type": platform_type,
         "//command_line_option:apple_platforms": apple_platforms,
@@ -333,6 +334,11 @@ def _command_line_options(
         "@build_bazel_rules_swift//swift:emit_swiftinterface": emit_swiftinterface,
     }
 
+    if is_split:
+        foo["//command_line_option:ios_multi_cpus"] = environment_arch if environment_arch else ""
+        foo["//command_line_option:platforms"] = [apple_platforms[0]] if apple_platforms else (default_platforms if default_platforms else ["@build_bazel_apple_support//platforms:%s" % cpu])
+    return foo
+
 def _apple_rule_base_transition_impl(settings, attr):
     """Rule transition for Apple rules using Bazel CPUs and a valid Apple split transition."""
 
@@ -347,6 +353,7 @@ def _apple_rule_base_transition_impl(settings, attr):
         minimum_os_version = minimum_os_version,
         platform_type = platform_type,
         settings = settings,
+        is_split = True,
     )
 
 # These flags are a mix of options defined in native Bazel from the following fragments:
@@ -392,10 +399,32 @@ _apple_rule_base_transition_outputs = [
     "@build_bazel_rules_swift//swift:emit_swiftinterface",
 ]
 
+_apple_rule_base_transition_outputs_2 = [
+    build_settings_labels.use_tree_artifacts_outputs,
+    "//command_line_option:apple configuration distinguisher",
+    "//command_line_option:apple_platform_type",
+    "//command_line_option:apple_platforms",
+    "//command_line_option:apple_split_cpu",
+    "//command_line_option:compiler",
+    "//command_line_option:cpu",
+    "//command_line_option:crosstool_top",
+    "//command_line_option:fission",
+    "//command_line_option:grte_top",
+    "//command_line_option:ios_multi_cpus",
+    "//command_line_option:ios_minimum_os",
+    "//command_line_option:macos_minimum_os",
+    "//command_line_option:minimum_os_version",
+    "//command_line_option:platforms",
+    "//command_line_option:tvos_minimum_os",
+    "//command_line_option:watchos_minimum_os",
+    "@build_bazel_rules_swift//swift:emit_swiftinterface",
+]
+
 _apple_rule_base_transition = transition(
     implementation = _apple_rule_base_transition_impl,
     inputs = _apple_rule_base_transition_inputs,
-    outputs = _apple_rule_base_transition_outputs,
+    #outputs = _apple_rule_base_transition_outputs,
+    outputs = _apple_rule_base_transition_outputs_2,
 )
 
 def _apple_platform_split_transition_impl(settings, attr):
@@ -437,6 +466,7 @@ def _apple_platform_split_transition_impl(settings, attr):
                     minimum_os_version = minimum_os_version,
                     platform_type = platform_type,
                     settings = settings,
+                    is_split = True,
                 )
 
     else:
@@ -485,6 +515,7 @@ def _apple_platform_split_transition_impl(settings, attr):
                 minimum_os_version = minimum_os_version,
                 platform_type = platform_type,
                 settings = settings,
+                is_split = True,
             )
 
     if not bool(output_dictionary):
@@ -503,12 +534,16 @@ def _apple_platform_split_transition_impl(settings, attr):
             )
         fail(error_msg)
 
+    #if attr.name == "ReaderSDK2":
+    #    print(output_dictionary)
+
     return output_dictionary
 
 _apple_platform_split_transition = transition(
     implementation = _apple_platform_split_transition_impl,
     inputs = _apple_platform_transition_inputs,
-    outputs = _apple_rule_base_transition_outputs,
+    outputs = _apple_rule_base_transition_outputs_2,
+    #outputs = _apple_rule_base_transition_outputs,
 )
 
 transition_support = struct(
