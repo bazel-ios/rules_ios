@@ -26,7 +26,4 @@ feature_names = struct(
 
     # When set disable passing the `-import-underlying-module` copt to `swift_library` targets
     swift_disable_import_underlying_module = "swift.swift_disable_import_underlying_module",
-
-    # Allow consumers to opt-in to https://github.com/bazelbuild/rules_swift/pull/1162
-    swift_always_include_developer_search_paths = "swift.always_include_developer_search_paths",
 )

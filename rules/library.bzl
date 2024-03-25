@@ -579,6 +579,7 @@ def apple_library(
     testonly = kwargs.pop("testonly", False)
     features = kwargs.pop("features", [])
     plugins = kwargs.pop("plugins", None)
+    swift_always_include_developer_search_paths = kwargs.pop("swift_always_include_developer_search_paths", None)
 
     for (k, v) in {"momc_copts": momc_copts, "mapc_copts": mapc_copts, "ibtool_copts": ibtool_copts}.items():
         if v:
@@ -959,6 +960,8 @@ def apple_library(
     if swift_sources:
         # To be backward compatible with rules_apple 2.x
         swift_kwargs = dicts.add(kwargs, {"plugins": plugins} if plugins else {})
+        # Allow consumers to opt-in to https://github.com/bazelbuild/rules_swift/pull/1162
+        swift_kwargs = dicts.add(swift_kwargs, {"always_include_developer_search_paths": swift_always_include_developer_search_paths} if swift_always_include_developer_search_paths else {})
 
         swift_library(
             name = swift_libname,
@@ -985,10 +988,6 @@ def apple_library(
             tags = tags_manual,
             defines = defines + swift_defines,
             testonly = testonly,
-            always_include_developer_search_paths = select({
-                "@build_bazel_rules_ios//:swift_always_include_developer_search_paths": True,
-                "//conditions:default": False,
-            }),
             **swift_kwargs
         )
         lib_names.append(swift_libname)
