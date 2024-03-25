@@ -958,9 +958,11 @@ def apple_library(
     )
 
     if swift_sources:
+        swift_kwargs = kwargs
+
         # To be backward compatible with rules_apple 2.x
         if plugins:
-            swift_kwargs = dicts.add(kwargs, {"plugins": plugins})
+            swift_kwargs = dicts.add(swift_kwargs, {"plugins": plugins})
 
         # Allow consumers to opt-in to https://github.com/bazelbuild/rules_swift/pull/1162
         if always_include_developer_search_paths:
