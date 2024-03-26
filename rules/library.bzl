@@ -27,6 +27,12 @@ GLOBAL_INDEX_STORE_PATH = "bazel-out/_global_index_store"
 
 _MANUAL = ["manual"]
 
+_SWIFT_LIBRARY_KWARGS = [
+    "always_include_developer_search_paths",
+    "package_name",
+    "plugins",
+]
+
 def _private_headers_impl(ctx):
     return [
         PrivateHeadersInfo(
@@ -578,8 +584,10 @@ def apple_library(
     defines = kwargs.pop("defines", [])
     testonly = kwargs.pop("testonly", False)
     features = kwargs.pop("features", [])
-    plugins = kwargs.pop("plugins", None)
-    always_include_developer_search_paths = kwargs.pop("always_include_developer_search_paths", None)
+
+    # Collect the swift_library related kwargs, these are typically only set when provided to allow
+    # for wider compatibility with rule_swift versions.
+    swift_kwargs = {arg: kwargs.pop(arg) for arg in _SWIFT_LIBRARY_KWARGS if arg in kwargs}
 
     for (k, v) in {"momc_copts": momc_copts, "mapc_copts": mapc_copts, "ibtool_copts": ibtool_copts}.items():
         if v:
@@ -958,16 +966,8 @@ def apple_library(
     )
 
     if swift_sources:
-        swift_kwargs = kwargs
-
-        # To be backward compatible with rules_apple 2.x
-        if plugins:
-            swift_kwargs = dicts.add(swift_kwargs, {"plugins": plugins})
-
-        # Allow consumers to opt-in to https://github.com/bazelbuild/rules_swift/pull/1162
-        if always_include_developer_search_paths:
-            swift_kwargs = dicts.add(swift_kwargs, {"always_include_developer_search_paths": always_include_developer_search_paths})
-
+        # Forward the kwargs and the swift specific kwargs to the swift_library
+        swift_library_kwargs = dicts.add(kwargs, swift_kwargs)
         swift_library(
             name = swift_libname,
             module_name = module_name,
@@ -993,7 +993,7 @@ def apple_library(
             tags = tags_manual,
             defines = defines + swift_defines,
             testonly = testonly,
-            **swift_kwargs
+            **swift_library_kwargs
         )
         lib_names.append(swift_libname)
 
