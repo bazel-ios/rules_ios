@@ -91,3 +91,6 @@ test:ci --flaky_test_attempts=3
 
 # Load a user.bazelrc
 try-import %workspace%/user.bazelrc
+
+# Repros `failed to find TestImports-Unit-Tests.xctest` issue
+build --define=apple.experimental.tree_artifact_outputs=1

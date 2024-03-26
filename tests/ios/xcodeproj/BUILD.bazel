@@ -62,7 +62,6 @@ xcodeproj(
         ],
     },
     bazel_path = "bazelisk",
-    generate_schemes_for_product_types = ["application"],
     include_transitive_targets = False,
     provide_build_settings_from_target_for_pre_post_actions = True,
     deps = [
