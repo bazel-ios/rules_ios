@@ -18,8 +18,9 @@ jobs:
     name: Build and test (Bazel ${{ matrix.bazel_version }} / Xcode ${{ matrix.xcode_version }} / Virtual Frameworks ${{ matrix.virtual_frameworks }})
     runs-on: macos-14
     strategy:
+      fail-fast: false
       matrix:
-        bazel_version: [6.5.0]
+        bazel_version: [6.5.0, 7.1.0]
         xcode_version: [15.2]
         virtual_frameworks: [true, false]
     env:
@@ -63,8 +64,9 @@ jobs:
     name: arm64 Simulator (Bazel ${{ matrix.bazel_version }} / Xcode ${{ matrix.xcode_version }})
     runs-on: macos-14
     strategy:
+      fail-fast: false
       matrix:
-        bazel_version: [6.5.0]
+        bazel_version: [6.5.0, 7.1.0]
         xcode_version: [15.2]
     env:
         XCODE_VERSION: ${{ matrix.xcode_version }}
@@ -103,8 +105,9 @@ jobs:
     name: Buildifier and Documentation (Bazel ${{ matrix.bazel_version }} / Xcode ${{ matrix.xcode_version }})
     runs-on: macos-14
     strategy:
+      fail-fast: false
       matrix:
-        bazel_version: [6.5.0]
+        bazel_version: [7.1.0] # Only run on latest Bazel version as stardoc changes between versions and produces different results
         xcode_version: [15.2]
     env:
         XCODE_VERSION: ${{ matrix.xcode_version }}
@@ -133,8 +136,9 @@ jobs:
     name: Legacy xcodeproj tests (Bazel ${{ matrix.bazel_version }} / Xcode ${{ matrix.xcode_version }})
     runs-on: macos-14
     strategy:
+      fail-fast: false
       matrix:
-        bazel_version: [6.5.0]
+        bazel_version: [6.5.0]  # Only test on a single Bazel version as fixtures require updates across Bazel verisons
         xcode_version: [15.2]
     env:
         XCODE_VERSION: ${{ matrix.xcode_version }}
@@ -155,8 +159,9 @@ jobs:
     name: LLDB tests (Bazel ${{ matrix.bazel_version }} / Xcode ${{ matrix.xcode_version }})
     runs-on: macos-14
     strategy:
+      fail-fast: false
       matrix:
-        bazel_version: [6.5.0]
+        bazel_version: [6.5.0, 7.1.0]
         xcode_version: [15.2]
     env:
         XCODE_VERSION: ${{ matrix.xcode_version }}
@@ -184,8 +189,9 @@ jobs:
     name: iOS App Multiple Architectures (Bazel ${{ matrix.bazel_version }} / Xcode ${{ matrix.xcode_version }})
     runs-on: macos-14
     strategy:
+      fail-fast: false
       matrix:
-        bazel_version: [6.5.0]
+        bazel_version: [6.5.0, 7.1.0]
         xcode_version: [15.2]
     env:
         XCODE_VERSION: ${{ matrix.xcode_version }}

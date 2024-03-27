@@ -145,8 +145,8 @@ Builds and packages iOS UI Tests.
 | Name  | Description | Default Value |
 | :------------- | :------------- | :------------- |
 | <a id="ios_ui_test-name"></a>name |  The name of the UI test.   |  none |
-| <a id="ios_ui_test-apple_library"></a>apple_library |  The macro used to package sources into a library.   |  `<function apple_library>` |
-| <a id="ios_ui_test-test_factory"></a>test_factory |  Use this to generate other variations of tests.   |  `struct(make_named_split = <function _make_named_split>, make_runner_split = <function _make_runner_split>, make_test = <function _make_test>, make_test_suite = <function _make_test_suite>, make_test_suite_splits = <function _make_test_suite_splits>, make_tests = <function _make_tests>)` |
+| <a id="ios_ui_test-apple_library"></a>apple_library |  The macro used to package sources into a library.   |  `<function apple_library from //rules:library.bzl>` |
+| <a id="ios_ui_test-test_factory"></a>test_factory |  Use this to generate other variations of tests.   |  `struct(make_named_split = <function _make_named_split from //rules:test.bzl>, make_runner_split = <function _make_runner_split from //rules:test.bzl>, make_test = <function _make_test from //rules:test.bzl>, make_test_suite = <function _make_test_suite from //rules:test.bzl>, make_test_suite_splits = <function _make_test_suite_splits from //rules:test.bzl>, make_tests = <function _make_tests from //rules:test.bzl>)` |
 | <a id="ios_ui_test-kwargs"></a>kwargs |  Arguments passed to the apple_library and ios_ui_test rules as appropriate.   |  none |
 
 
@@ -166,8 +166,8 @@ Builds and packages iOS Unit Snapshot Tests.
 | Name  | Description | Default Value |
 | :------------- | :------------- | :------------- |
 | <a id="ios_unit_snapshot_test-name"></a>name |  The name of the UI test.   |  none |
-| <a id="ios_unit_snapshot_test-apple_library"></a>apple_library |  The macro used to package sources into a library.   |  `<function apple_library>` |
-| <a id="ios_unit_snapshot_test-test_factory"></a>test_factory |  Use this to generate other variations of tests.   |  `struct(make_named_split = <function _make_named_split>, make_runner_split = <function _make_runner_split>, make_test = <function _make_test>, make_test_suite = <function _make_test_suite>, make_test_suite_splits = <function _make_test_suite_splits>, make_tests = <function _make_tests>)` |
+| <a id="ios_unit_snapshot_test-apple_library"></a>apple_library |  The macro used to package sources into a library.   |  `<function apple_library from //rules:library.bzl>` |
+| <a id="ios_unit_snapshot_test-test_factory"></a>test_factory |  Use this to generate other variations of tests.   |  `struct(make_named_split = <function _make_named_split from //rules:test.bzl>, make_runner_split = <function _make_runner_split from //rules:test.bzl>, make_test = <function _make_test from //rules:test.bzl>, make_test_suite = <function _make_test_suite from //rules:test.bzl>, make_test_suite_splits = <function _make_test_suite_splits from //rules:test.bzl>, make_tests = <function _make_tests from //rules:test.bzl>)` |
 | <a id="ios_unit_snapshot_test-kwargs"></a>kwargs |  Arguments passed to the apple_library and ios_unit_test rules as appropriate.   |  none |
 
 
@@ -187,8 +187,8 @@ Builds and packages iOS Unit Tests.
 | Name  | Description | Default Value |
 | :------------- | :------------- | :------------- |
 | <a id="ios_unit_test-name"></a>name |  The name of the unit test.   |  none |
-| <a id="ios_unit_test-apple_library"></a>apple_library |  The macro used to package sources into a library.   |  `<function apple_library>` |
-| <a id="ios_unit_test-test_factory"></a>test_factory |  Use this to generate other variations of tests.   |  `struct(make_named_split = <function _make_named_split>, make_runner_split = <function _make_runner_split>, make_test = <function _make_test>, make_test_suite = <function _make_test_suite>, make_test_suite_splits = <function _make_test_suite_splits>, make_tests = <function _make_tests>)` |
+| <a id="ios_unit_test-apple_library"></a>apple_library |  The macro used to package sources into a library.   |  `<function apple_library from //rules:library.bzl>` |
+| <a id="ios_unit_test-test_factory"></a>test_factory |  Use this to generate other variations of tests.   |  `struct(make_named_split = <function _make_named_split from //rules:test.bzl>, make_runner_split = <function _make_runner_split from //rules:test.bzl>, make_test = <function _make_test from //rules:test.bzl>, make_test_suite = <function _make_test_suite from //rules:test.bzl>, make_test_suite_splits = <function _make_test_suite_splits from //rules:test.bzl>, make_tests = <function _make_tests from //rules:test.bzl>)` |
 | <a id="ios_unit_test-kwargs"></a>kwargs |  Arguments passed to the apple_library and ios_unit_test rules as appropriate.   |  none |
 
 
