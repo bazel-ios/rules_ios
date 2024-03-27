@@ -52,6 +52,7 @@ def _merge_dynamic_framework_providers(dynamic_framework_providers):
         _add_to_dict_if_present(fields, key, set)
 
     fields["objc"] = apple_common.new_objc_provider()
+    fields["cc_info"] = CcInfo()
 
     return apple_common.new_dynamic_framework_provider(**fields)
 
