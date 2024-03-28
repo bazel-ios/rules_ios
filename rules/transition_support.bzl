@@ -292,6 +292,12 @@ def _command_line_options(
         settings = settings,
     )
 
+    # PATCH: start - rules_ios sets ios_multi_cpus
+    # Transition ios_multi_cpus to to a single cpu when building for iOS.
+    # Rules using this transition (e.g., apple_framework_packaging, precompiled_apple_resource_bundle) don't need any artifacts from other archs.
+    ios_multi_cpus = cpu[4:] if platform_type == "ios" else settings["//command_line_option:ios_multi_cpus"]
+    # PATCH: end
+
     default_platforms = [settings[_CPU_TO_DEFAULT_PLATFORM_FLAG[cpu]]] if _is_bazel_7 else []
     return {
         build_settings_labels.use_tree_artifacts_outputs: force_bundle_outputs if force_bundle_outputs else settings[build_settings_labels.use_tree_artifacts_outputs],
@@ -314,6 +320,9 @@ def _command_line_options(
             platform = "ios",
             platform_type = platform_type,
         ),
+        # PATCH: start - rules_ios sets ios_multi_cpus
+        "//command_line_option:ios_multi_cpus": ios_multi_cpus,
+        # PATCH: end
         "//command_line_option:macos_minimum_os": _min_os_version_or_none(
             minimum_os_version = minimum_os_version,
             platform = "macos",
@@ -384,6 +393,9 @@ _apple_rule_base_transition_outputs = [
     "//command_line_option:fission",
     "//command_line_option:grte_top",
     "//command_line_option:ios_minimum_os",
+    # PATCH: start - rules_ios sets ios_multi_cpus
+    "//command_line_option:ios_multi_cpus",
+    # PATCH: end
     "//command_line_option:macos_minimum_os",
     "//command_line_option:minimum_os_version",
     "//command_line_option:platforms",
