@@ -298,7 +298,7 @@ def _command_line_options(
     ios_multi_cpus = cpu[4:] if platform_type == "ios" else settings["//command_line_option:ios_multi_cpus"]
     # PATCH: end
 
-    default_platforms = [settings[_CPU_TO_DEFAULT_PLATFORM_FLAG[cpu]]] if _is_bazel_7 else []
+    default_platforms = [settings[_CPU_TO_DEFAULT_PLATFORM_FLAG[cpu]]]
     return {
         build_settings_labels.use_tree_artifacts_outputs: force_bundle_outputs if force_bundle_outputs else settings[build_settings_labels.use_tree_artifacts_outputs],
         "//command_line_option:apple configuration distinguisher": "applebin_" + platform_type,
