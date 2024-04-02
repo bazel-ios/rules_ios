@@ -41,16 +41,9 @@ jobs:
             //... \
             -//tests/ios/...
 
-          # Clean up after simctl (https://github.com/bazelbuild/rules_apple/issues/185)
-          pgrep Simulator | xargs kill || true
-
-          # Create single ephemeral iOS sim
-          SIMULATOR_UDID=$(python3 tools/tests/prepare_sim.py)
-
           # iOS tests
           bazelisk test \
             --config=ios \
-            --test_arg=--destination=platform=ios_simulator,id=$SIMULATOR_UDID \
             -- \
             //tests/ios/...
       - uses: actions/upload-artifact@v4
