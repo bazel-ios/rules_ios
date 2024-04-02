@@ -84,8 +84,8 @@ build:ci --verbose_failures
 # ci setup for tests, tend to be more flaky on github actions
 build:ci --jobs=4
 # allow extra time for simulators to boot
-test:ci --test_env=STARTUP_TIMEOUT_SEC=300
-test:ci --test_timeout=600
+test:ci --test_env=STARTUP_TIMEOUT_SEC=350
+test:ci --test_timeout=1000
 test:ci --local_test_jobs=1
 test:ci --flaky_test_attempts=3
 
