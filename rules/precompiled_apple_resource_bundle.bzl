@@ -34,19 +34,6 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
     platform_type = str(current_apple_platform.platform.platform_type)
 
-    if apple_api_version == "3.0":
-        platform_prerequisites_version_args = {
-            "build_settings": None,
-        }
-        rules_api_3_resource_partials_args = {
-            "include_executable_name": False,  # Must be set to False or bundle_name is now used if executable_name is None
-        }
-    else:
-        platform_prerequisites_version_args = {
-            "disabled_features": ctx.disabled_features,
-        }
-        rules_api_3_resource_partials_args = {}
-
     platform_prerequisites = platform_support.platform_prerequisites(
         apple_fragment = ctx.fragments.apple,
         config_vars = ctx.var,
