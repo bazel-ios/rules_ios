@@ -113,7 +113,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         output_pkginfo = None,
         output_plist = output_plist,
         output_discriminator = "bundle",
-        resolved_plisttool = apple_mac_toolchain_info.resolved_plisttool,
+        plisttool = apple_mac_toolchain_info.plisttool,
         **partials_args
     )
 
@@ -180,19 +180,16 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         output = bundletool_instructions_file,
         content = bundletool_instructions.to_json(),
     )
-    resolved_bundletool_experimental = apple_mac_toolchain_info.resolved_bundletool_experimental
+    bundletool_experimental = apple_mac_toolchain_info.bundletool_experimental
 
     apple_support.run(
         actions = ctx.actions,
         apple_fragment = platform_prerequisites.apple_fragment,
-        executable = resolved_bundletool_experimental.executable,
+        executable = bundletool_experimental,
         execution_requirements = {},
-        inputs = depset(resolved_bundletool_experimental.inputs.to_list() + input_files + [bundletool_instructions_file], transitive = [
-            resolved_bundletool_experimental.inputs,
-        ]),
-        input_manifests = resolved_bundletool_experimental.input_manifests,
+        inputs = depset(input_files + [bundletool_instructions_file]),
         mnemonic = "BundleResources",
-        tools = [apple_mac_toolchain_info.resolved_bundletool_experimental.executable],
+        tools = [apple_mac_toolchain_info.bundletool_experimental.executable],
         xcode_config = platform_prerequisites.xcode_version_config,
         arguments = [bundletool_instructions_file.path],
         outputs = [output_bundle_dir],
