@@ -34,23 +34,6 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
     platform_type = str(current_apple_platform.platform.platform_type)
 
-    # The label of this fake_ctx is used as the swift module associated with storyboards, nibs, xibs
-    # and CoreData models.
-    # * For storyboards, nibs and xibs: https://github.com/bazelbuild/rules_apple/blob/master/apple/internal/partials/support/resources_support.bzl#L446
-    # * For CoreData models: https://github.com/bazelbuild/rules_apple/blob/master/apple/internal/partials/support/resources_support.bzl#L57
-    #
-    # Such swift module is required in the following cases:
-    # 1- When the storyboard, nib or xib contains the value <customModuleProvider="target">.
-    # 2- When the CoreData model sets "Current Product Module" for its Module property.
-    # If none of above scenarios, the swift module is not important and could be any arbitrary string.
-    # For the full context see https://github.com/bazel-ios/rules_ios/issues/113
-    #
-    # Usage:
-    # The most common scenario happens when the bundle name is the same as the corresponding swift module.
-    # If that is not the case, it is possible to customize the swift module by explicitly
-    # passing a swift_module attr
-    fake_rule_label = Label("//fake_package:" + (ctx.attr.swift_module or bundle_name))
-
     platform_prerequisites = platform_support.platform_prerequisites(
         apple_fragment = ctx.fragments.apple,
         config_vars = ctx.var,
@@ -78,7 +61,8 @@ def _precompiled_apple_resource_bundle_impl(ctx):
             binary_infoplist = None,
             product_type = _FAKE_BUNDLE_PRODUCT_TYPE_BY_PLATFORM_TYPE.get(platform_type, ctx.attr._product_type),
         ),
-        rule_label = fake_rule_label,
+        rule_label = ctx.label,
+        swift_module = ctx.attr.swift_module or bundle_name,
         version = None,
         include_executable_name = False,
     )
@@ -107,6 +91,8 @@ def _precompiled_apple_resource_bundle_impl(ctx):
         paths.join("%s-intermediates" % ctx.label.name, "Info.plist"),
     )
 
+    # No need to pass swift_module to merge_root_infoplists
+    partials_args.pop("swift_module")
     resource_actions.merge_root_infoplists(
         bundle_id = ctx.attr.bundle_id or bundle_identifier_for_bundle(bundle_name),
         input_plists = ctx.files.infoplists,
