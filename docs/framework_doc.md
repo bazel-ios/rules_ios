@@ -61,7 +61,7 @@ Builds and packages an Apple framework.
 | Name  | Description | Default Value |
 | :------------- | :------------- | :------------- |
 | <a id="apple_framework-name"></a>name |  The name of the framework.   |  none |
-| <a id="apple_framework-apple_library"></a>apple_library |  The macro used to package sources into a library.   |  `<function apple_library>` |
+| <a id="apple_framework-apple_library"></a>apple_library |  The macro used to package sources into a library.   |  `<function apple_library from //rules:library.bzl>` |
 | <a id="apple_framework-infoplists"></a>infoplists |  A list of Info.plist files to be merged into the framework.   |  `[]` |
 | <a id="apple_framework-infoplists_by_build_setting"></a>infoplists_by_build_setting |  A dictionary of infoplists grouped by bazel build setting.<br><br>Each value is applied if the respective bazel build setting is resolved during the analysis phase.<br><br>If '//conditions:default' is not set the value in 'infoplists' is set as default.   |  `{}` |
 | <a id="apple_framework-xcconfig"></a>xcconfig |  A dictionary of xcconfigs to be applied to the framework by default.   |  `{}` |

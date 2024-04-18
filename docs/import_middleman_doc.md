@@ -42,7 +42,7 @@ can be updated to work without the other behavior
 | <a id="import_middleman-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
 | <a id="import_middleman-deps"></a>deps |  -   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
 | <a id="import_middleman-test_deps"></a>test_deps |  -   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
-| <a id="import_middleman-update_in_place"></a>update_in_place |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `//tools/m1_utils:update_in_place`  |
+| <a id="import_middleman-update_in_place"></a>update_in_place |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `"@rules_ios//tools/m1_utils:update_in_place"`  |
 
 
 <a id="find_imports"></a>
