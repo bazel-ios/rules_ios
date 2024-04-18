@@ -1,5 +1,4 @@
 load("@build_bazel_rules_apple//apple/internal:providers.bzl", "AppleFrameworkImportInfo", "new_appleframeworkimportinfo")
-load("//rules:features.bzl", "feature_names")
 load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
 load("@build_bazel_rules_apple//apple/internal:bundling_support.bzl", "bundling_support")
 
@@ -174,7 +173,6 @@ def _file_collector_rule_impl(ctx):
         # This should be correctly configured upstream: see setup in rules_ios
         fail("using import_middleman ({}) on wrong transition ({},{},is_device={})".format(ctx.attr.name, platform, arch, ctx.fragments.apple.single_arch_platform.is_device))
 
-    virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
     merge_keys = [
         "sdk_dylib",
         "sdk_framework",
@@ -184,17 +182,13 @@ def _file_collector_rule_impl(ctx):
         "link_inputs",
         "linkopt",
         "library",
-    ] + ([] if is_sim_arm64 else [
-        # Merge in the objc provider fields
-        "imported_library",
-        "dynamic_framework_file",
-        "static_framework_file",
-    ])
+    ]
 
     objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(
         providers = [dep[apple_common.Objc] for dep in ctx.attr.deps],
         merge_keys = merge_keys,
     )
+
     exisiting_imported_libraries = objc_provider_fields.get("imported_library", depset([]))
     replaced_imported_libraries = _replace_inputs(ctx, exisiting_imported_libraries, input_imported_libraries, _update_lib).inputs
     objc_provider_fields["imported_library"] = depset(_deduplicate_test_deps(test_linker_deps[1], replaced_imported_libraries))
@@ -260,15 +254,15 @@ def _file_collector_rule_impl(ctx):
         **objc_provider_fields
     )
 
-    additional_providers = []
+    # Create the CcInfo provider, linking information from this is used in Bazel 7+.
     dep_cc_infos = [dep[CcInfo] for dep in ctx.attr.deps if CcInfo in dep]
-    cc_info = cc_common.merge_cc_infos(direct_cc_infos = [], cc_infos = dep_cc_infos)
-    additional_providers.append(cc_info)
+    cc_info = cc_common.merge_cc_infos(cc_infos = dep_cc_infos)
 
     return [
         DefaultInfo(files = depset(dynamic_framework_dirs + replaced_frameworks)),
         objc,
-    ] + _make_imports(dynamic_framework_dirs) + additional_providers
+        cc_info,
+    ] + _make_imports(dynamic_framework_dirs)
 
 import_middleman = rule(
     implementation = _file_collector_rule_impl,

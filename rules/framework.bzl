@@ -6,6 +6,7 @@ load("//rules:library.bzl", "PrivateHeadersInfo", "apple_library")
 load("//rules:plists.bzl", "process_infoplists")
 load("//rules:providers.bzl", "AvoidDepsInfo", "FrameworkInfo")
 load("//rules:transition_support.bzl", "transition_support")
+load("//rules:utils.bzl", "is_bazel_7")
 load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@bazel_skylib//lib:paths.bzl", "paths")
@@ -534,6 +535,18 @@ def _get_symlinked_framework_clean_action(ctx, framework_files, compilation_cont
     else:
         ctx.actions.write(framework_manifest, "# Empty framework\n")
 
+def _get_cc_info_linker_inputs(*, deps):
+    linker_inputs = []
+
+    for dep in deps:
+        if not CcInfo in dep:
+            continue
+
+        for linker_input in dep[CcInfo].linking_context.linker_inputs.to_list():
+            linker_inputs.append(linker_input)
+
+    return depset(linker_inputs)
+
 def _create_swiftmodule(attrs):
     kwargs = {}
 
@@ -986,7 +999,9 @@ def _apple_framework_packaging_impl(ctx):
 
     split_slice_key = "{}_{}{}".format(platform, split_slice_varint, arch)
     deps = _attrs_for_split_slice(ctx.split_attr.deps, split_slice_key)
+    dep_cc_infos = [dep[CcInfo] for dep in deps if CcInfo in dep]
     transitive_deps = _attrs_for_split_slice(ctx.split_attr.transitive_deps, split_slice_key)
+    transitive_dep_cc_infos = [dep[CcInfo] for dep in transitive_deps if CcInfo in dep]
     vfs = _attrs_for_split_slice(ctx.split_attr.vfs, split_slice_key)
 
     current_apple_platform = transition_support.current_apple_platform(apple_fragment = ctx.fragments.apple, xcode_config = ctx.attr._xcode_config)
@@ -1004,15 +1019,15 @@ def _apple_framework_packaging_impl(ctx):
     ))
     objc_provider_utils.add_to_dict_if_present(compilation_context_fields, "defines", depset(
         direct = [],
-        transitive = [getattr(dep[CcInfo].compilation_context, "defines") for dep in deps if CcInfo in dep],
+        transitive = [getattr(cc_info.compilation_context, "defines") for cc_info in dep_cc_infos],
     ))
     objc_provider_utils.add_to_dict_if_present(compilation_context_fields, "includes", depset(
         direct = [],
-        transitive = [getattr(dep[CcInfo].compilation_context, "includes") for dep in deps if CcInfo in dep],
+        transitive = [getattr(cc_info.compilation_context, "includes") for cc_info in dep_cc_infos],
     ))
     objc_provider_utils.add_to_dict_if_present(compilation_context_fields, "framework_includes", depset(
         direct = [],
-        transitive = [getattr(dep[CcInfo].compilation_context, "framework_includes") for dep in deps if CcInfo in dep],
+        transitive = [getattr(cc_info.compilation_context, "framework_includes") for cc_info in dep_cc_infos],
     ))
 
     # Compute cc_info and swift_info
@@ -1031,17 +1046,23 @@ def _apple_framework_packaging_impl(ctx):
         # If not virtualizing the framework - then it runs a "clean"
         _get_symlinked_framework_clean_action(ctx, framework_files, compilation_context_fields)
 
+    # Construct the `CcInfo` provider, the linking context here used instead of ObjcProvider in Bazel 7+.
     cc_info_provider = CcInfo(
         compilation_context = cc_common.create_compilation_context(
             **compilation_context_fields
+        ),
+        linking_context = cc_common.create_linking_context(
+            linker_inputs = _get_cc_info_linker_inputs(deps = deps) if is_bazel_7 else depset([]),
         ),
     )
 
     if virtualize_frameworks:
         cc_info = cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider])
     else:
-        dep_cc_infos = [dep[CcInfo] for dep in transitive_deps if CcInfo in dep]
-        cc_info = cc_common.merge_cc_infos(direct_cc_infos = [cc_info_provider], cc_infos = dep_cc_infos)
+        cc_info = cc_common.merge_cc_infos(
+            direct_cc_infos = [cc_info_provider],
+            cc_infos = transitive_dep_cc_infos,
+        )
 
     # Propagate the avoid deps information upwards
     avoid_deps = []
@@ -1072,6 +1093,7 @@ def _apple_framework_packaging_impl(ctx):
         providers = [dep[apple_common.Objc] for dep in deps if apple_common.Objc in dep],
         transitive = [dep[apple_common.Objc] for dep in transitive_deps if apple_common.Objc in dep],
     )
+
     return [
         avoid_deps_info,
         framework_info,

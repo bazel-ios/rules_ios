@@ -1,4 +1,5 @@
 load("@bazel_skylib//lib:partial.bzl", "partial")
+load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain", "use_cpp_toolchain")
 load(
     "@build_bazel_rules_apple//apple/internal:providers.bzl",
     "AppleResourceInfo",
@@ -40,6 +41,14 @@ def _framework_middleman(ctx):
     dynamic_framework_providers = []
     apple_embeddable_infos = []
     cc_providers = []
+    cc_toolchain = find_cpp_toolchain(ctx)
+    cc_features = cc_common.configure_features(
+        ctx = ctx,
+        cc_toolchain = cc_toolchain,
+        language = "objc",
+        requested_features = ctx.features,
+        unsupported_features = ctx.disabled_features,
+    )
 
     def _process_dep(lib_dep):
         if AppleEmbeddableInfo in lib_dep:
@@ -72,13 +81,34 @@ def _framework_middleman(ctx):
         "dynamic_framework_file",
     ])
 
-    # Add the frameworks to the linker command
+    # Add the frameworks to the objc provider for Bazel <= 6
     dynamic_framework_provider = objc_provider_utils.merge_dynamic_framework_providers(dynamic_framework_providers)
     objc_provider_fields["dynamic_framework_file"] = depset(
         transitive = [dynamic_framework_provider.framework_files, objc_provider_fields.get("dynamic_framework_file", depset([]))],
     )
     objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
-    cc_info_provider = cc_common.merge_cc_infos(direct_cc_infos = [], cc_infos = cc_providers)
+
+    # Add the framework info to the cc info linking context for Bazel >= 7
+    framework_cc_info = CcInfo(
+        linking_context = cc_common.create_linking_context(
+            linker_inputs = depset([
+                cc_common.create_linker_input(
+                    owner = ctx.label,
+                    libraries = depset([
+                        cc_common.create_library_to_link(
+                            actions = ctx.actions,
+                            cc_toolchain = cc_toolchain,
+                            feature_configuration = cc_features,
+                            dynamic_library = dynamic_library,
+                        )
+                        for dynamic_library in dynamic_framework_provider.framework_files.to_list()
+                    ]),
+                ),
+            ]),
+        ),
+    )
+    cc_info_provider = cc_common.merge_cc_infos(direct_cc_infos = [framework_cc_info], cc_infos = cc_providers)
+
     providers = [
         dynamic_framework_provider,
         cc_info_provider,
@@ -120,6 +150,8 @@ def _framework_middleman(ctx):
 
 framework_middleman = rule(
     implementation = _framework_middleman,
+    toolchains = use_cpp_toolchain(),
+    fragments = ["cpp"],
     attrs = {
         "framework_deps": attr.label_list(
             cfg = transition_support.apple_platform_split_transition,
@@ -155,6 +187,14 @@ framework_middleman = rule(
         "_allowlist_function_transition": attr.label(
             default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
             doc = "Needed to allow this rule to have an incoming edge configuration transition.",
+        ),
+        "_cc_toolchain": attr.label(
+            providers = [cc_common.CcToolchainInfo],
+            default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
+            doc = """\
+The C++ toolchain from which linking flags and other tools needed by the Swift
+toolchain (such as `clang`) will be retrieved.
+""",
         ),
     },
     doc = """
@@ -194,6 +234,8 @@ def _dep_middleman(ctx):
     def _collect_providers(lib_dep):
         if apple_common.Objc in lib_dep:
             objc_providers.append(lib_dep[apple_common.Objc])
+        if CcInfo in lib_dep:
+            cc_providers.append(lib_dep[CcInfo])
 
     def _process_avoid_deps(avoid_dep_libs):
         for dep in avoid_dep_libs:
@@ -206,6 +248,11 @@ def _dep_middleman(ctx):
                     avoid_libraries[lib.basename] = True
                 for lib in dep[apple_common.Objc].static_framework_file.to_list():
                     avoid_libraries[lib.basename] = True
+            if CcInfo in dep:
+                for linker_input in dep[CcInfo].linking_context.linker_inputs.to_list():
+                    for library_to_link in linker_input.libraries:
+                        if library_to_link.static_library:
+                            avoid_libraries[library_to_link.static_library] = True
 
     for dep in ctx.attr.deps:
         _collect_providers(dep)
@@ -216,7 +263,7 @@ def _dep_middleman(ctx):
             for lib_dep in dep[AvoidDepsInfo].libraries:
                 _collect_providers(lib_dep)
 
-    # Merge the entire provider here
+    # Construct & merge the ObjcProvider, the linking information is only used in Bazel <= 6
     objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(providers = objc_providers, merge_keys = [
         "force_load_library",
         "imported_library",
@@ -249,12 +296,14 @@ def _dep_middleman(ctx):
         )
 
     objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
-    cc_info_provider = cc_common.merge_cc_infos(direct_cc_infos = [], cc_infos = cc_providers)
-    providers = [
+
+    # Construct the CcInfo provider, the linking information is used in Bazel >= 7.
+    cc_info_provider = cc_common.merge_cc_infos(cc_infos = cc_providers)
+
+    return [
         cc_info_provider,
         objc_provider,
     ]
-    return providers
 
 dep_middleman = rule(
     implementation = _dep_middleman,
