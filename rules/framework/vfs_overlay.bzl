@@ -387,7 +387,7 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules
     vfs_info = _make_vfs_info(framework_name, data)
     if merge_vfsoverlays:
         vfs_info = _merge_vfs_infos(vfs_info, merge_vfsoverlays)
-        roots = _roots_from_datas(vfs_prefix, target_triple, vfs_info.values() + [data])
+        roots = _roots_from_datas(vfs_prefix, target_triple, vfs_info.values())
     else:
         roots = _make_root(
             vfs_prefix = vfs_prefix,
