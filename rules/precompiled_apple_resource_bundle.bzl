@@ -164,7 +164,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     )
     ctx.actions.write(
         output = bundletool_instructions_file,
-        content = bundletool_instructions.to_json(),
+        content = json.encode(bundletool_instructions),
     )
     bundletool_experimental = apple_mac_toolchain_info.bundletool_experimental
 

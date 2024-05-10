@@ -81,7 +81,7 @@ def _ios_breakpoint_test_wrapper(name, application, cmds, test_spec, sdk, device
     write_file(
         name = name + "_test_spec",
         out = name + ".test_spec.json",
-        content = [test_spec.to_json()],
+        content = [json.encode(test_spec)],
     )
 
     lldbinit_deps = ["@build_bazel_rules_ios//rules/test/lldb:breakpoint.py"]
