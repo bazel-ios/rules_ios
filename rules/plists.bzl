@@ -110,7 +110,7 @@ def write_info_plists_if_needed(name, plists):
             write_file(
                 name = plist_name,
                 out = plist_name + ".plist",
-                content = [struct(**plist).to_json()],
+                content = [json.encode(struct(**plist))],
             )
             written_plists.append(plist_name)
         else:
