@@ -263,6 +263,27 @@ def _framework_vfs_overlay_impl(ctx):
     # Conditionally collect and pass in the VFS overlay here.
     virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
 
+    new_vfs_providers = []
+    new_vfs_info = None
+    if virtualize_frameworks and not feature_names.compile_with_xcode in ctx.features:
+        new_vfs_info = VFSInfo(
+            info = depset(
+                [
+                    vfs_info(
+                        ctx = ctx,
+                        swiftmodules = depset(ctx.files.swiftmodules),
+                        root_dir = ctx.attr.framework_name,
+                        extra_search_paths = ctx.attr.extra_search_paths,
+                        module_map = depset(ctx.files.modulemap),
+                        hdrs = depset(ctx.files.hdrs),
+                        private_hdrs = depset(ctx.files.private_hdrs),
+                    )
+                ],
+                transitive=[d[VFSInfo].info for d in ctx.attr.deps if VFSInfo in d]
+            ),
+        )
+        new_vfs_providers.append(new_vfs_info)
+
     if virtualize_frameworks and not feature_names.compile_with_xcode in ctx.features:
         for dep in ctx.attr.deps:
             if FrameworkInfo in dep:
@@ -270,17 +291,25 @@ def _framework_vfs_overlay_impl(ctx):
             if VFSOverlayInfo in dep:
                 vfsoverlays.append(dep[VFSOverlayInfo].vfs_info)
 
-    vfs = make_vfsoverlay(
-        ctx,
-        hdrs = ctx.files.hdrs,
-        module_map = ctx.files.modulemap,
-        private_hdrs = ctx.files.private_hdrs,
-        has_swift = ctx.attr.has_swift,
-        swiftmodules = ctx.files.swiftmodules,
-        merge_vfsoverlays = vfsoverlays,
-        output = ctx.outputs.vfsoverlay_file,
-        extra_search_paths = ctx.attr.extra_search_paths,
-    )
+    vfs = None
+    if virtualize_frameworks and not feature_names.compile_with_xcode in ctx.features:
+        vfs = make_vfsoverlay_2(
+            ctx = ctx,
+            info = new_vfs_info,
+            output = ctx.outputs.vfsoverlay_file,
+        )
+    else:
+        vfs = make_vfsoverlay(
+            ctx,
+            hdrs = ctx.files.hdrs,
+            module_map = ctx.files.modulemap,
+            private_hdrs = ctx.files.private_hdrs,
+            has_swift = ctx.attr.has_swift,
+            swiftmodules = ctx.files.swiftmodules,
+            merge_vfsoverlays = vfsoverlays,
+            output = ctx.outputs.vfsoverlay_file,
+            extra_search_paths = ctx.attr.extra_search_paths,
+        )
 
     headers = depset([vfs.vfsoverlay_file])
     cc_info = CcInfo(
@@ -289,29 +318,9 @@ def _framework_vfs_overlay_impl(ctx):
         ),
     )
 
-    new_vfs_providers = []
-    if virtualize_frameworks and not feature_names.compile_with_xcode in ctx.features:
-        new_vfs_providers.append(
-            VFSInfo(
-                info = depset(
-                    [
-                        vfs_info(
-                            ctx = ctx,
-                            swiftmodules = ctx.files.swiftmodules,
-                            root_dir = ctx.attr.framework_name,
-                            extra_search_paths = ctx.attr.extra_search_paths,
-                            module_map = ctx.files.modulemap,
-                            hdrs = ctx.files.hdrs,
-                            private_hdrs = ctx.files.private_hdrs,
-                        )
-                    ],
-                    transitive=[d[VFSInfo].info for d in ctx.attr.deps if VFSInfo in d]
-                ),
-            )
-        )
-    if ctx.attr.name == "App_vfs":
-        for p in new_vfs_providers:
-            print([r.root_dir for r in p.info.to_list()])
+    #if ctx.attr.name == "App_vfs":
+    #    for p in new_vfs_providers:
+    #        print([r.root_dir for r in p.info.to_list()])
     return new_vfs_providers + [
         apple_common.new_objc_provider(),
         cc_info,
@@ -385,6 +394,22 @@ def _roots_from_datas(vfs_prefix, target_triple, datas):
         )
     ]
 
+def _roots_from_datas_2(datas):
+    return [
+        root
+        for data in datas
+        for root in _make_root(
+            vfs_prefix = data.vfs_prefix,
+            target_triple = data.target_triple,
+            root_dir = data.framework_path,
+            extra_search_paths = data.extra_search_paths,
+            module_map = data.module_map,
+            swiftmodules = data.swiftmodules,
+            hdrs = data.hdrs,
+            private_hdrs = data.private_hdrs,
+        )
+    ]
+
 def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules = [], merge_vfsoverlays = [], extra_search_paths = None, output = None, framework_name = None):
     if framework_name == None:
         framework_name = ctx.attr.framework_name
@@ -448,6 +473,47 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules
     )
 
     return struct(vfsoverlay_file = output, vfs_info = vfs_info)
+
+def make_vfsoverlay_2(ctx, info, output = None):
+    datas = [
+        struct(
+            bin_dir_path = ctx.bin_dir.path,
+            build_file_path = ctx.build_file_path,
+            framework_name = vfs_info.root_dir,
+            framework_path = "{framework_name}.framework".format(framework_name = vfs_info.root_dir),
+            extra_search_paths = vfs_info.extra_search_paths,
+            module_map = vfs_info.module_map.to_list(),
+            swiftmodules = vfs_info.swiftmodules.to_list(),
+            hdrs = vfs_info.hdrs.to_list(),
+            private_hdrs = vfs_info.private_hdrs.to_list(),
+            has_swift = False,
+            vfs_prefix = vfs_info.vfs_prefix,
+            target_triple = vfs_info.target_triple,
+        )
+        for vfs_info in info.info.to_list()
+    ]
+    roots = _roots_from_datas_2(datas)
+
+    vfs = {
+        "version": 0,
+        "case-sensitive": True,
+        "overlay-relative": True,
+        "use-external-names": True,
+        "roots": [{
+            "name": FRAMEWORK_SEARCH_PATH,
+            "type": "directory",
+            "contents": roots,
+        }],
+    }
+
+    # Write
+    vfs_yaml = struct(**vfs).to_json()
+    if output:
+        ctx.actions.write(
+            content = vfs_yaml,
+            output = output,
+        )
+    return struct(vfsoverlay_file = output, vfs_info = {})
 
 framework_vfs_overlay = rule(
     implementation = _framework_vfs_overlay_impl,

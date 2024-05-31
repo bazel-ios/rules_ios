@@ -92,12 +92,12 @@ def _vfs_aspect_impl(target, ctx):
           [
             vfs_info(
               ctx = ctx,
-              swiftmodules = ctx.rule.attr.swiftmodules,
+              swiftmodules = depset(ctx.rule.attr.swiftmodules),
               root_dir = ctx.rule.attr.framework_name,
               extra_search_paths = ctx.rule.attr.extra_search_paths,
-              module_map = ctx.rule.attr.modulemap,
-              hdrs = ctx.rule.attr.hdrs,
-              private_hdrs = ctx.rule.attr.private_hdrs,
+              module_map = depset(ctx.rule.attr.modulemap),
+              hdrs = depset(ctx.rule.attr.hdrs),
+              private_hdrs = depset(ctx.rule.attr.private_hdrs),
             )
           ],
           transitive=[d[VFSInfo].info for d in ctx.rule.attr.deps if VFSInfo in d]
