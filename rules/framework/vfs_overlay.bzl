@@ -263,11 +263,11 @@ def _framework_vfs_overlay_impl(ctx):
     # Conditionally collect and pass in the VFS overlay here.
     virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
 
-    if virtualize_frameworks and not feature_names.compile_with_xcode in ctx.features:
-        for dep in ctx.attr.deps:
-            if VFSInfo in dep:
-                print("VFSInfo for {}:".format(dep.label))
-                print(dep[VFSInfo].to_json())
+    #if virtualize_frameworks and not feature_names.compile_with_xcode in ctx.features:
+    #    for dep in ctx.attr.deps:
+    #        if VFSInfo in dep:
+    #            print("VFSInfo for {}:".format(dep.label))
+    #            print(dep[VFSInfo].to_json())
 
     if virtualize_frameworks and not feature_names.compile_with_xcode in ctx.features:
         for dep in ctx.attr.deps:

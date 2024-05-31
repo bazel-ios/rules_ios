@@ -58,20 +58,26 @@ def _vfs_prefix(ctx):
 def _vfs_aspect_impl(target, ctx):
     providers = []
 
-    if VFSInfo not in target:
+    if not ctx.rule.kind == "framework_vfs_overlay":
+      return providers
 
+    if VFSInfo not in target:
       providers.append(
         VFSInfo(
           vfs_prefix = _vfs_prefix(ctx),
           target_triple = _get_basic_llvm_tripple(ctx),
-          swiftmodules = "foo",
-          root_dir = "foo",
-          extra_search_paths = "foo",
-          module_map = "foo",
-          hdrs = "foo",
-          private_hdrs = "foo",
+          swiftmodules = ctx.rule.attr.swiftmodules,
+          root_dir = ctx.rule.attr.framework_name,
+          extra_search_paths = ctx.rule.attr.extra_search_paths,
+          module_map = ctx.rule.attr.modulemap,
+          hdrs = ctx.rule.attr.hdrs,
+          private_hdrs = ctx.rule.attr.private_hdrs,
         ),
       )
+
+      #print("VFSInfo for {}:".format(target.label))
+      #for p in providers:
+      #  print(p)
 
     return providers
 
