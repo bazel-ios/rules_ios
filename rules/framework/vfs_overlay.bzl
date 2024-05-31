@@ -9,8 +9,10 @@ in-memory tree roots, it pre-pends the prefix of the `vfsoverlay` path
 to each of the entries.
 """
 
-load("//rules:providers.bzl", "FrameworkInfo")
 load("//rules:features.bzl", "feature_names")
+load("//rules/framework:vfs_aspect.bzl", "vfs_aspect")
+load("//rules:providers.bzl", "FrameworkInfo", "VFSInfo")
+
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain", "use_cpp_toolchain")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_common")
 
@@ -260,6 +262,12 @@ def _framework_vfs_overlay_impl(ctx):
 
     # Conditionally collect and pass in the VFS overlay here.
     virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
+
+    if virtualize_frameworks and not feature_names.compile_with_xcode in ctx.features:
+        for dep in ctx.attr.deps:
+            if VFSInfo in dep:
+                print("Found VFSInfo in {}".format(dep))
+
     if virtualize_frameworks and not feature_names.compile_with_xcode in ctx.features:
         for dep in ctx.attr.deps:
             if FrameworkInfo in dep:
@@ -433,7 +441,7 @@ framework_vfs_overlay = rule(
         "swiftmodules": attr.label_list(allow_files = True, doc = "Everything under a .swiftmodule dir if exists"),
         "hdrs": attr.label_list(allow_files = True),
         "private_hdrs": attr.label_list(allow_files = True, default = []),
-        "deps": attr.label_list(allow_files = True, default = []),
+        "deps": attr.label_list(allow_files = True, default = [], aspects = [vfs_aspect]),
         "_cc_toolchain": attr.label(
             providers = [cc_common.CcToolchainInfo],
             default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),

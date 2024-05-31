@@ -1,3 +1,16 @@
+VFSInfo = provider(
+    fields = {
+        "vfs_prefix": "TBD",
+        "target_triple": "TBD",
+        "swiftmodules": "TBD",
+        "root_dir" : "TBD",
+        "extra_search_paths": "TBD",
+        "module_map": "TBD",
+        "hdrs": "TBD",
+        "private_hdrs": "TBD",
+    }
+)
+
 FrameworkInfo = provider(
     fields = {
         "vfsoverlay_infos": "Merged VFS overlay infos, present when virtual frameworks enabled",
