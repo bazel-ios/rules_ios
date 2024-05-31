@@ -1,13 +1,6 @@
 VFSInfo = provider(
     fields = {
-        "vfs_prefix": "TBD",
-        "target_triple": "TBD",
-        "swiftmodules": "TBD",
-        "root_dir" : "TBD",
-        "extra_search_paths": "TBD",
-        "module_map": "TBD",
-        "hdrs": "TBD",
-        "private_hdrs": "TBD",
+        "info": "TBD",
     }
 )
 

@@ -256,6 +256,7 @@ def _compact(args):
     return [item for item in args if item]
 
 def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields, deps, transitive_deps, vfs):
+    #print(vfs)
     import_vfsoverlays = [
         dep[VFSOverlayInfo].vfs_info
         for dep in vfs

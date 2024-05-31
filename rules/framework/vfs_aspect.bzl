@@ -1,5 +1,6 @@
-load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
+
 load("//rules:providers.bzl", "VFSInfo")
+load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
 
 def _get_basic_llvm_tripple(ctx):
     """Returns a target triple string for an Apple platform.
@@ -55,29 +56,55 @@ def _vfs_prefix(ctx):
   vfs_parent_len = len(vfs_parent.split("/")) - 1
   return _make_relative_prefix(vfs_parent_len)
 
+def vfs_info(
+  ctx,
+  swiftmodules,
+  root_dir,
+  extra_search_paths,
+  module_map,
+  hdrs, 
+  private_hdrs):
+  #print(ctx.attr.name)
+  return struct(
+    vfs_prefix = _vfs_prefix(ctx),
+    target_triple = _get_basic_llvm_tripple(ctx),
+    swiftmodules = swiftmodules,
+    root_dir = root_dir,
+    extra_search_paths = extra_search_paths,
+    module_map = module_map,
+    hdrs = hdrs,
+    private_hdrs = private_hdrs,
+  )
+
 def _vfs_aspect_impl(target, ctx):
     providers = []
-
-    if not ctx.rule.kind == "framework_vfs_overlay":
+    if not ctx.rule.kind in ["framework_vfs_overlay"]:
       return providers
 
     if VFSInfo not in target:
       providers.append(
-        VFSInfo(
-          vfs_prefix = _vfs_prefix(ctx),
-          target_triple = _get_basic_llvm_tripple(ctx),
-          swiftmodules = ctx.rule.attr.swiftmodules,
-          root_dir = ctx.rule.attr.framework_name,
-          extra_search_paths = ctx.rule.attr.extra_search_paths,
-          module_map = ctx.rule.attr.modulemap,
-          hdrs = ctx.rule.attr.hdrs,
-          private_hdrs = ctx.rule.attr.private_hdrs,
-        ),
+          VFSInfo(
+            info = depset(
+              [
+                vfs_info(
+                  ctx = ctx,
+                  swiftmodules = ctx.rule.attr.swiftmodules,
+                  root_dir = ctx.rule.attr.framework_name,
+                  extra_search_paths = ctx.rule.attr.extra_search_paths,
+                  module_map = ctx.rule.attr.modulemap,
+                  hdrs = ctx.rule.attr.hdrs,
+                  private_hdrs = ctx.rule.attr.private_hdrs,
+                )
+              ],
+              transitive=[d[VFSInfo].info for d in ctx.rule.attr.deps if VFSInfo in d]
+            ),
+          )
       )
 
-      #print("VFSInfo for {}:".format(target.label))
-      #for p in providers:
-      #  print(p)
+      if len(providers):
+        print("VFSInfo for {}:".format(target.label))
+        #for p in providers:
+        #  print(p)
 
     return providers
 

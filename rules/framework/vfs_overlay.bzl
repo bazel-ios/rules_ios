@@ -10,7 +10,7 @@ to each of the entries.
 """
 
 load("//rules:features.bzl", "feature_names")
-load("//rules/framework:vfs_aspect.bzl", "vfs_aspect")
+load("//rules/framework:vfs_aspect.bzl", "vfs_aspect", "vfs_info")
 load("//rules:providers.bzl", "FrameworkInfo", "VFSInfo")
 
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain", "use_cpp_toolchain")
@@ -263,12 +263,6 @@ def _framework_vfs_overlay_impl(ctx):
     # Conditionally collect and pass in the VFS overlay here.
     virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
 
-    #if virtualize_frameworks and not feature_names.compile_with_xcode in ctx.features:
-    #    for dep in ctx.attr.deps:
-    #        if VFSInfo in dep:
-    #            print("VFSInfo for {}:".format(dep.label))
-    #            print(dep[VFSInfo].to_json())
-
     if virtualize_frameworks and not feature_names.compile_with_xcode in ctx.features:
         for dep in ctx.attr.deps:
             if FrameworkInfo in dep:
@@ -294,7 +288,36 @@ def _framework_vfs_overlay_impl(ctx):
             headers = headers,
         ),
     )
-    return [
+
+    #if virtualize_frameworks and not feature_names.compile_with_xcode in ctx.features:
+    #    for dep in ctx.attr.deps:
+    #        if VFSInfo in dep:
+    #            print("VFSInfo for {}:".format(dep.label))
+    #            print(dep[VFSInfo].to_json())
+
+    new_vfs_providers = []
+    if virtualize_frameworks and not feature_names.compile_with_xcode in ctx.features:
+        #print(len([d[VFSInfo].info for d in ctx.attr.deps if VFSInfo in d]))
+        #print(ctx.attr.name)
+        new_vfs_providers.append(
+            VFSInfo(
+                info = depset(
+                    [
+                        vfs_info(
+                            ctx = ctx,
+                            swiftmodules = ctx.files.swiftmodules,
+                            root_dir = ctx.attr.framework_name,
+                            extra_search_paths = ctx.attr.extra_search_paths,
+                            module_map = ctx.files.modulemap,
+                            hdrs = ctx.files.hdrs,
+                            private_hdrs = ctx.files.private_hdrs,
+                        )
+                    ],
+                    transitive=[d[VFSInfo].info for d in ctx.attr.deps if VFSInfo in d]
+                ),
+            )
+        )
+    return new_vfs_providers + [
         apple_common.new_objc_provider(),
         cc_info,
         VFSOverlayInfo(
