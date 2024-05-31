@@ -88,6 +88,10 @@ def _vfs_aspect_impl(target, ctx):
 
     if VFSInfo not in target:
       info = None
+      deps_infos = [d[VFSInfo].info for d in ctx.rule.attr.deps if VFSInfo in d]
+      transitive_deps_infos = []
+      if hasattr(ctx.rule.attr, "transitive_deps"):
+        transitive_deps_infos = [d[VFSInfo].info for d in ctx.rule.attr.transitive_deps if VFSInfo in d]
 
       if ctx.rule.kind == "framework_vfs_overlay":
         info = depset(
@@ -103,7 +107,7 @@ def _vfs_aspect_impl(target, ctx):
               has_swift = ctx.rule.attr.has_swift,
             )
           ],
-          transitive=[d[VFSInfo].info for d in ctx.rule.attr.deps if VFSInfo in d]
+          transitive=deps_infos + transitive_deps_infos,
         )
       if ctx.rule.kind == "apple_framework_packaging":
         framework_files = get_framework_files(ctx, ctx.rule.attr, ctx.rule.attr.deps)
@@ -121,7 +125,7 @@ def _vfs_aspect_impl(target, ctx):
                 has_swift = True if framework_files.outputs.swiftmodule else False,
               )
             ],
-            transitive=[d[VFSInfo].info for d in ctx.rule.attr.deps if VFSInfo in d]
+            transitive=deps_infos + transitive_deps_infos,
         )
       if info:
         providers.append(
@@ -139,7 +143,7 @@ def _vfs_aspect_impl(target, ctx):
 
 vfs_aspect = aspect(
     implementation = _vfs_aspect_impl,
-    attr_aspects = ["deps"],
+    attr_aspects = ["deps", "transitive_deps"],
     attrs = {
       "_cc_toolchain": attr.label(
             providers = [cc_common.CcToolchainInfo],
