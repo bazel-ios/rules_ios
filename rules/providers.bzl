@@ -4,6 +4,13 @@ VFSInfo = provider(
     }
 )
 
+PrivateHeadersInfo = provider(
+    doc = "Propagates private headers, so they can be accessed if necessary",
+    fields = {
+        "headers": "Private headers",
+    },
+)
+
 FrameworkInfo = provider(
     fields = {
         "vfsoverlay_infos": "Merged VFS overlay infos, present when virtual frameworks enabled",

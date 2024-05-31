@@ -289,16 +289,8 @@ def _framework_vfs_overlay_impl(ctx):
         ),
     )
 
-    #if virtualize_frameworks and not feature_names.compile_with_xcode in ctx.features:
-    #    for dep in ctx.attr.deps:
-    #        if VFSInfo in dep:
-    #            print("VFSInfo for {}:".format(dep.label))
-    #            print(dep[VFSInfo].to_json())
-
     new_vfs_providers = []
     if virtualize_frameworks and not feature_names.compile_with_xcode in ctx.features:
-        #print(len([d[VFSInfo].info for d in ctx.attr.deps if VFSInfo in d]))
-        #print(ctx.attr.name)
         new_vfs_providers.append(
             VFSInfo(
                 info = depset(
@@ -317,6 +309,9 @@ def _framework_vfs_overlay_impl(ctx):
                 ),
             )
         )
+    if ctx.attr.name == "App_vfs":
+        for p in new_vfs_providers:
+            print([r.root_dir for r in p.info.to_list()])
     return new_vfs_providers + [
         apple_common.new_objc_provider(),
         cc_info,

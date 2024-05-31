@@ -1,6 +1,10 @@
 
 load("//rules:providers.bzl", "VFSInfo")
+load("//rules:framework_utils.bzl", "get_framework_files")
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
+
+def _compact(args):
+    return [item for item in args if item]
 
 def _get_basic_llvm_tripple(ctx):
     """Returns a target triple string for an Apple platform.
@@ -64,7 +68,6 @@ def vfs_info(
   module_map,
   hdrs, 
   private_hdrs):
-  #print(ctx.attr.name)
   return struct(
     vfs_prefix = _vfs_prefix(ctx),
     target_triple = _get_basic_llvm_tripple(ctx),
@@ -78,31 +81,53 @@ def vfs_info(
 
 def _vfs_aspect_impl(target, ctx):
     providers = []
-    if not ctx.rule.kind in ["framework_vfs_overlay"]:
+    if not ctx.rule.kind in ["framework_vfs_overlay", "apple_framework_packaging"]:
       return providers
 
     if VFSInfo not in target:
-      providers.append(
-          VFSInfo(
-            info = depset(
-              [
-                vfs_info(
-                  ctx = ctx,
-                  swiftmodules = ctx.rule.attr.swiftmodules,
-                  root_dir = ctx.rule.attr.framework_name,
-                  extra_search_paths = ctx.rule.attr.extra_search_paths,
-                  module_map = ctx.rule.attr.modulemap,
-                  hdrs = ctx.rule.attr.hdrs,
-                  private_hdrs = ctx.rule.attr.private_hdrs,
-                )
-              ],
-              transitive=[d[VFSInfo].info for d in ctx.rule.attr.deps if VFSInfo in d]
-            ),
-          )
-      )
+      info = None
 
-      if len(providers):
-        print("VFSInfo for {}:".format(target.label))
+      if ctx.rule.kind == "framework_vfs_overlay":
+        info = depset(
+          [
+            vfs_info(
+              ctx = ctx,
+              swiftmodules = ctx.rule.attr.swiftmodules,
+              root_dir = ctx.rule.attr.framework_name,
+              extra_search_paths = ctx.rule.attr.extra_search_paths,
+              module_map = ctx.rule.attr.modulemap,
+              hdrs = ctx.rule.attr.hdrs,
+              private_hdrs = ctx.rule.attr.private_hdrs,
+            )
+          ],
+          transitive=[d[VFSInfo].info for d in ctx.rule.attr.deps if VFSInfo in d]
+        )
+      if ctx.rule.kind == "apple_framework_packaging":
+        framework_files = get_framework_files(ctx, ctx.rule.attr, ctx.rule.attr.deps)
+        swiftmodules = _compact([framework_files.outputs.swiftmodule, framework_files.outputs.swiftdoc])
+        info = depset(
+            [
+              vfs_info(
+                ctx = ctx,
+                swiftmodules = depset(swiftmodules),
+                root_dir = ctx.rule.attr.framework_name,
+                extra_search_paths = None,
+                module_map = depset(framework_files.outputs.modulemaps),
+                hdrs = depset(framework_files.outputs.headers),
+                private_hdrs = depset(framework_files.outputs.private_headers),
+              )
+            ],
+            transitive=[d[VFSInfo].info for d in ctx.rule.attr.deps if VFSInfo in d]
+        )
+      if info:
+        providers.append(
+          VFSInfo(
+            info = info,
+          )
+        )
+
+      #if len(providers):
+        #print("VFSInfo for {}:".format(target.label))
         #for p in providers:
         #  print(p)
 
