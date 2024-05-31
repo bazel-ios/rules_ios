@@ -266,7 +266,8 @@ def _framework_vfs_overlay_impl(ctx):
     if virtualize_frameworks and not feature_names.compile_with_xcode in ctx.features:
         for dep in ctx.attr.deps:
             if VFSInfo in dep:
-                print("Found VFSInfo in {}".format(dep))
+                print("VFSInfo for {}:".format(dep.label))
+                print(dep[VFSInfo].to_json())
 
     if virtualize_frameworks and not feature_names.compile_with_xcode in ctx.features:
         for dep in ctx.attr.deps:
