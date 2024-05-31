@@ -67,7 +67,8 @@ def vfs_info(
   extra_search_paths,
   module_map,
   hdrs, 
-  private_hdrs):
+  private_hdrs,
+  has_swift):
   return struct(
     vfs_prefix = _vfs_prefix(ctx),
     target_triple = _get_basic_llvm_tripple(ctx),
@@ -77,6 +78,7 @@ def vfs_info(
     module_map = module_map,
     hdrs = hdrs,
     private_hdrs = private_hdrs,
+    has_swift = has_swift,
   )
 
 def _vfs_aspect_impl(target, ctx):
@@ -98,6 +100,7 @@ def _vfs_aspect_impl(target, ctx):
               module_map = depset(ctx.rule.attr.modulemap),
               hdrs = depset(ctx.rule.attr.hdrs),
               private_hdrs = depset(ctx.rule.attr.private_hdrs),
+              has_swift = ctx.rule.attr.has_swift,
             )
           ],
           transitive=[d[VFSInfo].info for d in ctx.rule.attr.deps if VFSInfo in d]
@@ -115,6 +118,7 @@ def _vfs_aspect_impl(target, ctx):
                 module_map = depset(framework_files.outputs.modulemaps),
                 hdrs = depset(framework_files.outputs.headers),
                 private_hdrs = depset(framework_files.outputs.private_headers),
+                has_swift = True if framework_files.outputs.swiftmodule else False,
               )
             ],
             transitive=[d[VFSInfo].info for d in ctx.rule.attr.deps if VFSInfo in d]
@@ -136,6 +140,16 @@ def _vfs_aspect_impl(target, ctx):
 vfs_aspect = aspect(
     implementation = _vfs_aspect_impl,
     attr_aspects = ["deps"],
+    attrs = {
+      "_cc_toolchain": attr.label(
+            providers = [cc_common.CcToolchainInfo],
+            default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
+            doc = """\
+The C++ toolchain from which linking flags and other tools needed by the Swift
+toolchain (such as `clang`) will be retrieved.
+""",
+        ),
+    },
     fragments = ["apple"],
     toolchains = ["@bazel_tools//tools/cpp:toolchain_type"],
 )

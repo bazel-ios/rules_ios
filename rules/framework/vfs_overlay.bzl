@@ -277,6 +277,7 @@ def _framework_vfs_overlay_impl(ctx):
                         module_map = depset(ctx.files.modulemap),
                         hdrs = depset(ctx.files.hdrs),
                         private_hdrs = depset(ctx.files.private_hdrs),
+                        has_swift = ctx.attr.has_swift,
                     )
                 ],
                 transitive=[d[VFSInfo].info for d in ctx.attr.deps if VFSInfo in d]
