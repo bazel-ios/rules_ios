@@ -294,6 +294,7 @@ def _framework_vfs_overlay_impl(ctx):
 
     vfs = None
     if virtualize_frameworks and not feature_names.compile_with_xcode in ctx.features:
+    #if False:
         vfs = make_vfsoverlay_2(
             ctx = ctx,
             info = new_vfs_info,
@@ -395,13 +396,13 @@ def _roots_from_datas(vfs_prefix, target_triple, datas):
         )
     ]
 
-def _roots_from_datas_2(datas):
+def _roots_from_datas_2(vfs_prefix, target_triple, datas):
     return [
         root
         for data in datas
         for root in _make_root(
-            vfs_prefix = data.vfs_prefix,
-            target_triple = data.target_triple,
+            vfs_prefix = vfs_prefix,
+            target_triple = target_triple,
             root_dir = data.framework_path,
             extra_search_paths = data.extra_search_paths,
             module_map = data.module_map,
@@ -476,6 +477,11 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules
     return struct(vfsoverlay_file = output, vfs_info = vfs_info)
 
 def make_vfsoverlay_2(ctx, info, output = None):
+    vfs_parent = _get_vfs_parent(ctx)
+    vfs_parent_len = len(vfs_parent.split("/")) - 1
+    vfs_prefix = _make_relative_prefix(vfs_parent_len)
+    target_triple = _get_basic_llvm_tripple(ctx)
+
     datas = [
         struct(
             bin_dir_path = ctx.bin_dir.path,
@@ -493,7 +499,7 @@ def make_vfsoverlay_2(ctx, info, output = None):
         )
         for vfs_info in info.info.to_list()
     ]
-    roots = _roots_from_datas_2(datas)
+    roots = _roots_from_datas_2(vfs_prefix, target_triple, datas)
 
     vfs = {
         "version": 0,
