@@ -118,7 +118,7 @@ def _vfs_aspect_impl(target, ctx):
                 ctx = ctx,
                 swiftmodules = depset(swiftmodules),
                 root_dir = ctx.rule.attr.framework_name,
-                extra_search_paths = None,
+                extra_search_paths = "",
                 module_map = depset(framework_files.outputs.modulemaps),
                 hdrs = depset(framework_files.outputs.headers),
                 private_hdrs = depset(framework_files.outputs.private_headers),
