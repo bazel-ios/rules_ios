@@ -112,6 +112,20 @@ def _vfs_aspect_impl(target, ctx):
       if ctx.rule.kind == "apple_framework_packaging":
         framework_files = get_framework_files(ctx, ctx.rule.attr, ctx.rule.attr.deps)
         swiftmodules = _compact([framework_files.outputs.swiftmodule, framework_files.outputs.swiftdoc])
+
+        # This is empty and that's wrong
+        # //Frameworks/Printers/SquareEpsonPrinters/Public:SquareEpsonPrinters
+        #
+        # libepos2-import-libepos2.xcframework-ios-arm64_i386_x86_64-simulator_vfs
+        # framework_name: libepos2
+        # [<input file target //Pods/libepos2:libepos2.xcframework/ios-arm64_i386_x86_64-simulator/Headers/ePOS2.h>]
+        # libepos2_vfs
+        # framework_name: libepos2
+        # []
+        #
+        #if target.label.name.count("libepos"):
+        #  print(framework_files.outputs.headers)
+
         info = depset(
             [
               vfs_info(
