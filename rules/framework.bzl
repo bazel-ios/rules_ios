@@ -1,7 +1,7 @@
 """Framework rules"""
 
 load("//rules/framework:vfs_overlay.bzl", "VFSOverlayInfo", "make_vfsoverlay")
-load("//rules:framework_utils.bzl", "get_framework_files", "platform_prerequisites", "find_framework_dir")
+load("//rules:framework_utils.bzl", "get_framework_files", _platform_prerequisites = "platform_prerequisites", "find_framework_dir")
 load("//rules:features.bzl", "feature_names")
 load("//rules:library.bzl", "apple_library")
 load("//rules:plists.bzl", "process_infoplists")
@@ -390,7 +390,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
         platform_type = platform_type,
         product_type = apple_product_type.framework,
     )
-    platform_prerequisites = platform_prerequisites(ctx, rule_descriptor, platform_type, features)
+    platform_prerequisites = _platform_prerequisites(ctx, rule_descriptor, platform_type, features)
     signed_frameworks = []
     if provisioning_profile:
         signed_frameworks = [
