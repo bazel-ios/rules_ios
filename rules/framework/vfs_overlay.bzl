@@ -493,9 +493,9 @@ def make_vfsoverlay_2(ctx, info, output = None):
             swiftmodules = vfs_info.swiftmodules.to_list(),
             hdrs = vfs_info.hdrs.to_list(),
             private_hdrs = vfs_info.private_hdrs.to_list(),
-            has_swift = False,
-            vfs_prefix = vfs_info.vfs_prefix,
-            target_triple = vfs_info.target_triple,
+            has_swift = vfs_info.has_swift,
+            vfs_prefix = vfs_prefix,
+            target_triple = target_triple,
         )
         for vfs_info in info.info.to_list()
     ]
