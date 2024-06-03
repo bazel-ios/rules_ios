@@ -113,18 +113,10 @@ def _vfs_aspect_impl(target, ctx):
         framework_files = get_framework_files(ctx, ctx.rule.attr, ctx.rule.attr.deps)
         swiftmodules = _compact([framework_files.outputs.swiftmodule, framework_files.outputs.swiftdoc])
 
-        # This is empty and that's wrong
-        # //Frameworks/Printers/SquareEpsonPrinters/Public:SquareEpsonPrinters
-        #
-        # libepos2-import-libepos2.xcframework-ios-arm64_i386_x86_64-simulator_vfs
-        # framework_name: libepos2
-        # [<input file target //Pods/libepos2:libepos2.xcframework/ios-arm64_i386_x86_64-simulator/Headers/ePOS2.h>]
-        # libepos2_vfs
-        # framework_name: libepos2
-        # []
-        #
-        #if target.label.name.count("libepos"):
-        #  print(framework_files.outputs.headers)
+        cc_info_hdrs = []
+        #if CcInfo in target:
+        #  compilation_context = target[CcInfo].compilation_context
+        #  cc_info_hdrs.extend([h for h in compilation_context.headers.to_list() if h.path.endswith(".h") or h.path.endswith(".hh")])
 
         info = depset(
             [
@@ -134,7 +126,7 @@ def _vfs_aspect_impl(target, ctx):
                 root_dir = ctx.rule.attr.framework_name,
                 extra_search_paths = "",
                 module_map = depset(framework_files.outputs.modulemaps),
-                hdrs = depset(framework_files.outputs.headers),
+                hdrs = depset(framework_files.outputs.headers + cc_info_hdrs),
                 private_hdrs = depset(framework_files.outputs.private_headers),
                 has_swift = True if framework_files.outputs.swiftmodule else False,
               )
