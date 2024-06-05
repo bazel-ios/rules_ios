@@ -6,7 +6,7 @@ import re
 import time
 import json
 import os
-from pkg_resources import packaging
+import importlib.metadata
 
 _DEVICE_NAME = "BazeliOSPhone"
 _DEVICE_TYPE = os.getenv('TEST_DEVICE_MODEL') if os.getenv(
@@ -64,9 +64,8 @@ def get_current_runtime_version():
     ios_runtimes = [
         runtime for runtime in runtimes if runtime["platform"] == "iOS"]
 
-    # find the newest runtime. Apple uses semver, so packaging.version allows for stable sorting.
-    ios_runtimes.sort(key=lambda runtime: packaging.version.parse(
-        runtime["version"]), reverse=True)
+    # find the newest runtime
+    ios_runtimes.sort(key=lambda runtime: importlib.metadata.version(runtime["version"]), reverse=True)
 
     if len(ios_runtimes) == 0:
         raise Exception(
