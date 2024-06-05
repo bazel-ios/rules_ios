@@ -1,6 +1,8 @@
-load("@build_bazel_rules_apple//apple/internal:providers.bzl", "AppleFrameworkImportInfo", "new_appleframeworkimportinfo")
 load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
+load("//rules:utils.bzl", "is_bazel_7")
+load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain", "use_cpp_toolchain")
 load("@build_bazel_rules_apple//apple/internal:bundling_support.bzl", "bundling_support")
+load("@build_bazel_rules_apple//apple/internal:providers.bzl", "AppleFrameworkImportInfo", "new_appleframeworkimportinfo")
 
 _FindImportsAspectInfo = provider(fields = {
     "imported_library_file": "",
@@ -159,6 +161,15 @@ def _deduplicate_test_deps(test_deps, deps):
     return filtered
 
 def _file_collector_rule_impl(ctx):
+    cc_toolchain = find_cpp_toolchain(ctx)
+    cc_features = cc_common.configure_features(
+        ctx = ctx,
+        cc_toolchain = cc_toolchain,
+        language = "objc",
+        requested_features = ctx.features,
+        unsupported_features = ctx.disabled_features,
+    )
+
     linker_deps = _merge_linked_inputs(ctx.attr.deps)
     test_linker_deps = _merge_linked_inputs(ctx.attr.test_deps)
     input_static_frameworks = _deduplicate_test_deps(test_linker_deps[0], linker_deps[0])
@@ -255,8 +266,31 @@ def _file_collector_rule_impl(ctx):
     )
 
     # Create the CcInfo provider, linking information from this is used in Bazel 7+.
-    dep_cc_infos = [dep[CcInfo] for dep in ctx.attr.deps if CcInfo in dep]
-    cc_info = cc_common.merge_cc_infos(cc_infos = dep_cc_infos)
+    cc_info = None
+    if is_bazel_7:
+        cc_info = CcInfo(
+            linking_context = cc_common.create_linking_context(
+                linker_inputs = depset([
+                    cc_common.create_linker_input(
+                        owner = ctx.label,
+                        user_link_flags = compat_link_opt if len(all_replaced_frameworks) else [],
+                        libraries = depset([
+                            cc_common.create_library_to_link(
+                                actions = ctx.actions,
+                                cc_toolchain = cc_toolchain,
+                                feature_configuration = cc_features,
+                                static_library = static_library,
+                                alwayslink = False,
+                            )
+                            for static_library in replaced_static_framework.replaced.values()
+                        ]),
+                    ),
+                ]),
+            ),
+        )
+    else:
+        dep_cc_infos = [dep[CcInfo] for dep in ctx.attr.deps if CcInfo in dep]
+        cc_info = cc_common.merge_cc_infos(cc_infos = dep_cc_infos)
 
     return [
         DefaultInfo(files = depset(dynamic_framework_dirs + replaced_frameworks)),
@@ -266,11 +300,20 @@ def _file_collector_rule_impl(ctx):
 
 import_middleman = rule(
     implementation = _file_collector_rule_impl,
-    fragments = ["apple"],
+    fragments = ["apple", "cpp"],
+    toolchains = use_cpp_toolchain(),
     attrs = {
         "deps": attr.label_list(aspects = [find_imports]),
         "test_deps": attr.label_list(aspects = [find_imports], allow_empty = True),
         "update_in_place": attr.label(executable = True, default = Label("//tools/m1_utils:update_in_place"), cfg = "exec"),
+        "_cc_toolchain": attr.label(
+            providers = [cc_common.CcToolchainInfo],
+            default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
+            doc = """\
+The C++ toolchain from which linking flags and other tools needed by the Swift
+toolchain (such as `clang`) will be retrieved.
+""",
+        ),
     },
     doc = """
 This rule adds the ability to update the Mach-o header on imported
