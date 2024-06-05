@@ -8,6 +8,8 @@ import json
 import os
 from pkg_resources import packaging
 
+print("this is a test")
+
 _DEVICE_NAME = "BazeliOSPhone"
 _DEVICE_TYPE = os.getenv('TEST_DEVICE_MODEL') if os.getenv(
     'TEST_DEVICE_MODEL') else "com.apple.CoreSimulator.SimDeviceType.iPhone-15"
