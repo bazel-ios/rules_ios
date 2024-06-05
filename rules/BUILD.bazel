@@ -105,6 +105,7 @@ bzl_library(
     deps = [
         ":features",
         "//rules/internal:objc_provider_utils",
+        "//rules:utils.bzl",
         "@build_bazel_rules_apple//apple",
     ],
 )
