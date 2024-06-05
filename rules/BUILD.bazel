@@ -104,8 +104,8 @@ bzl_library(
     visibility = ["//visibility:public"],
     deps = [
         ":features",
-        "//rules/internal:objc_provider_utils",
         "//rules:utils.bzl",
+        "//rules/internal:objc_provider_utils",
         "@build_bazel_rules_apple//apple",
     ],
 )

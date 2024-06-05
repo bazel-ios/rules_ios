@@ -1,10 +1,8 @@
 load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
 load("//rules:utils.bzl", "is_bazel_7")
-
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain", "use_cpp_toolchain")
 load("@build_bazel_rules_apple//apple/internal:bundling_support.bzl", "bundling_support")
 load("@build_bazel_rules_apple//apple/internal:providers.bzl", "AppleFrameworkImportInfo", "new_appleframeworkimportinfo")
-
 
 _FindImportsAspectInfo = provider(fields = {
     "imported_library_file": "",
