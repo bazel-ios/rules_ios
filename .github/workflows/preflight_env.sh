@@ -8,7 +8,7 @@ set -e
 #   - XCODE_VERSION: The version of Xcode to use.
 
 # GitHub runners are hitting 'module not found pkg_resources' required by prepare_sim.py
-pip3 install setuptools --break-system-packages
+pip3 install setuptools==69.5.1 --break-system-packages
 
 # If flag --no-bzlmod is passed, writes a user.bazelrc file to disable Bzlmod.
 if [[ "$*" == *--no-bzlmod* ]]; then
