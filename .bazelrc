@@ -62,6 +62,10 @@ build:remote_cache --noslim_profile
 build:remote_cache --remote_cache=grpcs://remote.buildbuddy.io
 build:remote_cache --remote_timeout=3600
 
+# Configure for explicit module compilation
+build:explicit_modules --features=swift.use_c_modules
+build:explicit_modules --features=swift.emit_c_module
+
 # By default don't upload local results to remote cache, only CI does this.
 build --noremote_upload_local_results
 build:ci --remote_upload_local_results
