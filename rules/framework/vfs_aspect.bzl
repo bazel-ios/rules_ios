@@ -116,6 +116,8 @@ def _vfs_aspect_impl(target, ctx):
         def _check_umbrella(ctx, h):
           if h.path.count("-umbrella"):
             return h.path.endswith("%s-umbrella.h" % ctx.rule.attr.name)
+          if h.path.count("-Swift"):
+            return h.path.endswith("%s-Swift.h" % ctx.rule.attr.name)
           return True
 
         cc_info_hdrs = []
