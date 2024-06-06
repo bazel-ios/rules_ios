@@ -109,14 +109,30 @@ def _vfs_aspect_impl(target, ctx):
           ],
           transitive=deps_infos + transitive_deps_infos,
         )
-      if ctx.rule.kind == "apple_framework_packaging":
+      elif ctx.rule.kind == "apple_framework_packaging":
         framework_files = get_framework_files(ctx, ctx.rule.attr, ctx.rule.attr.deps)
         swiftmodules = _compact([framework_files.outputs.swiftmodule, framework_files.outputs.swiftdoc])
 
+        def _check_umbrella(ctx, h):
+          if h.path.count("-umbrella"):
+            return h.path.endswith("%s-umbrella.h" % ctx.rule.attr.name)
+          return True
+
         cc_info_hdrs = []
-        #if CcInfo in target:
-        #  compilation_context = target[CcInfo].compilation_context
-        #  cc_info_hdrs.extend([h for h in compilation_context.headers.to_list() if h.path.endswith(".h") or h.path.endswith(".hh")])
+        if CcInfo in target:
+          compilation_context = target[CcInfo].compilation_context
+          foo_h = [
+            h
+            for h in compilation_context.direct_headers + compilation_context.direct_private_headers
+            if h.path.endswith(".h") and
+            h.path.count("/%s/" % ctx.rule.attr.name) and
+            _check_umbrella(ctx, h) and
+            not h.path.count("/Internal/")
+          ]
+          #for h in foo_h:
+          #  print(target.label.name)
+          #  print(h)
+          cc_info_hdrs.extend(foo_h)
 
         info = depset(
             [
