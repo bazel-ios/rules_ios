@@ -92,6 +92,8 @@ def _vfs_aspect_impl(target, ctx):
       transitive_deps_infos = []
       if hasattr(ctx.rule.attr, "transitive_deps"):
         transitive_deps_infos = [d[VFSInfo].info for d in ctx.rule.attr.transitive_deps if VFSInfo in d]
+      if hasattr(ctx.rule.attr, "private_deps"):
+        transitive_deps_infos += [d[VFSInfo].info for d in ctx.rule.attr.private_deps if VFSInfo in d]
 
       if ctx.rule.kind == "framework_vfs_overlay":
         info = depset(
@@ -167,7 +169,7 @@ def _vfs_aspect_impl(target, ctx):
 
 vfs_aspect = aspect(
     implementation = _vfs_aspect_impl,
-    attr_aspects = ["deps", "transitive_deps"],
+    attr_aspects = ["deps", "transitive_deps", "private_deps"],
     attrs = {
       "_cc_toolchain": attr.label(
             providers = [cc_common.CcToolchainInfo],
