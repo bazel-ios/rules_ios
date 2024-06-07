@@ -213,17 +213,17 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
 
     outputs = framework_files.outputs
     compile_with_xcode = feature_names.compile_with_xcode in ctx.features
-    vfs = make_vfsoverlay(
-        ctx,
-        hdrs = outputs.headers,
-        module_map = outputs.modulemaps,
-        # We might need to pass in .swiftinterface files here as well
-        # esp. if the error is `swift declaration not found` for some module
-        swiftmodules = _compact([outputs.swiftmodule, outputs.swiftdoc]),
-        private_hdrs = outputs.private_headers,
-        has_swift = True if outputs.swiftmodule else False,
-        merge_vfsoverlays = [] if compile_with_xcode else (fw_dep_vfsoverlays + import_vfsoverlays),
-    )
+    #vfs = make_vfsoverlay(
+    #    ctx,
+    #    hdrs = outputs.headers,
+    #    module_map = outputs.modulemaps,
+    #    # We might need to pass in .swiftinterface files here as well
+    #    # esp. if the error is `swift declaration not found` for some module
+    #    swiftmodules = _compact([outputs.swiftmodule, outputs.swiftdoc]),
+    #    private_hdrs = outputs.private_headers,
+    #    has_swift = True if outputs.swiftmodule else False,
+    #    merge_vfsoverlays = [] if compile_with_xcode else (fw_dep_vfsoverlays + import_vfsoverlays),
+    #)
 
     # Includes interface headers here ( handled in cc_info merge for no virtual )
     compilation_context_fields["headers"] = depset(
@@ -232,7 +232,8 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
     )
 
     return FrameworkInfo(
-        vfsoverlay_infos = [vfs.vfs_info],
+        #vfsoverlay_infos = [vfs.vfs_info],
+        vfsoverlay_infos = [],
         headers = outputs.headers,
         private_headers = outputs.private_headers,
         modulemap = outputs.modulemaps,

@@ -413,6 +413,7 @@ def _roots_from_datas_2(vfs_prefix, target_triple, datas):
     ]
 
 def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules = [], merge_vfsoverlays = [], extra_search_paths = None, output = None, framework_name = None):
+    print("foo: make_vfsoverlay")
     if framework_name == None:
         framework_name = ctx.attr.framework_name
 
