@@ -131,7 +131,8 @@ def _vfs_aspect_impl(target, ctx):
             if h.path.endswith(".h") and
             h.path.count("/%s/" % ctx.rule.attr.name) and
             _check_umbrella(ctx, h) and
-            not h.path.count("/Internal/")
+            not h.path.count("/Internal/") and
+            not h in framework_files.outputs.private_headers
           ]
           #for h in foo_h:
           #  print(target.label.name)
