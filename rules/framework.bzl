@@ -207,7 +207,7 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
             propagated_interface_headers.append(compilation_context.headers)
         if FrameworkInfo in dep:
             framework_info = dep[FrameworkInfo]
-            fw_dep_vfsoverlays.extend(framework_info.vfsoverlay_infos)
+            #fw_dep_vfsoverlays.extend(framework_info.vfsoverlay_infos)
             framework_headers = depset(framework_info.headers + framework_info.modulemap + framework_info.private_headers)
             propagated_interface_headers.append(framework_headers)
 
