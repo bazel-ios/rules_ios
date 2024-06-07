@@ -285,12 +285,12 @@ def _framework_vfs_overlay_impl(ctx):
         )
         new_vfs_providers.append(new_vfs_info)
 
-    if virtualize_frameworks and not feature_names.compile_with_xcode in ctx.features:
-        for dep in ctx.attr.deps:
+    #if virtualize_frameworks and not feature_names.compile_with_xcode in ctx.features:
+        #for dep in ctx.attr.deps:
             #if FrameworkInfo in dep:
             #    vfsoverlays.extend(dep[FrameworkInfo].vfsoverlay_infos)
-            if VFSOverlayInfo in dep:
-                vfsoverlays.append(dep[VFSOverlayInfo].vfs_info)
+            #if VFSOverlayInfo in dep:
+            #    vfsoverlays.append(dep[VFSOverlayInfo].vfs_info)
 
     vfs = None
     if virtualize_frameworks and not feature_names.compile_with_xcode in ctx.features:
@@ -326,10 +326,10 @@ def _framework_vfs_overlay_impl(ctx):
     return new_vfs_providers + [
         apple_common.new_objc_provider(),
         cc_info,
-        VFSOverlayInfo(
-            files = depset([vfs.vfsoverlay_file]),
-            vfs_info = vfs.vfs_info,
-        ),
+        #VFSOverlayInfo(
+        #    files = depset([vfs.vfsoverlay_file]),
+        #    vfs_info = vfs.vfs_info,
+        #),
         swift_common.create_swift_info(),
     ]
 

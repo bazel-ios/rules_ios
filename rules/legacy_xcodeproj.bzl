@@ -95,9 +95,9 @@ def _make_swift_copts(deps):
     vfs_files = []
     collected_vfs = False
     for dep in deps:
-        if VFSOverlayInfo in dep and not collected_vfs:
-            vfs_files.extend(dep[VFSOverlayInfo].files.to_list())
-            collected_vfs = True
+        #if VFSOverlayInfo in dep and not collected_vfs:
+        #    vfs_files.extend(dep[VFSOverlayInfo].files.to_list())
+        #    collected_vfs = True
         if HeaderMapInfo in dep:
             hmap_files.extend(dep[HeaderMapInfo].files.to_list())
 
@@ -156,9 +156,9 @@ def _make_objc_copts(deps):
     vfs_files = []
     collected_vfs = False
     for dep in deps:
-        if VFSOverlayInfo in dep and not collected_vfs:
-            vfs_files.extend(dep[VFSOverlayInfo].files.to_list())
-            collected_vfs = True
+        #if VFSOverlayInfo in dep and not collected_vfs:
+        #    vfs_files.extend(dep[VFSOverlayInfo].files.to_list())
+        #    collected_vfs = True
         if HeaderMapInfo in dep:
             hmap_files.extend(dep[HeaderMapInfo].files.to_list())
 
