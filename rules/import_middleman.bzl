@@ -269,6 +269,15 @@ def _file_collector_rule_impl(ctx):
     cc_info = None
     if is_bazel_7:
         cc_info = CcInfo(
+            compilation_context = cc_common.create_compilation_context(
+                framework_includes = depset(
+                    transitive = [
+                        dep[CcInfo].compilation_context.framework_includes
+                        for dep in ctx.attr.deps
+                        if CcInfo in dep
+                    ],
+                ),
+            ),
             linking_context = cc_common.create_linking_context(
                 linker_inputs = depset([
                     cc_common.create_linker_input(
