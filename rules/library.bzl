@@ -585,6 +585,11 @@ def apple_library(
     defines = kwargs.pop("defines", [])
     testonly = kwargs.pop("testonly", False)
     features = kwargs.pop("features", [])
+    extension_safe = kwargs.pop("extension_safe", None)
+
+    # Set extra linkopt for application extension safety
+    if extension_safe:
+        linkopts.append("-fapplication-extension")
 
     # Collect the swift_library related kwargs, these are typically only set when provided to allow
     # for wider compatibility with rule_swift versions.
