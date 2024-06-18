@@ -589,7 +589,9 @@ def apple_library(
 
     # Set extra linkopt for application extension safety
     if extension_safe:
-        linkopts.append("-fapplication-extension")
+        linkopts += ["-fapplication-extension"]
+        objc_copts += ["-fapplication-extension"]
+        swift_copts += ["-application-extension"]
 
     # Collect the swift_library related kwargs, these are typically only set when provided to allow
     # for wider compatibility with rule_swift versions.
