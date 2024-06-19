@@ -74,6 +74,17 @@ module {module_name}.Swift {{
         arguments = [args],
     )
 
+    return [
+        DefaultInfo(
+            files = depset([ctx.outputs.destination]),
+        ),
+        CcInfo(
+            compilation_context = cc_common.create_compilation_context(
+                headers = depset([ctx.outputs.destination]),
+            ),
+        ),
+    ]
+
 extend_modulemap = rule(
     implementation = _extend_modulemap_impl,
     attrs = {
@@ -961,6 +972,7 @@ def apple_library(
                 tags = _MANUAL,
             )
             module_map = "%s.extended.modulemap" % name
+            swiftc_inputs.append(module_map)
 
     # Note: this needs to go here, in order to virtualize the extended module
     framework_vfs_overlay(
@@ -991,11 +1003,11 @@ def apple_library(
                 "@build_bazel_rules_ios//:virtualize_frameworks": framework_vfs_swift_copts,
                 "//conditions:default": framework_vfs_swift_copts if enable_framework_vfs else [],
             }) + additional_swift_copts,
-            deps = deps + private_deps + private_dep_names + lib_names + select({
+            deps = deps + private_deps + private_dep_names + lib_names,
+            swiftc_inputs = swiftc_inputs + select({
                 "@build_bazel_rules_ios//:virtualize_frameworks": [framework_vfs_overlay_name_swift],
                 "//conditions:default": [framework_vfs_overlay_name_swift] if enable_framework_vfs else [],
             }),
-            swiftc_inputs = swiftc_inputs,
             features = features + ["swift.no_generated_module_map", "swift.use_pch_output_dir"] + select({
                 "@build_bazel_rules_ios//:virtualize_frameworks": ["swift.vfsoverlay"],
                 "//conditions:default": [],
