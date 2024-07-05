@@ -819,14 +819,6 @@ def apple_library(
     if vendored_deps_arm64_sim:
         deps += vendored_deps_arm64_sim
 
-    resource_bundles = library_tools["resource_bundle_generator"](
-        name = name,
-        library_tools = library_tools,
-        resource_bundles = kwargs.pop("resource_bundles", {}),
-        platforms = platforms,
-    )
-    deps += resource_bundles
-
     objc_libname = "%s_objc" % name
     swift_libname = "%s_swift" % name
     cpp_libname = "%s_cpp" % name
@@ -936,8 +928,6 @@ def apple_library(
     if swift_version:
         additional_swift_copts += ["-swift-version", swift_version]
 
-    module_data = library_tools["wrap_resources_in_filegroup"](name = name + "_wrapped_resources_filegroup", srcs = data, testonly = testonly)
-
     if has_swift_sources:
         additional_swift_copts += ["-Xcc", "-I."]
         if module_map:
@@ -987,6 +977,20 @@ def apple_library(
         deps = deps + private_deps + private_dep_names + lib_names + import_vfsoverlays,
         #enable_framework_vfs = enable_framework_vfs
     )
+
+    # Generate resource bundles
+    module_data = library_tools["wrap_resources_in_filegroup"](
+        name = name + "_wrapped_resources_filegroup",
+        srcs = data,
+        testonly = testonly,
+    )
+    resource_bundles = library_tools["resource_bundle_generator"](
+        name = name,
+        library_tools = library_tools,
+        resource_bundles = kwargs.pop("resource_bundles", {}),
+        platforms = platforms,
+    )
+    deps += resource_bundles
 
     if has_swift_sources:
         # Forward the kwargs and the swift specific kwargs to the swift_library
