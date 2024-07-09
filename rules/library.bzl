@@ -941,8 +941,6 @@ def apple_library(
             })
 
         swiftc_inputs = other_inputs + objc_hdrs + objc_private_hdrs
-        if module_map:
-            swiftc_inputs.append(module_map)
         if swift_objc_bridging_header:
             if swift_objc_bridging_header not in objc_hdrs:
                 swiftc_inputs.append(swift_objc_bridging_header)
