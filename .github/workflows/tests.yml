@@ -21,8 +21,8 @@ jobs:
       fail-fast: false
       matrix:
         bazel_version: [6.5.0, 7.1.0]
-        xcode_version: [15.2]
         virtual_frameworks: [true, false]
+        xcode_version: [15.2]
     env:
         XCODE_VERSION: ${{ matrix.xcode_version }}
         USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
@@ -155,3 +155,67 @@ jobs:
             --config=ios_multi_arch_test \
             -- \
             tests/ios/app/App
+
+  build_without_the_bytes:
+    name: Build without the Bytes (Bazel ${{ matrix.bazel_version }} / Outputs level ${{matrix.download_outputs_level}} / rule versions ${{ matrix.rule_versions }} / Xcode ${{ matrix.xcode_version }})
+    runs-on: macos-14
+    strategy:
+      fail-fast: false
+      matrix:
+        bazel_version: [7.1.0]
+        download_outputs_level: ["minimal", "toplevel"]
+        rule_versions: ["current", "latest"]
+        xcode_version: [15.2]
+    env:
+        GH_TOKEN: ${{ github.token }}
+        RULES_APPLE_RULES_SWIFT_VERSION: ${{ matrix.rule_versions }}
+        USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
+        XCODE_VERSION: ${{ matrix.xcode_version }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Preflight Env
+        run: .github/workflows/preflight_env.sh
+      - name: Build using Build without the Bytes
+        run: |
+          # non-iOS
+          bazelisk build \
+            --remote_download_outputs=${{matrix.download_outputs_level}} \
+            --disk_cache="/tmp/bazel-rules_ios-bwtb-cache" \
+            --remote_cache= \
+            -- \
+            //... \
+            -//tests/ios/...
+          # Clean the caches to test that BwtB works
+          bazel clean --expunge
+          # Run the same build again
+          bazelisk build \
+            --remote_download_outputs=${{matrix.download_outputs_level}} \
+            --disk_cache="/tmp/bazel-rules_ios-bwtb-cache" \
+            --remote_cache= \
+            -- \
+            //... \
+            -//tests/ios/...
+
+          # iOS
+          bazelisk build \
+            --config=ios \
+            --remote_download_outputs=${{matrix.download_outputs_level}} \
+            --disk_cache="/tmp/bazel-rules_ios-bwtb-ios-cache" \
+            --remote_cache= \
+            -- \
+            //tests/ios/...
+          # Clean the caches to test that BwtB works
+          bazel clean --expunge
+          # Run the same build again
+          bazelisk build \
+            --config=ios \
+            --remote_download_outputs=${{matrix.download_outputs_level}} \
+            --disk_cache="/tmp/bazel-rules_ios-bwtb-ios-cache" \
+            --remote_cache= \
+            -- \
+            //tests/ios/...
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: bazel-testlogs
+          path: bazel-testlogs
