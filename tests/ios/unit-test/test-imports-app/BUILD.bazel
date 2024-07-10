@@ -55,7 +55,6 @@ apple_framework_packaging(
     skip_packaging = ["binary"],
     tags = [
         "manual",
-        "xcodeproj-ignore-as-target",
     ],
     transitive_deps = [
         ":SomeFramework",
@@ -80,8 +79,6 @@ ios_unit_test(
     sdk_frameworks = ["XCTest"],
     swift_objc_bridging_header = "TestImports-Unit-Tests-Bridging-Header.h",
     test_host = ":TestImports-App",
-    # Adding visibility so the xcodeproject tests can depend on this target
-    visibility = ["//visibility:public"],
     deps = [
         ":TestImports-App_framework_unlinked",
     ],

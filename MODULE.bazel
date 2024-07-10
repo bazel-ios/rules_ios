@@ -63,7 +63,6 @@ non_module_deps = use_extension("//rules:module_extensions.bzl", "non_module_dep
 use_repo(
     non_module_deps,
     "arm64-to-sim",
-    "com_github_yonaskolb_xcodegen",
     "tart",
 )
 

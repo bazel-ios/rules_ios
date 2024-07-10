@@ -62,9 +62,6 @@ def rules_ios_dependencies(
     # Non-bzlmod tool dependencies that are used in the rule APIs
     _rules_ios_tool_dependencies()
 
-    # If legacy project generator is deprecated this can be removed.
-    _rules_ios_legacy_xcodeproj_dependencies()
-
 def rules_ios_dev_dependencies(
         load_bzlmod_dependencies = True):
     """
@@ -143,29 +140,6 @@ def _rules_ios_bzlmod_dev_dependencies():
             "https://mirror.bazel.build/github.com/bazelbuild/stardoc/releases/download/0.6.2/stardoc-0.6.2.tar.gz",
             "https://github.com/bazelbuild/stardoc/releases/download/0.6.2/stardoc-0.6.2.tar.gz",
         ],
-    )
-
-def _rules_ios_legacy_xcodeproj_dependencies():
-    """Fetches the repositories that are dependencies of the legacy xcode project generator"""
-
-    _maybe(
-        http_archive,
-        name = "com_github_yonaskolb_xcodegen",
-        build_file_content = """\
-load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
-
-native_binary(
-    name = "xcodegen",
-    src = "bin/xcodegen",
-    out = "xcodegen",
-    data = glob(["share/**/*"]),
-    visibility = ["//visibility:public"],
-)
-""",
-        canonical_id = "xcodegen-2.19.0",
-        sha256 = "a70a815cdde2f8fd834b9f0605d0a2eb05f2c0a4b424480ab9bb6ef8d48156cf",
-        strip_prefix = "xcodegen",
-        urls = ["https://github.com/bazel-ios/XcodeGen/releases/download/2.19.0/xcodegen.zip"],
     )
 
 def _rules_ios_tool_dependencies():

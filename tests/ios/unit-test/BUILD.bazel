@@ -20,8 +20,6 @@ ios_unit_test(
     bundle_name = "DefaultHosted_bundle",
     minimum_os_version = "12.0",
     test_host = True,
-    # Adding visibility so the xcodeproject tests can depend on this target
-    visibility = ["//visibility:public"],
 )
 
 ios_unit_test(
@@ -32,8 +30,6 @@ ios_unit_test(
     ],
     minimum_os_version = "12.0",
     test_host = "//rules/test_host_app:iOS-12.0-AppHost",
-    # Adding visibility so the xcodeproject tests can depend on this target
-    visibility = ["//visibility:public"],
 )
 
 bool_flag(
@@ -59,8 +55,6 @@ ios_unit_test(
         "//tests/ios/unit-test:use_other_test_host": "//rules/test_host_app:iOS-12.0-AppHost",
         "//conditions:default": "//rules/test_host_app:iOS-14.0-AppHost",
     }),
-    # Adding visibility so the xcodeproject tests can depend on this target
-    visibility = ["//visibility:public"],
 )
 
 ios_unit_test(
@@ -72,8 +66,6 @@ ios_unit_test(
     minimum_os_version = "12.0",
     # Intentionally dependent on app with extensions.
     test_host = "//tests/ios/app:App",
-    # Adding visibility so the xcodeproject tests can depend on this target
-    visibility = ["//visibility:public"],
 )
 
 ios_unit_test(
@@ -98,8 +90,6 @@ ios_unit_test(
         "shard_2": {"test_filter": "EmptyTests"},
     },
     test_host = True,
-    # Adding visibility so the xcodeproject tests can depend on this target
-    visibility = ["//visibility:public"],
 )
 
 ios_unit_test(

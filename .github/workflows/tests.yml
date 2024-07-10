@@ -132,57 +132,6 @@ jobs:
           name: bazel-testlogs
           path: bazel-testlogs
 
-  xcodeproj_tests:
-    name: Legacy xcodeproj tests (Bazel ${{ matrix.bazel_version }} / Xcode ${{ matrix.xcode_version }})
-    runs-on: macos-14
-    strategy:
-      fail-fast: false
-      matrix:
-        bazel_version: [6.5.0]  # Only test on a single Bazel version as fixtures require updates across Bazel verisons
-        xcode_version: [15.2]
-    env:
-        XCODE_VERSION: ${{ matrix.xcode_version }}
-        USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Preflight Env
-        run: .github/workflows/preflight_env.sh --no-bzlmod
-      - name: Run tests
-        run: ./tests/xcodeproj-tests.sh --run && ./tests/test-tests.sh
-      - uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: bazel-testlogs
-          path: bazel-testlogs
-
-  lldb_ios_tests_xcode:
-    name: LLDB tests (Bazel ${{ matrix.bazel_version }} / Xcode ${{ matrix.xcode_version }})
-    runs-on: macos-14
-    strategy:
-      fail-fast: false
-      matrix:
-        bazel_version: [6.5.0, 7.1.0]
-        xcode_version: [15.2]
-    env:
-        XCODE_VERSION: ${{ matrix.xcode_version }}
-        USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Preflight Env
-        run: .github/workflows/preflight_env.sh
-      - name: Run tests
-        run: |
-          bazelisk test \
-            --config=ios_lldb_test \
-            -- \
-            tests/ios/lldb/app:objc_app_po_test \
-            tests/ios/lldb/app:objc_app_variable_test
-      - uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: bazel-testlogs
-          path: bazel-testlogs
-
   multi_arch_support:
     # i386 was removed on rules_apple 3.x.x - this test case needs reworking
     # to exemplify fat binaries on the latest version
