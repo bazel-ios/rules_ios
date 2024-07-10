@@ -133,23 +133,7 @@ ios_application(
 
 ### Xcode project generation
 
-There are currently two options to generate Xcode projects that build with Bazel.
-
-`rules_ios` has its own project generator that is considered stable and ready to be used in production. Here's a minimal example of how to load it in your `BUILD` file:
-
-```python
-load("@build_bazel_rules_ios//rules:xcodeproj.bzl", "xcodeproj")
-
-xcodeproj(
-    name = "MyXcode",
-    bazel_path = "bazelisk",
-    deps = [ ":iOS-App"]
-)
-```
-
-Checkout [legacy_xcodeproj.bzl](https://github.com/bazel-ios/rules_ios/blob/master/rules/legacy_xcodeproj.bzl) for available attributes.
-
-Alternatively, [rules_xcodeproj](https://github.com/MobileNativeFoundation/rules_xcodeproj) is another great generator and we're working with them to better integrate it with `rules_ios`. Checkout [examples/rules_ios](https://github.com/MobileNativeFoundation/rules_xcodeproj/tree/main/examples/rules_ios) for examples of how to use it with `rules_ios`.
+See [rules_xcodeproj](https://github.com/MobileNativeFoundation/rules_xcodeproj).
 
 ### Frameworks
 

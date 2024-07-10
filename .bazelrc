@@ -4,7 +4,7 @@ common --enable_bzlmod
 # Spawn strategy required for some tests
 build --spawn_strategy=standalone
 
-# Setup Xcode configuration for xcodeproj tests
+# Setup Xcode configuration.
 build --xcode_version_config=//:host_xcodes
 
 build --experimental_strict_conflict_checks
@@ -12,8 +12,7 @@ build --experimental_strict_conflict_checks
 build --verbose_failures # Print the full command line for commands that failed
 build --test_output=errors # Prints log file output to the console on failure
 
-# Enable dbg compilation mode in this repo, so we can test xcodeproj-built
-# binaries contain debug symbol tables.
+# Enable dbg compilation mode in this repo.
 build --compilation_mode=dbg
 
 # Use 'worker' strategy for swift compilation
