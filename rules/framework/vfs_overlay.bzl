@@ -267,6 +267,8 @@ def _framework_vfs_overlay_impl(ctx):
             if VFSOverlayInfo in dep:
                 vfsoverlays.append(dep[VFSOverlayInfo].vfs_info)
 
+    vfs_overlay_file = ctx.actions.declare_file(ctx.label.name + ".yaml")
+
     vfs = make_vfsoverlay(
         ctx,
         hdrs = ctx.files.hdrs,
@@ -275,7 +277,7 @@ def _framework_vfs_overlay_impl(ctx):
         has_swift = ctx.attr.has_swift,
         swiftmodules = ctx.files.swiftmodules,
         merge_vfsoverlays = vfsoverlays,
-        output = ctx.outputs.vfsoverlay_file,
+        output = vfs_overlay_file,
         extra_search_paths = ctx.attr.extra_search_paths,
     )
 
@@ -286,6 +288,9 @@ def _framework_vfs_overlay_impl(ctx):
         ),
     )
     return [
+        DefaultInfo(
+            files = depset([vfs_overlay_file]),
+        ),
         apple_common.new_objc_provider(),
         cc_info,
         VFSOverlayInfo(
@@ -446,7 +451,4 @@ toolchain (such as `clang`) will be retrieved.
     fragments = [
         "apple",
     ],
-    outputs = {
-        "vfsoverlay_file": "%{name}.yaml",
-    },
 )

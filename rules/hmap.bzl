@@ -70,21 +70,26 @@ def _make_headermap_impl(ctx):
             # means neither apple_common.Objc nor CcInfo in hdr provider target
             fail("direct_hdr_provider %s must contain either 'CcInfo' or 'objc' provider" % provider)
 
+    headermap = ctx.actions.declare_file(ctx.label.name + ".hmap")
+
     hmap.make_hmap(
         actions = ctx.actions,
         headermap_builder = ctx.executable._headermap_builder,
-        output = ctx.outputs.headermap,
+        output = headermap,
         namespace = ctx.attr.namespace,
         hdrs_lists = hdrs_lists,
     )
 
     cc_info_provider = CcInfo(
         compilation_context = cc_common.create_compilation_context(
-            headers = depset([ctx.outputs.headermap]),
+            headers = depset([headermap]),
         ),
     )
 
     providers = [
+        DefaultInfo(
+            files = depset([headermap]),
+        ),
         apple_common.new_objc_provider(),
         cc_info_provider,
         swift_common.create_swift_info(),
@@ -93,7 +98,7 @@ def _make_headermap_impl(ctx):
     hdrs_lists = [l for l in hdrs_lists if l]
     if len(hdrs_lists) > 0:
         providers.append(HeaderMapInfo(
-            files = depset([ctx.outputs.headermap]),
+            files = depset([headermap]),
         ))
 
     return providers
@@ -126,7 +131,6 @@ headermap = rule(
             ),
         ),
     },
-    outputs = {"headermap": "%{name}.hmap"},
     doc = """\
 Creates a binary headermap file from the given headers,
 suitable for passing to clang.
