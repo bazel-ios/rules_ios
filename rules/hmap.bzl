@@ -93,13 +93,10 @@ def _make_headermap_impl(ctx):
         apple_common.new_objc_provider(),
         cc_info_provider,
         swift_common.create_swift_info(),
-    ]
-
-    hdrs_lists = [l for l in hdrs_lists if l]
-    if len(hdrs_lists) > 0:
-        providers.append(HeaderMapInfo(
+        HeaderMapInfo(
             files = depset([headermap]),
-        ))
+        ),
+    ]
 
     return providers
 
