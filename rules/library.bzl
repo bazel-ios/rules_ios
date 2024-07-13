@@ -896,7 +896,7 @@ def apple_library(
             hdrs = objc_hdrs,
             tags = _MANUAL,
         )
-        private_dep_names.append(public_hmap_name)
+        deps += [public_hmap_name]
         additional_objc_copts, additional_swift_copts, additional_cc_copts = _append_headermap_copts(public_hmap_name, "-I", additional_objc_copts, additional_swift_copts, additional_cc_copts)
 
     if len(objc_non_exported_hdrs + objc_private_hdrs) > 0:
@@ -1033,7 +1033,7 @@ def apple_library(
                 tags = _MANUAL,
                 testonly = testonly,
             )
-            private_dep_names.append(swift_doublequote_hmap_name)
+            deps += [swift_doublequote_hmap_name]
             additional_objc_copts, additional_swift_copts, additional_cc_copts = _append_headermap_copts(swift_doublequote_hmap_name, "-iquote", additional_objc_copts, additional_swift_copts, additional_cc_copts)
 
             # Add generated swift header to header maps for angle bracket imports
@@ -1046,7 +1046,7 @@ def apple_library(
                 tags = _MANUAL,
                 testonly = testonly,
             )
-            private_dep_names.append(swift_angle_bracket_hmap_name)
+            deps += [swift_angle_bracket_hmap_name]
             additional_objc_copts, additional_swift_copts, additional_cc_copts = _append_headermap_copts(swift_angle_bracket_hmap_name, "-I", additional_objc_copts, additional_swift_copts, additional_cc_copts)
 
     if cpp_sources:
