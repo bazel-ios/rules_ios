@@ -285,6 +285,7 @@ def _framework_vfs_overlay_impl(ctx):
     cc_info = CcInfo(
         compilation_context = cc_common.create_compilation_context(
             headers = headers,
+            direct_public_headers = [vfs.vfsoverlay_file],
         ),
     )
     return [
