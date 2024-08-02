@@ -155,3 +155,41 @@ jobs:
             --config=ios_multi_arch_test \
             -- \
             tests/ios/app/App
+
+  clean_build:
+    # Intended to test issues with rules which only pass when they have already been built
+    name: Clean Build (Bazel ${{ matrix.bazel_version }} / Xcode ${{ matrix.xcode_version }})
+    runs-on: macos-14
+    strategy:
+      fail-fast: false
+      matrix:
+        bazel_version: [6.5.0, 7.1.0]
+        xcode_version: [15.2]
+    env:
+        XCODE_VERSION: ${{ matrix.xcode_version }}
+        USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Preflight Env
+        run: .github/workflows/preflight_env.sh
+      - name: Clean Build
+        run: |
+          bazelisk clean --expunge
+
+          # non-iOS
+          bazelisk build \
+            --disk_cache= \
+            --remote_cache= \
+            -- \
+            //... \
+            -//tests/ios/...
+
+          bazelisk clean --expunge
+
+          # iOS
+          bazelisk build \
+            --config=ios \
+            --disk_cache= \
+            --remote_cache= \
+            -- \
+            //tests/ios/...
