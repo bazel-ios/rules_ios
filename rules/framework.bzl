@@ -1017,6 +1017,11 @@ def _apple_framework_packaging_impl(ctx):
     objc_provider_utils.add_to_dict_if_present(compilation_context_fields, "headers", depset(
         direct = outputs.headers + outputs.private_headers + outputs.modulemaps,
     ))
+    objc_provider_utils.add_to_dict_if_present(
+        compilation_context_fields,
+        "direct_public_headers",
+        outputs.headers + outputs.modulemaps,
+    )
     objc_provider_utils.add_to_dict_if_present(compilation_context_fields, "defines", depset(
         direct = [],
         transitive = [getattr(cc_info.compilation_context, "defines") for cc_info in dep_cc_infos],
