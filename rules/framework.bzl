@@ -1216,13 +1216,6 @@ that this target depends on.
 """,
             cfg = transition_support.apple_platform_split_transition,
         ),
-        "_headermap_builder": attr.label(
-            executable = True,
-            cfg = "exec",
-            default = Label(
-                "//rules/hmap:hmaptool",
-            ),
-        ),
         "stamp": attr.int(
             mandatory = False,
             default = 0,
