@@ -10,6 +10,7 @@ load("@build_bazel_rules_apple//apple/internal/resource_rules:apple_intent_libra
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 load("//rules:precompiled_apple_resource_bundle.bzl", "precompiled_apple_resource_bundle")
 load("//rules:hmap.bzl", "headermap")
+load("//rules:features.bzl", "feature_names")
 load("//rules/framework:vfs_overlay.bzl", "framework_vfs_overlay", VFS_OVERLAY_FRAMEWORK_SEARCH_PATH = "FRAMEWORK_SEARCH_PATH")
 load("//rules/library:resources.bzl", "wrap_resources_in_filegroup")
 load("//rules/library:xcconfig.bzl", "copts_by_build_setting_with_defaults")
@@ -937,7 +938,7 @@ def apple_library(
 
             additional_swift_copts += select({
                 "@build_bazel_rules_ios//:swift_disable_import_underlying_module": [],
-                "//conditions:default": ["-import-underlying-module"],
+                "//conditions:default": ["-import-underlying-module"] if not feature_names.swift_disable_import_underlying_module in features else [],
             })
 
         swiftc_inputs = other_inputs + objc_hdrs + objc_private_hdrs
