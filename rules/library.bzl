@@ -931,6 +931,7 @@ def apple_library(
 
     if has_swift_sources:
         additional_swift_copts += ["-Xcc", "-I."]
+        swiftc_inputs = other_inputs + objc_hdrs + objc_private_hdrs
         if module_map:
             # Frameworks find the modulemap file via the framework vfs overlay
             if not namespace_is_module_name:
@@ -940,8 +941,8 @@ def apple_library(
                 "@build_bazel_rules_ios//:swift_disable_import_underlying_module": [],
                 "//conditions:default": ["-import-underlying-module"] if not feature_names.swift_disable_import_underlying_module in features else [],
             })
+            swiftc_inputs += [module_map]
 
-        swiftc_inputs = other_inputs + objc_hdrs + objc_private_hdrs
         if swift_objc_bridging_header:
             if swift_objc_bridging_header not in objc_hdrs:
                 swiftc_inputs.append(swift_objc_bridging_header)
@@ -952,6 +953,8 @@ def apple_library(
         generated_swift_header_name = module_name + "-Swift.h"
 
         if module_map:
+            # TODO: now that we always add module_map as a swiftc_input,
+            # we should consider removing this one if it's not needed
             extend_modulemap(
                 name = module_map + ".extended." + name,
                 destination = "%s.extended.modulemap" % name,
