@@ -2,7 +2,7 @@
 common --enable_bzlmod
 
 # Spawn strategy required for some tests
-build --spawn_strategy=standalone
+build --spawn_strategy=local
 
 # Setup Xcode configuration.
 build --xcode_version_config=//:host_xcodes
@@ -61,6 +61,16 @@ build:remote_cache --nolegacy_important_outputs
 build:remote_cache --noslim_profile
 build:remote_cache --remote_cache=grpcs://remote.buildbuddy.io
 build:remote_cache --remote_timeout=3600
+
+build:sandboxed --spawn_strategy=sandboxed
+# Otherwise it still use the worker strategy
+build:sandboxed --strategy=SwiftCompile=sandboxed
+build:sandboxed --strategy=Genrule=sandboxed,local
+build:sandboxed --strategy=StoryboardCompile=sandboxed,local
+build:sandboxed --strategy=CleaningFramework=sandboxed,local
+build:sandboxed --strategy=StoryboardLink=sandboxed,local
+build:sandboxed --strategy=ProcessAndSign=sandboxed,local
+build:sandboxed --strategy=AssetCatalogCompile=sandboxed,local
 
 # By default don't upload local results to remote cache, only CI does this.
 build --noremote_upload_local_results

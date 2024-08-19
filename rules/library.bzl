@@ -953,8 +953,6 @@ def apple_library(
         generated_swift_header_name = module_name + "-Swift.h"
 
         if module_map:
-            # TODO: now that we always add module_map as a swiftc_input,
-            # we should consider removing this one if it's not needed
             extend_modulemap(
                 name = module_map + ".extended." + name,
                 destination = "%s.extended.modulemap" % name,

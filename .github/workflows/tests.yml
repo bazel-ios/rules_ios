@@ -15,7 +15,7 @@ concurrency:
 #       when adding a new job / changing the matrix, make sure to update all jobs
 jobs:
   integration_tests:
-    name: Build and test (Bazel ${{ matrix.bazel_version }} / Xcode ${{ matrix.xcode_version }} / Virtual Frameworks ${{ matrix.virtual_frameworks }})
+    name: Build and test (Bazel ${{ matrix.bazel_version }} / Xcode ${{ matrix.xcode_version }} / Virtual Frameworks ${{ matrix.virtual_frameworks }}) / Sandbox ${{ matrix.sandbox }}
     runs-on: macos-14
     strategy:
       fail-fast: false
@@ -23,6 +23,7 @@ jobs:
         bazel_version: [6.5.0, 7.1.0]
         xcode_version: [15.2]
         virtual_frameworks: [true, false]
+        sandbox: [true, false]
     env:
         XCODE_VERSION: ${{ matrix.xcode_version }}
         USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
@@ -34,6 +35,10 @@ jobs:
         name: Add vfs config
         run: |
           echo "build --config=vfs" >> user.bazelrc
+      - if: matrix.sandbox
+        name: Enable sandbox mode
+        run: |
+          echo "build --config=sandboxed" >> user.bazelrcc
       - name: Build and Test
         run: |
           # non-iOS tests
