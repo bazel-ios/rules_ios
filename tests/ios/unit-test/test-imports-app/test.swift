@@ -5,6 +5,6 @@ class SwiftTests : XCTestCase {
   func testPasses() {
       _ = EmptyStruct()
       XCTAssertTrue(true)
-      XCTAssertEqual(TestHelper.createString(), "ObjcTestHelperString_EnumValue=1")
+      XCTAssertEqual(TestHelper.createString(), "ObjcTestHelperString_EnumValue=\(AppErrorCode.unknown.rawValue)")
   }
 }
