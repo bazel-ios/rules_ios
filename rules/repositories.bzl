@@ -92,7 +92,7 @@ def _rules_ios_bzlmod_dependencies():
     _maybe(
         http_archive,
         name = "build_bazel_rules_apple",
-        sha256 = "b4df908ec14868369021182ab191dbd1f40830c9b300650d5dc389e0b9266c8d",
+        sha256 = "62847b3f444ce514ae386704a119ad7b29fa6dfb65a38bff4ae239f2389a0429",
         url = "https://github.com/bazelbuild/rules_apple/releases/download/3.8.0/rules_apple.3.8.0.tar.gz",
     )
     _maybe(
