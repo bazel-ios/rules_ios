@@ -142,8 +142,9 @@ def _write_umbrella_header(
         module_name = name
 
     content = ""
-
+    extern_keyword = "extern"
     if generate_default_umbrella_header:
+        extern_keyword = "FOUNDATION_EXPORT"
         content += """\
 #ifdef __OBJC__
 #    import <Foundation/Foundation.h>
@@ -165,13 +166,13 @@ def _write_umbrella_header(
     for header in public_headers:
         content += "#import \"{header}\"\n".format(header = paths.basename(header))
 
-    if generate_default_umbrella_header:
-        content += """
-FOUNDATION_EXPORT double {module_name}VersionNumber;
-FOUNDATION_EXPORT const unsigned char {module_name}VersionString[];
+    content += """
+{extern_keyword} double {module_name}VersionNumber;
+{extern_keyword} const unsigned char {module_name}VersionString[];
 """.format(
-            module_name = module_name,
-        )
+        extern_keyword = extern_keyword,
+        module_name = module_name,
+    )
 
     write_file(
         name = basename + "~",
