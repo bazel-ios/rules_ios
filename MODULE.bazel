@@ -101,3 +101,14 @@ use_repo(
     apple_non_module_deps,
     "xctestrunner",
 )
+
+# Load xcode_sdk_frameworks
+xcode_sdk_frameworks = use_extension(
+    "//rules:module_extensions.bzl",
+    "xcode_sdk_frameworks",
+    dev_dependency = True,
+)
+use_repo(
+    xcode_sdk_frameworks,
+    "xcode_sdk_frameworks",
+)

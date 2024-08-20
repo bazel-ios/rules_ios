@@ -1,4 +1,5 @@
 load("@build_bazel_rules_swift//swift/internal:feature_names.bzl", "SWIFT_FEATURE_SYSTEM_MODULE")
+load("@build_bazel_rules_swift//swift/internal:providers.bzl", "create_swift_info")
 load("@build_bazel_rules_swift//swift/internal:swift_common.bzl", "swift_common")
 
 def _sdk_clang_module_impl(ctx):
@@ -11,10 +12,16 @@ def _sdk_clang_module_impl(ctx):
         # We need to return CcInfo and its compilation_context. We may also consider to update swift_clang_module_aspect.
         # See https://github.com/bazelbuild/rules_swift/blob/d68b21471e4e9d922b75e2b0621082b8ce017d11/swift/internal/swift_clang_module_aspect.bzl#L548
         CcInfo(compilation_context = cc_common.create_compilation_context()),
+        # Required to add sdk_clang_module targets to the deps of swift_module_alias.
+        # TODO(cshi): create the SwiftInfo correctly
+        create_swift_info(),
     ]
 
 sdk_clang_module = rule(
     attrs = {
+        "deps": attr.label_list(
+            doc = "The deps of the SDK clang module",
+        ),
         "module_map": attr.string(
             doc = """\
 The path to a SDK framework module map.
