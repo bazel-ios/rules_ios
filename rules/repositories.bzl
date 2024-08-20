@@ -85,7 +85,7 @@ def _rules_ios_bzlmod_dependencies():
     _maybe(
         http_archive,
         name = "build_bazel_rules_swift",
-        sha256 = "bb01097c7c7a1407f8ad49a1a0b1960655cf823c26ad2782d0b7d15b323838e2",
+        sha256 = "9919ed1d8dae509645bfd380537ae6501528d8de971caebed6d5185b9970dc4d",
         url = "https://github.com/bazelbuild/rules_swift/releases/download/2.1.1/rules_swift.2.1.1.tar.gz",
     )
 
