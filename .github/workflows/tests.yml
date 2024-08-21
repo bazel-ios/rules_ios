@@ -15,7 +15,7 @@ concurrency:
 #       when adding a new job / changing the matrix, make sure to update all jobs
 jobs:
   integration_tests:
-    name: Build and test (Bazel ${{ matrix.bazel_version }} / Xcode ${{ matrix.xcode_version }} / Virtual Frameworks ${{ matrix.virtual_frameworks }}) / Sandbox ${{ matrix.sandbox }}
+    name: Build and test (Bazel ${{ matrix.bazel_version }} / Xcode ${{ matrix.xcode_version }} / VFS ${{ matrix.virtual_frameworks }} / Sandbox ${{ matrix.sandbox }} / Latest rules ${{ matrix.latest_rules }})
     runs-on: macos-14
     strategy:
       fail-fast: false
@@ -24,9 +24,13 @@ jobs:
         xcode_version: [15.2]
         virtual_frameworks: [true, false]
         sandbox: [true, false]
+        latest_rules: [true, false]
     env:
         XCODE_VERSION: ${{ matrix.xcode_version }}
         USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
+        LATEST_RULES_SWIFT_VERSION: 2.1.1
+        LATEST_RULES_APPLE_VERSION: 3.8.0
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - name: Preflight Env
@@ -39,8 +43,18 @@ jobs:
         name: Enable sandbox mode
         run: |
           echo "build --config=sandboxed" >> user.bazelrcc
+      - if: matrix.latest_rules
+        name: Use latest rules
+        run: |
+          gh repo clone bazelbuild/rules_swift /tmp/rules_swift -- --branch "${{ env.LATEST_RULES_SWIFT_VERSION }}" --depth=1
+          echo "common --override_module=rules_swift=/tmp/rules_swift" >> user.bazelrc
+          gh repo clone bazelbuild/rules_apple /tmp/rules_apple -- --branch "${{ env.LATEST_RULES_APPLE_VERSION }}" --depth=1
+          echo "common --override_module=rules_apple=/tmp/rules_apple" >> user.bazelrc
       - name: Build and Test
         run: |
+          echo "Running with config:"
+          cat user.bazelrc
+
           # non-iOS tests
           bazelisk test \
             -- \
