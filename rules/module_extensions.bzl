@@ -6,6 +6,10 @@ load(
     "rules_ios_dev_dependencies",
 )
 load(
+    "//rules:xcode_sdk_frameworks.bzl",
+    "load_xcode_sdk_frameworks",
+)
+load(
     "//tools/toolchains/xcode_configure:xcode_configure.bzl",
     _xcode_configure = "xcode_configure",
 )
@@ -41,3 +45,8 @@ xcode_configure = module_extension(
         ),
     },
 )
+
+def _xcode_sdk_frameworks_impl(_):
+    load_xcode_sdk_frameworks()
+
+xcode_sdk_frameworks = module_extension(implementation = _xcode_sdk_frameworks_impl)
