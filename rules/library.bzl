@@ -954,6 +954,8 @@ def apple_library(
         generated_swift_header_name = module_name + "-Swift.h"
 
         if module_map:
+            # Extended modulemap contains the Swift module and its generated header
+            # It is to be used by the Objective-C part of the library.
             extend_modulemap(
                 name = module_map + ".extended." + name,
                 destination = "%s.extended.modulemap" % name,
@@ -963,7 +965,6 @@ def apple_library(
                 tags = _MANUAL,
             )
             module_map = "%s.extended.modulemap" % name
-            swiftc_inputs.append(module_map)
 
     # Note: this needs to go here, in order to virtualize the extended module
     framework_vfs_overlay(
