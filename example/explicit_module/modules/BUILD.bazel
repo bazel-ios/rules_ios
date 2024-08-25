@@ -1,0 +1,20 @@
+load(
+    "@build_bazel_rules_swift//swift:swift.bzl",
+    "swift_binary",
+    "swift_library",
+)
+
+swift_binary(
+    name = "car",
+    srcs = ["main.swift"],
+    deps = [":car_module_library"],
+)
+
+swift_library(
+    name = "car_module_library",
+    srcs = ["CarModule.swift"],
+    module_name = "CarModule",
+    deps = [
+        "@xcode_sdk_frameworks//version15_4_0_15F31d/MacOSX:Foundation_swift",
+    ],
+)
