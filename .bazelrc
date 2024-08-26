@@ -5,7 +5,7 @@ common --enable_bzlmod
 build --spawn_strategy=standalone
 
 # Setup Xcode configuration.
-build --xcode_version_config=//:host_xcodes
+build --xcode_version=15.4.0.15F31d
 
 build --experimental_strict_conflict_checks
 
@@ -65,6 +65,7 @@ build:remote_cache --remote_timeout=3600
 # Configure for explicit module compilation
 build:explicit_modules --features=swift.use_c_modules
 build:explicit_modules --features=swift.emit_c_module
+build:explicit_modules --features=swift.use_explicit_swift_module_map
 build:explicit_modules --repo_env=EXPLICIT_MODULES=1
 
 # By default don't upload local results to remote cache, only CI does this.

@@ -16,9 +16,10 @@ PLATFORM_TUPLES = [
     ("iPhoneSimulator", "ios"),
 ]
 
-SDK_BUILD_FILE_TMPL = """load("@build_bazel_rules_apple//apple:apple.bzl", "apple_dynamic_framework_import")
+SDK_BUILD_FILE_TMPL = """\
 load("@build_bazel_rules_ios//rules/explicit_module:sdk_clang_module.bzl", "sdk_clang_module")
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_module_alias")
+load("@build_bazel_rules_ios//rules/explicit_module:sdk_swiftmodule_import.bzl", "sdk_swiftmodule_import")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_import")
 
 package(default_visibility = ["//visibility:public"])
 {sdk_targets}
@@ -38,9 +39,16 @@ sdk_clang_module(
 """
 
 SWIFT_MODULE_TMPL = """
-swift_module_alias(
+sdk_swiftmodule_import(
+    name = "import_swiftmodule_{name}",
+    module_name = "{name}",
+    swiftmodule_path = "{swiftmodule_path}",
+)
+
+swift_import(
     name = "{name}_swift",
     module_name = "{name}",
+    swiftmodule = ":import_swiftmodule_{name}",
     deps = [
 {deps}
     ],
@@ -101,15 +109,15 @@ config_setting(
 
 XCODE_VERSION_BUILD_FILE_TMPL = """package(default_visibility = ["//visibility:public"])
 
-alias(
-    name = "xcode_sdk_frameworks",
-    actual = select({{
-        "//:iPhoneOS": "//{xcode_version}/iPhoneOS:bazel_xcode_imports_swift",
-        "//:iPhoneSimulator": "//{xcode_version}/iPhoneSimulator:bazel_xcode_imports_swift",
-        "//:MacOSX": "//{xcode_version}/MacOSX:bazel_xcode_imports_swift",
-        "//conditions:default": "//{xcode_version}/MacOSX:bazel_xcode_imports_swift",
-    }})
-)
+# alias(
+#     name = "xcode_sdk_frameworks",
+#     actual = select({{
+#         "//:iPhoneOS": "//{xcode_version}/iPhoneOS:bazel_xcode_imports_swift",
+#         "//:iPhoneSimulator": "//{xcode_version}/iPhoneSimulator:bazel_xcode_imports_swift",
+#         "//:MacOSX": "//{xcode_version}/MacOSX:bazel_xcode_imports_swift",
+#         "//conditions:default": "//{xcode_version}/MacOSX:bazel_xcode_imports_swift",
+#     }})
+# )
 """
 
 def _find_all_frameworks(sdk_path):
@@ -180,6 +188,9 @@ def _target_for_module(developer_dir, sdk_path, module_name_by_type, module_deta
     module_name = module_name_by_type.get("swift") if is_swift else module_name_by_type.get("clang")
     if not module_name:
         fail("Expect module name by type, but got {}".format(module_name_by_type))
+    if module_name == "bazel_xcode_imports":
+        # Ignore bazel_xcode_imports
+        return None
 
     module_deps = module_details.get("directDependencies", [])
     deps = ["{}_c".format(d["clang"]) for d in module_deps if "clang" in d]
@@ -189,9 +200,11 @@ def _target_for_module(developer_dir, sdk_path, module_name_by_type, module_deta
     deps_string = "\n".join(sorted(["        \":{}\",".format(d) for d in deps]))
 
     if is_swift:
+        swiftmodule_path = module_details["details"]["swift"]["compiledModuleCandidates"][0]
         return SWIFT_MODULE_TMPL.format(
             name = module_name,
             deps = deps_string,
+            swiftmodule_path = swiftmodule_path,
         )
 
     clang_module_map_path = module_details["details"]["clang"]["moduleMapPath"]
@@ -231,13 +244,15 @@ def _create_build_file_for_sdk(
     for i in range(module_count):
         name_idx = 2 * i
         details_idx = 2 * i + 1
-        targets.append(_target_for_module(
+        target = _target_for_module(
             developer_dir = developer_dir,
             sdk_path = sdk_path,
             module_name_by_type = modules_info[name_idx],
             module_details = modules_info[details_idx],
             overrides = overrides,
-        ))
+        )
+        if target:
+            targets.append(target)
 
     build_file = SDK_BUILD_FILE_TMPL.format(sdk_targets = "".join(targets))
     build_file_path = output_folder.get_child("BUILD.bazel")
@@ -358,7 +373,8 @@ def _create_xcode_framework_targets(
     xcode_version_build_file_path = xcode_version_folder.get_child("BUILD.bazel")
     repository_ctx.file(
         xcode_version_build_file_path,
-        XCODE_VERSION_BUILD_FILE_TMPL.format(xcode_version = xcode_version_name),
+        XCODE_VERSION_BUILD_FILE_TMPL,
+        # XCODE_VERSION_BUILD_FILE_TMPL.format(xcode_version = xcode_version_name),
     )
 
 def _stub_frameworks(repository_ctx):
@@ -419,14 +435,14 @@ def _xcode_sdk_frameworks_impl(repository_ctx):
             target = "xcode_sdk_frameworks",
         ))
 
-    root_alias = ROOT_ALIAS_TMPL.format(
-        target = "xcode_sdk_frameworks",
-        select_lines = ",\n        ".join(framework_select_lines),
-    )
+    # root_alias = ROOT_ALIAS_TMPL.format(
+    #     target = "xcode_sdk_frameworks",
+    #     select_lines = ",\n        ".join(framework_select_lines),
+    # )
 
     root_build_file = ROOT_BUILD_FILE_TMPL.format(
         config_setting_lines = "".join(config_setting_lines),
-        xcode_sdk_framework_alias = root_alias,
+        xcode_sdk_framework_alias = "",
     )
 
     repository_ctx.file("BUILD.bazel", root_build_file)
