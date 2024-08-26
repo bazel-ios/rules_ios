@@ -276,7 +276,11 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
         if FrameworkInfo in dep:
             framework_info = dep[FrameworkInfo]
             fw_dep_vfsoverlays.extend(framework_info.vfsoverlay_infos)
-            framework_headers = depset(framework_info.headers + framework_info.modulemap + framework_info.private_headers)
+            framework_headers = depset(_compact(
+                framework_info.headers +
+                framework_info.private_headers +
+                [framework_info.modulemap],
+            ))
             propagated_interface_headers.append(framework_headers)
 
     outputs = framework_files.outputs
@@ -284,7 +288,7 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
     vfs = make_vfsoverlay(
         ctx,
         hdrs = outputs.headers,
-        module_map = outputs.modulemaps,
+        module_map = _compact([outputs.modulemap]),  # use a list as the rule expects a list here
         # We might need to pass in .swiftinterface files here as well
         # esp. if the error is `swift declaration not found` for some module
         swiftmodules = _compact([outputs.swiftmodule, outputs.swiftdoc]),
@@ -295,7 +299,11 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
 
     # Includes interface headers here ( handled in cc_info merge for no virtual )
     compilation_context_fields["headers"] = depset(
-        direct = outputs.headers + outputs.private_headers + outputs.modulemaps,
+        direct = _compact(
+            outputs.headers +
+            outputs.private_headers +
+            [outputs.modulemap],
+        ),
         transitive = propagated_interface_headers,
     )
 
@@ -303,7 +311,7 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
         vfsoverlay_infos = [vfs.vfs_info],
         headers = outputs.headers,
         private_headers = outputs.private_headers,
-        modulemap = outputs.modulemaps,
+        modulemap = outputs.modulemap,
         swiftmodule = outputs.swiftmodule,
         swiftdoc = outputs.swiftdoc,
     )
@@ -459,7 +467,7 @@ def _get_framework_files(ctx, deps):
         headers = headers_out,
         infoplist = infoplist_out,
         private_headers = private_headers_out,
-        modulemaps = [modulemap_out] if modulemap_out else [],
+        modulemap = modulemap_out,
         swiftmodule = swiftmodule_out,
         swiftdoc = swiftdoc_out,
         swiftinterface = swiftinterface_out,
@@ -471,7 +479,7 @@ def _get_framework_files(ctx, deps):
         binaries = binaries_in,
         headers = headers_in,
         private_headers = private_headers_in,
-        modulemaps = [modulemap_in] if modulemap_in else [],
+        modulemap = modulemap_in,
         swiftmodule = swiftmodule_in,
         swiftdoc = swiftdoc_in,
         swiftinterface = swiftinterface_in,
@@ -498,10 +506,10 @@ def _get_symlinked_framework_clean_action(ctx, framework_files, compilation_cont
     framework_contents = _compact(
         [
             outputs.binary,
-            outputs.swiftmodule,
+            outputs.modulemap,
             outputs.swiftdoc,
+            outputs.swiftmodule,
         ] +
-        outputs.modulemaps +
         outputs.headers +
         outputs.private_headers,
     )
@@ -561,7 +569,7 @@ def _create_swiftmodule(attrs):
         **kwargs
     )
 
-def _copy_swiftmodule(ctx, framework_files):
+def _copy_swiftmodule(ctx, framework_files, virtualize_frameworks):
     inputs = framework_files.inputs
     outputs = framework_files.outputs
 
@@ -581,15 +589,28 @@ def _copy_swiftmodule(ctx, framework_files):
     return [
         # only add the swift module, the objc modulemap is already listed as a header,
         # and it will be discovered via the framework search path
-        swift_common.create_module(name = swiftmodule_name, swift = swift_module),
+        swift_common.create_module(
+            name = swiftmodule_name,
+            clang = None if virtualize_frameworks else swift_common.create_clang_module(
+                module_map = outputs.modulemap,
+                compilation_context = cc_common.create_compilation_context(
+                    headers = depset(_compact(
+                        outputs.headers +
+                        outputs.private_headers +
+                        [outputs.modulemap],
+                    )),
+                ),
+            ),
+            swift = swift_module,
+        ),
     ]
 
-def _get_merged_swift_info(ctx, framework_files, transitive_deps):
+def _get_merged_swift_info(ctx, framework_files, transitive_deps, virtualize_frameworks):
     swift_info_fields = {
         "swift_infos": [dep[SwiftInfo] for dep in transitive_deps if SwiftInfo in dep],
     }
     if framework_files.outputs.swiftmodule:
-        swift_info_fields["modules"] = _copy_swiftmodule(ctx, framework_files)
+        swift_info_fields["modules"] = _copy_swiftmodule(ctx, framework_files, virtualize_frameworks)
     return swift_common.create_swift_info(**swift_info_fields)
 
 def _merge_root_infoplists(ctx):
@@ -1015,12 +1036,12 @@ def _apple_framework_packaging_impl(ctx):
     # Perform a basic merging of compilation context fields
     compilation_context_fields = {}
     objc_provider_utils.add_to_dict_if_present(compilation_context_fields, "headers", depset(
-        direct = outputs.headers + outputs.private_headers + outputs.modulemaps,
+        direct = _compact(outputs.headers + outputs.private_headers + [outputs.modulemap]),
     ))
     objc_provider_utils.add_to_dict_if_present(
         compilation_context_fields,
         "direct_public_headers",
-        outputs.headers + outputs.modulemaps,
+        _compact(outputs.headers + [outputs.modulemap]),
     )
     objc_provider_utils.add_to_dict_if_present(compilation_context_fields, "defines", depset(
         direct = [],
@@ -1043,7 +1064,7 @@ def _apple_framework_packaging_impl(ctx):
         framework_info = FrameworkInfo(
             headers = outputs.headers,
             private_headers = outputs.private_headers,
-            modulemap = outputs.modulemaps,
+            modulemap = outputs.modulemap,
             swiftmodule = outputs.swiftmodule,
             swiftdoc = outputs.swiftdoc,
         )
@@ -1084,13 +1105,12 @@ def _apple_framework_packaging_impl(ctx):
     else:
         bundle_outs = _bundle_static_framework(ctx, is_extension_safe = is_extension_safe, current_apple_platform = current_apple_platform, outputs = outputs)
         avoid_deps_info = AvoidDepsInfo(libraries = depset(avoid_deps).to_list(), link_dynamic = False)
-    swift_info = _get_merged_swift_info(ctx, framework_files, transitive_deps)
+    swift_info = _get_merged_swift_info(ctx, framework_files, transitive_deps, virtualize_frameworks)
 
     # Build out the default info provider
-    out_files = _compact([outputs.binary, outputs.swiftmodule, outputs.infoplist])
+    out_files = _compact([outputs.binary, outputs.swiftmodule, outputs.infoplist, outputs.modulemap])
     out_files.extend(outputs.headers)
     out_files.extend(outputs.private_headers)
-    out_files.extend(outputs.modulemaps)
 
     default_info = DefaultInfo(files = depset(out_files + bundle_outs.files.to_list()))
 
