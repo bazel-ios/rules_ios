@@ -549,7 +549,11 @@ def apple_library(
     module_name = kwargs.pop("module_name", name)
     namespace = module_name if namespace_is_module_name else name
     module_map = kwargs.pop("module_map", None)
+
     swift_objc_bridging_header = kwargs.pop("swift_objc_bridging_header", None)
+    if swift_objc_bridging_header:
+        objc_private_hdrs.append(swift_objc_bridging_header)
+
     has_swift_sources = len(swift_sources) > 0
 
     # Historically, xcode and cocoapods use an umbrella header that imports Foundation and UIKit at the
@@ -945,12 +949,11 @@ def apple_library(
             swiftc_inputs += [module_map]
 
         if swift_objc_bridging_header:
-            if swift_objc_bridging_header not in objc_hdrs:
-                swiftc_inputs.append(swift_objc_bridging_header)
             additional_swift_copts += [
                 "-import-objc-header",
                 "$(execpath :{})".format(swift_objc_bridging_header),
             ]
+
         generated_swift_header_name = module_name + "-Swift.h"
 
         if module_map:
