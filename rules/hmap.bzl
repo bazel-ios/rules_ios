@@ -72,20 +72,28 @@ def _make_headermap_impl(ctx):
         namespace = ctx.attr.namespace,
         hdrs_lists = hdrs_lists,
     )
-
-    cc_info_provider = CcInfo(
-        compilation_context = cc_common.create_compilation_context(
-            headers = depset([headermap]),
-        ),
+    compilation_context = cc_common.create_compilation_context(
+        headers = depset([headermap]),
     )
-
+    cc_info_provider = CcInfo(
+        compilation_context = compilation_context,
+    )
+    swift_info_provider = swift_common.create_swift_info(
+        modules = [swift_common.create_module(
+            name = ctx.attr.name,
+            clang = swift_common.create_clang_module(
+                compilation_context = compilation_context,
+                module_map = None,
+            ),
+        )],
+    )
     providers = [
         DefaultInfo(
             files = depset([headermap]),
         ),
         apple_common.new_objc_provider(),
         cc_info_provider,
-        swift_common.create_swift_info(),
+        swift_info_provider,
     ]
 
     hdrs_lists = [l for l in hdrs_lists if l]
