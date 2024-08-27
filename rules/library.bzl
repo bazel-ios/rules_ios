@@ -966,6 +966,10 @@ def apple_library(
             )
             module_map = "%s.extended.modulemap" % name
 
+            # We still add the extended modulemap to the swiftc inputs, so that it is
+            # available to dependents.
+            swiftc_inputs.append(module_map)
+
     # Note: this needs to go here, in order to virtualize the extended module
     framework_vfs_overlay(
         name = framework_vfs_overlay_name,
