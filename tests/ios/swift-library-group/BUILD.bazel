@@ -1,0 +1,64 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library", "swift_library_group")
+load("//rules:app.bzl", "ios_application")
+load("//rules:framework.bzl", "apple_framework")
+
+swift_library(
+    name = "A_SwiftLib",
+    srcs = ["A.swift"],
+    module_name = "A",
+    tags = ["manual"],
+)
+
+swift_library(
+    name = "B_SwiftLib",
+    srcs = ["B.swift"],
+    module_name = "B",
+    tags = ["manual"],
+    deps = [":A_SwiftLib"],
+)
+
+swift_library(
+    name = "C_SwiftLib",
+    srcs = ["C.swift"],
+    module_name = "C",
+    tags = ["manual"],
+)
+
+swift_library_group(
+    name = "B_SwiftLibGroup",
+    tags = ["manual"],
+    deps = [":B_SwiftLib"],
+)
+
+swift_library_group(
+    name = "A_C_SwiftLibGroup",
+    tags = ["manual"],
+    deps = [
+        ":A_SwiftLib",
+        ":C_SwiftLib",
+    ],
+)
+
+apple_framework(
+    name = "Framework",
+    srcs = ["Fwk.swift"],
+    module_name = "Fwk",
+    platforms = {"ios": "15.0"},
+    deps = [
+        ":A_SwiftLib",
+        ":B_SwiftLibGroup",
+    ],
+)
+
+ios_application(
+    name = "App",
+    srcs = ["App.swift"],
+    bundle_id = "com.example.app",
+    families = ["iphone"],
+    minimum_os_version = "15.0",
+    deps = [
+        ":A_C_SwiftLibGroup",
+        ":B_SwiftLibGroup",
+        ":Framework",
+    ],
+)
