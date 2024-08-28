@@ -6,7 +6,14 @@ load(
 swift_binary(
     name = "hello_world",
     srcs = ["main.swift"],
+    copts = [
+        # We need to add a new feature in rules_swift and add this flag.
+        "-Xfrontend",
+        "-disable-implicit-swift-modules",
+    ],
     deps = [
         "@xcode_sdk_frameworks//version15_4_0_15F31d/MacOSX:Foundation_swift",
+        # This flag should be dynamic added for debug builds
+        "@xcode_sdk_frameworks//version15_4_0_15F31d/MacOSX:SwiftOnoneSupport_swift",
     ],
 )
