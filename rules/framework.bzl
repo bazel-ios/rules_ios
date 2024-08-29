@@ -604,12 +604,13 @@ def _copy_swiftmodule(ctx, framework_files, virtualize_frameworks):
         ),
     ]
 
-def _get_merged_swift_info(ctx, framework_files, transitive_deps, virtualize_frameworks):
+def _get_merged_swift_info(ctx, swift_module_context, framework_files, transitive_deps, virtualize_frameworks):
     swift_info_fields = {
         "swift_infos": [dep[SwiftInfo] for dep in transitive_deps if SwiftInfo in dep],
+        "modules": [swift_module_context],
     }
     if framework_files.outputs.swiftmodule:
-        swift_info_fields["modules"] = _copy_swiftmodule(ctx, framework_files, virtualize_frameworks)
+        swift_info_fields["modules"] += _copy_swiftmodule(ctx, framework_files, virtualize_frameworks)
     return swift_common.create_swift_info(**swift_info_fields)
 
 def _merge_root_infoplists(ctx):
@@ -1071,11 +1072,13 @@ def _apple_framework_packaging_impl(ctx):
         # If not virtualizing the framework - then it runs a "clean"
         _get_symlinked_framework_clean_action(ctx, framework_files, compilation_context_fields)
 
+    compilation_context = cc_common.create_compilation_context(
+        **compilation_context_fields
+    )
+
     # Construct the `CcInfo` provider, the linking context here used instead of ObjcProvider in Bazel 7+.
     cc_info_provider = CcInfo(
-        compilation_context = cc_common.create_compilation_context(
-            **compilation_context_fields
-        ),
+        compilation_context = compilation_context,
         linking_context = cc_common.create_linking_context(
             linker_inputs = _get_cc_info_linker_inputs(deps = deps) if is_bazel_7 else depset([]),
         ),
@@ -1104,7 +1107,16 @@ def _apple_framework_packaging_impl(ctx):
     else:
         bundle_outs = _bundle_static_framework(ctx, is_extension_safe = is_extension_safe, current_apple_platform = current_apple_platform, outputs = outputs)
         avoid_deps_info = AvoidDepsInfo(libraries = depset(avoid_deps).to_list(), link_dynamic = False)
-    swift_info = _get_merged_swift_info(ctx, framework_files, transitive_deps, virtualize_frameworks)
+
+    # rules_swift 2.x no longers takes compilation_context from CcInfo, need to pass it in via SwiftInfo
+    swift_module_context = swift_common.create_module(
+        name = ctx.attr.name,
+        clang = swift_common.create_clang_module(
+            compilation_context = compilation_context,
+            module_map = None,
+        ),
+    )
+    swift_info = _get_merged_swift_info(ctx, swift_module_context, framework_files, transitive_deps, virtualize_frameworks)
 
     # Build out the default info provider
     out_files = _compact([outputs.binary, outputs.swiftmodule, outputs.infoplist])
