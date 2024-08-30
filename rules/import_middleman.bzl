@@ -265,19 +265,13 @@ def _file_collector_rule_impl(ctx):
         **objc_provider_fields
     )
 
-    # Create the CcInfo provider, linking information from this is used in Bazel 7+.
-    cc_info = None
+    dep_cc_infos = [dep[CcInfo] for dep in ctx.attr.deps if CcInfo in dep]
+    cc_info = cc_common.merge_cc_infos(cc_infos = dep_cc_infos)
     if is_bazel_7:
+        # Need to recreate linking_context for Bazel 7 or later
+        # because of https://github.com/bazelbuild/bazel/issues/16939
         cc_info = CcInfo(
-            compilation_context = cc_common.create_compilation_context(
-                framework_includes = depset(
-                    transitive = [
-                        dep[CcInfo].compilation_context.framework_includes
-                        for dep in ctx.attr.deps
-                        if CcInfo in dep
-                    ],
-                ),
-            ),
+            compilation_context = cc_info.compilation_context,
             linking_context = cc_common.create_linking_context(
                 linker_inputs = depset([
                     cc_common.create_linker_input(
@@ -297,10 +291,6 @@ def _file_collector_rule_impl(ctx):
                 ]),
             ),
         )
-    else:
-        dep_cc_infos = [dep[CcInfo] for dep in ctx.attr.deps if CcInfo in dep]
-        cc_info = cc_common.merge_cc_infos(cc_infos = dep_cc_infos)
-
     return [
         DefaultInfo(files = depset(dynamic_framework_dirs + replaced_frameworks)),
         objc,
