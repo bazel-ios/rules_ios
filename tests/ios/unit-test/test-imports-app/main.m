@@ -1,6 +1,7 @@
 #import "Header.h"
 #import <TestImports-App/Header.h>
 #import <TestImports-App/TestImports_App-Swift.h>
+#import <Basic/Basic.h>
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 @import UIKit;
@@ -18,6 +19,7 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = [UIViewController new];
     self.window.rootViewController.view.backgroundColor = UIColor.whiteColor;
+    NSLog([NSString stringWithFormat:@"%@ %ld", BasicString, BasicVal_DownloadTheApp]);
     NSAssert([EmptyClass emptyDescription] != nil, @"Empty class description exists");
     NSAssert([[EmptyClass new] emptyDescription] != nil, @"Empty instance description exists");
     [self.window makeKeyAndVisible];
