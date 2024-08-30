@@ -266,40 +266,8 @@ def _file_collector_rule_impl(ctx):
     )
 
     # Create the CcInfo provider, linking information from this is used in Bazel 7+.
-    cc_info = None
-    if is_bazel_7:
-        cc_info = CcInfo(
-            compilation_context = cc_common.create_compilation_context(
-                framework_includes = depset(
-                    transitive = [
-                        dep[CcInfo].compilation_context.framework_includes
-                        for dep in ctx.attr.deps
-                        if CcInfo in dep
-                    ],
-                ),
-            ),
-            linking_context = cc_common.create_linking_context(
-                linker_inputs = depset([
-                    cc_common.create_linker_input(
-                        owner = ctx.label,
-                        user_link_flags = compat_link_opt if len(all_replaced_frameworks) else [],
-                        libraries = depset([
-                            cc_common.create_library_to_link(
-                                actions = ctx.actions,
-                                cc_toolchain = cc_toolchain,
-                                feature_configuration = cc_features,
-                                static_library = static_library,
-                                alwayslink = False,
-                            )
-                            for static_library in replaced_static_framework.replaced.values()
-                        ]),
-                    ),
-                ]),
-            ),
-        )
-    else:
-        dep_cc_infos = [dep[CcInfo] for dep in ctx.attr.deps if CcInfo in dep]
-        cc_info = cc_common.merge_cc_infos(cc_infos = dep_cc_infos)
+    dep_cc_infos = [dep[CcInfo] for dep in ctx.attr.deps if CcInfo in dep]
+    cc_info = cc_common.merge_cc_infos(cc_infos = dep_cc_infos)
 
     return [
         DefaultInfo(files = depset(dynamic_framework_dirs + replaced_frameworks)),
