@@ -267,7 +267,27 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
 
     # We need to map all the deps here - for both swift headers and others
     fw_dep_vfsoverlays = []
+
+    # Wheter or not to collect SwiftInfo providers from rules_swift_package_manager targets
+    enable_rules_swift_package_manager = feature_names.experimental_rules_swift_package_manager in ctx.features
+
     for dep in transitive_deps + deps:
+        if enable_rules_swift_package_manager and SwiftInfo in dep:
+            if dep.label.workspace_name.startswith("swiftpkg"):
+                for spm_dep in dep[SwiftInfo].transitive_modules.to_list():
+                    if spm_dep.swift:
+                        spm_dep_vfs = make_vfsoverlay(
+                            ctx,
+                            hdrs = [],
+                            module_map = [],
+                            swiftmodules = [spm_dep.swift.swiftmodule, spm_dep.swift.swiftdoc],
+                            private_hdrs = [],
+                            has_swift = True,
+                            merge_vfsoverlays = [],
+                            framework_name = spm_dep.name,
+                        )
+                        fw_dep_vfsoverlays.append(spm_dep_vfs.vfs_info)
+
         # Collect transitive headers. For now, this needs to include all of the
         # transitive headers
         if CcInfo in dep:
