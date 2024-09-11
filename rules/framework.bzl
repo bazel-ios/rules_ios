@@ -41,6 +41,7 @@ _APPLE_FRAMEWORK_PACKAGING_KWARGS = [
     "skip_packaging",
     "link_dynamic",
     "exported_symbols_lists",
+    "plugins",
 ]
 
 def apple_framework(
@@ -1119,6 +1120,15 @@ apple_framework_packaging = rule(
             mandatory = True,
             doc =
                 """Name of the framework, usually the same as the module name
+""",
+        ),
+        "plugins": attr.label_list(
+            mandatory = False,
+            cfg = transition_support.apple_platform_split_transition,
+            aspects = [apple_resource_aspect],
+            doc =
+                """See `swift_library`: A list of swift_compiler_plugin targets
+that should be loaded by the compiler when compiling this module and any modules that directly depend on it.
 """,
         ),
         "deps": attr.label_list(
