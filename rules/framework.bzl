@@ -268,7 +268,7 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
     # We need to map all the deps here - for both swift headers and others
     fw_dep_vfsoverlays = []
 
-    # Wheter or not to collect SwiftInfo providers from rules_swift_package_manager targets
+    # Whether or not to collect SwiftInfo providers from rules_swift_package_manager targets
     enable_rules_swift_package_manager = feature_names.experimental_rules_swift_package_manager in ctx.features
 
     for dep in transitive_deps + deps:
