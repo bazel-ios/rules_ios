@@ -7,7 +7,6 @@ on:
       - master
 
 # One active job per PR, cancel older ones on push
-# Just add here to verify above is true
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
