@@ -26,4 +26,9 @@ feature_names = struct(
 
     # When set disable passing the `-import-underlying-module` copt to `swift_library` targets
     swift_disable_import_underlying_module = "swift.swift_disable_import_underlying_module",
+
+    # Allows consumers to depend on targets from https://github.com/cgrindel/rules_swift_package_manager.
+    #
+    # Note: This is a work in progress, and the flag will remain experimental until full support is ready.
+    experimental_rules_swift_package_manager = "swift.experimental_rules_swift_package_manager",
 )

@@ -267,7 +267,27 @@ def _get_virtual_framework_info(ctx, framework_files, compilation_context_fields
 
     # We need to map all the deps here - for both swift headers and others
     fw_dep_vfsoverlays = []
+
+    # Whether or not to collect SwiftInfo providers from rules_swift_package_manager targets
+    enable_rules_swift_package_manager = feature_names.experimental_rules_swift_package_manager in ctx.features
+
     for dep in transitive_deps + deps:
+        if enable_rules_swift_package_manager and SwiftInfo in dep:
+            if dep.label.workspace_name.startswith("swiftpkg"):
+                for spm_dep in dep[SwiftInfo].transitive_modules.to_list():
+                    if spm_dep.swift:
+                        spm_dep_vfs = make_vfsoverlay(
+                            ctx,
+                            hdrs = [],
+                            module_map = [],
+                            swiftmodules = [spm_dep.swift.swiftmodule, spm_dep.swift.swiftdoc],
+                            private_hdrs = [],
+                            has_swift = True,
+                            merge_vfsoverlays = [],
+                            framework_name = spm_dep.name,
+                        )
+                        fw_dep_vfsoverlays.append(spm_dep_vfs.vfs_info)
+
         # Collect transitive headers. For now, this needs to include all of the
         # transitive headers
         if CcInfo in dep:
@@ -561,7 +581,7 @@ def _create_swiftmodule(attrs):
         **kwargs
     )
 
-def _copy_swiftmodule(ctx, framework_files, virtualize_frameworks):
+def _copy_swiftmodule(ctx, framework_files, clang_module):
     inputs = framework_files.inputs
     outputs = framework_files.outputs
 
@@ -578,39 +598,23 @@ def _copy_swiftmodule(ctx, framework_files, virtualize_frameworks):
         # original swift module/doc, so that swift can find it.
         swift_module = _create_swiftmodule(inputs)
 
-    # Setup the `clang` attr of the Swift module for non-vfs case this is required to have it locate the modulemap
-    # and headers correctly.
-    clang = None
-    if not virtualize_frameworks:
-        module_map = outputs.modulemaps[0] if outputs.modulemaps else None
-        clang = swift_common.create_clang_module(
-            module_map = module_map,
-            compilation_context = cc_common.create_compilation_context(
-                headers = depset(_compact(
-                    outputs.headers +
-                    outputs.private_headers +
-                    [module_map],
-                )),
-            ),
-        )
-
     return [
         # only add the swift module, the objc modulemap is already listed as a header,
         # and it will be discovered via the framework search path
         swift_common.create_module(
             name = swiftmodule_name,
-            clang = clang,
+            clang = clang_module,
             swift = swift_module,
         ),
     ]
 
-def _get_merged_swift_info(ctx, swift_module_context, framework_files, transitive_deps, virtualize_frameworks):
+def _get_merged_swift_info(ctx, framework_files, transitive_deps, clang_module):
     swift_info_fields = {
         "swift_infos": [dep[SwiftInfo] for dep in transitive_deps if SwiftInfo in dep],
-        "modules": [swift_module_context],
     }
     if framework_files.outputs.swiftmodule:
-        swift_info_fields["modules"] += _copy_swiftmodule(ctx, framework_files, virtualize_frameworks)
+        swift_info_fields["modules"] = _copy_swiftmodule(ctx, framework_files, clang_module)
+
     return swift_common.create_swift_info(**swift_info_fields)
 
 def _merge_root_infoplists(ctx):
@@ -1108,15 +1112,27 @@ def _apple_framework_packaging_impl(ctx):
         bundle_outs = _bundle_static_framework(ctx, is_extension_safe = is_extension_safe, current_apple_platform = current_apple_platform, outputs = outputs)
         avoid_deps_info = AvoidDepsInfo(libraries = depset(avoid_deps).to_list(), link_dynamic = False)
 
-    # rules_swift 2.x no longers takes compilation_context from CcInfo, need to pass it in via SwiftInfo
-    swift_module_context = swift_common.create_module(
-        name = ctx.attr.name,
-        clang = swift_common.create_clang_module(
-            compilation_context = compilation_context,
+    # rules_swift 2.x no longers takes compilation_context from CcInfo, need to pass it in via SwiftInfo's clang_module
+    if virtualize_frameworks:
+        clang_module = swift_common.create_clang_module(
             module_map = None,
-        ),
-    )
-    swift_info = _get_merged_swift_info(ctx, swift_module_context, framework_files, transitive_deps, virtualize_frameworks)
+            compilation_context = compilation_context,
+        )
+    else:
+        # Setup the `clang` attr of the Swift module for non-vfs case this is required to have it locate the modulemap
+        # and headers correctly.
+        module_map = outputs.modulemaps[0] if outputs.modulemaps else None
+        clang_module = swift_common.create_clang_module(
+            module_map = module_map,
+            compilation_context = cc_common.create_compilation_context(
+                headers = depset(_compact(
+                    outputs.headers +
+                    outputs.private_headers +
+                    [module_map],
+                )),
+            ),
+        )
+    swift_info = _get_merged_swift_info(ctx, framework_files, transitive_deps, clang_module)
 
     # Build out the default info provider
     out_files = _compact([outputs.binary, outputs.swiftmodule, outputs.infoplist])
