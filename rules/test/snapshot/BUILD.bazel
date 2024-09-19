@@ -1,14 +1,17 @@
 load("//rules:framework.bzl", "apple_framework")
 
-objc_library(
+apple_framework(
     name = "Impl",
-    srcs = ["BazelRunfileBridge.mm"],
-    hdrs = ["BazelRunfileBridge.h"],
+    srcs = [
+        "BazelRunfileBridge.h",
+        "BazelRunfileBridge.mm",
+    ],
     deps = ["@bazel_tools//tools/cpp/runfiles"],
 )
 
 apple_framework(
     name = "BazelRunfileBridge",
+    srcs = ["dummy.m"],
     public_headers = ["BazelRunfileBridge.h"],
     visibility = ["//visibility:public"],
     deps = [":Impl"],
