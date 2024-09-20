@@ -8,7 +8,7 @@ on:
 
 # One active job per PR, cancel older ones on push
 concurrency:
-  group: ${{ github.head_ref || github.run_id }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 # NOTE: because matrix cannot easily be shared across jobs, it should be copied to each job
