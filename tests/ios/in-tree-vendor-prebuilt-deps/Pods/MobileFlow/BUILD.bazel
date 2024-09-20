@@ -2,6 +2,7 @@ load("@build_bazel_rules_ios//rules:framework.bzl", "apple_framework")
 
 apple_framework(
     name = "MobileFlow",
+    deps = ["//tests/ios/in-tree-vendor-prebuilt-deps/Pods/MiSnap:MiSnapCore"],
     platforms = {"ios": "12.0"},
     sdk_dylibs = ["c++"],
     vendored_dynamic_frameworks = ["Frameworks/MobileFlow.framework"],
