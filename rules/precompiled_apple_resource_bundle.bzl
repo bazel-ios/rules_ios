@@ -28,6 +28,14 @@ _FAKE_BUNDLE_PRODUCT_TYPE_BY_PLATFORM_TYPE = {
     "watchos": apple_product_type.watch2_application,
 }
 
+_DEVICE_FAMILIES_BY_PLATFORM_TYPE = {
+    "ios": ["iphone", "ipad"],
+    "macos": ["mac"],
+    "tvos": ["tv"],
+    "visionos": ["vision"],
+    "watchos": ["watch"],
+}
+
 def _precompiled_apple_resource_bundle_impl(ctx):
     bundle_name = ctx.attr.bundle_name or ctx.label.name
 
@@ -37,7 +45,7 @@ def _precompiled_apple_resource_bundle_impl(ctx):
     platform_prerequisites = platform_support.platform_prerequisites(
         apple_fragment = ctx.fragments.apple,
         config_vars = ctx.var,
-        device_families = ["iphone", "ipad"],
+        device_families = _DEVICE_FAMILIES_BY_PLATFORM_TYPE[platform_type],
         explicit_minimum_os = None,
         explicit_minimum_deployment_os = None,
         objc_fragment = None,
