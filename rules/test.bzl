@@ -9,7 +9,6 @@ _IOS_TEST_KWARGS = [
     "bundle_id",
     "bundle_name",
     "env",
-    "features",
     "flaky",
     "frameworks",
     "infoplists",
@@ -34,7 +33,6 @@ _APPLE_BUNDLE_ATTRS = {
         "bundle_id",
         "bundle_name",
         "families",
-        "features",
         "frameworks",
         "infoplists",
         "linkopts",
@@ -44,6 +42,22 @@ _APPLE_BUNDLE_ATTRS = {
         "test_host",
     ]
 }
+
+# See: https://bazel.build/reference/be/common-definitions#common-attributes
+# NOTE: `testonly` arent listed because we have custom logic for them in here.
+_ALWAYS_AVAILABLE_ATTRS = [
+    "compatible_with",
+    "deprecation",
+    "distribs",
+    "exec_compatible_with",
+    "exec_properties",
+    "features",
+    "restricted_to",
+    "tags",
+    "target_compatible_with",
+    "toolchains",
+    "visibility",
+]
 
 _DEFAULT_APPLE_TEST_RUNNER = "@build_bazel_rules_apple//apple/testing/default_runner:ios_default_runner"
 
@@ -104,7 +118,7 @@ def _make_test(name, test_rule, **kwargs):
     Helper to create an individual test
     """
     runner = kwargs.pop("runner", None) or _DEFAULT_APPLE_TEST_RUNNER
-    test_attrs = {k: v for (k, v) in kwargs.items() if k not in _APPLE_BUNDLE_ATTRS}
+    test_attrs = {k: v for (k, v) in kwargs.items() if (k not in _APPLE_BUNDLE_ATTRS) or (k in _ALWAYS_AVAILABLE_ATTRS)}
 
     test_rule(
         name = name,
@@ -159,7 +173,7 @@ def _ios_test(name, bundle_rule, test_rule, test_factory, apple_library, infopli
     """
 
     testonly = kwargs.pop("testonly", True)
-    ios_test_kwargs = {arg: kwargs.pop(arg) for arg in _IOS_TEST_KWARGS if arg in kwargs}
+    ios_test_kwargs = {arg: kwargs.pop(arg) for arg in (_IOS_TEST_KWARGS + _ALWAYS_AVAILABLE_ATTRS) if arg in kwargs}
     ios_test_kwargs["data"] = kwargs.pop("test_data", [])
 
     test_exec_properties = kwargs.pop("test_exec_properties", None)
@@ -218,7 +232,7 @@ def _ios_test(name, bundle_rule, test_rule, test_factory, apple_library, infopli
 
     # Set this to a single __internal__ test bundle.
     test_bundle_name = name + ".__internal__.__test_bundle"
-    bundle_attrs = {k: v for (k, v) in ios_test_kwargs.items() if k in _APPLE_BUNDLE_ATTRS}
+    bundle_attrs = {k: v for (k, v) in ios_test_kwargs.items() if (k in _APPLE_BUNDLE_ATTRS) or (k in _ALWAYS_AVAILABLE_ATTRS)}
     bundle_name = bundle_attrs.pop("bundle_name", name)
     bundle_rule(
         name = test_bundle_name,
