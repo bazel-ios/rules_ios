@@ -980,12 +980,18 @@ def apple_library(
         #enable_framework_vfs = enable_framework_vfs
     )
 
-    # Generate resource bundles
-    module_data = library_tools["wrap_resources_in_filegroup"](
-        name = name + "_wrapped_resources_filegroup",
-        srcs = data,
-        testonly = testonly,
-    )
+    # Wrap resources in a filegroup if requested.
+    if library_tools["wrap_resources_in_filegroup"]:
+        # Override the data as all the resources are now wrapped in a single filegroup target
+        data = [
+            library_tools["wrap_resources_in_filegroup"](
+                name = name + "_wrapped_resources_filegroup",
+                srcs = data,
+                testonly = testonly,
+            ),
+        ]
+
+    # Generate resource bundles for any requested `resource_bundles`.
     resource_bundles = library_tools["resource_bundle_generator"](
         name = name,
         library_tools = library_tools,
@@ -1018,7 +1024,7 @@ def apple_library(
                 "@build_bazel_rules_ios//:virtualize_frameworks": ["swift.vfsoverlay"],
                 "//conditions:default": [],
             }),
-            data = [module_data],
+            data = data,
             tags = tags_manual,
             defines = defines + swift_defines,
             testonly = testonly,
@@ -1112,7 +1118,7 @@ def apple_library(
         weak_sdk_frameworks = weak_sdk_frameworks,
         sdk_includes = sdk_includes,
         pch = pch,
-        data = [] if has_swift_sources else [module_data],
+        data = [] if has_swift_sources else data,
         tags = tags_manual,
         defines = defines + objc_defines,
         testonly = testonly,
@@ -1122,7 +1128,7 @@ def apple_library(
     launch_screen_storyboard_name = name + "_launch_screen_storyboard"
     native.filegroup(
         name = launch_screen_storyboard_name,
-        srcs = [module_data],
+        srcs = data,
         output_group = "launch_screen_storyboard",
         tags = _MANUAL,
         testonly = testonly,
@@ -1140,7 +1146,7 @@ def apple_library(
         transitive_deps = deps,
         deps = lib_names + deps,
         module_name = module_name,
-        data = module_data,
+        data = data,
         launch_screen_storyboard_name = launch_screen_storyboard_name,
         namespace = namespace,
         linkopts = copts_by_build_setting.linkopts + linkopts,
