@@ -1,0 +1,11 @@
+framework module MiSnapCore {
+  umbrella header "MiSnapCore.h"
+
+  export *
+  module * { export * }
+}
+
+module MiSnapCore.Swift {
+  header "MiSnapCore-Swift.h"
+  requires objc
+}
