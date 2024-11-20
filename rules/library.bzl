@@ -1020,8 +1020,9 @@ def apple_library(
                 "@build_bazel_rules_ios//:virtualize_frameworks": [framework_vfs_overlay_name_swift],
                 "//conditions:default": [framework_vfs_overlay_name_swift] if enable_framework_vfs else [],
             }),
+            # TODO: rules_swift VFS overlay feature is not compatitable with rules_ios, disabled for now
             features = features + ["swift.no_generated_module_map", "swift.use_pch_output_dir"] + select({
-                "@build_bazel_rules_ios//:virtualize_frameworks": ["swift.vfsoverlay"],
+                "@build_bazel_rules_ios//:virtualize_frameworks": [],
                 "//conditions:default": [],
             }),
             data = data,
