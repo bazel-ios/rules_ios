@@ -873,11 +873,9 @@ def apple_library(
     framework_vfs_swift_copts = []
     if has_swift_sources:
         framework_vfs_swift_copts = [
+            "-I{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
             "-Xfrontend",
             "-vfsoverlay$(execpath :{})".format(framework_vfs_overlay_name_swift),
-            "-Xfrontend",
-            "-F{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
-            "-I{}".format(VFS_OVERLAY_FRAMEWORK_SEARCH_PATH),
             "-Xcc",
             "-ivfsoverlay$(execpath :{})".format(framework_vfs_overlay_name_swift),
             "-Xcc",
@@ -920,8 +918,6 @@ def apple_library(
     ]
 
     additional_swift_copts += [
-        "-Xcc",
-        "-D__SWIFTC__",
         "-Xfrontend",
         "-no-clang-module-breadcrumbs",
     ]
