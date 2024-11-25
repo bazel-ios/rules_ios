@@ -88,6 +88,15 @@ def _rules_ios_platform_type(settings, attr):
 
 # PATCH: start - private helper to get the `minimum_os_version` from the rules_ios attributes.
 def _rules_ios_minimum_os_version(platform_type, attr):
+    if hasattr(attr, "platforms"):
+        x = attr.platforms.get("ios", None)
+        if x and x == "15.0":
+            return "16.0"
+    else:
+        if hasattr(attr, "minimum_os_version"):
+            if attr.minimum_os_version == "15.0":
+                return "16.0"
+
     platforms = getattr(attr, "platforms", None)
 
     if platforms:
@@ -216,6 +225,8 @@ def _cpu_string(*, environment_arch, platform_type, settings = {}):
 
 def _min_os_version_or_none(*, minimum_os_version, platform, platform_type):
     if platform_type == platform:
+        if minimum_os_version == "15.0":
+            return "16.0"
         return minimum_os_version
     return None
 
