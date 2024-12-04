@@ -562,10 +562,9 @@ def _get_cc_info_linker_inputs(*, deps):
         if not CcInfo in dep:
             continue
 
-        for linker_input in dep[CcInfo].linking_context.linker_inputs.to_list():
-            linker_inputs.append(linker_input)
+        linker_inputs.append(dep[CcInfo].linking_context.linker_inputs)
 
-    return depset(linker_inputs)
+    return depset([], transitive = linker_inputs)
 
 def _create_swiftmodule(attrs):
     kwargs = {}
