@@ -221,11 +221,6 @@ def _framework_packaging_multi(ctx, action, inputs, outputs, manifest = None):
         return []
     if inputs == [None]:
         return []
-
-    virtualize_frameworks = feature_names.virtualize_frameworks in ctx.features
-    if virtualize_frameworks:
-        return inputs
-
     if action in ctx.attr.skip_packaging:
         return []
     action_inputs = [manifest] + inputs if manifest else inputs
@@ -456,26 +451,41 @@ def _get_framework_files(ctx, deps):
     else:
         framework_manifest = None
 
-    # Package each part of the framework separately,
-    # so inputs that do not depend on compilation
-    # are available before those that do,
-    # improving parallelism
-    binary_out = _framework_packaging_single(ctx, "binary", binaries_in, binary_out, framework_manifest)
-    headers_out = _framework_packaging_multi(ctx, "header", headers_in, headers_out, framework_manifest)
-    private_headers_out = _framework_packaging_multi(ctx, "private_header", private_headers_in, private_headers_out, framework_manifest)
+    if virtualize_frameworks:
+        # When using virtualized frameworks, we skip the packaging step.
+        binaries_out = binaries_in
+        headers_out = headers_in
+        private_headers_out = private_headers_in
+        modulemap_out = modulemap_in
+        swiftmodule_out = swiftmodule_in
+        swiftinterface_out = swiftinterface_in
+        swiftdoc_out = swiftdoc_in
+        infoplist_out = infoplist_in
+        symbol_graph_out = symbol_graph_in
+    else:
+        # Package each part of the framework separately,
+        # so inputs that do not depend on compilation
+        # are available before those that do,
+        # improving parallelism
+        binaries_out = _compact([_framework_packaging_single(ctx, "binary", binaries_in, binary_out, framework_manifest)])
+        headers_out = _framework_packaging_multi(ctx, "header", headers_in, headers_out, framework_manifest)
+        private_headers_out = _framework_packaging_multi(ctx, "private_header", private_headers_in, private_headers_out, framework_manifest)
 
-    # Instead of creating a symlink of the modulemap, we need to copy it to modulemap_out.
-    # It's a hacky fix to guarantee running the clean action before compiling objc files depending on this framework in non-sandboxed mode.
-    # Otherwise, stale header files under framework_root will cause compilation failure in non-sandboxed mode.
-    modulemap_out = _framework_packaging_single(ctx, "modulemap", [modulemap_in], modulemap_out, framework_manifest)
-    swiftmodule_out = _framework_packaging_single(ctx, "swiftmodule", [swiftmodule_in], swiftmodule_out, framework_manifest)
-    swiftinterface_out = _framework_packaging_single(ctx, "swiftinterface", [swiftinterface_in], swiftinterface_out, framework_manifest)
-    swiftdoc_out = _framework_packaging_single(ctx, "swiftdoc", [swiftdoc_in], swiftdoc_out, framework_manifest)
-    infoplist_out = _framework_packaging_single(ctx, "infoplist", [infoplist_in], infoplist_out, framework_manifest)
-    symbol_graph_out = _framework_packaging_single(ctx, "symbol_graph", [symbol_graph_in], symbol_graph_out, framework_manifest)
+        # Instead of creating a symlink of the modulemap, we need to copy it to modulemap_out.
+        # It's a hacky fix to guarantee running the clean action before compiling objc files depending on this framework in non-sandboxed mode.
+        # Otherwise, stale header files under framework_root will cause compilation failure in non-sandboxed mode.
+        modulemap_out = _framework_packaging_single(ctx, "modulemap", [modulemap_in], modulemap_out, framework_manifest)
+        swiftmodule_out = _framework_packaging_single(ctx, "swiftmodule", [swiftmodule_in], swiftmodule_out, framework_manifest)
+        swiftinterface_out = _framework_packaging_single(ctx, "swiftinterface", [swiftinterface_in], swiftinterface_out, framework_manifest)
+        swiftdoc_out = _framework_packaging_single(ctx, "swiftdoc", [swiftdoc_in], swiftdoc_out, framework_manifest)
+        infoplist_out = _framework_packaging_single(ctx, "infoplist", [infoplist_in], infoplist_out, framework_manifest)
+        symbol_graph_out = _framework_packaging_single(ctx, "symbol_graph", [symbol_graph_in], symbol_graph_out, framework_manifest)
 
     outputs = struct(
-        binary = binary_out,
+        # When the virtualized frameworks feature is disabled, this contains a single binary, merged with libtool.
+        # When the virtualized frameworks feature is enabled, this contains both the objc_library and swift_library binaries, so that
+        # both binaries are included in the output files of this rule.
+        binaries = binaries_out,
         headers = headers_out,
         infoplist = infoplist_out,
         private_headers = private_headers_out,
@@ -517,10 +527,10 @@ def _get_symlinked_framework_clean_action(ctx, framework_files, compilation_cont
 
     framework_contents = _compact(
         [
-            outputs.binary,
             outputs.swiftmodule,
             outputs.swiftdoc,
         ] +
+        outputs.binaries +
         outputs.modulemaps +
         outputs.headers +
         outputs.private_headers,
@@ -988,7 +998,9 @@ def _bundle_static_framework(ctx, is_extension_safe, current_apple_platform, out
         new_applebundleinfo(
             archive = None,
             archive_root = None,
-            binary = outputs.binary,
+            # When the virtualized frameworks feature is enabled, outputs.binaries can contain two binaries:
+            # the swift_library binary and the objc_library binary. Arbitrarily use the first, matching previous behavior.
+            binary = outputs.binaries[0] if outputs.binaries else None,
             bundle_id = ctx.attr.bundle_id,
             bundle_name = ctx.attr.framework_name,
             bundle_extension = ctx.attr.bundle_extension,
@@ -1134,7 +1146,8 @@ def _apple_framework_packaging_impl(ctx):
     swift_info = _get_merged_swift_info(ctx, framework_files, transitive_deps, clang_module)
 
     # Build out the default info provider
-    out_files = _compact([outputs.binary, outputs.swiftmodule, outputs.infoplist])
+    out_files = _compact([outputs.swiftmodule, outputs.infoplist])
+    out_files.extend(outputs.binaries)
     out_files.extend(outputs.headers)
     out_files.extend(outputs.private_headers)
     out_files.extend(outputs.modulemaps)
