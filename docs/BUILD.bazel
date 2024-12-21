@@ -14,7 +14,6 @@ _DOC_SRCS = [
     "import_middleman",
     "library",
     "plists",
-    "force_load_direct_deps",
     "precompiled_apple_resource_bundle",
     "providers",
     "substitute_build_settings",
