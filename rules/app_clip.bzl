@@ -1,6 +1,5 @@
 load("@build_bazel_rules_apple//apple:ios.bzl", rules_apple_ios_app_clip = "ios_app_clip")
 load("//rules:plists.bzl", "process_infoplists")
-load("//rules:force_load_direct_deps.bzl", "force_load_direct_deps")
 load("//rules/internal:framework_middleman.bzl", "dep_middleman", "framework_middleman")
 
 def ios_app_clip(
@@ -42,15 +41,6 @@ def ios_app_clip(
     deps = kwargs.pop("deps", [])
     frameworks = kwargs.pop("frameworks", [])
     testonly = kwargs.pop("testonly", False)
-
-    # Setup force loading here - need to process deps and libs
-    force_load_name = name + ".force_load_direct_deps"
-    force_load_direct_deps(
-        name = force_load_name,
-        deps = deps,
-        tags = ["manual"],
-        testonly = testonly,
-    )
 
     # Setup framework middlemen - need to process deps and libs
     fw_name = name + ".framework_middleman"
