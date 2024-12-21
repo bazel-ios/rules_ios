@@ -1,7 +1,6 @@
 load("@build_bazel_rules_apple//apple:ios.bzl", rules_apple_ios_application = "ios_application")
 load("//rules:library.bzl", "apple_library")
 load("//rules:plists.bzl", "process_infoplists")
-load("//rules:force_load_direct_deps.bzl", "force_load_direct_deps")
 load("//rules/internal:framework_middleman.bzl", "dep_middleman", "framework_middleman")
 
 # We need to try and partition out arguments for obj_library / swift_library
@@ -93,17 +92,6 @@ def ios_application(
 
     application_kwargs["launch_storyboard"] = application_kwargs.pop("launch_storyboard", library.launch_screen_storyboard_name)
 
-    # Setup force loading here - need to process deps and libs
-    force_load_name = name + ".force_load_direct_deps"
-    force_load_direct_deps(
-        name = force_load_name,
-        deps = kwargs.get("deps", []) + library.lib_names,
-        tags = ["manual"],
-        testonly = testonly,
-        platform_type = "ios",
-        minimum_os_version = application_kwargs.get("minimum_os_version"),
-    )
-
     # Setup framework middlemen - need to process deps and libs
     fw_name = name + ".framework_middleman"
     framework_middleman(
@@ -125,8 +113,7 @@ def ios_application(
         platform_type = "ios",
         minimum_os_version = application_kwargs.get("minimum_os_version"),
     )
-    deps = [dep_name] + [force_load_name]
-
+    deps = [dep_name]
     processed_infoplists = process_infoplists(
         name = name,
         infoplists = infoplists,
