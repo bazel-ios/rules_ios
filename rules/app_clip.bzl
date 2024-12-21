@@ -59,7 +59,7 @@ def ios_app_clip(
         tags = ["manual"],
         testonly = testonly,
     )
-    deps = [dep_name] + [force_load_name]
+    deps = [dep_name]
 
     processed_infoplists = process_infoplists(
         name = name,
