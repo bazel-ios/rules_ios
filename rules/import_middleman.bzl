@@ -96,7 +96,6 @@ def _find_imports_impl(target, ctx):
         imported_library_file.append(target[apple_common.Objc].imported_library)
 
     elif AppleFrameworkImportInfo in target:
-        static_framework_file.append(target[apple_common.Objc].imported_library)
         target_dynamic_framework_file = target[apple_common.Objc].dynamic_framework_file
         target_dynamic_framework_file_list = target_dynamic_framework_file.to_list()
         if len(target_dynamic_framework_file_list) > 0:
