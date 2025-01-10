@@ -7,6 +7,8 @@
 ## import_middleman
 
 <pre>
+load("@rules_ios//rules:import_middleman.bzl", "import_middleman")
+
 import_middleman(<a href="#import_middleman-name">name</a>, <a href="#import_middleman-deps">deps</a>, <a href="#import_middleman-test_deps">test_deps</a>, <a href="#import_middleman-update_in_place">update_in_place</a>)
 </pre>
 
@@ -50,6 +52,8 @@ can be updated to work without the other behavior
 ## find_imports
 
 <pre>
+load("@rules_ios//rules:import_middleman.bzl", "find_imports")
+
 find_imports(<a href="#find_imports-name">name</a>)
 </pre>
 

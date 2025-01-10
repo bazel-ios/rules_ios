@@ -11,6 +11,8 @@ if this is ever fixed in bazel it should be removed
 ## precompiled_apple_resource_bundle
 
 <pre>
+load("@rules_ios//rules:precompiled_apple_resource_bundle.bzl", "precompiled_apple_resource_bundle")
+
 precompiled_apple_resource_bundle(<a href="#precompiled_apple_resource_bundle-kwargs">kwargs</a>)
 </pre>
 

@@ -7,6 +7,8 @@ Library rules
 ## extend_modulemap
 
 <pre>
+load("@rules_ios//rules:library.bzl", "extend_modulemap")
+
 extend_modulemap(<a href="#extend_modulemap-name">name</a>, <a href="#extend_modulemap-destination">destination</a>, <a href="#extend_modulemap-module_name">module_name</a>, <a href="#extend_modulemap-source">source</a>, <a href="#extend_modulemap-swift_header">swift_header</a>)
 </pre>
 
@@ -29,13 +31,14 @@ Extends a modulemap with a Swift submodule
 ## PrivateHeadersInfo
 
 <pre>
+load("@rules_ios//rules:library.bzl", "PrivateHeadersInfo")
+
 PrivateHeadersInfo(<a href="#PrivateHeadersInfo-headers">headers</a>)
 </pre>
 
 Propagates private headers, so they can be accessed if necessary
 
 **FIELDS**
-
 
 | Name  | Description |
 | :------------- | :------------- |
@@ -47,6 +50,8 @@ Propagates private headers, so they can be accessed if necessary
 ## apple_library
 
 <pre>
+load("@rules_ios//rules:library.bzl", "apple_library")
+
 apple_library(<a href="#apple_library-name">name</a>, <a href="#apple_library-library_tools">library_tools</a>, <a href="#apple_library-export_private_headers">export_private_headers</a>, <a href="#apple_library-namespace_is_module_name">namespace_is_module_name</a>,
               <a href="#apple_library-default_xcconfig_name">default_xcconfig_name</a>, <a href="#apple_library-xcconfig">xcconfig</a>, <a href="#apple_library-xcconfig_by_build_setting">xcconfig_by_build_setting</a>, <a href="#apple_library-objc_defines">objc_defines</a>, <a href="#apple_library-swift_defines">swift_defines</a>,
               <a href="#apple_library-kwargs">kwargs</a>)
