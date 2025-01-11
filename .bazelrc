@@ -92,6 +92,8 @@ build:ci --progress_report_interval=60
 build:ci --verbose_failures
 # ci setup for tests, tend to be more flaky on github actions
 build:ci --jobs=4
+# Sets alwayslink to True in objc_library and objc_import
+build:ci --incompatible_objc_alwayslink_by_default
 # allow extra time for simulators to boot
 test:ci --test_env=STARTUP_TIMEOUT_SEC=350
 test:ci --test_timeout=1000
