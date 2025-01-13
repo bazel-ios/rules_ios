@@ -426,7 +426,7 @@ def make_vfsoverlay(ctx, hdrs, module_map, private_hdrs, has_swift, swiftmodules
             "contents": roots,
         }],
     }
-    vfsoverlay_yaml = struct(**vfsoverlay_object).to_json()
+    vfsoverlay_yaml = json.encode(vfsoverlay_object)
     ctx.actions.write(
         content = vfsoverlay_yaml,
         output = output,
