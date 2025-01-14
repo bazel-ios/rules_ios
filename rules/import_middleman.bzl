@@ -91,7 +91,7 @@ def _find_imports_impl(target, ctx):
             imported_library_file.append(dep[_FindImportsAspectInfo].imported_library_file)
             dynamic_framework_file.append(dep[_FindImportsAspectInfo].dynamic_framework_file)
             import_infos.update(dep[_FindImportsAspectInfo].import_infos)
-    
+
     if AppleFrameworkImportInfo in target:
         if CcInfo in target:
             for linker_input in target[CcInfo].linking_context.linker_inputs.to_list():
