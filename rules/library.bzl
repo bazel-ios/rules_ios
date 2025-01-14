@@ -1069,7 +1069,7 @@ def apple_library(
             deps = deps + private_deps + private_dep_names,
             defines = defines,
             tags = tags_manual,
-            alwayslink = True,
+            alwayslink = True,  # ensure symbols from any static deps are always included (see https://github.com/bazelbuild/rules_apple/issues/1938)
             testonly = testonly,
             features = features,
         )
@@ -1124,7 +1124,7 @@ def apple_library(
         defines = defines + objc_defines,
         testonly = testonly,
         features = features,
-        alwayslink = True,
+        alwayslink = True,  # ensure symbols from any static deps are always included (see https://github.com/bazelbuild/rules_apple/issues/1938)
         **kwargs
     )
     launch_screen_storyboard_name = name + "_launch_screen_storyboard"
