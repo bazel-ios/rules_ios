@@ -91,9 +91,13 @@ def _find_imports_impl(target, ctx):
             imported_library_file.append(dep[_FindImportsAspectInfo].imported_library_file)
             dynamic_framework_file.append(dep[_FindImportsAspectInfo].dynamic_framework_file)
             import_infos.update(dep[_FindImportsAspectInfo].import_infos)
-
-    if ctx.rule.kind == "objc_import":
-        imported_library_file.append(target[apple_common.Objc].imported_library)
+    
+    if AppleFrameworkImportInfo in target:
+        if CcInfo in target:
+            for linker_input in target[CcInfo].linking_context.linker_inputs.to_list():
+                for library_to_link in linker_input.libraries:
+                    if library_to_link.static_library:
+                        static_framework_file.append(depset([library_to_link.static_library]))
 
     return [_FindImportsAspectInfo(
         dynamic_framework_file = depset(transitive = dynamic_framework_file),
