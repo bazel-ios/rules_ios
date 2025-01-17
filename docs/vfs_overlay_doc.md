@@ -7,6 +7,8 @@
 ## framework_vfs_overlay
 
 <pre>
+load("@rules_ios//rules:vfs_overlay.doc.bzl", "framework_vfs_overlay")
+
 framework_vfs_overlay(<a href="#framework_vfs_overlay-name">name</a>, <a href="#framework_vfs_overlay-deps">deps</a>, <a href="#framework_vfs_overlay-hdrs">hdrs</a>, <a href="#framework_vfs_overlay-extra_search_paths">extra_search_paths</a>, <a href="#framework_vfs_overlay-framework_name">framework_name</a>, <a href="#framework_vfs_overlay-has_swift">has_swift</a>, <a href="#framework_vfs_overlay-modulemap">modulemap</a>,
                       <a href="#framework_vfs_overlay-private_hdrs">private_hdrs</a>, <a href="#framework_vfs_overlay-swiftmodules">swiftmodules</a>)
 </pre>
@@ -34,6 +36,8 @@ framework_vfs_overlay(<a href="#framework_vfs_overlay-name">name</a>, <a href="#
 ## make_vfsoverlay
 
 <pre>
+load("@rules_ios//rules:vfs_overlay.doc.bzl", "make_vfsoverlay")
+
 make_vfsoverlay(<a href="#make_vfsoverlay-ctx">ctx</a>, <a href="#make_vfsoverlay-hdrs">hdrs</a>, <a href="#make_vfsoverlay-module_map">module_map</a>, <a href="#make_vfsoverlay-private_hdrs">private_hdrs</a>, <a href="#make_vfsoverlay-has_swift">has_swift</a>, <a href="#make_vfsoverlay-swiftmodules">swiftmodules</a>, <a href="#make_vfsoverlay-merge_vfsoverlays">merge_vfsoverlays</a>,
                 <a href="#make_vfsoverlay-extra_search_paths">extra_search_paths</a>, <a href="#make_vfsoverlay-output">output</a>, <a href="#make_vfsoverlay-framework_name">framework_name</a>)
 </pre>

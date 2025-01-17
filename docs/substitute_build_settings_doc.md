@@ -7,6 +7,8 @@
 ## substitute_build_settings
 
 <pre>
+load("@rules_ios//rules:substitute_build_settings.bzl", "substitute_build_settings")
+
 substitute_build_settings(<a href="#substitute_build_settings-name">name</a>, <a href="#substitute_build_settings-source">source</a>, <a href="#substitute_build_settings-variables">variables</a>)
 </pre>
 

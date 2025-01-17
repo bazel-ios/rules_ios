@@ -7,6 +7,8 @@
 ## ios_application
 
 <pre>
+load("@rules_ios//rules:app.bzl", "ios_application")
+
 ios_application(<a href="#ios_application-name">name</a>, <a href="#ios_application-families">families</a>, <a href="#ios_application-apple_library">apple_library</a>, <a href="#ios_application-infoplists">infoplists</a>, <a href="#ios_application-infoplists_by_build_setting">infoplists_by_build_setting</a>, <a href="#ios_application-xcconfig">xcconfig</a>,
                 <a href="#ios_application-xcconfig_by_build_setting">xcconfig_by_build_setting</a>, <a href="#ios_application-kwargs">kwargs</a>)
 </pre>

@@ -7,6 +7,8 @@
 ## build_setting_name
 
 <pre>
+load("@rules_ios//rules:xcconfig.doc.bzl", "build_setting_name")
+
 build_setting_name(<a href="#build_setting_name-build_setting">build_setting</a>)
 </pre>
 
@@ -32,6 +34,8 @@ The string 'target_name' in '@repo_name//path/to/package:target_name'
 ## copts_by_build_setting_with_defaults
 
 <pre>
+load("@rules_ios//rules:xcconfig.doc.bzl", "copts_by_build_setting_with_defaults")
+
 copts_by_build_setting_with_defaults(<a href="#copts_by_build_setting_with_defaults-xcconfig">xcconfig</a>, <a href="#copts_by_build_setting_with_defaults-fetch_default_xcconfig">fetch_default_xcconfig</a>, <a href="#copts_by_build_setting_with_defaults-xcconfig_by_build_setting">xcconfig_by_build_setting</a>)
 </pre>
 
@@ -64,6 +68,8 @@ Struct with different copts behind 'select()' statements
 ## merge_xcconfigs
 
 <pre>
+load("@rules_ios//rules:xcconfig.doc.bzl", "merge_xcconfigs")
+
 merge_xcconfigs(<a href="#merge_xcconfigs-xcconfigs">xcconfigs</a>)
 </pre>
 
