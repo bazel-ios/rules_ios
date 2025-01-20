@@ -1106,7 +1106,7 @@ def apple_library(
     if module_map:
         objc_hdrs.append(module_map)
 
-    default_alwayslink = kwargs.pop("alwayslink", True) # By default set it to True to ensure symbols from static deps are always included
+    default_alwayslink = kwargs.pop("alwayslink", True)  # By default set it to True to ensure symbols from static deps are always included
     native.objc_library(
         name = objc_libname,
         srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,
