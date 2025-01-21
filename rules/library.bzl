@@ -1106,7 +1106,7 @@ def apple_library(
     if module_map:
         objc_hdrs.append(module_map)
 
-    default_alwayslink = kwargs.pop("alwayslink", True)  # By default set it to True to ensure symbols from static deps are always included
+    default_alwayslink = kwargs.pop("alwayslink", True)  # ensure symbols from any static deps are always included (see https://github.com/bazelbuild/rules_apple/issues/1938)
     native.objc_library(
         name = objc_libname,
         srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,
@@ -1125,7 +1125,7 @@ def apple_library(
         defines = defines + objc_defines,
         testonly = testonly,
         features = features,
-        alwayslink = default_alwayslink,  # ensure symbols from any static deps are always included (see https://github.com/bazelbuild/rules_apple/issues/1938)
+        alwayslink = default_alwayslink,
         **kwargs
     )
     launch_screen_storyboard_name = name + "_launch_screen_storyboard"
