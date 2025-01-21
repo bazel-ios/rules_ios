@@ -618,7 +618,7 @@ def _get_merged_swift_info(ctx, framework_files, transitive_deps, clang_module):
         swift_info_fields["modules"] = [
             swift_common.create_module(
                 name = ctx.attr.framework_name,
-                clang = clang_module
+                clang = clang_module,
             ),
         ]
 
