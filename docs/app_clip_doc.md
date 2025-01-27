@@ -7,6 +7,8 @@
 ## ios_app_clip
 
 <pre>
+load("@rules_ios//rules:app_clip.bzl", "ios_app_clip")
+
 ios_app_clip(<a href="#ios_app_clip-name">name</a>, <a href="#ios_app_clip-families">families</a>, <a href="#ios_app_clip-infoplists">infoplists</a>, <a href="#ios_app_clip-infoplists_by_build_setting">infoplists_by_build_setting</a>, <a href="#ios_app_clip-xcconfig">xcconfig</a>,
              <a href="#ios_app_clip-xcconfig_by_build_setting">xcconfig_by_build_setting</a>, <a href="#ios_app_clip-kwargs">kwargs</a>)
 </pre>

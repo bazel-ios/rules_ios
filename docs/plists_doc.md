@@ -7,6 +7,8 @@ Defines macros for working with plist files.
 ## process_infoplists
 
 <pre>
+load("@rules_ios//rules:plists.bzl", "process_infoplists")
+
 process_infoplists(<a href="#process_infoplists-name">name</a>, <a href="#process_infoplists-infoplists">infoplists</a>, <a href="#process_infoplists-infoplists_by_build_setting">infoplists_by_build_setting</a>, <a href="#process_infoplists-xcconfig">xcconfig</a>,
                    <a href="#process_infoplists-xcconfig_by_build_setting">xcconfig_by_build_setting</a>)
 </pre>
@@ -34,6 +36,8 @@ A selectable dict of the substituted_plists grouped by config_setting
 ## substituted_plist
 
 <pre>
+load("@rules_ios//rules:plists.bzl", "substituted_plist")
+
 substituted_plist(<a href="#substituted_plist-name">name</a>, <a href="#substituted_plist-plist">plist</a>, <a href="#substituted_plist-xcconfig">xcconfig</a>)
 </pre>
 
@@ -58,6 +62,8 @@ The plist target with the substituted variables.
 ## write_info_plists_if_needed
 
 <pre>
+load("@rules_ios//rules:plists.bzl", "write_info_plists_if_needed")
+
 write_info_plists_if_needed(<a href="#write_info_plists_if_needed-name">name</a>, <a href="#write_info_plists_if_needed-plists">plists</a>)
 </pre>
 

@@ -7,6 +7,8 @@ Framework rules
 ## apple_framework_packaging
 
 <pre>
+load("@rules_ios//rules:framework.bzl", "apple_framework_packaging")
+
 apple_framework_packaging(<a href="#apple_framework_packaging-name">name</a>, <a href="#apple_framework_packaging-deps">deps</a>, <a href="#apple_framework_packaging-data">data</a>, <a href="#apple_framework_packaging-bundle_extension">bundle_extension</a>, <a href="#apple_framework_packaging-bundle_id">bundle_id</a>, <a href="#apple_framework_packaging-environment_plist">environment_plist</a>,
                           <a href="#apple_framework_packaging-exported_symbols_lists">exported_symbols_lists</a>, <a href="#apple_framework_packaging-framework_name">framework_name</a>, <a href="#apple_framework_packaging-frameworks">frameworks</a>, <a href="#apple_framework_packaging-infoplists">infoplists</a>,
                           <a href="#apple_framework_packaging-library_linkopts">library_linkopts</a>, <a href="#apple_framework_packaging-link_dynamic">link_dynamic</a>, <a href="#apple_framework_packaging-minimum_deployment_os_version">minimum_deployment_os_version</a>,
@@ -49,6 +51,8 @@ Packages compiled code into an Apple .framework package
 ## apple_framework
 
 <pre>
+load("@rules_ios//rules:framework.bzl", "apple_framework")
+
 apple_framework(<a href="#apple_framework-name">name</a>, <a href="#apple_framework-apple_library">apple_library</a>, <a href="#apple_framework-infoplists">infoplists</a>, <a href="#apple_framework-infoplists_by_build_setting">infoplists_by_build_setting</a>, <a href="#apple_framework-xcconfig">xcconfig</a>,
                 <a href="#apple_framework-xcconfig_by_build_setting">xcconfig_by_build_setting</a>, <a href="#apple_framework-kwargs">kwargs</a>)
 </pre>

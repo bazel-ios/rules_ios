@@ -29,7 +29,7 @@ jobs:
         XCODE_VERSION: ${{ matrix.xcode_version }}
         USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
         LATEST_RULES_SWIFT_VERSION: 2.1.1
-        LATEST_RULES_APPLE_VERSION: 3.8.0
+        LATEST_RULES_APPLE_VERSION: 3.15.0
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4

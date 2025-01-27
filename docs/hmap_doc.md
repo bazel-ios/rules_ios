@@ -7,6 +7,8 @@ Header Map rules
 ## headermap
 
 <pre>
+load("@rules_ios//rules:hmap.bzl", "headermap")
+
 headermap(<a href="#headermap-name">name</a>, <a href="#headermap-hdrs">hdrs</a>, <a href="#headermap-direct_hdr_providers">direct_hdr_providers</a>, <a href="#headermap-namespace">namespace</a>)
 </pre>
 
@@ -32,13 +34,14 @@ regardless of the package structure being used.
 ## HeaderMapInfo
 
 <pre>
+load("@rules_ios//rules:hmap.bzl", "HeaderMapInfo")
+
 HeaderMapInfo(<a href="#HeaderMapInfo-files">files</a>)
 </pre>
 
 Propagates header maps
 
 **FIELDS**
-
 
 | Name  | Description |
 | :------------- | :------------- |
@@ -50,6 +53,8 @@ Propagates header maps
 ## hmap.make_hmap
 
 <pre>
+load("@rules_ios//rules:hmap.bzl", "hmap")
+
 hmap.make_hmap(<a href="#hmap.make_hmap-actions">actions</a>, <a href="#hmap.make_hmap-headermap_builder">headermap_builder</a>, <a href="#hmap.make_hmap-output">output</a>, <a href="#hmap.make_hmap-namespace">namespace</a>, <a href="#hmap.make_hmap-hdrs_lists">hdrs_lists</a>)
 </pre>
 
