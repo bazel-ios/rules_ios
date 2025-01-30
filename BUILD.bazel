@@ -134,35 +134,45 @@ selects.config_setting_group(
     ],
 )
 
+# Below are supported Xcode versions for Bazel.
+# More info: https://blog.bazel.build/2020/02/26/xcode-selection.html
+# and: https://www.smileykeith.com/2021/03/08/locking-xcode-in-bazel/
 xcode_version(
-    name = "version15_2_0_15C500b",
-    aliases = [
-        "15.2",
-        "15.2.0",
-        "15.2.0.15C500b",
-        "15C500b",
-    ],
-    default_ios_sdk_version = "17.2",
-    default_macos_sdk_version = "14.2",
-    default_tvos_sdk_version = "17.2",
-    default_visionos_sdk_version = "1.0",
-    default_watchos_sdk_version = "10.2",
-    version = "15.2.0.15C500b",
+    name = "16_1_0_16B40",
+    aliases = ["16B40"],
+    default_ios_sdk_version = "18.1",
+    default_macos_sdk_version = "15.1",
+    default_tvos_sdk_version = "18.1",
+    default_watchos_sdk_version = "11.1",
+    version = "16.1.0.16B40",
+)
+
+xcode_version(
+    name = "16_0_0_16A242d",
+    aliases = ["16A242d"],
+    default_ios_sdk_version = "18.0",
+    default_macos_sdk_version = "15.0",
+    default_tvos_sdk_version = "18.0",
+    default_watchos_sdk_version = "11.0",
+    version = "16.0.0.16A242d",
+)
+
+xcode_version(
+    name = "15_4_0_15F31d",
+    aliases = ["15F31d"],
+    default_ios_sdk_version = "17.5",
+    default_macos_sdk_version = "14.5",
+    default_tvos_sdk_version = "17.5",
+    default_watchos_sdk_version = "10.5",
+    version = "15.4.0.15F31d",
 )
 
 xcode_config(
     name = "host_xcodes",
-    default = ":version15_2_0_15C500b",
+    default = ":16_1_0_16B40",
     versions = [
-        ":version15_2_0_15C500b",
-    ],
-    visibility = ["//visibility:public"],
-)
-
-available_xcodes(
-    name = "host_available_xcodes",
-    default = ":version15_2_0_15C500b",
-    versions = [
-        ":version15_2_0_15C500b",
+        ":16_1_0_16B40",
+        ":16_0_0_16A242d",
+        ":15_4_0_15F31d",
     ],
 )

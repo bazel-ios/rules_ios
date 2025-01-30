@@ -9,11 +9,21 @@ load(
     "//tools/toolchains/xcode_configure:xcode_configure.bzl",
     _xcode_configure = "xcode_configure",
 )
+load("@bazel_features//:features.bzl", "bazel_features")
 
-def _non_module_deps_impl(_):
+
+def _non_module_deps_impl(module_ctx):
     rules_ios_dependencies(
         load_bzlmod_dependencies = False,
     )
+    metadata_kwargs = {}
+    if bazel_features.external_deps.extension_metadata_has_reproducible:
+        metadata_kwargs["reproducible"] = True
+
+    return module_ctx.extension_metadata(
+        **metadata_kwargs
+    )
+
 
 non_module_deps = module_extension(implementation = _non_module_deps_impl)
 
