@@ -11,7 +11,6 @@ load(
 )
 load("@bazel_features//:features.bzl", "bazel_features")
 
-
 def _non_module_deps_impl(module_ctx):
     rules_ios_dependencies(
         load_bzlmod_dependencies = False,
@@ -23,7 +22,6 @@ def _non_module_deps_impl(module_ctx):
     return module_ctx.extension_metadata(
         **metadata_kwargs
     )
-
 
 non_module_deps = module_extension(implementation = _non_module_deps_impl)
 
