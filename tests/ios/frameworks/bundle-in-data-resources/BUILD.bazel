@@ -1,0 +1,29 @@
+load("//rules:framework.bzl", "apple_framework")
+load("//rules:precompiled_apple_resource_bundle.bzl", "precompiled_apple_resource_bundle")
+load("//rules:test.bzl", "ios_unit_test")
+
+precompiled_apple_resource_bundle(
+    name = "BundleInDataResources",
+    bundle_id = "com.example.BundleInDataResources",
+    bundle_name = "BundleInDataResources",
+    platforms = {"ios": "12.0"},
+    resources = ["fake-data.txt"],
+)
+
+apple_framework(
+    name = "BundleInDataResourcesFramework",
+    srcs = ["BundleInData.swift"],
+    data = [":BundleInDataResources"],
+    # Because the `library.bzl` wraps `data` in a filegroup by default, the `rules_apple` aspects
+    # seem to fail to find the resource bundle. It seems in order to directly use a resource bundle rule
+    # within `data`, it must be directly referenced vs. wrapped in a filegroup.
+    library_tools = {"wrap_resources_in_filegroup": None},
+    platforms = {"ios": "12.0"},
+)
+
+ios_unit_test(
+    name = "BundleInDataTests",
+    srcs = ["BundleInDataTests.swift"],
+    minimum_os_version = "12.0",
+    deps = [":BundleInDataResourcesFramework"],
+)

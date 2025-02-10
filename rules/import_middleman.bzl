@@ -92,17 +92,12 @@ def _find_imports_impl(target, ctx):
             dynamic_framework_file.append(dep[_FindImportsAspectInfo].dynamic_framework_file)
             import_infos.update(dep[_FindImportsAspectInfo].import_infos)
 
-    if ctx.rule.kind == "objc_import":
-        imported_library_file.append(target[apple_common.Objc].imported_library)
-
-    elif AppleFrameworkImportInfo in target:
-        static_framework_file.append(target[apple_common.Objc].imported_library)
-        target_dynamic_framework_file = target[apple_common.Objc].dynamic_framework_file
-        target_dynamic_framework_file_list = target_dynamic_framework_file.to_list()
-        if len(target_dynamic_framework_file_list) > 0:
-            import_infos[target_dynamic_framework_file_list[0].path] = target[AppleFrameworkImportInfo]
-
-        dynamic_framework_file.append(target_dynamic_framework_file)
+    if AppleFrameworkImportInfo in target:
+        if CcInfo in target:
+            for linker_input in target[CcInfo].linking_context.linker_inputs.to_list():
+                for library_to_link in linker_input.libraries:
+                    if library_to_link.static_library:
+                        static_framework_file.append(depset([library_to_link.static_library]))
 
     return [_FindImportsAspectInfo(
         dynamic_framework_file = depset(transitive = dynamic_framework_file),
@@ -196,7 +191,7 @@ def _file_collector_rule_impl(ctx):
     ]
 
     objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(
-        providers = [dep[apple_common.Objc] for dep in ctx.attr.deps],
+        providers = [],
         merge_keys = merge_keys,
     )
 

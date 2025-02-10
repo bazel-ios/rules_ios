@@ -30,7 +30,6 @@ load(
     "@build_bazel_rules_apple//apple/internal/aspects:resource_aspect.bzl",
     "apple_resource_aspect",
 )
-load("//rules:force_load_direct_deps.bzl", "force_load_direct_deps")
 
 _APPLE_FRAMEWORK_PACKAGING_KWARGS = [
     "visibility",
@@ -124,21 +123,6 @@ def apple_framework(
         "@build_bazel_rules_ios//rules/apple_platform:watchos": "watchos",
         "//conditions:default": "",
     })
-
-    # Setup force loading here - only for direct deps / direct libs and when `link_dynamic` is set.
-    should_force_load = framework_packaging_kwargs.get("link_dynamic", False)
-    if should_force_load:
-        force_load_name = name + ".force_load_direct_deps"
-        force_load_direct_deps(
-            name = force_load_name,
-            deps = kwargs.get("deps", []) + library.lib_names,
-            should_force_load = should_force_load,
-            testonly = testonly,
-            tags = ["manual"],
-            minimum_os_version = minimum_os_version,
-            platform_type = platform_type,
-        )
-        framework_deps.append(force_load_name)
 
     framework_deps += library.lib_names
     apple_framework_packaging(
@@ -614,6 +598,13 @@ def _get_merged_swift_info(ctx, framework_files, transitive_deps, clang_module):
     }
     if framework_files.outputs.swiftmodule:
         swift_info_fields["modules"] = _copy_swiftmodule(ctx, framework_files, clang_module)
+    else:
+        swift_info_fields["modules"] = [
+            swift_common.create_module(
+                name = ctx.attr.framework_name,
+                clang = clang_module,
+            ),
+        ]
 
     return swift_common.create_swift_info(**swift_info_fields)
 
@@ -894,7 +885,6 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
             cc_features = cc_features,
             cc_info = link_result.cc_info,
             cc_toolchain = cc_toolchain,
-            objc_provider = link_result.objc,
             rule_label = label,
         ),
     )

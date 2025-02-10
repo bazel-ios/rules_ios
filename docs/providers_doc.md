@@ -7,13 +7,12 @@
 ## AvoidDepsInfo
 
 <pre>
+load("@rules_ios//rules:providers.bzl", "AvoidDepsInfo")
+
 AvoidDepsInfo(<a href="#AvoidDepsInfo-libraries">libraries</a>, <a href="#AvoidDepsInfo-link_dynamic">link_dynamic</a>)
 </pre>
 
-
-
 **FIELDS**
-
 
 | Name  | Description |
 | :------------- | :------------- |
@@ -26,13 +25,12 @@ AvoidDepsInfo(<a href="#AvoidDepsInfo-libraries">libraries</a>, <a href="#AvoidD
 ## FrameworkInfo
 
 <pre>
+load("@rules_ios//rules:providers.bzl", "FrameworkInfo")
+
 FrameworkInfo(<a href="#FrameworkInfo-vfsoverlay_infos">vfsoverlay_infos</a>, <a href="#FrameworkInfo-binary">binary</a>, <a href="#FrameworkInfo-headers">headers</a>, <a href="#FrameworkInfo-private_headers">private_headers</a>, <a href="#FrameworkInfo-modulemap">modulemap</a>, <a href="#FrameworkInfo-swiftmodule">swiftmodule</a>, <a href="#FrameworkInfo-swiftdoc">swiftdoc</a>)
 </pre>
 
-
-
 **FIELDS**
-
 
 | Name  | Description |
 | :------------- | :------------- |

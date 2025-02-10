@@ -7,6 +7,8 @@
 ## default_test_factory.make_named_split
 
 <pre>
+load("@rules_ios//rules:test.bzl", "default_test_factory")
+
 default_test_factory.make_named_split(<a href="#default_test_factory.make_named_split-name">name</a>, <a href="#default_test_factory.make_named_split-split_kwargs">split_kwargs</a>, <a href="#default_test_factory.make_named_split-in_split">in_split</a>)
 </pre>
 
@@ -27,6 +29,8 @@ default_test_factory.make_named_split(<a href="#default_test_factory.make_named_
 ## default_test_factory.make_runner_split
 
 <pre>
+load("@rules_ios//rules:test.bzl", "default_test_factory")
+
 default_test_factory.make_runner_split(<a href="#default_test_factory.make_runner_split-name">name</a>, <a href="#default_test_factory.make_runner_split-runner">runner</a>, <a href="#default_test_factory.make_runner_split-in_split">in_split</a>)
 </pre>
 
@@ -47,6 +51,8 @@ default_test_factory.make_runner_split(<a href="#default_test_factory.make_runne
 ## default_test_factory.make_test
 
 <pre>
+load("@rules_ios//rules:test.bzl", "default_test_factory")
+
 default_test_factory.make_test(<a href="#default_test_factory.make_test-name">name</a>, <a href="#default_test_factory.make_test-test_rule">test_rule</a>, <a href="#default_test_factory.make_test-kwargs">kwargs</a>)
 </pre>
 
@@ -67,6 +73,8 @@ Helper to create an individual test
 ## default_test_factory.make_test_suite
 
 <pre>
+load("@rules_ios//rules:test.bzl", "default_test_factory")
+
 default_test_factory.make_test_suite(<a href="#default_test_factory.make_test_suite-factory">factory</a>, <a href="#default_test_factory.make_test_suite-name">name</a>, <a href="#default_test_factory.make_test_suite-test_rule">test_rule</a>, <a href="#default_test_factory.make_test_suite-test_kwargs">test_kwargs</a>)
 </pre>
 
@@ -88,6 +96,8 @@ default_test_factory.make_test_suite(<a href="#default_test_factory.make_test_su
 ## default_test_factory.make_test_suite_splits
 
 <pre>
+load("@rules_ios//rules:test.bzl", "default_test_factory")
+
 default_test_factory.make_test_suite_splits(<a href="#default_test_factory.make_test_suite_splits-factory">factory</a>, <a href="#default_test_factory.make_test_suite_splits-name">name</a>, <a href="#default_test_factory.make_test_suite_splits-in_kwargs">in_kwargs</a>)
 </pre>
 
@@ -113,6 +123,8 @@ Finally - you can set the splits to be whatever you want.
 ## default_test_factory.make_tests
 
 <pre>
+load("@rules_ios//rules:test.bzl", "default_test_factory")
+
 default_test_factory.make_tests(<a href="#default_test_factory.make_tests-factory">factory</a>, <a href="#default_test_factory.make_tests-name">name</a>, <a href="#default_test_factory.make_tests-test_rule">test_rule</a>, <a href="#default_test_factory.make_tests-kwargs">kwargs</a>)
 </pre>
 
@@ -134,6 +146,8 @@ Main entry point of generating tests"
 ## ios_ui_test
 
 <pre>
+load("@rules_ios//rules:test.bzl", "ios_ui_test")
+
 ios_ui_test(<a href="#ios_ui_test-name">name</a>, <a href="#ios_ui_test-apple_library">apple_library</a>, <a href="#ios_ui_test-test_factory">test_factory</a>, <a href="#ios_ui_test-kwargs">kwargs</a>)
 </pre>
 
@@ -155,6 +169,8 @@ Builds and packages iOS UI Tests.
 ## ios_unit_snapshot_test
 
 <pre>
+load("@rules_ios//rules:test.bzl", "ios_unit_snapshot_test")
+
 ios_unit_snapshot_test(<a href="#ios_unit_snapshot_test-name">name</a>, <a href="#ios_unit_snapshot_test-apple_library">apple_library</a>, <a href="#ios_unit_snapshot_test-test_factory">test_factory</a>, <a href="#ios_unit_snapshot_test-kwargs">kwargs</a>)
 </pre>
 
@@ -176,6 +192,8 @@ Builds and packages iOS Unit Snapshot Tests.
 ## ios_unit_test
 
 <pre>
+load("@rules_ios//rules:test.bzl", "ios_unit_test")
+
 ios_unit_test(<a href="#ios_unit_test-name">name</a>, <a href="#ios_unit_test-apple_library">apple_library</a>, <a href="#ios_unit_test-test_factory">test_factory</a>, <a href="#ios_unit_test-kwargs">kwargs</a>)
 </pre>
 

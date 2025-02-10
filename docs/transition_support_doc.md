@@ -23,6 +23,8 @@ part on the language used for XCFramework library identifiers:
 ## transition_support.current_apple_platform
 
 <pre>
+load("@rules_ios//rules:transition_support.bzl", "transition_support")
+
 transition_support.current_apple_platform(<a href="#transition_support.current_apple_platform-apple_fragment">apple_fragment</a>, <a href="#transition_support.current_apple_platform-xcode_config">xcode_config</a>)
 </pre>
 
