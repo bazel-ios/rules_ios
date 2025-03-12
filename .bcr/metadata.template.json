@@ -5,11 +5,6 @@
       "email": "rules_ios@squareup.com",
       "name": "rules_ios Maintainers"
     },
-    {
-      "email": "heyluispadron@gmail.com",
-      "github": "luispadron",
-      "name": "Luis Padron"
-    }
   ],
   "repository": [
     "github:bazel-ios/rules_ios"
