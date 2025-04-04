@@ -87,14 +87,6 @@ xcode_configure.configure(
     xcode_locator_label = "//tools/toolchains/xcode_configure:xcode_locator.m",
 )
 
-# Load non-bzlmod dependencies used in this repo from rules_swift
-swift_non_module_deps = use_extension("@build_bazel_rules_swift//swift:extensions.bzl", "non_module_deps")
-use_repo(
-    swift_non_module_deps,
-    "build_bazel_rules_swift_index_import",
-    "build_bazel_rules_swift_local_config",
-)
-
 # Load non-bzlmod dependencies used in this repo from rules_apple
 apple_non_module_deps = use_extension("@build_bazel_rules_apple//apple:extensions.bzl", "non_module_deps")
 use_repo(
