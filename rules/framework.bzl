@@ -355,7 +355,7 @@ def _get_framework_files(ctx, deps):
                 continue
 
             # collect binary files
-            if file.path.endswith(".a"):
+            if file.path.endswith(".a") or file.path.endswith(".lo"):
                 binaries_in.append(file)
 
             # collect swift specific files
