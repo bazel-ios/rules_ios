@@ -14,13 +14,22 @@ def make_tests():
     default_outputs_test(
         name = "test_FWOutputs",
         target_under_test = ":FW",
-        expected_output_file_paths = [
-            "FW/FW.framework/FW",
-            "FW/FW.framework/Headers/FW.h",
-            "FW/FW.framework/Headers/FW-umbrella.h",
-            "FW/FW.framework/PrivateHeaders/FW_Private.h",
-            "FW/FW.framework/Modules/module.modulemap",
-        ],
+        expected_output_file_paths = select({
+            "//:virtualize_frameworks": [
+                "libFW_objc.lo",
+                "FW/FW.h",
+                "FW-modulemap/FW-umbrella.h",
+                "FW/FW_Private.h",
+                "FW-modulemap/FW.modulemap",
+            ],
+            "//conditions:default": [
+                "FW/FW.framework/FW",
+                "FW/FW.framework/Headers/FW.h",
+                "FW/FW.framework/Headers/FW-umbrella.h",
+                "FW/FW.framework/PrivateHeaders/FW_Private.h",
+                "FW/FW.framework/Modules/module.modulemap",
+            ],
+        }),
     )
 
     native.test_suite(
