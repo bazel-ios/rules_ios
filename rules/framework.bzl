@@ -25,7 +25,8 @@ load("@build_bazel_rules_apple//apple/internal:apple_toolchains.bzl", "AppleMacT
 load("@build_bazel_rules_apple//apple/internal:swift_support.bzl", "swift_support")
 load("@build_bazel_rules_apple//apple/internal/utils:clang_rt_dylibs.bzl", "clang_rt_dylibs")
 load("@build_bazel_rules_apple//apple/internal:providers.bzl", "AppleBundleInfo", "ApplePlatformInfo", "IosFrameworkBundleInfo", "new_applebundleinfo", "new_iosframeworkbundleinfo")
-load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo", "swift_clang_module_aspect", "swift_common")
+load("@build_bazel_rules_swift//swift:providers.bzl", "SwiftInfo", "create_clang_module_inputs", "create_swift_module_context", "create_swift_module_inputs")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_clang_module_aspect")
 load(
     "@build_bazel_rules_apple//apple/internal/aspects:resource_aspect.bzl",
     "apple_resource_aspect",
@@ -558,7 +559,7 @@ def _create_swiftmodule(attrs):
     if attrs.symbol_graph:
         kwargs["symbol_graph"] = attrs.symbol_graph
 
-    return swift_common.create_swift_module(
+    return create_swift_module_inputs(
         swiftdoc = attrs.swiftdoc,
         swiftmodule = attrs.swiftmodule,
         swiftinterface = attrs.swiftinterface,
@@ -585,7 +586,7 @@ def _copy_swiftmodule(ctx, framework_files, clang_module):
     return [
         # only add the swift module, the objc modulemap is already listed as a header,
         # and it will be discovered via the framework search path
-        swift_common.create_module(
+        create_swift_module_context(
             name = swiftmodule_name,
             clang = clang_module,
             swift = swift_module,
@@ -600,13 +601,13 @@ def _get_merged_swift_info(ctx, framework_files, transitive_deps, clang_module):
         swift_info_fields["modules"] = _copy_swiftmodule(ctx, framework_files, clang_module)
     else:
         swift_info_fields["modules"] = [
-            swift_common.create_module(
+            create_swift_module_context(
                 name = ctx.attr.framework_name,
                 clang = clang_module,
             ),
         ]
 
-    return swift_common.create_swift_info(**swift_info_fields)
+    return SwiftInfo(**swift_info_fields)
 
 def _merge_root_infoplists(ctx):
     if ctx.attr.infoplists == None or len(ctx.attr.infoplists) == 0:
@@ -695,6 +696,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
     actions = ctx.actions
     apple_mac_toolchain_info = ctx.attr._mac_toolchain[AppleMacToolsToolchainInfo]
     apple_xplat_toolchain_info = ctx.attr._xplat_toolchain[AppleXPlatToolsToolchainInfo]
+    cc_toolchain_forwarder = ctx.split_attr._child_configuration_dummy
     bin_root_path = ctx.bin_dir.path
     bundle_id = ctx.attr.bundle_id
     if not bundle_id:
@@ -753,6 +755,7 @@ def _bundle_dynamic_framework(ctx, is_extension_safe, avoid_deps):
     )
     link_result = linking_support.register_binary_linking_action(
         ctx,
+        cc_toolchains = cc_toolchain_forwarder,
         avoid_deps = avoid_deps,
         entitlements = None,
         exported_symbols_lists = ctx.files.exported_symbols_lists,
@@ -1104,7 +1107,7 @@ def _apple_framework_packaging_impl(ctx):
 
     # rules_swift 2.x no longers takes compilation_context from CcInfo, need to pass it in via SwiftInfo's clang_module
     if virtualize_frameworks:
-        clang_module = swift_common.create_clang_module(
+        clang_module = create_clang_module_inputs(
             module_map = None,
             compilation_context = compilation_context,
         )
@@ -1112,7 +1115,7 @@ def _apple_framework_packaging_impl(ctx):
         # Setup the `clang` attr of the Swift module for non-vfs case this is required to have it locate the modulemap
         # and headers correctly.
         module_map = outputs.modulemaps[0] if outputs.modulemaps else None
-        clang_module = swift_common.create_clang_module(
+        clang_module = create_clang_module_inputs(
             module_map = module_map,
             compilation_context = cc_common.create_compilation_context(
                 headers = depset(_compact(

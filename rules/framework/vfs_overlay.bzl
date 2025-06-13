@@ -10,7 +10,7 @@ to each of the entries.
 """
 
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain", "use_cpp_toolchain")
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_common")
+load("@build_bazel_rules_swift//swift:providers.bzl", "SwiftInfo")
 load("//rules:features.bzl", "feature_names")
 load("//rules:providers.bzl", "FrameworkInfo")
 
@@ -298,7 +298,7 @@ def _framework_vfs_overlay_impl(ctx):
             files = depset([vfs.vfsoverlay_file]),
             vfs_info = vfs.vfs_info,
         ),
-        swift_common.create_swift_info(),
+        SwiftInfo(),
     ]
 
 def _merge_vfs_infos(base, vfs_infos):

@@ -252,7 +252,6 @@ def _is_arch_supported_for_target_tuple(*, environment_arch, minimum_os_version,
 def _command_line_options(
         *,
         apple_platforms = [],
-        emit_swiftinterface = False,
         environment_arch = None,
         force_bundle_outputs = False,
         minimum_os_version,
@@ -267,8 +266,6 @@ def _command_line_options(
             first element will be applied to `platforms` as that will be what is resolved by the
             underlying rule. Defaults to an empty list, which will signal to Bazel that platform
             mapping can take place as a fallback measure.
-        emit_swiftinterface: Wheither to emit swift interfaces for the given target. Defaults to
-            `False`.
         environment_arch: A valid Apple environment when applicable with its architecture as a
             string (for example `sim_arm64` from `ios_sim_arm64`, or `arm64` from `ios_arm64`), or
             None to infer a value from command line options passed through settings.
@@ -339,7 +336,6 @@ def _command_line_options(
             platform = "watchos",
             platform_type = platform_type,
         ),
-        "@build_bazel_rules_swift//swift:emit_swiftinterface": emit_swiftinterface,
     }
 
 def _apple_rule_base_transition_impl(settings, attr):
@@ -351,7 +347,6 @@ def _apple_rule_base_transition_impl(settings, attr):
     # PATCH: end
 
     return _command_line_options(
-        emit_swiftinterface = hasattr(attr, "_emitswiftinterface"),
         environment_arch = _environment_archs(platform_type, settings)[0],
         minimum_os_version = minimum_os_version,
         platform_type = platform_type,
@@ -401,7 +396,6 @@ _apple_rule_base_transition_outputs = [
     "//command_line_option:platforms",
     "//command_line_option:tvos_minimum_os",
     "//command_line_option:watchos_minimum_os",
-    "@build_bazel_rules_swift//swift:emit_swiftinterface",
 ]
 
 _apple_rule_base_transition = transition(
@@ -419,11 +413,6 @@ def _apple_platform_split_transition_impl(settings, attr):
     platform_type = _rules_ios_platform_type(settings, attr)
     minimum_os_version = _rules_ios_minimum_os_version(platform_type, attr)
     # PATCH: end
-
-    # iOS and tvOS static frameworks require underlying swift_library targets generate a Swift
-    # interface file. These rules define a private attribute called `_emitswiftinterface` that
-    # let's this transition flip rules_swift config down the build graph.
-    emit_swiftinterface = hasattr(attr, "_emitswiftinterface")
 
     if settings["//command_line_option:incompatible_enable_apple_toolchain_resolution"]:
         platforms = (
@@ -445,7 +434,6 @@ def _apple_platform_split_transition_impl(settings, attr):
             if str(platform) not in output_dictionary:
                 output_dictionary[str(platform)] = _command_line_options(
                     apple_platforms = apple_platforms,
-                    emit_swiftinterface = emit_swiftinterface,
                     minimum_os_version = minimum_os_version,
                     platform_type = platform_type,
                     settings = settings,
@@ -492,7 +480,6 @@ def _apple_platform_split_transition_impl(settings, attr):
                 continue
 
             output_dictionary[found_cpu] = _command_line_options(
-                emit_swiftinterface = emit_swiftinterface,
                 environment_arch = environment_arch,
                 minimum_os_version = minimum_os_version,
                 platform_type = platform_type,
