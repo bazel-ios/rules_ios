@@ -7,7 +7,7 @@ load("@bazel_skylib//lib:selects.bzl", "selects")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@build_bazel_rules_apple//apple/internal:apple_framework_import.bzl", "apple_dynamic_framework_import", "apple_static_framework_import")
 load("@build_bazel_rules_apple//apple/internal/resource_rules:apple_intent_library.bzl", "apple_intent_library")
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint", "swift_library")
 load("//rules:precompiled_apple_resource_bundle.bzl", "precompiled_apple_resource_bundle")
 load("//rules:hmap.bzl", "headermap")
 load("//rules:features.bzl", "feature_names")
@@ -1106,15 +1106,23 @@ def apple_library(
     if module_map:
         objc_hdrs.append(module_map)
 
+    swift_interop_hint_name = name + "_swift_interop_hint"
+    swift_interop_hint(
+        name = swift_interop_hint_name,
+        module_name = module_name,
+        module_map = module_map,
+        tags = _MANUAL,
+    )
+
     default_alwayslink = kwargs.pop("alwayslink", True)  # ensure symbols from any static deps are always included (see https://github.com/bazelbuild/rules_apple/issues/1938)
     native.objc_library(
         name = objc_libname,
+        aspect_hints = [swift_interop_hint_name],
         srcs = objc_sources + objc_private_hdrs + objc_non_exported_hdrs,
         non_arc_srcs = objc_non_arc_sources,
         hdrs = objc_hdrs,
         copts = copts_by_build_setting.objc_copts + objc_copts + additional_objc_vfs_copts + additional_objc_copts + index_while_building_objc_copts,
         deps = deps + private_deps + private_dep_names + lib_names + additional_objc_vfs_deps,
-        module_map = module_map,
         sdk_dylibs = sdk_dylibs,
         sdk_frameworks = sdk_frameworks,
         weak_sdk_frameworks = weak_sdk_frameworks,

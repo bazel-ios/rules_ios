@@ -1,13 +1,13 @@
 """Definitions for handling Bazel repositories used by the Apple rules."""
 
 load(
+    "@bazel_tools//tools/build_defs/repo:git.bzl",
+    "new_git_repository",
+)
+load(
     "@bazel_tools//tools/build_defs/repo:http.bzl",
     "http_archive",
     "http_file",
-)
-load(
-    "@bazel_tools//tools/build_defs/repo:git.bzl",
-    "new_git_repository",
 )
 
 def _maybe(repo_rule, name, **kwargs):
@@ -85,15 +85,15 @@ def _rules_ios_bzlmod_dependencies():
     _maybe(
         http_archive,
         name = "build_bazel_rules_swift",
-        sha256 = "bb01097c7c7a1407f8ad49a1a0b1960655cf823c26ad2782d0b7d15b323838e2",
-        url = "https://github.com/bazelbuild/rules_swift/releases/download/1.18.0/rules_swift.1.18.0.tar.gz",
+        sha256 = "ae6673d27024914fa89e32fd1369e9563fb8ede463feac703aaec1ba6ca0358c",
+        url = "https://github.com/bazelbuild/rules_swift/releases/download/3.0.1/rules_swift.3.0.1.tar.gz",
     )
 
     _maybe(
         http_archive,
         name = "build_bazel_rules_apple",
-        sha256 = "b4df908ec14868369021182ab191dbd1f40830c9b300650d5dc389e0b9266c8d",
-        url = "https://github.com/bazelbuild/rules_apple/releases/download/3.5.1/rules_apple.3.5.1.tar.gz",
+        sha256 = "b28822cb81916fb544119f5533de010cc67ec6a789f2e7d0fc19d53bfcbb8285",
+        url = "https://github.com/bazelbuild/rules_apple/releases/download/4.0.1/rules_apple.4.0.1.tar.gz",
     )
     _maybe(
         http_archive,
