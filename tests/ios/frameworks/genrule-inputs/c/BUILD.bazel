@@ -1,0 +1,39 @@
+load("//rules:framework.bzl", "apple_framework")
+
+genrule(
+   name="lib-src.swift",
+   cmd = """
+cat > $(OUTS) <<-EOF
+public struct C {
+
+    public static func run() {
+       print("runs here") 
+       guard LibC == "LibC" else {
+           fatalError()
+       }
+    }
+}
+EOF
+   """,
+   outs = ["lib.swift"]
+)
+
+genrule(
+   name="lib-src.h",
+   cmd = """
+cat > $(OUTS) <<-EOF
+   @import Foundation;
+   static NSString *const LibC = @"LibC";
+EOF
+   """,
+   outs = ["lib-src.h"]
+)
+
+apple_framework(
+    name = "c",
+    # Note: supplying a hader file, e.g. `lib-src.h` named `:lib-src.h`
+    # string will cause the umbrella header rule to break.
+    srcs = [":lib-src.swift", "lib-src.h"],
+    platforms = {"ios": "10.0"},
+    visibility = ["//visibility:public"],
+)
