@@ -6,6 +6,7 @@ _VERSIONS = {
     "ios": ["12.0", "16.2", "17.2"],
     "tvos": ["12.0", "16.2", "17.2"],
     "watchos": ["3.2"],
+    "visionos": ["1.0"],
 }
 
 def _version_int(version):

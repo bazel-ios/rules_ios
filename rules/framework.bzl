@@ -91,6 +91,7 @@ def apple_framework(
         "@build_bazel_rules_ios//rules/apple_platform:macos": "@build_bazel_rules_apple//apple/internal:environment_plist_macos",
         "@build_bazel_rules_ios//rules/apple_platform:tvos": "@build_bazel_rules_apple//apple/internal:environment_plist_tvos",
         "@build_bazel_rules_ios//rules/apple_platform:watchos": "@build_bazel_rules_apple//apple/internal:environment_plist_watchos",
+        "@build_bazel_rules_ios//rules/apple_platform:visionos": "@build_bazel_rules_apple//apple/internal:environment_plist_visionos",
         "//conditions:default": None,
     }))
 
@@ -115,6 +116,7 @@ def apple_framework(
         "@build_bazel_rules_ios//rules/apple_platform:macos": platforms.get("macos", ""),
         "@build_bazel_rules_ios//rules/apple_platform:tvos": platforms.get("tvos", ""),
         "@build_bazel_rules_ios//rules/apple_platform:watchos": platforms.get("watchos", ""),
+        "@build_bazel_rules_ios//rules/apple_platform:visionos": platforms.get("visionos", ""),
         "//conditions:default": "",
     })
     platform_type = select({
@@ -122,6 +124,7 @@ def apple_framework(
         "@build_bazel_rules_ios//rules/apple_platform:macos": "macos",
         "@build_bazel_rules_ios//rules/apple_platform:tvos": "tvos",
         "@build_bazel_rules_ios//rules/apple_platform:watchos": "watchos",
+        "@build_bazel_rules_ios//rules/apple_platform:visionos": "visionos",
         "//conditions:default": "",
     })
 
@@ -1000,7 +1003,7 @@ def _apple_framework_packaging_impl(ctx):
     # The current build architecture
     arch = ctx.fragments.apple.single_arch_cpu
 
-    # The current Apple platform type, such as iOS, macOS, tvOS, or watchOS
+    # The current Apple platform type, such as iOS, macOS, tvOS, visionOS or watchOS
     platform = str(ctx.fragments.apple.single_arch_platform.platform_type)
 
     # Use 'library_linkopts' to determine if resulting binary should be application extension safe.
