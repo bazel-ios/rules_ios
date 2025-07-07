@@ -72,7 +72,7 @@ ios_application(
         ":FW",
         ":FW2",
         ":OnlySources",
-    ],
+    ] + ["//tests/ios/in-tree-vendor-prebuilt-deps/Pods/MobileFlow"],
 )
 
 ios_application(
@@ -86,7 +86,7 @@ ios_application(
         ":FW",
         ":FW2",
         ":OnlySources",
-    ],
+    ] + ["//tests/ios/in-tree-vendor-prebuilt-deps/Pods/MobileFlow"],
 )
 
 ios_application(
@@ -101,7 +101,7 @@ ios_application(
         ":Empty",
         ":FW",
         ":OnlySources",
-    ],
+    ] + ["//tests/ios/in-tree-vendor-prebuilt-deps/Pods/MobileFlow"],
 )
 
 ios_application(
@@ -114,7 +114,7 @@ ios_application(
         ":Empty",
         ":FW",
         ":OnlySources",
-    ],
+    ] + ["//tests/ios/in-tree-vendor-prebuilt-deps/Pods/MobileFlow"],
 )
 
 apple_bundle_import(
@@ -150,7 +150,7 @@ ios_application(
         ":Empty",
         ":FW",
         ":OnlySources",
-    ],
+    ] + ["//tests/ios/in-tree-vendor-prebuilt-deps/Pods/MobileFlow"],
 )
 
 ios_unit_test(
@@ -229,7 +229,7 @@ ios_application(
         ":Empty",
         ":FW",
         ":OnlySources",
-    ],
+    ] + ["//tests/ios/in-tree-vendor-prebuilt-deps/Pods/MobileFlow"],
 )
 
 ios_application(
@@ -275,7 +275,7 @@ ios_application(
         ":Empty",
         ":FW",
         ":OnlySources",
-    ],
+    ] + ["//tests/ios/in-tree-vendor-prebuilt-deps/Pods/MobileFlow"],
 )
 
 ios_application(
@@ -303,5 +303,5 @@ ios_application(
         ":FW",
         ":OnlySources",
         ":SwiftLib",
-    ],
+    ] + ["//tests/ios/in-tree-vendor-prebuilt-deps/Pods/MobileFlow"],
 )

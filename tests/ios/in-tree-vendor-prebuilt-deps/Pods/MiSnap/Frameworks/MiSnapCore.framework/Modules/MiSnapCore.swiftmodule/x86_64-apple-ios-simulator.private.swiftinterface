@@ -1,0 +1,604 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.8 (swiftlang-5.8.0.124.2 clang-1403.0.22.11.100)
+// swift-module-flags: -target x86_64-apple-ios12.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name MiSnapCore
+// swift-module-flags-ignorable: -enable-bare-slash-regex
+import CommonCrypto
+import Foundation
+@_exported import MiSnapCore
+import Swift
+import UIKit
+import _Concurrency
+import _StringProcessing
+@objc public enum MiSnapUxpEvent : Swift.Int {
+  case none
+  case checkFrontFailure
+  case checkBackFailure
+  case identityFrontFailure
+  case identityBackFailure
+  case passportFailure
+  case notFoundFailure
+  case mrzFailure
+  case contrastFailure
+  case backgroundFailure
+  case angleFailure
+  case rotationAngleFailure
+  case tooFarFailure
+  case tooCloseFailure
+  case aspectRatioFailure
+  case sharpnessFailure
+  case brightnessFailure
+  case maxBrightnessFailure
+  case glareFailure
+  case classificationInProgress
+  case faceNotFoundFailure
+  case faceNotCenteredFailure
+  case faceMultipleFacesFailure
+  case faceRollFailure
+  case facePitchFailure
+  case faceYawFailure
+  case faceTooFarFailure
+  case faceTooCloseFailure
+  case faceNotStillFailure
+  case faceStopSmilingFailure
+  case holdStill
+  case smile
+  case errorVerbose
+  case successVerbose
+  case timeoutVerbose
+  case startVerbose
+  case readVerbose
+  case unknownTagVerbose
+  case paceSupportVerbose
+  case caSupportVerbose
+  case aaSupportVerbose
+  case accessMechanismVerbose
+  case discardVerbose
+  case cancelVerbose
+  case cancel
+  case instruction
+  case help
+  case timeout
+  case review
+  case measuredConfidence
+  case measuredCornerPoints
+  case measuredMicrConfidence
+  case measuredContrast
+  case measuredBackground
+  case measuredAngle
+  case measuredRotationAngle
+  case measuredSharpness
+  case measuredBrightness
+  case measuredGlare
+  case measuredWidth
+  case measuredAutoTime
+  case measuredManualTime
+  case measuredFailover
+  case torchOn
+  case torchOff
+  case startAuto
+  case startManual
+  case orientationLandscape
+  case orientationPortrait
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@_inheritsConvenienceInitializers @objc public class MiSnapUxpEventManager : ObjectiveC.NSObject {
+  @objc public var events: [[Swift.String : Any]] {
+    get
+  }
+  @objc public var totalDuration: Swift.Int {
+    get
+  }
+  @objc public class var shared: MiSnapUxpEventManager {
+    @objc get
+  }
+  @objc public class func destroyShared()
+  @objc override dynamic public init()
+  @objc public func start()
+  @objc public func addEvent(_ event: MiSnapUxpEvent)
+  @objc public func addEvent(_ event: MiSnapUxpEvent, value: Swift.String?)
+  @objc deinit
+}
+@objc public enum MiSnapLogLevel : Swift.Int {
+  case verbose = 0
+  case debug = 1
+  case info = 2
+  case warning = 3
+  case error = 4
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum MiSnapLogPresentation : Swift.Int {
+  case console = 0
+  case file = 1
+  case consoleAndFile = 2
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@_inheritsConvenienceInitializers @objc public class MiSnapLogConfiguration : ObjectiveC.NSObject, Foundation.NSCoding {
+  @objc public var level: MiSnapLogLevel
+  @objc public var presentation: MiSnapLogPresentation
+  @objc public var savePII: Swift.Bool
+  @objc override dynamic public init()
+  @objc override dynamic public var description: Swift.String {
+    @objc get
+  }
+  @objc required public init?(coder: Foundation.NSCoder)
+  @objc public func encode(with coder: Foundation.NSCoder)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc public class MiSnapLog : ObjectiveC.NSObject {
+  @objc public var configuration: MiSnapLogConfiguration
+  @objc public class var shared: MiSnapLog {
+    @objc get
+  }
+  @objc public class func destroyShared()
+  @objc public static var configuration: MiSnapLogConfiguration
+  @objc public func verbose(_ msg: Swift.String)
+  @objc public func debug(_ msg: Swift.String)
+  @objc public func info(_ msg: Swift.String)
+  @objc public func warning(_ msg: Swift.String)
+  @objc public func error(_ msg: Swift.String)
+  @discardableResult
+  @objc public func getLog(keepFile: Swift.Bool = false) -> Swift.String
+  @objc public func clearAllSavedLogFiles()
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc public enum MiSnapCryptographyHashingAlgorithm : Swift.Int {
+  case sha224
+  case sha256
+  case sha384
+  case sha512
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public class MiSnapCryptography : ObjectiveC.NSObject {
+  @objc public init(publicKey: Security.SecKey? = nil, privateKey: Security.SecKey? = nil, algorithm: Security.SecKeyAlgorithm)
+  @objc public func set(publicKey: Security.SecKey? = nil, privateKey: Security.SecKey? = nil)
+  @objc public func encryptDictionary(_ dictionary: [Swift.String : Any]) -> [Swift.String]?
+  @objc public func decryptToDictionary(_ base64Strings: [Swift.String]) -> [Swift.String : Any]?
+  @objc public func encryptData(_ data: Foundation.Data?) -> [Swift.String]?
+  @objc public func decryptData(_ base64Strings: [Swift.String]) -> Foundation.Data?
+  @objc public func encrypt(_ data: Foundation.Data) -> Foundation.Data?
+  @objc public func decrypt(_ data: Foundation.Data) -> Foundation.Data?
+  @objc public static func hash(_ data: Foundation.Data?, algorithm: MiSnapCryptographyHashingAlgorithm = .sha256) -> Swift.String?
+  @objc public static func secKey(from data: Foundation.Data, parameters: [Swift.String : Any]) -> Security.SecKey?
+  public static func generateKeys(parameters: [Swift.String : Any]) -> (privateKey: Security.SecKey?, publicKey: Security.SecKey?)
+  @objc deinit
+}
+@objc public enum MiSnapMibiDataElement : Swift.Int, Swift.Codable {
+  case mibiVersion
+  case deviceInfo
+  case sdkInfo
+  case platformPrivate
+  case sessionInfo
+  case device
+  case manufacturer
+  case model
+  case platform
+  case os
+  case id
+  case modules
+  case name
+  case version
+  case license
+  case gpo
+  case expiryDate
+  case parameters
+  case original
+  case final
+  case uxp
+  case resultCode
+  case imageWidth
+  case imageHeight
+  case orientation
+  case classificationDocumentType
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@_inheritsConvenienceInitializers @objc public class MiSnapMibi : ObjectiveC.NSObject, Swift.Codable {
+  @objc public var string: Swift.String?
+  @objc public var deviceInfo: MiSnapMibiDeviceInfo {
+    get
+  }
+  @objc public var sessionInfos: [MiSnapMibiSessionInfo] {
+    @objc get
+  }
+  @objc public var deepCopy: MiSnapMibi {
+    @objc get
+  }
+  @objc override dynamic public init()
+  public func encode(to encoder: any Swift.Encoder) throws
+  required public init(from decoder: any Swift.Decoder) throws
+  @objc public func setModuleWithName(_ name: Swift.String, version: Swift.String)
+  @objc public func setSessionInfo(_ sessionInfo: [Swift.String : Any], resetOld: Swift.Bool = true)
+  @objc public func set(value: Swift.String, for element: MiSnapMibiDataElement)
+  @objc public func setParameters(_ parameters: [Swift.String : Any], original: Swift.Bool)
+  @objc public func setUXP(_ events: [[Swift.String : Any]])
+  @objc public func add(to image: UIKit.UIImage?, compression: Swift.Float) -> Foundation.Data?
+  @objc public func add(to wavData: Foundation.Data) -> Foundation.Data
+  @objc deinit
+}
+@objc public enum MiSnapMibiSessionInfoType : Swift.Int {
+  case none
+  case document
+  case barcode
+  case face
+  case voice
+  case nfc
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum MiSnapMibiSessionInfoMode : Swift.Int, Swift.Codable {
+  case none
+  case auto
+  case manual
+  case forcedAuto
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum MiSnapMibiSessionInfoOrientation : Swift.Int, Swift.Codable {
+  case none
+  case portrait
+  case landscape
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum MiSnapMibiSessionInfoFlow : Swift.Int, Swift.Codable {
+  case none
+  case enrollment
+  case verification
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum MiSnapMibiSessionInfoUnlock : Swift.Int, Swift.Codable {
+  case none
+  case pace
+  case ca
+  case bac
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers @objc public class MiSnapMibiSessionInfo : ObjectiveC.NSObject {
+  @objc public var type: MiSnapMibiSessionInfoType {
+    get
+  }
+  @objc public var totalDuration: Swift.Int {
+    get
+  }
+  @objc override dynamic public var description: Swift.String {
+    @objc get
+  }
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @objc public class MiSnapMibiDocumentSessionInfo : MiSnapMibiSessionInfo {
+  @objc public var docType: Swift.String {
+    get
+  }
+  @objc public var mode: MiSnapMibiSessionInfoMode {
+    get
+  }
+  @objc public var deviceOrientation: MiSnapMibiSessionInfoOrientation {
+    get
+  }
+  @objc public var documentOrientation: MiSnapMibiSessionInfoOrientation {
+    get
+  }
+  @objc public var jpegQuality: Swift.Int {
+    get
+  }
+  @objc public var autoTries: Swift.Int {
+    get
+  }
+  @objc public var manualTries: Swift.Int {
+    get
+  }
+  @objc public var enhancedManual: Swift.Bool {
+    get
+  }
+  @objc public var classificationType: Swift.String? {
+    get
+  }
+  @objc public var fourCorners: [[Swift.Int]]? {
+    get
+  }
+  @objc public var warnings: [Swift.String]? {
+    get
+  }
+  @objc public var mrzExtracted: Swift.Bool {
+    get
+  }
+  @objc public var optionalDataRedacted: Swift.Bool {
+    get
+  }
+  @objc public init()
+  @objc public static func from(_ dictionary: [Swift.String : Any]) -> MiSnapMibiDocumentSessionInfo
+  @objc override dynamic public var description: Swift.String {
+    @objc get
+  }
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @objc public class MiSnapMibiBarcodeSessionInfo : MiSnapMibiSessionInfo {
+  @objc public var barcodeType: Swift.String {
+    get
+  }
+  @objc public var mode: MiSnapMibiSessionInfoMode {
+    get
+  }
+  @objc public var deviceOrientation: MiSnapMibiSessionInfoOrientation {
+    get
+  }
+  @objc public var documentOrientation: MiSnapMibiSessionInfoOrientation {
+    get
+  }
+  @objc public var jpegQuality: Swift.Int {
+    get
+  }
+  @objc public var autoTries: Swift.Int {
+    get
+  }
+  @objc public var manualTries: Swift.Int {
+    get
+  }
+  @objc public init()
+  @objc public static func from(_ dictionary: [Swift.String : Any]) -> MiSnapMibiBarcodeSessionInfo
+  @objc override dynamic public var description: Swift.String {
+    @objc get
+  }
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @objc public class MiSnapMibiFaceSessionInfo : MiSnapMibiSessionInfo {
+  @objc public var mode: MiSnapMibiSessionInfoMode {
+    get
+  }
+  @objc public var smile: Swift.Bool {
+    get
+  }
+  @objc public var deviceOrientation: MiSnapMibiSessionInfoOrientation {
+    get
+  }
+  @objc public var jpegQuality: Swift.Int {
+    get
+  }
+  @objc public var autoTries: Swift.Int {
+    get
+  }
+  @objc public var manualTries: Swift.Int {
+    get
+  }
+  @objc public var warnings: [Swift.String]? {
+    get
+  }
+  @objc public init()
+  @objc public static func from(_ dictionary: [Swift.String : Any]) -> MiSnapMibiFaceSessionInfo
+  @objc override dynamic public var description: Swift.String {
+    @objc get
+  }
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @objc public class MiSnapMibiVoiceSessionInfo : MiSnapMibiSessionInfo {
+  @objc public var flow: MiSnapMibiSessionInfoFlow {
+    get
+  }
+  @objc public var tries: Swift.Int {
+    get
+  }
+  @objc public var warnings: [[Swift.String]]? {
+    get
+  }
+  @objc public var snr: Swift.Float {
+    get
+  }
+  @objc public var speechDuration: Swift.Int {
+    get
+  }
+  @objc public init()
+  @objc public static func from(_ dictionary: [Swift.String : Any]) -> MiSnapMibiVoiceSessionInfo
+  @objc override dynamic public var description: Swift.String {
+    @objc get
+  }
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @objc public class MiSnapMibiNFCSessionInfo : MiSnapMibiSessionInfo {
+  @objc public var tries: Swift.Int {
+    get
+  }
+  @objc public var unlock: MiSnapMibiSessionInfoUnlock {
+    get
+  }
+  @objc public var ca: [Swift.String : Swift.Bool]? {
+    get
+  }
+  @objc public var dgs: [Swift.String]? {
+    get
+  }
+  @objc public var warnings: [[Swift.String]]? {
+    get
+  }
+  @objc public var documentCode: Swift.String? {
+    get
+  }
+  @objc public var issuingCountry: Swift.String? {
+    get
+  }
+  @objc public var issueDate: Swift.String? {
+    get
+  }
+  @objc public var nationality: Swift.String? {
+    get
+  }
+  @objc public var optionalDataRedacted: Swift.Bool {
+    get
+  }
+  @objc public init()
+  @objc public static func from(_ dictionary: [Swift.String : Any]) -> MiSnapMibiNFCSessionInfo
+  @objc override dynamic public var description: Swift.String {
+    @objc get
+  }
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc public class MiSnapMibiDeviceInfo : ObjectiveC.NSObject, Swift.Codable {
+  @objc public var manufacturer: Swift.String {
+    get
+  }
+  @objc public var device: Swift.String {
+    get
+  }
+  @objc public var model: Swift.String {
+    get
+  }
+  @objc public var os: Swift.String {
+    get
+  }
+  @objc public var id: Swift.String {
+    get
+  }
+  @objc override dynamic public init()
+  public func encode(to encoder: any Swift.Encoder) throws
+  required public init(from decoder: any Swift.Decoder) throws
+  @objc override dynamic public var description: Swift.String {
+    @objc get
+  }
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc public class MiSnapDevice : ObjectiveC.NSObject {
+  @objc override dynamic public init()
+  @objc public var id: Swift.String? {
+    @objc get
+  }
+  @objc public var modelName: Swift.String {
+    @objc get
+  }
+  @objc public var osVersion: Swift.String {
+    @objc get
+  }
+  @objc public var info: Swift.String? {
+    @objc get
+  }
+  @objc deinit
+}
+@objc public enum MiSnapLicenseFeature : Swift.Int {
+  case none = 0
+  case generic = 1
+  case deposit = 2
+  case barcode = 3
+  case id = 4
+  case ODC = 5
+  case ODE = 6
+  case NFC = 7
+  case face = 8
+  case voice = 9
+  case enhancedManual = 10
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum MiSnapLicenseStatus : Swift.Int {
+  case none = 0
+  case valid = 1
+  case notValid = 2
+  case expired = 3
+  case disabled = 4
+  case notValidAppId = 5
+  case platformNotSupported = 6
+  case featureNotSupported = 7
+  public var stringValue: Swift.String {
+    get
+  }
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@_inheritsConvenienceInitializers @objc public class MiSnapLicenseManager : ObjectiveC.NSObject {
+  @objc public class var shared: MiSnapLicenseManager {
+    @objc get
+  }
+  @objc public class func destroyShared()
+  @objc public var status: MiSnapLicenseStatus {
+    get
+  }
+  @objc public var gpo: Swift.String? {
+    get
+  }
+  @objc public var expirationDateString: Swift.String? {
+    get
+  }
+  @objc public func setLicenseKey(_ base64LicenseKey: Swift.String?)
+  @objc public func featureSupported(_ feature: MiSnapLicenseFeature) -> Swift.Bool
+  @objc override dynamic public var description: Swift.String {
+    @objc get
+  }
+  @objc override dynamic public init()
+  @objc deinit
+}
+extension MiSnapUxpEvent : Swift.Equatable {}
+extension MiSnapUxpEvent : Swift.Hashable {}
+extension MiSnapUxpEvent : Swift.RawRepresentable {}
+extension MiSnapLogLevel : Swift.Equatable {}
+extension MiSnapLogLevel : Swift.Hashable {}
+extension MiSnapLogLevel : Swift.RawRepresentable {}
+extension MiSnapLogPresentation : Swift.Equatable {}
+extension MiSnapLogPresentation : Swift.Hashable {}
+extension MiSnapLogPresentation : Swift.RawRepresentable {}
+extension MiSnapCryptographyHashingAlgorithm : Swift.Equatable {}
+extension MiSnapCryptographyHashingAlgorithm : Swift.Hashable {}
+extension MiSnapCryptographyHashingAlgorithm : Swift.RawRepresentable {}
+extension MiSnapMibiDataElement : Swift.Equatable {}
+extension MiSnapMibiDataElement : Swift.Hashable {}
+extension MiSnapMibiDataElement : Swift.RawRepresentable {}
+extension MiSnapMibiSessionInfoType : Swift.Equatable {}
+extension MiSnapMibiSessionInfoType : Swift.Hashable {}
+extension MiSnapMibiSessionInfoType : Swift.RawRepresentable {}
+extension MiSnapMibiSessionInfoMode : Swift.Equatable {}
+extension MiSnapMibiSessionInfoMode : Swift.Hashable {}
+extension MiSnapMibiSessionInfoMode : Swift.RawRepresentable {}
+extension MiSnapMibiSessionInfoOrientation : Swift.Equatable {}
+extension MiSnapMibiSessionInfoOrientation : Swift.Hashable {}
+extension MiSnapMibiSessionInfoOrientation : Swift.RawRepresentable {}
+extension MiSnapMibiSessionInfoFlow : Swift.Equatable {}
+extension MiSnapMibiSessionInfoFlow : Swift.Hashable {}
+extension MiSnapMibiSessionInfoFlow : Swift.RawRepresentable {}
+extension MiSnapMibiSessionInfoUnlock : Swift.Equatable {}
+extension MiSnapMibiSessionInfoUnlock : Swift.Hashable {}
+extension MiSnapMibiSessionInfoUnlock : Swift.RawRepresentable {}
+extension MiSnapLicenseFeature : Swift.Equatable {}
+extension MiSnapLicenseFeature : Swift.Hashable {}
+extension MiSnapLicenseFeature : Swift.RawRepresentable {}
+extension MiSnapLicenseStatus : Swift.Equatable {}
+extension MiSnapLicenseStatus : Swift.Hashable {}
+extension MiSnapLicenseStatus : Swift.RawRepresentable {}

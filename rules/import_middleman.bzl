@@ -281,6 +281,16 @@ def _file_collector_rule_impl(ctx):
                                 alwayslink = False,
                             )
                             for static_library in replaced_static_framework.replaced.values()
+                        ] + [
+                            # Bazel7 should specify dynamic library for link
+                            cc_common.create_library_to_link(
+                                actions = ctx.actions,
+                                cc_toolchain = cc_toolchain,
+                                feature_configuration = cc_features,
+                                dynamic_library = dynamic_library,
+                                alwayslink = False,
+                            )
+                            for dynamic_library in replaced_dynamic_framework.values()
                         ]),
                     ),
                 ]),
