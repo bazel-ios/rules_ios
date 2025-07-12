@@ -289,6 +289,7 @@ def precompiled_apple_resource_bundle(**kwargs):
             "@build_bazel_rules_ios//rules/apple_platform:macos": "@build_bazel_rules_apple//apple/internal:environment_plist_macos",
             "@build_bazel_rules_ios//rules/apple_platform:tvos": "@build_bazel_rules_apple//apple/internal:environment_plist_tvos",
             "@build_bazel_rules_ios//rules/apple_platform:watchos": "@build_bazel_rules_apple//apple/internal:environment_plist_watchos",
+            "@build_bazel_rules_ios//rules/apple_platform:visionos": "@build_bazel_rules_apple//apple/internal:environment_plist_visionos",
         }),
         **kwargs
     )
