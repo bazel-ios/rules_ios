@@ -254,22 +254,41 @@ def _file_collector_rule_impl(ctx):
         ],
     )
 
-    objc = apple_common.new_objc_provider(
-        **objc_provider_fields
-    )
+    # Filter out fields that are no longer supported in Bazel 8
+    if is_bazel_7:
+        # Remove linking fields that were deprecated in Bazel 8
+        # Linking is now handled exclusively through CcInfo
+        objc_provider_fields_filtered = {
+            k: v for k, v in objc_provider_fields.items()
+            if k not in ["imported_library", "dynamic_framework_file", "linkopt", "link_inputs"]
+        }
+        objc = apple_common.new_objc_provider(
+            **objc_provider_fields_filtered
+        )
+    else:
+        objc = apple_common.new_objc_provider(
+            **objc_provider_fields
+        )
 
     dep_cc_infos = [dep[CcInfo] for dep in ctx.attr.deps if CcInfo in dep]
     cc_info = cc_common.merge_cc_infos(cc_infos = dep_cc_infos)
     if is_bazel_7:
         # Need to recreate linking_context for Bazel 7 or later
         # because of https://github.com/bazelbuild/bazel/issues/16939
+        # Collect all user link flags
+        user_link_flags = []
+        if len(all_replaced_frameworks):
+            # Add framework search paths for replaced frameworks
+            user_link_flags.extend(["\"\"\"-F" + "/".join(f.path.split("/")[:-2]) + "\"\"\"" for f in replaced_frameworks])
+            user_link_flags.extend(compat_link_opt)
+
         cc_info = CcInfo(
             compilation_context = cc_info.compilation_context,
             linking_context = cc_common.create_linking_context(
                 linker_inputs = depset([
                     cc_common.create_linker_input(
                         owner = ctx.label,
-                        user_link_flags = compat_link_opt if len(all_replaced_frameworks) else [],
+                        user_link_flags = user_link_flags,
                         libraries = depset([
                             cc_common.create_library_to_link(
                                 actions = ctx.actions,

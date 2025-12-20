@@ -33,6 +33,7 @@ load(
     "objc_provider_utils",
 )
 load("//rules:transition_support.bzl", "transition_support")
+load("//rules:utils.bzl", "is_bazel_7")
 
 def _framework_middleman(ctx):
     resource_providers = []
@@ -243,7 +244,9 @@ def _dep_middleman(ctx):
 
     def _process_avoid_deps(avoid_dep_libs):
         for dep in avoid_dep_libs:
-            if apple_common.Objc in dep:
+            # Linking fields removed from ObjcInfo in Bazel 8 / rules_apple 4.x
+            # All linking information is now in CcInfo
+            if not is_bazel_7 and apple_common.Objc in dep:
                 for lib in dep[apple_common.Objc].library.to_list():
                     avoid_libraries[lib] = True
                 # force_load_library removed in Bazel 8 / rules_apple 4.x

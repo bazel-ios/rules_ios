@@ -30,7 +30,6 @@ ios_unit_test(
     name = "ObjcFrameworkTests",
     srcs = glob(
         [
-            "tests/**/*.h",
             "tests/**/*.m",
         ],
     ),

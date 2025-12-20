@@ -150,19 +150,37 @@ xcode_version(
     version = "15.2.0.15C500b",
 )
 
+xcode_version(
+    name = "version16_2_0_16C5032a",
+    aliases = [
+        "16.2",
+        "16.2.0",
+        "16.2.0.16C5032a",
+        "16C5032a",
+    ],
+    default_ios_sdk_version = "18.2",
+    default_macos_sdk_version = "15.2",
+    default_tvos_sdk_version = "18.2",
+    default_visionos_sdk_version = "2.2",
+    default_watchos_sdk_version = "11.2",
+    version = "16.2.0.16C5032a",
+)
+
 xcode_config(
     name = "host_xcodes",
-    default = ":version15_2_0_15C500b",
+    default = ":version16_2_0_16C5032a",
     versions = [
         ":version15_2_0_15C500b",
+        ":version16_2_0_16C5032a",
     ],
     visibility = ["//visibility:public"],
 )
 
 available_xcodes(
     name = "host_available_xcodes",
-    default = ":version15_2_0_15C500b",
+    default = ":version16_2_0_16C5032a",
     versions = [
         ":version15_2_0_15C500b",
+        ":version16_2_0_16C5032a",
     ],
 )
