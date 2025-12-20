@@ -179,15 +179,13 @@ def _file_collector_rule_impl(ctx):
         # This should be correctly configured upstream: see setup in rules_ios
         fail("using import_middleman ({}) on wrong transition ({},{},is_device={})".format(ctx.attr.name, platform, arch, ctx.fragments.apple.single_arch_platform.is_device))
 
+    # Most linking fields removed from ObjcInfo in Bazel 8 / rules_apple 4.x
+    # Linking is now handled exclusively through CcInfo
     merge_keys = [
-        "sdk_dylib",
-        "sdk_framework",
-        "weak_sdk_framework",
-        "force_load_library",
         "source",
-        "link_inputs",
-        "linkopt",
-        "library",
+        # Removed fields (no longer available in ObjcInfo):
+        # "sdk_dylib", "sdk_framework", "weak_sdk_framework",
+        # "force_load_library", "link_inputs", "linkopt", "library"
     ]
 
     objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(

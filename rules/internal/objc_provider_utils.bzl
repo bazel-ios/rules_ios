@@ -3,15 +3,14 @@ def _add_to_dict_if_present(dict, key, value):
         dict[key] = value
 
 objc_merge_keys = [
-    "sdk_dylib",
-    "sdk_framework",
-    "weak_sdk_framework",
-    "imported_library",
-    "force_load_library",
+    # Most linking-related fields removed from ObjcInfo in Bazel 8 / rules_apple 4.x
+    # Linking is now handled exclusively through CcInfo
+    # Only source-related fields remain in ObjcInfo
     "source",
-    "link_inputs",
-    "linkopt",
-    "library",
+    # Removed fields (no longer available in ObjcInfo):
+    # "sdk_dylib", "sdk_framework", "weak_sdk_framework",
+    # "imported_library", "force_load_library",
+    # "link_inputs", "linkopt", "library"
 ]
 
 def _merge_objc_providers_dict(providers, transitive = [], merge_keys = objc_merge_keys):
@@ -38,23 +37,17 @@ def _merge_objc_providers(providers, transitive = []):
     return apple_common.new_objc_provider(**objc_provider_fields)
 
 def _merge_dynamic_framework_providers(dynamic_framework_providers):
-    fields = {}
-    merge_keys = [
-        "framework_dirs",
-        "framework_files",
-    ]
-    for key in merge_keys:
-        set = depset(
-            direct = [],
-            # Note:  we may want to merge this with the below inputs?
-            transitive = [getattr(dep, key) for dep in dynamic_framework_providers],
-        )
-        _add_to_dict_if_present(fields, key, set)
+    # AppleDynamicFramework provider removed in Bazel 8 / rules_apple 4.x
+    # Return a mock struct with empty framework_files for backwards compatibility
+    # This was only used for Bazel <= 6
+    if len(dynamic_framework_providers) > 0:
+        fail("AppleDynamicFramework provider no longer exists in Bazel 8")
 
-    fields["objc"] = apple_common.new_objc_provider()
-    fields["cc_info"] = CcInfo()
-
-    return apple_common.new_dynamic_framework_provider(**fields)
+    return struct(
+        framework_dirs = depset([]),
+        framework_files = depset([]),
+        objc = apple_common.new_objc_provider(),
+    )
 
 objc_provider_utils = struct(
     merge_objc_providers_dict = _merge_objc_providers_dict,

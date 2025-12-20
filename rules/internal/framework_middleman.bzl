@@ -64,9 +64,11 @@ def _framework_middleman(ctx):
                 resource_providers.append(lib_dep[AppleResourceInfo])
         if apple_common.Objc in lib_dep:
             objc_providers.append(lib_dep[apple_common.Objc])
-        if apple_common.AppleDynamicFramework in lib_dep:
-            dynamic_frameworks.append(lib_dep)
-            dynamic_framework_providers.append(lib_dep[apple_common.AppleDynamicFramework])
+        # AppleDynamicFramework provider removed in Bazel 8 / rules_apple 4.x
+        # This was only needed for Bazel <= 6
+        # if apple_common.AppleDynamicFramework in lib_dep:
+        #     dynamic_frameworks.append(lib_dep)
+        #     dynamic_framework_providers.append(lib_dep[apple_common.AppleDynamicFramework])
 
     for dep in ctx.attr.framework_deps:
         _process_dep(dep)
@@ -77,15 +79,17 @@ def _framework_middleman(ctx):
                 _process_dep(lib_dep)
 
     # Here we only need to loop a subset of the keys
+    # dynamic_framework_file removed in Bazel 8 / rules_apple 4.x - this was only for Bazel <= 6
     objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(providers = objc_providers, merge_keys = [
-        "dynamic_framework_file",
+        # "dynamic_framework_file",  # removed in Bazel 8
     ])
 
     # Add the frameworks to the objc provider for Bazel <= 6
+    # dynamic_framework_file removed in Bazel 8 / rules_apple 4.x
     dynamic_framework_provider = objc_provider_utils.merge_dynamic_framework_providers(dynamic_framework_providers)
-    objc_provider_fields["dynamic_framework_file"] = depset(
-        transitive = [dynamic_framework_provider.framework_files, objc_provider_fields.get("dynamic_framework_file", depset([]))],
-    )
+    # objc_provider_fields["dynamic_framework_file"] = depset(
+    #     transitive = [dynamic_framework_provider.framework_files, objc_provider_fields.get("dynamic_framework_file", depset([]))],
+    # )
     objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
 
     # Add the framework info to the cc info linking context for Bazel >= 7
@@ -242,8 +246,9 @@ def _dep_middleman(ctx):
             if apple_common.Objc in dep:
                 for lib in dep[apple_common.Objc].library.to_list():
                     avoid_libraries[lib] = True
-                for lib in dep[apple_common.Objc].force_load_library.to_list():
-                    avoid_libraries[lib] = True
+                # force_load_library removed in Bazel 8 / rules_apple 4.x
+                # for lib in dep[apple_common.Objc].force_load_library.to_list():
+                #     avoid_libraries[lib] = True
                 for lib in dep[apple_common.Objc].imported_library.to_list():
                     avoid_libraries[lib.basename] = True
                 for lib in dep[apple_common.Objc].static_framework_file.to_list():
@@ -263,25 +268,23 @@ def _dep_middleman(ctx):
             for lib_dep in dep[AvoidDepsInfo].libraries:
                 _collect_providers(lib_dep)
 
-    # Construct & merge the ObjcProvider, the linking information is only used in Bazel <= 6
+    # Construct & merge the ObjcProvider
+    # Most linking fields removed from ObjcInfo in Bazel 8 / rules_apple 4.x
+    # Linking is now handled exclusively through CcInfo
     objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(providers = objc_providers, merge_keys = [
-        "force_load_library",
-        "imported_library",
-        "library",
-        "link_inputs",
-        "linkopt",
-        "sdk_dylib",
-        "sdk_framework",
         "source",
-        "static_framework_file",
-        "weak_sdk_framework",
+        # Removed fields (no longer available in ObjcInfo):
+        # "imported_library", "library", "link_inputs", "linkopt",
+        # "sdk_dylib", "sdk_framework", "weak_sdk_framework",
+        # "static_framework_file", "force_load_library"
     ])
 
     # Ensure to strip out static link inputs
-    _dedupe_key("library", avoid_libraries, objc_provider_fields)
-    _dedupe_key("force_load_library", avoid_libraries, objc_provider_fields)
-    _dedupe_key("imported_library", avoid_libraries, objc_provider_fields, check_name = True)
-    _dedupe_key("static_framework_file", avoid_libraries, objc_provider_fields, check_name = True)
+    # These fields no longer exist in ObjcInfo in Bazel 8 / rules_apple 4.x
+    # _dedupe_key("library", avoid_libraries, objc_provider_fields)
+    # _dedupe_key("force_load_library", avoid_libraries, objc_provider_fields)
+    # _dedupe_key("imported_library", avoid_libraries, objc_provider_fields, check_name = True)
+    # _dedupe_key("static_framework_file", avoid_libraries, objc_provider_fields, check_name = True)
 
     if "sdk_dylib" in objc_provider_fields:
         # Put sdk_dylib at _end_ of the linker invocation. Apple's linkers have

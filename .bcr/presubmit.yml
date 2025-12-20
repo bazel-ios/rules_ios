@@ -1,10 +1,18 @@
 matrix:
-  bazel: ["7.x"]
+  bazel: ["7.x", "8.x"]
 tasks:
   verify_build_targets_bazel_7:
     name: Verify Build targets on macOS with Bazel 7
     platform: macos_arm64
     bazel: 7.x
+    build_targets:
+      - "@rules_ios//rules/..."
+    build_flags:
+      - "--repo_env=BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1"
+  verify_build_targets_bazel_8:
+    name: Verify Build targets on macOS with Bazel 8
+    platform: macos_arm64
+    bazel: 8.x
     build_targets:
       - "@rules_ios//rules/..."
     build_flags:

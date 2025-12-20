@@ -7,8 +7,6 @@ build --spawn_strategy=local
 # Setup Xcode configuration.
 build --xcode_version_config=//:host_xcodes
 
-build --experimental_strict_conflict_checks
-
 build --verbose_failures # Print the full command line for commands that failed
 build --test_output=errors # Prints log file output to the console on failure
 
