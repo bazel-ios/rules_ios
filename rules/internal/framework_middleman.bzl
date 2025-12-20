@@ -65,6 +65,7 @@ def _framework_middleman(ctx):
                 resource_providers.append(lib_dep[AppleResourceInfo])
         if apple_common.Objc in lib_dep:
             objc_providers.append(lib_dep[apple_common.Objc])
+
         # AppleDynamicFramework provider removed in Bazel 8 / rules_apple 4.x
         # This was only needed for Bazel <= 6
         # if apple_common.AppleDynamicFramework in lib_dep:
@@ -88,6 +89,7 @@ def _framework_middleman(ctx):
     # Add the frameworks to the objc provider for Bazel <= 6
     # dynamic_framework_file removed in Bazel 8 / rules_apple 4.x
     dynamic_framework_provider = objc_provider_utils.merge_dynamic_framework_providers(dynamic_framework_providers)
+
     # objc_provider_fields["dynamic_framework_file"] = depset(
     #     transitive = [dynamic_framework_provider.framework_files, objc_provider_fields.get("dynamic_framework_file", depset([]))],
     # )
@@ -249,6 +251,7 @@ def _dep_middleman(ctx):
             if not is_bazel_7 and apple_common.Objc in dep:
                 for lib in dep[apple_common.Objc].library.to_list():
                     avoid_libraries[lib] = True
+
                 # force_load_library removed in Bazel 8 / rules_apple 4.x
                 # for lib in dep[apple_common.Objc].force_load_library.to_list():
                 #     avoid_libraries[lib] = True
