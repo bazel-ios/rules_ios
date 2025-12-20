@@ -14,6 +14,7 @@ bzl_library(
         ":objc_provider_utils",
         "//rules:providers",
         "//rules:transition_support",
+        "//rules:utils",
         "@bazel_skylib//lib:dicts",
         "@bazel_skylib//lib:partial",
         "@build_bazel_rules_apple//apple",
