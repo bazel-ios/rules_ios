@@ -1,5 +1,6 @@
 # Enable Bzlmod
 common --enable_bzlmod
+common --module_mirrors=https://bcr.cloudflaremirrors.com
 
 # Spawn strategy required for some tests
 build --spawn_strategy=local
