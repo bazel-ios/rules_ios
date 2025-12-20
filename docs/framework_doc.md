@@ -54,7 +54,7 @@ Packages compiled code into an Apple .framework package
 load("@rules_ios//rules:framework.bzl", "apple_framework")
 
 apple_framework(<a href="#apple_framework-name">name</a>, <a href="#apple_framework-apple_library">apple_library</a>, <a href="#apple_framework-infoplists">infoplists</a>, <a href="#apple_framework-infoplists_by_build_setting">infoplists_by_build_setting</a>, <a href="#apple_framework-xcconfig">xcconfig</a>,
-                <a href="#apple_framework-xcconfig_by_build_setting">xcconfig_by_build_setting</a>, <a href="#apple_framework-kwargs">kwargs</a>)
+                <a href="#apple_framework-xcconfig_by_build_setting">xcconfig_by_build_setting</a>, <a href="#apple_framework-kwargs">**kwargs</a>)
 </pre>
 
 Builds and packages an Apple framework.

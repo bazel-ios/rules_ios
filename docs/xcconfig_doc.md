@@ -70,7 +70,7 @@ Struct with different copts behind 'select()' statements
 <pre>
 load("@rules_ios//rules:xcconfig.doc.bzl", "merge_xcconfigs")
 
-merge_xcconfigs(<a href="#merge_xcconfigs-xcconfigs">xcconfigs</a>)
+merge_xcconfigs(<a href="#merge_xcconfigs-xcconfigs">*xcconfigs</a>)
 </pre>
 
 Merges a list of xcconfigs into a single dictionary

@@ -54,7 +54,7 @@ can be updated to work without the other behavior
 <pre>
 load("@rules_ios//rules:import_middleman.bzl", "find_imports")
 
-find_imports(<a href="#find_imports-name">name</a>)
+find_imports()
 </pre>
 
 Internal aspect for the `import_middleman` see below for a description.
@@ -70,9 +70,5 @@ Internal aspect for the `import_middleman` see below for a description.
 
 **ATTRIBUTES**
 
-
-| Name  | Description | Type | Mandatory | Default |
-| :------------- | :------------- | :------------- | :------------- | :------------- |
-| <a id="find_imports-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
 
 

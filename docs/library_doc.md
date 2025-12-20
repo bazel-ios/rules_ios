@@ -54,7 +54,7 @@ load("@rules_ios//rules:library.bzl", "apple_library")
 
 apple_library(<a href="#apple_library-name">name</a>, <a href="#apple_library-library_tools">library_tools</a>, <a href="#apple_library-export_private_headers">export_private_headers</a>, <a href="#apple_library-namespace_is_module_name">namespace_is_module_name</a>,
               <a href="#apple_library-default_xcconfig_name">default_xcconfig_name</a>, <a href="#apple_library-xcconfig">xcconfig</a>, <a href="#apple_library-xcconfig_by_build_setting">xcconfig_by_build_setting</a>, <a href="#apple_library-objc_defines">objc_defines</a>, <a href="#apple_library-swift_defines">swift_defines</a>,
-              <a href="#apple_library-kwargs">kwargs</a>)
+              <a href="#apple_library-kwargs">**kwargs</a>)
 </pre>
 
 Create libraries for native source code on Apple platforms.
