@@ -30,7 +30,7 @@ def _merge_objc_providers(providers, transitive = []):
     return apple_common.new_objc_provider(**objc_provider_fields)
 
 def _merge_dynamic_framework_providers(dynamic_framework_providers):
-    # AppleDynamicFramework is still available in Bazel 8 via apple_common.AppleDynamicFramework
+    # Note: AppleDynamicFramework only exists in Bazel 7 and earlier
     # Merge all dynamic framework providers into a single struct
     if len(dynamic_framework_providers) == 0:
         return struct(
