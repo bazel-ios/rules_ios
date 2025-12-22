@@ -65,6 +65,9 @@ def _framework_middleman(ctx):
                 resource_providers.append(lib_dep[AppleResourceInfo])
         if apple_common.Objc in lib_dep:
             objc_providers.append(lib_dep[apple_common.Objc])
+        if apple_common.AppleDynamicFramework in lib_dep:
+            dynamic_frameworks.append(lib_dep)
+            dynamic_framework_providers.append(lib_dep[apple_common.AppleDynamicFramework])
 
     for dep in ctx.attr.framework_deps:
         _process_dep(dep)
@@ -75,14 +78,15 @@ def _framework_middleman(ctx):
                 _process_dep(lib_dep)
 
     # Here we only need to loop a subset of the keys
-    # dynamic_framework_file removed in Bazel 8 / rules_apple 4.x - this was only for Bazel <= 6
     objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(providers = objc_providers, merge_keys = [
     ])
 
-    # Add the frameworks to the objc provider for Bazel <= 6
-    # dynamic_framework_file removed in Bazel 8 / rules_apple 4.x
+    # Add the frameworks to the objc provider
+    # AppleDynamicFramework is still available in Bazel 8 via apple_common.AppleDynamicFramework
     dynamic_framework_provider = objc_provider_utils.merge_dynamic_framework_providers(dynamic_framework_providers)
-
+    objc_provider_fields["dynamic_framework_file"] = depset(
+        transitive = [dynamic_framework_provider.framework_files, objc_provider_fields.get("dynamic_framework_file", depset([]))],
+    )
     objc_provider = apple_common.new_objc_provider(**objc_provider_fields)
 
     # Add the framework info to the cc info linking context for Bazel >= 7
