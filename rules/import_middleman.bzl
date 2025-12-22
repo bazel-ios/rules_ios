@@ -253,11 +253,11 @@ def _file_collector_rule_impl(ctx):
     if is_bazel_7:
         # Remove linking fields that were deprecated in Bazel 8
         # Linking is now handled exclusively through CcInfo
-        # Note: dynamic_framework_file is still supported via apple_common.AppleDynamicFramework
+        # dynamic_framework_file is also no longer supported in ObjcInfo
         objc_provider_fields_filtered = {
             k: v
             for k, v in objc_provider_fields.items()
-            if k not in ["imported_library", "linkopt", "link_inputs"]
+            if k not in ["imported_library", "linkopt", "link_inputs", "dynamic_framework_file"]
         }
         objc = apple_common.new_objc_provider(
             **objc_provider_fields_filtered
