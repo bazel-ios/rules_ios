@@ -179,13 +179,8 @@ def _file_collector_rule_impl(ctx):
         # This should be correctly configured upstream: see setup in rules_ios
         fail("using import_middleman ({}) on wrong transition ({},{},is_device={})".format(ctx.attr.name, platform, arch, ctx.fragments.apple.single_arch_platform.is_device))
 
-    merge_keys = [
-        "source",
-    ]
-
     objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(
         providers = [],
-        merge_keys = merge_keys,
     )
 
     exisiting_imported_libraries = objc_provider_fields.get("imported_library", depset([]))

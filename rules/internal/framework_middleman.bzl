@@ -79,8 +79,7 @@ def _framework_middleman(ctx):
                 _process_dep(lib_dep)
 
     # Here we only need to loop a subset of the keys
-    objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(providers = objc_providers, merge_keys = [
-    ])
+    objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(providers = objc_providers)
 
     # Add the frameworks to the objc provider
     # Note: AppleDynamicFramework only exists in Bazel 7 and earlier
@@ -269,11 +268,7 @@ def _dep_middleman(ctx):
                 _collect_providers(lib_dep)
 
     # Construct & merge the ObjcProvider
-    # Most linking fields removed from ObjcInfo in Bazel 8 / rules_apple 4.x
-    # Linking is now handled exclusively through CcInfo
-    objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(providers = objc_providers, merge_keys = [
-        "source",
-    ])
+    objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(providers = objc_providers)
 
     if "sdk_dylib" in objc_provider_fields:
         # Put sdk_dylib at _end_ of the linker invocation. Apple's linkers have
