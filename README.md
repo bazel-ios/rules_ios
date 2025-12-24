@@ -45,7 +45,7 @@ See the following table for supported rules_apple release versions.
 
 | rules_apple release | Minimum supported rules version | Final supported rules version
 |:-------------------:|:-------------------------:|:-------------------------:
-| 4.3.3 | 7.0.0 | current
+| 4.3.3 | 7.0.0 | current 
 | 3.15.0 | 5.3.0 | current
 | 3.* | 3.* | 4.2.1
 | 2.* | 2.* | 3.2.2
