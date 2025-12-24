@@ -30,7 +30,7 @@ See the following table for supported release versions.
 
 | Bazel release | Minimum supported rules version | Final supported rules version
 |:-------------------:|:-------------------------:|:-------------------------:
-| 8.* | 6.0.0 | current
+| 8.* | 7.0.0 | current
 | 7.* | 4.4.0 | current
 | 6.* | 2.0.0 | 5.3.0
 | 5.* | 1.0.0 | 3.2.2
@@ -45,26 +45,11 @@ See the following table for supported rules_apple release versions.
 
 | rules_apple release | Minimum supported rules version | Final supported rules version
 |:-------------------:|:-------------------------:|:-------------------------:
-| 4.3.3 | 6.0.0 | current
+| 4.3.3 | 7.0.0 | current
 | 3.15.0 | 5.3.0 | current
 | 3.* | 3.* | 4.2.1
 | 2.* | 2.* | 3.2.2
 | 1.* | 1.0.0 | 3.2.2
-
-## Migrating to Bazel 8
-
-rules_ios 6.0.0+ supports Bazel 8.x. To migrate from Bazel 7.x to 8.x:
-
-1. Update your `.bazelversion` file to `8.4.0` (or later)
-2. Update `rules_ios` to version `6.0.0` or later in your `MODULE.bazel`
-3. No code changes required - all deprecated APIs were already migrated in previous releases
-
-The following dependencies are automatically updated when you upgrade rules_ios:
-- `apple_support`: 2.0.0+
-- `rules_apple`: 4.3.3+
-- `rules_swift`: 3.4.1+
-
-Both Bazel 7.x and 8.x are supported during the transition period. We recommend staying on Bazel 7.x until you're ready to migrate your entire project.
 
 ## Getting started
 
