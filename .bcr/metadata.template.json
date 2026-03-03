@@ -4,6 +4,10 @@
     {
       "email": "rules_ios@squareup.com",
       "name": "rules_ios Maintainers"
+    },
+    {
+      "email": "lpadron@block.xyz",
+      "name": "Luis Padron",
     }
   ],
   "repository": [
