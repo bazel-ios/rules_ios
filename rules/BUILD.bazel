@@ -12,6 +12,12 @@ genrule(
 )
 
 bzl_library(
+    name = "utils",
+    srcs = ["utils.bzl"],
+    visibility = ["//visibility:public"],
+)
+
+bzl_library(
     name = "providers",
     srcs = ["providers.bzl"],
     visibility = ["//visibility:public"],
@@ -79,7 +85,7 @@ bzl_library(
     visibility = ["//visibility:public"],
     deps = [
         ":transition_support",
-        ":utils.bzl",
+        ":utils",
         "@bazel_skylib//lib:partial",
         "@bazel_skylib//lib:paths",
         "@build_bazel_apple_support//lib:apple_support",
@@ -93,7 +99,7 @@ bzl_library(
     visibility = ["//visibility:public"],
     deps = [
         ":features",
-        "//rules:utils.bzl",
+        ":utils",
         "//rules/internal:objc_provider_utils",
         "@build_bazel_rules_apple//apple",
     ],
@@ -107,7 +113,7 @@ bzl_library(
         ":hmap",
         ":import_middleman",
         ":precompiled_apple_resource_bundle",
-        ":utils.bzl",
+        ":utils",
         "//rules/framework:vfs_overlay",
         "//rules/library:resources",
         "//rules/library:xcconfig",
@@ -132,6 +138,7 @@ bzl_library(
         ":plists",
         ":providers",
         ":transition_support",
+        ":utils",
         "//rules/framework:vfs_overlay",
         "//rules/internal:objc_provider_utils",
         "@bazel_skylib//lib:partial",

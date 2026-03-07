@@ -22,12 +22,19 @@ def _merge_objc_providers_dict(providers, transitive = [], merge_keys = objc_mer
         "providers": transitive,
     }
     for key in merge_keys:
-        set = depset(
-            direct = [],
-            # Note:  we may want to merge this with the below inputs?
-            transitive = [getattr(provider, key) for provider in providers],
-        )
-        _add_to_dict_if_present(fields, key, set)
+        # In Bazel 8+, linking fields are not available in ObjcInfo (migrated to CcInfo)
+        # but can still be passed to apple_common.new_objc_provider()
+        # Only try to merge fields that actually exist in the providers
+        transitive_sets = []
+        for provider in providers:
+            if hasattr(provider, key):
+                transitive_sets.append(getattr(provider, key))
+        if transitive_sets:
+            set = depset(
+                direct = [],
+                transitive = transitive_sets,
+            )
+            _add_to_dict_if_present(fields, key, set)
     return fields
 
 def _merge_objc_providers(providers, transitive = []):
@@ -38,23 +45,24 @@ def _merge_objc_providers(providers, transitive = []):
     return apple_common.new_objc_provider(**objc_provider_fields)
 
 def _merge_dynamic_framework_providers(dynamic_framework_providers):
-    fields = {}
-    merge_keys = [
-        "framework_dirs",
-        "framework_files",
-    ]
-    for key in merge_keys:
-        set = depset(
-            direct = [],
-            # Note:  we may want to merge this with the below inputs?
-            transitive = [getattr(dep, key) for dep in dynamic_framework_providers],
+    # Note: AppleDynamicFramework only exists in Bazel 7 and earlier
+    # Merge all dynamic framework providers into a single struct
+    if len(dynamic_framework_providers) == 0:
+        return struct(
+            framework_dirs = depset([]),
+            framework_files = depset([]),
+            objc = apple_common.new_objc_provider(),
         )
-        _add_to_dict_if_present(fields, key, set)
 
-    fields["objc"] = apple_common.new_objc_provider()
-    fields["cc_info"] = CcInfo()
+    framework_dirs = [provider.framework_dirs for provider in dynamic_framework_providers]
+    framework_files = [provider.framework_files for provider in dynamic_framework_providers]
+    objc_providers = [provider.objc for provider in dynamic_framework_providers]
 
-    return apple_common.new_dynamic_framework_provider(**fields)
+    return struct(
+        framework_dirs = depset(transitive = framework_dirs),
+        framework_files = depset(transitive = framework_files),
+        objc = apple_common.new_objc_provider(providers = objc_providers),
+    )
 
 objc_provider_utils = struct(
     merge_objc_providers_dict = _merge_objc_providers_dict,

@@ -1,8 +1,8 @@
-load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
-load("//rules:utils.bzl", "is_bazel_7")
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain", "use_cpp_toolchain")
 load("@build_bazel_rules_apple//apple/internal:bundling_support.bzl", "bundling_support")
 load("@build_bazel_rules_apple//apple/internal:providers.bzl", "AppleFrameworkImportInfo", "new_appleframeworkimportinfo")
+load("//rules:utils.bzl", "is_bazel_7")
+load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
 
 _FindImportsAspectInfo = provider(fields = {
     "imported_library_file": "",
@@ -179,20 +179,8 @@ def _file_collector_rule_impl(ctx):
         # This should be correctly configured upstream: see setup in rules_ios
         fail("using import_middleman ({}) on wrong transition ({},{},is_device={})".format(ctx.attr.name, platform, arch, ctx.fragments.apple.single_arch_platform.is_device))
 
-    merge_keys = [
-        "sdk_dylib",
-        "sdk_framework",
-        "weak_sdk_framework",
-        "force_load_library",
-        "source",
-        "link_inputs",
-        "linkopt",
-        "library",
-    ]
-
     objc_provider_fields = objc_provider_utils.merge_objc_providers_dict(
         providers = [],
-        merge_keys = merge_keys,
     )
 
     exisiting_imported_libraries = objc_provider_fields.get("imported_library", depset([]))
@@ -256,22 +244,43 @@ def _file_collector_rule_impl(ctx):
         ],
     )
 
-    objc = apple_common.new_objc_provider(
-        **objc_provider_fields
-    )
+    # Filter out fields that are no longer supported in Bazel 8
+    if is_bazel_7:
+        # Remove linking fields that were deprecated in Bazel 8
+        # Linking is now handled exclusively through CcInfo
+        # dynamic_framework_file is also no longer supported in ObjcInfo
+        objc_provider_fields_filtered = {
+            k: v
+            for k, v in objc_provider_fields.items()
+            if k not in ["imported_library", "linkopt", "link_inputs", "dynamic_framework_file"]
+        }
+        objc = apple_common.new_objc_provider(
+            **objc_provider_fields_filtered
+        )
+    else:
+        objc = apple_common.new_objc_provider(
+            **objc_provider_fields
+        )
 
     dep_cc_infos = [dep[CcInfo] for dep in ctx.attr.deps if CcInfo in dep]
     cc_info = cc_common.merge_cc_infos(cc_infos = dep_cc_infos)
     if is_bazel_7:
         # Need to recreate linking_context for Bazel 7 or later
         # because of https://github.com/bazelbuild/bazel/issues/16939
+        # Collect all user link flags
+        user_link_flags = []
+        if len(all_replaced_frameworks):
+            # Add framework search paths for replaced frameworks
+            user_link_flags.extend(["\"\"\"-F" + "/".join(f.path.split("/")[:-2]) + "\"\"\"" for f in replaced_frameworks])
+            user_link_flags.extend(compat_link_opt)
+
         cc_info = CcInfo(
             compilation_context = cc_info.compilation_context,
             linking_context = cc_common.create_linking_context(
                 linker_inputs = depset([
                     cc_common.create_linker_input(
                         owner = ctx.label,
-                        user_link_flags = compat_link_opt if len(all_replaced_frameworks) else [],
+                        user_link_flags = user_link_flags,
                         libraries = depset([
                             cc_common.create_library_to_link(
                                 actions = ctx.actions,

@@ -31,7 +31,6 @@ apple_framework(
     testonly = True,
     srcs = glob(
         [
-            "MixedSourceTest/**/*.h",
             "MixedSourceTest/**/*.m",
             "MixedSourceTest/**/*.swift",
         ],

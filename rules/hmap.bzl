@@ -27,7 +27,7 @@ def _make_hmap(actions, headermap_builder, output, namespace, hdrs_lists):
     args.add("--output", output)
 
     for hdrs in hdrs_lists:
-        args.add_all(hdrs)
+        args.add_all(hdrs, expand_directories = False)
 
     args.set_param_file_format(format = "multiline")
     args.use_param_file("@%s")
