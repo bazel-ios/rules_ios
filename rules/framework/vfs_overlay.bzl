@@ -240,13 +240,25 @@ def _provided_vfs_swift_module_contents(swiftmodules, vfs_prefix, target_triple)
     if swiftmodule_file == None or swiftmodule_file.is_source:
         return None
 
+    swiftmoudles_file_infos = []
+    swiftsourceinfo_file = None
+    for file in swiftmodules:
+        swiftmoudles_file_infos.append((file.path, file.extension))
+        if file.extension == "swiftsourceinfo":
+            swiftsourceinfo_file = file
+
+    if swiftsourceinfo_file == None:
+        extension = "swiftsourceinfo"
+        path = swiftmodule_file.path.replace(".swiftmodule", ".swiftsourceinfo")
+        swiftmoudles_file_infos.append((path, extension))
+
     contents = [
         {
             "type": "file",
-            "name": target_triple + "." + file.extension,
-            "external-contents": vfs_prefix + file.path,
+            "name": target_triple + "." + extension,
+            "external-contents": vfs_prefix + path,
         }
-        for file in swiftmodules
+        for (path, extension) in swiftmoudles_file_infos
     ]
 
     return {
