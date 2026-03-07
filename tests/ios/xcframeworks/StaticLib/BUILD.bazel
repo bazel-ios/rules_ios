@@ -5,7 +5,7 @@ ios_application(
     name = "StaticLibApp",
     srcs = ["App/main.m"],
     bundle_id = "com.example.app",
-    minimum_os_version = "12.0",
+    minimum_os_version = "15.2",
     provisioning_profile = "@build_bazel_rules_ios//tests/ios:integration-test.mobileprovision",
     visibility = ["//visibility:public"],
     deps = [
@@ -16,7 +16,7 @@ ios_application(
 apple_framework(
     name = "StaticLibFW",
     srcs = glob(["StaticLibFW/*"]),
-    platforms = {"ios": "12.0"},
+    platforms = {"ios": "15.2"},
     visibility = ["//visibility:public"],
     deps = [
         "//tests/ios/xcframeworks/StaticLib/ObjcLib",

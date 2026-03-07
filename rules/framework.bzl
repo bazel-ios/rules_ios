@@ -1,36 +1,36 @@
 """Framework rules"""
 
-load("//rules/framework:vfs_overlay.bzl", "VFSOverlayInfo", "make_vfsoverlay")
-load("//rules:features.bzl", "feature_names")
-load("//rules:library.bzl", "PrivateHeadersInfo", "apple_library")
-load("//rules:plists.bzl", "process_infoplists")
-load("//rules:providers.bzl", "AvoidDepsInfo", "FrameworkInfo")
-load("//rules:transition_support.bzl", "transition_support")
-load("//rules:utils.bzl", "is_bazel_7")
-load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain", "use_cpp_toolchain")
 load("@build_bazel_rules_apple//apple/internal:apple_product_type.bzl", "apple_product_type")
+load("@build_bazel_rules_apple//apple/internal:apple_toolchains.bzl", "AppleMacToolsToolchainInfo", "AppleXPlatToolsToolchainInfo")
 load("@build_bazel_rules_apple//apple/internal:features_support.bzl", "features_support")
 load("@build_bazel_rules_apple//apple/internal:linking_support.bzl", "linking_support")
 load("@build_bazel_rules_apple//apple/internal:outputs.bzl", "outputs")
 load("@build_bazel_rules_apple//apple/internal:partials.bzl", "partials")
 load("@build_bazel_rules_apple//apple/internal:platform_support.bzl", "platform_support")
 load("@build_bazel_rules_apple//apple/internal:processor.bzl", "processor")
+load("@build_bazel_rules_apple//apple/internal:providers.bzl", "AppleBundleInfo", "ApplePlatformInfo", "IosFrameworkBundleInfo", "new_applebundleinfo", "new_iosframeworkbundleinfo")
 load("@build_bazel_rules_apple//apple/internal:resource_actions.bzl", "resource_actions")
 load("@build_bazel_rules_apple//apple/internal:resources.bzl", "resources")
 load("@build_bazel_rules_apple//apple/internal:rule_support.bzl", "rule_support")
-load("@build_bazel_rules_apple//apple/internal:apple_toolchains.bzl", "AppleMacToolsToolchainInfo", "AppleXPlatToolsToolchainInfo")
 load("@build_bazel_rules_apple//apple/internal:swift_support.bzl", "swift_support")
-load("@build_bazel_rules_apple//apple/internal/utils:clang_rt_dylibs.bzl", "clang_rt_dylibs")
-load("@build_bazel_rules_apple//apple/internal:providers.bzl", "AppleBundleInfo", "ApplePlatformInfo", "IosFrameworkBundleInfo", "new_applebundleinfo", "new_iosframeworkbundleinfo")
-load("@build_bazel_rules_swift//swift:providers.bzl", "SwiftInfo", "create_clang_module_inputs", "create_swift_module_context", "create_swift_module_inputs")
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_clang_module_aspect")
 load(
     "@build_bazel_rules_apple//apple/internal/aspects:resource_aspect.bzl",
     "apple_resource_aspect",
 )
+load("@build_bazel_rules_apple//apple/internal/utils:clang_rt_dylibs.bzl", "clang_rt_dylibs")
+load("@build_bazel_rules_swift//swift:providers.bzl", "SwiftInfo", "create_clang_module_inputs", "create_swift_module_context", "create_swift_module_inputs")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_clang_module_aspect")
+load("//rules:features.bzl", "feature_names")
+load("//rules:library.bzl", "PrivateHeadersInfo", "apple_library")
+load("//rules:plists.bzl", "process_infoplists")
+load("//rules:providers.bzl", "AvoidDepsInfo", "FrameworkInfo")
+load("//rules:transition_support.bzl", "transition_support")
+load("//rules:utils.bzl", "is_bazel_7")
+load("//rules/framework:vfs_overlay.bzl", "VFSOverlayInfo", "make_vfsoverlay")
+load("//rules/internal:objc_provider_utils.bzl", "objc_provider_utils")
 
 _APPLE_FRAMEWORK_PACKAGING_KWARGS = [
     "visibility",
@@ -1169,7 +1169,7 @@ apple_framework_packaging = rule(
     implementation = _apple_framework_packaging_impl,
     toolchains = use_cpp_toolchain(),
     cfg = transition_support.apple_rule_transition,
-    fragments = ["apple", "cpp", "objc"],
+    fragments = ["apple", "cpp", "objc", "j2objc"],
     output_to_genfiles = True,
     attrs = {
         "framework_name": attr.string(

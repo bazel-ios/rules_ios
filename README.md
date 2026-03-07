@@ -30,6 +30,7 @@ See the following table for supported release versions.
 
 | Bazel release | Minimum supported rules version | Final supported rules version
 |:-------------------:|:-------------------------:|:-------------------------:
+| 8.* | 5.4.0 | current
 | 7.* | 4.4.0 | current
 | 6.* | 2.0.0 | 5.3.0
 | 5.* | 1.0.0 | 3.2.2
@@ -48,6 +49,29 @@ See the following table for supported rules_apple release versions.
 | 3.* | 3.* | 4.2.1
 | 2.* | 2.* | 3.2.2
 | 1.* | 1.0.0 | 3.2.2
+
+## Bazel 8 Migration Guide
+
+If you're upgrading from Bazel 7 to Bazel 8, please note the following changes:
+
+### Important Changes
+- The `apple_common.AppleDynamicFramework` provider has been removed in Bazel 8
+- Several ObjcInfo provider fields have been removed, including:
+  - `force_load_library`
+  - `imported_library`
+  - `library`
+  - `static_framework_file`
+  - And others related to linking
+
+### Required Updates
+1. Update rules_ios to version 5.4.0 or later
+2. Update your dependencies in MODULE.bazel:
+   - `apple_support` to 1.21.1 or later
+   - `rules_cc` to 0.0.16 or later
+   - `bazel_skylib` to 1.7.1 or later
+
+### Compatibility
+rules_ios 5.4.0+ maintains compatibility with both Bazel 7 and Bazel 8, so you can safely update before migrating to Bazel 8.
 
 ## Getting started
 

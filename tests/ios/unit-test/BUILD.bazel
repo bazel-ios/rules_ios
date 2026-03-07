@@ -53,7 +53,7 @@ ios_unit_test(
     minimum_os_version = "12.0",
     test_host = select({
         "//tests/ios/unit-test:use_other_test_host": "//rules/test_host_app:iOS-12.0-AppHost",
-        "//conditions:default": "//rules/test_host_app:iOS-14.0-AppHost",
+        "//conditions:default": "//rules/test_host_app:iOS-15.2-AppHost",
     }),
 )
 

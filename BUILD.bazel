@@ -1,8 +1,9 @@
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
 # Pull buildifer.mac as an http_file, then depend on the file group to make an
 # executable
 load("@build_bazel_rules_swift//swift/internal:feature_names.bzl", "SWIFT_FEATURE_USE_GLOBAL_INDEX_STORE")
 load("//rules:features.bzl", "feature_names")
-load("@bazel_skylib//lib:selects.bzl", "selects")
 
 alias(
     name = "buildifier",
@@ -135,34 +136,32 @@ selects.config_setting_group(
 )
 
 xcode_version(
-    name = "version15_2_0_15C500b",
+    name = "version16_4_0_16F6",
     aliases = [
-        "15.2",
-        "15.2.0",
-        "15.2.0.15C500b",
-        "15C500b",
+        "16.4",
+        "16.4.0",
     ],
-    default_ios_sdk_version = "17.2",
-    default_macos_sdk_version = "14.2",
-    default_tvos_sdk_version = "17.2",
-    default_visionos_sdk_version = "1.0",
-    default_watchos_sdk_version = "10.2",
-    version = "15.2.0.15C500b",
+    default_ios_sdk_version = "18.5",
+    default_macos_sdk_version = "15.5",
+    default_tvos_sdk_version = "18.5",
+    default_visionos_sdk_version = "2.5",
+    default_watchos_sdk_version = "11.5",
+    version = "16.4.0.16F6",
 )
 
 xcode_config(
     name = "host_xcodes",
-    default = ":version15_2_0_15C500b",
+    default = ":version16_4_0_16F6",
     versions = [
-        ":version15_2_0_15C500b",
+        ":version16_4_0_16F6",
     ],
     visibility = ["//visibility:public"],
 )
 
 available_xcodes(
     name = "host_available_xcodes",
-    default = ":version15_2_0_15C500b",
+    default = ":version16_4_0_16F6",
     versions = [
-        ":version15_2_0_15C500b",
+        ":version16_4_0_16F6",
     ],
 )
